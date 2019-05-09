@@ -29,7 +29,7 @@ namespace System.Windows.Forms {
         Designer("System.Windows.Forms.Design.ButtonBaseDesigner, " + AssemblyRef.SystemDesign)
     ]
     public abstract class ButtonBase : Control {
- 
+
         private FlatStyle flatStyle                  = System.Windows.Forms.FlatStyle.Standard;
         private ContentAlignment imageAlign          = ContentAlignment.MiddleCenter;
         private ContentAlignment textAlign           = ContentAlignment.MiddleCenter;
@@ -38,7 +38,7 @@ namespace System.Windows.Forms {
         private FlatButtonAppearance flatAppearance;
         private ImageList imageList;
         private Image image;
-        
+
         private const int FlagMouseOver             = 0x0001;
         private const int FlagMouseDown             = 0x0002;
         private const int FlagMousePressed          = 0x0004;
@@ -53,29 +53,29 @@ namespace System.Windows.Forms {
         private ToolTip textToolTip;
 
         //this allows the user to disable visual styles for the button so that it inherits its background color
-        private bool enableVisualStyleBackground = true;     
+        private bool enableVisualStyleBackground = true;
 
         private bool isEnableVisualStyleBackgroundSet = false;
-        
+
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.ButtonBase'/> class.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         protected ButtonBase() {
             // If Button doesn't want double-clicks, we should introduce a StandardDoubleClick style.
             // Checkboxes probably want double-click's, and RadioButtons certainly do
             // (useful e.g. on a Wizard).
-            SetStyle( ControlStyles.SupportsTransparentBackColor | 
-                      ControlStyles.Opaque | 
+            SetStyle( ControlStyles.SupportsTransparentBackColor |
+                      ControlStyles.Opaque |
                       ControlStyles.ResizeRedraw |
                       ControlStyles.OptimizedDoubleBuffer |
                       ControlStyles.CacheText | // We gain about 2% in painting by avoiding extra GetWindowText calls
                       ControlStyles.StandardClick,
                       true);
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
-            SetState2(STATE2_USEPREFERREDSIZECACHE, true);  
+            SetState2(STATE2_USEPREFERREDSIZECACHE, true);
 
             SetStyle(ControlStyles.UserMouse |
                      ControlStyles.UserPaint, OwnerDraw);
@@ -84,13 +84,13 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        ///    <para> This property controls the activation handling of bleedover for the text that 
+        ///    <para> This property controls the activation handling of bleedover for the text that
         ///    extends beyond the width of the button. </para>
         /// </devdoc>
         [
             SRCategory(nameof(SR.CatBehavior)),
             DefaultValue(false),
-            Browsable(true), 
+            Browsable(true),
             EditorBrowsable(EditorBrowsableState.Always),
             SRDescription(nameof(SR.ButtonAutoEllipsisDescr))
         ]
@@ -107,7 +107,7 @@ namespace System.Windows.Forms {
                             textToolTip  = new ToolTip();
                         }
                     }
-                    Invalidate();    
+                    Invalidate();
                 }
             }
         }
@@ -183,15 +183,15 @@ namespace System.Windows.Forms {
                 CreateParams cp = base.CreateParams;
                 if (!OwnerDraw) {
                     cp.ExStyle &= ~NativeMethods.WS_EX_RIGHT;   // WS_EX_RIGHT overrides the BS_XXXX alignment styles
-                    
+
                     cp.Style |= NativeMethods.BS_MULTILINE;
-                    
+
                     if (IsDefault) {
                         cp.Style |= NativeMethods.BS_DEFPUSHBUTTON;
                     }
 
-                    ContentAlignment align = RtlTranslateContent(TextAlign);                              
-                              
+                    ContentAlignment align = RtlTranslateContent(TextAlign);
+
                     if ((int)(align & WindowsFormsUtils.AnyLeftAlign) != 0) {
                         cp.Style |= NativeMethods.BS_LEFT;
                     }
@@ -200,7 +200,7 @@ namespace System.Windows.Forms {
                     }
                     else {
                         cp.Style |= NativeMethods.BS_CENTER;
-                    
+
                     }
                     if ((int)(align & WindowsFormsUtils.AnyTopAlign) != 0) {
                         cp.Style |= NativeMethods.BS_TOP;
@@ -215,7 +215,7 @@ namespace System.Windows.Forms {
                 return cp;
             }
         }
-        
+
         protected override ImeMode DefaultImeMode {
             get {
                 return ImeMode.Disable;
@@ -240,7 +240,7 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
+
         /// <devdoc>
         ///    <para>
         ///       Gets or
@@ -263,7 +263,7 @@ namespace System.Windows.Forms {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlatStyle));
                 }
                 flatStyle = value;
-                LayoutTransaction.DoLayoutIf(AutoSize,ParentInternal, this, PropertyNames.FlatStyle);                
+                LayoutTransaction.DoLayoutIf(AutoSize,ParentInternal, this, PropertyNames.FlatStyle);
                 Invalidate();
                 UpdateOwnerDraw();
             }
@@ -444,7 +444,7 @@ namespace System.Windows.Forms {
         [
             DefaultValue(null),
             SRDescription(nameof(SR.ButtonImageListDescr)),
-            RefreshProperties(RefreshProperties.Repaint),        
+            RefreshProperties(RefreshProperties.Repaint),
             SRCategory(nameof(SR.CatAppearance))
         ]
         public ImageList ImageList {
@@ -460,7 +460,7 @@ namespace System.Windows.Forms {
                     //
                     if (imageList != null) {
                         imageList.RecreateHandle -= recreateHandler;
-                        imageList.Disposed -= disposedHandler;                        
+                        imageList.Disposed -= disposedHandler;
                     }
 
                     // Make sure we don't have an Image as well as an ImageList
@@ -476,14 +476,14 @@ namespace System.Windows.Forms {
                     //
                     if (value != null) {
                         value.RecreateHandle += recreateHandler;
-                        value.Disposed += disposedHandler;                                               
-                    }                    
+                        value.Disposed += disposedHandler;
+                    }
 
                     Invalidate();
                 }
             }
         }
-        
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public ImeMode ImeMode {
             get {
@@ -493,7 +493,7 @@ namespace System.Windows.Forms {
                 base.ImeMode = value;
             }
         }
-        
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
             add => base.ImeModeChanged += value;
@@ -501,9 +501,9 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        ///     Specifies whether the control is willing to process mnemonics when hosted in an container ActiveX (Ax Sourcing).  
+        ///     Specifies whether the control is willing to process mnemonics when hosted in an container ActiveX (Ax Sourcing).
         /// </devdoc>
-        internal override bool IsMnemonicsListenerAxSourced 
+        internal override bool IsMnemonicsListenerAxSourced
         {
             get{
                 return true;
@@ -533,7 +533,7 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
+
         internal bool OwnerDraw {
             get {
                 return FlatStyle != FlatStyle.System;
@@ -579,10 +579,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        
+
         /// <devdoc>
         ///     Indicates whether the tooltip should be shown
-        /// </devdoc>   
+        /// </devdoc>
         internal bool ShowToolTip {
             get {
                 return GetFlag(FlagShowToolTip);
@@ -656,7 +656,7 @@ namespace System.Windows.Forms {
                     textImageRelation = value;
                     LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.TextImageRelation);
                     Invalidate();
-                }                
+                }
             }
         }
 
@@ -673,7 +673,7 @@ namespace System.Windows.Forms {
             get {
                 return GetFlag(FlagUseMnemonic);
             }
-        
+
             set {
                 SetFlag(FlagUseMnemonic, value);
                 LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.Text);
@@ -705,7 +705,7 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
+
         protected override AccessibleObject CreateAccessibilityInstance() {
             return new ButtonBaseAccessibleObject(this);
         }
@@ -740,7 +740,7 @@ namespace System.Windows.Forms {
                 Invalidate();
             }
         }
-        
+
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnGotFocus'/> event.
@@ -789,7 +789,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected override void OnMouseLeave(EventArgs eventargs) {
-            SetFlag(FlagMouseOver, false);    
+            SetFlag(FlagMouseOver, false);
             if (textToolTip != null) {
                 textToolTip.Hide(this);
             }
@@ -846,7 +846,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnMouseUp'/> event.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         protected override void OnMouseUp(MouseEventArgs mevent) {
@@ -868,7 +868,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Central paint dispatcher to one of the three styles of painting.
         /// </devdoc>
-        private void PaintControl(PaintEventArgs pevent) {        
+        private void PaintControl(PaintEventArgs pevent) {
             Debug.Assert(GetStyle(ControlStyles.UserPaint), "Shouldn't be in PaintControl when control is not UserPaint style");
             Adapter.Paint(pevent);
         }
@@ -876,7 +876,7 @@ namespace System.Windows.Forms {
         public override Size GetPreferredSize( Size proposedSize ) {
             // TableLayoutPanel passes width = 1 to get the minimum autosize width, since Buttons word-break text
             // that width would be the size of the widest caracter in the text.  We need to make the proposed size
-            // unbounded.  
+            // unbounded.
             // This is the same as what Label does.
             if( proposedSize.Width == 1 ) {
                 proposedSize.Width = 0;
@@ -927,12 +927,12 @@ namespace System.Windows.Forms {
             Debug.Fail("Derived classes need to provide a meaningful implementation.");
             return null;
         }
-            
+
         internal virtual ButtonBaseAdapter CreateStandardAdapter() {
             Debug.Fail("Derived classes need to provide a meaningful implementation.");
             return null;
         }
-        
+
         internal virtual StringFormat CreateStringFormat() {
             if( Adapter == null ) {
                 Debug.Fail("Adapter not expected to be null at this point");
@@ -982,7 +982,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnKeyDown'/> event.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         protected override void OnKeyDown(KeyEventArgs kevent) {
@@ -1009,7 +1009,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnKeyUp'/> event.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         protected override void OnKeyUp(KeyEventArgs kevent) {
@@ -1023,7 +1023,7 @@ namespace System.Windows.Forms {
                     SendMessage(NativeMethods.BM_SETSTATE, 0, 0);
                 }
                 // Breaking change: specifically filter out Keys.Enter and Keys.Space as the only
-                // two keystrokes to execute OnClick.  
+                // two keystrokes to execute OnClick.
                 if (kevent.KeyCode == Keys.Enter || kevent.KeyCode == Keys.Space) {
                     OnClick(EventArgs.Empty);
                 }
@@ -1032,13 +1032,13 @@ namespace System.Windows.Forms {
             // call base last, so if it invokes any listeners that disable the button, we
             // don't have to recheck
             base.OnKeyUp(kevent);
-            
+
         }
 
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnPaint'/> event.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         protected override void OnPaint(PaintEventArgs pevent) {
@@ -1087,11 +1087,11 @@ namespace System.Windows.Forms {
                 AccessibilityNotifyClients(AccessibleEvents.StateChange, -1);
             }
         }
-        
+
         private bool ShouldSerializeImage() {
             return image != null;
         }
-        
+
         private void UpdateOwnerDraw() {
             if (OwnerDraw != GetStyle(ControlStyles.UserPaint)) {
                 SetStyle(ControlStyles.UserMouse | ControlStyles.UserPaint, OwnerDraw);
@@ -1142,9 +1142,9 @@ namespace System.Windows.Forms {
                 	return false;
                 }
 
-            }            
+            }
             set {
-                isEnableVisualStyleBackgroundSet = true;                
+                isEnableVisualStyleBackgroundSet = true;
                 enableVisualStyleBackground = value;
                 this.Invalidate();
             }
@@ -1159,9 +1159,9 @@ namespace System.Windows.Forms {
         private bool ShouldSerializeUseVisualStyleBackColor() {
             return isEnableVisualStyleBackgroundSet;
         }
-        
 
-        
+
+
         protected override void WndProc(ref Message m) {
 
             switch (m.Msg) {
@@ -1229,17 +1229,17 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
-        [System.Runtime.InteropServices.ComVisible(true)]        
+
+        [System.Runtime.InteropServices.ComVisible(true)]
         public class ButtonBaseAccessibleObject : ControlAccessibleObject {
-            
+
             public ButtonBaseAccessibleObject(Control owner) : base(owner) {
             }
 
             public override void DoDefaultAction() {
                 ((ButtonBase)Owner).OnClick(EventArgs.Empty);
             }
-            
+
             public override AccessibleStates State {
                 get {
                     AccessibleStates state = base.State;
@@ -1251,7 +1251,7 @@ namespace System.Windows.Forms {
 
                     return state;
                 }
-            }                        
+            }
 
         }
     }

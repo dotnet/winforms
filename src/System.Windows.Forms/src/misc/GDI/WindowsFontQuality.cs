@@ -23,15 +23,15 @@ namespace System.Experimental.Gdi
         /// Appearance of the font does not matter.
         Default = IntNativeMethods.DEFAULT_QUALITY,
 
-        /// Appearance of the font is less important than when PROOF_QUALITY is used. 
-        /// For GDI raster fonts, scaling is enabled, which means that more font sizes are available, 
+        /// Appearance of the font is less important than when PROOF_QUALITY is used.
+        /// For GDI raster fonts, scaling is enabled, which means that more font sizes are available,
         /// but the quality may be lower. Bold, italic, underline, and strikeout fonts are synthesized if necessary.
         Draft = IntNativeMethods.DRAFT_QUALITY,
 
-        /// Character quality of the font is more important than exact matching of the logical-font attributes. 
-        /// For GDI raster fonts, scaling is disabled and the font closest in size is chosen. 
-        /// Although the chosen font size may not be mapped exactly when PROOF_QUALITY is used, the quality of 
-        /// the font is high and there is no distortion of appearance. Bold, italic, underline, and strikeout 
+        /// Character quality of the font is more important than exact matching of the logical-font attributes.
+        /// For GDI raster fonts, scaling is disabled and the font closest in size is chosen.
+        /// Although the chosen font size may not be mapped exactly when PROOF_QUALITY is used, the quality of
+        /// the font is high and there is no distortion of appearance. Bold, italic, underline, and strikeout
         /// fonts are synthesized if necessary.
         Proof = IntNativeMethods.PROOF_QUALITY,
 
@@ -42,21 +42,21 @@ namespace System.Experimental.Gdi
 
         /// <devdoc>
         /// Font is always antialiased if the font supports it and the size of the font is not
-        /// too small or too large. 
+        /// too small or too large.
         /// </devdoc>
         AntiAliased = IntNativeMethods.ANTIALIASED_QUALITY,
 
         /// <devdoc>
-        /// The following situations do not support ClearType antialiasing: 
-        /// - Text is rendered on a printer. 
-        /// - Display set for 256 colors or less. 
-        /// - Text is rendered to a terminal server client. 
-        /// - The font is not a TrueType font or an OpenType font with TrueType outlines. 
-        ///   For example, the following do not support ClearType antialiasing: 
+        /// The following situations do not support ClearType antialiasing:
+        /// - Text is rendered on a printer.
+        /// - Display set for 256 colors or less.
+        /// - Text is rendered to a terminal server client.
+        /// - The font is not a TrueType font or an OpenType font with TrueType outlines.
+        ///   For example, the following do not support ClearType antialiasing:
         ///     Type 1 fonts, Postscript OpenType fonts without TrueType outlines, bitmap fonts, vector fonts, and device fonts.
-        /// - The font has tuned embedded bitmaps, for any font sizes that contain the embedded bitmaps. 
-        ///   For example, this occurs commonly in East Asian fonts. 
-        /// If set, text is rendered (when possible) using ClearType antialiasing method. 
+        /// - The font has tuned embedded bitmaps, for any font sizes that contain the embedded bitmaps.
+        ///   For example, this occurs commonly in East Asian fonts.
+        /// If set, text is rendered (when possible) using ClearType antialiasing method.
         /// <devdoc>
         ClearType        = IntNativeMethods.CLEARTYPE_QUALITY,
 

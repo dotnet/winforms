@@ -6,7 +6,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
     using System.Diagnostics;
     using System;
-    
+
     using System.ComponentModel;
     using System.Collections;
     using Microsoft.Win32;
@@ -33,7 +33,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
              this.propDesc = propDesc;
              this.allowExpand = allowExpand;
         }
-        
+
         /// <devdoc>
         ///      Determines if this converter can convert an object in the given source
         ///      type to the native type of the converter.
@@ -41,7 +41,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) {
             return false;
         }
-        
+
         /// <devdoc>
         ///      Determines if this converter can convert an object to the given destination
         ///      type.
@@ -49,8 +49,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType) {
             return destinationType == typeof(string);
         }
-        
-        
+
+
         /// <devdoc>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call
@@ -63,13 +63,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                if (value == null){
                   return none;
                }
-               
+
                string text = ComNativeDescriptor.Instance.GetName(value);
-   
+
                if (text == null || text.Length == 0){
                      text = ComNativeDescriptor.Instance.GetClassName(value);
                }
-   
+
                if (text == null){
                   return "(Object)";
                }
@@ -77,11 +77,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
             return base.ConvertTo(context, culture, value, destinationType);
         }
-        
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes) {      
+
+        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes) {
             return TypeDescriptor.GetProperties(value, attributes);
         }
-        
+
         /// <devdoc>
         ///      Determines if this object supports properties.  By default, this
         ///      is false.
@@ -89,7 +89,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         public override bool GetPropertiesSupported(ITypeDescriptorContext context) {
             return this.allowExpand;
         }
-        
+
         // no dropdown, please!
         //
         public override bool GetStandardValuesSupported(ITypeDescriptorContext context) {

@@ -106,7 +106,7 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         /// Scale all hardcoded sizes if needed
-        /// </summary> 
+        /// </summary>
         static DesignerUtils()
         {
             if (!DpiHelper.IsScalingRequired)

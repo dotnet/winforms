@@ -108,7 +108,7 @@ namespace System.Windows.Forms
                 return this.items;
             }
         }
-        
+
         public DataGridViewColumn this[int index]
         {
             get
@@ -124,12 +124,12 @@ namespace System.Windows.Forms
         {
             return this.items.Add(dataGridViewColumn);
         }
-        
+
         /* Unused at this point
         internal void AddRange(DataGridViewColumn[] dataGridViewColumns)
         {
             Debug.Assert(dataGridViewColumns != null);
-            foreach(DataGridViewColumn dataGridViewColumn in dataGridViewColumns) 
+            foreach(DataGridViewColumn dataGridViewColumn in dataGridViewColumns)
             {
                 this.items.Add(dataGridViewColumn);
             }
@@ -140,7 +140,7 @@ namespace System.Windows.Forms
         internal void AddColumnCollection(DataGridViewColumnCollection dataGridViewColumns)
         {
             Debug.Assert(dataGridViewColumns != null);
-            foreach(DataGridViewColumn dataGridViewColumn in dataGridViewColumns) 
+            foreach(DataGridViewColumn dataGridViewColumn in dataGridViewColumns)
             {
                 this.items.Add(dataGridViewColumn);
             }

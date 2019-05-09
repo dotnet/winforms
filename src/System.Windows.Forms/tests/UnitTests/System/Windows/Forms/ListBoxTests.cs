@@ -635,7 +635,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { controlWithItems, null, 1, -1 };
             yield return new object[] { controlWithItems, null, 2, -1 };
             yield return new object[] { controlWithItems, null, 5, -1 };
-    
+
             yield return new object[] { controlWithItems, string.Empty, -1, 0 };
             yield return new object[] { controlWithItems, string.Empty, 0, 1 };
             yield return new object[] { controlWithItems, string.Empty, 1, 2 };
@@ -739,7 +739,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { controlWithItems, null, 1, -1 };
             yield return new object[] { controlWithItems, null, 2, -1 };
             yield return new object[] { controlWithItems, null, 5, -1 };
-    
+
             yield return new object[] { controlWithItems, string.Empty, -1, 4 };
             yield return new object[] { controlWithItems, string.Empty, 0, 4 };
             yield return new object[] { controlWithItems, string.Empty, 1, 4 };

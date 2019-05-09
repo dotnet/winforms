@@ -106,7 +106,7 @@ namespace System.Windows.Forms.Tests
             var child = new Control();
             var control = new ContainerControl();
             control.Controls.Add(child);
-            
+
             control.AutoScaleDimensions = value;
             Assert.Equal(value, control.AutoScaleDimensions);
 

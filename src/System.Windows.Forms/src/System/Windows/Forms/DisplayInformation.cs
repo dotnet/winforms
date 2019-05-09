@@ -19,23 +19,23 @@ namespace System.Windows.Forms
         private static bool dropShadowEnabled;
         private static bool menuAccessKeysUnderlinedValid;
         private static bool menuAccessKeysUnderlined;
-    
-    
+
+
         static DisplayInformation() {
             SystemEvents.UserPreferenceChanging += new UserPreferenceChangingEventHandler(UserPreferenceChanging);
-            SystemEvents.DisplaySettingsChanging += new EventHandler(DisplaySettingsChanging); 
+            SystemEvents.DisplaySettingsChanging += new EventHandler(DisplaySettingsChanging);
         }
 
         public static short BitsPerPixel {
            get {
                if (bitsPerPixel == 0) {
-                    // we used to iterate through all screens, but 
-                    // for some reason unused screens can temparily appear 
+                    // we used to iterate through all screens, but
+                    // for some reason unused screens can temparily appear
                     // in the AllScreens collection - we would honor the display
-                    // setting of an unused screen.  
-                    // According to EnumDisplayMonitors, a primary screen check should be sufficient 
+                    // setting of an unused screen.
+                    // According to EnumDisplayMonitors, a primary screen check should be sufficient
                     bitsPerPixel = (short)Screen.PrimaryScreen.BitsPerPixel;
-                    
+
                }
                return bitsPerPixel;
            }
@@ -46,11 +46,11 @@ namespace System.Windows.Forms
         ///</devdoc>
         public static bool LowResolution {
             get {
-                
+
                 if (lowResSettingValid && !lowRes) {
                     return lowRes;
                 }
-                // dont cache if we're in low resolution.  
+                // dont cache if we're in low resolution.
                 lowRes = BitsPerPixel <= 8;
                 lowResSettingValid = true;
                 return lowRes;
@@ -112,7 +112,7 @@ namespace System.Windows.Forms
         ///event handler for change in display setting
         ///</devdoc>
         private static void DisplaySettingsChanging(object obj, EventArgs ea)
-        {    
+        {
             highContrastSettingValid = false;
             lowResSettingValid = false;
             terminalSettingValid = false;
@@ -130,7 +130,7 @@ namespace System.Windows.Forms
             terminalSettingValid = false;
             dropShadowSettingValid = false;
             bitsPerPixel = 0;
-            
+
             if (e.Category == UserPreferenceCategory.General) {
                 menuAccessKeysUnderlinedValid =false;
             }

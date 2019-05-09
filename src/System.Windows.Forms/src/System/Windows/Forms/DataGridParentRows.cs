@@ -58,7 +58,7 @@ namespace System.Windows.Forms {
 
         // a horizOffset of 0 means that the layout for the parent
         // rows is left aligned.
-        // a horizOffset of 1 means that the leftmost unit of information ( let it be a 
+        // a horizOffset of 1 means that the leftmost unit of information ( let it be a
         // table name, a column name or a column value ) is not visible.
         // a horizOffset of 2 means that the leftmost 2 units of information are not visible, and so on
         //
@@ -297,9 +297,9 @@ namespace System.Windows.Forms {
             }
 
             SetParentCount(parentsCount - 1);
-            DataGridState ret = (DataGridState)parents[parentsCount];            
+            DataGridState ret = (DataGridState)parents[parentsCount];
             ret.RemoveChangeNotification();
-            parents.RemoveAt(parentsCount);           
+            parents.RemoveAt(parentsCount);
             return ret;
         }
 
@@ -331,7 +331,7 @@ namespace System.Windows.Forms {
             //
             textRegionHeight = (int)dataGrid.Font.Height + 2;
 
-            // make the height of the Column.Font count for the height 
+            // make the height of the Column.Font count for the height
             // of the parentRows;
             //
             // if the user wants to programatically
@@ -445,7 +445,7 @@ namespace System.Windows.Forms {
                 else
                     LeftArrowClick(cellCount);
             }
-            else 
+            else
             {
                 if (downLeftArrow)
                 {
@@ -556,7 +556,7 @@ namespace System.Windows.Forms {
             g.FillRectangle(borderBrush, border);
         }
 
-        // will return the width of the text box that will fit all the 
+        // will return the width of the text box that will fit all the
         // tables names
         private int GetTableBoxWidth(Graphics g, Font font) {
             // try to make the font BOLD
@@ -772,9 +772,9 @@ namespace System.Windows.Forms {
         private void PaintDownButton(Graphics g, Rectangle bounds)
         {
             g.DrawLine(Pens.Black, bounds.X, bounds.Y, bounds.X + bounds.Width, bounds.Y);  // the top
-            g.DrawLine(Pens.White, bounds.X + bounds.Width, bounds.Y, bounds.X + bounds.Width, bounds.Y + bounds.Height);  // the right side 
-            g.DrawLine(Pens.White, bounds.X + bounds.Width, bounds.Y + bounds.Height, bounds.X, bounds.Y + bounds.Height);  // the right side 
-            g.DrawLine(Pens.Black, bounds.X, bounds.Y + bounds.Height, bounds.X, bounds.Y);  // the left side 
+            g.DrawLine(Pens.White, bounds.X + bounds.Width, bounds.Y, bounds.X + bounds.Width, bounds.Y + bounds.Height);  // the right side
+            g.DrawLine(Pens.White, bounds.X + bounds.Width, bounds.Y + bounds.Height, bounds.X, bounds.Y + bounds.Height);  // the right side
+            g.DrawLine(Pens.Black, bounds.X, bounds.Y + bounds.Height, bounds.X, bounds.Y);  // the left side
         }
 
         private void PaintLeftArrow(Graphics g, Rectangle bounds, bool alignToRight)
@@ -921,7 +921,7 @@ namespace System.Windows.Forms {
                     paintBounds.Width = Math.Min(bounds.Width - cx, colsDataWidths[i]);
                     paintBounds.X = MirrorRect(bounds, paintBounds, alignToRight);
 
-                    // when we paint the data grid parent rows, we want to paint the data at the position 
+                    // when we paint the data grid parent rows, we want to paint the data at the position
                     // stored in the currency manager.
                     cols[i].Paint(g, paintBounds, (CurrencyManager) dataGrid.BindingContext[dgs.DataSource, dgs.DataMember],
                                     dataGrid.BindingContext[dgs.DataSource, dgs.DataMember].Position, BackBrush, ForeBrush, alignToRight);
@@ -978,7 +978,7 @@ namespace System.Windows.Forms {
                 format.Alignment = StringAlignment.Far;
             }
             format.FormatFlags |= StringFormatFlags.NoWrap;
-            // part 1, section 3: put the table and the column name in the 
+            // part 1, section 3: put the table and the column name in the
             // parent rows at the same height as the dataGridTextBoxColumn draws the string
             //
             textBounds.Offset(0, 2);
@@ -1093,7 +1093,7 @@ namespace System.Windows.Forms {
                     return null;
                 }
             }
-            
+
             public override void DoDefaultAction() {
                 owner.dataGrid.NavigateBack();
             }

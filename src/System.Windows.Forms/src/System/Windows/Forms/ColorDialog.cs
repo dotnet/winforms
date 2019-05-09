@@ -57,7 +57,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-            SRCategory(nameof(SR.CatBehavior)), 
+            SRCategory(nameof(SR.CatBehavior)),
             DefaultValue(true),
             SRDescription(nameof(SR.CDallowFullOpenDescr))
         ]
@@ -78,7 +78,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-            SRCategory(nameof(SR.CatBehavior)), 
+            SRCategory(nameof(SR.CatBehavior)),
             DefaultValue(false),
             SRDescription(nameof(SR.CDanyColorDescr))
         ]
@@ -98,7 +98,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-            SRCategory(nameof(SR.CatData)), 
+            SRCategory(nameof(SR.CatData)),
             SRDescription(nameof(SR.CDcolorDescr))
         ]
         public Color Color {
@@ -142,7 +142,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-            SRCategory(nameof(SR.CatAppearance)), 
+            SRCategory(nameof(SR.CatAppearance)),
             DefaultValue(false),
             SRDescription(nameof(SR.CDfullOpenDescr))
         ]
@@ -181,7 +181,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-            SRCategory(nameof(SR.CatBehavior)), 
+            SRCategory(nameof(SR.CatBehavior)),
             DefaultValue(false),
             SRDescription(nameof(SR.CDshowHelpDescr))
         ]
@@ -203,7 +203,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-            SRCategory(nameof(SR.CatBehavior)), 
+            SRCategory(nameof(SR.CatBehavior)),
             DefaultValue(false),
             SRDescription(nameof(SR.CDsolidColorOnlyDescr))
         ]

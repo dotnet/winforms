@@ -11,21 +11,21 @@ namespace System.Windows.Forms.PropertyGridInternal {
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System;
-    using System.Collections;   
+    using System.Collections;
     using System.Windows.Forms;
     using System.Windows.Forms.ComponentModel;
-    using System.Windows.Forms.Design;    
+    using System.Windows.Forms.Design;
     using System.ComponentModel.Design;
     using System.IO;
     using System.Drawing;
     using Microsoft.Win32;
     using Message = System.Windows.Forms.Message;
-    using System.Drawing.Drawing2D;    
+    using System.Drawing.Drawing2D;
 
     /// <devdoc>
     ///     Implements a dialog that is displayed when an unhandled exception occurs in
     ///     a thread. This dialog's width is defined by the summary message
-    ///     in the top pane. We don't restrict dialog width in any way.  
+    ///     in the top pane. We don't restrict dialog width in any way.
     ///     Use caution and check at all DPI scaling factors if adding a new message
     ///     to be displayed in the top pane.
     /// </devdoc>
@@ -57,7 +57,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 this.details.Text = value;
             }
         }
-       
+
 
         public string Message {
             set {
@@ -92,7 +92,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             detailsBtn.Text = " " + SR.ExDlgShowDetails;
 
             details.AccessibleName = SR.ExDlgDetailsText;
-            
+
             okBtn.Text = SR.ExDlgOk;
             cancelBtn.Text = SR.ExDlgCancel;
             detailsBtn.Image = expandImage;
@@ -156,18 +156,18 @@ namespace System.Windows.Forms.PropertyGridInternal {
             this.pictureLabelTableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
-            // 
+            //
             // lblMessage
-            // 
+            //
             this.lblMessage.AutoSize = true;
             this.lblMessage.Location = new System.Drawing.Point(73, 30);
             this.lblMessage.Margin = new System.Windows.Forms.Padding(3, 30, 3, 0);
             this.lblMessage.Name = "lblMessage";
             this.lblMessage.Size = new System.Drawing.Size(208, 43);
             this.lblMessage.TabIndex = 0;
-            // 
+            //
             // pictureBox
-            // 
+            //
             this.pictureBox.Location = new System.Drawing.Point(3, 3);
             this.pictureBox.Name = "pictureBox";
             this.pictureBox.Size = new System.Drawing.Size(64, 64);
@@ -175,9 +175,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             this.pictureBox.TabIndex = 5;
             this.pictureBox.TabStop = false;
             this.pictureBox.AutoSize = true;
-            // 
+            //
             // detailsBtn
-            // 
+            //
             this.detailsBtn.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.detailsBtn.Location = new System.Drawing.Point(3, 3);
             this.detailsBtn.Margin = new System.Windows.Forms.Padding(12, 3, 29, 3);
@@ -185,9 +185,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             this.detailsBtn.Size = new System.Drawing.Size(100, 23);
             this.detailsBtn.TabIndex = 4;
             this.detailsBtn.Click += new System.EventHandler(this.DetailsClick);
-            // 
+            //
             // overarchingTableLayoutPanel
-            // 
+            //
             this.overarchingTableLayoutPanel.AutoSize = true;
             this.overarchingTableLayoutPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.overarchingTableLayoutPanel.ColumnCount = 1;
@@ -203,9 +203,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             this.overarchingTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.overarchingTableLayoutPanel.Size = new System.Drawing.Size(290, 108);
             this.overarchingTableLayoutPanel.TabIndex = 6;
-            // 
+            //
             // buttonTableLayoutPanel
-            // 
+            //
             this.buttonTableLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonTableLayoutPanel.AutoSize = true;
@@ -223,9 +223,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             this.buttonTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.buttonTableLayoutPanel.Size = new System.Drawing.Size(290, 29);
             this.buttonTableLayoutPanel.TabIndex = 8;
-            // 
+            //
             // okBtn
-            // 
+            //
             this.okBtn.AutoSize = true;
             this.okBtn.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.okBtn.Location = new System.Drawing.Point(131, 3);
@@ -233,9 +233,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             this.okBtn.Size = new System.Drawing.Size(75, 23);
             this.okBtn.TabIndex = 1;
             this.okBtn.Click += new System.EventHandler(this.OnButtonClick);
-            // 
+            //
             // cancelBtn
-            // 
+            //
             this.cancelBtn.AutoSize = true;
             this.cancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancelBtn.Location = new System.Drawing.Point(212, 3);
@@ -244,9 +244,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             this.cancelBtn.Size = new System.Drawing.Size(75, 23);
             this.cancelBtn.TabIndex = 2;
             this.cancelBtn.Click += new System.EventHandler(this.OnButtonClick);
-            // 
+            //
             // pictureLabelTableLayoutPanel
-            // 
+            //
             this.pictureLabelTableLayoutPanel.AutoSize = true;
             this.pictureLabelTableLayoutPanel.AutoSizeMode = Forms.AutoSizeMode.GrowOnly;
             this.pictureLabelTableLayoutPanel.ColumnCount = 2;
@@ -261,9 +261,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             this.pictureLabelTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
             this.pictureLabelTableLayoutPanel.Size = new System.Drawing.Size(284, 73);
             this.pictureLabelTableLayoutPanel.TabIndex = 4;
-            // 
+            //
             // details
-            // 
+            //
             this.details.Location = new System.Drawing.Point(4, 114);
             this.details.Multiline = true;
             this.details.Name = "details";
@@ -273,9 +273,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             this.details.TabIndex = 3;
             this.details.TabStop = false;
             this.details.Visible = false;
-            // 
+            //
             // Form1
-            // 
+            //
             this.AcceptButton = this.okBtn;
             this.AutoSize = true;
             this.AutoScaleMode = Forms.AutoScaleMode.Font;
@@ -345,10 +345,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
             parent = form;
         }
 
-        public bool Expanded { 
-            get { 
-                return parent.DetailsButtonExpanded; 
-            } 
+        public bool Expanded {
+            get {
+                return parent.DetailsButtonExpanded;
+            }
         }
         protected override AccessibleObject CreateAccessibilityInstance() {
             return new DetailsButtonAccessibleObject(this);
@@ -356,9 +356,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
     }
 
     internal class DetailsButtonAccessibleObject: Control.ControlAccessibleObject {
-        
-        private DetailsButton ownerItem = null; 
-        
+
+        private DetailsButton ownerItem = null;
+
         public DetailsButtonAccessibleObject(DetailsButton owner): base(owner) {
             ownerItem = owner;
         }

@@ -9,10 +9,10 @@ namespace System.Windows.Forms
     public class ToolStripRenderEventArgs : EventArgs
     {
         private Color _backColor = Color.Empty;
-        
+
         /// <devdoc>
         /// This class represents all the information to render the toolStrip
-        /// </devdoc>        
+        /// </devdoc>
         public ToolStripRenderEventArgs(Graphics g, ToolStrip toolStrip)
         {
             Graphics = g;
@@ -22,7 +22,7 @@ namespace System.Windows.Forms
 
         /// <devdoc>
         ///  This class represents all the information to render the toolStrip
-        /// </devdoc>        
+        /// </devdoc>
         public ToolStripRenderEventArgs(Graphics g, ToolStrip toolStrip, Rectangle affectedBounds, Color backColor)
         {
             Graphics = g;
@@ -103,17 +103,17 @@ namespace System.Windows.Forms
                             switch (ownerItem.DropDownDirection)
                             {
                                 case ToolStripDropDownDirection.AboveLeft:
-                                case ToolStripDropDownDirection.AboveRight:                        
+                                case ToolStripDropDownDirection.AboveRight:
                                     return Rectangle.Empty;
                                 case ToolStripDropDownDirection.BelowRight:
                                 case ToolStripDropDownDirection.BelowLeft:
                                     overlap.Intersect(itemBounds);
                                     if (overlap.Height == 2)
                                     {
-                                        return new Rectangle(itemBounds.X+1, 0, itemBounds.Width -2, 2);                                   
+                                        return new Rectangle(itemBounds.X+1, 0, itemBounds.Width -2, 2);
                                     }
- 
-                                    // If its overlapping more than one pixel, this means we've pushed it to obscure 
+
+                                    // If its overlapping more than one pixel, this means we've pushed it to obscure
                                     // the menu item. In this case pretend it's not connected.
                                     return Rectangle.Empty;
                                 case ToolStripDropDownDirection.Right:

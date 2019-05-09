@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Design
     internal class OleDragDropHandler
     {
         // This is a bit that we stuff into the DoDragDrop
-        // to indicate that the thing that is being dragged should only 
+        // to indicate that the thing that is being dragged should only
         // be allowed to be moved in the current DropTarget (e.g. parent designer).
         // We use this for interited components that can be modified (e.g. location/size) changed
         // but not removed from their parent.

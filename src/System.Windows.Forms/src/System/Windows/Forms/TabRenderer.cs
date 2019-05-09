@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms { 
+namespace System.Windows.Forms {
 
 using System;
 using System.Drawing;
@@ -21,14 +21,14 @@ using Microsoft.Win32;
        //Make this per-thread, so that different threads can safely use these methods.
        [ThreadStatic]
        private static VisualStyleRenderer visualStyleRenderer = null;
-       
+
         //cannot instantiate
        private TabRenderer() {
        }
 
        /// <devdoc>
        ///    <para>
-       ///       Returns true if this class is supported for the current OS and user/application settings, 
+       ///       Returns true if this class is supported for the current OS and user/application settings,
        ///       otherwise returns false.
        ///    </para>
        /// </devdoc>
@@ -84,7 +84,7 @@ using Microsoft.Win32;
        ///    </para>
        /// </devdoc>
        public static void DrawTabItem(Graphics g, Rectangle bounds, string tabItemText, Font font, bool focused, TabItemState state) {
-           DrawTabItem(g, bounds, tabItemText, font, 
+           DrawTabItem(g, bounds, tabItemText, font,
                        TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
                        focused, state);
        }
@@ -120,9 +120,9 @@ using Microsoft.Win32;
 
            // GetBackgroundContentRectangle() returns same rectangle as bounds for this control!
            Rectangle contentBounds = Rectangle.Inflate(bounds, -3, -3);
-           
+
            visualStyleRenderer.DrawImage(g, imageRectangle, image);
-           
+
            if (focused) {
                ControlPaint.DrawFocusRectangle(g, contentBounds);
            }
@@ -134,7 +134,7 @@ using Microsoft.Win32;
        ///    </para>
        /// </devdoc>
        public static void DrawTabItem(Graphics g, Rectangle bounds, string tabItemText, Font font, Image image, Rectangle imageRectangle, bool focused, TabItemState state) {
-           DrawTabItem(g, bounds, tabItemText, font, 
+           DrawTabItem(g, bounds, tabItemText, font,
                        TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
                        image, imageRectangle, focused, state);
        }
@@ -154,7 +154,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawImage(g, imageRectangle, image);
            Color textColor = visualStyleRenderer.GetColor(ColorProperty.TextColor);
            TextRenderer.DrawText(g, tabItemText, font, contentBounds, textColor, flags);
-           
+
            if (focused) {
                ControlPaint.DrawFocusRectangle(g, contentBounds);
            }

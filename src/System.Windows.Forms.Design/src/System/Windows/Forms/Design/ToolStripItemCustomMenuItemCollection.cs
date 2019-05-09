@@ -87,7 +87,7 @@ namespace System.Windows.Forms.Design
             return item;
         }
 
-        /// <summary> 
+        /// <summary>
         /// creates an item that when clicked changes the enum value.
         /// </summary>
         private ToolStripMenuItem CreateEnumValueItem(string propertyName, string name, object value)
@@ -280,7 +280,7 @@ namespace System.Windows.Forms.Design
             Type t = senderItem.ItemType;
             if (senderItem.ConvertTo)
             {
-                //we are morphing the currentItem 
+                //we are morphing the currentItem
                 MorphToolStripItem(t);
             }
             else

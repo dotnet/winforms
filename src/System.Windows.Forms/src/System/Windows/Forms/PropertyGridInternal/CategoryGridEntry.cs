@@ -12,7 +12,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
      using System;
      using System.Collections;
      using System.Reflection;
-     
+
      using System.ComponentModel;
      using System.ComponentModel.Design;
      using System.Windows.Forms;
@@ -49,11 +49,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
 
             this.IsExpandable = true;
-            
+
             for (int i = 0; i < childGridEntries.Length; i++) {
                 childGridEntries[i].ParentGridEntry = this;
             }
-            
+
             this.ChildCollection = new GridEntryCollection(this, childGridEntries);
 
             lock (categoryStates) {
@@ -62,8 +62,8 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
             this.SetFlag(GridEntry.FLAG_LABEL_BOLD,true);
         }
-        
-          
+
+
         /// <devdoc>
         /// Returns true if this GridEntry has a value field in the right hand column.
         /// </devdoc>
@@ -93,8 +93,8 @@ namespace System.Windows.Forms.PropertyGridInternal {
             //
             return;
         }
-        
-        
+
+
         // we don't want this guy participating in property depth.
         public override int PropertyDepth {
             get {
@@ -125,7 +125,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return !GetFlagSet(FL_EXPANDABLE_FAILED);
             }
         }
-        
+
         internal override bool InternalExpanded {
             set {
                 base.InternalExpanded = value;
@@ -134,7 +134,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
             }
         }
-        
+
         public override GridItemType GridItemType {
             get {
                 return GridItemType.Category;
@@ -151,13 +151,13 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return name;
             }
         }
-        
+
         internal override int PropertyLabelIndent {
             get {
                 // we give an extra pixel for breathing room
                 // we want to make sure that we return 0 for property depth here instead of
                 PropertyGridView gridHost = this.GridEntryHost;
-                
+
                 // we call base.PropertyDepth here because we don't want the subratction to happen.
                 return 1+gridHost.GetOutlineIconSize()+OUTLINE_ICON_PADDING + (base.PropertyDepth * gridHost.GetDefaultOutlineIndent());
             }

@@ -44,10 +44,10 @@ namespace System.Windows.Forms
         private readonly static int[] primes = {
             11,17,23,29,37,47,59,71,89,107,131,163,197,239,293,353,431,521,631,761,919,
             1103,1327,1597,1931,2333,2801,3371,4049,4861,5839,7013,8419,10103,12143,14591,
-            17519,21023,25229,30293,36353,43627,52361,62851,75431,90523, 108631, 130363, 
+            17519,21023,25229,30293,36353,43627,52361,62851,75431,90523, 108631, 130363,
             156437, 187751, 225307, 270371, 324449, 389357, 467237, 560689, 672827, 807403,
-            968897, 1162687, 1395263, 1674319, 2009191, 2411033, 2893249, 3471899, 4166287, 
-            4999559, 5999471, 7199369 
+            968897, 1162687, 1395263, 1674319, 2009191, 2411033, 2893249, 3471899, 4166287,
+            4999559, 5999471, 7199369
         };
 
         const int InitializedFlags = 0x01;
@@ -56,8 +56,8 @@ namespace System.Windows.Forms
         const int LoadConfigSettings = 0x08;
         const int AssemblyIsDebuggable = 0x10;
 
-        // do we have any active HWNDs? 
-        //       
+        // do we have any active HWNDs?
+        //
         [ThreadStatic]
         static bool anyHandleCreated;
         static bool anyHandleCreatedInApp;
@@ -148,7 +148,7 @@ namespace System.Windows.Forms
             IntPtr h;
             bool ownedHandle;
 
-            // 
+            //
             lock (this) {
                 h = handle;
                 ownedHandle = ownHandle;
@@ -186,7 +186,7 @@ namespace System.Windows.Forms
             }
 
             if (h != IntPtr.Zero && ownedHandle) {
-                // If we owned the handle, post a 
+                // If we owned the handle, post a
                 // WM_CLOSE to get rid of it.
                 //
                 UnsafeNativeMethods.PostMessage(new HandleRef(this, h), Interop.WindowMessages.WM_CLOSE, 0, 0);
@@ -216,9 +216,9 @@ namespace System.Windows.Forms
                 // We cannot assert this here.  Consider the case where someone has created an HWND on a thread but
                 // never started a message pump.  When the thread is cleaned up by the OS USER will destroy all window
                 // handles. This happens long before we finalize, so when finalization does come along and we
-                // try to check to see if we should PostMessage(WM_CLOSE, this assert would fire.  
+                // try to check to see if we should PostMessage(WM_CLOSE, this assert would fire.
                 //
-                // Debug.Assert(handle == IntPtr.Zero || UnsafeNativeMethods.IsWindow(new HandleRef(this, handle)), 
+                // Debug.Assert(handle == IntPtr.Zero || UnsafeNativeMethods.IsWindow(new HandleRef(this, handle)),
                 //             "Attempt to access a non-valid handle ");
 #endif
                 return handle;
@@ -228,7 +228,7 @@ namespace System.Windows.Forms
         /// <devdoc>
         ///     This returns the previous NativeWindow in the chain of subclasses.
         ///     Generally it returns null, but if someone has subclassed a control
-        ///     through the use of a NativeWindow class, this will return the 
+        ///     through the use of a NativeWindow class, this will return the
         ///     previous NativeWindow subclass.
         ///
         ///     This should be public, but it is way too late for that.
@@ -494,7 +494,7 @@ namespace System.Windows.Forms
                         dbgJit = (int)value;
                     }
                     catch (InvalidCastException) {
-                        // If the value isn't a DWORD, then we will 
+                        // If the value isn't a DWORD, then we will
                         // continue to use the non-debuggable wndproc
                         //
                         dbgJit = 1;
@@ -619,7 +619,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         private IntPtr Callback(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam) {
 
-            // Note: if you change this code be sure to change the 
+            // Note: if you change this code be sure to change the
             // corresponding code in DebuggableCallback below!
 
             Message m = Message.Create(hWnd, msg, wparam, lparam);
@@ -664,7 +664,7 @@ namespace System.Windows.Forms
         ]
         public virtual void CreateHandle(CreateParams cp) {
 
-            lock (this) { 
+            lock (this) {
                 CheckReleased();
                 WindowClass windowClass = WindowClass.Create(cp.ClassName, cp.ClassStyle);
                 lock (createWindowSyncObject) {
@@ -679,7 +679,7 @@ namespace System.Windows.Forms
                     IntPtr createResult = IntPtr.Zero;
                     int lastWin32Error = 0;
 
-                    // Parking window dpi awarness context need to match with dpi awarenss context of control being 
+                    // Parking window dpi awarness context need to match with dpi awarenss context of control being
                     // parented to this parkign window. Otherwise, reparenting of control will fail.
                     using (DpiHelper.EnterDpiAwarenessScope(this.windowDpiAwarenessContext)) {
                         IntPtr modHandle = UnsafeNativeMethods.GetModuleHandle(null);
@@ -727,7 +727,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         private IntPtr DebuggableCallback(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam) {
 
-            // Note: if you change this code be sure to change the 
+            // Note: if you change this code be sure to change the
             // corresponding code in Callback above!
 
             Message m = Message.Create(hWnd, msg, wparam, lparam);
@@ -781,7 +781,7 @@ namespace System.Windows.Forms
         ///    </para>
         /// </devdoc>
         public virtual void DestroyHandle() {
-            // 
+            //
             lock (this) {
                 if (handle != IntPtr.Zero) {
                     if (!UnsafeNativeMethods.DestroyWindow(new HandleRef(this, handle))) {
@@ -811,12 +811,12 @@ namespace System.Windows.Forms
         ///     hashcodes.
         /// </devdoc>
         private static void ExpandTable() {
-            // Allocate new Array 
+            // Allocate new Array
             int oldhashsize = hashBuckets.Length;
 
             int hashsize = GetPrime(1 + oldhashsize * 2);
 
-            // Don't replace any internal state until we've finished adding to the 
+            // Don't replace any internal state until we've finished adding to the
             // new bucket[].  This serves two purposes: 1) Allow concurrent readers
             // to see valid hashtable contents at all times and 2) Protect against
             // an OutOfMemoryException while allocating this new bucket[].
@@ -884,8 +884,8 @@ namespace System.Windows.Forms
                 int size = primes[i];
                 if (size >= minSize) return size;
             }
-            //outside of our predefined table. 
-            //compute the hard way. 
+            //outside of our predefined table.
+            //compute the hard way.
             for (int j = ((minSize - 2) | 1); j < int.MaxValue; j += 2) {
                 bool prime = true;
 
@@ -909,7 +909,7 @@ namespace System.Windows.Forms
         }
 
         /// <devdoc>
-        ///     Returns the native window for the given handle, or null if 
+        ///     Returns the native window for the given handle, or null if
         ///     the handle is not in our hash table.
         /// </devdoc>
         private static NativeWindow GetWindowFromTable(IntPtr handle) {
@@ -952,8 +952,8 @@ namespace System.Windows.Forms
 
         /// <devdoc>
         ///     Computes the hash function:  H(key, i) = h1(key) + i*h2(key, hashSize).
-        ///     The out parameter 'seed' is h1(key), while the out parameter 
-        ///     'incr' is h2(key, hashSize).  Callers of this function should 
+        ///     The out parameter 'seed' is h1(key), while the out parameter
+        ///     'incr' is h2(key, hashSize).  Callers of this function should
         ///     add 'incr' each time through a loop.
         /// </devdoc>
         private static uint InitHash(IntPtr handle, int hashsize, out uint seed, out uint incr) {
@@ -963,7 +963,7 @@ namespace System.Windows.Forms
             seed = (uint)hashcode;
             // Restriction: incr MUST be between 1 and hashsize - 1, inclusive for
             // the modular arithmetic to work correctly.  This guarantees you'll
-            // visit every bucket in the table exactly once within hashsize 
+            // visit every bucket in the table exactly once within hashsize
             // iterations.  Violate this and it'll cause obscure bugs forever.
             // If you change this calculation for h2(key), update putEntry too!
             incr = (uint)(1 + (((seed >> 5) + 1) % ((uint)hashsize - 1)));
@@ -1058,13 +1058,13 @@ namespace System.Windows.Forms
         /// <devdoc>
         ///     Releases the handle associated with this window.  If handleValid
         ///     is true, this will unsubclass the window as well.  HandleValid
-        ///     should be false if we are releasing in response to a 
+        ///     should be false if we are releasing in response to a
         ///     WM_DESTROY.  Unsubclassing during this message can cause problems
         ///     with XP's theme manager and it's not needed anyway.
         /// </devdoc>
         private void ReleaseHandle(bool handleValid) {
             if (handle != IntPtr.Zero) {
-                // 
+                //
                 lock (this) {
                     if (handle != IntPtr.Zero) {
                         if (handleValid) {
@@ -1172,7 +1172,7 @@ namespace System.Windows.Forms
         ///   Determines if the given window is the first member of the linked list
         /// </devdoc>
         private static bool IsRootWindowInListWithChildren(NativeWindow window) {
-            // This seems backwards, but it isn't.  When a new subclass comes in, 
+            // This seems backwards, but it isn't.  When a new subclass comes in,
             // it's previousWindow field is set to the previous subclass.  Therefore,
             // the top of the subclass chain has nextWindow == null and previousWindow
             // == the first child subclass.
@@ -1187,8 +1187,8 @@ namespace System.Windows.Forms
         /* No one is calling this private method, so it is safe to comment it out.
         private static bool IsRootWindowInListWithNoChildren(NativeWindow window)
         {
-            return ((window.PreviousWindow == null) && (window.nextWindow == null));     
-        }       
+            return ((window.PreviousWindow == null) && (window.nextWindow == null));
+        }
         */
 
 
@@ -1214,12 +1214,12 @@ namespace System.Windows.Forms
         ///     code using this method.  Setting the unhandled exception mode does
         ///     not change the behavior of any NativeWindow objects that are currently
         ///     connected to window handles; it only affects new handle connections.
-        /// 
-        ///     When threadScope is false, the application exception mode is set. The 
+        ///
+        ///     When threadScope is false, the application exception mode is set. The
         ///     application exception mode is used for all threads that have the Automatic mode.
         ///     Setting the application exception mode does not affect the setting of the current thread.
-        /// 
-        ///     When threadScope is true, the thread exception mode is set. The thread 
+        ///
+        ///     When threadScope is true, the thread exception mode is set. The thread
         ///     exception mode overrides the application exception mode if it's not Automatic.
         /// </devdoc>
         internal static void SetUnhandledExceptionModeInternal(UnhandledExceptionMode mode, bool threadScope) {
@@ -1264,7 +1264,7 @@ namespace System.Windows.Forms
         /// <devdoc>
         ///     Unsubclassing is a tricky business.  We need to account for
         ///     some border cases:
-        ///     
+        ///
         ///     1) User has done multiple subclasses but has un-subclassed out of order.
         ///     2) User has done multiple subclasses but now our defWindowProc points to
         ///        a NativeWindow that has GC'd
@@ -1320,7 +1320,7 @@ namespace System.Windows.Forms
             }
             else {
                 // cutting the subclass chain anyway, even if we're not the last one in the chain
-                // if the whole chain is all managed NativeWindow it doesnt matter, 
+                // if the whole chain is all managed NativeWindow it doesnt matter,
                 // if the chain is not, then someone has been dirty and didn't clean up properly, too bad for them...
 
                 //We will cut off the chain if we cannot unsubclass.
@@ -1520,7 +1520,7 @@ namespace System.Windows.Forms
 
                 // Our static data is different for different app domains, so we include the app domain in with
                 // our window class name.  This way our static table always matches what Win32 thinks.
-                // 
+                //
                 windowClassName = GetFullClassName(localClassName);
                 windowProc = new NativeMethods.WndProc(this.Callback);
                 wndclass.lpfnWndProc = windowProc;
@@ -1556,7 +1556,7 @@ namespace System.Windows.Forms
                                 // This is a little harder.  We cannot reuse the class because it is
                                 // already in use.  We must create a new class.  We bump our domain qualifier
                                 // here to account for this, so we only do this expensive search once for the
-                                // domain.  
+                                // domain.
                                 do {
                                     domainQualifier++;
                                     windowClassName = GetFullClassName(localClassName);

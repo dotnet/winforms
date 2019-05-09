@@ -43,17 +43,17 @@ namespace System
         public static bool IsRedHatFamily7 => false;
         public static bool IsNotRedHatFamily6 => true;
 
-        public static bool IsWindows10Version1607OrGreater => 
+        public static bool IsWindows10Version1607OrGreater =>
             GetWindowsVersion() == 10 && GetWindowsMinorVersion() == 0 && GetWindowsBuildNumber() >= 14393;
-        public static bool IsWindows10Version1703OrGreater => 
+        public static bool IsWindows10Version1703OrGreater =>
             GetWindowsVersion() == 10 && GetWindowsMinorVersion() == 0 && GetWindowsBuildNumber() >= 15063;
-        public static bool IsWindows10Version1709OrGreater => 
+        public static bool IsWindows10Version1709OrGreater =>
             GetWindowsVersion() == 10 && GetWindowsMinorVersion() == 0 && GetWindowsBuildNumber() >= 16299;
         public static bool IsWindows10Version1803OrGreater =>
             GetWindowsVersion() == 10 && GetWindowsMinorVersion() == 0 && GetWindowsBuildNumber() >= 17134;
 
         // Windows OneCoreUAP SKU doesn't have httpapi.dll
-        public static bool IsNotOneCoreUAP =>  
+        public static bool IsNotOneCoreUAP =>
             File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "httpapi.dll"));
 
         public static bool IsWindowsIoTCore
@@ -105,7 +105,7 @@ namespace System
 
         public static bool IsInAppContainer
         {
-            // This actually checks whether code is running in a modern app. 
+            // This actually checks whether code is running in a modern app.
             // Currently this is the only situation where we run in app container.
             // If we want to distinguish the two cases in future,
             // EnvironmentHelpers.IsAppContainerProcess in desktop code shows how to check for the AC token.
@@ -292,7 +292,7 @@ namespace System
 
         [DllImport("kernel32.dll", ExactSpelling = true)]
         private static extern int GetCurrentApplicationUserModelId(ref uint applicationUserModelIdLength, byte[] applicationUserModelId);
-            
+
         [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
         private static extern bool CloseHandle(IntPtr handle);
 

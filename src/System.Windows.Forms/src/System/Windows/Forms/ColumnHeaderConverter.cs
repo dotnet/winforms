@@ -19,7 +19,7 @@ namespace System.Windows.Forms {
     /// <devdoc>
     /// </devdoc>
     public class ColumnHeaderConverter : ExpandableObjectConverter {
-    
+
         /// <devdoc>
         ///    <para>Gets a value indicating whether this converter can
         ///       convert an object to the given destination type using the context.</para>
@@ -30,7 +30,7 @@ namespace System.Windows.Forms {
             }
             return base.CanConvertTo(context, destinationType);
         }
-        
+
         /// <devdoc>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call
@@ -49,21 +49,21 @@ namespace System.Windows.Forms {
 
                 Type t = TypeDescriptor.GetReflectionType(value);
                 InstanceDescriptor id = null;
-                
+
                 if (col.ImageIndex != -1) {
                     ctor = t.GetConstructor(new Type[]{typeof(int)});
                     if (ctor != null) {
                         id = new InstanceDescriptor(ctor, new object[]{col.ImageIndex}, false);
                     }
-                    
-                } 
+
+                }
 
                 if (id == null && !string.IsNullOrEmpty(col.ImageKey)) {
                     ctor = t.GetConstructor(new Type[]{typeof(string)});
                     if (ctor != null) {
                         id = new InstanceDescriptor(ctor, new object[]{col.ImageKey}, false);
                     }
-                } 
+                }
 
                 if (id == null) {
                     ctor = t.GetConstructor(new Type[0]);
@@ -74,11 +74,11 @@ namespace System.Windows.Forms {
                         throw new ArgumentException(string.Format(SR.NoDefaultConstructor, t.FullName));
                     }
                 }
-                return id;                
+                return id;
             }
-            
+
             return base.ConvertTo(context, culture, value, destinationType);
         }
-    }    
+    }
 }
 

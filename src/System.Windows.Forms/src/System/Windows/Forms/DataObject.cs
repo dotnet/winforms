@@ -122,7 +122,7 @@ namespace System.Windows.Forms
         }
 
         /// <devdoc>
-        /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataObject'/> class, containing the specified data and its 
+        /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataObject'/> class, containing the specified data and its
         ///    associated format.</para>
         /// </devdoc>
         public DataObject(string format, object data) : this()
@@ -134,7 +134,7 @@ namespace System.Windows.Forms
         private IntPtr GetCompatibleBitmap(Bitmap bm)
         {
             // GDI+ returns a DIBSECTION based HBITMAP. The clipboard deals well
-            // only with bitmaps created using CreateCompatibleBitmap(). So, we 
+            // only with bitmaps created using CreateCompatibleBitmap(). So, we
             // convert the DIBSECTION into a compatible bitmap.
             //
             IntPtr hBitmap = bm.GetHbitmap();
@@ -148,7 +148,7 @@ namespace System.Windows.Forms
             IntPtr dcSrc = UnsafeNativeMethods.CreateCompatibleDC(new HandleRef(null, hDC));
             IntPtr srcOld = SafeNativeMethods.SelectObject(new HandleRef(null, dcSrc), new HandleRef(bm, hBitmap));
 
-            // Create a compatible DC and a new compatible bitmap. 
+            // Create a compatible DC and a new compatible bitmap.
             //
             IntPtr dcDest = UnsafeNativeMethods.CreateCompatibleDC(new HandleRef(null, hDC));
             IntPtr hBitmapNew = SafeNativeMethods.CreateCompatibleBitmap(new HandleRef(null, hDC), bm.Size.Width, bm.Size.Height);
@@ -173,7 +173,7 @@ namespace System.Windows.Forms
         }
 
         /// <devdoc>
-        ///    <para>Retrieves the data associated with the specified data 
+        ///    <para>Retrieves the data associated with the specified data
         ///       format, using an automated conversion parameter to determine whether to convert
         ///       the data to the format.</para>
         /// </devdoc>
@@ -185,7 +185,7 @@ namespace System.Windows.Forms
         }
 
         /// <devdoc>
-        ///    <para>Retrieves the data associated with the specified data 
+        ///    <para>Retrieves the data associated with the specified data
         ///       format.</para>
         /// </devdoc>
         public virtual object GetData(string format)
@@ -195,7 +195,7 @@ namespace System.Windows.Forms
         }
 
         /// <devdoc>
-        ///    <para>Retrieves the data associated with the specified class 
+        ///    <para>Retrieves the data associated with the specified class
         ///       type format.</para>
         /// </devdoc>
         public virtual object GetData(Type format)
@@ -210,7 +210,7 @@ namespace System.Windows.Forms
         }
 
         /// <devdoc>
-        ///    <para>Determines whether data stored in this instance is 
+        ///    <para>Determines whether data stored in this instance is
         ///       associated with, or can be converted to, the specified
         ///       format.</para>
         /// </devdoc>
@@ -228,7 +228,7 @@ namespace System.Windows.Forms
         }
 
         /// <devdoc>
-        ///    <para>Determines whether data stored in this instance is 
+        ///    <para>Determines whether data stored in this instance is
         ///       associated with the specified format, using an automatic conversion
         ///       parameter to determine whether to convert the data to the format.</para>
         /// </devdoc>
@@ -242,7 +242,7 @@ namespace System.Windows.Forms
         }
 
         /// <devdoc>
-        ///    <para>Determines whether data stored in this instance is 
+        ///    <para>Determines whether data stored in this instance is
         ///       associated with, or can be converted to, the specified
         ///       format.</para>
         /// </devdoc>
@@ -256,7 +256,7 @@ namespace System.Windows.Forms
 
 
         /// <devdoc>
-        ///    <para>Gets a list of all formats that data stored in this 
+        ///    <para>Gets a list of all formats that data stored in this
         ///       instance is associated with or can be converted to, using an automatic
         ///       conversion parameter<paramref name=" "/>to
         ///       determine whether to retrieve all formats that the data can be converted to or
@@ -279,7 +279,7 @@ namespace System.Windows.Forms
             return GetFormats(true);
         }
 
-        // <-- WHIDBEY ADDITIONS 
+        // <-- WHIDBEY ADDITIONS
 
         public virtual bool ContainsAudio()
         {
@@ -566,7 +566,7 @@ namespace System.Windows.Forms
                                 medium.unionmember = mf.Handle;
                             }
                         }
-                    } 
+                    }
                     */
                     else
                     {
@@ -789,7 +789,7 @@ namespace System.Windows.Forms
 
 
         /// <summary>
-        /// We are restricting serialization of formats that represent strings, bitmaps or OLE types. 
+        /// We are restricting serialization of formats that represent strings, bitmaps or OLE types.
         /// </summary>
         /// <param name="format">format name</param>
         /// <returns>true - serialize only safe types, strings or bitmaps.</returns>
@@ -850,7 +850,7 @@ namespace System.Windows.Forms
             else if (format.Equals(DataFormats.Dib)
                      && data is Image)
             {
-                // GDI+ does not properly handle saving to DIB images.  Since the 
+                // GDI+ does not properly handle saving to DIB images.  Since the
                 // clipboard will take an HBITMAP and publish a Dib, we don't need
                 // to support this.
                 //
@@ -1092,7 +1092,7 @@ namespace System.Windows.Forms
 
 
         /// <devdoc>
-        ///    <para>Stores the specified data and its associated format in 
+        ///    <para>Stores the specified data and its associated format in
         ///       this instance, using the automatic conversion parameter
         ///       to specify whether the
         ///       data can be converted to another format.</para>
@@ -1534,7 +1534,7 @@ namespace System.Windows.Forms
                         // thing of cloning the image so we can release the HBITMAP.
                         //
 
-                        //This bitmap is created by the com object which originally copied the bitmap to tbe 
+                        //This bitmap is created by the com object which originally copied the bitmap to tbe
                         //clipboard. We call Add here, since DeleteObject calls Remove.
                         Interop.HandleCollector.Add(medium.unionmember, Interop.CommonHandles.GDI);
                         Image clipboardImage = Image.FromHbitmap(medium.unionmember);
@@ -2180,10 +2180,10 @@ namespace System.Windows.Forms
         /// </summary>
         private class BitmapBinder : SerializationBinder
         {
-            // Bitmap type lives in defferent assemblies in the .Net Framework and in .Net Core. 
-            // However we allow desktop content to be deserializated in Core and Core content 
-            // deserialized on desktop. To support this roundtrip, 
-            // Bitmap type identity is unified to the desktop type during serialization 
+            // Bitmap type lives in defferent assemblies in the .Net Framework and in .Net Core.
+            // However we allow desktop content to be deserializated in Core and Core content
+            // deserialized on desktop. To support this roundtrip,
+            // Bitmap type identity is unified to the desktop type during serialization
             // and we use the desktop type name when filtering as well.
             private static readonly string s_allowedTypeName = "System.Drawing.Bitmap";
             private static readonly string s_allowedAssemblyName = "System.Drawing";
@@ -2191,7 +2191,7 @@ namespace System.Windows.Forms
             private static byte[] s_allowedToken = new byte[] { 0xB0, 0x3F, 0x5F, 0x7F, 0x11, 0xD5, 0x0A, 0x3A };
 
             /// <summary>
-            ///  Only safe to deserialize types are bypassing this callback, Strings 
+            ///  Only safe to deserialize types are bypassing this callback, Strings
             ///  and arrays of primitive types in particular. We are explicitly allowing
             ///  System.Drawing.Bitmap type to bind using the default binder.
             /// </summary>
@@ -2258,7 +2258,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This exception is used to indicate that clipboard contains a serialized 
+        /// This exception is used to indicate that clipboard contains a serialized
         /// managed object that contains unexpected types and that we should stop processing this data.
         /// </summary>
         private class RestrictedTypeDeserializationException : Exception

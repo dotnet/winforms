@@ -121,7 +121,7 @@ namespace System.Windows.Forms
         ///       Opens the file selected by the user with read-only permission.  The file
         ///       attempted is specified by the <see cref='System.Windows.Forms.FileDialog.FileName'/> property.
         ///    </para>
-        /// </devdoc>        
+        /// </devdoc>
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
         public Stream OpenFile()
         {
@@ -182,7 +182,7 @@ namespace System.Windows.Forms
                 results.GetCount(out count);
                 string[] files = new string[count];
                 for (uint i = 0; i < count; ++i)
-                { 
+                {
                     FileDialogNative.IShellItem item;
                     results.GetItemAt(i, out item);
                     files[unchecked((int)i)] = GetFilePathFromShellItem(item);
@@ -190,7 +190,7 @@ namespace System.Windows.Forms
                 return files;
             }
             else
-            { 
+            {
                 FileDialogNative.IShellItem item;
                 openDialog.GetResult(out item);
                 return new string[] { GetFilePathFromShellItem(item) };
@@ -244,7 +244,7 @@ namespace System.Windows.Forms
         }
 
         private protected override bool SettingsSupportVistaDialog
-        { 
+        {
             get => base.SettingsSupportVistaDialog && !ShowReadOnly;
         }
     }

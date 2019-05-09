@@ -118,8 +118,8 @@ namespace System.Windows.Forms {
         private Size        dimensions = new Size(1, 1);
         private int         maxSelectionCount = DEFAULT_MAX_SELECTION_COUNT;
         // Reconcile out-of-range min/max values in the property getters.
-        private DateTime    maxDate = DateTime.MaxValue; 
-        private DateTime    minDate = DateTime.MinValue; 
+        private DateTime    maxDate = DateTime.MaxValue;
+        private DateTime    minDate = DateTime.MinValue;
         private int         scrollChange = DEFAULT_SCROLL_CHANGE;
         private bool        todayDateSet = false;           // Has TodayDate been explicitly set?
         private DateTime    todayDate = DateTime.Now.Date;
@@ -163,7 +163,7 @@ namespace System.Windows.Forms {
             selectionEnd = todayDate;
             SetStyle(ControlStyles.UserPaint, false);
             SetStyle(ControlStyles.StandardClick, false);
-            
+
             TabStop = true;
         }
 
@@ -204,7 +204,7 @@ namespace System.Windows.Forms {
                 return dateTimes;
             }
             set {
-                // 
+                //
 
 
 
@@ -293,7 +293,7 @@ namespace System.Windows.Forms {
                 return dateTimes;
             }
             set {
-                // 
+                //
 
 
 
@@ -551,7 +551,7 @@ namespace System.Windows.Forms {
                 return dateTimes;
             }
             set {
-                // 
+                //
 
 
 
@@ -597,7 +597,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add => base.PaddingChanged += value; 
+            add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value; }
 
         /// <devdoc>
@@ -860,7 +860,7 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         ///     Unlike most controls, serializing the MonthCalendar's Size is really bad:
-        ///     when it's restored at runtime, it uses a a default SingleMonthSize, which 
+        ///     when it's restored at runtime, it uses a a default SingleMonthSize, which
         ///     may not be right, especially for JPN/CHS machines.
         /// </devdoc>
         [
@@ -1150,7 +1150,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected override void CreateHandle() {
             if (!RecreatingHandle) {
-                IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();   
+                IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
                 try {
                     NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX();
                     icc.dwICC = NativeMethods.ICC_DATE_CLASSES;
@@ -2008,7 +2008,7 @@ namespace System.Windows.Forms {
 
             AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
             AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);
-            
+
             //subhag
             if (start.Ticks < minDate.Ticks || end.Ticks < minDate.Ticks)
                 SetSelRange(minDate,minDate);
@@ -2399,7 +2399,7 @@ namespace System.Windows.Forms {
                 set {
                     base.Value = value;
                 }
-            }                      
+            }
         }
 
     } // end class MonthCalendar

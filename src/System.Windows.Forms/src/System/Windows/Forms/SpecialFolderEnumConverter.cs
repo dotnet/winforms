@@ -6,7 +6,7 @@ namespace System.Windows.Forms {
     using System;
     using System.ComponentModel;
     using System.Collections;
-    
+
     internal class SpecialFolderEnumConverter : AlphaSortedEnumConverter {
         public SpecialFolderEnumConverter(Type type) : base(type) {
         }

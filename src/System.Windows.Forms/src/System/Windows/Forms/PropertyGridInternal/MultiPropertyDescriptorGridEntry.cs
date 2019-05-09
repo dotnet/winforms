@@ -10,7 +10,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
     using System.Diagnostics.CodeAnalysis;
     using System;
     using System.Collections;
-    using System.Reflection;    
+    using System.Reflection;
     using System.ComponentModel.Design;
     using System.Windows.Forms;
     using System.Drawing;
@@ -26,7 +26,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // GridEntry classes are internal so we have complete
                                                                                                     // control over who does what in the constructor.
         ]
-        public MultiPropertyDescriptorGridEntry(PropertyGrid ownerGrid, GridEntry peParent, object[] objectArray, PropertyDescriptor[] propInfo, bool hide) 
+        public MultiPropertyDescriptorGridEntry(PropertyGrid ownerGrid, GridEntry peParent, object[] objectArray, PropertyDescriptor[] propInfo, bool hide)
         : base (ownerGrid, peParent, hide) {
             mergedPd = new MergePropertyDescriptor(propInfo);
             this.objs = objectArray;
@@ -241,15 +241,15 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     object[] objects = (object[])obj;
 
                     if (objects != null && objects.Length > 0) {
-                
+
                         IDesignerHost host = DesignerHost;
                         DesignerTransaction trans = null;
-            
+
                         if (host != null) {
                             trans = host.CreateTransaction(string.Format(SR.PropertyGridResetValue, this.PropertyName));
                         }
                         try {
-                            
+
                             bool needChangeNotify = !(objects[0] is IComponent) || ((IComponent)objects[0]).Site == null;
                             if (needChangeNotify) {
                                 if (!OnComponentChanging()) {
@@ -260,9 +260,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
                                     return false;
                                 }
                             }
-    
+
                             this.mergedPd.ResetValue(obj);
-    
+
                             if (needChangeNotify) {
                                 OnComponentChanged();
                             }
@@ -273,7 +273,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                                 trans.Commit();
                             }
                         }
-                    } 
+                    }
                     return false;
                 case NOTIFY_DBL_CLICK:
                 case NOTIFY_RETURN:
@@ -281,7 +281,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     Debug.Assert(obj is object[], "Did not get an array of objects!!");
 
                     MergePropertyDescriptor mpd = propertyInfo as MergePropertyDescriptor;
-                    
+
                     if (mpd != null) {
                         object[] objs = (object[])obj;
 
@@ -295,7 +295,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                                 return ViewEvent(obj, null, descriptor, true);
                             }
                         }
-                    
+
                         return false;
                     }
                     else {

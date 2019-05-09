@@ -9,9 +9,9 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.VisualStyles;
     using System.Windows.Forms.Layout;
     using System.Diagnostics;
-    
+
     /// <summary>
-    /// 
+    ///
 
     internal class ToolStripGrip : ToolStripButton {
 
@@ -38,7 +38,7 @@ namespace System.Windows.Forms {
             }
 
             // if we're using Visual Styles we've got to be a bit thicker.
-            gripThickness = ToolStripManager.VisualStylesEnabled ? scaledGripThicknessVisualStylesEnabled : scaledGripThickness;     
+            gripThickness = ToolStripManager.VisualStylesEnabled ? scaledGripThicknessVisualStylesEnabled : scaledGripThickness;
             SupportsItemClick = false;
         }
 
@@ -52,10 +52,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        public override bool CanSelect {  
+        public override bool CanSelect {
             get  {
-                return false; 
-            } 
+                return false;
+            }
         }
 
         internal int GripThickness {
@@ -66,7 +66,7 @@ namespace System.Windows.Forms {
 
         internal bool MovingToolStrip {
             get {
-                return ((ToolStripPanelRow != null) && movingToolStrip);  
+                return ((ToolStripPanelRow != null) && movingToolStrip);
             }
             set {
                 if ((movingToolStrip != value) && ParentInternal != null) {
@@ -94,7 +94,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        
+
         protected override AccessibleObject CreateAccessibilityInstance() {
             return new ToolStripGripAccessibleObject(this);
         }
@@ -107,9 +107,9 @@ namespace System.Windows.Forms {
                 }
                 else {
                     preferredSize = new Size(gripThickness, this.ParentInternal.Height);
-                    
+
                 }
-                    
+
             }
             // Constrain ourselves
             if (preferredSize.Width > constrainingSize.Width) {
@@ -119,32 +119,32 @@ namespace System.Windows.Forms {
             if (preferredSize.Height > constrainingSize.Height) {
                 preferredSize.Height = constrainingSize.Height;
             }
-            
+
             return preferredSize;
         }
 
         private bool LeftMouseButtonIsDown() {
           return (Control.MouseButtons == MouseButtons.Left) && (Control.ModifierKeys == Keys.None);
         }
-         
+
         protected override void OnPaint(System.Windows.Forms.PaintEventArgs e) {
-            // all the grip painting should be on the ToolStrip itself. 
+            // all the grip painting should be on the ToolStrip itself.
             if (ParentInternal != null) {
                 ParentInternal.OnPaintGrip(e);
             }
         }
-            
-       
+
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="mea"></param>
-        protected override void OnMouseDown(System.Windows.Forms.MouseEventArgs mea) {            
+        protected override void OnMouseDown(System.Windows.Forms.MouseEventArgs mea) {
             startLocation =  TranslatePoint(new Point(mea.X, mea.Y), ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords);
             base.OnMouseDown(mea);
         }
 
-        protected override void OnMouseMove(System.Windows.Forms.MouseEventArgs mea) {  
+        protected override void OnMouseMove(System.Windows.Forms.MouseEventArgs mea) {
             bool leftMouseButtonDown = LeftMouseButtonIsDown();
             if (!MovingToolStrip && leftMouseButtonDown) {
 
@@ -157,7 +157,7 @@ namespace System.Windows.Forms {
                 if (DragSize == LayoutUtils.MaxSize) {
                     DragSize = SystemInformation.DragSize;
                 }
-               
+
                 if (deltaX >= DragSize.Width) {
                     MovingToolStrip = true;
                 }
@@ -169,7 +169,7 @@ namespace System.Windows.Forms {
                         MovingToolStrip = true;
                     }
                 }
-                
+
             }
             if (MovingToolStrip) {
                 if (leftMouseButtonDown) {
@@ -180,7 +180,7 @@ namespace System.Windows.Forms {
                     if (endLocation != lastEndLocation) {
                         ToolStripPanelRow.ToolStripPanel.MoveControl(ParentInternal, /*startLocation,*/endLocation );
                         lastEndLocation = endLocation;
-                    }                        
+                    }
                     startLocation = endLocation;
                 }
                 else {
@@ -188,11 +188,11 @@ namespace System.Windows.Forms {
                     MovingToolStrip = false;
                 }
             }
-    
+
             base.OnMouseMove(mea);
         }
 
-        protected override void OnMouseEnter(System.EventArgs e) { 
+        protected override void OnMouseEnter(System.EventArgs e) {
 
             // only switch the cursor if we've got a rafting row.
             if ((ParentInternal != null) && (ToolStripPanelRow != null) && (!ParentInternal.IsInDesignMode)) {
@@ -207,10 +207,10 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="e"></param>
-        protected override void OnMouseLeave(System.EventArgs e) { 
+        protected override void OnMouseLeave(System.EventArgs e) {
             if (oldCursor != null && !ParentInternal.IsInDesignMode) {
                 SetCursor(ParentInternal,oldCursor);
             }
@@ -220,9 +220,9 @@ namespace System.Windows.Forms {
             base.OnMouseLeave(e);
         }
 
-       
-        
-        protected override void OnMouseUp(System.Windows.Forms.MouseEventArgs mea) {    
+
+
+        protected override void OnMouseUp(System.Windows.Forms.MouseEventArgs mea) {
             if (MovingToolStrip) {
                 Point endLocation = TranslatePoint(new Point(mea.X, mea.Y), ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords);
                 ToolStripPanelRow.ToolStripPanel.MoveControl(ParentInternal, /*startLocation,*/endLocation );
@@ -262,7 +262,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            
+
             public override AccessibleRole Role {
                get {
                    AccessibleRole role = Owner.AccessibleRole;
@@ -286,5 +286,5 @@ namespace System.Windows.Forms {
         }
     }
 }
-   
+
 

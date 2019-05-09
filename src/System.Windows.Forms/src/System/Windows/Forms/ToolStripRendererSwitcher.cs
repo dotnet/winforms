@@ -7,15 +7,15 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.Collections.Specialized;
     using System.ComponentModel;
-    
 
-    // this class encapsulates the logic for Renderer and RenderMode so it can 
+
+    // this class encapsulates the logic for Renderer and RenderMode so it can
     // be shared across classes.
     internal class ToolStripRendererSwitcher {
 
         private static readonly int stateUseDefaultRenderer             = BitVector32.CreateMask();
         private static readonly int stateAttachedRendererChanged = BitVector32.CreateMask(stateUseDefaultRenderer);
-        
+
 
         private ToolStripRenderer              renderer                 = null;
         private Type                           currentRendererType      = typeof(System.Type);
@@ -28,7 +28,7 @@ namespace System.Windows.Forms {
             this.RenderMode = defaultRenderMode;
         }
 
-        
+
         public ToolStripRendererSwitcher(Control owner) {
             state[stateUseDefaultRenderer] = true;
             state[stateAttachedRendererChanged] = false;
@@ -47,16 +47,16 @@ namespace System.Windows.Forms {
                 }
                 // always return a valid renderer so our paint code
                 // doesn't have to be bogged down by checks for null.
-      
+
                 state[stateUseDefaultRenderer] = false;
                 if (renderer == null) {
                     Renderer = ToolStripManager.CreateRenderer(RenderMode);
                 }
                 return renderer;
-              
+
             }
             set {
-               // if the value happens to be null, the next get 
+               // if the value happens to be null, the next get
                // will autogenerate a new ToolStripRenderer.
                if (renderer != value) {
                    state[stateUseDefaultRenderer] = (value == null);
@@ -85,7 +85,7 @@ namespace System.Windows.Forms {
                     return ToolStripRenderMode.System;
                 }
                 return  ToolStripRenderMode.Custom;
-                
+
             }
             set {
                 //valid values are 0x0 to 0x3
@@ -109,7 +109,7 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
+
         public event EventHandler RendererChanged;
 
         private void OnRendererChanged(EventArgs e) {
@@ -122,14 +122,14 @@ namespace System.Windows.Forms {
                 OnRendererChanged(e);
             }
         }
-            
+
         private void OnControlDisposed(object sender, EventArgs e) {
             if (state[stateAttachedRendererChanged]) {
                ToolStripManager.RendererChanged -= new EventHandler(OnDefaultRendererChanged);
                state[stateAttachedRendererChanged] = false;
             }
         }
- 
+
         private void OnControlVisibleChanged(object sender, EventArgs e) {
             Control control = sender as Control;
             if (control != null) {
@@ -147,7 +147,7 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
+
         public bool ShouldSerializeRenderMode() {
             // We should NEVER serialize custom.
             return (RenderMode != defaultRenderMode && RenderMode != ToolStripRenderMode.Custom);
@@ -155,6 +155,6 @@ namespace System.Windows.Forms {
         public void ResetRenderMode() {
             this.RenderMode = defaultRenderMode;
         }
-   
+
     }
 }

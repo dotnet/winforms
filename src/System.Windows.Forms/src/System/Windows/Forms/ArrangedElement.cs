@@ -12,8 +12,8 @@ namespace System.Windows.Forms {
       using System.Collections;
       using System.ComponentModel;
       using System.Diagnostics;
-      
-      
+
+
       internal abstract class ArrangedElement : Component, IArrangedElement {
 
           /// <devdoc>
@@ -24,12 +24,12 @@ namespace System.Windows.Forms {
           private BitVector32 state = new BitVector32();
           private PropertyStore propertyStore = new PropertyStore();  // Contains all properties that are not always set.
           private int suspendCount = 0;
-       
+
           private static readonly int stateVisible   = BitVector32.CreateMask();
           private static readonly int stateDisposing = BitVector32.CreateMask(stateVisible);
           private static readonly int stateLocked    = BitVector32.CreateMask(stateDisposing);
-                
-    
+
+
           private static readonly int PropControlsCollection = PropertyStore.CreateKey();
           private Control spacer = new Control();
 
@@ -38,7 +38,7 @@ namespace System.Windows.Forms {
             this.Margin  = DefaultMargin;
             state[stateVisible] = true;
           }
-        
+
           public Rectangle Bounds {
               get {
                   return bounds;
@@ -56,25 +56,25 @@ namespace System.Windows.Forms {
           protected virtual Padding DefaultMargin {
               get { return Padding.Empty; }
           }
-   
+
           protected virtual Padding DefaultPadding {
               get { return Padding.Empty; }
           }
- 
+
           public virtual Rectangle DisplayRectangle {
               get {
                   Rectangle displayRectangle = this.Bounds;
                   return displayRectangle;
               }
            }
-          
+
            public abstract LayoutEngine LayoutEngine {
                get;
            }
-   
+
            public Padding Margin {
                get { return CommonProperties.GetMargin(this); }
-               set { 
+               set {
 
                 Debug.Assert((value.Right >= 0 && value.Left >= 0 && value.Top >= 0 && value.Bottom >=0),  "who's setting margin negative?");
                 value = LayoutUtils.ClampNegativePaddingToZero(value);
@@ -82,7 +82,7 @@ namespace System.Windows.Forms {
 
                }
            }
-   
+
            public virtual Padding Padding {
                get { return CommonProperties.GetPadding(this, DefaultPadding); }
                set {
@@ -135,9 +135,9 @@ namespace System.Windows.Forms {
            }
 
           protected abstract IArrangedElement GetContainer();
-          
+
           protected abstract ArrangedElementCollection GetChildren();
-          
+
           public virtual Size GetPreferredSize(Size constrainingSize) {
               Size preferredSize = LayoutEngine.GetPreferredSize(this, constrainingSize - Padding.Size) + Padding.Size;
 
@@ -159,7 +159,7 @@ namespace System.Windows.Forms {
           }
 
           public void SetBounds(Rectangle bounds, BoundsSpecified specified) {
-              // in this case the parent is telling us to refresh our bounds - dont 
+              // in this case the parent is telling us to refresh our bounds - dont
               // call PerformLayout
               SetBoundsCore(bounds, specified);
           }
@@ -168,7 +168,7 @@ namespace System.Windows.Forms {
           protected virtual void SetBoundsCore(Rectangle bounds, BoundsSpecified specified) {
               if (bounds != this.bounds) {
                   Rectangle oldBounds = this.bounds;
-          
+
                   this.bounds = bounds;
                   OnBoundsChanged(oldBounds, bounds);
               }

@@ -34,12 +34,12 @@ namespace System.Windows.Forms {
         private BitVector32 state = new BitVector32();
         private ToolStripContainer owner;
 
-        
+
 #if DEBUG
             internal static TraceSwitch ToolStripPanelDebug = new TraceSwitch("ToolStripPanelDebug", "Debug code for rafting mouse movement");
             internal static TraceSwitch ToolStripPanelFeedbackDebug = new TraceSwitch("ToolStripPanelFeedbackDebug", "Debug code for rafting feedback");
             internal static TraceSwitch ToolStripPanelMissingRowDebug = new TraceSwitch("ToolStripPanelMissingRowDebug", "Debug code for rafting feedback");
-                   
+
 #else
         internal static TraceSwitch ToolStripPanelDebug;
         internal static TraceSwitch ToolStripPanelFeedbackDebug;
@@ -61,7 +61,7 @@ namespace System.Windows.Forms {
         private static readonly int stateEndInit = BitVector32.CreateMask(stateInJoin);
         private static readonly int stateLayoutSuspended  = BitVector32.CreateMask(stateEndInit);
         private static readonly int stateRightToLeftChanged =  BitVector32.CreateMask(stateLayoutSuspended);
-     
+
 
 
         // events
@@ -132,7 +132,7 @@ namespace System.Windows.Forms {
             set { base.AutoScrollMinSize = value; }
         }
 
-        
+
         [
             DefaultValue(true),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)
@@ -194,7 +194,7 @@ namespace System.Windows.Forms {
                 return LayoutUtils.InflateRect(this.ClientRectangle, DragMargin);
             }
         }
-        
+
         internal bool IsInDesignMode {
             get {
                 return DesignMode;
@@ -222,7 +222,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        
+
         public Orientation Orientation {
             get {
                 return orientation;
@@ -308,10 +308,10 @@ namespace System.Windows.Forms {
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ToolStripPanelRowsDescr)),        
+        SRDescription(nameof(SR.ToolStripPanelRowsDescr)),
         SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")
         ]
-        
+
         public ToolStripPanelRow[] Rows {
             get {
                 ToolStripPanelRow[] rows = new ToolStripPanelRow[RowsInternal.Count];
@@ -320,7 +320,7 @@ namespace System.Windows.Forms {
             }
         }
 
-       
+
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -441,8 +441,8 @@ namespace System.Windows.Forms {
 
         }
         private Point GetStartLocation(ToolStrip toolStripToDrag) {
-            if (toolStripToDrag.IsCurrentlyDragging 
-                && Orientation == Orientation.Horizontal 
+            if (toolStripToDrag.IsCurrentlyDragging
+                && Orientation == Orientation.Horizontal
                 && toolStripToDrag.RightToLeft == RightToLeft.Yes ) {
                 // the grip is on the right side, not left.
                 return new Point(toolStripToDrag.Right,toolStripToDrag.Top);
@@ -480,7 +480,7 @@ namespace System.Windows.Forms {
 
         protected override void OnControlAdded(ControlEventArgs e) {
             base.OnControlAdded(e);
-            
+
             if (!state[stateBeginInit] && !state[stateInJoin]) {
                 if (!state[stateLayoutSuspended]) {
                     this.Join(e.Control as ToolStrip, e.Control.Location);
@@ -494,7 +494,7 @@ namespace System.Windows.Forms {
 
         protected override void OnControlRemoved(ControlEventArgs e) {
             ISupportToolStripPanel controlToBeDragged = e.Control as ISupportToolStripPanel;
-            
+
             if (controlToBeDragged != null) {
                 if (controlToBeDragged.ToolStripPanelRow != null/* && controlToBeDragged.ToolStripPanelRow != owner*/) {
                     controlToBeDragged.ToolStripPanelRow.ControlsInternal.Remove(e.Control);
@@ -518,7 +518,7 @@ namespace System.Windows.Forms {
         internal override void OnLayoutSuspended() {
             base.OnLayoutSuspended();
             state[stateLayoutSuspended] = true;
-        
+
         }
 
         internal override void OnLayoutResuming(bool resumeLayout) {
@@ -559,7 +559,7 @@ namespace System.Windows.Forms {
             else {
                 state[stateRightToLeftChanged] = true;
             }
-            
+
         }
 
         // PM team has reviewed and decided on naming changes already
@@ -625,7 +625,7 @@ namespace System.Windows.Forms {
                 for (int i = 0; i < controlArray.Length; i++) {
                     int numRows = RowsInternal.Count;
                     ISupportToolStripPanel draggedControl = controlArray[i] as ISupportToolStripPanel;
-                    
+
                     if (draggedControl != null && draggedControl.ToolStripPanelRow != null && !draggedControl.IsCurrentlyDragging) {
                         ToolStripPanelRow row = draggedControl.ToolStripPanelRow;
                         if (row.Bounds.Contains(controlArray[i].Location)) {
@@ -660,16 +660,16 @@ namespace System.Windows.Forms {
 
         [ThreadStatic]
         private static FeedbackRectangle feedbackRect;
-        
+
         private void GiveToolStripPanelFeedback(ToolStrip toolStripToDrag, Point screenLocation) {
-          
+
             if (Orientation == Orientation.Horizontal && RightToLeft == RightToLeft.Yes) {
                 // paint the feedback in the correct location when RTL.Yes
                 screenLocation.Offset(-toolStripToDrag.Width,0);
             }
             if (CurrentFeedbackRect == null) {
                 Debug.WriteLineIf(ToolStripPanelFeedbackDebug.TraceVerbose, "FEEDBACK: creating NEW feedback at " + screenLocation.ToString());
-          
+
                 CurrentFeedbackRect = new FeedbackRectangle(toolStripToDrag.ClientRectangle);
             }
 
@@ -682,29 +682,29 @@ namespace System.Windows.Forms {
                 }
                 finally {
                     toolStripToDrag.ResumeCaputureMode();
-                }                
+                }
             }
             else {
                 Debug.WriteLineIf(ToolStripPanelFeedbackDebug.TraceVerbose, "FEEDBACK: Moving feedback to " + screenLocation.ToString());
                 CurrentFeedbackRect.Move(screenLocation);
-                
+
             }
         }
-            
-            
+
+
 
         internal static void ClearDragFeedback() {
-#if DEBUG            
+#if DEBUG
             if (ToolStripPanelFeedbackDebug.TraceVerbose){
                Debug.WriteLine("FEEDBACK:  clearing old feedback at "/*+ new StackTrace().ToString()*/);
             }
-#endif            
+#endif
             FeedbackRectangle oldFeedback = feedbackRect;
             feedbackRect = null;
             if (oldFeedback != null) {
                 oldFeedback.Dispose();
             }
-            
+
         }
 
 
@@ -723,19 +723,19 @@ namespace System.Windows.Forms {
         // API so the underlying implementation can be replaced if necessary.
         private class FeedbackRectangle : IDisposable {
             private FeedbackDropDown dropDown;
-            
+
             public FeedbackRectangle(Rectangle bounds) {
                 dropDown = new FeedbackDropDown(bounds);
-             
+
             }
             public bool Visible {
                 get {
                     if (dropDown != null && !dropDown.IsDisposed) {
-                        return dropDown.Visible; 
+                        return dropDown.Visible;
                     }
                     return false;
                 }
-                set { 
+                set {
                     if (dropDown != null && !dropDown.IsDisposed) {
                         dropDown.Visible = value;
                     }
@@ -762,7 +762,7 @@ namespace System.Windows.Forms {
             public void Dispose() {
                 Dispose(true);
             }
-            
+
             ~FeedbackRectangle() {
                 Dispose(false);
             }
@@ -771,7 +771,7 @@ namespace System.Windows.Forms {
 
                 private const int MAX_PAINTS_TO_SERVICE = 20;
                 private int _numPaintsServiced = 0; // member variable to protect against re-entrancy
-                
+
                 public FeedbackDropDown(Rectangle bounds) : base(){
                     SetStyle(ControlStyles.AllPaintingInWmPaint, false);
                     SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
@@ -783,21 +783,21 @@ namespace System.Windows.Forms {
 
                     // caching as this is unlikely to change during the lifetime
                     // of the dropdown.
-        
+
                     Rectangle regionRect = bounds;    //create a region the size of the client area
                     regionRect.Inflate(-1,-1);        //squish down by one pixel
 
-                    Region rgn = new Region(bounds);  // create region 
+                    Region rgn = new Region(bounds);  // create region
                     rgn.Exclude(regionRect);          // exclude the center part
 
                     // set it into the toolstripdropdown’s region
-                    this.Region = rgn;                
+                    this.Region = rgn;
                 }
-                
-                // ForceSynchronousPaint - peeks through the message queue, looking for WM_PAINTs 
-                // calls UpdateWindow on the hwnd to force the paint to happen now.  
+
+                // ForceSynchronousPaint - peeks through the message queue, looking for WM_PAINTs
+                // calls UpdateWindow on the hwnd to force the paint to happen now.
                 //
-                // When we're changing the location of the feedback dropdown, we need to 
+                // When we're changing the location of the feedback dropdown, we need to
                 // force WM_PAINTS to happen, as things that dont respond to WM_ERASEBKGND
                 // have bits of the dropdown region drawn all over them.
                 private void ForceSynchronousPaint() {
@@ -808,7 +808,7 @@ namespace System.Windows.Forms {
                                 while (UnsafeNativeMethods.PeekMessage(ref msg, new HandleRef(this, IntPtr.Zero),
                                                            Interop.WindowMessages.WM_PAINT, Interop.WindowMessages.WM_PAINT,
                                                            NativeMethods.PM_REMOVE)) {
-                                    SafeNativeMethods.UpdateWindow(new HandleRef(null, msg.hwnd));    
+                                    SafeNativeMethods.UpdateWindow(new HandleRef(null, msg.hwnd));
 
                                     // Infinite loop protection
                                     if (_numPaintsServiced++ > MAX_PAINTS_TO_SERVICE) {
@@ -823,7 +823,7 @@ namespace System.Windows.Forms {
                         }
                     }
                 }
-            
+
                 protected override void OnPaint(PaintEventArgs e) {
                 }
                 protected override void OnPaintBackground(PaintEventArgs e) {
@@ -843,7 +843,7 @@ namespace System.Windows.Forms {
                     ForceSynchronousPaint();
                 }
 
-                protected override void WndProc(ref Message m){                
+                protected override void WndProc(ref Message m){
                     if (m.Msg == Interop.WindowMessages.WM_NCHITTEST){
                         m.Result = (IntPtr)NativeMethods.HTTRANSPARENT;
                     }
@@ -880,15 +880,15 @@ namespace System.Windows.Forms {
             else {
                 location = new Point(dragRect.Right -1, 0);
             }
-            
+
             Join(toolStripToDrag, location);
-            
+
         }
 
         public void Join(ToolStrip toolStripToDrag, int x, int y) {
             Join(toolStripToDrag, new Point(x, y));
         }
- 
+
         [
             SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // Using ToolStrip instead of Control intentionally
         ]
@@ -914,7 +914,7 @@ namespace System.Windows.Forms {
 
         internal void MoveControl(ToolStrip toolStripToDrag, Point screenLocation) {
             ISupportToolStripPanel draggedControl = toolStripToDrag as ISupportToolStripPanel;
-         
+
             if (draggedControl == null) {
                 Debug.Fail("Move called on immovable object.");
                 return;
@@ -926,7 +926,7 @@ namespace System.Windows.Forms {
                 MoveOutsideContainer(toolStripToDrag, screenLocation);
                 return;
             }
-            else {                
+            else {
                 Join(toolStripToDrag as ToolStrip, clientLocation);
             }
         }
@@ -942,7 +942,7 @@ namespace System.Windows.Forms {
             // we know we're moving inside the container.
 
             bool changedRow = false;
-   
+
             ClearDragFeedback();
 
             // In design mode we get bogus values for client location.
@@ -988,10 +988,10 @@ namespace System.Windows.Forms {
             else {
                 // Point OUTSIDE current rafting row.
 
-              
+
 
                 Debug.WriteLineIf(ToolStripPanelDebug.TraceVerbose, "RC.MoveControl - Point " + clientLocation + " is outside the current rafting row.");
-                
+
                 ToolStripPanelRow row = PointToRow(clientLocation);
                 if (row == null) {
                     Debug.WriteLineIf(ToolStripPanelDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "\tThere is no row corresponding to this point, creating a new one."));
@@ -1007,7 +1007,7 @@ namespace System.Windows.Forms {
                         // if it's before the first row, insert at the front.
                         index = (clientLocation.X <= this.Padding.Left) ? 0 : index;
                     }
-                
+
                     ToolStripPanelRow previousRow = null;
                     if (this.RowsInternal.Count > 0) {
                         if (index == 0) {
@@ -1075,7 +1075,7 @@ namespace System.Windows.Forms {
                     }
                     row.JoinRow(toolStripToDrag, clientLocation);
                 }
-                
+
                 if (changedRow && draggedControl.IsCurrentlyDragging) {
                     // force the layout of the new row.
                     for (int i = 0; i < RowsInternal.Count; i++) {
@@ -1093,23 +1093,23 @@ namespace System.Windows.Forms {
                         }
                         else {
                             cursorLoc.Y += toolStripToDrag.GripRectangle.Height /2;
-                            cursorLoc.X = Cursor.Position.X;                                
+                            cursorLoc.X = Cursor.Position.X;
                         }
                         Cursor.Position = cursorLoc;
                     }
                 }
 
             }
- 
-       
-#if DEBUG            
+
+
+#if DEBUG
             Debug_VerifyOneToOneCellRowControlMatchup();
-//            Debug_VerifyCountRows();            
+//            Debug_VerifyCountRows();
             if (draggedControl.IsCurrentlyDragging && changedRow && !debugModeOnly_ChangedContainers) {
                 // if we have changed containers, we're in a SuspendLayout.
                 Debug_VerifyNoOverlaps();
             }
-#endif            
+#endif
         }
 
         private void MoveOutsideContainer(ToolStrip toolStripToDrag, Point screenLocation) {
@@ -1121,7 +1121,7 @@ namespace System.Windows.Forms {
                     panel.MoveControl(toolStripToDrag, screenLocation);
                 }
                 toolStripToDrag.PerformLayout();
-#if DEBUG             
+#if DEBUG
                 ISupportToolStripPanel draggedControl = toolStripToDrag as ISupportToolStripPanel;
                 if (draggedControl.IsCurrentlyDragging) {
                     Debug_VerifyNoOverlaps();
@@ -1162,7 +1162,7 @@ namespace System.Windows.Forms {
             return null;
         }
 
-    
+
         #endregion JoinAndMove
 
 
@@ -1171,8 +1171,8 @@ namespace System.Windows.Forms {
             for (int i = 0; i < this.RowsInternal.Count; i++) {
                 ToolStripPanelRow row = this.RowsInternal[i];
                 foreach (ToolStripPanelCell cell in row.Cells) {
-                    
-                    if (cell.Control != null) {                        
+
+                    if (cell.Control != null) {
                         ToolStripPanelRow currentlyAssignedRow = ((ISupportToolStripPanel)cell.Control).ToolStripPanelRow;
                         if (currentlyAssignedRow != row) {
                             int goodRowIndex = (currentlyAssignedRow != null) ? RowsInternal.IndexOf(currentlyAssignedRow) : -1;
@@ -1196,7 +1196,7 @@ namespace System.Windows.Forms {
            for (int i = 0; i < RowsInternal.Count; i++) {
                 Debug.Write("Row " + i.ToString(CultureInfo.CurrentCulture) + ": ");
                 for (int  j = 0; j < RowsInternal[i].ControlsInternal.Count; j++) {
-                    Debug.Write(string.Format(CultureInfo.CurrentCulture, "[{0} {1}] ", RowsInternal[i].ControlsInternal[j].Name, ((ToolStripPanelCell)RowsInternal[i].Cells[j]).Margin));                                   
+                    Debug.Write(string.Format(CultureInfo.CurrentCulture, "[{0} {1}] ", RowsInternal[i].ControlsInternal[j].Name, ((ToolStripPanelCell)RowsInternal[i].Cells[j]).Margin));
                 }
                 Debug.Write("\r\n");
            }
@@ -1216,31 +1216,31 @@ namespace System.Windows.Forms {
                     }
                     Rectangle intersection = c1.Bounds;
                     intersection.Intersect(c2.Bounds);
-                    
+
                     if (!LayoutUtils.IsZeroWidthOrHeight(intersection)) {
                         ISupportToolStripPanel draggedToolStrip1 = c1 as ISupportToolStripPanel;
                         ISupportToolStripPanel draggedToolStrip2 = c2 as ISupportToolStripPanel;
-                
-                        string fail = string.Format(CultureInfo.CurrentCulture, 
+
+                        string fail = string.Format(CultureInfo.CurrentCulture,
                             "OVERLAP detection:\r\n{0}: {1} row {2} row bounds {3}",
-                            c1.Name == null ? "" : c1.Name, 
+                            c1.Name == null ? "" : c1.Name,
                             c1.Bounds,
                             !RowsInternal.Contains(draggedToolStrip1.ToolStripPanelRow) ? "unknown" : RowsInternal.IndexOf(draggedToolStrip1.ToolStripPanelRow).ToString(CultureInfo.CurrentCulture),
                             draggedToolStrip1.ToolStripPanelRow.Bounds);
-                        
-                         fail += string.Format(CultureInfo.CurrentCulture, 
+
+                         fail += string.Format(CultureInfo.CurrentCulture,
                              "\r\n{0}: {1} row {2} row bounds {3}",
-                             c2.Name == null ? "" : c2.Name, 
+                             c2.Name == null ? "" : c2.Name,
                              c2.Bounds,
                              !RowsInternal.Contains(draggedToolStrip2.ToolStripPanelRow) ? "unknown" : RowsInternal.IndexOf(draggedToolStrip2.ToolStripPanelRow).ToString(CultureInfo.CurrentCulture),
                              draggedToolStrip2.ToolStripPanelRow.Bounds);
                         Debug.Fail(fail);
-                            
+
                     }
                 }
-                
+
             }
-            
+
         }
 
         ArrangedElementCollection IArrangedElement.Children {
@@ -1252,8 +1252,8 @@ namespace System.Windows.Forms {
         [
         ListBindable(false),
         ComVisible(false)
-        ]               
-        [SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]        
+        ]
+        [SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]
         public class ToolStripPanelRowCollection : ArrangedElementCollection, IList {
 
             private ToolStripPanel owner;
@@ -1389,17 +1389,17 @@ namespace System.Windows.Forms {
             ///  Do proper cleanup of ownership, etc.
             /// </devdoc>
             private void OnAfterRemove(ToolStripPanelRow row) {
-              
-#if DEBUG                    
+
+#if DEBUG
                     if (ToolStripPanelMissingRowDebug.TraceVerbose) {
                        if (row != null) {
                           Debug.Write("Removing row: ");
                           row.Debug_PrintRowID();
                           Debug.WriteLine(new StackTrace().ToString());
                        }
-                    }              
+                    }
 #endif
-                
+
             }
 
             public void Remove(ToolStripPanelRow value) {

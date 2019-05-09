@@ -24,13 +24,13 @@ namespace System.Experimental.Gdi
 #else
     internal
 #endif
-    static partial class IntUnsafeNativeMethods 
+    static partial class IntUnsafeNativeMethods
     {
         [DllImport(ExternDll.User32, SetLastError=true, ExactSpelling=true, EntryPoint="GetDC", CharSet=System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern IntPtr IntGetDC(HandleRef hWnd);
-        
-        
+
+
         public static IntPtr GetDC(HandleRef hWnd) {
             IntPtr hdc = Interop.HandleCollector.Add(IntGetDC(hWnd), Interop.CommonHandles.HDC);
             DbgUtil.AssertWin32(hdc != IntPtr.Zero, "GetHdc([hWnd=0x{0:X8}]) failed.", hWnd);
@@ -42,7 +42,7 @@ namespace System.Experimental.Gdi
         ///     deleted with DeleteHDC.
         /// </devdoc>
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "DeleteDC", CharSet = CharSet.Auto)]
-        
+
         public static extern bool IntDeleteDC(HandleRef hDC);
         public static bool DeleteDC(HandleRef hDC) {
             Interop.HandleCollector.Remove((IntPtr)hDC, Interop.CommonHandles.GDI);
@@ -58,7 +58,7 @@ namespace System.Experimental.Gdi
         }
 
         [DllImport(ExternDll.User32, SetLastError=true, ExactSpelling=true, EntryPoint="ReleaseDC", CharSet=System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern int IntReleaseDC(HandleRef hWnd, HandleRef hDC);
         public static int ReleaseDC(HandleRef hWnd, HandleRef hDC) {
             Interop.HandleCollector.Remove((IntPtr)hDC, Interop.CommonHandles.HDC);
@@ -68,11 +68,11 @@ namespace System.Experimental.Gdi
 
         [SuppressMessage("Microsoft.Security", "CA2101:SpecifyMarshalingForPInvokeStringArguments")]
         [DllImport(ExternDll.Gdi32, SetLastError=true, EntryPoint="CreateDC", CharSet=System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern IntPtr IntCreateDC(string lpszDriverName, string lpszDeviceName, string lpszOutput, HandleRef /*DEVMODE*/ lpInitData);
-        
-        
-        public static IntPtr CreateDC(string lpszDriverName, string lpszDeviceName, string lpszOutput, HandleRef /*DEVMODE*/ lpInitData) 
+
+
+        public static IntPtr CreateDC(string lpszDriverName, string lpszDeviceName, string lpszOutput, HandleRef /*DEVMODE*/ lpInitData)
         {
             IntPtr hdc = Interop.HandleCollector.Add(IntCreateDC(lpszDriverName, lpszDeviceName, lpszOutput, lpInitData), Interop.CommonHandles.HDC);
             DbgUtil.AssertWin32(hdc != IntPtr.Zero, "CreateDC([driverName={0}], [deviceName={1}], [fileName={2}], [devMode={3}]) failed.", lpszDriverName, lpszDeviceName, lpszOutput, lpInitData.Handle);
@@ -81,11 +81,11 @@ namespace System.Experimental.Gdi
 
         [SuppressMessage("Microsoft.Security", "CA2101:SpecifyMarshalingForPInvokeStringArguments")]
         [DllImport(ExternDll.Gdi32, SetLastError=true, EntryPoint="CreateIC", CharSet=System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern IntPtr IntCreateIC(string lpszDriverName, string lpszDeviceName, string lpszOutput, HandleRef /*DEVMODE*/ lpInitData);
-        
-        
-        public static IntPtr CreateIC(string lpszDriverName, string lpszDeviceName, string lpszOutput, HandleRef /*DEVMODE*/ lpInitData) 
+
+
+        public static IntPtr CreateIC(string lpszDriverName, string lpszDeviceName, string lpszOutput, HandleRef /*DEVMODE*/ lpInitData)
         {
             IntPtr hdc = Interop.HandleCollector.Add(IntCreateIC(lpszDriverName, lpszDeviceName, lpszOutput, lpInitData), Interop.CommonHandles.HDC);
             DbgUtil.AssertWin32(hdc != IntPtr.Zero, "CreateIC([driverName={0}], [deviceName={1}], [fileName={2}], [devMode={3}]) failed.", lpszDriverName, lpszDeviceName, lpszOutput, lpInitData.Handle);
@@ -97,10 +97,10 @@ namespace System.Experimental.Gdi
         ///     The hdc obtained from this method needs to be deleted with DeleteDC instead of DeleteHDC.
         /// </devdoc>
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "CreateCompatibleDC", CharSet = CharSet.Auto)]
-        
+
         public static extern IntPtr IntCreateCompatibleDC(HandleRef hDC);
-        
-        
+
+
         public static IntPtr CreateCompatibleDC(HandleRef hDC)
         {
             IntPtr compatibleDc = Interop.HandleCollector.Add(IntCreateCompatibleDC(hDC), Interop.CommonHandles.GDI);
@@ -110,7 +110,7 @@ namespace System.Experimental.Gdi
 
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, EntryPoint="SaveDC", CharSet=System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern int IntSaveDC(HandleRef hDC);
         public static int SaveDC(HandleRef hDC)
         {
@@ -118,26 +118,26 @@ namespace System.Experimental.Gdi
             DbgUtil.AssertWin32(state != 0, "SaveDC([hdc=0x{0:X8}]) failed", hDC.Handle);
             return state;
         }
-        
+
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, EntryPoint="RestoreDC", CharSet=System.Runtime.InteropServices.CharSet.Auto)]
-        
-        public static extern bool IntRestoreDC(HandleRef hDC, int nSavedDC);        
+
+        public static extern bool IntRestoreDC(HandleRef hDC, int nSavedDC);
         public static bool RestoreDC(HandleRef hDC, int nSavedDC)
         {
             bool retVal = IntRestoreDC( hDC, nSavedDC );
             return retVal;
         }
-        
+
         [DllImport(ExternDll.User32, SetLastError=true, ExactSpelling = true)]
-        
+
         public static extern IntPtr WindowFromDC(HandleRef hDC);
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, CharSet=CharSet.Auto)]
-        
+
         public static extern int GetDeviceCaps(HandleRef hDC, int nIndex);
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, EntryPoint="OffsetViewportOrgEx", CharSet=System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern bool IntOffsetViewportOrgEx(HandleRef hDC, int nXOffset, int nYOffset, [In, Out] IntNativeMethods.POINT point);
         public static bool OffsetViewportOrgEx(HandleRef hDC, int nXOffset, int nYOffset, [In, Out] IntNativeMethods.POINT point)
         {
@@ -147,7 +147,7 @@ namespace System.Experimental.Gdi
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, EntryPoint="SetGraphicsMode", CharSet=System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern int IntSetGraphicsMode(HandleRef hDC, int iMode);
         public static int SetGraphicsMode(HandleRef hDC, int iMode)
         {
@@ -157,21 +157,21 @@ namespace System.Experimental.Gdi
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, CharSet=System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern int GetGraphicsMode(HandleRef hDC);
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true)]
-        
+
         public static extern int GetROP2(HandleRef hdc);
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern int SetROP2(HandleRef hDC, int nDrawMode);
 
 
         // Region.
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "CombineRgn", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern IntNativeMethods.RegionFlags IntCombineRgn(HandleRef hRgnDest, HandleRef hRgnSrc1, HandleRef hRgnSrc2, RegionCombineMode combineMode);
         public static IntNativeMethods.RegionFlags CombineRgn(HandleRef hRgnDest, HandleRef hRgnSrc1, HandleRef hRgnSrc2, RegionCombineMode combineMode) {
             Debug.Assert(hRgnDest.Wrapper != null && hRgnDest.Handle != IntPtr.Zero, "Destination region is invalid");
@@ -187,7 +187,7 @@ namespace System.Experimental.Gdi
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "GetClipRgn", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern int IntGetClipRgn(HandleRef hDC, HandleRef hRgn);
         public static int GetClipRgn(HandleRef hDC, HandleRef hRgn) {
             int retVal = IntGetClipRgn(hDC, hRgn);
@@ -196,7 +196,7 @@ namespace System.Experimental.Gdi
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "SelectClipRgn", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern IntNativeMethods.RegionFlags IntSelectClipRgn(HandleRef hDC, HandleRef hRgn);
         public static IntNativeMethods.RegionFlags SelectClipRgn(HandleRef hDC, HandleRef hRgn)
         {
@@ -206,7 +206,7 @@ namespace System.Experimental.Gdi
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "GetRgnBox", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern IntNativeMethods.RegionFlags IntGetRgnBox(HandleRef hRgn, [In, Out] ref IntNativeMethods.RECT clipRect);
         public static IntNativeMethods.RegionFlags GetRgnBox(HandleRef hRgn, [In, Out] ref IntNativeMethods.RECT clipRect)
         {
@@ -218,11 +218,11 @@ namespace System.Experimental.Gdi
         // Font.
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, EntryPoint = "CreateFontIndirect", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern IntPtr IntCreateFontIndirect([In, Out, MarshalAs(UnmanagedType.AsAny)] object lf); // need object here since LOGFONT is not public.
-        
-        
-        public static IntPtr CreateFontIndirect(/*IntNativeMethods.LOGFONT*/ object lf) 
+
+
+        public static IntPtr CreateFontIndirect(/*IntNativeMethods.LOGFONT*/ object lf)
         {
             IntPtr hFont = Interop.HandleCollector.Add(IntCreateFontIndirect(lf), Interop.CommonHandles.GDI);
             DbgUtil.AssertWin32(hFont != IntPtr.Zero, "CreateFontIndirect(logFont) failed.");
@@ -231,7 +231,7 @@ namespace System.Experimental.Gdi
 
         // Common.
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling = true, EntryPoint = "DeleteObject", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern bool IntDeleteObject(HandleRef hObject);
         public static bool DeleteObject(HandleRef hObject)
         {
@@ -242,20 +242,20 @@ namespace System.Experimental.Gdi
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, EntryPoint = "GetObject", ExactSpelling=false, CharSet=System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern int IntGetObject(HandleRef hBrush, int nSize, [In, Out] IntNativeMethods.LOGBRUSH lb);
-        public static int GetObject(HandleRef hBrush, IntNativeMethods.LOGBRUSH lb) 
+        public static int GetObject(HandleRef hBrush, IntNativeMethods.LOGBRUSH lb)
         {
             int retVal = IntGetObject(hBrush, System.Runtime.InteropServices.Marshal.SizeOf<IntNativeMethods.LOGBRUSH>(), lb);
             DbgUtil.AssertWin32(retVal != 0, "GetObject(hObj=[0x{0:X8}], [LOGBRUSH]) failed.", hBrush.Handle);
             return retVal;
         }
-        
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2101:SpecifyMarshalingForPInvokeStringArguments")]
         [DllImport(ExternDll.Gdi32, SetLastError=true, EntryPoint = "GetObject", ExactSpelling=false, CharSet=System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern int IntGetObject(HandleRef hFont, int nSize, [In, Out] IntNativeMethods.LOGFONT lf);
-        public static int GetObject(HandleRef hFont, IntNativeMethods.LOGFONT lp) 
+        public static int GetObject(HandleRef hFont, IntNativeMethods.LOGFONT lp)
         {
             int retVal = IntGetObject(hFont, System.Runtime.InteropServices.Marshal.SizeOf<IntNativeMethods.LOGFONT>(), lp);
             DbgUtil.AssertWin32(retVal != 0, "GetObject(hObj=[0x{0:X8}], [LOGFONT]) failed.", hFont.Handle);
@@ -263,22 +263,22 @@ namespace System.Experimental.Gdi
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, EntryPoint="SelectObject", CharSet=CharSet.Auto)]
-        
+
         public static extern IntPtr IntSelectObject(HandleRef hdc, HandleRef obj);
-        
-        
+
+
         public static IntPtr SelectObject(HandleRef hdc, HandleRef obj)
         {
             IntPtr oldObj = IntSelectObject(hdc, obj);
             DbgUtil.AssertWin32(oldObj != IntPtr.Zero, "SelectObject(hdc=hObj=[0x{0:X8}], hObj=[0x{1:X8}]) failed.", hdc.Handle, obj.Handle);
             return oldObj;
         }
-                       
+
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling = true, EntryPoint="GetCurrentObject", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern IntPtr IntGetCurrentObject(HandleRef hDC, int uObjectType);
-        
-        
+
+
         public static IntPtr GetCurrentObject(HandleRef hDC, int uObjectType)
         {
             IntPtr hGdiObj = IntGetCurrentObject(hDC, uObjectType);
@@ -288,10 +288,10 @@ namespace System.Experimental.Gdi
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, EntryPoint="GetStockObject", CharSet=CharSet.Auto)]
-        
+
         public static extern IntPtr IntGetStockObject(int nIndex);
-        
-        
+
+
         public static IntPtr GetStockObject(int nIndex)
         {
             IntPtr hGdiObj = IntGetStockObject(nIndex);
@@ -303,27 +303,27 @@ namespace System.Experimental.Gdi
         // Drawing.
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, CharSet=System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern int GetNearestColor(HandleRef hDC, int color);
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern int /*COLORREF*/ SetTextColor(HandleRef hDC, int crColor);
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern int GetTextAlign(HandleRef hdc);
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern int /*COLORREF*/ GetTextColor(HandleRef hDC);
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern int SetBkColor(HandleRef hDC, int clr);
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling = true, EntryPoint="SetBkMode", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern int IntSetBkMode(HandleRef hDC, int nBkMode);
         public static int SetBkMode(HandleRef hDC, int nBkMode)
         {
@@ -333,7 +333,7 @@ namespace System.Experimental.Gdi
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling = true, EntryPoint="GetBkMode", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern int IntGetBkMode(HandleRef hDC);
         public static int GetBkMode(HandleRef hDC)
         {
@@ -343,16 +343,16 @@ namespace System.Experimental.Gdi
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern int GetBkColor(HandleRef hDC);
 
 
         [DllImport( ExternDll.User32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Unicode )]
-        
+
         public static extern int DrawTextW(HandleRef hDC, string lpszString, int nCount, ref IntNativeMethods.RECT lpRect, int nFormat);
 
         [DllImport( ExternDll.User32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Ansi )]
-        
+
         public static extern int DrawTextA(HandleRef hDC, byte[] lpszString, int byteCount, ref IntNativeMethods.RECT lpRect, int nFormat);
 
         public static int DrawText( HandleRef hDC, string text, ref IntNativeMethods.RECT lpRect, int nFormat )
@@ -364,11 +364,11 @@ namespace System.Experimental.Gdi
         }
 
         [DllImport(ExternDll.User32, SetLastError=true, CharSet=System.Runtime.InteropServices.CharSet.Unicode)]
-        
+
         public static extern int DrawTextExW(HandleRef hDC, string lpszString, int nCount, ref IntNativeMethods.RECT lpRect, int nFormat, [In, Out] IntNativeMethods.DRAWTEXTPARAMS lpDTParams);
 
         [DllImport(ExternDll.User32, SetLastError=true, CharSet=System.Runtime.InteropServices.CharSet.Ansi)]
-        
+
         public static extern int DrawTextExA(HandleRef hDC, byte[] lpszString, int byteCount, ref IntNativeMethods.RECT lpRect, int nFormat, [In, Out] IntNativeMethods.DRAWTEXTPARAMS lpDTParams);
 
         public static int DrawTextEx(HandleRef hDC, string text, ref IntNativeMethods.RECT lpRect, int nFormat, [In, Out] IntNativeMethods.DRAWTEXTPARAMS lpDTParams)
@@ -379,14 +379,14 @@ namespace System.Experimental.Gdi
             return retVal;
         }
 
-        [SuppressMessage("Microsoft.Interoperability", "CA1400:PInvokeEntryPointsShouldExist")]            
+        [SuppressMessage("Microsoft.Interoperability", "CA1400:PInvokeEntryPointsShouldExist")]
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, CharSet=System.Runtime.InteropServices.CharSet.Unicode)]
-        
+
         public static extern int GetTextExtentPoint32W(HandleRef hDC, string text, int len, [In, Out] IntNativeMethods.SIZE size);
-        
-        [SuppressMessage("Microsoft.Interoperability", "CA1400:PInvokeEntryPointsShouldExist")]            
+
+        [SuppressMessage("Microsoft.Interoperability", "CA1400:PInvokeEntryPointsShouldExist")]
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, CharSet=System.Runtime.InteropServices.CharSet.Ansi)]
-        
+
         public static extern int GetTextExtentPoint32A(HandleRef hDC, byte[] lpszString, int byteCount, [In, Out] IntNativeMethods.SIZE size);
 
         public static int GetTextExtentPoint32(HandleRef hDC, string text, [In, Out] IntNativeMethods.SIZE size)
@@ -408,9 +408,9 @@ namespace System.Experimental.Gdi
         [SuppressMessage("Microsoft.Security", "CA2101:SpecifyMarshalingForPInvokeStringArguments")]
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=false, CharSet=CharSet.Auto)]
         internal static extern bool ExtTextOut(HandleRef hdc, int x, int y, int options, ref IntNativeMethods.RECT rect, string str, int length, int[] spacing);
-        
+
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling = true, EntryPoint="LineTo", CharSet = CharSet.Auto)]
-        
+
         public static extern bool IntLineTo(HandleRef hdc, int x, int y);
         public static bool LineTo(HandleRef hdc, int x, int y)
         {
@@ -420,7 +420,7 @@ namespace System.Experimental.Gdi
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling = true, EntryPoint="MoveToEx", CharSet = CharSet.Auto)]
-        
+
         public static extern bool IntMoveToEx(HandleRef hdc, int x, int y, IntNativeMethods.POINT pt);
         public static bool MoveToEx(HandleRef hdc, int x, int y, IntNativeMethods.POINT pt)
         {
@@ -430,7 +430,7 @@ namespace System.Experimental.Gdi
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling = true, EntryPoint="Rectangle", CharSet = CharSet.Auto)]
-        
+
         public static extern bool IntRectangle(HandleRef hdc, int left, int top, int right, int bottom);
         public static bool Rectangle(HandleRef hdc, int left, int top, int right, int bottom)
         {
@@ -440,7 +440,7 @@ namespace System.Experimental.Gdi
         }
 
         [DllImport(ExternDll.User32, SetLastError=true, ExactSpelling = true, EntryPoint="FillRect", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern bool IntFillRect(HandleRef hdc, [In] ref IntNativeMethods.RECT rect, HandleRef hbrush);
         public static bool FillRect(HandleRef hDC, [In] ref IntNativeMethods.RECT rect, HandleRef hbrush)
         {
@@ -450,7 +450,7 @@ namespace System.Experimental.Gdi
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling = true, EntryPoint="SetMapMode", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern int IntSetMapMode(HandleRef hDC, int nMapMode);
         public static int SetMapMode(HandleRef hDC, int nMapMode)
         {
@@ -460,7 +460,7 @@ namespace System.Experimental.Gdi
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, EntryPoint="GetMapMode", CharSet=System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern int IntGetMapMode(HandleRef hDC);
         public static int GetMapMode(HandleRef hDC)
         {
@@ -470,7 +470,7 @@ namespace System.Experimental.Gdi
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, EntryPoint="GetViewportExtEx")]
-        
+
         public static extern bool IntGetViewportExtEx(HandleRef hdc, [In, Out] IntNativeMethods.SIZE lpSize);
         public static bool GetViewportExtEx( HandleRef hdc, [In, Out] IntNativeMethods.SIZE lpSize )
         {
@@ -478,9 +478,9 @@ namespace System.Experimental.Gdi
             DbgUtil.AssertWin32(retVal, "GetViewportExtEx([hdc=0x{0:X8}], [out size]) failed.", hdc.Handle);
             return retVal;
         }
-       
+
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, EntryPoint="GetViewportOrgEx")]
-        
+
         public static extern bool IntGetViewportOrgEx(HandleRef hdc, [In, Out] IntNativeMethods.POINT lpPoint);
         public static bool GetViewportOrgEx( HandleRef hdc, [In, Out] IntNativeMethods.POINT lpPoint )
         {
@@ -490,7 +490,7 @@ namespace System.Experimental.Gdi
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, EntryPoint="SetViewportExtEx", CharSet=System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern bool IntSetViewportExtEx(HandleRef hDC, int x, int y, [In, Out] IntNativeMethods.SIZE size);
         public static bool SetViewportExtEx(HandleRef hDC, int x, int y, [In, Out] IntNativeMethods.SIZE size)
         {
@@ -499,7 +499,7 @@ namespace System.Experimental.Gdi
             return retVal;
         }
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, EntryPoint="SetViewportOrgEx", CharSet=System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern bool IntSetViewportOrgEx(HandleRef hDC, int x, int y, [In, Out] IntNativeMethods.POINT point);
         public static bool SetViewportOrgEx(HandleRef hDC, int x, int y, [In, Out] IntNativeMethods.POINT point)
         {
@@ -509,14 +509,14 @@ namespace System.Experimental.Gdi
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
-        
+
         public static extern int GetTextMetricsW(HandleRef hDC, [In, Out] ref IntNativeMethods.TEXTMETRIC lptm);
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, CharSet = System.Runtime.InteropServices.CharSet.Ansi)]
-        
+
         public static extern int GetTextMetricsA(HandleRef hDC, [In, Out] ref IntNativeMethods.TEXTMETRICA lptm);
 
-        public static int GetTextMetrics(HandleRef hDC, ref IntNativeMethods.TEXTMETRIC lptm) 
+        public static int GetTextMetrics(HandleRef hDC, ref IntNativeMethods.TEXTMETRIC lptm)
         {
             int retVal = IntUnsafeNativeMethods.GetTextMetricsW(hDC, ref lptm);
 
@@ -525,7 +525,7 @@ namespace System.Experimental.Gdi
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, EntryPoint="BeginPath", CharSet=System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern bool IntBeginPath(HandleRef hDC);
         public static bool BeginPath(HandleRef hDC)
         {
@@ -533,9 +533,9 @@ namespace System.Experimental.Gdi
             DbgUtil.AssertWin32(retVal, "BeginPath(hdc=[0x{0:X8}]failed.", hDC.Handle );
             return retVal;
         }
-       
+
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, EntryPoint="EndPath", CharSet=System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern bool IntEndPath(HandleRef hDC);
         public static bool EndPath(HandleRef hDC)
         {
@@ -545,7 +545,7 @@ namespace System.Experimental.Gdi
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, EntryPoint="StrokePath", CharSet=System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern bool IntStrokePath(HandleRef hDC);
         public static bool StrokePath(HandleRef hDC)
         {
@@ -555,7 +555,7 @@ namespace System.Experimental.Gdi
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, EntryPoint="AngleArc", CharSet=System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern bool IntAngleArc(HandleRef hDC, int x, int y, int radius, float startAngle, float endAngle);
         public static bool AngleArc(HandleRef hDC, int x, int y, int radius, float startAngle, float endAngle)
         {
@@ -565,9 +565,9 @@ namespace System.Experimental.Gdi
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, EntryPoint="Arc", CharSet=System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern bool IntArc(
-            HandleRef hDC, 
+            HandleRef hDC,
             int nLeftRect,   // x-coord of rectangle's upper-left corner
             int nTopRect,    // y-coord of rectangle's upper-left corner
             int nRightRect,  // x-coord of rectangle's lower-right corner
@@ -578,7 +578,7 @@ namespace System.Experimental.Gdi
             int nYEndArc     // y-coord of second radial ending point
             );
         public static bool Arc(
-            HandleRef hDC, 
+            HandleRef hDC,
             int nLeftRect,   // x-coord of rectangle's upper-left corner
             int nTopRect,    // y-coord of rectangle's upper-left corner
             int nRightRect,  // x-coord of rectangle's lower-right corner
@@ -597,11 +597,11 @@ namespace System.Experimental.Gdi
         // Misc.
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern int SetTextAlign(HandleRef hDC, int nMode);
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling = true, EntryPoint="Ellipse", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        
+
         public static extern bool IntEllipse(HandleRef hDc, int x1, int y1, int x2, int y2);
         public static bool Ellipse(HandleRef hDc, int x1, int y1, int x2, int y2)
         {
@@ -610,13 +610,13 @@ namespace System.Experimental.Gdi
             return retVal;
         }
 
-        // 
+        //
 
 
 
 
         [DllImport(ExternDll.Kernel32, ExactSpelling=true, CharSet=CharSet.Unicode)]
-        
+
         public static extern int WideCharToMultiByte(int codePage, int flags, [MarshalAs(UnmanagedType.LPWStr)]string wideStr, int chars, [In, Out]byte[] pOutBytes, int bufferBytes, IntPtr defaultChar, IntPtr pDefaultUsed);
 
     }

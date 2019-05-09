@@ -10,7 +10,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Layout
 {
     public abstract class LayoutEngine
-    {        
+    {
         internal IArrangedElement CastToArrangedElement(object obj)
         {
             if (!(obj is IArrangedElement element))
@@ -24,7 +24,7 @@ namespace System.Windows.Forms.Layout
         {
             return Size.Empty;
         }
-    
+
         public virtual void InitLayout(object child, BoundsSpecified specified)
         {
             if (child == null)
@@ -62,7 +62,7 @@ namespace System.Windows.Forms.Layout
             Debug.Indent();
             Stopwatch sw = new Stopwatch();
             sw.Start();
-#endif            
+#endif
             bool parentNeedsLayout = LayoutCore(CastToArrangedElement(container), layoutEventArgs);
 
 #if LAYOUT_PERFWATCH

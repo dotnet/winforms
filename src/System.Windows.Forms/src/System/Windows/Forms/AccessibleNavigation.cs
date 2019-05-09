@@ -35,19 +35,19 @@ namespace System.Windows.Forms
         /// object to a sibling object.
         /// </devdoc>
         Next = 0x5,
-        
+
         /// <devdoc>
         /// Navigation to the previous logical object, generally from a sibling
         /// object to the starting object.
         /// </devdoc>
         Previous = 0x6,
-        
+
         /// <devdoc>
         /// Navigation to the sibling object located to the right of the
         /// starting object.
         /// </devdoc>
         Right = 0x4,
-        
+
         /// <devdoc>
         /// Navigation to a sibling object located above the starting object.
         /// </devdoc>

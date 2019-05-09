@@ -1271,7 +1271,7 @@ namespace System.Windows.Forms
                     else
                     {
                         // We don't want the grid to get the keyboard focus
-                        // when the editing control gets parented to the parking window, 
+                        // when the editing control gets parented to the parking window,
                         // because some other window is in the middle of receiving the focus.
                         UnsafeNativeMethods.SetFocus(new HandleRef(null, IntPtr.Zero));
                     }
@@ -1309,7 +1309,7 @@ namespace System.Windows.Forms
             Debug.Assert(dgv.EditingPanel.Controls.Count == 0);
 
             // Since the tooltip is removed when the editing control is shown,
-            // the CurrentMouseLocation is reset to DATAGRIDVIEWCELL_flagAreaNotSet 
+            // the CurrentMouseLocation is reset to DATAGRIDVIEWCELL_flagAreaNotSet
             // so that the tooltip appears again on mousemove after the editing.
             this.CurrentMouseLocation = DATAGRIDVIEWCELL_flagAreaNotSet;
         }
@@ -1455,7 +1455,7 @@ namespace System.Windows.Forms
                     case '\n':
                         output.Write("<br>");
                         break;
-                    // 
+                    //
                     default:
                         // The seemingly arbitrary 160 comes from RFC
                         // Code taken from ASP.NET file xsp\System\Web\httpserverutility.cs
@@ -1874,7 +1874,7 @@ namespace System.Windows.Forms
                     this.FormattedValueType != null &&
                     !typeof(System.ValueType).IsAssignableFrom(this.FormattedValueType))
                 {
-                    // null is an acceptable formatted value 
+                    // null is an acceptable formatted value
                     return null;
                 }
                 Exception exception = null;
@@ -4469,7 +4469,7 @@ namespace System.Windows.Forms
             hEditingControl = cellBounds.Height - borderAndPaddingWidths.Y - borderAndPaddingWidths.Height;
             this.DataGridView.EditingPanel.Location = new Point(xEditingPanel, yEditingPanel);
             this.DataGridView.EditingPanel.Size = new Size(wEditingPanel, hEditingPanel);
-            /* 
+            /*
             if (this.DataGridView.RightToLeftInternal)
             {
                 xEditingControl = wEditingPanel - xEditingControl - wEditingControl;
@@ -4510,7 +4510,7 @@ namespace System.Windows.Forms
                             // As a result of pushing the value in the back end, the data grid view row and/or data grid view cell
                             // became disconnected from the DataGridView.
                             // Return true because the operation succeded.
-                            // However, because the row which was edited became disconnected  from the DataGridView, 
+                            // However, because the row which was edited became disconnected  from the DataGridView,
                             // do not mark the current row in the data grid view as being dirty.
                             // And because the data grid view cell which was edited became disconnected from the data grid view
                             // do not fire CellValueChanged event.
@@ -4964,12 +4964,12 @@ namespace System.Windows.Forms
                 {
                     cellRight = rowRect.Right - rightToLeftRowHeadersWidth;
                 }
-                
+
                 if ((cellRight - cellLeft) >= 0)
                     cellRect.Width = cellRight - cellLeft;
                 else
                     cellRect.Width = 0;
-                
+
                 return cellRect;
             }
 

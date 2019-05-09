@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms {
     using System;
-  
+
     /// <devdoc>
     ///    Comprises the information specifying how acceleration should be performed
     ///     on a Windows up-down control when the up/down button is pressed for certain
@@ -56,7 +56,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public decimal Increment {
 
-            get 
+            get
             {
                 return this.increment;
             }

@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms { 
+namespace System.Windows.Forms {
 
 using System;
 using System.Drawing;
@@ -20,14 +20,14 @@ using Microsoft.Win32;
        //Make this per-thread, so that different threads can safely use these methods.
        [ThreadStatic]
        private static VisualStyleRenderer visualStyleRenderer = null;
-       
+
         //cannot instantiate
        private ScrollBarRenderer() {
        }
 
        /// <devdoc>
        ///    <para>
-       ///       Returns true if this class is supported for the current OS and user/application settings, 
+       ///       Returns true if this class is supported for the current OS and user/application settings,
        ///       otherwise returns false.
        ///    </para>
        /// </devdoc>
@@ -120,7 +120,7 @@ using Microsoft.Win32;
 
            visualStyleRenderer.DrawBackground(g, bounds);
        }
-              
+
        /// <devdoc>
        ///    <para>
        ///       Renders a vertical ScrollBar thumb in the center of the given bounds.

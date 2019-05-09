@@ -28,7 +28,7 @@ namespace System.Windows.Forms
             }
 
             DataGridViewCell cell = value as DataGridViewCell;
-            if (destinationType == typeof(InstanceDescriptor) && cell != null) {                
+            if (destinationType == typeof(InstanceDescriptor) && cell != null) {
                 ConstructorInfo ctor = cell.GetType().GetConstructor(new Type[0]);
                 if (ctor != null) {
                     return new InstanceDescriptor(ctor, new object[0], false);

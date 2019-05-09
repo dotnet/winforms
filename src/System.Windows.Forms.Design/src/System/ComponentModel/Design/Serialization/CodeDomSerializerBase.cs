@@ -42,7 +42,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 throw new ArgumentNullException(nameof(manager));
             }
-            if (type == null) 
+            if (type == null)
             {
                 throw new ArgumentNullException(nameof(type));
             }
@@ -148,11 +148,11 @@ namespace System.ComponentModel.Design.Serialization
 
         internal static void Error(IDesignerSerializationManager manager, string exceptionText, string helpLink)
         {
-            if (manager == null) 
+            if (manager == null)
             {
                 throw new ArgumentNullException(nameof(manager));
             }
-            if (exceptionText == null) 
+            if (exceptionText == null)
             {
                 throw new ArgumentNullException(nameof(exceptionText));
             }
@@ -661,7 +661,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             using (TraceScope("CodeDomSerializerBase::" + nameof(DeserializeAssignStatement)))
             {
-                // Since we're doing an assignment into something, we need to know what that something is.  It can be a property, a variable, or a member. Anything else is invalid.  
+                // Since we're doing an assignment into something, we need to know what that something is.  It can be a property, a variable, or a member. Anything else is invalid.
                 //Perf: is -> as changes, change ordering based on possibility of occurence
                 CodeExpression expression = statement.Left;
                 CodePropertyReferenceExpression propertyReferenceEx;
@@ -957,7 +957,7 @@ namespace System.ComponentModel.Design.Serialization
                                                     MethodInfo mi = GetReflectionTypeHelper(manager, target).GetMethod(methodRef.MethodName, paramTypes);
                                                     if (mi != null)
                                                     {
-                                                        // MethodInfo from the reflection Universe might not implement MethodHandle property, once we know that the method is available, get it from the runtime type.     
+                                                        // MethodInfo from the reflection Universe might not implement MethodHandle property, once we know that the method is available, get it from the runtime type.
                                                         mi = target.GetType().GetMethod(methodRef.MethodName, paramTypes);
                                                         result = Activator.CreateInstance(type, new object[] { target, mi.MethodHandle.GetFunctionPointer() });
                                                     }
@@ -1102,7 +1102,7 @@ namespace System.ComponentModel.Design.Serialization
                                     }
                                     catch (MissingMethodException)
                                     {
-                                        // We did not find the method directly. Let's see if we can find it 
+                                        // We did not find the method directly. Let's see if we can find it
                                         // as an private implemented interface name.
                                         //
                                         CodeCastExpression castExpr = methodInvokeEx.Method.TargetObject as CodeCastExpression;
@@ -1530,7 +1530,7 @@ namespace System.ComponentModel.Design.Serialization
         {
 
             // "Binary" operator type is actually a combination of several types of operators: boolean, binary  and math.  Group them into categories here.
-            CodeBinaryOperatorType[] booleanOperators = new CodeBinaryOperatorType[] 
+            CodeBinaryOperatorType[] booleanOperators = new CodeBinaryOperatorType[]
             {
                 CodeBinaryOperatorType.IdentityInequality,
                 CodeBinaryOperatorType.IdentityEquality,
@@ -1543,7 +1543,7 @@ namespace System.ComponentModel.Design.Serialization
                 CodeBinaryOperatorType.GreaterThanOrEqual
             };
 
-            CodeBinaryOperatorType[] mathOperators = new CodeBinaryOperatorType[] 
+            CodeBinaryOperatorType[] mathOperators = new CodeBinaryOperatorType[]
             {
                 CodeBinaryOperatorType.Add,
                 CodeBinaryOperatorType.Subtract,
@@ -1552,7 +1552,7 @@ namespace System.ComponentModel.Design.Serialization
                 CodeBinaryOperatorType.Modulus
             };
 
-            CodeBinaryOperatorType[] binaryOperators = new CodeBinaryOperatorType[] 
+            CodeBinaryOperatorType[] binaryOperators = new CodeBinaryOperatorType[]
             {
                 CodeBinaryOperatorType.BitwiseOr,
                 CodeBinaryOperatorType.BitwiseAnd
@@ -1888,7 +1888,7 @@ namespace System.ComponentModel.Design.Serialization
         [Conditional("DEBUG")]
         internal static void TraceWarningIf(bool condition, string message, params object[] values)
         {
-            if (condition) 
+            if (condition)
             {
                 TraceWarning(message, values);
             }
@@ -1967,7 +1967,7 @@ namespace System.ComponentModel.Design.Serialization
                     // two properties, if supported.
                     // We need to setup this MemberRelationship before we actually set the property value.
                     // If we do it the other way around the new property value will be pushed into the old
-                    // relationship, which isn't a problem during normal serialization (since it not very 
+                    // relationship, which isn't a problem during normal serialization (since it not very
                     // likely the property has already been assigned to), but it does affect undo.
                     MemberRelationship oldRelation = MemberRelationship.Empty;
                     MemberRelationshipService relationships = null;
@@ -2093,9 +2093,9 @@ namespace System.ComponentModel.Design.Serialization
             if (expression == null)
             {
 
-                // perf: first try to retrieve objectName from DesignerSerializationManager 
+                // perf: first try to retrieve objectName from DesignerSerializationManager
                 // only then involve reference service if needed
-                // this is done to avoid unnecessary ensuring\creating references 
+                // this is done to avoid unnecessary ensuring\creating references
 
                 string objectName = manager.GetName(value);
                 if (objectName == null || objectName.IndexOf('.') != -1)
@@ -2340,7 +2340,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
             }
 
-            // see if this thing is serialiable                
+            // see if this thing is serialiable
             if (GetReflectionTypeHelper(manager, value).IsSerializable && !(value is IComponent && ((IComponent)value).Site != null))
             {
                 CodeExpression expression = SerializeToResourceExpression(manager, value);
@@ -2492,11 +2492,11 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected string GetUniqueName(IDesignerSerializationManager manager, object value)
         {
-            if (manager == null) 
+            if (manager == null)
             {
                 throw new ArgumentNullException(nameof(manager));
             }
-            if (value == null) 
+            if (value == null)
             {
                 throw new ArgumentNullException(nameof(value));
             }

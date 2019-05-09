@@ -10,8 +10,8 @@
 
 namespace System.Windows.Forms.Design.Resources {
     using System;
-    
-    
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -23,15 +23,15 @@ namespace System.Windows.Forms.Design.Resources {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class SR {
-        
+
         private static global::System.Resources.ResourceManager resourceMan;
-        
+
         private static global::System.Globalization.CultureInfo resourceCulture;
-        
+
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal SR() {
         }
-        
+
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
@@ -45,7 +45,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return resourceMan;
             }
         }
-        
+
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
@@ -59,7 +59,7 @@ namespace System.Windows.Forms.Design.Resources {
                 resourceCulture = value;
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Copy and move {0}.
         /// </summary>
@@ -68,7 +68,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("BehaviorServiceCopyControl", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Copy and move {0} Controls.
         /// </summary>
@@ -77,7 +77,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("BehaviorServiceCopyControls", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Move {0}.
         /// </summary>
@@ -86,7 +86,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("BehaviorServiceMoveControl", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Move {0} Controls.
         /// </summary>
@@ -95,7 +95,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("BehaviorServiceMoveControls", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Resize {0}.
         /// </summary>
@@ -104,7 +104,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("BehaviorServiceResizeControl", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Resize {0} Controls.
         /// </summary>
@@ -113,7 +113,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("BehaviorServiceResizeControls", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Double cannot be converted to a date..
         /// </summary>
@@ -122,7 +122,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("CannotConvertDoubleToDate", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Integer cannot be converted to a float..
         /// </summary>
@@ -131,7 +131,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("CannotConvertIntToFloat", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The serialization store is closed.  New objects cannot be added to a closed store..
         /// </summary>
@@ -140,7 +140,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("CodeDomComponentSerializationServiceClosedStore", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Complete deserialization of {0} failed..
         /// </summary>
@@ -149,7 +149,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("CodeDomComponentSerializationServiceDeserializationError", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to This type of serialization store is not supported.  Use a store returned by the CreateStore method..
         /// </summary>
@@ -158,7 +158,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("CodeDomComponentSerializationServiceUnknownStore", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Unhandled VT: {0}..
         /// </summary>
@@ -167,7 +167,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("COM2UnhandledVT", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Format {0} components (alignment).
         /// </summary>
@@ -176,7 +176,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("CommandSetAlignByPrimary", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Align {0} components to grid.
         /// </summary>
@@ -185,7 +185,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("CommandSetAlignToGrid", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Cut {0} Components.
         /// </summary>
@@ -194,7 +194,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("CommandSetCutMultiple", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Delete {0} components.
         /// </summary>
@@ -203,7 +203,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("CommandSetDelete", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to An error occurred while processing this command.
         ///      {0}.
@@ -213,7 +213,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("CommandSetError", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Format {0} components (spacing).
         /// </summary>
@@ -222,7 +222,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("CommandSetFormatSpacing", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Paste components.
         /// </summary>
@@ -231,7 +231,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("CommandSetPaste", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Size {0} components.
         /// </summary>
@@ -240,7 +240,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("CommandSetSize", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Size {0} components to grid.
         /// </summary>
@@ -249,7 +249,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("CommandSetSizeToGrid", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Unknown spacing command.
         /// </summary>
@@ -258,7 +258,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("CommandSetUnknownSpacingCommand", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Adding event &apos;{0}&apos;.
         /// </summary>
@@ -267,7 +267,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ComponentDesignerAddEvent", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Align To &amp;Grid.
         /// </summary>
@@ -276,7 +276,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ContextMenuAlignToGrid", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Bring To Front.
         /// </summary>
@@ -285,7 +285,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ContextMenuBringToFront", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to C&amp;opy.
         /// </summary>
@@ -294,7 +294,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ContextMenuCopy", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Cut.
         /// </summary>
@@ -303,7 +303,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ContextMenuCut", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Delete.
         /// </summary>
@@ -312,7 +312,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ContextMenuDelete", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Document Outline.
         /// </summary>
@@ -321,7 +321,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ContextMenuDocumentOutline", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Lock Controls.
         /// </summary>
@@ -330,7 +330,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ContextMenuLockControls", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Paste.
         /// </summary>
@@ -339,7 +339,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ContextMenuPaste", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Properties.
         /// </summary>
@@ -348,7 +348,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ContextMenuProperties", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Select.
         /// </summary>
@@ -357,7 +357,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ContextMenuSelect", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Send To Back.
         /// </summary>
@@ -366,7 +366,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ContextMenuSendToBack", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to ShowCheckMargin.
         /// </summary>
@@ -375,7 +375,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ContextMenuStripActionList_ShowCheckMargin", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Toggles the ShowCheckMargin property.
         /// </summary>
@@ -384,7 +384,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ContextMenuStripActionList_ShowCheckMarginDesc", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to ShowImageMargin.
         /// </summary>
@@ -393,7 +393,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ContextMenuStripActionList_ShowImageMargin", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Toggles the ShowImageMargin property.
         /// </summary>
@@ -402,7 +402,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ContextMenuStripActionList_ShowImageMarginDesc", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to View &amp;Code.
         /// </summary>
@@ -411,7 +411,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ContextMenuViewCode", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The control {0} has thrown an unhandled exception in the designer and has been disabled.
         ///
@@ -425,7 +425,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ControlDesigner_WndProcException", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Could not convert value &apos;{0}&apos; to the type &apos;{1}&apos;..
         /// </summary>
@@ -434,7 +434,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerActionPanel_CouldNotConvertValue", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Could not find method &apos;{0}&apos;..
         /// </summary>
@@ -443,7 +443,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerActionPanel_CouldNotFindMethod", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Could not find property &apos;{0}&apos; on &apos;{1}&apos;..
         /// </summary>
@@ -452,7 +452,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerActionPanel_CouldNotFindProperty", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to {0} Tasks.
         /// </summary>
@@ -461,7 +461,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerActionPanel_DefaultPanelTitle", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Error using the dropdown: {0}.
         /// </summary>
@@ -470,7 +470,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerActionPanel_ErrorActivatingDropDown", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Error invoking &apos;{0}&apos;.  Details: {1}.
         /// </summary>
@@ -479,7 +479,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerActionPanel_ErrorInvokingAction", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Error setting value &apos;{0}&apos; to property &apos;{1}&apos;.  Details: {2}.
         /// </summary>
@@ -488,7 +488,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerActionPanel_ErrorSettingValue", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Call to BeginDrag must succeed before calling drag functions..
         /// </summary>
@@ -497,7 +497,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerBeginDragNotCalled", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Cannot remove or destroy inherited component &apos;{0}&apos;..
         /// </summary>
@@ -506,7 +506,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerHostCantDestroyInheritedComponent", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Cannot add an instance of {0} to the designer because it would create a circular dependency.  Make sure that the type does not have the same namespace and type name as the root component {1}..
         /// </summary>
@@ -515,7 +515,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerHostCyclicAdd", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Failure initializing the designer.  It has no Component member..
         /// </summary>
@@ -524,7 +524,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerHostDesignerNeedsComponent", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Deleting &apos;{0}&apos;..
         /// </summary>
@@ -533,7 +533,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerHostDestroyComponentTransaction", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The name {0} is already in use by another component..
         /// </summary>
@@ -542,7 +542,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerHostDuplicateName", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Component of type {0} could not be created.  Make sure the type implements IComponent and provides an appropriate public constructor.  Appropriate constructors either take no parameters or take a single IContainer parameter..
         /// </summary>
@@ -551,7 +551,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerHostFailedComponentCreate", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to No Description Available.
         /// </summary>
@@ -560,7 +560,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerHostGenericTransactionName", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to A designer loader has already been configured for this design surface..
         /// </summary>
@@ -569,7 +569,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerHostLoaderSpecified", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The designer transaction &apos;{0}&apos; cannot be committed or canceled because nested transaction &apos;{1}&apos; is still active.  Commit or cancel the nested transaction first..
         /// </summary>
@@ -578,7 +578,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerHostNestedTransaction", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Cannot open a designer for the file because the class within it does not inherit from a class that can be visually designed..
         /// </summary>
@@ -587,7 +587,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerHostNoBaseClass", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to There is no designer for the class {0}..
         /// </summary>
@@ -596,7 +596,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerHostNoTopLevelDesigner", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to New components cannot be added while a designer is unloading..
         /// </summary>
@@ -605,7 +605,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerHostUnloading", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Inherited control.
         /// </summary>
@@ -614,7 +614,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerInherited", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Inherited control (Private).
         /// </summary>
@@ -623,7 +623,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerInheritedReadOnly", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Optimized Code Generation.
         /// </summary>
@@ -632,7 +632,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerOptions_CodeGenDisplay", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Code Generation Settings.
         /// </summary>
@@ -641,7 +641,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerOptions_CodeGenSettings", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to InSitu Editing.
         /// </summary>
@@ -650,7 +650,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerOptions_EnableInSituEditingCat", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Controls whether InSitu editing is enabled..
         /// </summary>
@@ -659,7 +659,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerOptions_EnableInSituEditingDesc", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Enable InSitu Editing.
         /// </summary>
@@ -668,7 +668,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerOptions_EnableInSituEditingDisplay", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Sets the default X and Y grid setting on designers when LayoutMode  = SnapToGrid..
         /// </summary>
@@ -677,7 +677,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerOptions_GridSizeDesc", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Default Grid Cell Size.
         /// </summary>
@@ -686,7 +686,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerOptions_GridSizeDisplayName", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Layout Settings.
         /// </summary>
@@ -695,7 +695,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerOptions_LayoutSettings", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Controls whether designer smart tag windows should be shown by default..
         /// </summary>
@@ -704,7 +704,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerOptions_ObjectBoundSmartTagAutoShow", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Automatically Open Smart Tags.
         /// </summary>
@@ -713,7 +713,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerOptions_ObjectBoundSmartTagAutoShowDisplayName", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Object Bound Smart Tag Settings.
         /// </summary>
@@ -722,7 +722,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerOptions_ObjectBoundSmartTagSettings", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Enabled optimized code generation.  Some controls may not be compatible with this mode.  For this change to take effect, Visual Studio must be closed and re-opened..
         /// </summary>
@@ -731,7 +731,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerOptions_OptimizedCodeGen", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Controls whether designers should display a sizing grid when LayoutMode = SnapToGrid..
         /// </summary>
@@ -740,7 +740,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerOptions_ShowGridDesc", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Show Grid.
         /// </summary>
@@ -749,7 +749,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerOptions_ShowGridDisplayName", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Controls whether designers should snap to grid dots when LayoutMode = SnapToGrid..
         /// </summary>
@@ -758,7 +758,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerOptions_SnapToGridDesc", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Snap to Grid.
         /// </summary>
@@ -767,7 +767,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerOptions_SnapToGridDisplayName", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Controls whether designers should show smart tag popup windows..
         /// </summary>
@@ -776,7 +776,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerOptions_UseSmartTags", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Controls whether designers should use snap lines.  If true, snap lines will be used as guides.  If false, grid lines will be used..
         /// </summary>
@@ -785,7 +785,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerOptions_UseSnapLines", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Dock in Parent Container.
         /// </summary>
@@ -794,7 +794,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerShortcutDockInParent", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Undock in Parent Container.
         /// </summary>
@@ -803,7 +803,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignerShortcutUndockInParent", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The container cannot be disposed at design time..
         /// </summary>
@@ -812,7 +812,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignSurfaceContainerDispose", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Cannot create a view for this design surface because the designer is not loaded..
         /// </summary>
@@ -821,7 +821,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignSurfaceDesignerNotLoaded", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to An error occurred while loading the document.  Fix the error, and then try loading the document again. The error message follows:
         ///
@@ -832,7 +832,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignSurfaceFatalError", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The designer loader did not provide a root component but has not indicated why..
         /// </summary>
@@ -841,7 +841,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignSurfaceNoRootComponent", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The designer loaded, but it does not offer a view compatible with this design surface..
         /// </summary>
@@ -850,7 +850,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignSurfaceNoSupportedTechnology", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The service {0} cannot be removed from the service container..
         /// </summary>
@@ -859,7 +859,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DesignSurfaceServiceIsFixed", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to .NET Component.
         /// </summary>
@@ -868,7 +868,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DotNET_ComponentType", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Drag {0} components.
         /// </summary>
@@ -877,7 +877,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DragDropDragComponents", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Move {0}.
         /// </summary>
@@ -886,7 +886,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DragDropMoveComponent", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Move {0} components.
         /// </summary>
@@ -895,7 +895,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DragDropMoveComponents", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to This IDataObject doesn&apos;t support SetData..
         /// </summary>
@@ -904,7 +904,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DragDropSetDataError", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Size {0}.
         /// </summary>
@@ -913,7 +913,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DragDropSizeComponent", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Size {0} components.
         /// </summary>
@@ -922,7 +922,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("DragDropSizeComponents", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The extender provider {0} has already been added as an extender.  Adding another would result in duplicate properties..
         /// </summary>
@@ -931,7 +931,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ExtenderProviderServiceDuplicateProvider", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Read-Only.
         /// </summary>
@@ -940,7 +940,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("InheritanceServiceReadOnlyCollection", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &apos;{1}&apos; is not a valid value for &apos;{0}&apos;..
         /// </summary>
@@ -949,7 +949,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("InvalidArgument", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &apos;{1}&apos; is not a valid value for &apos;{0}&apos;. &apos;{0}&apos; should be between {2} and {3}..
         /// </summary>
@@ -958,7 +958,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("InvalidBoundArgument", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The Locked property determines if we can move or resize the control..
         /// </summary>
@@ -967,7 +967,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("lockedDescr", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to This method/object is not implemented by design..
         /// </summary>
@@ -976,7 +976,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("NotImplementedByDesign", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Winforms Designer is not supported on this platform..
         /// </summary>
@@ -985,7 +985,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("PlatformNotSupported_WinformsDesigner", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to RTL_False.
         /// </summary>
@@ -994,7 +994,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("RTL", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to You cannot create a new session because this serialization manager already has an active serialization session..
         /// </summary>
@@ -1003,7 +1003,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("SerializationManagerAreadyInSession", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Duplicate declaration of member &apos;{0}&apos;.
         /// </summary>
@@ -1012,7 +1012,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("SerializationManagerDuplicateComponentDecl", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The name &apos;{0}&apos; is already used by another object..
         /// </summary>
@@ -1021,7 +1021,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("SerializationManagerNameInUse", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Type &apos;{0}&apos; does not have a constructor with parameters of types {1}..
         /// </summary>
@@ -1030,7 +1030,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("SerializationManagerNoMatchingCtor", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to This method cannot be invoked because the serialization manager does not have an active serialization session..
         /// </summary>
@@ -1039,7 +1039,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("SerializationManagerNoSession", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Cannot name the object &apos;{0}&apos; because it is already named &apos;{1}&apos;..
         /// </summary>
@@ -1048,7 +1048,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("SerializationManagerObjectHasName", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to This method cannot be invoked because the serialization manager has an active serialization session..
         /// </summary>
@@ -1057,7 +1057,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("SerializationManagerWithinSession", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Elements of type {0} are not supported.  The serializer expects the element to be one of the following: {1}..
         /// </summary>
@@ -1066,7 +1066,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("SerializerBadElementTypes", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The field &apos;{0}&apos; could not be found on the target object.  Make sure that the field is defined as an instance variable on the target object and has the correct scope..
         /// </summary>
@@ -1075,7 +1075,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("SerializerFieldTargetEvalFailed", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Array rank &apos;{0}&apos; is too high.  Visual Studio can only save and load arrays with a rank of 1..
         /// </summary>
@@ -1084,7 +1084,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("SerializerInvalidArrayRank", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Code statements for the object &apos;{0}&apos; were lost during serialization.  This may have been a result of another object misbehaving during serialization..
         /// </summary>
@@ -1093,7 +1093,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("SerializerLostStatements", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Members of type &apos;{0}&apos; cannot be serialized..
         /// </summary>
@@ -1102,7 +1102,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("SerializerMemberTypeNotSerializable", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The source code contains a reference to the class definition, but the class definition cannot be found..
         /// </summary>
@@ -1111,7 +1111,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("SerializerNoRootExpression", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The object &apos;{0}&apos; failed to serialize itself.  It may not support code generation..
         /// </summary>
@@ -1120,7 +1120,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("SerializerNoSerializerForComponent", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The type &apos;{0}&apos; has no event named &apos;{1}&apos;..
         /// </summary>
@@ -1129,7 +1129,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("SerializerNoSuchEvent", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The type &apos;{0}&apos; has no field named &apos;{1}&apos;..
         /// </summary>
@@ -1138,7 +1138,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("SerializerNoSuchField", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The type &apos;{0}&apos; has no property named &apos;{1}&apos;..
         /// </summary>
@@ -1147,7 +1147,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("SerializerNoSuchProperty", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Error reading resources from the resource file for the culture {0}: {1}.
         /// </summary>
@@ -1156,7 +1156,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("SerializerResourceException", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Error reading resources from the resource file for the default culture: {0}.
         /// </summary>
@@ -1165,7 +1165,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("SerializerResourceExceptionInvariant", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Could not find type &apos;{0}&apos;.  Please make sure that the assembly that contains this type is referenced.  If this type is a part of your development project, make sure that the project has been successfully built using settings for your current platform or Any CPU..
         /// </summary>
@@ -1174,7 +1174,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("SerializerTypeNotFound", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The variable &apos;{0}&apos; is either undeclared or was never assigned..
         /// </summary>
@@ -1183,7 +1183,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("SerializerUndeclaredName", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;About....
         /// </summary>
@@ -1192,7 +1192,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("StandardMenuAbout", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Contents.
         /// </summary>
@@ -1201,7 +1201,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("StandardMenuContents", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Copy.
         /// </summary>
@@ -1210,7 +1210,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("StandardMenuCopy", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Create Standard Menu.
         /// </summary>
@@ -1219,7 +1219,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("StandardMenuCreateDesc", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Customize.
         /// </summary>
@@ -1228,7 +1228,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("StandardMenuCustomize", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Cu&amp;t.
         /// </summary>
@@ -1237,7 +1237,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("StandardMenuCut", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Edit.
         /// </summary>
@@ -1246,7 +1246,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("StandardMenuEdit", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to E&amp;xit.
         /// </summary>
@@ -1255,7 +1255,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("StandardMenuExit", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;File.
         /// </summary>
@@ -1264,7 +1264,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("StandardMenuFile", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Help.
         /// </summary>
@@ -1273,7 +1273,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("StandardMenuHelp", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Index.
         /// </summary>
@@ -1282,7 +1282,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("StandardMenuIndex", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;New.
         /// </summary>
@@ -1291,7 +1291,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("StandardMenuNew", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Open.
         /// </summary>
@@ -1300,7 +1300,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("StandardMenuOpen", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Options.
         /// </summary>
@@ -1309,7 +1309,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("StandardMenuOptions", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Paste.
         /// </summary>
@@ -1318,7 +1318,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("StandardMenuPaste", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Print.
         /// </summary>
@@ -1327,7 +1327,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("StandardMenuPrint", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Print Pre&amp;view.
         /// </summary>
@@ -1336,7 +1336,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("StandardMenuPrintPreview", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Redo.
         /// </summary>
@@ -1345,7 +1345,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("StandardMenuRedo", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Save.
         /// </summary>
@@ -1354,7 +1354,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("StandardMenuSave", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Save &amp;As.
         /// </summary>
@@ -1363,7 +1363,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("StandardMenuSaveAs", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Search.
         /// </summary>
@@ -1372,7 +1372,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("StandardMenuSearch", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Select &amp;All.
         /// </summary>
@@ -1381,7 +1381,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("StandardMenuSelectAll", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Tools.
         /// </summary>
@@ -1390,7 +1390,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("StandardMenuTools", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Undo.
         /// </summary>
@@ -1399,7 +1399,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("StandardMenuUndo", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to C&amp;ut.
         /// </summary>
@@ -1408,7 +1408,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("StandardToolCut", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to He&amp;lp.
         /// </summary>
@@ -1417,7 +1417,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("StandardToolHelp", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Argument should be a non-empty string..
         /// </summary>
@@ -1426,7 +1426,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolboxItemInvalidKey", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Property {0} requires an argument of type {1}..
         /// </summary>
@@ -1435,7 +1435,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolboxItemInvalidPropertyType", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Toolbox item cannot be modified..
         /// </summary>
@@ -1444,7 +1444,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolboxItemLocked", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Data type {0} is not serializable. Items added to a property dictionary must be serializable..
         /// </summary>
@@ -1453,7 +1453,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolboxItemValueNotSerializable", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Dock:.
         /// </summary>
@@ -1462,7 +1462,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripActionList_Dock", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Changes the Dock property.
         /// </summary>
@@ -1471,7 +1471,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripActionList_DockDesc", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to GripStyle:.
         /// </summary>
@@ -1480,7 +1480,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripActionList_GripStyle", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Changes the GripStyle property.
         /// </summary>
@@ -1489,7 +1489,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripActionList_GripStyleDesc", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Layout &amp;&amp; Appearance.
         /// </summary>
@@ -1498,7 +1498,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripActionList_Layout", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to RenderMode:.
         /// </summary>
@@ -1507,7 +1507,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripActionList_RenderMode", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Changes the RenderMode property.
         /// </summary>
@@ -1516,7 +1516,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripActionList_RenderModeDesc", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Adding {0} Item.
         /// </summary>
@@ -1525,7 +1525,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripAddingItem", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to AllowItemReorder and AllowDrop cannot both be true..
         /// </summary>
@@ -1534,7 +1534,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to ToolStrip New Item create Transaction..
         /// </summary>
@@ -1543,7 +1543,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripCreatingNewItemTransaction", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Embed in ToolStripContainer.
         /// </summary>
@@ -1552,7 +1552,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripDesignerEmbedVerb", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Embeds the current ToolStrip in ToolStripContainer.
         /// </summary>
@@ -1561,7 +1561,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripDesignerEmbedVerbDesc", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Insert Standard Items.
         /// </summary>
@@ -1570,7 +1570,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripDesignerStandardItemsVerb", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Inserts standard items in the current ToolStrip.
         /// </summary>
@@ -1579,7 +1579,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripDesignerStandardItemsVerbDesc", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Type Here.
         /// </summary>
@@ -1588,7 +1588,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripDesignerTemplateNodeEnterText", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Type Text for ToolStripMenuItem.
         /// </summary>
@@ -1597,7 +1597,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripDesignerTemplateNodeLabelToolTip", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Add Menu Item.
         /// </summary>
@@ -1606,7 +1606,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripDesignerTemplateNodeSplitButtonStatusStripAccessibleName", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Add ToolStripStatusLabel.
         /// </summary>
@@ -1615,7 +1615,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripDesignerTemplateNodeSplitButtonStatusStripToolTip", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Add ToolStripButton.
         /// </summary>
@@ -1624,7 +1624,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripDesignerTemplateNodeSplitButtonToolTip", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to New item selection.
         /// </summary>
@@ -1633,7 +1633,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripDesignerToolStripAccessibleName", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Adding Item.
         /// </summary>
@@ -1642,7 +1642,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripDesignerTransactionAddingItem", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Removing Item.
         /// </summary>
@@ -1651,7 +1651,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripDesignerTransactionRemovingItem", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Edit DropDownItems....
         /// </summary>
@@ -1660,7 +1660,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripDropDownItemCollectionEditorVerb", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to ToolStrip MenuItem Insert in DropDown Transaction..
         /// </summary>
@@ -1669,7 +1669,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripInsertingIntoDropDownTransaction", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Edit Items....
         /// </summary>
@@ -1678,7 +1678,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripItemCollectionEditorVerb", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Con&amp;vert To.
         /// </summary>
@@ -1687,7 +1687,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripItemContextMenuConvertTo", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &amp;Insert.
         /// </summary>
@@ -1696,7 +1696,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripItemContextMenuInsert", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Set I&amp;mage....
         /// </summary>
@@ -1705,7 +1705,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripItemContextMenuSetImage", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to ToolStripItem Property Change Transaction..
         /// </summary>
@@ -1714,7 +1714,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripItemPropertyChangeTransaction", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to ToolStripItem Morphing Transaction..
         /// </summary>
@@ -1723,7 +1723,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripMorphingItemTransaction", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos;.
         /// </summary>
@@ -1732,7 +1732,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripSelectMenuItem", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Cannot add ToolStripSeparator to MenuStrip..
         /// </summary>
@@ -1741,7 +1741,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("ToolStripSeparatorError", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Auto Arrange Tray Icons.
         /// </summary>
@@ -1750,7 +1750,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("TrayAutoArrange", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Line Up Tray Icons.
         /// </summary>
@@ -1759,7 +1759,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("TrayLineUpIcons", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Show Large or Small Icons.
         /// </summary>
@@ -1768,7 +1768,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("TrayShowLargeIcons", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Type &apos;{0}&apos; is not available in the target framework..
         /// </summary>
@@ -1777,7 +1777,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("TypeNotFoundInTargetFramework", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
@@ -1786,7 +1786,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("UIServiceHelper_ErrorCaption", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Add Component.
         /// </summary>
@@ -1795,7 +1795,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("UndoEngineComponentAdd0", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Add {0}.
         /// </summary>
@@ -1804,7 +1804,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("UndoEngineComponentAdd1", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Change Component.
         /// </summary>
@@ -1813,7 +1813,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("UndoEngineComponentChange0", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Change {0}.
         /// </summary>
@@ -1822,7 +1822,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("UndoEngineComponentChange1", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Change {0}.{1}.
         /// </summary>
@@ -1831,7 +1831,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("UndoEngineComponentChange2", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Remove Component.
         /// </summary>
@@ -1840,7 +1840,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("UndoEngineComponentRemove0", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Remove {0}.
         /// </summary>
@@ -1849,7 +1849,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("UndoEngineComponentRemove1", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Rename {0} to {1}.
         /// </summary>
@@ -1858,7 +1858,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("UndoEngineComponentRename", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement..
         /// </summary>
@@ -1867,7 +1867,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("UndoEngineMissingService", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Not implemented..
         /// </summary>
@@ -1876,7 +1876,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("UnsafeNativeMethodsNotImplemented", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &lt;couldn&apos;t find resource string &quot;WindowsFormsAddEvent&quot;&gt;.
         /// </summary>
@@ -1885,7 +1885,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("WindowsFormsAddEvent", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Horizontal center of {0} component(s).
         /// </summary>
@@ -1894,7 +1894,7 @@ namespace System.Windows.Forms.Design.Resources {
                 return ResourceManager.GetString("WindowsFormsCommandCenterX", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Vertical center of {0} component(s).
         /// </summary>

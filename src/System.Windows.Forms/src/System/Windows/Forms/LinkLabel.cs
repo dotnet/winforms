@@ -21,7 +21,7 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Internal;
     using System;
     using System.Runtime.Versioning;
-    
+
     /// <devdoc>
     ///   <para>
     ///      Displays text that can contain a hyperlink.
@@ -57,7 +57,7 @@ namespace System.Windows.Forms {
 
         bool textLayoutValid = false;
         bool receivedDoubleClick = false;
-        
+
         ArrayList links = new ArrayList(2);
 
         Link focusLink = null;
@@ -66,8 +66,8 @@ namespace System.Windows.Forms {
         Cursor overrideCursor = null;
 
         bool processingOnGotFocus;  // used to avoid raising the OnGotFocus event twice after selecting a focus link.
-        
-        LinkBehavior linkBehavior = System.Windows.Forms.LinkBehavior.SystemDefault; 
+
+        LinkBehavior linkBehavior = System.Windows.Forms.LinkBehavior.SystemDefault;
 
         /// <devdoc>
         ///   <para>
@@ -148,17 +148,17 @@ namespace System.Windows.Forms {
                     }
 
                     focusLink = value;
-                    
+
                     if (focusLink != null) {
                         InvalidateLink(focusLink);
 
                         UpdateAccessibilityLink(focusLink);
-                        
+
                     }
                 }
             }
         }
-        
+
         private Color IELinkColor {
             get {
                 return LinkUtilities.IELinkColor;
@@ -237,7 +237,7 @@ namespace System.Windows.Forms {
 
                     if (value.Start != 0 || value.Length != 0) {
                         Links.Add(new Link(this));
-                        
+
                         // Update the link area of the first link
                         //
                         ((Link)links[0]).Start = value.Start;
@@ -385,7 +385,7 @@ namespace System.Windows.Forms {
                         UnsafeNativeMethods.GetCursorPos(p);
                         UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
 
-                        // 
+                        //
                         if ((r.left <= p.x && p.x < r.right && r.top <= p.y && p.y < r.bottom) || UnsafeNativeMethods.GetCapture() == Handle)
                             SendMessage(Interop.WindowMessages.WM_SETCURSOR, Handle, NativeMethods.HTCLIENT);
                     }
@@ -524,9 +524,9 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        ///    Determines whether the current state of the control allows for rendering text using 
+        ///    Determines whether the current state of the control allows for rendering text using
         ///    TextRenderer (GDI).
-        ///    The Gdi library doesn't currently have a way to calculate character ranges so we cannot 
+        ///    The Gdi library doesn't currently have a way to calculate character ranges so we cannot
         ///    use it for painting link(s) within the text, but if the link are is null or covers the
         ///    entire text we are ok since it is just one area with the same size of the text binding
         ///    area.
@@ -543,12 +543,12 @@ namespace System.Windows.Forms {
         internal override bool UseGDIMeasuring() {
             return !UseCompatibleTextRendering;
         }
-        
+
         /// <devdoc>
         ///    Converts the character index into char index of the string
         ///    This method is copied in LinkCollectionEditor.cs. Update the other
         ///    one as well if you change this method.
-        ///    This method mainly deal with surrogate. Suppose we 
+        ///    This method mainly deal with surrogate. Suppose we
         ///    have a string consisting of 3 surrogates, and we want the
         ///    second character, then the index we need should be 2 instead of
         ///    1, and this method returns the correct index.
@@ -558,7 +558,7 @@ namespace System.Windows.Forms {
                 return 0;
             }
             if (string.IsNullOrEmpty(text)) {
-                Debug.Assert(text != null, "string should not be null"); 
+                Debug.Assert(text != null, "string should not be null");
                 //do no conversion, just return the original value passed in
                 return index;
             }
@@ -577,8 +577,8 @@ namespace System.Windows.Forms {
             string sub = stringInfo.SubstringByTextElements(0, index);
             return sub.Length;
         }
-        
-        
+
+
         /// <devdoc>
         ///    Ensures that we have analyzed the text run so that we can render each segment
         ///    and link.
@@ -620,7 +620,7 @@ namespace System.Windows.Forms {
                         Region[] textRegions = g.MeasureCharacterRanges (text, alwaysUnderlined, ClientRectWithPadding, textFormat);
 
                         int regionIndex = 0;
-                        
+
                         for (int i=0; i<Links.Count; i++) {
                             Link link = Links[i];
                             int charStart = ConvertToCharIndex(link.Start, text);
@@ -630,7 +630,7 @@ namespace System.Windows.Forms {
                                 regionIndex++;
                             }
                         }
-                        
+
                         Debug.Assert(regionIndex == (textRegions.Length - 1), "Failed to consume all link label visual regions");
                         this.textRegion = textRegions[textRegions.Length - 1];
                     } else {
@@ -653,8 +653,8 @@ namespace System.Windows.Forms {
                             using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(this.Font)) {
                                 IntNativeMethods.DRAWTEXTPARAMS dtParams = wg.GetTextMargins(wf);
 
-                                iLeftMargin = dtParams.iLeftMargin; 
-                                iRightMargin = dtParams.iRightMargin; 
+                                iLeftMargin = dtParams.iLeftMargin;
+                                iRightMargin = dtParams.iRightMargin;
                             }
 
                         }
@@ -664,7 +664,7 @@ namespace System.Windows.Forms {
                                                                   textSize.Width - iRightMargin - iLeftMargin,
                                                                   textSize.Height);
                         visualRectangle = CalcTextRenderBounds(visualRectangle /*textRect*/, clientRectWithPadding /*clientRect*/, RtlTranslateContent(this.TextAlign));
-                        // 
+                        //
 
 
                         Region visualRegion = new Region(visualRectangle);
@@ -691,8 +691,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        
-        
+
+
         internal override StringFormat CreateStringFormat() {
             StringFormat stringFormat = base.CreateStringFormat();
             if (string.IsNullOrEmpty(Text)) {
@@ -715,7 +715,7 @@ namespace System.Windows.Forms {
                 return new CharacterRange[]{};
             }
 
-            StringInfo stringInfo = new StringInfo(text);                 
+            StringInfo stringInfo = new StringInfo(text);
             int textLen = stringInfo.LengthInTextElements;
             ArrayList ranges = new ArrayList(Links.Count);
 
@@ -749,7 +749,7 @@ namespace System.Windows.Forms {
             }
             return false;
         }
-        
+
         /// <devdoc>
         ///    Determines if the given client coordinates is contained within a portion
         ///    of a link area.
@@ -852,8 +852,8 @@ namespace System.Windows.Forms {
 
             try {
                 Link focusLink = FocusLink;
-                if (focusLink == null) {                   
-                    // Set focus on first link.  
+                if (focusLink == null) {
+                    // Set focus on first link.
                     // This will raise the OnGotFocus event again but it will not be processed because processingOnGotFocus is true.
                     Select(true /*directed*/, true /*forward*/);
                 }
@@ -965,7 +965,7 @@ namespace System.Windows.Forms {
 
             base.OnMouseUp(e);
 
-            // 
+            //
             if (Disposing || IsDisposed) {
                 return;
             }
@@ -989,7 +989,7 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
+
         /// <devdoc>
         ///   <para>
         ///      Raises the <see cref='System.Windows.Forms.Control.OnMouseMove'/>
@@ -1114,7 +1114,7 @@ namespace System.Windows.Forms {
                                     else {
                                         finalrect = this.ClientRectWithPadding;
                                         Size finalRectSize = finalrect.Size.ToSize();
-                                        
+
                                         Size requiredSize = MeasureTextCache.GetTextSize(Text, Font, finalRectSize, CreateTextFormatFlags(finalRectSize));
 
                                         finalrect.Width = requiredSize.Width;
@@ -1138,7 +1138,7 @@ namespace System.Windows.Forms {
                             }
 
                             // When there is only one link in link label,
-                            // it's not necessary to paint with forebrush first 
+                            // it's not necessary to paint with forebrush first
                             // as it will be overlapped by linkbrush in the following steps
 
                             if (!IsOneLink()) {
@@ -1195,7 +1195,7 @@ namespace System.Windows.Forms {
                                 e.Graphics.ReleaseHdc();
                             }
                             Rectangle clientRectWidthPadding = ClientRectWithPadding;
-                            
+
                             ControlPaint.DrawStringDisabled(e.Graphics, Text, Font, foreColor, clientRectWidthPadding, CreateTextFormatFlags(clientRectWidthPadding.Size));
                         }
                     }
@@ -1264,7 +1264,7 @@ namespace System.Windows.Forms {
 
         protected override void OnEnabledChanged(EventArgs e) {
             base.OnEnabledChanged(e);
-            
+
             if (!Enabled) {
                 for (int i=0; i<links.Count; i++) {
                     ((Link)links[i]).State &= ~(LinkState.Hover | LinkState.Active);
@@ -1288,7 +1288,7 @@ namespace System.Windows.Forms {
         }
 
         private void PaintLink(Graphics g, Link link, SolidBrush foreBrush, SolidBrush linkBrush, bool optimizeBackgroundRendering, RectangleF finalrect) {
-            
+
             // link = null means paint the whole text
 
             Debug.Assert(g != null, "Must pass valid graphics");
@@ -1328,7 +1328,7 @@ namespace System.Windows.Forms {
                     else {
                         g.Clip = link.VisualRegion;
                     }
-                    
+
                     if (optimizeBackgroundRendering) {
                         PaintLinkBackground(g);
                     }
@@ -1336,7 +1336,7 @@ namespace System.Windows.Forms {
                     if( UseCompatibleTextRendering ){
                         SolidBrush useBrush = brushColor == Color.Empty ? linkBrush : new SolidBrush( brushColor );
                         StringFormat stringFormat = CreateStringFormat();
-                    
+
                         g.DrawString(Text, font, useBrush, ClientRectWithPadding, stringFormat);
 
                         if( useBrush != linkBrush ){
@@ -1543,7 +1543,7 @@ namespace System.Windows.Forms {
                     else {
                         test = null;
                     }
-                    
+
                 } while (test != null
                          && !test.Enabled
                          && LinkInText(charStart, charEnd - charStart));
@@ -1588,9 +1588,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
 
-            // we cache too much state to try and optimize this (regions, etc)... it is best 
-            // to always relayout here... If we want to resurect this code in the future, 
-            // remember that we need to handle a word wrapped top aligned text that 
+            // we cache too much state to try and optimize this (regions, etc)... it is best
+            // to always relayout here... If we want to resurect this code in the future,
+            // remember that we need to handle a word wrapped top aligned text that
             // will become newly exposed (and therefore layed out) when we resize...
             //
             /*
@@ -1601,7 +1601,7 @@ namespace System.Windows.Forms {
                 Invalidate();
             }
             */
-            
+
             InvalidateTextLayout();
             Invalidate();
 
@@ -1611,7 +1611,7 @@ namespace System.Windows.Forms {
         protected override void Select(bool directed, bool forward) {
 
             if (directed) {
-                // In a multi-link label, if the tab came from another control, we want to keep the currently 
+                // In a multi-link label, if the tab came from another control, we want to keep the currently
                 // focused link, otherwise, we set the focus to the next link.
                 if (links.Count > 0) {
 
@@ -1623,7 +1623,7 @@ namespace System.Windows.Forms {
                     }
 
                     // We could be getting focus from ourself, so we must
-                    // invalidate each time.                                   
+                    // invalidate each time.
                     //
                     FocusLink = null;
 
@@ -1666,7 +1666,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///   <para>
         ///      Determines if the range in text that is treated as a
-        ///      link should remain the same.      
+        ///      link should remain the same.
         ///   </para>
         /// </devdoc>
         private bool ShouldSerializeLinkArea() {
@@ -1693,7 +1693,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         private bool ShouldSerializeUseCompatibleTextRendering() {
             // Serialize code if LinkLabel cannot support the feature or the property's value is  not the default.
-            return !CanUseTextRenderer || UseCompatibleTextRendering != Control.UseCompatibleTextRenderingDefault; 
+            return !CanUseTextRenderer || UseCompatibleTextRendering != Control.UseCompatibleTextRenderingDefault;
         }
 
         /// <devdoc>
@@ -1718,14 +1718,14 @@ namespace System.Windows.Forms {
 
                 return;
             }
-            
+
             int focusIndex = -1;
             for (int i=0; i<links.Count; i++) {
                 if (links[i] == focusLink) {
                     focusIndex = i;
                 }
             }
-            AccessibilityNotifyClients(AccessibleEvents.Focus, focusIndex);            
+            AccessibilityNotifyClients(AccessibleEvents.Focus, focusIndex);
         }
 
         /// <devdoc>
@@ -1775,7 +1775,7 @@ namespace System.Windows.Forms {
                     FocusLink = null;
                 }
             }
-            
+
             OverrideCursor = null;
             TabStop = selectable;
             SetStyle(ControlStyles.Selectable, selectable);
@@ -1870,7 +1870,7 @@ namespace System.Windows.Forms {
                     owner.Invalidate();
                 }
             }
-            
+
             object IList.this[int index] {
                 get {
                     return this[index];
@@ -1879,12 +1879,12 @@ namespace System.Windows.Forms {
                     if (value is Link) {
                         this[index] = (Link)value;
                     }
-                    else {  
+                    else {
                         throw new ArgumentException(SR.LinkLabelBadLink,"value");
                     }
                 }
             }
-           
+
             /// <devdoc>
             ///    <para>Retrieves the child control with the specified key.</para>
             /// </devdoc>
@@ -1906,7 +1906,7 @@ namespace System.Windows.Forms {
 
                 }
             }
-  
+
 
             [Browsable(false)]
             public int Count {
@@ -1918,13 +1918,13 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///   <para>whether we have added a non-trivial link to the collection</para>
             /// </devdoc>
-            
+
             public bool LinksAdded {
                 get {
                     return linksAdded;
                 }
             }
-            
+
             object ICollection.SyncRoot {
                 get {
                     return this;
@@ -1936,19 +1936,19 @@ namespace System.Windows.Forms {
                     return false;
                 }
             }
-            
+
             bool IList.IsFixedSize {
                 get {
                     return false;
                 }
             }
-           
+
             public bool IsReadOnly {
                 get {
                     return false;
                 }
             }
-            
+
             public Link Add(int start, int length) {
                 if (length != 0) {
                     linksAdded = true;
@@ -1964,7 +1964,7 @@ namespace System.Windows.Forms {
                 // state of having only the default link in it. In that case
                 // we want to clear the list before adding this link.
                 //
-                if (owner.links.Count == 1 
+                if (owner.links.Count == 1
                     && this[0].Start == 0
                     && this[0]._length == -1) {
 
@@ -1988,7 +1988,7 @@ namespace System.Windows.Forms {
                 // state of having only the default link in it. In that case
                 // we want to clear the list before adding this link.
                 //
-                if (owner.links.Count == 1 
+                if (owner.links.Count == 1
                     && this[0].Start == 0
                     && this[0]._length == -1) {
 
@@ -2023,25 +2023,25 @@ namespace System.Windows.Forms {
                     return 0;
                 }
             }
-            
+
             int IList.Add(object value) {
                 if (value is Link) {
                     return Add((Link)value);
                 }
-                else {  
+                else {
                     throw new ArgumentException(SR.LinkLabelBadLink,"value");
                 }
             }
-            
+
             void IList.Insert(int index, object value) {
                 if (value is Link) {
                     Add((Link)value);
                 }
-                else {  
+                else {
                     throw new ArgumentException(SR.LinkLabelBadLink, "value");
                 }
             }
-    
+
             public bool Contains(Link link) {
                 return owner.links.Contains(link);
             }
@@ -2050,27 +2050,27 @@ namespace System.Windows.Forms {
             ///    <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
             /// </devdoc>
             public virtual bool ContainsKey(string key) {
-               return IsValidIndex(IndexOfKey(key)); 
+               return IsValidIndex(IndexOfKey(key));
             }
-        
+
             bool IList.Contains(object link) {
                 if (link is Link) {
                     return Contains((Link)link);
                 }
-                else {  
+                else {
                     return false;
                 }
             }
-            
+
             public int IndexOf(Link link) {
                 return owner.links.IndexOf(link);
             }
-            
+
             int IList.IndexOf(object link) {
                 if (link is Link) {
                     return IndexOf((Link)link);
                 }
-                else {  
+                else {
                     return -1;
                 }
             }
@@ -2112,7 +2112,7 @@ namespace System.Windows.Forms {
                 return ((index >= 0) && (index < this.Count));
             }
 
-            
+
             /// <devdoc>
             ///   Remove all links from the linkLabel.
             /// </devdoc>
@@ -2143,7 +2143,7 @@ namespace System.Windows.Forms {
                     return new Link[0].GetEnumerator();
                 }
             }
-            
+
             public void Remove(Link value) {
 
                 if (value.Owner != this.owner) {
@@ -2169,25 +2169,25 @@ namespace System.Windows.Forms {
                     owner.FocusLink = (Link)owner.links[0];
                 }
             }
-            
+
             public void RemoveAt(int index) {
                 Remove(this[index]);
             }
-  
+
             /// <devdoc>
             ///    <para>Removes the child control with the specified key.</para>
             /// </devdoc>
             public virtual void RemoveByKey(string key) {
                     int index = IndexOfKey(key);
                     if (IsValidIndex(index)) {
-                        RemoveAt(index); 
+                        RemoveAt(index);
                      }
                }
-            
+
             void IList.Remove(object value) {
                 if (value is Link) {
                     Remove((Link)value);
-                }                
+                }
             }
         }
 
@@ -2399,7 +2399,7 @@ namespace System.Windows.Forms {
 
                 return base.GetPropertyValue(propertyID);
             }
-            
+
             public override System.Windows.Forms.AccessibleObject HitTest(int x,  int y) {
                 Point p = Owner.PointToClient(new Point(x, y));
                 Link hit = ((LinkLabel)Owner).PointInLink(p.X, p.Y);
@@ -2421,7 +2421,7 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         /// </devdoc>
-        [System.Runtime.InteropServices.ComVisible(true)]        
+        [System.Runtime.InteropServices.ComVisible(true)]
         internal class LinkAccessibleObject : AccessibleObject {
 
             private Link link;
@@ -2472,9 +2472,9 @@ namespace System.Windows.Forms {
                     return link.Description;
                 }
             }
-            
+
             public override string Name {
-                get {          
+                get {
                     string text = link.Owner.Text;
                     string name;
 
@@ -2495,7 +2495,7 @@ namespace System.Windows.Forms {
 
             public override AccessibleObject Parent {
                 get {
-                    return link.Owner.AccessibilityObject;                
+                    return link.Owner.AccessibilityObject;
                 }
             }
 

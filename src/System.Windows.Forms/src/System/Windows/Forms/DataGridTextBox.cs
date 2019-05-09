@@ -11,7 +11,7 @@ namespace System.Windows.Forms{
     using System.Runtime.InteropServices;
 
     /// <devdoc>
-    /// <para>Represents a <see cref='System.Windows.Forms.TextBox'/> control that is hosted in a 
+    /// <para>Represents a <see cref='System.Windows.Forms.TextBox'/> control that is hosted in a
     /// <see cref='System.Windows.Forms.DataGridTextBoxColumn'/> .</para>
     /// </devdoc>
     [
@@ -28,7 +28,7 @@ namespace System.Windows.Forms{
         // takes place
         private DataGrid dataGrid;
 
-        public DataGridTextBox() : base () { 
+        public DataGridTextBox() : base () {
             TabStop = false;
         }
         /// <devdoc>
@@ -59,12 +59,12 @@ namespace System.Windows.Forms{
         {
             base.OnKeyPress(e);
 
-            // Shift-Space should not cause the grid to 
+            // Shift-Space should not cause the grid to
             // be put in edit mode
             if (e.KeyChar == ' ' && (Control.ModifierKeys & Keys.Shift) == Keys.Shift)
                 return;
 
-            // if the edit box is in ReadOnly mode, then do not tell the DataGrid about the 
+            // if the edit box is in ReadOnly mode, then do not tell the DataGrid about the
             // edit
             if (this.ReadOnly)
                 return;
@@ -124,13 +124,13 @@ namespace System.Windows.Forms{
                     // or if the entire text is selected and we did not start editing
                     // send this character to the dataGrid
                     // else, process the KeyEvent
-                    // 
+                    //
                     if (SelectionStart + SelectionLength == 0 ||
                         (this.IsInEditOrNavigateMode && this.SelectionLength == Text.Length))
                         return ProcessKeyPreview(ref m);
                     return ProcessKeyEventArgs(ref m);
                 case Keys.Down:
-                    // if the end of the selection is on the last line of the text then 
+                    // if the end of the selection is on the last line of the text then
                     // send this character to the dataGrid
                     // else, process the KeyEvent
                     //
@@ -139,7 +139,7 @@ namespace System.Windows.Forms{
                         return ProcessKeyPreview(ref m);
                     return ProcessKeyEventArgs(ref m);
                 case Keys.Up:
-                    // if the end of the selection is on the first line of the text then 
+                    // if the end of the selection is on the first line of the text then
                     // send this character to the dataGrid
                     // else, process the KeyEvent
                     //
@@ -174,7 +174,7 @@ namespace System.Windows.Forms{
                             // when we get a SHIFT-SPACEBAR message, disregard the WM_CHAR part of the message
                             if (m.Msg == Interop.WindowMessages.WM_CHAR) return true;
 
-                            // if the user pressed the SHIFT key at the same time with 
+                            // if the user pressed the SHIFT key at the same time with
                             // the space key, send the key message to the DataGrid
                             return ProcessKeyPreview(ref m);
                     }
@@ -185,7 +185,7 @@ namespace System.Windows.Forms{
                             // when we get a Control-A message, disregard the WM_CHAR part of the message
                             if (m.Msg == Interop.WindowMessages.WM_CHAR) return true;
 
-                            // if the user pressed the Control key at the same time with 
+                            // if the user pressed the Control key at the same time with
                             // the space key, send the key message to the DataGrid
                             return ProcessKeyPreview(ref m);
                     }
@@ -204,7 +204,7 @@ namespace System.Windows.Forms{
                         if (ProcessKeyPreview(ref m))
                             return true;
                         else {
-                            // the edit control will use the 
+                            // the edit control will use the
                             // delete key: we are in Edit mode now:
                             IsInEditOrNavigateMode = false;
                             dataGrid.ColumnStartedEditing(Bounds);

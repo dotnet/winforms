@@ -301,7 +301,7 @@ namespace System.Windows.Forms
                 Name = name;
                 Id = id;
             }
-            
+
             /// <devdoc>
             /// Specifies the name of this format.
             /// </devdoc>

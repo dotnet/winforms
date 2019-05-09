@@ -28,7 +28,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             this.SetFlag(FLAG_RENDER_READONLY, (peParent.Flags & FLAG_RENDER_READONLY) != 0 || peParent.ForceReadOnly);
         }
 
-        
+
         public override GridItemType GridItemType {
             get {
                 return GridItemType.ArrayValue;
@@ -100,6 +100,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         public override bool CanSetReadOnlyPropertyValue() {
            return this.ParentGridEntry.CanSetReadOnlyPropertyValue();
         }*/
-       
+
     }
 }

@@ -24,17 +24,17 @@ namespace System.Windows.Forms {
         /// We use an index here rather than control so that we don't have lifetime
         /// issues by holding on to extra references.
         private int lastAccessedIndex = -1;
-		
+
         //this index is used to optimize performance of AddRange
-        //items are added from last to first after this index 
-        //(to work around TV_INSertItem comctl32 perf issue with consecutive adds in the end of the list) 
+        //items are added from last to first after this index
+        //(to work around TV_INSertItem comctl32 perf issue with consecutive adds in the end of the list)
         private int fixedIndex = -1;
-        
+
 
         internal TreeNodeCollection(TreeNode owner) {
             this.owner = owner;
         }
-        
+
         internal int FixedIndex
         {
             get {
@@ -62,7 +62,7 @@ namespace System.Windows.Forms {
                 value.Realize(false);
             }
         }
-        
+
         object IList.this[int index] {
             get {
                 return this[index];
@@ -71,7 +71,7 @@ namespace System.Windows.Forms {
                 if (value is TreeNode) {
                     this[index] = (TreeNode)value;
                 }
-                else { 
+                else {
                     throw new ArgumentException(SR.TreeNodeCollectionBadTreeNode, "value");
                 }
             }
@@ -117,15 +117,15 @@ namespace System.Windows.Forms {
                 return false;
             }
         }
-        
+
         bool IList.IsFixedSize {
             get {
                 return false;
             }
         }
-        
+
         public bool IsReadOnly {
-            get {  
+            get {
                 return false;
             }
         }
@@ -196,7 +196,7 @@ namespace System.Windows.Forms {
         }
 
         // END - NEW ADD OVERLOADS IN WHIDBEY -->
-        
+
         public virtual void AddRange(TreeNode[] nodes) {
             if (nodes == null) {
                 throw new ArgumentNullException(nameof(nodes));
@@ -221,7 +221,7 @@ namespace System.Windows.Forms {
         public TreeNode[] Find (string key, bool searchAllChildren) {
              ArrayList foundNodes =  FindInternal(key, searchAllChildren, this, new ArrayList());
 
-             // 
+             //
              TreeNode[] stronglyTypedFoundNodes = new TreeNode[foundNodes.Count];
              foundNodes.CopyTo(stronglyTypedFoundNodes, 0);
 
@@ -230,26 +230,26 @@ namespace System.Windows.Forms {
 
         private ArrayList FindInternal(string key, bool searchAllChildren, TreeNodeCollection treeNodeCollectionToLookIn, ArrayList foundTreeNodes) {
           if ((treeNodeCollectionToLookIn == null) || (foundTreeNodes == null)) {
-                return null; 
+                return null;
             }
 
             // Perform breadth first search - as it's likely people will want tree nodes belonging
             // to the same parent close to each other.
-            
+
             for (int i = 0; i < treeNodeCollectionToLookIn.Count; i++) {
                   if (treeNodeCollectionToLookIn[i] == null){
                       continue;
                   }
-                  
+
                   if (WindowsFormsUtils.SafeCompareStrings(treeNodeCollectionToLookIn[i].Name, key, /* ignoreCase = */ true)) {
                        foundTreeNodes.Add(treeNodeCollectionToLookIn[i]);
                   }
             }
 
             // Optional recurive search for controls in child collections.
-            
+
             if (searchAllChildren){
-                for (int i = 0; i < treeNodeCollectionToLookIn.Count; i++) {    
+                for (int i = 0; i < treeNodeCollectionToLookIn.Count; i++) {
                   if (treeNodeCollectionToLookIn[i] == null){
                       continue;
                   }
@@ -269,7 +269,7 @@ namespace System.Windows.Forms {
 			return AddInternal(node, 0);
 		}
 
-       
+
         private int AddInternal(TreeNode node, int delta) {
             if (node == null) {
                 throw new ArgumentNullException(nameof(node));
@@ -283,7 +283,7 @@ namespace System.Windows.Forms {
             // If the TreeView is sorted, index is ignored
             TreeView tv = owner.TreeView;
             if (tv != null && tv.Sorted) {
-                return owner.AddSorted(node);                
+                return owner.AddSorted(node);
             }
             node.parent = owner;
             int fixedIndex = owner.Nodes.FixedIndex;
@@ -291,7 +291,7 @@ namespace System.Windows.Forms {
                 node.index = fixedIndex + delta;
             }
             else {
-                //if fixedIndex != -1 capacity was ensured by AddRange 
+                //if fixedIndex != -1 capacity was ensured by AddRange
                 Debug.Assert(delta == 0,"delta should be 0");
                 owner.EnsureCapacity(1);
                 node.index = owner.childCount;
@@ -302,11 +302,11 @@ namespace System.Windows.Forms {
 
             if (tv != null && node == tv.selectedNode)
                 tv.SelectedNode = node; // communicate this to the handle
-            
+
             if (tv != null && tv.TreeViewNodeSorter != null) {
                 tv.Sort();
             }
-                
+
             return node.index;
         }
 
@@ -316,7 +316,7 @@ namespace System.Windows.Forms {
             }
             else if (node is TreeNode) {
                 return Add((TreeNode)node);
-            }            
+            }
             else
             {
                 return Add(node.ToString()).index;
@@ -331,7 +331,7 @@ namespace System.Windows.Forms {
         ///     <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
         /// </devdoc>
         public virtual bool ContainsKey(string key) {
-           return IsValidIndex(IndexOfKey(key)); 
+           return IsValidIndex(IndexOfKey(key));
         }
 
 
@@ -339,7 +339,7 @@ namespace System.Windows.Forms {
             if (node is TreeNode) {
                 return Contains((TreeNode)node);
             }
-            else {  
+            else {
                 return false;
             }
         }
@@ -348,7 +348,7 @@ namespace System.Windows.Forms {
             for(int index=0; index < Count; ++index) {
                 if (this[index] == node) {
                     return index;
-                } 
+                }
             }
             return -1;
         }
@@ -357,7 +357,7 @@ namespace System.Windows.Forms {
             if (node is TreeNode) {
                 return IndexOf((TreeNode)node);
             }
-            else {  
+            else {
                 return -1;
             }
         }
@@ -415,12 +415,12 @@ namespace System.Windows.Forms {
             if (index > owner.childCount) index = owner.childCount;
             owner.InsertNodeAt(index, node);
         }
-        
+
         void IList.Insert(int index, object node) {
             if (node is TreeNode) {
                 Insert(index, (TreeNode)node);
             }
-            else {  
+            else {
                 throw new ArgumentException(SR.TreeNodeCollectionBadTreeNode, "node");
             }
         }
@@ -511,11 +511,11 @@ namespace System.Windows.Forms {
                 System.Array.Copy(owner.children, 0, dest, index, owner.childCount);
             }
         }
-        
+
         public void Remove(TreeNode node) {
             node.Remove();
         }
-        
+
         void IList.Remove(object node) {
             if (node is TreeNode ) {
                 Remove((TreeNode)node);
@@ -525,14 +525,14 @@ namespace System.Windows.Forms {
         public virtual void RemoveAt(int index) {
             this[index].Remove();
         }
-       
+
         /// <devdoc>
         ///     <para>Removes the child control with the specified key.</para>
         /// </devdoc>
         public virtual void RemoveByKey(string key) {
             int index = IndexOfKey(key);
             if (IsValidIndex(index)) {
-                RemoveAt(index); 
+                RemoveAt(index);
              }
         }
 

@@ -99,7 +99,7 @@ namespace System.ComponentModel.Design
                     {
                         // this code can either be used in an InitPerf (loads CodeMarker DLL) or AttachPerf context (CodeMarker DLL already loaded)
                         // in the InitPerf context we have a regroot and should check for the test DLL registration
-                        // in the AttachPerf context we should see which module is already loaded 
+                        // in the AttachPerf context we should see which module is already loaded
                         if (_regroot == null)
                         {
                             _shouldUseTestDll = NativeMethods.GetModuleHandle(ProductDllName) == IntPtr.Zero;
@@ -365,7 +365,7 @@ namespace System.ComponentModel.Design
         /// DLL failed to load.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public bool InitPerformanceDll(int iApp, string strRegRoot)
-        {            
+        {
             return InitPerformanceDll(iApp, strRegRoot, RegistryView.Default);
         }
 
@@ -384,7 +384,7 @@ namespace System.ComponentModel.Design
         /// false indicates that either CodeMarkers are not enabled in the registry, or that the CodeMarkers transport
         /// DLL failed to load.</returns>
         public bool InitPerformanceDll(int iApp, string strRegRoot, RegistryView registryView)
-        {           
+        {
             // Prevent multiple initializations.
             if (IsEnabled)
             {
@@ -395,7 +395,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ArgumentNullException(nameof(strRegRoot));
             }
-            
+
             this.regroot = strRegRoot;
             this.registryView = registryView;
 
@@ -409,11 +409,11 @@ namespace System.ComponentModel.Design
                 {
                     NativeMethods.ProductDllInitPerf(iApp);
                 }
-                
+
                 this.state = State.Enabled;
-                
+
                 // Add an ATOM so that other CodeMarker enabled code in this process
-                // knows that CodeMarkers are enabled 
+                // knows that CodeMarkers are enabled
                 NativeMethods.AddAtom(AtomName);
             }
             // catch BadImageFormatException to handle 64-bit process loading 32-bit CodeMarker DLL (e.g., msbuild.exe)
@@ -430,7 +430,7 @@ namespace System.ComponentModel.Design
             return true;
         }
 
-        
+
         // Opposite of InitPerformanceDLL. Call it when your app does not need the code markers dll.
         public void UninitializePerformanceDLL(int iApp)
         {
@@ -470,7 +470,7 @@ namespace System.ComponentModel.Design
             {
                 // Swallow exception
             }
-        }        
+        }
 #endif //Codemarkers_IncludeAppEnum
     }
 

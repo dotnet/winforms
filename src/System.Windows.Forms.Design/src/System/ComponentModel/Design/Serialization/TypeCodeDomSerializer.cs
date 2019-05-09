@@ -199,7 +199,7 @@ namespace System.ComponentModel.Design.Serialization
                     OrderedCodeStatementCollection[] statementArray = new OrderedCodeStatementCollection[_statementTable.Count];
                     _statementTable.Values.CopyTo(statementArray, 0);
                     Array.Sort(statementArray, StatementOrderComparer.s_default);
-                    // make sure we have fully deserialized everything that is referenced in the statement table. Skip the root object for last 
+                    // make sure we have fully deserialized everything that is referenced in the statement table. Skip the root object for last
                     OrderedCodeStatementCollection rootStatements = null;
                     foreach (OrderedCodeStatementCollection statements in statementArray)
                     {
@@ -423,7 +423,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// This method serializes the given root object and optional collection of members to create a new type definition. The members collection can be null or empty. If it contains values, these values will be serialized. Values themselves may decide to serialize as either member  variables or local variables. This determination is done by looking for an extender property on the object called GenerateMember. If true, a member is generated. Otherwise, a local variable is generated. For convenience, the members collection can contain the root object. In this case the root object will not also be added as a member or local variable. The return value is a CodeTypeDeclaration that defines the root object.  The name of the type will be taken from the root object’s name, if it was a named object.  If not, a name will be fabricated from the simple type name of the root class.   
+        /// This method serializes the given root object and optional collection of members to create a new type definition. The members collection can be null or empty. If it contains values, these values will be serialized. Values themselves may decide to serialize as either member  variables or local variables. This determination is done by looking for an extender property on the object called GenerateMember. If true, a member is generated. Otherwise, a local variable is generated. For convenience, the members collection can contain the root object. In this case the root object will not also be added as a member or local variable. The return value is a CodeTypeDeclaration that defines the root object.  The name of the type will be taken from the root object’s name, if it was a named object.  If not, a name will be fabricated from the simple type name of the root class.
         /// The default implementation of Serialize performs the following tasks:
         /// •    Context Seeding.  The serialization context will be “seeded” with data including the RootContext, and CodeTypeDeclaration.
         /// •    Member Serialization.  Next Serialize will walk all of the members and call SerializeToExpression.  Because serialization is done opportunistically in SerializeToExpression, this ensures that we do not serialize twice.

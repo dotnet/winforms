@@ -80,7 +80,7 @@ namespace System.Windows.Forms
             {
                 ResetDpiAwarenessContextChanges();
             }
-            
+
             /// <summary>
             /// resetting dpiawareness of the thread.
             /// </summary>

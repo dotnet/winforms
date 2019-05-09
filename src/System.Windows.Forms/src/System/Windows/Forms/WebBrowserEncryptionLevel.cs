@@ -10,7 +10,7 @@ namespace System.Windows.Forms
     /// </devdoc>
     public enum WebBrowserEncryptionLevel
     {
-        Insecure = 0, 
+        Insecure = 0,
         Mixed = 1,
         Unknown = 2,
         Bit40 = 3,

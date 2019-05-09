@@ -13,13 +13,13 @@ namespace System.Windows.Forms.VisualStyles {
     using System.Windows.Forms;
     using System.Runtime.InteropServices;
     using System.Diagnostics.CodeAnalysis;
-    
+
 
     /// <devdoc>
-    ///    <para> 
-    ///         Provides information about the current visual style. 
-    ///         NOTE: 
-    ///         1) These properties (except SupportByOS, which is always meaningful) are meaningful only 
+    ///    <para>
+    ///         Provides information about the current visual style.
+    ///         NOTE:
+    ///         1) These properties (except SupportByOS, which is always meaningful) are meaningful only
     ///            if visual styles are supported and have currently been applied by the user.
     ///         2) A subset of these use VisualStyleRenderer objects, so they are
     ///            not meaningful unless VisualStyleRenderer.IsSupported is true.
@@ -33,7 +33,7 @@ namespace System.Windows.Forms.VisualStyles {
 
         /// <devdoc>
         ///    <para>
-        ///       Used to find whether visual styles are supported by the current OS. Same as 
+        ///       Used to find whether visual styles are supported by the current OS. Same as
         ///       using the OSFeature class to see if themes are supported.
         ///    </para>
         /// </devdoc>
@@ -44,7 +44,7 @@ namespace System.Windows.Forms.VisualStyles {
         }
 
         /// <devdoc>
-        ///    <para> 
+        ///    <para>
         ///     Returns true if a visual style has currently been applied by the user, else false.
         ///    </para>
         /// </devdoc>
@@ -53,7 +53,7 @@ namespace System.Windows.Forms.VisualStyles {
                 if (!IsSupportedByOS) {
                     return false;
                 }
-    
+
                 return (SafeNativeMethods.IsAppThemed());
             }
         }
@@ -62,7 +62,7 @@ namespace System.Windows.Forms.VisualStyles {
             get {
                 if (IsEnabledByUser) {
                     StringBuilder filename = new StringBuilder(512);
-                    SafeNativeMethods.GetCurrentThemeName(filename, filename.Capacity, null, 0, null, 0); 
+                    SafeNativeMethods.GetCurrentThemeName(filename, filename.Capacity, null, 0, null, 0);
                     return (filename.ToString());
                 }
 
@@ -77,7 +77,7 @@ namespace System.Windows.Forms.VisualStyles {
             get {
                 if (IsEnabledByUser) {
                     StringBuilder colorScheme = new StringBuilder(512);
-                    SafeNativeMethods.GetCurrentThemeName(null, 0, colorScheme, colorScheme.Capacity, null, 0); 
+                    SafeNativeMethods.GetCurrentThemeName(null, 0, colorScheme, colorScheme.Capacity, null, 0);
                     return (colorScheme.ToString());
                 }
 
@@ -92,7 +92,7 @@ namespace System.Windows.Forms.VisualStyles {
             get {
                 if (IsEnabledByUser) {
                     StringBuilder size = new StringBuilder(512);
-                    SafeNativeMethods.GetCurrentThemeName(null, 0, null, 0, size, size.Capacity); 
+                    SafeNativeMethods.GetCurrentThemeName(null, 0, null, 0, size, size.Capacity);
                     return (size.ToString());
                 }
 
@@ -144,7 +144,7 @@ namespace System.Windows.Forms.VisualStyles {
                 return string.Empty;
             }
         }
-        
+
         /// <devdoc>
         ///    The current visual style's copyright information.
         /// </devdoc>
@@ -218,13 +218,13 @@ namespace System.Windows.Forms.VisualStyles {
                     }
                     else {
                         visualStyleRenderer.SetParameters(VisualStyleElement.Window.Caption.Active);
-                    }    
+                    }
 
                     return (SafeNativeMethods.GetThemeSysBool(new HandleRef(null, visualStyleRenderer.Handle), SafeNativeMethods.VisualStyleSystemProperty.SupportsFlatMenus));
                 }
 
                 return false;
-            }            
+            }
         }
 
         /// <devdoc>
@@ -239,7 +239,7 @@ namespace System.Windows.Forms.VisualStyles {
                     else {
                         visualStyleRenderer.SetParameters(VisualStyleElement.Window.Caption.Active);
                     }
-                    
+
                     int mcDepth = 0;
 
                     SafeNativeMethods.GetThemeSysInt(new HandleRef(null, visualStyleRenderer.Handle), SafeNativeMethods.VisualStyleSystemProperty.MinimumColorDepth, ref mcDepth);
@@ -247,7 +247,7 @@ namespace System.Windows.Forms.VisualStyles {
                 }
 
                 return 0;
-            }            
+            }
         }
 
         /// <devdoc>
@@ -257,7 +257,7 @@ namespace System.Windows.Forms.VisualStyles {
             get {
                 if (Application.RenderWithVisualStyles) {
                     if (visualStyleRenderer == null) {
-                        visualStyleRenderer = new VisualStyleRenderer(VisualStyleElement.TextBox.TextEdit.Normal);                        
+                        visualStyleRenderer = new VisualStyleRenderer(VisualStyleElement.TextBox.TextEdit.Normal);
                     }
                     else {
                         visualStyleRenderer.SetParameters(VisualStyleElement.TextBox.TextEdit.Normal);
@@ -279,7 +279,7 @@ namespace System.Windows.Forms.VisualStyles {
                 if (Application.RenderWithVisualStyles) {
                     if (visualStyleRenderer == null) {
                         visualStyleRenderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
-                        
+
                     }
                     else {
                         visualStyleRenderer.SetParameters(VisualStyleElement.Button.PushButton.Normal);

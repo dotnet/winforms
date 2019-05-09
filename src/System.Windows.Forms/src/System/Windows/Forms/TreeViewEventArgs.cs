@@ -22,16 +22,16 @@ namespace System.Windows.Forms {
     public class TreeViewEventArgs : EventArgs {
         TreeNode node;
         TreeViewAction action = TreeViewAction.Unknown;
-        
+
         public TreeViewEventArgs(TreeNode node) {
             this.node = node;
         }
-        
+
         public TreeViewEventArgs(TreeNode node, TreeViewAction action) {
-            this.node = node;                                           
+            this.node = node;
             this.action = action;
         }
-        
+
         public TreeNode Node {
             get {
                 return node;

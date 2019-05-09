@@ -124,7 +124,7 @@ namespace System.ComponentModel.Design
                 _typeService = GetService(typeof(TypeDescriptionProviderService)) as TypeDescriptionProviderService;
                 _typeServiceChecked = true;
             }
-            // TypeDescriptionProviderService is attached at design time only 
+            // TypeDescriptionProviderService is attached at design time only
             if (_typeService != null)
             {
                 // Check for the attribute that VsTargetFrameworkProvider injects on reflection types to see if VsTargetFrameworkProvider is already attached.
@@ -1194,7 +1194,7 @@ namespace System.ComponentModel.Design
                 _rootComponentClassName = _rootComponent.Site.Name;
             }
 
-            // If the loader indicated success, but it never created a component, that is an error.  
+            // If the loader indicated success, but it never created a component, that is an error.
             if (successful && _rootComponent == null)
             {
                 ArrayList errorList = new ArrayList();

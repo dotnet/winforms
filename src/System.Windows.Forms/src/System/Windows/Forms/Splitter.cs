@@ -4,7 +4,7 @@
 
 
 namespace System.Windows.Forms {
-    
+
     using Microsoft.Win32;
     using System;
     using System.ComponentModel;
@@ -43,7 +43,7 @@ namespace System.Windows.Forms {
         private int splitSize = -1;
         private int splitterThickness = 3;
         private int initTargetSize;
-        private int lastDrawSplit = -1;       
+        private int lastDrawSplit = -1;
         private int maxSize;
         private static readonly object EVENT_MOVING = new object();
         private static readonly object EVENT_MOVED = new object();
@@ -60,7 +60,7 @@ namespace System.Windows.Forms {
             TabStop = false;
             minSize = 25;
             minExtra = 25;
-            
+
             Dock = DockStyle.Left;
         }
 
@@ -198,7 +198,7 @@ namespace System.Windows.Forms {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D)){
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                 }
-            
+
                 if (borderStyle != value) {
                     borderStyle = value;
                     UpdateStyles();
@@ -229,7 +229,7 @@ namespace System.Windows.Forms {
                 return cp;
             }
         }
-        
+
         protected override ImeMode DefaultImeMode {
             get {
                 return ImeMode.Disable;
@@ -246,13 +246,13 @@ namespace System.Windows.Forms {
             get { return base.Dock;}
 
             set {
-            
+
                 if (!(value == DockStyle.Top || value == DockStyle.Bottom || value == DockStyle.Left || value == DockStyle.Right)) {
                     throw new ArgumentException(SR.SplitterInvalidDockEnum);
                 }
-                
+
                 int requestedSize = splitterThickness;
-                
+
                 base.Dock = value;
                 switch (Dock) {
                     case DockStyle.Top:
@@ -280,7 +280,7 @@ namespace System.Windows.Forms {
                 return dock == DockStyle.Left || dock == DockStyle.Right;
             }
         }
-        
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public ImeMode ImeMode {
             get {
@@ -394,7 +394,7 @@ namespace System.Windows.Forms {
                 spd.target.Bounds = bounds;
                 Application.DoEvents();
                 OnSplitterMoved(new SplitterEventArgs(Left, Top, (Left + bounds.Width / 2), (Top + bounds.Height / 2)));
-                
+
             }
         }
 
@@ -415,10 +415,10 @@ namespace System.Windows.Forms {
         }
 
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never), 
-        Bindable(false), 
+        Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
+        Bindable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]                
+        ]
         public override string Text {
             get {
                 return base.Text;
@@ -427,13 +427,13 @@ namespace System.Windows.Forms {
                 base.Text = value;
             }
         }
-        
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
         }
-        
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Enter {
             add => base.Enter += value;
@@ -695,7 +695,7 @@ namespace System.Windows.Forms {
             }
             return Math.Max(Math.Min(size, maxSize), minSize);
         }
-        
+
         /// <devdoc>
         /// </devdoc>
         protected override void OnKeyDown(KeyEventArgs e) {
@@ -768,7 +768,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        
+
 
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
             if (Horizontal) {
@@ -836,7 +836,7 @@ namespace System.Windows.Forms {
         private void ApplySplitPosition() {
             SplitPosition = splitSize;
         }
-        
+
         /// <devdoc>
         ///     Moves the splitter line to the splitSize for the mouse position
         ///     (x, y).
@@ -868,7 +868,7 @@ namespace System.Windows.Forms {
         }
 
 
-        private class SplitterMessageFilter : IMessageFilter 
+        private class SplitterMessageFilter : IMessageFilter
         {
             private Splitter owner = null;
 
@@ -876,7 +876,7 @@ namespace System.Windows.Forms {
             {
                 this.owner = splitter;
             }
-            
+
             /// <devdoc>
             /// </devdoc>
             public bool PreFilterMessage(ref Message m) {

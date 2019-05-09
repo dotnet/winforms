@@ -21,7 +21,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         public Com2EnumConverter(Com2Enum enumObj) {
             com2Enum = enumObj;
         }
-        
+
         /// <devdoc>
         ///      Determines if this converter can convert an object in the given source
         ///      type to the native type of the converter.
@@ -50,7 +50,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
             return base.ConvertFrom(context, culture, value);
         }
-    
+
         /// <devdoc>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call
@@ -75,7 +75,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
             return base.ConvertTo(context, culture, value, destinationType);
         }
-     
+
         /// <devdoc>
         ///      Retrieves a collection containing a set of standard values
         ///      for the data type this validator is designed for.  This
@@ -91,7 +91,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
             return values;
         }
-    
+
         /// <devdoc>
         ///      Determines if the list of standard values returned from
         ///      GetStandardValues is an exclusive list.  If the list
@@ -103,7 +103,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         public override bool GetStandardValuesExclusive(ITypeDescriptorContext context) {
             return com2Enum.IsStrictEnum;
         }
-        
+
         /// <devdoc>
         ///      Determines if this object supports a standard set of values
         ///      that can be picked from a list.
@@ -111,7 +111,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         public override bool GetStandardValuesSupported(ITypeDescriptorContext context) {
             return true;
         }
-        
+
         /// <devdoc>
         ///      Determines if the given object value is valid for this type.
         /// </devdoc>

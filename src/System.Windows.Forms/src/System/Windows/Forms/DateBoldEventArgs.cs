@@ -17,7 +17,7 @@ namespace System.Windows.Forms
         }
 
         public DateTime StartDate { get; }
-        
+
         public int Size { get; }
 
         public int[] DaysToBold { get; set; }

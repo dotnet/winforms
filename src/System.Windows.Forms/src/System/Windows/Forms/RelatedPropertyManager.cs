@@ -6,7 +6,7 @@ namespace System.Windows.Forms {
 
     using System;
     using Microsoft.Win32;
-    using System.Diagnostics;    
+    using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.ComponentModel;
     using System.Collections;
@@ -16,7 +16,7 @@ namespace System.Windows.Forms {
         BindingManagerBase parentManager;
         string dataField;
         PropertyDescriptor fieldInfo;
-        
+
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set the dataSource
                                                                                                     // it would be a breaking change.
@@ -44,12 +44,12 @@ namespace System.Windows.Forms {
             }
             return base.GetListName();
         }
-        
+
         protected internal override string GetListName(ArrayList listAccessors) {
             listAccessors.Insert(0, fieldInfo);
             return parentManager.GetListName(listAccessors);
         }
-        
+
         internal override PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors) {
             PropertyDescriptor[] accessors;
 
@@ -78,7 +78,7 @@ namespace System.Windows.Forms {
             OnCurrentChanged(EventArgs.Empty);
         }
 
-        
+
         internal override Type BindType {
             get {
                 return fieldInfo.PropertyType;

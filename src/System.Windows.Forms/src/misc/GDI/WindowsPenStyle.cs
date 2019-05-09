@@ -34,7 +34,7 @@ namespace System.Experimental.Gdi
         EndcapRound     = 0x00000000,
         EndcapSquare    = 0x00000100,
         EndcapFlat      = 0x00000200,
-        
+
         // join style
         JoinRound       = 0x00000000,
         JoinBevel       = 0x00001000,
@@ -45,7 +45,7 @@ namespace System.Experimental.Gdi
         Geometric        = 0x00010000,
 
         Default          = 0x00000000 // Solid | EndcapRound | JoinRound | Cosmetic
-        
+
         // (From wingdi.h)
         /* Pen Styles */
         /* Pen Styles */

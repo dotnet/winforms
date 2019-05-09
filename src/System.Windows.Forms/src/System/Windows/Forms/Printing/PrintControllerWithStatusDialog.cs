@@ -18,7 +18,7 @@ namespace System.Windows.Forms {
         private int pageNumber;
         private string dialogTitle;
 
-        public PrintControllerWithStatusDialog(PrintController underlyingController) 
+        public PrintControllerWithStatusDialog(PrintController underlyingController)
         : this(underlyingController, string.Format(SR.PrintControllerWithStatusDialog_DialogTitlePrint)) {
         }
 
@@ -28,7 +28,7 @@ namespace System.Windows.Forms {
         }
         /// <devdoc>
         ///    <para>
-        ///       This is new public property which notifies if this controller is used for PrintPreview.. so get the underlying Controller 
+        ///       This is new public property which notifies if this controller is used for PrintPreview.. so get the underlying Controller
         ///       and return its IsPreview Property.
         ///    </para>
         /// </devdoc>
@@ -57,7 +57,7 @@ namespace System.Windows.Forms {
                 backgroundThread = new BackgroundThread(this); // starts running & shows dialog automatically
             }
 
-            // OnStartPrint does the security check... lots of 
+            // OnStartPrint does the security check... lots of
             // extra setup to make sure that we tear down
             // correctly...
             //
@@ -148,7 +148,7 @@ namespace System.Windows.Forms {
 
             // on correct thread
             private void Run() {
-                // 
+                //
 
                 try {
                     lock (this) {
@@ -189,7 +189,7 @@ namespace System.Windows.Forms {
             // on correct thread
             private void ThreadUnsafeUpdateLabel() {
                 // "page {0} of {1}"
-                dialog.label1.Text = string.Format(SR.PrintControllerWithStatusDialog_NowPrinting, 
+                dialog.label1.Text = string.Format(SR.PrintControllerWithStatusDialog_NowPrinting,
                                                    parent.pageNumber, parent.document.DocumentName);
             }
 
@@ -209,7 +209,7 @@ namespace System.Windows.Forms {
             private BackgroundThread backgroundThread;
 
             internal StatusDialog(BackgroundThread backgroundThread, string dialogTitle) {
-                
+
                 InitializeComponent();
                 this.backgroundThread = backgroundThread;
                 this.Text = dialogTitle;
@@ -242,7 +242,7 @@ namespace System.Windows.Forms {
                 label1.Size = new Size(240, 64);
                 label1.TabIndex = 1;
                 label1.Anchor = AnchorStyles.None;
-                                
+
                 button1.AutoSize = true;
                 button1.Size = new Size(75, 23);
                 button1.TabIndex = 0;
@@ -262,7 +262,7 @@ namespace System.Windows.Forms {
                 tableLayoutPanel1.TabIndex = 0;
                 tableLayoutPanel1.Controls.Add(label1, 0, 0);
                 tableLayoutPanel1.Controls.Add(button1, 0, 1);
-                
+
                 this.AutoScaleDimensions = new Size(6, 13);
                 this.AutoScaleMode = AutoScaleMode.Font;
                 this.MaximizeBox = false;
@@ -276,7 +276,7 @@ namespace System.Windows.Forms {
                     this.ClientSize = clientSize;
                 }
                 this.CancelButton = button1;
-                this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;                
+                this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
                 this.Controls.Add(tableLayoutPanel1);
             }
             private void button1_Click(object sender, System.EventArgs e) {

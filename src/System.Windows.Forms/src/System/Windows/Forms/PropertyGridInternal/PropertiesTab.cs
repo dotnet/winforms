@@ -23,7 +23,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return SR.PBRSToolTipProperties;
             }
         }
-        
+
         public override string HelpKeyword {
             get {
                 return "vs.properties"; // do not localize.
@@ -50,14 +50,14 @@ namespace System.Windows.Forms.PropertyGridInternal {
         public override PropertyDescriptorCollection GetProperties(object component, Attribute[] attributes) {
                return GetProperties(null, component, attributes);
         }
-        
+
         public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object component, Attribute[] attributes) {
             if (attributes == null) {
                 attributes = new Attribute[]{BrowsableAttribute.Yes};
             }
 
             if (context == null) {
-                return TypeDescriptor.GetProperties(component, attributes); 
+                return TypeDescriptor.GetProperties(component, attributes);
             }
             else {
                 TypeConverter tc = (context.PropertyDescriptor == null ? TypeDescriptor.GetConverter(component) : context.PropertyDescriptor.Converter);

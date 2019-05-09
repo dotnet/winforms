@@ -17,7 +17,7 @@ namespace System.Windows.Forms {
     using System.ComponentModel.Design;
     using System.Drawing;
     using Microsoft.Win32;
-    
+
     /// <devdoc>
     ///    <para>
     ///       Defines a base class for controls that support auto-scrolling behavior.
@@ -29,7 +29,7 @@ namespace System.Windows.Forms {
     Designer("System.Windows.Forms.Design.ScrollableControlDesigner, " + AssemblyRef.SystemDesign)
     ]
     public class ScrollableControl : Control, IArrangedElement {
-#if DEBUG        
+#if DEBUG
         internal static readonly TraceSwitch AutoScrolling = new TraceSwitch("AutoScrolling", "Debug autoscrolling logic");
 #else
         internal static readonly TraceSwitch AutoScrolling;
@@ -49,7 +49,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected const int ScrollStateFullDrag          =  0x0010;
 
-        
+
         private Size       userAutoScrollMinSize = System.Drawing.Size.Empty;
         /// <devdoc>
         ///     Current size of the displayRect.
@@ -71,13 +71,13 @@ namespace System.Windows.Forms {
         private DockPaddingEdges dockPadding = null;
 
         private int         scrollState;
-        
+
         VScrollProperties verticalScroll = null;
         HScrollProperties horizontalScroll = null;
         private static readonly object EVENT_SCROLL = new object();
 
 
-        // Used to figure out what the horizontal scroll value should be set to when 
+        // Used to figure out what the horizontal scroll value should be set to when
         // the horizontal scrollbar is first shown
         private bool resetRTLHScrollValue = false;
 
@@ -117,7 +117,7 @@ namespace System.Windows.Forms {
                     UpdateFullDrag();
                 }
 
-                SetScrollState(ScrollStateAutoScrolling, value);                
+                SetScrollState(ScrollStateAutoScrolling, value);
                 LayoutTransaction.DoLayout(this, this, PropertyNames.AutoScroll);
             }
         }
@@ -152,9 +152,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         SRCategory(nameof(SR.CatLayout)),
-        Browsable(false), 
+        Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.FormAutoScrollPositionDescr))        
+        SRDescription(nameof(SR.FormAutoScrollPositionDescr))
         ]
         public Point AutoScrollPosition {
             get {
@@ -270,7 +270,7 @@ namespace System.Windows.Forms {
             get {
                 return GetScrollState(ScrollStateHScrollVisible);
             }
-            set { 
+            set {
                 SetScrollState(ScrollStateHScrollVisible, value);
             }
         }
@@ -293,7 +293,7 @@ namespace System.Windows.Forms {
         }
 
 
-       
+
 
 
         /// <devdoc>
@@ -303,7 +303,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected bool VScroll {
-            get { 
+            get {
                 return GetScrollState(ScrollStateVScrollVisible);
             }
             set {
@@ -377,7 +377,7 @@ namespace System.Windows.Forms {
                 LayoutTransaction.DoLayout(this, this, PropertyNames.DisplayRectangle);
             }
         }
-        
+
         private bool ApplyScrollbarChanges(Rectangle display) {
             Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, GetType().Name + "::ApplyScrollbarChanges(" + display + ") {");
             Debug.Indent();
@@ -394,14 +394,14 @@ namespace System.Windows.Forms {
             else {
                 minClient.Height -= SystemInformation.HorizontalScrollBarHeight;
             }
-            
+
             if (VScroll) {
                 fullClient.Width += SystemInformation.VerticalScrollBarWidth;
             }
             else {
                 minClient.Width -= SystemInformation.VerticalScrollBarWidth;
             }
-            
+
             int maxX = minClient.Width;
             int maxY = minClient.Height;
 
@@ -411,12 +411,12 @@ namespace System.Windows.Forms {
                 // things.)
                 //
                 scrollMargin = requestedScrollMargin;
-                
+
                 if (dockPadding != null) {
                     scrollMargin.Height += Padding.Bottom;
                     scrollMargin.Width += Padding.Right;
                 }
-                
+
                 for (int i=0; i<Controls.Count; i++) {
                     Control current = Controls[i];
 
@@ -452,7 +452,7 @@ namespace System.Windows.Forms {
 
 
             bool defaultLayoutEngine = (LayoutEngine == DefaultLayout.Instance);
-            
+
             if (!defaultLayoutEngine && CommonProperties.HasLayoutBounds(this)) {
 
                 Size layoutBounds = CommonProperties.GetLayoutBounds(this);
@@ -464,10 +464,10 @@ namespace System.Windows.Forms {
                 if (layoutBounds.Height > maxY) {
                     needVscroll = true;
                     maxY = layoutBounds.Height;
-                }                
+                }
             }
             else if (Controls.Count != 0) {
-                
+
                 // Compute the dimensions of the display rect
                 //
                 for (int i=0; i < Controls.Count; i++) {
@@ -477,7 +477,7 @@ namespace System.Windows.Forms {
                     Control current = Controls[i];
 
                     // Same logic as the margin calc - you need to see if the
-                    // control *will* be visible... 
+                    // control *will* be visible...
                     //
                     if (current != null && current.GetState(STATE_VISIBLE)) {
                         if (defaultLayoutEngine) {
@@ -523,7 +523,7 @@ namespace System.Windows.Forms {
                             {
                                 ctlRight += current.Margin.Right;
                                 ctlBottom += current.Margin.Bottom;
-                            }                            
+                            }
 
                             if (ctlRight > maxX && watchHoriz) {
                                 needHscroll = true;
@@ -603,10 +603,10 @@ namespace System.Windows.Forms {
                 displayRect = ClientRectangle;
             }
             if (!AutoScroll && this.HorizontalScroll._visible == true) {
-                displayRect = new Rectangle(displayRect.X, displayRect.Y, this.HorizontalScroll.Maximum, this.displayRect.Height); 
+                displayRect = new Rectangle(displayRect.X, displayRect.Y, this.HorizontalScroll.Maximum, this.displayRect.Height);
             }
             if (!AutoScroll && this.VerticalScroll._visible == true) {
-                displayRect = new Rectangle(displayRect.X, displayRect.Y, this.displayRect.Width, this.VerticalScroll.Maximum); 
+                displayRect = new Rectangle(displayRect.X, displayRect.Y, this.displayRect.Width, this.VerticalScroll.Maximum);
             }
             return displayRect;
         }
@@ -621,7 +621,7 @@ namespace System.Windows.Forms {
         protected bool GetScrollState(int bit) {
             return(bit & scrollState) == bit;
         }
-      
+
 
         /// <devdoc>
         ///    Forces the layout of any docked or anchored child controls.
@@ -645,10 +645,10 @@ namespace System.Windows.Forms {
             if (levent.AffectedControl != null && AutoScroll) {
                 base.OnLayout(levent);
             }
-			
+
             AdjustFormScrollbars(AutoScroll);
             base.OnLayout(levent);
-            
+
         }
 
         /// <devdoc>
@@ -658,7 +658,7 @@ namespace System.Windows.Forms {
         protected override void OnMouseWheel(MouseEventArgs e) {
 
             // Favor the vertical scroll bar, since it's the most
-            // common use.  However, if there isn't a vertical 
+            // common use.  However, if there isn't a vertical
             // scroll and the horizontal is on, then wheel it around.
             //
             if (VScroll) {
@@ -708,7 +708,7 @@ namespace System.Windows.Forms {
 
         protected override void OnPaintBackground (PaintEventArgs e) {
             if ((HScroll || VScroll) &&
-                BackgroundImage != null && 
+                BackgroundImage != null &&
                 (BackgroundImageLayout == ImageLayout.Zoom || BackgroundImageLayout == ImageLayout.Stretch || BackgroundImageLayout == ImageLayout.Center)) {
                     if (ControlPaint.IsImageTransparent(BackgroundImage)) {
                         PaintTransparentBackground(e, displayRect);
@@ -721,8 +721,8 @@ namespace System.Windows.Forms {
         }
 
         protected override void OnPaddingChanged(EventArgs e) {
-            // DockPaddingEdges compat.  
-            // dont call base in this instance - for App compat we should not fire Invalidate when 
+            // DockPaddingEdges compat.
+            // dont call base in this instance - for App compat we should not fire Invalidate when
             // the padding has changed.
             EventHandler handler = (EventHandler)Events[Control.EventPaddingChanged];
             if (handler != null) handler(this, e);
@@ -760,7 +760,7 @@ namespace System.Windows.Forms {
             base.ScaleControl(factor, specified);
         }
 
-        // internal for the respective scroll bars to call so that the Display Rectangle is set to 
+        // internal for the respective scroll bars to call so that the Display Rectangle is set to
         // enable the visual scroll effect.
         //
         internal void SetDisplayFromScrollProps(int x, int y)
@@ -769,13 +769,13 @@ namespace System.Windows.Forms {
           ApplyScrollbarChanges(display);
           SetDisplayRectLocation(x, y);
         }
-        
+
         /// <devdoc>
         ///    Adjusts the displayRect to be at the offset x, y. The contents of the
         ///    Form is scrolled using Windows.ScrollWindowEx.
         /// </devdoc>
         //
-        // 
+        //
 
         protected void SetDisplayRectLocation(int x, int y) {
             int xDelta = 0;
@@ -819,17 +819,17 @@ namespace System.Windows.Forms {
                 Rectangle cr = ClientRectangle;
                 NativeMethods.RECT rcClip = NativeMethods.RECT.FromXYWH(cr.X, cr.Y, cr.Width, cr.Height);
                 NativeMethods.RECT rcUpdate = NativeMethods.RECT.FromXYWH(cr.X, cr.Y, cr.Width, cr.Height);
-                SafeNativeMethods.ScrollWindowEx(new HandleRef(this, Handle), xDelta, yDelta, 
+                SafeNativeMethods.ScrollWindowEx(new HandleRef(this, Handle), xDelta, yDelta,
                                                  null,
-                                                 ref rcClip, 
-                                                 NativeMethods.NullHandleRef, 
+                                                 ref rcClip,
+                                                 NativeMethods.NullHandleRef,
                                                  ref rcUpdate,
                                                  NativeMethods.SW_INVALIDATE
                                                  | NativeMethods.SW_ERASE
                                                  | NativeMethods.SW_SCROLLCHILDREN);
             }
 
-			
+
 
             // Force child controls to update bounds.
             //
@@ -856,17 +856,17 @@ namespace System.Windows.Forms {
             Debug.Indent();
 
             Rectangle client = ClientRectangle;
-          
+
             if (IsDescendant(activeControl)
                 && AutoScroll
                 && (HScroll || VScroll)
                 && (client.Width > 0 && client.Height > 0)) {
 
                 Debug.WriteLineIf(ScrollableControl.AutoScrolling.TraceVerbose, "Calculating...");
-            
+
 
                 Point scrollLocation = ScrollToControl(activeControl);
-                
+
 
                 SetScrollState(ScrollStateUserHasScrolled, false);
                 SetDisplayRectLocation(scrollLocation.X, scrollLocation.Y);
@@ -878,14 +878,14 @@ namespace System.Windows.Forms {
 
 
         /// <devdoc> Allow containers to tweak autoscrolling.  when you tab between controls contained in the scrollable control
-        /// this allows you to set the scroll location.  This would allow you to scroll to the middle of a control, where as the default is 
+        /// this allows you to set the scroll location.  This would allow you to scroll to the middle of a control, where as the default is
         /// the top of the control.
 
         ///
-        /// Additionally there is a new AutoScrollOffset property on the child controls themselves.  This lets them control where they want to 
+        /// Additionally there is a new AutoScrollOffset property on the child controls themselves.  This lets them control where they want to
         /// be scrolled to.  E.g. In SelectedIndexChanged for a ListBox, you could do:
-        /// 
-        /// listBox1.AutoScrollOffset = parent.AutoScrollPosition; 
+        ///
+        /// listBox1.AutoScrollOffset = parent.AutoScrollPosition;
         ///
         /// </devdoc>
         protected virtual Point ScrollToControl(Control activeControl) {
@@ -1025,7 +1025,7 @@ namespace System.Windows.Forms {
                 resetRTLHScrollValue = true;
             }
 
-            
+
             if (needLayout) {
                 int x = displayRect.X;
                 int y = displayRect.Y;
@@ -1165,7 +1165,7 @@ namespace System.Windows.Forms {
                 if (!IsHandleCreated) {
                     return;
                 }
-                
+
                 if (HScroll) {
                     if (!HorizontalScroll._maximumSetExternally) {
                         HorizontalScroll._maximum = displayRect.Width-1;
@@ -1182,8 +1182,8 @@ namespace System.Windows.Forms {
                     }
                     else if(-displayRect.X >= HorizontalScroll._minimum && -displayRect.X < HorizontalScroll._maximum) {
                         HorizontalScroll._value = -displayRect.X;
-                    }                    
-                    HorizontalScroll.UpdateScrollInfo ();                    
+                    }
+                    HorizontalScroll.UpdateScrollInfo ();
                 }
                 if (VScroll) {
                     if (!VerticalScroll._maximumSetExternally) {
@@ -1198,7 +1198,7 @@ namespace System.Windows.Forms {
                     if (-displayRect.Y >= VerticalScroll._minimum && -displayRect.Y < VerticalScroll._maximum) {
                         VerticalScroll._value = -displayRect.Y;
                     }
-                    VerticalScroll.UpdateScrollInfo ();                    
+                    VerticalScroll.UpdateScrollInfo ();
                 }
             }
             else {
@@ -1219,11 +1219,11 @@ namespace System.Windows.Forms {
 
         private void OnSetScrollPosition(object sender, EventArgs e) {
             if (!IsMirrored) {
-                SendMessage(Interop.WindowMessages.WM_HSCROLL, 
+                SendMessage(Interop.WindowMessages.WM_HSCROLL,
                             NativeMethods.Util.MAKELPARAM((RightToLeft == RightToLeft.Yes) ? NativeMethods.SB_RIGHT : NativeMethods.SB_LEFT,0), 0);
             }
         }
-        
+
 
         /// <devdoc>
         ///     Queries the system to determine the users preference for full drag
@@ -1254,12 +1254,12 @@ namespace System.Windows.Forms {
             int maxPos = -(client.Height - displayRect.Height);
             if (!AutoScroll) {
                 maxPos = this.VerticalScroll.Maximum;
-            }            
-            
+            }
+
             switch (NativeMethods.Util.LOWORD(m.WParam)) {
                 case NativeMethods.SB_THUMBPOSITION:
                 case NativeMethods.SB_THUMBTRACK:
-                    pos = ScrollThumbPosition(NativeMethods.SB_VERT);                    
+                    pos = ScrollThumbPosition(NativeMethods.SB_VERT);
                     break;
                 case NativeMethods.SB_LINEUP:
                     if (pos > 0) {
@@ -1324,7 +1324,7 @@ namespace System.Windows.Forms {
             }
 
             Rectangle client = ClientRectangle;
-            
+
             int pos = -displayRect.X;
             int oldValue = pos;
             int maxPos = -(client.Width - displayRect.Width);
@@ -1390,7 +1390,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         private void WmOnScroll(ref Message m, int oldValue, int value, ScrollOrientation scrollOrientation) {
             ScrollEventType type = (ScrollEventType)NativeMethods.Util.LOWORD(m.WParam);
-            if (type != ScrollEventType.EndScroll) { 
+            if (type != ScrollEventType.EndScroll) {
                 ScrollEventArgs se = new ScrollEventArgs(type, oldValue, value, scrollOrientation);
                 OnScroll(se);
             }

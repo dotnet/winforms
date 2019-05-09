@@ -36,7 +36,7 @@ namespace System.Windows.Forms.Design.Tests
             TestControlDesigner controlDesigner = new TestControlDesigner();
             Assert.False(controlDesigner.GetEnableDragRectProperty());
         }
-        
+
         [Fact]
         public void ParticipatesWithSnapLinesProperty()
         {

@@ -13,9 +13,9 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.IO;
     using System.Runtime.InteropServices;
-    using System.Windows.Forms;    
+    using System.Windows.Forms;
     using System.Globalization;
-    
+
     /// <devdoc>
     ///    <para>
     ///       Displays a single column header in a <see cref='System.Windows.Forms.ListView'/>
@@ -59,7 +59,7 @@ namespace System.Windows.Forms {
                 int width = this.Width;
 
                 listview = value;
-                
+
                 // The below properties are set into the listview.
                 this.Width = width;
             }
@@ -109,7 +109,7 @@ namespace System.Windows.Forms {
             get {
                 return this.DisplayIndexInternal;
             }
-		
+
 	    set {
 
                 // When the list is being deserialized we need
@@ -170,7 +170,7 @@ namespace System.Windows.Forms {
             get {
                 if (listview != null)
                     return listview.GetColumnIndex(this);
-                return -1;  
+                return -1;
             }
         }
 
@@ -185,7 +185,7 @@ namespace System.Windows.Forms {
             get {
                 if (imageIndexer.Index != -1 && ImageList != null && imageIndexer.Index >= ImageList.Images.Count) {
                     return ImageList.Images.Count - 1;
-                } 
+                }
                 return imageIndexer.Index;
             }
             set {
@@ -316,13 +316,13 @@ namespace System.Windows.Forms {
                 return this.textAlign;
             }
             set {
-                //valid values are 0x0 to 0x2. 
+                //valid values are 0x0 to 0x2.
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center)){
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
                 }
 
                 this.textAlign = value;
-                
+
                 // The first column must be left-aligned
                 if (Index == 0 && this.textAlign != HorizontalAlignment.Left) {
                     this.textAlign = HorizontalAlignment.Left;
@@ -372,7 +372,7 @@ namespace System.Windows.Forms {
                 // from the underlying control every time we're asked.
                 // The underlying control will only report the correct width if it's in Report view
                 if (listview != null && listview.IsHandleCreated && !listview.Disposing && listview.View == View.Details) {
-                    
+
                     // Make sure this column has already been added to the ListView, else just return width
                     //
                     IntPtr hwndHdr = UnsafeNativeMethods.SendMessage(new HandleRef(listview, listview.Handle), NativeMethods.LVM_GETHEADER, 0, 0);
@@ -403,7 +403,7 @@ namespace System.Windows.Forms {
                 this.listview.AutoResizeColumn(this.Index, headerAutoResize);
             }
         }
-        
+
 
         /// <devdoc>
         ///     Creates an identical ColumnHeader, unattached to any ListView
@@ -460,7 +460,7 @@ namespace System.Windows.Forms {
         internal bool ShouldSerializeText() {
             return(text != null);
         }
-        
+
         /// <devdoc>
         ///     Returns a string representation of this column header
         /// </devdoc>

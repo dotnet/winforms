@@ -12,7 +12,7 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Windows.Forms;
     using System.Drawing;
-    
+
     using Microsoft.Win32;
 
     internal class Command : WeakReference {

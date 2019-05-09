@@ -4,9 +4,9 @@
 
 
 namespace System.Windows.Forms {
-    
+
     using System;
-    using System.ComponentModel;   
+    using System.ComponentModel;
     using System.Diagnostics;
 
     /// <devdoc>

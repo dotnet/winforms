@@ -13,7 +13,7 @@ using System.Runtime.CompilerServices;
 // [assembly:RuntimeCompatibility(WrapNonExceptionThrows = true)]
 [assembly:System.Runtime.CompilerServices.StringFreezingAttribute()]
 [assembly:System.Runtime.InteropServices.TypeLibVersion(2, 4)]
- 
+
 // Opts into the VS loading icons from the Icon Satellite assembly: System.Windows.Forms.VisualStudio.<version>.0.dll
 [assembly:System.Drawing.BitmapSuffixInSatelliteAssemblyAttribute()]
 

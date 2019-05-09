@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop {
-    using System;    
+    using System;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Globalization;
@@ -31,7 +31,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                return typeof(NativeMethods.IVsPerPropertyBrowsing);
             }
          }
-         
+
          public static bool AllowChildProperties(Com2PropertyDescriptor propDesc) {
             if (propDesc.TargetObject is NativeMethods.IVsPerPropertyBrowsing) {
                bool pfHide = false;
@@ -55,13 +55,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                   propDesc[i].QueryGetBaseAttributes += new GetAttributesEventHandler(this.OnGetBaseAttributes);
                   propDesc[i].QueryGetDisplayName += new GetNameItemEventHandler(this.OnGetDisplayName);
                   propDesc[i].QueryGetIsReadOnly += new GetBoolValueEventHandler(this.OnGetIsReadOnly);
-                  
+
                   propDesc[i].QueryShouldSerializeValue += new GetBoolValueEventHandler(this.OnShouldSerializeValue);
                   propDesc[i].QueryCanResetValue += new GetBoolValueEventHandler(this.OnCanResetPropertyValue);
                   propDesc[i].QueryResetValue += new Com2EventHandler(this.OnResetPropertyValue);
-                  
+
                   propDesc[i].QueryGetTypeConverterAndTypeEditor += new GetTypeConverterAndTypeEditorEventHandler(this.OnGetTypeConverterAndTypeEditor);
-                  
+
                }
          }
 
@@ -91,7 +91,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                   NativeMethods.IVsPerPropertyBrowsing vsObj = (NativeMethods.IVsPerPropertyBrowsing)sender.TargetObject;
 
                   int hr = NativeMethods.S_OK;
-                  
+
                   // we want to avoid allowing clients to force a bad property to be browsable,
                   // so we don't allow things that are marked as non browsable to become browsable,
                   // only the other way around.
@@ -99,12 +99,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                   if (sender.CanShow) {
                     // should we hide this?
                     bool pfHide = sender.Attributes[typeof(BrowsableAttribute)].Equals(BrowsableAttribute.No);
-                  
+
                     hr = vsObj.HideProperty(sender.DISPID, ref pfHide);
                     if (hr == NativeMethods.S_OK){
                          attrEvent.Add(pfHide ? BrowsableAttribute.No : BrowsableAttribute.Yes);
                     }
-                  } 
+                  }
 
                   // should we show this
                   if (typeof(UnsafeNativeMethods.IDispatch).IsAssignableFrom(sender.PropertyType) && sender.CanShow){
@@ -164,7 +164,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                   }
                }
          }
-         
+
          /// <devdoc>
          /// Here is where we handle IVsPerPropertyBrowsing.DisplayChildProperties
          /// </devdoc>
@@ -178,7 +178,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                      // should we make this read only?
                      bool pfResult = false;
                      int hr = vsObj.DisplayChildProperties(sender.DISPID, ref pfResult);
-                     
+
                      if (gveevent.TypeConverter is Com2IDispatchConverter){
                         gveevent.TypeConverter = new Com2IDispatchConverter(sender, (hr == NativeMethods.S_OK && pfResult));
                      }
@@ -189,11 +189,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                }
                Debug.Assert(sender.TargetObject == null || sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
          }
-         
+
          private void OnResetPropertyValue(Com2PropertyDescriptor sender, EventArgs e) {
                if (sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing) {
 
-                    
+
                     NativeMethods.IVsPerPropertyBrowsing target = (NativeMethods.IVsPerPropertyBrowsing)sender.TargetObject;
                     int dispid = sender.DISPID;
                     bool canReset = false;

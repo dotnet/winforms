@@ -12,7 +12,7 @@ namespace System.Windows.Forms.ButtonInternal {
     using System.Windows.Forms;
     using System.Windows.Forms.Layout;
     using System.Diagnostics.CodeAnalysis;
-        
+
 
     internal class CheckBoxPopupAdapter : CheckBoxBaseAdapter {
 
@@ -32,9 +32,9 @@ namespace System.Windows.Forms.ButtonInternal {
                 PaintButtonBackground(e, Control.ClientRectangle, null);
 
                 PaintImage(e, layout);
-                
+
                 DrawCheckBackground(e, layout.checkBounds, colors.windowText, colors.options.highContrast ? colors.buttonFace : colors.highlight, true, colors);
-                DrawFlatBorder(e.Graphics, layout.checkBounds, 
+                DrawFlatBorder(e.Graphics, layout.checkBounds,
                     (colors.options.highContrast && !Control.Enabled) ? colors.windowFrame : colors.buttonShadow);
                 DrawCheckOnly(e, layout, colors, colors.windowText, colors.highlight);
 
@@ -42,7 +42,7 @@ namespace System.Windows.Forms.ButtonInternal {
                 PaintField(e, layout, colors, colors.windowText, true);
             }
         }
-        
+
         internal override void PaintOver(PaintEventArgs e, CheckState state) {
             System.Drawing.Graphics g = e.Graphics;
             if (Control.Appearance == Appearance.Button) {
@@ -57,7 +57,7 @@ namespace System.Windows.Forms.ButtonInternal {
                 PaintButtonBackground(e, Control.ClientRectangle, null);
 
                 PaintImage(e, layout);
-                
+
                 DrawCheckBackground(e, layout.checkBounds, colors.windowText, colors.options.highContrast ? colors.buttonFace : colors.highlight, true, colors);
                 DrawPopupBorder(g, layout.checkBounds, colors);
                 DrawCheckOnly(e, layout, colors, colors.windowText, colors.highlight);
@@ -71,7 +71,7 @@ namespace System.Windows.Forms.ButtonInternal {
                 PaintField(e, layout, colors, colors.windowText, true);
             }
         }
-        
+
         internal override void PaintDown(PaintEventArgs e, CheckState state) {
             if (Control.Appearance == Appearance.Button) {
                 ButtonPopupAdapter adapter = new ButtonPopupAdapter(Control);
@@ -86,7 +86,7 @@ namespace System.Windows.Forms.ButtonInternal {
                 PaintButtonBackground(e, Control.ClientRectangle, null);
 
                 PaintImage(e, layout);
-                
+
                 DrawCheckBackground(e, layout.checkBounds, colors.windowText, colors.buttonFace, true, colors);
                 DrawPopupBorder(g, layout.checkBounds, colors);
                 DrawCheckOnly(e, layout, colors, colors.windowText, colors.buttonFace);

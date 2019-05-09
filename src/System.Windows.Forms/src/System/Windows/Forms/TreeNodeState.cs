@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <devdoc>
-    /// Gives state information about a TreeView node. Used with owner draw. 
+    /// Gives state information about a TreeView node. Used with owner draw.
     /// </devdoc>
     [Flags]
     public enum TreeNodeStates

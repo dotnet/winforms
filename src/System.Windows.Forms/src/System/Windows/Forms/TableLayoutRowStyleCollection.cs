@@ -9,11 +9,11 @@ namespace System.Windows.Forms {
     using System.ComponentModel.Design.Serialization;
     using System.Diagnostics;
     using System.Drawing;
-    using System.Drawing.Design;    
+    using System.Drawing.Design;
     using System.Globalization;
     using System.Windows.Forms.Layout;
     using System.Reflection;
-    
+
     public class TableLayoutRowStyleCollection : TableLayoutStyleCollection {
 
         internal TableLayoutRowStyleCollection(IArrangedElement Owner) : base(Owner) {}
@@ -24,9 +24,9 @@ namespace System.Windows.Forms {
         }
 
         public int Add(RowStyle rowStyle) { return ((IList)this).Add(rowStyle); }
-        
+
         public void Insert(int index, RowStyle rowStyle) { ((IList)this).Insert(index, rowStyle); }
-        
+
         public new RowStyle this[int index] {
             get { return (RowStyle)((IList)this)[index]; }
             set { ((IList)this)[index] = value; }

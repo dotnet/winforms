@@ -79,9 +79,9 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Go to a specific url(string) in the history</para>
         /// </devdoc>
-        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have 
-        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified 
-        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to 
+        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
+        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified
+        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to
         /// break.
         [SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads")]
         public void Go(string urlString)

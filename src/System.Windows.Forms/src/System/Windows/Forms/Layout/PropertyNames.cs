@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Layout {
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
         public static readonly string AutoSize = "AutoSize";
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly string Appearance = "Appearance";        
+        public static readonly string Appearance = "Appearance";
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
         public static readonly string AutoEllipsis = "AutoEllipsis";
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Layout {
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
         public static readonly string ColumnStyles = "ColumnStyles";
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly string Controls = "Controls";        
+        public static readonly string Controls = "Controls";
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
         public static readonly string Dock = "Dock";
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]

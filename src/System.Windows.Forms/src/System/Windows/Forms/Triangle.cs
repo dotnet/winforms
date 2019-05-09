@@ -6,7 +6,7 @@ namespace System.Windows.Forms {
 
     using System.Diagnostics;
     using System;
-    
+
     using System.Windows.Forms;
     using System.Drawing;
     using Microsoft.Win32;

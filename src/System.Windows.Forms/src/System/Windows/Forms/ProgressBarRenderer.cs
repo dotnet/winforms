@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms { 
+namespace System.Windows.Forms {
 
 using System;
 using System.Drawing;
@@ -20,14 +20,14 @@ using Microsoft.Win32;
        //Make this per-thread, so that different threads can safely use these methods.
        [ThreadStatic]
        private static VisualStyleRenderer visualStyleRenderer = null;
-       
+
         //cannot instantiate
        private ProgressBarRenderer() {
        }
 
        /// <devdoc>
        ///    <para>
-       ///       Returns true if this class is supported for the current OS and user/application settings, 
+       ///       Returns true if this class is supported for the current OS and user/application settings,
        ///       otherwise returns false.
        ///    </para>
        /// </devdoc>
@@ -101,7 +101,7 @@ using Microsoft.Win32;
        public static int ChunkThickness {
            get {
                InitializeRenderer(VisualStyleElement.ProgressBar.Chunk.Normal);
-    
+
                return (visualStyleRenderer.GetInteger(IntegerProperty.ProgressChunkSize));
            }
        }
@@ -114,7 +114,7 @@ using Microsoft.Win32;
        public static int ChunkSpaceThickness {
            get {
                InitializeRenderer(VisualStyleElement.ProgressBar.Chunk.Normal);
-    
+
                return (visualStyleRenderer.GetInteger(IntegerProperty.ProgressSpaceSize));
            }
        }

@@ -53,9 +53,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public ContainerControl() : base() {
             SetStyle(ControlStyles.AllPaintingInWmPaint, false);
-            
+
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
-            SetState2(STATE2_USEPREFERREDSIZECACHE, true);  
+            SetState2(STATE2_USEPREFERREDSIZECACHE, true);
         }
 
         /// <devdoc>
@@ -140,7 +140,7 @@ namespace System.Windows.Forms {
                 bool scalingNeeded = false;
 
                 if (value != autoScaleMode) {
-                    
+
                     // Invalidate any current scaling factors.  If we
                     // are changing AutoScaleMode to anything other than
                     // its default, we should clear out autoScaleDimensions as it is
@@ -183,7 +183,7 @@ namespace System.Windows.Forms {
             }
             set {
                 // PERF/FXCop: dont use Enum.IsDefined.
-                switch (value) { 
+                switch (value) {
                     case AutoValidate.Disable:
                     case AutoValidate.EnablePreventFocusChange:
                     case AutoValidate.EnableAllowFocusChange:
@@ -433,10 +433,10 @@ namespace System.Windows.Forms {
                 if (selected && this.activeControl != control)
                 {
                     // Add the check. If it is set to true, do not call into FocusActiveControlInternal().
-                    // The TOP MDI window could be gone and CreateHandle method will fail 
-                    // because it try to create a parking window Parent for the MDI children 
-                    if (!this.activeControl.Parent.IsTopMdiWindowClosing) 
-                    {                 
+                    // The TOP MDI window could be gone and CreateHandle method will fail
+                    // because it try to create a parking window Parent for the MDI children
+                    if (!this.activeControl.Parent.IsTopMdiWindowClosing)
+                    {
                         FocusActiveControlInternal();
                     }
                 }
@@ -461,7 +461,7 @@ namespace System.Windows.Forms {
             }
 
             // Two controls in UserControls that don't take focus via UI can have bad behavior if ...
-            // When a control is removed from a container, not only do we need to clear the unvalidatedControl of that 
+            // When a control is removed from a container, not only do we need to clear the unvalidatedControl of that
             // container potentially, but the unvalidatedControl of all its container parents, up the chain, needs to
             // now point to the old parent of the disappearing control.
             cc = this;
@@ -487,13 +487,13 @@ namespace System.Windows.Forms {
         }
 
         private bool AssignActiveControlInternal(Control value) {
-#if DEBUG            
+#if DEBUG
             if (value == null || (value != null && value.ParentInternal != null && !value.ParentInternal.IsContainerControl))
             {
                 Debug.Assert(value == null || (value.ParentInternal != null && this == value.ParentInternal.GetContainerControl()));
             }
 #endif
-                
+
             Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "ContainerControl::AssignActiveControlInternal(" + (value == null ? "null" : value.Name) + ") - " + this.Name);
             if (activeControl != value) {
                 // cpb: #7318
@@ -579,7 +579,7 @@ namespace System.Windows.Forms {
             if (disposing) {
                 activeControl = null;
             }
-            
+
             base.Dispose(disposing);
 
             focusedControl = null;
@@ -666,7 +666,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")] // Refers to 'fontMeasureString'.
         [SuppressMessage("Microsoft.Usage", "CA2204:LiteralsShouldBeSpelledCorrectly")]
-        private SizeF GetFontAutoScaleDimensions() 
+        private SizeF GetFontAutoScaleDimensions()
         {
             SizeF retval = SizeF.Empty;
 
@@ -751,7 +751,7 @@ namespace System.Windows.Forms {
                 autoValidateChanged(this, e);
             }
         }
-        
+
         internal override void OnFrameWindowActivate(bool fActivate) {
           if (fActivate) {
                 if (ActiveControl == null) {
@@ -772,7 +772,7 @@ namespace System.Windows.Forms {
             if (AutoScaleMode == AutoScaleMode.Dpi) {
                 return;
             }
-            
+
             // We need to scale children before their layout engines get to them.
             // We don't have a lot of opportunity for that because the code
             // generator always generates a PerformLayout() right after a
@@ -1174,7 +1174,7 @@ namespace System.Windows.Forms {
                 do  {
                     // Loop through the controls starting at the control next to the current Active control in the Tab order
                     // till we find someone willing to process this mnemonic.
-                    // We don't start the search on the Active control to allow controls in the same container with the same 
+                    // We don't start the search on the Active control to allow controls in the same container with the same
                     // mnemonic (bad UI design but supported) to be processed sequentially
 #if DEBUG
                 count++;
@@ -1466,7 +1466,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-#if DEBUG            
+#if DEBUG
             if (activeControl == null || (activeControl != null && activeControl.ParentInternal != null && !activeControl.ParentInternal.IsContainerControl))
             {
                 Debug.Assert(activeControl == null || activeControl.ParentInternal.GetContainerControl() == this);
@@ -1647,16 +1647,16 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public virtual bool ValidateChildren(ValidationConstraints validationConstraints) {
-            // validationConstraints must be a combination of 
+            // validationConstraints must be a combination of
             // None = 0x00, Selectable = 0x01, Enabled = 0x02, Visible = 0x04, TabStop = 0x08, ImmediateChildren = 0x10
             // Not using ClientUtils.IsValidEnum here because this is a flags enum and everything is valid between 0x00 and 0x1F.
             if ((int)validationConstraints < 0x00 || (int)validationConstraints > 0x1F)
             {
-                throw new InvalidEnumArgumentException(nameof(validationConstraints), (int)validationConstraints, typeof(ValidationConstraints)); 
+                throw new InvalidEnumArgumentException(nameof(validationConstraints), (int)validationConstraints, typeof(ValidationConstraints));
             }
             return !PerformContainerValidation(validationConstraints);
         }
-        
+
         private bool ValidateThroughAncestor(Control ancestorControl, bool preventFocusChangeOnError) {
             if (ancestorControl == null)
                 ancestorControl = this;
@@ -1673,7 +1673,7 @@ namespace System.Windows.Forms {
 
             this.state[stateValidating] = true;
             bool cancel = false;
-            
+
             Control currentActiveControl = activeControl;
             Control currentValidatingControl = unvalidatedControl;
             if (currentActiveControl != null) {
@@ -1731,7 +1731,7 @@ namespace System.Windows.Forms {
                 unvalidatedControl = null;
                 state[stateValidating] = false;
             }
-            
+
             return !cancel;
         }
 

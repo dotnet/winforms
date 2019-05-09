@@ -31,10 +31,10 @@ namespace System.Windows.Forms
         /// <devdoc>
         /// The middle mouse button was pressed.
         /// </devdoc>
-        Middle = 0x00400000,        
-        
-        XButton1 = 0x00800000,        
-        
+        Middle = 0x00400000,
+
+        XButton1 = 0x00800000,
+
         XButton2 = 0x01000000,
     }
 }

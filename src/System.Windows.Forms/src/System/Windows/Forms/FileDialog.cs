@@ -153,7 +153,7 @@ namespace System.Windows.Forms
                 {
                     return string.Empty;
                 }
-                
+
                 return _fileNames[0];
             }
             set => _fileNames = value != null ? new string[] { value } : null;

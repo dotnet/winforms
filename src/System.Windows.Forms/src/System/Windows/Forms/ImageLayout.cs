@@ -34,4 +34,4 @@ namespace System.Windows.Forms
         /// </devdoc>
         Zoom,
     }
-}  
+}

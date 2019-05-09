@@ -31,7 +31,7 @@ namespace System.Windows.Forms {
         // we have to implement IList for the Collection editor to work
         //
         int IList.Add(object value) {
-            return this.Add((DataGridColumnStyle) value);            
+            return this.Add((DataGridColumnStyle) value);
         }
 
         void IList.Clear() {
@@ -107,7 +107,7 @@ namespace System.Windows.Forms {
                 return items;
             }
         }
-        
+
         /* implemented in BaseCollection
         /// <summary>
         ///    <para>
@@ -252,13 +252,13 @@ namespace System.Windows.Forms {
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, column));
             return index;
         }
-        
+
         public void AddRange(DataGridColumnStyle[] columns) {
             if (columns == null) {
                 throw new ArgumentNullException(nameof(columns));
             }
             for (int i = 0; i < columns.Length; i++) {
-                Add(columns[i]);            
+                Add(columns[i]);
             }
         }
 
@@ -291,7 +291,7 @@ namespace System.Windows.Forms {
             add => onCollectionChanged += value;
             remove => onCollectionChanged -= value;
         }
-        
+
         public void Clear() {
             for (int i = 0; i < Count; i ++) {
                 this[i].ReleaseHostedControl();
@@ -356,7 +356,7 @@ namespace System.Windows.Forms {
         /// <example>
         ///    <para>
         ///       The following example gets an <see cref='System.Collections.IEnumerator'/> that iterates through the System.Windows.Forms.GridColumnsStyleCollection. and prints the
-        ///    <see cref='System.Windows.Forms.GridColumnsCollection.Caption'/> of each <see cref='System.Data.DataColumn'/> 
+        ///    <see cref='System.Windows.Forms.GridColumnsCollection.Caption'/> of each <see cref='System.Data.DataColumn'/>
         ///    associated with the object.
         /// </para>
         /// <code lang='VB'>
@@ -416,7 +416,7 @@ namespace System.Windows.Forms {
         ///    Set ie = DataGrid1.GridColumns.GetEnumerator(true)
         ///    Do While ie.GetNext
         ///       Set dgCol = ie.GetObject
-        ///       
+        ///
         ///       If dgCol.ToString = "DataGridBoolColumn" Then
         ///          DataGrid1.GridColumns.Remove dgCol
         ///       End If

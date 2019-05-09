@@ -10,11 +10,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.Windows.Forms;
     using System.Collections;
     using Hashtable = System.Collections.Hashtable;
-    
+
     using System.Reflection.Emit;
     using System.Reflection;
     using System.Globalization;
-   
+
 
     /// <devdoc>
     /// This is the main worker class of Com2 property interop. It takes an IDispatch Object
@@ -25,14 +25,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     /// information such as IPerPropertyBrowsing is handled elsewhere.
     /// </devdoc>
     internal class Com2TypeInfoProcessor {
-        
+
         private static TraceSwitch DbgTypeInfoProcessorSwitch = new TraceSwitch("DbgTypeInfoProcessor", "Com2TypeInfoProcessor: debug Com2 type info processing");
-        
+
         private Com2TypeInfoProcessor() {
         }
-        
+
         private static ModuleBuilder moduleBuilder = null;
-        
+
         private static ModuleBuilder ModuleBuilder {
             get {
                if (moduleBuilder == null) {
@@ -44,11 +44,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                return moduleBuilder;
             }
         }
-        
+
         private static Hashtable builtEnums;
         private static Hashtable processedLibraries;
-        
-         
+
+
         /// <devdoc>
         /// Given an Object, this attempts to locate its type ifo
         /// </devdoc>
@@ -99,7 +99,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// all available type infos will be returned, otherwise the primary one will be alled.
         /// </devdoc>
         public static UnsafeNativeMethods.ITypeInfo[] FindTypeInfos(object obj, bool wantCoClass){
-            
+
             UnsafeNativeMethods.ITypeInfo[] typeInfos = null;
             int n = 0;
             UnsafeNativeMethods.ITypeInfo temp = null;
@@ -112,7 +112,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
                if (n > 0){
                   typeInfos = new UnsafeNativeMethods.ITypeInfo[n];
-                  
+
                   for (int i = 0; i < n; i++){
                      if (NativeMethods.Failed(pCI.GetInfoOfIndex(i, 1 /*MULTICLASSINFO_GETTYPEINFO*/, ref temp, 0, 0, IntPtr.Zero, IntPtr.Zero))){
                         continue;
@@ -132,7 +132,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
             return typeInfos;
         }
-        
+
         /// <devdoc>
         /// Retrieve the dispid of the property that we are to use as the name
         /// member.  In this case, the grid will put parens around the name.
@@ -140,13 +140,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         public static int GetNameDispId(UnsafeNativeMethods.IDispatch obj){
             int dispid = NativeMethods.DISPID_UNKNOWN;
             string[] names = null;
-            
+
             ComNativeDescriptor cnd = ComNativeDescriptor.Instance;
             bool succeeded = false;
 
             // first try to find one with a valid value
             cnd.GetPropertyValue(obj, "__id", ref succeeded);
-            
+
             if (succeeded) {
                names = new string[]{"__id"};
             }
@@ -162,7 +162,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                   }
                }
             }
-            
+
             // now get the dispid of the one that worked...
             if (names != null) {
                int[] pDispid = new int[]{NativeMethods.DISPID_UNKNOWN};
@@ -173,7 +173,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                   dispid = pDispid[0];
                }
             }
-            
+
             return dispid;
         }
 
@@ -185,7 +185,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         public static Com2Properties GetProperties(object obj) {
 
             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "Com2TypeInfoProcessor.GetProperties");
-            
+
             if (obj == null || !Marshal.IsComObject(obj)) {
                 Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "Com2TypeInfoProcessor.GetProperties returning null: Object is not a com Object");
                 return null;
@@ -220,7 +220,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
                if (dontProcess) {
                     CachedProperties cp = (CachedProperties)processedLibraries[typeGuid];
-                    
+
                     if (versions[0] == cp.MajorVersion && versions[1] == cp.MinorVersion) {
                         props = cp.Properties;
                         if (i == 0 && cp.DefaultIndex != -1) {
@@ -231,10 +231,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         dontProcess = false;
                     }
                }
-               
+
                if (!dontProcess) {
                    props = InternalGetProperties(obj, ti, NativeMethods.MEMBERID_NIL, ref temp);
-    
+
                    // only save the default property from the first type Info
                    if (i == 0 && temp != -1) {
                       defaultProp = temp;
@@ -243,7 +243,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                    if (processedLibraries == null) {
                         processedLibraries = new Hashtable();
                    }
-             
+
                    if (typeGuid != Guid.Empty) {
                         processedLibraries[typeGuid] = new CachedProperties(props, i == 0 ? defaultProp : -1, versions[0], versions[1]);
                    }
@@ -302,7 +302,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             case NativeMethods.tagVT.VT_DISPATCH:
                 // get the guid
                 typeData[0] = GetGuidForTypeInfo(typeInfo, null);
-                
+
                 // return the type
                 return VTToType((NativeMethods.tagVT)typeDesc.vt);
 
@@ -316,7 +316,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 // we'll need to recurse into a user defined reference typeinfo
                 Debug.Assert(typeDesc.unionMember != IntPtr.Zero, "typeDesc doesn't contain an refTypeDesc!");
                 ref readonly NativeMethods.tagTYPEDESC refTypeDesc = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagTYPEDESC>(typeDesc.unionMember);
-                
+
                 if (refTypeDesc.vt == (int)NativeMethods.tagVT.VT_VARIANT) {
                     return VTToType((NativeMethods.tagVT)refTypeDesc.vt);
                 }
@@ -343,7 +343,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     hr = refTypeInfo.GetTypeAttr(ref pRefTypeAttr);
 
                     if (!NativeMethods.Succeeded(hr)) {
-                        
+
                         throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
                     }
 
@@ -385,16 +385,16 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
         private static PropertyDescriptor[] InternalGetProperties(object obj, UnsafeNativeMethods.ITypeInfo typeInfo, int dispidToGet, ref int defaultIndex) {
-        
+
             if (typeInfo == null) {
                 return null;
             }
-            
+
             Hashtable propInfos = new Hashtable();
-            
+
             int nameDispID = GetNameDispId((UnsafeNativeMethods.IDispatch)obj);
             bool addAboutBox = false;
-            
+
             // properties can live as functions with get_ and put_ or
             // as variables, so we do two steps here.
             try {
@@ -419,14 +419,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             // now we take the propertyInfo structures we built up
             // and use them to create the actual descriptors.
             int cProps = propInfos.Count;
-            
+
             if (addAboutBox) {
                cProps++;
             }
-            
+
             PropertyDescriptor[] props = new PropertyDescriptor[cProps];
             int defaultProp = -1;
-            
+
             int hr = NativeMethods.S_OK;
             object[] pvar = new object[1];
             ComNativeDescriptor cnd = ComNativeDescriptor.Instance;
@@ -463,7 +463,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     defaultProp = pi.Index;
                 }
             }
-            
+
             if (addAboutBox) {
                props[props.Length-1] = new Com2AboutBoxPropertyDescriptor();
             }
@@ -558,7 +558,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             // lastly, if it's DISPID_Name, add the ParenthesizeNameAttribute
             if (dispid == nameDispID){
                 pi.Attributes.Add(new ParenthesizePropertyNameAttribute(true));
-                
+
                 // don't allow merges on the name
                 pi.Attributes.Add(new MergablePropertyAttribute(false));
             }
@@ -576,7 +576,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
             try {
                 ref readonly NativeMethods.tagTYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagTYPEATTR>(pTypeAttr);
-                
+
                 bool              isPropGet;
                 PropInfo          pi;
 
@@ -593,7 +593,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         ref readonly NativeMethods.tagFUNCDESC funcDesc = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagFUNCDESC>(pFuncDesc);
                         if (funcDesc.invkind == (int)NativeMethods.tagINVOKEKIND.INVOKE_FUNC ||
                             (dispidToGet != NativeMethods.MEMBERID_NIL && funcDesc.memid != dispidToGet)) {
-                            
+
                             if (funcDesc.memid == NativeMethods.ActiveX.DISPID_ABOUTBOX) {
                                addAboutBox = true;
                             }
@@ -608,7 +608,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         if (isPropGet) {
 
                             if (funcDesc.cParams != 0) {
-                                
+
                                 continue;
                             }
 
@@ -620,7 +620,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         else {
                             Debug.Assert(funcDesc.lprgelemdescParam != IntPtr.Zero, "ELEMDESC param is null!");
                             if (funcDesc.lprgelemdescParam == IntPtr.Zero || funcDesc.cParams != 1) {
-                                
+
                                 continue;
                             }
 
@@ -684,7 +684,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     string helpstr = null;
 
                     enumTypeInfo.GetDocumentation(NativeMethods.MEMBERID_NIL, ref enumName, ref helpstr, null, null);
-                    
+
                                                             // For each item in the enum type info,
                     // we just need it's name and value, and helpstring if it's there.
                     //
@@ -754,13 +754,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
                     // just build our enumerator
                     if (strs.Count > 0) {
-                        
+
                         // get the IUnknown value of the ITypeInfo
                         IntPtr pTypeInfoUnk = Marshal.GetIUnknownForObject(enumTypeInfo);
-                        
+
                         try {
                            enumName = pTypeInfoUnk.ToString() + "_" + enumName;
-                           
+
                            if (builtEnums == null) {
                               builtEnums = new Hashtable();
                            }
@@ -773,7 +773,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                            if (vars.Count > 0 && vars[0] != null) {
                                enumType = vars[0].GetType();
                            }
-                           
+
                            EnumBuilder enumBuilder = ModuleBuilder.DefineEnum(enumName, TypeAttributes.Public, enumType);
                            for (int i = 0; i < strs.Count; i++) {
                               enumBuilder.DefineLiteral((string)strs[i], vars[i]);
@@ -862,16 +862,16 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 return typeof(short);
             case NativeMethods.tagVT.VT_UI2:
                 return typeof(ushort);
-                
+
 
             case NativeMethods.tagVT.VT_I4:
             case NativeMethods.tagVT.VT_INT:
                 return typeof(int);
-            
+
             case NativeMethods.tagVT.VT_UI4:
             case NativeMethods.tagVT.VT_UINT:
                 return typeof(uint);
-            
+
             case NativeMethods.tagVT.VT_I8:
                 return typeof(long);
             case NativeMethods.tagVT.VT_UI8:
@@ -1045,8 +1045,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
     }
-    
-    
+
+
     // just so we can recognize a variant properly...
     public class Com2Variant {
     }

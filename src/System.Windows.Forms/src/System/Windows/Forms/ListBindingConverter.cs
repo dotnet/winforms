@@ -11,9 +11,9 @@ namespace System.Windows.Forms {
     using System.Collections;
     using System.Globalization;
     using System.Reflection;
-    
+
     public class ListBindingConverter : TypeConverter {
-                                            
+
         private static Type[] ctorTypes = null;  // the list of type of our ctor parameters.
         private static string[] ctorParamProps = null; // the name of each property to check to see if we need to init with a ctor.
 
@@ -41,8 +41,8 @@ namespace System.Windows.Forms {
                 return ctorParamProps;
             }
         }
-        
-        
+
+
         /// <devdoc>
         ///    <para>Gets a value indicating whether this converter can
         ///       convert an object to the given destination type using the context.</para>
@@ -53,7 +53,7 @@ namespace System.Windows.Forms {
             }
             return base.CanConvertTo(context, destinationType);
         }
-        
+
         /// <devdoc>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call
@@ -68,12 +68,12 @@ namespace System.Windows.Forms {
 
             if (destinationType == typeof(InstanceDescriptor) && value is Binding) {
                 Binding b = (Binding)value;
-                return GetInstanceDescriptorFromValues(b);   
+                return GetInstanceDescriptorFromValues(b);
             }
-            
+
             return base.ConvertTo(context, culture, value, destinationType);
         }
-        
+
         /// <devdoc>
         ///      Creates an instance of this type given a set of property values
         ///      for the object.  This is useful for objects that are immutable, but still
@@ -105,7 +105,7 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        ///      Gets the best matching ctor for a given binding and fills it out, based on the 
+        ///      Gets the best matching ctor for a given binding and fills it out, based on the
         ///      state of the Binding and the optimal ctor.
         /// </devdoc>
         private InstanceDescriptor GetInstanceDescriptorFromValues(Binding b) {
@@ -118,9 +118,9 @@ namespace System.Windows.Forms {
 
             bool isComplete = true;
             int lastItem = ConstructorParameterProperties.Length - 1;
-            
+
             for (; lastItem >= 0; lastItem--) {
-                
+
                 // null means no prop is available, we quit here.
                 //
                 if (ConstructorParameterProperties[lastItem] == null) {
@@ -178,4 +178,4 @@ namespace System.Windows.Forms {
         }
     }
 }
- 
+

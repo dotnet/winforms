@@ -15,7 +15,7 @@ namespace System.Windows.Forms {
     using System.Collections;
     using System.Globalization;
     using System.Windows.Forms.Layout;
-    
+
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [Designer("System.Windows.Forms.Design.ToolStripContainerDesigner, " + AssemblyRef.SystemDesign)]
@@ -28,7 +28,7 @@ namespace System.Windows.Forms {
         private ToolStripPanel rightPanel;
         private ToolStripContentPanel contentPanel;
 
-        
+
         public ToolStripContainer() {
 
             SetStyle(ControlStyles.ResizeRedraw | ControlStyles.SupportsTransparentBackColor, true);
@@ -298,7 +298,7 @@ namespace System.Windows.Forms {
             }
         }
 
-       
+
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.ToolStripContainerRightToolStripPanelDescr)),
@@ -398,11 +398,11 @@ namespace System.Windows.Forms {
             //If ToolStripContainer's Handle is getting created demand create the childControl handle's
             if (IsHandleCreated) {
                 foreach(Control c in Controls) {
-                    c.CreateControl(true);                
+                    c.CreateControl(true);
                 }
             }
             base.RecreateHandleCore();
-            
+
         }
 
         internal override bool AllowsKeyboardToolTip() {

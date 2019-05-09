@@ -35,7 +35,7 @@ namespace System.Windows.Forms
         // Reference to the native ActiveX control's IWebBrowser2
         // Do not reference this directly. Use the AxIWebBrowser2
         // property instead.
-        private UnsafeNativeMethods.IWebBrowser2 axIWebBrowser2;  
+        private UnsafeNativeMethods.IWebBrowser2 axIWebBrowser2;
 
         private AxHost.ConnectionPointCookie cookie;   // To hook up events from the native WebBrowser
         private Stream documentStreamToSetOnLoad;
@@ -67,7 +67,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         public WebBrowser() : base("8856f961-340a-11d0-a96b-00c04fd705a2") {
                 CheckIfCreatedInIE();
-    
+
             webBrowserState = new System.Collections.Specialized.BitVector32(WEBBROWSERSTATE_isWebBrowserContextMenuEnabled |
                     WEBBROWSERSTATE_webBrowserShortcutsEnabled | WEBBROWSERSTATE_scrollbarsEnabled);
             AllowNavigation = true;
@@ -81,7 +81,7 @@ namespace System.Windows.Forms
 
         /// <devdoc>
         ///     <para>
-        /// Specifies whether the WebBrowser control may navigate to another page once 
+        /// Specifies whether the WebBrowser control may navigate to another page once
         /// it has been loaded.  NOTE: it will always be able to navigate before being loaded.
         /// "Loaded" here means setting Url, DocumentText, or DocumentStream.
         ///     </para>
@@ -128,7 +128,7 @@ namespace System.Windows.Forms
                 }
             }
         }
-        
+
         /// <devdoc>
         ///     <para>
         /// Specifies whether the browser control shows script errors in dialogs or not.
@@ -194,7 +194,7 @@ namespace System.Windows.Forms
                 }
             }
         }
-        
+
         /// <devdoc>
         ///     <para>
         /// If true, there is navigation history such that calling GoForward() will succeed.
@@ -208,7 +208,7 @@ namespace System.Windows.Forms
                 return CanGoForwardInternal;
             }
         }
-        
+
         /// <devdoc>
         /// Returns the current WEBBROWSERSTATE_canGoForward value so that this value can
         /// be accessed from child classes.
@@ -240,8 +240,8 @@ namespace System.Windows.Forms
                     UnsafeNativeMethods.IHTMLDocument2 iHTMLDocument2 = null;
                     try {
                         iHTMLDocument2 = objDoc as UnsafeNativeMethods.IHTMLDocument2;
-                    } 
-                    catch (InvalidCastException) { 
+                    }
+                    catch (InvalidCastException) {
                     }
                     if (iHTMLDocument2 != null) {
                         UnsafeNativeMethods.IHTMLLocation iHTMLLocation = iHTMLDocument2.GetLocation();
@@ -258,7 +258,7 @@ namespace System.Windows.Forms
                 return null;
             }
         }
-        
+
         /// <devdoc>
         ///     <para>
         /// Get/sets the stream for the html document.
@@ -268,7 +268,7 @@ namespace System.Windows.Forms
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Stream DocumentStream {
             get {
-                HtmlDocument htmlDocument = this.Document; 
+                HtmlDocument htmlDocument = this.Document;
                 if (htmlDocument == null) {
                     return null;
                 }
@@ -298,7 +298,7 @@ namespace System.Windows.Forms
                 }
             }
         }
-        
+
         /// <devdoc>
         ///     <para>
         /// Sets/sets the text of the contained html page.
@@ -321,7 +321,7 @@ namespace System.Windows.Forms
                 {
                     value = "";
                 }
-                //string length is a good initial guess for capacity -- 
+                //string length is a good initial guess for capacity --
                 //if it needs more room, it'll take it.
                 MemoryStream ms = new MemoryStream(value.Length);
                 StreamWriter sw = new StreamWriter(ms, Encoding.UTF8 );
@@ -360,7 +360,7 @@ namespace System.Windows.Forms
                 return documentTitle;
             }
         }
-        
+
         /// <devdoc>
         ///     <para>
         /// A string containing the MIME type of the document hosted in the browser control.
@@ -385,7 +385,7 @@ namespace System.Windows.Forms
                 return docType;
             }
         }
-        
+
         /// <devdoc>
         ///     <para>
         /// Initially set to WebBrowserEncryptionLevel.Insecure.
@@ -401,7 +401,7 @@ namespace System.Windows.Forms
                 return encryptionLevel;
             }
         }
-        
+
         /// <devdoc>
         ///     <para>
         /// True if the browser is engaged in navigation or download.  Maps to IWebBrowser2:Busy.
@@ -418,7 +418,7 @@ namespace System.Windows.Forms
                 }
             }
         }
-        
+
         /// <devdoc>
         ///     <para>
         /// Gets the offline state of the browser control. Maps to IWebBrowser2:Offline.
@@ -430,14 +430,14 @@ namespace System.Windows.Forms
                 return this.AxIWebBrowser2.Offline;
             }
         }
-        
+
         /// <devdoc>
         ///     <para>
         /// Indicates whether to use the WebBrowser context menu.
         /// It's technically possible to have both the WebBrowser & Windows Forms context
         /// menu enabled, but making this property effect the behavior of the Windows Form
         /// context menu does not lead to a clean OM.  Maps to sinking the
-        /// IDocHostUIHandler:ShowContextMenu 
+        /// IDocHostUIHandler:ShowContextMenu
         ///     </para>
         /// </devdoc>
         [SRDescription(nameof(SR.WebBrowserIsWebBrowserContextMenuEnabledDescr)),
@@ -460,13 +460,13 @@ namespace System.Windows.Forms
         ///     </para>
         /// </devdoc>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public object ObjectForScripting 
+        public object ObjectForScripting
         {
-            get 
+            get
             {
                 return objectForScripting;
             }
-            set 
+            set
             {
                 if (value != null)
                 {
@@ -527,7 +527,7 @@ namespace System.Windows.Forms
         /// The text that would be displayed in the IE status bar.
         /// There is no direct WebBrowser property that maps to this. This property is
         /// initially an empty string.  After that the value is kept up to date via the
-        /// DWebBrowserEvents2:StatusTextChange event.  
+        /// DWebBrowserEvents2:StatusTextChange event.
         ///     </para>
         /// </devdoc>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -595,7 +595,7 @@ namespace System.Windows.Forms
                 return new Version(fvi.FileMajorPart, fvi.FileMinorPart, fvi.FileBuildPart, fvi.FilePrivatePart);
             }
         }
-        
+
 
 
         //
@@ -626,7 +626,7 @@ namespace System.Windows.Forms
             }
             return retVal;
         }
-        
+
         /// <devdoc>
         ///     <para>
         /// Navigates the browser to the next page in the navigation history list.
@@ -651,7 +651,7 @@ namespace System.Windows.Forms
             }
             return retVal;
         }
-        
+
         /// <devdoc>
         ///     <para>
         /// Navigates the browser to user's homepage.  Maps to IWebBrowser2:GoHome.
@@ -660,7 +660,7 @@ namespace System.Windows.Forms
         public void GoHome() {
             this.AxIWebBrowser2.GoHome();
         }
-        
+
         /// <devdoc>
         ///     <para>
         /// Navigates the browser to user's default search page.  Maps to IWebBrowser2:GoSearch.
@@ -685,9 +685,9 @@ namespace System.Windows.Forms
         /// String overload for Navigate(Uri)
         ///     </para>
         /// </devdoc>
-        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have 
-        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified 
-        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to 
+        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
+        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified
+        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to
         /// break.
         [SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads"),
             SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings")]
@@ -713,9 +713,9 @@ namespace System.Windows.Forms
         /// String overload for Navigate(Uri, string)
         ///     </para>
         /// </devdoc>
-        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have 
-        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified 
-        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to 
+        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
+        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified
+        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to
         /// break.
         [SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads"),
             SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings")]
@@ -738,9 +738,9 @@ namespace System.Windows.Forms
         /// String overload for Navigate(Uri, bool)
         ///     </para>
         /// </devdoc>
-        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have 
-        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified 
-        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to 
+        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
+        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified
+        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to
         /// break.
         [SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads"),
             SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings")]
@@ -764,9 +764,9 @@ namespace System.Windows.Forms
         /// String overload for Navigate(Uri, string, byte[], string)
         ///     </para>
         /// </devdoc>
-        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have 
-        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified 
-        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to 
+        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
+        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified
+        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to
         /// break.
         [SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads"),
             SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings")]
@@ -795,7 +795,7 @@ namespace System.Windows.Forms
                 }
             }
         }
-        
+
         /// <devdoc>
         ///     <para>
         /// Refreshes the current page.  Maps to IWebBrowser2:Refresh.
@@ -823,7 +823,7 @@ namespace System.Windows.Forms
                 }
             }
         }
-        
+
         /// <devdoc>
         ///     <para>
         /// Refreshes the current page w/ the specified refresh option. The refresh option
@@ -851,7 +851,7 @@ namespace System.Windows.Forms
                 }
             }
         }
-        
+
         /// <devdoc>
         ///     <para>
         /// Enables/disables the webbrowser's scrollbars.
@@ -870,7 +870,7 @@ namespace System.Windows.Forms
                 }
             }
         }
-        
+
         /// <devdoc>
         ///     <para>
         /// Opens the IE page setup dialog for the current page.
@@ -888,7 +888,7 @@ namespace System.Windows.Forms
                 }
             }
         }
-        
+
         /// <devdoc>
         ///     <para>
         /// Opens the IE print dialog.
@@ -897,7 +897,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         public void ShowPrintDialog() {
             object nullObjectArray = null;
-            
+
             try {
                 this.AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PRINT, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, ref nullObjectArray, IntPtr.Zero);
             }
@@ -907,7 +907,7 @@ namespace System.Windows.Forms
                 }
             }
         }
-        
+
         /// <devdoc>
         ///     <para>
         /// Opens the IE print preview dialog.  Maps to IWebBrowser2:ExecWebBrowser w/ IDM_PRINTPREVIEW flag.
@@ -915,7 +915,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         public void ShowPrintPreviewDialog() {
             object nullObjectArray = null;
-            
+
             try {
                 this.AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PRINTPREVIEW, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, ref nullObjectArray, IntPtr.Zero);
             }
@@ -925,7 +925,7 @@ namespace System.Windows.Forms
                 }
             }
         }
-        
+
         /// <devdoc>
         ///     <para>
         /// Opens the properties dialog for the current html page.
@@ -934,7 +934,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         public void ShowPropertiesDialog() {
             object nullObjectArray = null;
-            
+
             try {
                 this.AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PROPERTIES, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, ref nullObjectArray, IntPtr.Zero);
             }
@@ -944,7 +944,7 @@ namespace System.Windows.Forms
                 }
             }
         }
-        
+
         /// <devdoc>
         ///     <para>
         /// Opens the IE File-Save dialog.
@@ -953,7 +953,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         public void ShowSaveAsDialog() {
             object nullObjectArray = null;
-            
+
             try {
                 this.AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_SAVEAS, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, ref nullObjectArray, IntPtr.Zero);
             }
@@ -963,7 +963,7 @@ namespace System.Windows.Forms
                 }
             }
         }
-        
+
         /// <devdoc>
         ///     <para>
         /// Stops the current navigation.  Maps to IWebBrowser2:Stop.
@@ -1147,7 +1147,7 @@ namespace System.Windows.Forms
         protected override void DetachInterfaces() {
             this.axIWebBrowser2 = null;
         }
-        
+
         /// <devdoc>
         ///     <para>
         /// Returns a WebBrowserSite object.
@@ -1171,7 +1171,7 @@ namespace System.Windows.Forms
                         typeof(UnsafeNativeMethods.DWebBrowserEvents2));
             }
         }
-        
+
         /// <devdoc>
         ///     <para>
         /// Releases the DWebBrowserEvents2 connection point.
@@ -1208,7 +1208,7 @@ namespace System.Windows.Forms
         ///     </para>
         /// </devdoc>
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected virtual void OnCanGoBackChanged(EventArgs e)
         {
             if (this.CanGoBackChanged != null)
@@ -1223,7 +1223,7 @@ namespace System.Windows.Forms
         ///     </para>
         /// </devdoc>
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected virtual void OnCanGoForwardChanged(EventArgs e)
         {
             if (this.CanGoForwardChanged != null)
@@ -1238,7 +1238,7 @@ namespace System.Windows.Forms
         ///     </para>
         /// </devdoc>
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected virtual void OnDocumentCompleted(WebBrowserDocumentCompletedEventArgs e)
         {
             this.AxIWebBrowser2.RegisterAsDropTarget = AllowWebBrowserDrop;
@@ -1254,7 +1254,7 @@ namespace System.Windows.Forms
         ///     </para>
         /// </devdoc>
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected virtual void OnDocumentTitleChanged(EventArgs e)
         {
             if (this.DocumentTitleChanged != null)
@@ -1269,7 +1269,7 @@ namespace System.Windows.Forms
         ///     </para>
         /// </devdoc>
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected virtual void OnEncryptionLevelChanged(EventArgs e)
         {
             if (this.EncryptionLevelChanged != null)
@@ -1284,7 +1284,7 @@ namespace System.Windows.Forms
         ///     </para>
         /// </devdoc>
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected virtual void OnFileDownload(EventArgs e)
         {
             if (this.FileDownload != null)
@@ -1299,7 +1299,7 @@ namespace System.Windows.Forms
         ///     </para>
         /// </devdoc>
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected virtual void OnNavigated(WebBrowserNavigatedEventArgs e)
         {
             if (this.Navigated != null)
@@ -1314,7 +1314,7 @@ namespace System.Windows.Forms
         ///     </para>
         /// </devdoc>
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected virtual void OnNavigating(WebBrowserNavigatingEventArgs e)
         {
             if (this.Navigating != null)
@@ -1329,7 +1329,7 @@ namespace System.Windows.Forms
         ///     </para>
         /// </devdoc>
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected virtual void OnNewWindow(CancelEventArgs e)
         {
             if (this.NewWindow != null)
@@ -1344,7 +1344,7 @@ namespace System.Windows.Forms
         ///     </para>
         /// </devdoc>
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected virtual void OnProgressChanged(WebBrowserProgressChangedEventArgs e)
         {
             if (this.ProgressChanged != null)
@@ -1359,7 +1359,7 @@ namespace System.Windows.Forms
         ///     </para>
         /// </devdoc>
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected virtual void OnStatusTextChanged(EventArgs e)
         {
             if (this.StatusTextChanged != null)
@@ -1401,14 +1401,14 @@ namespace System.Windows.Forms
         private string ReadyNavigateToUrl(string urlString) {
             if (string.IsNullOrEmpty(urlString)) {
                 urlString = "about:blank";
-            } 
+            }
 
             //
             // Nullify any calls to set_DocumentStream which may still be pending
             if (!webBrowserState[WEBBROWSERSTATE_documentStreamJustSet]) {
                 this.documentStreamToSetOnLoad = null;
             }
-            
+
             return urlString;
         }
 
@@ -1427,8 +1427,8 @@ namespace System.Windows.Forms
                 }
 
                 // Characters outside of US-ASCII may appear in Windows file paths and accordingly they are allowed in file URIs.
-                // Therefore, do not use the escaped AbsoluteUri for file schemes. Can't use ToString() either since the correct 
-                // syntax for file schemas includes percent escaped characters. We are stuck with OriginalString and hope that 
+                // Therefore, do not use the escaped AbsoluteUri for file schemes. Can't use ToString() either since the correct
+                // syntax for file schemas includes percent escaped characters. We are stuck with OriginalString and hope that
                 // it is well-formed.
                 urlString = url.IsFile ? url.OriginalString : url.AbsoluteUri;
             }
@@ -1446,7 +1446,7 @@ namespace System.Windows.Forms
             PerformNavigate2(ref objUrlString, ref objFlags, ref objTargetFrameName, ref objPostData, ref objHeaders);
         }
 
-        private void PerformNavigate2(ref object URL, ref object flags, ref object targetFrameName, ref object postData, ref object headers) 
+        private void PerformNavigate2(ref object URL, ref object flags, ref object targetFrameName, ref object postData, ref object headers)
         {
             try {
                 this.AxIWebBrowser2.Navigate2(ref URL, ref flags, ref targetFrameName, ref postData, ref headers);
@@ -1454,7 +1454,7 @@ namespace System.Windows.Forms
             catch (COMException ce) {
                 if ((uint)unchecked(ce.ErrorCode) != (uint)unchecked(0x800704c7)) {
                     // "the operation was canceled by the user" - navigation failed
-                    // ignore this error, IE has already alerted the user. 
+                    // ignore this error, IE has already alerted the user.
                     throw;
                 }
             }
@@ -1471,7 +1471,7 @@ namespace System.Windows.Forms
                 return Url == null || Url.AbsoluteUri == "about:blank";
             }
         }
-        
+
         private bool ShouldSerializeUrl() {
             return !ShouldSerializeDocumentText();
         }
@@ -1527,7 +1527,7 @@ namespace System.Windows.Forms
                     break;
             }
         }
-        
+
         private UnsafeNativeMethods.IWebBrowser2 AxIWebBrowser2 {
             get {
                 if (this.axIWebBrowser2 == null) {
@@ -1541,7 +1541,7 @@ namespace System.Windows.Forms
                 }
                 // We still don't have this.axIWebBrowser2. Throw an exception.
                 if (this.axIWebBrowser2 == null) {
-                    throw new InvalidOperationException(SR.WebBrowserNoCastToIWebBrowser2); 
+                    throw new InvalidOperationException(SR.WebBrowserNoCastToIWebBrowser2);
                 }
                 return this.axIWebBrowser2;
             }
@@ -1555,7 +1555,7 @@ namespace System.Windows.Forms
         /// <devdoc>
         ///     <para>
         /// Provides a default WebBrowserSite implementation for use in the CreateWebBrowserSite
-        /// method in the WebBrowser class. 
+        /// method in the WebBrowser class.
         ///     </para>
         /// </devdoc>
         [ComVisible(false)]
@@ -1613,7 +1613,7 @@ namespace System.Windows.Forms
                 else {
                     info.dwFlags |= (int)NativeMethods.DOCHOSTUIFLAG.NOTHEME;
                 }
-                
+
                 return NativeMethods.S_OK;
             }
 
@@ -1621,8 +1621,8 @@ namespace System.Windows.Forms
                 return NativeMethods.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.ShowUI(int dwID, UnsafeNativeMethods.IOleInPlaceActiveObject activeObject, 
-                    NativeMethods.IOleCommandTarget commandTarget, UnsafeNativeMethods.IOleInPlaceFrame frame, 
+            int UnsafeNativeMethods.IDocHostUIHandler.ShowUI(int dwID, UnsafeNativeMethods.IOleInPlaceActiveObject activeObject,
+                    NativeMethods.IOleCommandTarget commandTarget, UnsafeNativeMethods.IOleInPlaceFrame frame,
                     UnsafeNativeMethods.IOleInPlaceUIWindow doc) {
                 return NativeMethods.S_FALSE;
             }
@@ -1650,7 +1650,7 @@ namespace System.Windows.Forms
             int UnsafeNativeMethods.IDocHostUIHandler.GetOptionKeyPath(string[] pbstrKey, int dw) {
                 return NativeMethods.E_NOTIMPL;
             }
-            
+
             int UnsafeNativeMethods.IDocHostUIHandler.GetDropTarget(UnsafeNativeMethods.IOleDropTarget pDropTarget, out UnsafeNativeMethods.IOleDropTarget ppDropTarget) {
                 //
                 // Set to null no matter what we return, to prevent the marshaller
@@ -1665,14 +1665,14 @@ namespace System.Windows.Forms
                 return NativeMethods.S_OK;
             }
 
-            [SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible")]                     
+            [SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible")]
             int UnsafeNativeMethods.IDocHostUIHandler.TranslateAccelerator(ref NativeMethods.MSG msg, ref Guid group, int nCmdID) {
                 //
                 // Returning S_FALSE will allow the native control to do default processing,
                 // i.e., execute the shortcut key. Returning S_OK will cancel the shortcut key.
 
                 WebBrowser wb = (WebBrowser)this.Host;
-                
+
                 if (!wb.WebBrowserShortcutsEnabled)
                 {
                     int keyCode = (int)msg.wParam | (int)Control.ModifierKeys;
@@ -1694,7 +1694,7 @@ namespace System.Windows.Forms
                 return NativeMethods.S_FALSE;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.FilterDataObject(IComDataObject pDO, out IComDataObject ppDORet) 
+            int UnsafeNativeMethods.IDocHostUIHandler.FilterDataObject(IComDataObject pDO, out IComDataObject ppDORet)
             {
                 //
                 // Set to null no matter what we return, to prevent the marshaller
@@ -1712,14 +1712,14 @@ namespace System.Windows.Forms
                 }
             }
         }
-        
-        
+
+
         //
         // Private classes:
         //
         [ClassInterface(ClassInterfaceType.None)]
         private class WebBrowserEvent : StandardOleMarshalObject, UnsafeNativeMethods.DWebBrowserEvents2{
-            
+
             private WebBrowser parent;
             private bool allowNavigation;
             private bool haveNavigated = false;
@@ -1748,7 +1748,7 @@ namespace System.Windows.Forms
                     this.parent.CanGoForwardInternal = enable;
                 }
             }
-            
+
             public void BeforeNavigate2(object pDisp, ref object urlObject, ref object flags, ref object targetFrameName, ref object postData, ref object headers, ref bool cancel) {
                 Debug.Assert(parent != null, "Parent should have been set");
                 //Note: we want to allow navigation if we haven't already navigated.
@@ -1774,7 +1774,7 @@ namespace System.Windows.Forms
                     this.parent.OnNavigating(e);
                     cancel = e.Cancel;
                 }
-                else 
+                else
                 {
                     cancel = true;
                 }
@@ -1802,16 +1802,16 @@ namespace System.Windows.Forms
                     this.parent.OnDocumentCompleted(e);
                 }
             }
-            
+
             public void TitleChange(string text) {
                 this.parent.OnDocumentTitleChanged(EventArgs.Empty);
             }
-            
+
             public void SetSecureLockIcon(int secureLockIcon) {
                 this.parent.encryptionLevel = (WebBrowserEncryptionLevel)secureLockIcon;
                 this.parent.OnEncryptionLevelChanged(EventArgs.Empty);
             }
-            
+
             public void NavigateComplete2(object pDisp, ref object urlObject) {
                 Debug.Assert(urlObject == null || urlObject is string, "invalid url type");
                 string urlString = urlObject == null ? "" : (string)urlObject;
@@ -1819,27 +1819,27 @@ namespace System.Windows.Forms
                         new Uri(urlString));
                 this.parent.OnNavigated(e);
             }
-            
+
             public void NewWindow2(ref object ppDisp, ref bool cancel) {
                 CancelEventArgs e = new CancelEventArgs();
                 this.parent.OnNewWindow(e);
                 cancel = e.Cancel;
             }
-            
+
             public void ProgressChange(int progress, int progressMax) {
                 WebBrowserProgressChangedEventArgs e = new WebBrowserProgressChangedEventArgs(progress, progressMax);
                 this.parent.OnProgressChanged(e);
             }
-            
+
             public void StatusTextChange(string text) {
                 this.parent.statusText = (text == null) ? "" : text;
                 this.parent.OnStatusTextChanged(EventArgs.Empty);
             }
-            
+
             public void DownloadBegin() {
                 this.parent.OnFileDownload(EventArgs.Empty);
             }
-            
+
             public void FileDownload(ref bool cancel) { }
             public void PrivacyImpactedStateChange(bool bImpacted) { }
             public void UpdatePageStatus(object pDisp, ref object nPage, ref object fDone) { }

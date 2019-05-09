@@ -31,7 +31,7 @@ using Microsoft.Win32;
 
        /// <devdoc>
        ///    <para>
-       ///      If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to 
+       ///      If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to
        /// determine how to render.
        ///      If this property is false, the renderer will always render with visualstyles.
        ///    </para>
@@ -59,7 +59,7 @@ using Microsoft.Win32;
        public static bool IsBackgroundPartiallyTransparent(RadioButtonState state) {
            if (RenderWithVisualStyles) {
                InitializeRenderer((int)state);
-    
+
                return visualStyleRenderer.IsBackgroundPartiallyTransparent();
            }
            else {
@@ -79,7 +79,7 @@ using Microsoft.Win32;
        public static void DrawParentBackground(Graphics g, Rectangle bounds, Control childControl) {
            if (RenderWithVisualStyles) {
                InitializeRenderer(0);
-    
+
                visualStyleRenderer.DrawParentBackground(g, bounds, childControl);
            }
        }
@@ -113,7 +113,7 @@ using Microsoft.Win32;
        /// </devdoc>
        public static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string radioButtonText, Font font, bool focused, RadioButtonState state) {
            DrawRadioButton(g, glyphLocation, textBounds, radioButtonText, font,
-                      TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine, 
+                      TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
                       focused, state);
        }
 
@@ -132,7 +132,7 @@ using Microsoft.Win32;
 
            if (RenderWithVisualStyles) {
                InitializeRenderer((int)state);
-    
+
                visualStyleRenderer.DrawBackground(g, glyphBounds);
                textColor = visualStyleRenderer.GetColor(ColorProperty.TextColor);
            }
@@ -140,7 +140,7 @@ using Microsoft.Win32;
                ControlPaint.DrawRadioButton(g, glyphBounds, ConvertToButtonState(state));
                textColor = SystemColors.ControlText;
            }
-           
+
            TextRenderer.DrawText(g, radioButtonText, font, textBounds, textColor, flags);
 
            if (focused) {
@@ -155,7 +155,7 @@ using Microsoft.Win32;
        /// </devdoc>
        public static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string radioButtonText, Font font, Image image, Rectangle imageBounds, bool focused, RadioButtonState state) {
            DrawRadioButton(g, glyphLocation, textBounds, radioButtonText, font,
-                      TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine, 
+                      TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
                       image, imageBounds, focused, state);
        }
 
@@ -176,7 +176,7 @@ using Microsoft.Win32;
 
            if (RenderWithVisualStyles) {
                InitializeRenderer((int)state);
-    
+
                //Keep this drawing order! It matches default drawing order.
                visualStyleRenderer.DrawImage(g, imageBounds, image);
                visualStyleRenderer.DrawBackground(g, glyphBounds);
@@ -187,7 +187,7 @@ using Microsoft.Win32;
                ControlPaint.DrawRadioButton(g, glyphBounds, ConvertToButtonState(state));
                textColor = SystemColors.ControlText;
            }
-           
+
            TextRenderer.DrawText(g, radioButtonText, font, textBounds, textColor, flags);
 
            if (focused) {
@@ -204,17 +204,17 @@ using Microsoft.Win32;
            SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // Using Graphics instead of IDeviceContext intentionally
        ]
        public static Size GetGlyphSize(Graphics g, RadioButtonState state) {
-           return GetGlyphSize(g, state, IntPtr.Zero); 
+           return GetGlyphSize(g, state, IntPtr.Zero);
        }
 
        internal static Size GetGlyphSize(Graphics g, RadioButtonState state, IntPtr hWnd) {
            if (RenderWithVisualStyles) {
                InitializeRenderer((int)state);
-    
+
                return visualStyleRenderer.GetPartSize(g, ThemeSizeType.Draw, hWnd);
            }
 
-           return new Size(13, 13); 
+           return new Size(13, 13);
        }
 
        internal static ButtonState ConvertToButtonState(RadioButtonState state) {
@@ -269,7 +269,7 @@ using Microsoft.Win32;
         private static void InitializeRenderer(int state) {
             RadioButtonState radioButtonState = (RadioButtonState)state;
             int part = RadioElement.Part;
-            if (SystemInformation.HighContrast 
+            if (SystemInformation.HighContrast
                 && (radioButtonState == RadioButtonState.CheckedDisabled || radioButtonState == RadioButtonState.UncheckedDisabled)
                 && VisualStyleRenderer.IsCombinationDefined(RadioElement.ClassName, VisualStyleElement.Button.RadioButton.HighContrastDisabledPart)) {
                     part = VisualStyleElement.Button.RadioButton.HighContrastDisabledPart;

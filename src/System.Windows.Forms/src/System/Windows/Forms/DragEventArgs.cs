@@ -51,7 +51,7 @@ namespace System.Windows.Forms
         /// of the drag event.
         /// </devdoc>
         public DragDropEffects AllowedEffect { get; }
-        
+
         /// <devdoc>
         /// Gets or sets which drag-and-drop operations are allowed by the target of the drag event.
         /// </devdoc>

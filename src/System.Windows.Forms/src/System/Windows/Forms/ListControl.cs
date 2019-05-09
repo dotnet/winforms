@@ -73,7 +73,7 @@ namespace System.Windows.Forms
                 catch
                 {
                     // There are several possibilities why setting the data source throws an exception:
-                    // 1. the app throws an exception in the events that fire when we change the data source: DataSourceChanged, 
+                    // 1. the app throws an exception in the events that fire when we change the data source: DataSourceChanged,
                     // 2. we get an exception when we set the data source and populate the list controls (say,something went wrong while formatting the data)
                     // 3. the DisplayMember does not fit w/ the new data source (this could happen if the user resets the data source but did not reset the DisplayMember)
                     // in all cases ListControl should reset the DisplayMember to String.Empty
@@ -309,8 +309,8 @@ namespace System.Windows.Forms
                     {
                         SetDataConnection(DataSource, newValueMember, force: false);
                     }
-    
-                    // See if the valueMember is a member of 
+
+                    // See if the valueMember is a member of
                     // the properties in the dataManager
                     if (DataManager != null && !string.IsNullOrEmpty(value))
                     {
@@ -474,11 +474,11 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(startIndex));
             }
 
-            // Start from the start index and wrap around until we find the string 
+            // Start from the start index and wrap around until we find the string
             // in question. Use a separate counter to ensure that we arent cycling through the list infinitely.
             int numberOfTimesThroughLoop = 0;
 
-            // this API is really Find NEXT String... 
+            // this API is really Find NEXT String...
             for (int index = (startIndex + 1) % items.Count; numberOfTimesThroughLoop < items.Count; index = (index + 1) % items.Count)
             {
                 numberOfTimesThroughLoop++;

@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(AccessibleRole.MenuBar, accessibleObject.Role);
             Assert.Equal(AccessibleStates.Focusable, accessibleObject.State);
         }
-        
+
         [Fact]
         public void ToolStripItemAccessibleObject_Ctor_NullOwnerItem_ThrowsArgumentNullException()
         {

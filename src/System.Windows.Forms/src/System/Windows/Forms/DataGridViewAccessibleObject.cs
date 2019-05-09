@@ -300,14 +300,14 @@ namespace System.Windows.Forms
 
                         break;
                 }
-                
+
 
                 return base.GetPropertyValue(propertyID);
             }
 
             internal override bool IsPatternSupported(int patternId)
             {
-                if (patternId == NativeMethods.UIA_TablePatternId || 
+                if (patternId == NativeMethods.UIA_TablePatternId ||
                     patternId == NativeMethods.UIA_GridPatternId)
                 {
                     return true;

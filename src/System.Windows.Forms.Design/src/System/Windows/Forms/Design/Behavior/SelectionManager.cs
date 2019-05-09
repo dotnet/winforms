@@ -398,7 +398,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         private void OnSelectionChanged(object sender, EventArgs e)
         {
-            // Note: selectionChanging would guard against a re-entrant code... Since we dont want to be in messed up state when adding new Glyphs. 
+            // Note: selectionChanging would guard against a re-entrant code... Since we dont want to be in messed up state when adding new Glyphs.
             if (!selectionChanging)
             {
                 selectionChanging = true;
@@ -406,7 +406,7 @@ namespace System.Windows.Forms.Design.Behavior
                 bodyAdorner.Glyphs.Clear();
                 ArrayList selComps = new ArrayList(selSvc.GetSelectedComponents());
                 object primarySelection = selSvc.PrimarySelection;
-                //add all control glyphs to all controls on rootComp                                 
+                //add all control glyphs to all controls on rootComp
                 curCompIndex = 0;
                 curSelectionBounds = new Rectangle[selComps.Count];
                 AddAllControlGlyphs(rootComponent, selComps, primarySelection);

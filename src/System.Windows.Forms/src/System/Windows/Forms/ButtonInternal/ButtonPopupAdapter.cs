@@ -13,7 +13,7 @@ namespace System.Windows.Forms.ButtonInternal {
     using System.Windows.Forms;
     using System.Windows.Forms.Layout;
     using System.Diagnostics.CodeAnalysis;
-        
+
 
     internal class ButtonPopupAdapter : ButtonBaseAdapter {
 
@@ -135,7 +135,7 @@ namespace System.Windows.Forms.ButtonInternal {
 
             PaintImage(e, layout);
             PaintField(e, layout, colors, colors.windowText, true);
-            
+
             r.Inflate(1, 1);
             DrawDefaultBorder(g, r, colors.options.highContrast ? colors.windowText : colors.windowFrame, this.Control.IsDefault);
             ControlPaint.DrawBorder(g, r, colors.options.highContrast ? colors.windowText : colors.buttonShadow, ButtonBorderStyle.Solid);

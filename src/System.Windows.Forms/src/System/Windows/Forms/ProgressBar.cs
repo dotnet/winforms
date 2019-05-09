@@ -275,13 +275,13 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        DefaultValue(100), 
-        SRCategory(nameof(SR.CatBehavior)), 
+        DefaultValue(100),
+        SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.ProgressBarMarqueeAnimationSpeed))]
         public int MarqueeAnimationSpeed {
             get {
                 return marqueeSpeed;
-            }            
+            }
             [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
             set {
                 if (value < 0) {
@@ -316,7 +316,7 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         ///    <para>
-        ///       Gets or sets the maximum value of the <see cref='System.Windows.Forms.ProgressBar'/>.      
+        ///       Gets or sets the maximum value of the <see cref='System.Windows.Forms.ProgressBar'/>.
         ///       Gets or sets the maximum value of the <see cref='System.Windows.Forms.ProgressBar'/>.
         ///    </para>
         /// </devdoc>
@@ -421,7 +421,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add => base.PaddingChanged += value; 
+            add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value;
         }
 
@@ -604,7 +604,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected override void CreateHandle() {
             if (!RecreatingHandle) {
-                IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();   
+                IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
                 try {
                     NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX();
                     icc.dwICC = NativeMethods.ICC_PROGRESS_CLASS;
@@ -731,7 +731,7 @@ namespace System.Windows.Forms {
         }
 
         //Note: ProgressBar doesn't work like other controls as far as setting ForeColor/
-        //BackColor -- you need to send messages to update the colors 
+        //BackColor -- you need to send messages to update the colors
         private void UserPreferenceChangedHandler(object o, UserPreferenceChangedEventArgs e)
         {
             if (IsHandleCreated)
@@ -744,8 +744,8 @@ namespace System.Windows.Forms {
         /// <summary>
         /// Creates a new AccessibleObject for this ProgressBar instance.
         /// The AccessibleObject instance returned by this method supports ControlType UIA property.
-        /// However the new object is only available in applications that are recompiled to target 
-        /// .NET Framework 4.8 or opt-in into this feature using a compatibility switch. 
+        /// However the new object is only available in applications that are recompiled to target
+        /// .NET Framework 4.8 or opt-in into this feature using a compatibility switch.
         /// </summary>
         /// <returns>
         /// AccessibleObject for this ProgressBar instance.

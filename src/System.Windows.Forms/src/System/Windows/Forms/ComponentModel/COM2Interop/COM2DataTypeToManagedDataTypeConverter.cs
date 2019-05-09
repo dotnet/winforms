@@ -8,7 +8,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.Diagnostics;
     using System;
     using System.Drawing;
-    using System.ComponentModel.Design;    
+    using System.ComponentModel.Design;
     using System.Collections;
     using Microsoft.Win32;
 

@@ -26,11 +26,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             SetStyle(ControlStyles.UserPaint, false);
             this.Font = controls[0].Font;
             this.toolInfos = new NativeMethods.TOOLINFO_T[controls.Length];
-            
+
             for (int i = 0; i < controls.Length; i++) {
                   controls[i].HandleCreated += new EventHandler(this.OnControlCreateHandle);
                   controls[i].HandleDestroyed += new EventHandler(this.OnControlDestroyHandle);
-                  
+
                   if (controls[i].IsHandleCreated) {
                      SetupToolTip(controls[i]);
                   }
@@ -72,7 +72,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                      else{
                         dontShow = false;
                      }
-                     
+
                      for (int i = 0; i < controls.Length; i++) {
                         UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_UPDATETIPTEXT, 0, GetTOOLINFO(controls[i]));
                      }
@@ -80,7 +80,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                      if (visible && !dontShow){
                         this.Visible = true;
                      }
-                  
+
                }
             }
         }
@@ -105,11 +105,11 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         private NativeMethods.TOOLINFO_T GetTOOLINFO(Control c) {
-        
+
             int index = Array.IndexOf(controls, c);
-            
+
             Debug.Assert(index != -1, "Failed to find control in tooltip array");
-            
+
             if (toolInfos[index] == null){
                toolInfos[index] = new NativeMethods.TOOLINFO_T();
                toolInfos[index].cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_T>();
@@ -146,7 +146,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_DELTOOL, 0, GetTOOLINFO((Control)sender));
             }
         }
-        
+
         protected override void OnHandleCreated(EventArgs e) {
             base.OnHandleCreated(e);
             for (int i = 0; i < controls.Length; i++) {

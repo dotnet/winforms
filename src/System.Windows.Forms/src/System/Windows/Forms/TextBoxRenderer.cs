@@ -30,7 +30,7 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         ///    <para>
-        ///       Returns true if this class is supported for the current OS and user/application settings, 
+        ///       Returns true if this class is supported for the current OS and user/application settings,
         ///       otherwise returns false.
         ///    </para>
         /// </devdoc>

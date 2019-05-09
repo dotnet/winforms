@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Tests
             var style = new RowStyle();
             collection.Insert(0, style);
             Assert.Equal(style, Assert.Single(collection));
-    }   
+    }
 
         [Fact]
         public void TableLayoutRowStyleCollection_Item_SetRowStyle_GetReturnsExpected()

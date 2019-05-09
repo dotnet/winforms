@@ -6,7 +6,7 @@ namespace System.Windows.Forms {
     using System;
     using System.ComponentModel;
     using System.Collections;
-    
+
     internal class MdiWindowListItemConverter : ComponentConverter {
         public MdiWindowListItemConverter(Type type) : base(type) {
         }
@@ -27,11 +27,11 @@ namespace System.Windows.Forms {
                     ToolStripItem currentItem = values[i] as ToolStripItem;
                     if (currentItem != null && currentItem.Owner == menu)
                     {
-                       list.Add(currentItem); 
+                       list.Add(currentItem);
                     }
                 }
                 return new StandardValuesCollection(list);
-                
+
             }
             return base.GetStandardValues(context);
         }

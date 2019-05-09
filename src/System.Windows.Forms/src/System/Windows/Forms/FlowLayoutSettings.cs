@@ -13,7 +13,7 @@ namespace System.Windows.Forms {
     public class FlowLayoutSettings : LayoutSettings {
 
         internal FlowLayoutSettings(IArrangedElement owner) : base(owner) {}
-        
+
         public override LayoutEngine LayoutEngine {
             get { return FlowLayout.Instance; }
         }
@@ -23,18 +23,18 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatLayout))]
         public FlowDirection FlowDirection {
             get { return FlowLayout.GetFlowDirection(Owner); }
-            set { 
+            set {
                 FlowLayout.SetFlowDirection(Owner, value);
                 Debug.Assert(FlowDirection == value, "FlowDirection should be the same as we set it");
             }
         }
-        
+
         [SRDescription(nameof(SR.FlowPanelWrapContentsDescr))]
         [DefaultValue(true)]
         [SRCategory(nameof(SR.CatLayout))]
         public bool WrapContents {
             get { return FlowLayout.GetWrapContents(Owner); }
-            set { 
+            set {
                 FlowLayout.SetWrapContents(Owner, value);
                 Debug.Assert(WrapContents == value, "WrapContents should be the same as we set it");
             }
@@ -52,7 +52,7 @@ namespace System.Windows.Forms {
             return CommonProperties.GetFlowBreak(element);
         }
 
-        
+
     }
 }
 

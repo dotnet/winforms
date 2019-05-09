@@ -36,13 +36,13 @@ namespace WinformsControlsTest
             this.components = new System.ComponentModel.Container();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
-            // 
+            //
             // toolTip1
-            // 
+            //
             this.toolTip1.IsBalloon = true;
-            // 
+            //
             // Buttons
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(419, 271);

@@ -70,15 +70,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             // get the types
             Type[] types = new Type[attrTypeNames.Length];
             for (int i = 0; i < attrTypeNames.Length; i++) {
-                
+
                 string attrName = attrTypeNames[i];
-                
+
                 // try the name first
                 Type t = Type.GetType(attrName);
                 Assembly a = null;
-                
+
                 if (t != null) {
-                    a = t.Assembly;    
+                    a = t.Assembly;
                 }
 
                 if (t == null) {
@@ -227,7 +227,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             if (ptr != IntPtr.Zero) {
                 object[] objects = new object[cVariants];
                 IntPtr curVariant;
-                
+
                 for (int i = 0; i < cVariants; i++) {
                     try{
                         curVariant = (IntPtr)((long)ptr + (i* 16 /*sizeof(VARIANT)*/));

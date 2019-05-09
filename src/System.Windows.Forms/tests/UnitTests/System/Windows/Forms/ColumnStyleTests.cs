@@ -65,7 +65,7 @@ namespace System.Windows.Forms.Tests
             var panel = new TableLayoutPanel();
             var style = new ColumnStyle();
             panel.LayoutSettings.RowStyles.Add(style);
-            
+
             style.Width = value;
             Assert.Equal(value, style.Width);
         }

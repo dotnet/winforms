@@ -14,7 +14,7 @@ namespace System.Windows.Forms.VisualStyles
         Normal = 1,
         Hot = 2,
         Pressed = 3,
-        //Focused = 4, 
+        //Focused = 4,
         Disabled = 5
     }
 }

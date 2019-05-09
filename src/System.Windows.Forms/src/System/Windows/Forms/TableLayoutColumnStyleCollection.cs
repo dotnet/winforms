@@ -9,7 +9,7 @@ namespace System.Windows.Forms {
     using System.ComponentModel.Design.Serialization;
     using System.Diagnostics;
     using System.Drawing;
-    using System.Drawing.Design;    
+    using System.Drawing.Design;
     using System.Globalization;
     using System.Windows.Forms.Layout;
     using System.Reflection;
@@ -18,7 +18,7 @@ namespace System.Windows.Forms {
 
         internal TableLayoutColumnStyleCollection(IArrangedElement Owner) : base(Owner) {}
         internal TableLayoutColumnStyleCollection() : base(null) {}
-        
+
         internal override string PropertyName {
             get { return PropertyNames.ColumnStyles; }
         }

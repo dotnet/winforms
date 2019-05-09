@@ -6,8 +6,8 @@ namespace System.Windows.Forms {
 
     using System.Diagnostics;
     using System;
-    
-    
+
+
     /// <devdoc>
     ///    <para>
     ///       Specifies the return value for HITTEST on ListView.
@@ -27,7 +27,7 @@ namespace System.Windows.Forms {
             this.subItem = hitSubItem;
             this.loc = hitLocation;
         }
-        
+
 
         /// <devdoc>
         ///     This gives the exact location returned by hit test on listview.
@@ -37,7 +37,7 @@ namespace System.Windows.Forms {
                 return loc;
             }
         }
-        
+
         /// <devdoc>
         ///     This gives the ListViewItem returned by hit test on listview.
         /// </devdoc>
@@ -46,7 +46,7 @@ namespace System.Windows.Forms {
                 return item;
             }
         }
-        
+
         /// <devdoc>
         ///     This gives the ListViewSubItem returned by hit test on listview.
         /// </devdoc>

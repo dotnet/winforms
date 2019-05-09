@@ -78,7 +78,7 @@ namespace System.Windows.Forms {
         // the current NumericUpDownAcceleration object.
         private int accelerationsCurrentIndex;
 
-        // Used to calculate the time elapsed since the up/down button was pressed, 
+        // Used to calculate the time elapsed since the up/down button was pressed,
         // to know when to get the next entry in the accelaration table.
         private long buttonPressedStartTime;
 
@@ -88,7 +88,7 @@ namespace System.Windows.Forms {
         ]
         public NumericUpDown() : base() {
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
-            SetState2(STATE2_USEPREFERREDSIZECACHE, true);  
+            SetState2(STATE2_USEPREFERREDSIZECACHE, true);
             Text = "0";
             StopAcceleration();
         }
@@ -98,7 +98,7 @@ namespace System.Windows.Forms {
         //
         //////////////////////////////////////////////////////////////
 
-		
+
         /// <devdoc>
         ///     Specifies the acceleration information.
         /// </devdoc>
@@ -209,9 +209,9 @@ namespace System.Windows.Forms {
                 if (minimum > maximum) {
                     minimum = maximum;
                 }
-                
+
                 Value = Constrain(currentValue);
-                
+
                 Debug.Assert(maximum == value, "Maximum != what we just set it to!");
             }
         }
@@ -235,7 +235,7 @@ namespace System.Windows.Forms {
                 if (minimum > maximum) {
                     maximum = value;
                 }
-                
+
                 Value = Constrain(currentValue);
 
                 Debug.Assert(minimum.Equals(value), "Minimum != what we just set it to!");
@@ -257,7 +257,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         new public event EventHandler PaddingChanged {
-            add => base.PaddingChanged += value; 
+            add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value; }
 
         /// <devdoc>
@@ -276,8 +276,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
-        Bindable(false), 
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)        
+        Bindable(false),
+        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         // We're just overriding this to make it non-browsable.
         public override string Text {
@@ -294,7 +294,7 @@ namespace System.Windows.Forms {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
         }
-        
+
         /// <devdoc>
         ///    <para>Gets or sets a value indicating whether a thousands
         ///       separator is displayed in the up-down control when appropriate.</para>
@@ -340,15 +340,15 @@ namespace System.Windows.Forms {
 
             set {
                 if (value != currentValue) {
-                
+
                     if (!initializing && ((value < minimum) || (value > maximum))) {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(Value), value, $"'{nameof(Minimum)}'", $"'{nameof(Maximum)}'"));
                     }
                     else {
-                        currentValue = value;                       
-                        
+                        currentValue = value;
+
                         OnValueChanged(EventArgs.Empty);
-                        currentValueChanged = true;    
+                        currentValueChanged = true;
                         UpdateEditText();
                     }
                 }
@@ -394,10 +394,10 @@ namespace System.Windows.Forms {
             if (value > maximum) {
                 value = maximum;
             }
-            
+
             return value;
         }
-        
+
         protected override AccessibleObject CreateAccessibilityInstance() {
             return new NumericUpDownAccessibleObject(this);
         }
@@ -431,7 +431,7 @@ namespace System.Windows.Forms {
             catch( OverflowException ){
                 newValue = minimum;
             }
-            
+
             Value = newValue;
         }
 
@@ -451,20 +451,20 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected override void OnKeyDown(KeyEventArgs e) {
             if (base.InterceptArrowKeys && (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down) && !this.Spinning) {
-                StartAcceleration();  
+                StartAcceleration();
             }
-            
+
             base.OnKeyDown(e);
         }
-        
+
         /// <devdoc>
         ///     Overridden to set/reset acceleration variables.
         /// </devdoc>
         protected override void OnKeyUp(KeyEventArgs e) {
             if (base.InterceptArrowKeys && (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down)) {
-                StopAcceleration();  
+                StopAcceleration();
             }
-            
+
             base.OnKeyUp(e);
         }
 
@@ -477,18 +477,18 @@ namespace System.Windows.Forms {
         protected override void OnTextBoxKeyPress(object source, KeyPressEventArgs e) {
 
             base.OnTextBoxKeyPress(source, e);
-            
-            NumberFormatInfo numberFormatInfo = System.Globalization.CultureInfo.CurrentCulture.NumberFormat;                                
+
+            NumberFormatInfo numberFormatInfo = System.Globalization.CultureInfo.CurrentCulture.NumberFormat;
             string decimalSeparator = numberFormatInfo.NumberDecimalSeparator;
             string groupSeparator = numberFormatInfo.NumberGroupSeparator;
             string negativeSign = numberFormatInfo.NegativeSign;
-                
+
             string keyInput = e.KeyChar.ToString();
-                
+
             if (char.IsDigit(e.KeyChar)) {
                 // Digits are OK
             }
-            else if (keyInput.Equals(decimalSeparator) || keyInput.Equals(groupSeparator) || 
+            else if (keyInput.Equals(decimalSeparator) || keyInput.Equals(groupSeparator) ||
                      keyInput.Equals(negativeSign)) {
                 // Decimal separator is OK
             }
@@ -507,10 +507,10 @@ namespace System.Windows.Forms {
                 SafeNativeMethods.MessageBeep(0);
             }
         }
-                                  
+
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.NumericUpDown.OnValueChanged'/> event.</para>
-        /// </devdoc>        
+        /// </devdoc>
         protected virtual void OnValueChanged(EventArgs e) {
 
             // Call the event handler
@@ -519,10 +519,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        protected override void OnLostFocus(EventArgs e) 
+        protected override void OnLostFocus(EventArgs e)
         {
             base.OnLostFocus(e);
-            if (UserEdit) 
+            if (UserEdit)
             {
                 UpdateEditText();
             }
@@ -558,11 +558,11 @@ namespace System.Windows.Forms {
                 // which to start a string representing a negative number.
                 if (!string.IsNullOrEmpty(Text) &&
                     !(Text.Length == 1 && Text == "-")) {
-                    if (Hexadecimal) {                    
+                    if (Hexadecimal) {
                         Value = Constrain(Convert.ToDecimal(Convert.ToInt32(Text, 16)));
                     }
                     else {
-                        Value = Constrain(decimal.Parse(Text, CultureInfo.CurrentCulture));                
+                        Value = Constrain(decimal.Parse(Text, CultureInfo.CurrentCulture));
                     }
                 }
             }
@@ -584,9 +584,9 @@ namespace System.Windows.Forms {
                 long nowTicks                 = DateTime.Now.Ticks;
                 long buttonPressedElapsedTime = nowTicks - this.buttonPressedStartTime;
                 long accelerationInterval     = 10000000L * this.accelerations[this.accelerationsCurrentIndex + 1].Seconds;  // next entry.
-            
+
                 // If Up/Down button pressed for more than the current acceleration entry interval, get next entry in the accel table.
-                if( buttonPressedElapsedTime > accelerationInterval ) 
+                if( buttonPressedElapsedTime > accelerationInterval )
                 {
                     this.buttonPressedStartTime = nowTicks;
                     this.accelerationsCurrentIndex++;
@@ -599,7 +599,7 @@ namespace System.Windows.Forms {
         }
 
         private void ResetMaximum() {
-            Maximum = DefaultMaximum;            
+            Maximum = DefaultMaximum;
         }
 
         private void ResetMinimum() {
@@ -609,7 +609,7 @@ namespace System.Windows.Forms {
         private void ResetValue() {
             Value = DefaultValue;
         }
-        
+
         /// <devdoc>
         /// <para>Indicates whether the <see cref='System.Windows.Forms.NumericUpDown.Increment'/> property should be
         ///    persisted.</para>
@@ -639,7 +639,7 @@ namespace System.Windows.Forms {
             return !Value.Equals(NumericUpDown.DefaultValue);
         }
 
-        
+
         /// <devdoc>
         ///     Records when UpDownButtons are pressed to enable acceleration.
         /// </devdoc>
@@ -664,7 +664,7 @@ namespace System.Windows.Forms {
             s += ", Minimum = " + Minimum.ToString(CultureInfo.CurrentCulture) + ", Maximum = " + Maximum.ToString(CultureInfo.CurrentCulture);
             return s;
         }
-        
+
         /// <devdoc>
         ///    <para>
         ///       Increments the value of the up-down control.
@@ -695,12 +695,12 @@ namespace System.Windows.Forms {
                 newValue = maximum;
             }
 
-            Value = newValue;            
+            Value = newValue;
         }
 
         private string GetNumberText(decimal num) {
             string text;
-            
+
             if (Hexadecimal) {
                 text = ((long)num).ToString("X", CultureInfo.InvariantCulture);
                 Debug.Assert(text == text.ToUpper(CultureInfo.InvariantCulture), "GetPreferredSize assumes hex digits to be uppercase.");
@@ -764,7 +764,7 @@ namespace System.Windows.Forms {
         // smarter behavior.
         internal override Size GetPreferredSizeCore(Size proposedConstraints) {
             int height = PreferredHeight;
-            
+
             int baseSize = Hexadecimal ? 16 : 10;
             int digit = GetLargestDigit(0, baseSize);
             // The floor of log is intentionally 1 less than the number of digits.  We initialize
@@ -779,7 +779,7 @@ namespace System.Windows.Forms {
             }
             bool maxDigitsReached = numDigits >= maxDigits;
             decimal testNumber;
-            
+
             // preinitialize testNumber with the leading digit
             if(digit != 0 || numDigits == 1) {
                 testNumber = digit;
@@ -790,7 +790,7 @@ namespace System.Windows.Forms {
             }
 
             if (maxDigitsReached) {
-                // Prevent 
+                // Prevent
 
 
                 numDigits = maxDigits - 1;
@@ -812,11 +812,11 @@ namespace System.Windows.Forms {
                     shortText = testNumber.ToString(CultureInfo.CurrentCulture);
                 }
                 int shortTextWidth = TextRenderer.MeasureText(shortText, this.Font).Width;
-                // Adding the width of the one digit that was dropped earlier. 
+                // Adding the width of the one digit that was dropped earlier.
                 // This assumes that no additional thousand separator is added by that digit which is correct.
                 textWidth += shortTextWidth / (numDigits+1);
             }
-            
+
             // Call AdjuctWindowRect to add space for the borders
             int width = SizeFromClientSize(textWidth, height).Width + upDownButtons.Width;
             return new Size(width, height) + Padding.Size;
@@ -844,8 +844,8 @@ namespace System.Windows.Forms {
             Debug.Assert(largestDigit != -1 && digitWidth != -1, "Failed to find largest digit.");
             return largestDigit;
         }
-        
-        [System.Runtime.InteropServices.ComVisible(true)]        
+
+        [System.Runtime.InteropServices.ComVisible(true)]
         internal class NumericUpDownAccessibleObject : ControlAccessibleObject {
 
             public NumericUpDownAccessibleObject(NumericUpDown owner) : base(owner) {
@@ -863,7 +863,7 @@ namespace System.Windows.Forms {
                     base.Name = value;
                 }
             }
-            
+
             public override AccessibleRole Role {
                 get {
                     AccessibleRole role = Owner.AccessibleRole;
@@ -875,29 +875,29 @@ namespace System.Windows.Forms {
                     }
                 }
             }
-            
+
             public override AccessibleObject GetChild(int index) {
                 if (index >= 0 && index < GetChildCount()) {
-                    
+
                     // TextBox child
                     //
                     if (index == 0) {
                         return ((UpDownBase)Owner).TextBox.AccessibilityObject.Parent;
                     }
-                    
+
                     // Up/down buttons
                     //
                     if (index == 1) {
                         return ((UpDownBase)Owner).UpDownButtonsInternal.AccessibilityObject.Parent;
                     }
                 }
-                
+
                 return null;
             }
 
             public override int GetChildCount() {
                 return 2;
-            }            
+            }
         }
     }
 

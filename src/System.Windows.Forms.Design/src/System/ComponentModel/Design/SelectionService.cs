@@ -264,7 +264,7 @@ namespace System.ComponentModel.Design
 
         /// <summary>
         /// Disposes the entire selection service.
-        /// </summary>        
+        /// </summary>
         [SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
         void IDisposable.Dispose()
         {

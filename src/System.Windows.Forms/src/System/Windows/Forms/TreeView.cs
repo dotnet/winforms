@@ -66,7 +66,7 @@ namespace System.Windows.Forms {
         private TreeNode prevHoveredNode = null;
         private bool hoveredAlready  = false;
         private bool rightToLeftLayout = false;
-        
+
         [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
         private IntPtr hNodeMouseDown = IntPtr.Zero;//ensures we fire nodeclick on the correct node
 
@@ -84,7 +84,7 @@ namespace System.Windows.Forms {
         private const int   TREEVIEWSTATE_doubleclickFired          = 0x00000800;
         private const int   TREEVIEWSTATE_mouseUpFired              = 0x00001000;
         private const int   TREEVIEWSTATE_showTreeViewContextMenu   = 0x00002000;
-        private const int   TREEVIEWSTATE_lastControlValidated      = 0x00004000;  
+        private const int   TREEVIEWSTATE_lastControlValidated      = 0x00004000;
         private const int   TREEVIEWSTATE_stopResizeWindowMsgs      = 0x00008000;
         private const int   TREEVIEWSTATE_ignoreSelects             = 0x00010000;
 
@@ -149,7 +149,7 @@ namespace System.Windows.Forms {
 
         // Sorting
         private IComparer treeViewNodeSorter = null;
-             
+
 
         //Events
         private TreeNodeMouseClickEventHandler onNodeMouseClick;
@@ -585,7 +585,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value != imageList) {
-       
+
                     DetachImageListHandlers();
 
                     imageList = value;
@@ -614,7 +614,7 @@ namespace System.Windows.Forms {
                   imageList.ChangeHandle += new EventHandler(ImageListChangedHandle);
               }
           }
-  
+
           private void DetachImageListHandlers() {
               if (imageList != null) {
                   imageList.RecreateHandle -= new EventHandler(ImageListRecreateHandle);
@@ -622,7 +622,7 @@ namespace System.Windows.Forms {
                   imageList.ChangeHandle -= new EventHandler(ImageListChangedHandle);
               }
           }
-  
+
           private void AttachStateImageListHandlers() {
               if (stateImageList != null) {
                   //NOTE: any handlers added here should be removed in DetachStateImageListHandlers
@@ -631,7 +631,7 @@ namespace System.Windows.Forms {
                   stateImageList.ChangeHandle += new EventHandler(StateImageListChangedHandle);
               }
           }
-  
+
           private void DetachStateImageListHandlers() {
               if (stateImageList != null) {
                   stateImageList.RecreateHandle -= new EventHandler(StateImageListRecreateHandle);
@@ -639,7 +639,7 @@ namespace System.Windows.Forms {
                   stateImageList.ChangeHandle -= new EventHandler(StateImageListChangedHandle);
               }
           }
-  
+
 
         /// <devdoc>
         ///     Returns the state image list control that is bound to the tree view.
@@ -666,10 +666,10 @@ namespace System.Windows.Forms {
                     {
                         UpdateNativeStateImageList();
 
-                        // We need to update the checks 
+                        // We need to update the checks
                         // and stateimage value for each node.
                         UpdateCheckedState(root, true);
-                        
+
                         if((value == null || stateImageList.Images.Count == 0) && CheckBoxes) {
                             // Requires Handle Recreate to force on the checkBoxes and states..
                             RecreateHandle();
@@ -677,12 +677,12 @@ namespace System.Windows.Forms {
                         else {
                             // The TreeView shows up the state imageList after sending this message even if the nodes dont have any stateImageIndex set.
                             // In order to avoid that we refresh nodes which would "reset" the images to none.
-                            // This causes flicker but gives us the right behavior                        
+                            // This causes flicker but gives us the right behavior
                             RefreshNodes();
                         }
                     }
 
-                    
+
                 }
             }
         }
@@ -912,7 +912,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add => base.PaddingChanged += value; 
+            add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value; }
 
         /// <devdoc>
@@ -1469,7 +1469,7 @@ namespace System.Windows.Forms {
                     node.ContextMenu = null;
                 }
 
-                // 
+                //
                 lock(this) {
                     DetachImageListHandlers();
                     imageList = null;
@@ -1638,7 +1638,7 @@ namespace System.Windows.Forms {
 
         private void StateImageListChangedHandle(object sender, EventArgs e) {
             if ((null != sender) && (sender == stateImageList) && IsHandleCreated) {
-                // Since the native treeview requires the state imagelist to be 1-indexed we need to 
+                // Since the native treeview requires the state imagelist to be 1-indexed we need to
                 // re add the images if the original collection had changed.
                 if (stateImageList != null && stateImageList.Images.Count > 0) {
                     Image[] images = new Image[stateImageList.Images.Count + 1];
@@ -1646,13 +1646,13 @@ namespace System.Windows.Forms {
                     for (int i = 1;  i <= stateImageList.Images.Count ; i++) {
                         images[i] = stateImageList.Images[i -1];
                     }
-                    
+
                     if (internalStateImageList != null)
                     {
                         internalStateImageList.Images.Clear();
                         internalStateImageList.Images.AddRange(images);
                     }
-                    else 
+                    else
                     {
                         internalStateImageList = new ImageList();
                         internalStateImageList.Images.AddRange(images);
@@ -1660,7 +1660,7 @@ namespace System.Windows.Forms {
 
                     Debug.Assert(internalStateImageList != null, "Why are changing images when the Imagelist is null?");
                     if (internalStateImageList != null)
-                    {                
+                    {
                         if (ScaledStateImageSize != null)
                         {
                             internalStateImageList.ImageSize = (Size)ScaledStateImageSize;
@@ -1669,7 +1669,7 @@ namespace System.Windows.Forms {
                         SetStateImageList(internalStateImageList.Handle);
                     }
                 }
-                else //stateImageList == null || stateImageList.Images.Count = 0; 
+                else //stateImageList == null || stateImageList.Images.Count = 0;
                 {
                     UpdateCheckedState(root, true);
                 }
@@ -1777,15 +1777,15 @@ namespace System.Windows.Forms {
                 SendMessage(NativeMethods.TVM_SETITEMHEIGHT, ItemHeight, 0);
             }
 
-            // Essentially we are setting the width to be infinite so that the 
+            // Essentially we are setting the width to be infinite so that the
             // TreeView never thinks it needs a scrollbar when the first node is created
-            // during the first handle creation.  
+            // during the first handle creation.
             //
             // This is set back to the oldSize after the Realize method.
             int oldSize = 0;
             try
             {
-                
+
                 treeViewState[TREEVIEWSTATE_stopResizeWindowMsgs] = true;
                 oldSize = this.Width;
                 int flags = NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOMOVE;
@@ -1845,9 +1845,9 @@ namespace System.Windows.Forms {
                 SafeNativeMethods.ImageList_Destroy_Native(new HandleRef(this, handleOld));
             }
         }
-        
-        // Destroying the tree-view control does not destroy the native state image list. 
-        // We must destroy it explicitly. 
+
+        // Destroying the tree-view control does not destroy the native state image list.
+        // We must destroy it explicitly.
         private void DestroyNativeStateImageList(bool reset)
         {
             IntPtr handle = SendMessage(NativeMethods.TVM_GETIMAGELIST, NativeMethods.TVSIL_STATE, IntPtr.Zero);
@@ -1866,7 +1866,7 @@ namespace System.Windows.Forms {
         protected override void OnHandleDestroyed(EventArgs e) {
             selectedNode = SelectedNode;
 
-            // Unfortunately, to avoid the native tree view leaking it's State Image List, we need to 
+            // Unfortunately, to avoid the native tree view leaking it's State Image List, we need to
             // destroy it ourselves here.
             DestroyNativeStateImageList(true);
 
@@ -2166,7 +2166,7 @@ namespace System.Windows.Forms {
             RefreshNodes();
         }
 
-        
+
         /// <devdoc>
         ///     Returns a string representation for this control.
         /// </devdoc>
@@ -2382,7 +2382,7 @@ namespace System.Windows.Forms {
 
         }
 
-       
+
 
         /// <devdoc>
         ///     Performs custom draw handling
@@ -2433,7 +2433,7 @@ namespace System.Windows.Forms {
 
                         try {
                             Rectangle bounds = node.RowBounds;
-                            
+
                             NativeMethods.SCROLLINFO si = new NativeMethods.SCROLLINFO();
                             si.cbSize = Marshal.SizeOf<NativeMethods.SCROLLINFO>();
                             si.fMask = NativeMethods.SIF_POS;
@@ -2447,7 +2447,7 @@ namespace System.Windows.Forms {
                                     bounds.X -= value;
                                     bounds.Width += value;
                                 }
-                            }   
+                            }
                             e = new DrawTreeNodeEventArgs(g, node, bounds, (TreeNodeStates) (state));
                             OnDrawNode(e);
                         }
@@ -2534,7 +2534,7 @@ namespace System.Windows.Forms {
                             Size textSize = TextRenderer.MeasureText(node.Text, node.TreeView.Font);
                             Point textLoc = new Point(bounds.X -1, bounds.Y); // required to center the text
                             bounds = new Rectangle(textLoc, new Size(textSize.Width, bounds.Height));
-                                
+
                             e = new DrawTreeNodeEventArgs(g, node, bounds, (TreeNodeStates) (nmcd.nmcd.uItemState));
                             OnDrawNode(e);
 
@@ -2602,8 +2602,8 @@ namespace System.Windows.Forms {
         {
             NativeMethods.NMHDR* nmhdr = (NativeMethods.NMHDR*)m.LParam;
             IntPtr tooltipHandle = nmhdr->hwndFrom;
-            
-                
+
+
             NativeMethods.TV_HITTESTINFO tvhip = new NativeMethods.TV_HITTESTINFO();
             Point pos = Cursor.Position;
             pos = PointToClient(pos);
@@ -2614,7 +2614,7 @@ namespace System.Windows.Forms {
             if (hnode != IntPtr.Zero && ((tvhip.flags & NativeMethods.TVHT_ONITEM) != 0)) {
 
                 TreeNode tn = NodeFromHandle(hnode);
-                if (tn != null) 
+                if (tn != null)
                 {
                     if (!ShowNodeToolTips) // default ToolTips
                     {
@@ -2636,7 +2636,7 @@ namespace System.Windows.Forms {
         private void WmNeedText(ref Message m) {
             NativeMethods.TOOLTIPTEXT ttt = (NativeMethods.TOOLTIPTEXT) m.GetLParam(typeof(NativeMethods.TOOLTIPTEXT));
             string tipText = controlToolTipText;
-            
+
             NativeMethods.TV_HITTESTINFO tvhip = new NativeMethods.TV_HITTESTINFO();
             Point pos = Cursor.Position;
             pos = PointToClient(pos);
@@ -2669,14 +2669,14 @@ namespace System.Windows.Forms {
 
         private unsafe void WmNotify(ref Message m) {
             NativeMethods.NMHDR* nmhdr = (NativeMethods.NMHDR *)m.LParam;
-            
+
             // Custom draw code is handled separately.
             //
             if ((nmhdr->code ==  NativeMethods.NM_CUSTOMDRAW)) {
                 CustomDraw(ref m);
             }
             else {
-                
+
                 NativeMethods.NMTREEVIEW* nmtv = (NativeMethods.NMTREEVIEW*)m.LParam;
 
                 switch (nmtv->nmhdr.code) {
@@ -2771,13 +2771,13 @@ namespace System.Windows.Forms {
 
                 ContextMenu contextMenu = treeNode.ContextMenu;
                 ContextMenuStrip menu = treeNode.ContextMenuStrip;
-                
+
                 if (contextMenu != null)
                 {
 
                     NativeMethods.POINT pt = new NativeMethods.POINT();
                     UnsafeNativeMethods.GetCursorPos(pt);
-                                        
+
                     // Summary: the current window must be made the foreground window
                     // before calling TrackPopupMenuEx, and a task switch must be
                     // forced after the call.
@@ -2846,7 +2846,7 @@ namespace System.Windows.Forms {
                     {
                         base.WndProc(ref m);
                     }
-                    break;                        
+                    break;
                case Interop.WindowMessages.WM_HSCROLL:
                     base.WndProc(ref m);
                     if (DrawMode == TreeViewDrawMode.OwnerDrawAll)
@@ -2891,14 +2891,14 @@ namespace System.Windows.Forms {
                             if (WmShowToolTip(ref m))
                             {
                                 m.Result = (IntPtr)1;
-                                return;  
+                                return;
                             }
                             else
                             {
                                 base.WndProc(ref m);
                                 break;
                             }
-                            
+
                         default:
                              base.WndProc(ref m);
                              break;
@@ -2972,7 +2972,7 @@ namespace System.Windows.Forms {
                             if (hnode == hNodeMouseDown) {
                                 OnNodeMouseClick(new TreeNodeMouseClickEventArgs(NodeFromHandle(hnode), downButton, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam)));
                             }
-                            
+
                             OnClick(new MouseEventArgs(downButton, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
                             OnMouseClick(new MouseEventArgs(downButton, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
                         }
@@ -3031,7 +3031,7 @@ namespace System.Windows.Forms {
                     tvhit.pt_x = NativeMethods.Util.SignedLOWORD(m.LParam);
                     tvhit.pt_y = NativeMethods.Util.SignedHIWORD(m.LParam);
                     hNodeMouseDown = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhit);
-                    
+
                     WmMouseDown(ref m, MouseButtons.Right, 1);
                     downButton = MouseButtons.Right;
                     break;
@@ -3049,7 +3049,7 @@ namespace System.Windows.Forms {
                         DefWndProc(ref m);
                         this.InvokeGotFocus(this, EventArgs.Empty);
                      }
-                     else 
+                     else
                      {
                         base.WndProc(ref m);
                      }

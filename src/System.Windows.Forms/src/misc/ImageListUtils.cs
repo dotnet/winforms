@@ -7,19 +7,19 @@ namespace System.Windows.Forms {
     using System;
     using System.ComponentModel;
     using System.Diagnostics;
-    
+
     // Miscellaneous utilities
     static internal class ImageListUtils {
 
         public static PropertyDescriptor GetImageListProperty(PropertyDescriptor currentComponent, ref object instance) {
             if(instance is object[]) //multiple selection is not supported by this class
                 return null;
-            
+
             PropertyDescriptor imageListProp = null;
             object parentInstance = instance;
-            
+
             RelatedImageListAttribute relILAttr = currentComponent.Attributes[typeof(RelatedImageListAttribute)] as RelatedImageListAttribute;
-            if (relILAttr != null) 
+            if (relILAttr != null)
             {
                 string[] pathInfo = relILAttr.RelatedImageList.Split('.');
                 for(int i=0;i<pathInfo.Length;i++) {
@@ -40,11 +40,11 @@ namespace System.Windows.Forms {
                             break;
                         }
                     } else {
-                        parentInstance = prop.GetValue(parentInstance);                                    
+                        parentInstance = prop.GetValue(parentInstance);
                     }
                 }
             }
-    
+
             return imageListProp;
         }
     }

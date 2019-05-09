@@ -31,8 +31,8 @@ namespace System.Windows.Forms.Tests
             tb.PlaceholderText = "Enter your name";
 
             System.Runtime.InteropServices.HandleRef refHandle = new System.Runtime.InteropServices.HandleRef(tb, tb.Handle);
-           
-            //Cover the Placeholder draw code path 
+
+            //Cover the Placeholder draw code path
             UnsafeNativeMethods.SendMessage(refHandle, Interop.WindowMessages.WM_PAINT, false, 0);
             tb.TextAlign = HorizontalAlignment.Center;
             UnsafeNativeMethods.SendMessage(refHandle, Interop.WindowMessages.WM_PAINT, false, 0);

@@ -14,7 +14,7 @@ namespace System.Windows.Forms {
             get {
                 return false;
             }
-        }   
+        }
     }
 }
 

@@ -78,7 +78,7 @@ namespace System.Windows.Forms {
         private bool detailsVisible = false;
 
         /// <summary>
-        ///    Initializes a new instance of the <see cref='System.Windows.Forms.ThreadExceptionDialog'/> class.      
+        ///    Initializes a new instance of the <see cref='System.Windows.Forms.ThreadExceptionDialog'/> class.
         /// </summary>
         public ThreadExceptionDialog(Exception t) {
 
@@ -124,7 +124,7 @@ namespace System.Windows.Forms {
                 messageText = t.Message;
 
                 detailAnchor = true;
-                
+
                 if (Application.AllowQuit) {
                     if (t is System.Security.SecurityException) {
                         messageFormat = SR.ExDlgSecurityErrorText;
@@ -188,7 +188,7 @@ namespace System.Windows.Forms {
                 detailsTextBuilder.Append(string.Format(SR.ExDlgMsgLoadedAssembliesEntry, name.Name, name.Version, fileVer, name.EscapedCodeBase));
                 detailsTextBuilder.Append(separator);
             }
-            
+
             detailsTextBuilder.Append(string.Format(CultureInfo.CurrentCulture, sectionseparator, SR.ExDlgMsgJITDebuggingSection));
             if (Application.CustomThreadExceptionHandlerAttached) {
                 detailsTextBuilder.Append(SR.ExDlgMsgFooterNonSwitchable);
@@ -276,7 +276,7 @@ namespace System.Windows.Forms {
 
             Button b = null;
             int startIndex = 0;
-            
+
             if (detailAnchor) {
                 b = detailsButton;
 
@@ -295,9 +295,9 @@ namespace System.Windows.Forms {
                 Controls.Add(b);
                 startIndex = 1;
             }
-            
+
             int buttonLeft = (width - scaledButtonDetailsLeftPadding - ((buttons.Length - startIndex) * scaledButtonAlignmentWidth - scaledButtonAlignmentPadding));
-            
+
             for (int i = startIndex; i < buttons.Length; i++) {
                 b = buttons[i];
                 b.SetBounds(buttonLeft, buttonTop, scaledButtonWidth, scaledButtonHeight);
@@ -312,7 +312,7 @@ namespace System.Windows.Forms {
             details.WordWrap = false;
             details.TabStop = false;
             details.AcceptsReturn = false;
-            
+
             details.SetBounds(scaledButtonDetailsLeftPadding, buttonTop + scaledButtonTopPadding, width - scaledDetailsWidthPadding, scaledDetailsHeight);
             details.Visible = detailsVisible;
             Controls.Add(details);
@@ -355,7 +355,7 @@ namespace System.Windows.Forms {
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
-        }                
+        }
 
         /// <devdoc>
         ///     Called when the details button is clicked.

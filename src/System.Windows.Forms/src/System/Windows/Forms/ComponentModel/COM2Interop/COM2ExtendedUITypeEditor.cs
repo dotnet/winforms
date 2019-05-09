@@ -17,27 +17,27 @@ namespace System.Drawing.Design {
     using System.Drawing.Design;
 
     /// <devdoc>
-    ///    <para>Provides an editor that provides a way to visually edit the values of a COM2 
+    ///    <para>Provides an editor that provides a way to visually edit the values of a COM2
     ///       type.</para>
     /// </devdoc>
     internal class Com2ExtendedUITypeEditor : UITypeEditor {
-    
+
         private UITypeEditor innerEditor;
-        
+
         public Com2ExtendedUITypeEditor(UITypeEditor baseTypeEditor) {
             this.innerEditor = baseTypeEditor;
         }
-        
+
         public Com2ExtendedUITypeEditor(Type baseType) {
             this.innerEditor = (UITypeEditor)TypeDescriptor.GetEditor(baseType, typeof(UITypeEditor));
         }
-        
+
         public UITypeEditor InnerEditor {
             get {
                return innerEditor;
             }
         }
-  
+
         /// <devdoc>
         ///      Edits the given object value using the editor style provided by
         ///      GetEditorStyle.  A service provider is provided so that any
@@ -51,7 +51,7 @@ namespace System.Drawing.Design {
                return base.EditValue(context, provider, value);
             }
         }
-  
+
         /// <devdoc>
         ///      Determines if this editor supports the painting of a representation
         ///      of an object's value.

@@ -20,11 +20,11 @@ namespace System.ComponentModel.Design.Serialization
         private static readonly Attribute[] _designTimeFilter = new Attribute[] { DesignOnlyAttribute.Yes };
         private static CodeThisReferenceExpression _thisRef = new CodeThisReferenceExpression();
 
-        internal static CodeDomSerializer Default 
+        internal static CodeDomSerializer Default
         {
-            get 
+            get
             {
-                if (s_default == null) 
+                if (s_default == null)
                 {
                     s_default = new CodeDomSerializer();
                 }
@@ -169,7 +169,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 throw new ArgumentNullException(nameof(manager));
             }
-            if(value == null) 
+            if(value == null)
             {
                 throw new ArgumentNullException(nameof(value));
             }

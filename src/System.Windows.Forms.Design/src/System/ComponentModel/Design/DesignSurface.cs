@@ -384,7 +384,7 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// Protected override of Dispose that allows for cleanup.
         /// </summary>
-        /// <param name="disposing"> True if Dispose is being called or false if this is being invoked by a finalizer. </param>        
+        /// <param name="disposing"> True if Dispose is being called or false if this is being invoked by a finalizer. </param>
         [SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
         protected virtual void Dispose(bool disposing)
         {

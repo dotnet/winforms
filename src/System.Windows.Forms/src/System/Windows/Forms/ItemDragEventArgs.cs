@@ -15,13 +15,13 @@ namespace System.Windows.Forms
         public ItemDragEventArgs(MouseButtons button) : this(button, null)
         {
         }
-        
+
         public ItemDragEventArgs(MouseButtons button, object item)
         {
             Button = button;
             Item = item;
         }
-        
+
         public MouseButtons Button { get; }
 
         public object Item { get; }

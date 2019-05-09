@@ -8,7 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms.VisualStyles
 {
-    public enum SizingType 
+    public enum SizingType
     {
     	FixedSize = 0,
     	Stretch = 1,

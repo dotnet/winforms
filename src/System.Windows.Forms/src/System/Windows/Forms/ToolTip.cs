@@ -71,7 +71,7 @@ namespace System.Windows.Forms {
         bool                useAnimation = true;
         bool                useFading = true;
         int                 originalPopupDelay = 0;
-        
+
         // setting TTM_TRACKPOSITION will cause redundant POP and Draw Messages..
         // Hence we gaurd against this by having this private Flag..
         bool                trackPosition = false;
@@ -303,7 +303,7 @@ namespace System.Windows.Forms {
                         RecreateHandle();
                     }
                 }
-                
+
             }
         }
 
@@ -355,22 +355,22 @@ namespace System.Windows.Forms {
                 SetDelayTime(NativeMethods.TTDT_INITIAL, value);
             }
         }
-        
+
         /// <devdoc>
         /// Indicates whether the ToolTip will be drawn by the system or the user.
         /// </devdoc>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
-        SRDescription(nameof(SR.ToolTipOwnerDrawDescr)) 
+        SRDescription(nameof(SR.ToolTipOwnerDrawDescr))
         ]
-        public bool OwnerDraw 
+        public bool OwnerDraw
         {
-            get 
+            get
             {
                 return ownerDraw;
             }
-            set 
+            set
             {
                 ownerDraw = value;
             }
@@ -508,7 +508,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        DefaultValue(""), 
+        DefaultValue(""),
         SRDescription(nameof(SR.ToolTipTitleDescr))
         ]
         public string ToolTipTitle
@@ -548,7 +548,7 @@ namespace System.Windows.Forms {
                     if (regions != null && regions.Length > 0) {
                         for (int i=0; i<regions.Length; i++) {
                             Control ctl = regions[i];
-                            
+
                             baseVar = ctl.TopLevelControlInternal;
                             if (baseVar != null) {
                                 break;
@@ -643,17 +643,17 @@ namespace System.Windows.Forms {
         ///    <para>Fires in OwnerDraw mode when the tooltip needs to be drawn.</para>
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)),SRDescription(nameof(SR.ToolTipDrawEventDescr))]
-        public event DrawToolTipEventHandler Draw 
+        public event DrawToolTipEventHandler Draw
         {
             add => onDraw += value;
             remove => onDraw -= value;
         }
-        
+
         /// <devdoc>
         ///    <para>Fires when the tooltip is just about to be shown.</para>
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)),SRDescription(nameof(SR.ToolTipPopupEventDescr))]
-        public event PopupEventHandler Popup 
+        public event PopupEventHandler Popup
         {
             add => onPopup += value;
             remove => onPopup -= value;
@@ -668,7 +668,7 @@ namespace System.Windows.Forms {
             delayTimes[NativeMethods.TTDT_AUTOPOP] = delayTimes[NativeMethods.TTDT_AUTOMATIC] * AUTOPOP_RATIO;
             delayTimes[NativeMethods.TTDT_INITIAL] = delayTimes[NativeMethods.TTDT_AUTOMATIC];
         }
-        
+
         private void HandleCreated(object sender, EventArgs eventargs) {
             // Reset the toplevel control when the owner's handle is recreated.
             ClearTopLevelControlEvents();
@@ -688,14 +688,14 @@ namespace System.Windows.Forms {
             if (!GetHandleCreated()) {
                 return;
             }
-           
+
             TreeView treeView = associatedControl as TreeView;
             if (treeView != null) {
                 if (treeView.ShowNodeToolTips) {
                     treeView.SetToolTip(this,GetToolTip(associatedControl));
                 }
             }
-            
+
             if (associatedControl is ToolBar) {
                ((ToolBar)associatedControl).SetToolTip(this);
             }
@@ -707,18 +707,18 @@ namespace System.Windows.Forms {
                     tabControl.SetToolTip(this, GetToolTip(associatedControl));
                 }
             }
-            
+
             if (associatedControl is ListView) {
                ((ListView)associatedControl).SetToolTip(this, GetToolTip(associatedControl));
             }
-            
+
             if (associatedControl is StatusBar) {
                 ((StatusBar)associatedControl).SetToolTip(this);
             }
 
             // Label now has its own Tooltip for AutoEllipsis...
             // So this control too falls in special casing...
-            // We need to disable the LABEL AutoEllipsis tooltip and show 
+            // We need to disable the LABEL AutoEllipsis tooltip and show
             // this tooltip always...
             if (associatedControl is Label) {
                 ((Label)associatedControl).SetToolTip(this);
@@ -741,25 +741,25 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        /// Fires the Draw event. 
+        /// Fires the Draw event.
         /// </devdoc>
-        private void OnDraw(DrawToolTipEventArgs e) 
+        private void OnDraw(DrawToolTipEventArgs e)
         {
-            if(onDraw != null) 
+            if(onDraw != null)
             {
-                onDraw(this,e); 
+                onDraw(this,e);
             }
         }
 
 
         /// <devdoc>
-        /// Fires the Popup event. 
+        /// Fires the Popup event.
         /// </devdoc>
-        private void OnPopup(PopupEventArgs e) 
+        private void OnPopup(PopupEventArgs e)
         {
-            if(onPopup != null) 
+            if(onPopup != null)
             {
-                onPopup(this,e); 
+                onPopup(this,e);
             }
         }
 
@@ -803,7 +803,7 @@ namespace System.Windows.Forms {
                 return;
             }
             IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
-                        
+
             try {
 
                 NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX();
@@ -826,7 +826,7 @@ namespace System.Windows.Forms {
                 style &= ~NativeMethods.WS_BORDER;
                 UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)style));
             }
-           
+
             // Setting the max width has the added benefit of enabling multiline
             // tool tips!
             //
@@ -890,7 +890,7 @@ namespace System.Windows.Forms {
                 DestroyRegion(ctls[i]);
             }
         }
-        
+
         private void SetToolInfo(Control ctl, string caption) {
             bool allocatedString;
             NativeMethods.TOOLINFO_TOOLTIP tool = GetTOOLINFO(ctl, caption, out allocatedString);
@@ -915,7 +915,7 @@ namespace System.Windows.Forms {
                 if(allocatedString && IntPtr.Zero != tool.lpszText) {
                     Marshal.FreeHGlobal(tool.lpszText);
                 }
-            }	
+            }
         }
 
         private void CreateRegion(Control ctl) {
@@ -973,7 +973,7 @@ namespace System.Windows.Forms {
             // when the toplevelControl is a form and is Modal, the Handle of the tooltip is releasedbefore we come here.
             // In such a case the tool wont get deleted from the tooltip.
             // So we dont check "Handle" in the handlesCreate but check it only foe Non-Nodal dialogs later
-            
+
             bool handlesCreated = ctl.IsHandleCreated
                                 && topLevelControl != null
                                 && topLevelControl.IsHandleCreated
@@ -984,7 +984,7 @@ namespace System.Windows.Forms {
             {
                 handlesCreated = handlesCreated && GetHandleCreated();
             }
-            
+
             if (created.ContainsKey(ctl)
                 && handlesCreated && !DesignMode) {
 
@@ -1000,7 +1000,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected override void Dispose(bool disposing) {
-            
+
             if (disposing) {
                 this.isDisposing = true;
                 try {
@@ -1025,7 +1025,7 @@ namespace System.Windows.Forms {
                 finally {
                     this.isDisposing = false;
                 }
-            }  
+            }
             base.Dispose(disposing);
         }
 
@@ -1084,11 +1084,11 @@ namespace System.Windows.Forms {
             //
             Control richParent = TopLevelControl;
             if (richParent != null && richParent.RightToLeft == RightToLeft.Yes && !ctl.IsMirrored) {
-                //Indicates that the ToolTip text will be displayed in the opposite direction 
-                //to the text in the parent window.                 
+                //Indicates that the ToolTip text will be displayed in the opposite direction
+                //to the text in the parent window.
                 ti.uFlags |= NativeMethods.TTF_RTLREADING;
             }
-            
+
             if (ctl is TreeView || ctl is ListView) {
                 TreeView tv = ctl as TreeView;
                 if (tv != null && tv.ShowNodeToolTips) {
@@ -1110,7 +1110,7 @@ namespace System.Windows.Forms {
                 allocatedString = true;
             }
 
-            
+
             return ti;
         }
 
@@ -1119,19 +1119,19 @@ namespace System.Windows.Forms {
             ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_TOOLTIP>();
             ti.hwnd = hWnd;
             ti.uFlags |= NativeMethods.TTF_IDISHWND | NativeMethods.TTF_TRANSPARENT | NativeMethods.TTF_SUBCLASS;
-                    
+
             // RightToLeft reading order
             //
             Control richParent = TopLevelControl;
             if (richParent != null && richParent.RightToLeft == RightToLeft.Yes) {
-                bool isWindowMirrored = ((unchecked((int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, hWnd), NativeMethods.GWL_STYLE)) & NativeMethods.WS_EX_LAYOUTRTL) == NativeMethods.WS_EX_LAYOUTRTL);            
-                //Indicates that the ToolTip text will be displayed in the opposite direction 
-                //to the text in the parent window.                 
+                bool isWindowMirrored = ((unchecked((int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, hWnd), NativeMethods.GWL_STYLE)) & NativeMethods.WS_EX_LAYOUTRTL) == NativeMethods.WS_EX_LAYOUTRTL);
+                //Indicates that the ToolTip text will be displayed in the opposite direction
+                //to the text in the parent window.
                 if (!isWindowMirrored) {
                     ti.uFlags |= NativeMethods.TTF_RTLREADING;
                 }
             }
-            
+
             ti.uId = ti.hwnd;
             return ti;
         }
@@ -1149,7 +1149,7 @@ namespace System.Windows.Forms {
         ]
         public string GetToolTip(Control control) {
             if (control == null) {
-                return string.Empty; 
+                return string.Empty;
             }
             TipInfo tt = (TipInfo)tools[control];
             if (tt == null || tt.Caption == null) {
@@ -1181,7 +1181,7 @@ namespace System.Windows.Forms {
                 }
                 return IntPtr.Zero;
             }
-            
+
             IntPtr baseHwnd = IntPtr.Zero;
 
             if (baseVar != null) {
@@ -1327,7 +1327,7 @@ namespace System.Windows.Forms {
         public void SetToolTip(Control control, string caption) {
 
             TipInfo info = new TipInfo(caption, TipInfo.Type.Auto);
-            SetToolTipInternal(control, info); 
+            SetToolTipInternal(control, info);
 
         }
 
@@ -1452,7 +1452,7 @@ namespace System.Windows.Forms {
                 Cursor currentCursor = Cursor.CurrentInternal;
                 Point cursorLocation = Cursor.Position;
                 Point p = cursorLocation;
-                
+
                 Screen screen = Screen.FromPoint(cursorLocation);
 
                 // Place the tool tip on the associated control if its not already there
@@ -1460,13 +1460,13 @@ namespace System.Windows.Forms {
                      cursorLocation.Y < r.top || cursorLocation.Y > r.bottom ) {
 
                     // calculate the dimensions of the visible rectangle which
-                    // is used to estimate the upper x,y of the tooltip placement                  
+                    // is used to estimate the upper x,y of the tooltip placement
                     NativeMethods.RECT visibleRect = new NativeMethods.RECT();
                     visibleRect.left = (r.left < screen.WorkingArea.Left) ? screen.WorkingArea.Left:r.left;
                     visibleRect.top = (r.top < screen.WorkingArea.Top) ? screen.WorkingArea.Top:r.top;
                     visibleRect.right = (r.right > screen.WorkingArea.Right) ? screen.WorkingArea.Right:r.right;
                     visibleRect.bottom = (r.bottom > screen.WorkingArea.Bottom) ? screen.WorkingArea.Bottom:r.bottom;
-                   
+
                     p.X = visibleRect.left + (visibleRect.right - visibleRect.left)/2;
                     p.Y = visibleRect.top + (visibleRect.bottom - visibleRect.top)/2;
                     associatedControl.PointToClient(p);
@@ -1476,7 +1476,7 @@ namespace System.Windows.Forms {
                     if (duration > 0) {
                        StartTimer(window, duration);
                     }
-                    
+
                 }
                 else {
 
@@ -1498,7 +1498,7 @@ namespace System.Windows.Forms {
                     }
                     SetToolTipInternal(associatedControl, tt);
                 }
-            }        
+            }
         }
 
 
@@ -1512,12 +1512,12 @@ namespace System.Windows.Forms {
             if (IsWindowActive(window)) {
                 ShowTooltip(text, window, 0);
             }
-            
+
         }
 
         /// <devdoc>
         ///    <para>
-        ///       Associates <see cref='System.Windows.Forms.ToolTip'/> with the specified control 
+        ///       Associates <see cref='System.Windows.Forms.ToolTip'/> with the specified control
         ///       and displays it for the specified duration.
         ///    </para>
         /// </devdoc>
@@ -1530,7 +1530,7 @@ namespace System.Windows.Forms {
                 ShowTooltip(text, window, duration);
             }
         }
-        
+
         /// <devdoc>
         ///    <para>
         ///       Associates <see cref='System.Windows.Forms.ToolTip'/> with the specified control and displays it.
@@ -1579,7 +1579,7 @@ namespace System.Windows.Forms {
         }
 
 
-        
+
         /// <devdoc>
         ///    <para>
         ///       Associates <see cref='System.Windows.Forms.ToolTip'/> with the specified control and displays it.
@@ -1831,11 +1831,11 @@ namespace System.Windows.Forms {
             {
                 return;
             }
-                
-            if (GetHandleCreated())  {                    
+
+            if (GetHandleCreated())  {
                 IntPtr hWnd = Control.GetSafeHandle(win);
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.TTM_TRACKACTIVATE, 0, GetWinTOOLINFO(hWnd));
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.TTM_DELTOOL, 0, GetWinTOOLINFO(hWnd));                   
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.TTM_DELTOOL, 0, GetWinTOOLINFO(hWnd));
             }
             StopTimer();
 
@@ -1859,12 +1859,12 @@ namespace System.Windows.Forms {
                     baseFrom.Deactivate -= new EventHandler(this.BaseFormDeactivate);
                 }
             }
-                
+
             // Clear off the toplevel control.
             ClearTopLevelControlEvents();
             topLevelControl = null;
         }
-        
+
         private void BaseFormDeactivate(object sender, System.EventArgs e){
             HideAllToolTips();
 
@@ -1934,7 +1934,7 @@ namespace System.Windows.Forms {
                 }
                 tt.Position = position;
                 tools[tool] = tt;
-                
+
                 IntPtr hWnd = Control.GetSafeHandle(win);
                 owners[hWnd] = win;
                 NativeMethods.TOOLINFO_TOOLTIP toolInfo = GetWinTOOLINFO(hWnd);
@@ -1954,7 +1954,7 @@ namespace System.Windows.Forms {
                     }
                 }
             }
-            
+
             if (tool != null) {
 
                 // Lets find the Form for associated Control ...
@@ -1964,7 +1964,7 @@ namespace System.Windows.Forms {
                     baseFrom.Deactivate += new EventHandler(this.BaseFormDeactivate);
                 }
             }
-            
+
         }
 
         /// <devdoc>
@@ -1973,7 +1973,7 @@ namespace System.Windows.Forms {
         private void StartTimer(IWin32Window owner, int interval) {
 
             if (timer == null) {
-                timer = new ToolTipTimer(owner);      
+                timer = new ToolTipTimer(owner);
                 // Add the timer handler
                 timer.Tick += new EventHandler(TimerHandler);
             }
@@ -1989,7 +1989,7 @@ namespace System.Windows.Forms {
             //so that a posted message doesn't null this
             //out during disposal.
             ToolTipTimer timerRef = timer;
-        
+
             if (timerRef != null) {
                 timerRef.Stop();
                 timerRef.Dispose();
@@ -2036,7 +2036,7 @@ namespace System.Windows.Forms {
             // re-adjust the Y position of the tool tip if it bleeds off the screen working area.
             if (moveToLocation.Y + tipSize.Height> screen.WorkingArea.Bottom) {
                 moveToLocation.Y = screen.WorkingArea.Bottom - tipSize.Height;
-            } 
+            }
 
             SafeNativeMethods.SetWindowPos(new HandleRef(this, this.Handle),
             NativeMethods.HWND_TOPMOST,
@@ -2059,11 +2059,11 @@ namespace System.Windows.Forms {
                 if (win == null) {
                     win = (IWin32Window)Control.FromHandle(ti.hwnd);
                 }
-                
+
                 if (win == null) {
                     return;
                 }
-                
+
                 TipInfo tt = (TipInfo)tools[win];
                 if (win == null || tt==null) {
                    return;
@@ -2073,7 +2073,7 @@ namespace System.Windows.Forms {
                 TreeView treeView = win as TreeView;
                 if (treeView != null) {
                     if (treeView.ShowNodeToolTips) {
-                        return; 
+                        return;
                     }
                 }
 
@@ -2091,11 +2091,11 @@ namespace System.Windows.Forms {
         ///     Handles the WM_MOUSEACTIVATE message.
         /// </devdoc>
         private void WmMouseActivate(ref Message msg) {
-            
+
             NativeMethods.TOOLINFO_TOOLTIP ti = new NativeMethods.TOOLINFO_TOOLTIP();
             ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_TOOLTIP>();
             int ret = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_GETCURRENTTOOL, 0, ti);
-            
+
             if (ret != 0) {
 
                 IWin32Window win = (IWin32Window)owners[ti.hwnd];
@@ -2147,14 +2147,14 @@ namespace System.Windows.Forms {
             NativeMethods.TOOLINFO_TOOLTIP ti = new NativeMethods.TOOLINFO_TOOLTIP();
             ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_TOOLTIP>();
             int ret = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_GETCURRENTTOOL, 0, ti);
-            
+
             if (ret != 0) {
 
                 IWin32Window win = (IWin32Window)owners[ti.hwnd];
                 if (win == null) {
                     win = (IWin32Window)Control.FromHandle(ti.hwnd);
                 }
-                
+
                 if (win == null) {
                     return;
                 }
@@ -2162,7 +2162,7 @@ namespace System.Windows.Forms {
                 Control toolControl = win as Control;
 
                 Size currentTooltipSize = r.Size;
-                PopupEventArgs e = new PopupEventArgs(win, toolControl, IsBalloon, currentTooltipSize); 
+                PopupEventArgs e = new PopupEventArgs(win, toolControl, IsBalloon, currentTooltipSize);
                 OnPopup(e);
 
                 DataGridView dataGridView = toolControl as DataGridView;
@@ -2199,7 +2199,7 @@ namespace System.Windows.Forms {
                     UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_SETMAXTIPWIDTH, 0, maxwidth);
                 }
 
-                if (e.Cancel) { 
+                if (e.Cancel) {
                     cancelled = true;
                     SafeNativeMethods.SetWindowPos(new HandleRef(this, this.Handle),
                     NativeMethods.HWND_TOPMOST,
@@ -2244,11 +2244,11 @@ namespace System.Windows.Forms {
             }
 
             NativeMethods.WINDOWPOS* wp = (NativeMethods.WINDOWPOS *)m.LParam;
-            
+
             Cursor currentCursor = Cursor.CurrentInternal;
             Point cursorPos = Cursor.Position;
 
-			
+
 
             NativeMethods.TOOLINFO_TOOLTIP ti = new NativeMethods.TOOLINFO_TOOLTIP();
             ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_TOOLTIP>();
@@ -2276,7 +2276,7 @@ namespace System.Windows.Forms {
                     TreeView treeView = win as TreeView;
                     if (treeView != null) {
                         if (treeView.ShowNodeToolTips) {
-                            return; 
+                            return;
                         }
                     }
                 }
@@ -2319,14 +2319,14 @@ namespace System.Windows.Forms {
                       wp->x = screen.WorkingArea.Right - wp->cx;
                    }
                    wp->y = tt.Position.Y;
-                   
+
                    if (wp->y + wp->cy > screen.WorkingArea.Bottom) {
                         wp->y = screen.WorkingArea.Bottom - wp->cy;
                    }
                 }
             }
 
-            m.Result = IntPtr.Zero; 
+            m.Result = IntPtr.Zero;
         }
 
         /// <devdoc>
@@ -2365,7 +2365,7 @@ namespace System.Windows.Forms {
                 // them from the tip control.
                 if ((tt.TipType & TipInfo.Type.Auto) == 0) {
 
-                     tools.Remove(control); 
+                     tools.Remove(control);
                      owners.Remove(win.Handle);
 
                      control.HandleCreated -= new EventHandler(this.HandleCreated);
@@ -2378,7 +2378,7 @@ namespace System.Windows.Forms {
                      }
                 }
                 else {
-                     // Clear all other flags except for the 
+                     // Clear all other flags except for the
                      // Auto flag to ensure automatic tips can still show
                      tt.TipType = TipInfo.Type.Auto;
                      tt.Position = Point.Empty;
@@ -2400,25 +2400,25 @@ namespace System.Windows.Forms {
                  if (nmhdr.code == NativeMethods.TTN_SHOW && !trackPosition) {
                      WmShow();
                  }
-                 else if (nmhdr.code == NativeMethods.TTN_POP) {                    
+                 else if (nmhdr.code == NativeMethods.TTN_POP) {
                     WmPop();
                     if (window != null) {
                         window.DefWndProc(ref msg);
                     }
-                 } 
-                 break;                
-            
+                 }
+                 break;
+
             case Interop.WindowMessages.WM_WINDOWPOSCHANGING:
                  WmWindowPosChanging(ref msg);
                  break;
-			
+
             case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
                  if (!WmWindowPosChanged() && window != null)
                  {
                     window.DefWndProc(ref msg);
                  }
                  break;
-					 
+
             case Interop.WindowMessages.WM_MOUSEACTIVATE:
                  WmMouseActivate(ref msg);
                  break;
@@ -2426,14 +2426,14 @@ namespace System.Windows.Forms {
             case Interop.WindowMessages.WM_MOVE:
                  WmMove();
                  break;
-            
+
             case NativeMethods.TTM_WINDOWFROMPOINT:
                 WmWindowFromPoint(ref msg);
                 break;
-   
+
             case Interop.WindowMessages.WM_PRINTCLIENT:
                 goto case Interop.WindowMessages.WM_PAINT;
-                
+
             case Interop.WindowMessages.WM_PAINT:
                 if (ownerDraw && !isBalloon && !trackPosition)
                 {
@@ -2466,9 +2466,9 @@ namespace System.Windows.Forms {
                                 font = Control.DefaultFont;
                             }
 
-                            OnDraw(new DrawToolTipEventArgs(g, win, ac, bounds, GetToolTip(ac), 
+                            OnDraw(new DrawToolTipEventArgs(g, win, ac, bounds, GetToolTip(ac),
                                                             BackColor, ForeColor, font));
-    
+
                             break;
                         }
                     }
@@ -2497,8 +2497,8 @@ namespace System.Windows.Forms {
             internal ToolTipNativeWindow(ToolTip control) {
                 this.control = control;
             }
-            
-        
+
+
         protected override void WndProc(ref Message m) {
             if (control != null) {
             control.WndProc(ref m);
@@ -2525,13 +2525,13 @@ namespace System.Windows.Forms {
 
            [Flags]
            public enum Type
-           { 
+           {
                None = 0x0000,
                Auto = 0x0001,
                Absolute = 0x0002,
                SemiAbsolute = 0x0004
            }
-           
+
            public  Type     TipType = Type.Auto;
            private string   caption;
            private string   designerText;

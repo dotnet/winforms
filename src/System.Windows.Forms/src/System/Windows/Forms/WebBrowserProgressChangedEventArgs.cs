@@ -17,12 +17,12 @@ namespace System.Windows.Forms
             CurrentProgress = currentProgress;
             MaximumProgress = maximumProgress;
         }
-        
+
         /// <devdoc>
         /// Specifies current number of bytes donwloaded. CurrentProgress/MaximumProgress*100 = progress percentage.
         /// </devdoc>
         public long CurrentProgress { get; }
-        
+
         /// <devdoc>
         /// Specifies total number of bytes of item being downloaded.
         /// CurrentProgress/MaximumProgress*100 = progress percentage.

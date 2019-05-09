@@ -12,13 +12,13 @@ namespace System.Windows.Forms.PropertyGridInternal {
     using System.IO;
     using System.Collections;
     using System.Globalization;
-    using System.Reflection;    
+    using System.Reflection;
     using System.ComponentModel.Design;
     using System.ComponentModel.Design.Serialization;
     using System.Windows.Forms;
     using System.Drawing;
     using Microsoft.Win32;
-    
+
     internal class MergePropertyDescriptor : PropertyDescriptor {
 
         private PropertyDescriptor[] descriptors;
@@ -35,7 +35,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         private MultiMergeCollection collection;
 
-        
+
         public MergePropertyDescriptor(PropertyDescriptor[] descriptors) : base(descriptors[0].Name, null)  {
             this.descriptors = descriptors;
         }
@@ -100,7 +100,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         ///       indicating whether this property is read-only.
         ///    </para>
         /// </devdoc>
-        public override bool IsReadOnly { 
+        public override bool IsReadOnly {
             get {
                 if (readOnly == TriState.Unknown) {
                     readOnly = TriState.No;
@@ -115,14 +115,14 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-   
+
         /// <devdoc>
         ///    <para>
         ///       When overridden in a derived class,
         ///       gets the type of the property.
         ///    </para>
         /// </devdoc>
-        public override Type PropertyType { 
+        public override Type PropertyType {
             get {
                 return descriptors[0].PropertyType;
             }
@@ -152,7 +152,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                          break;
                      }
                  }
-                 
+
              }
              return (canReset == TriState.Yes);
         }
@@ -203,7 +203,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
             }
 
-            
+
 
             // How about serialization?
             if (clonedValue == null && type.IsSerializable) {
@@ -268,7 +268,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         public object GetValue(Array components, out bool allEqual) {
             allEqual = true;
             object obj = descriptors[0].GetValue(GetPropertyOwnerForComponent(components, 0));
-                    
+
             if (obj is ICollection) {
                if (collection == null) {
                    collection = new MultiMergeCollection((ICollection)obj);
@@ -280,7 +280,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                    collection.SetItems((ICollection)obj);
                }
             }
-            
+
             for (int i = 1; i < descriptors.Length; i++) {
                 object objCur = descriptors[i].GetValue(GetPropertyOwnerForComponent(components, i));
 
@@ -292,7 +292,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
                 else if ((obj == null && objCur == null) ||
                          (obj != null && obj.Equals(objCur))) {
-                
+
                    continue;
                 }
                 else {
@@ -300,11 +300,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     return null;
                 }
             }
-            
+
             if (allEqual && collection != null && collection.Count == 0) {
                 return null;
             }
-            
+
             return (collection != null ? collection : obj);
         }
 
@@ -335,7 +335,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
         private void SetCollectionValues(Array a, IList listValue) {
-            
+
             try {
                 if (collection != null) {
                    collection.Locked = true;
@@ -343,16 +343,16 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
                 // now we have to copy the value into each property.
                 object[] values = new object[listValue.Count];
-                
+
                 listValue.CopyTo(values, 0);
-                
+
                 for (int i = 0; i < descriptors.Length; i++) {
                     IList propList = descriptors[i].GetValue(GetPropertyOwnerForComponent(a, i)) as IList;
 
                     if (propList == null) {
                        continue;
                     }
-                    
+
                     propList.Clear();
                     foreach (object val in values) {
                         propList.Add(val);
@@ -407,14 +407,14 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
         private class MultiMergeCollection : ICollection {
-        
+
             private object[] items;
             private bool     locked;
-            
+
             public MultiMergeCollection(ICollection original) {
                SetItems(original);
             }
-            
+
             /// <devdoc>
             ///     Retrieves the number of items.
             /// </devdoc>
@@ -428,8 +428,8 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     }
                 }
             }
-            
-            
+
+
             /// <devdoc>
             ///     Prevents the contents of the collection from being re-initialized;
             /// </devdoc>
@@ -453,13 +453,13 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     return false;
                 }
             }
-            
+
             public void CopyTo(Array array, int index) {
                if (items == null) return;
-               
+
                Array.Copy(items, 0, array, index, items.Length);
             }
-            
+
             public IEnumerator GetEnumerator(){
                if (items != null) {
                   return items.GetEnumerator();
@@ -468,35 +468,35 @@ namespace System.Windows.Forms.PropertyGridInternal {
                   return new object[0].GetEnumerator();
                }
             }
-            
+
             /// <devdoc>
             /// Ensures that the new collection equals the exisitng one.
             /// Otherwise, it wipes out the contents of the new collection.
             /// </devdoc>
             public bool MergeCollection(ICollection newCollection) {
-                
+
                 if (locked) {
                    return true;
                 }
-               
+
                 if (items.Length != newCollection.Count) {
                      items = new object[0];
                      return false;
                 }
-                
+
                 object[] newItems = new object[newCollection.Count];
                 newCollection.CopyTo(newItems, 0);
                 for (int i = 0;i < newItems.Length; i++) {
                      if (((newItems[i] == null) != (items[i] == null)) ||
                          (items[i] != null && !items[i].Equals(newItems[i]))){
                            items = new object[0];
-                           return false;  
+                           return false;
                          }
-                         
+
                 }
                 return true;
             }
-            
+
             public void SetItems(ICollection collection) {
                 if (locked) {
                   return;
@@ -504,7 +504,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 items = new object[collection.Count];
                 collection.CopyTo(items, 0);
             }
-            
+
         }
 
         private class MergedAttributeCollection : AttributeCollection {
@@ -512,7 +512,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
             private AttributeCollection[] attributeCollections = null;
             private IDictionary             foundAttributes = null;
-            
+
             public MergedAttributeCollection(MergePropertyDescriptor owner) : base((Attribute[])null) {
                 this.owner = owner;
             }
@@ -532,9 +532,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     attrCollection.CopyTo(collections[i], 0);
                     Array.Sort(collections[i], GridEntry.AttributeTypeSorter);
                 }
-                
+
                 ArrayList mergedList = new ArrayList();
-    
+
                 // merge the sorted lists -- note that lists aren't fully sorted just by
                 // Attribute.TypeId
                 //
@@ -543,35 +543,35 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     Attribute pivotAttr = collections[0][i];
                     bool match = true;
                     for (int j = 1; j < collections.Length; j++) {
-    
+
                         if (posArray[j] >= collections[j].Length) {
                             match = false;
                             break;
                         }
-    
+
                         // check to see if we're on a match
                         //
                         if (pivotAttr.Equals(collections[j][posArray[j]])) {
                             posArray[j] += 1;
                             continue;
                         }
-    
+
                         int jPos = posArray[j];
                         Attribute jAttr = collections[j][jPos];
-    
+
                         match = false;
-    
+
                         // if we aren't on a match, check all the items until we're past
                         // where the matching item would be
                         while (GridEntry.AttributeTypeSorter.Compare(jAttr, pivotAttr) <= 0) {
-                            
+
                             // got a match!
                             if (pivotAttr.Equals(jAttr)) {
                                 posArray[j] = jPos + 1;
                                 match = true;
                                 break;
                             }
-    
+
                             // try again
                             jPos++;
                             if (jPos < collections[j].Length) {
@@ -581,20 +581,20 @@ namespace System.Windows.Forms.PropertyGridInternal {
                                 break;
                             }
                         }
-    
+
                         // if we got here, there is no match, quit for this guy
                         if (!match) {
                             posArray[j] = jPos;
                             break;
                         }
                     }
-    
+
                     // do we have a match?
                     if (match) {
                         mergedList.Add(pivotAttr);
                     }
                 }
-    
+
                 // create our merged array
                 Attribute[] mergedAttrs = new Attribute[mergedList.Count];
                 mergedList.CopyTo(mergedAttrs, 0);
@@ -627,7 +627,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 if (value == null) {
                     return null;
                 }
-                
+
                 for (int i = 1; i < attributeCollections.Length; i++) {
                     Attribute newValue = attributeCollections[i][attributeType];
                     if (!value.Equals(newValue)) {

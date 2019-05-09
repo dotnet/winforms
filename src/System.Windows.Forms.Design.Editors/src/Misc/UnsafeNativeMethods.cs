@@ -50,7 +50,7 @@ namespace System.Windows.Forms.Design
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern int GetWindowText(HandleRef hWnd, StringBuilder lpString, int nMaxCount);
-        
+
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int MsgWaitForMultipleObjectsEx(int nCount, IntPtr pHandles, int dwMilliseconds,
             int dwWakeMask, int dwFlags);
@@ -73,7 +73,7 @@ namespace System.Windows.Forms.Design
 
         [DllImport(ExternDll.User32, ExactSpelling = true, EntryPoint = "GetDC", CharSet = CharSet.Auto)]
         private static extern IntPtr IntGetDC(HandleRef hWnd);
-        
+
         public static IntPtr GetDC(HandleRef hWnd)
         {
             return Interop.HandleCollector.Add(IntGetDC(hWnd), Interop.CommonHandles.HDC);
@@ -101,7 +101,7 @@ namespace System.Windows.Forms.Design
         public static extern IntPtr SetWindowsHookEx(int hookid, HookProc pfnhook, HandleRef hinst, int threadid);
 
         //GetWindowLong won't work correctly for 64-bit: we should use GetWindowLongPtr instead.  On
-        //32-bit, GetWindowLongPtr is just #defined as GetWindowLong.  GetWindowLong really should 
+        //32-bit, GetWindowLongPtr is just #defined as GetWindowLong.  GetWindowLong really should
         //take/return int instead of IntPtr/HandleRef, but since we're running this only for 32-bit
         //it'll be OK.
         public static IntPtr GetWindowLong(HandleRef hWnd, int nIndex)
@@ -118,13 +118,13 @@ namespace System.Windows.Forms.Design
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto, EntryPoint = "GetWindowLongPtr")]
         public static extern IntPtr GetWindowLongPtr64(HandleRef hWnd, int nIndex);
 
-        //This is called, and needs to be owned (unmanaged SetWindowLong) vs. parented (managed 
+        //This is called, and needs to be owned (unmanaged SetWindowLong) vs. parented (managed
         //Control.Parent).
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [SuppressMessage("Microsoft.Usage", "CA2205:UseManagedEquivalentsOfWin32Api")]
         [SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable")]
         //SetWindowLong won't work correctly for 64-bit: we should use SetWindowLongPtr instead.  On
-        //32-bit, SetWindowLongPtr is just #defined as SetWindowLong.  SetWindowLong really should 
+        //32-bit, SetWindowLongPtr is just #defined as SetWindowLong.  SetWindowLong really should
         //take/return int instead of IntPtr/HandleRef, but since we're running this only for 32-bit
         //it'll be OK.
         public static IntPtr SetWindowLong(HandleRef hWnd, int nIndex, HandleRef dwNewLong)

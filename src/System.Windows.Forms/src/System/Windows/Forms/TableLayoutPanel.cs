@@ -20,7 +20,7 @@ namespace System.Windows.Forms {
     [ProvideProperty("Row", typeof(Control))]
     [ProvideProperty("Column", typeof(Control))]
     [ProvideProperty("CellPosition", typeof(Control))]
-    [DefaultProperty(nameof(ColumnCount))]    
+    [DefaultProperty(nameof(ColumnCount))]
     [DesignerSerializer("System.Windows.Forms.Design.TableLayoutPanelCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign)]
     [Docking(DockingBehavior.Never)]
     [Designer("System.Windows.Forms.Design.TableLayoutPanelDesigner, " + AssemblyRef.SystemDesign)]
@@ -34,7 +34,7 @@ namespace System.Windows.Forms {
         public TableLayoutPanel() {
             _tableLayoutSettings = TableLayout.CreateSettings(this);
         }
-        
+
         public override LayoutEngine LayoutEngine {
             get { return TableLayout.Instance; }
         }
@@ -51,22 +51,22 @@ namespace System.Windows.Forms {
             set {
                 if (value != null && value.IsStub) {
                     // WINRES only scenario.
-                    // we only support table layout settings that have been created from a type converter.  
+                    // we only support table layout settings that have been created from a type converter.
                     // this is here for localization (WinRes) support.
                     using (new LayoutTransaction(this, this, PropertyNames.LayoutSettings)) {
                         // apply RowStyles, ColumnStyles, Row & Column assignments.
-                        _tableLayoutSettings.ApplySettings(value);  
+                        _tableLayoutSettings.ApplySettings(value);
                     }
                 }
                 else {
                     throw new NotSupportedException(SR.TableLayoutSettingSettingsIsNotSupported);
                 }
-                
+
             }
         }
 
-    
-        
+
+
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -74,28 +74,28 @@ namespace System.Windows.Forms {
         ]
         public new BorderStyle BorderStyle {
             get { return base.BorderStyle; }
-            set { 
-                base.BorderStyle = value; 
+            set {
+                base.BorderStyle = value;
                 Debug.Assert(BorderStyle == value, "BorderStyle should be the same as we set it");
             }
         }
 
 
         [
-        DefaultValue(TableLayoutPanelCellBorderStyle.None), 
-        SRCategory(nameof(SR.CatAppearance)), 
+        DefaultValue(TableLayoutPanelCellBorderStyle.None),
+        SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.TableLayoutPanelCellBorderStyleDescr)),
         Localizable(true)
         ]
         public TableLayoutPanelCellBorderStyle CellBorderStyle {
             get { return _tableLayoutSettings.CellBorderStyle; }
-            set { 
-                _tableLayoutSettings.CellBorderStyle = value; 
+            set {
+                _tableLayoutSettings.CellBorderStyle = value;
 
                 // PERF: dont turn on ResizeRedraw unless we know we need it.
                 if (value != TableLayoutPanelCellBorderStyle.None) {
                     SetStyle(ControlStyles.ResizeRedraw, true);
-                }                
+                }
                 this.Invalidate();
                 Debug.Assert(CellBorderStyle == value, "CellBorderStyle should be the same as we set it");
             }
@@ -111,7 +111,7 @@ namespace System.Windows.Forms {
         public new TableLayoutControlCollection Controls {
             get { return (TableLayoutControlCollection)base.Controls; }
         }
-        
+
         /// <devdoc>
         /// This sets the maximum number of columns allowed on this table instead of allocating
         /// actual spaces for these columns. So it is OK to set ColumnCount to Int32.MaxValue without
@@ -123,12 +123,12 @@ namespace System.Windows.Forms {
         [Localizable(true)]
         public int ColumnCount {
             get { return _tableLayoutSettings.ColumnCount; }
-            set { 
-                _tableLayoutSettings.ColumnCount = value; 
+            set {
+                _tableLayoutSettings.ColumnCount = value;
                 Debug.Assert(ColumnCount == value, "ColumnCount should be the same as we set it");
             }
         }
- 
+
         /// <devdoc>
         ///       Specifies if a TableLayoutPanel will gain additional rows or columns once its existing cells
         ///       become full.  If the value is 'FixedSize' then the TableLayoutPanel will throw an exception
@@ -175,7 +175,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatLayout))]
         [DisplayName("Columns")]
         [Browsable(false)]
-        [MergableProperty(false)]        
+        [MergableProperty(false)]
         public TableLayoutColumnStyleCollection ColumnStyles {
             get { return _tableLayoutSettings.ColumnStyles; }
         }
@@ -191,7 +191,7 @@ namespace System.Windows.Forms {
             TableLayoutControlCollection collection = this.Controls;
             return collection != null && collection.Count > 0;
         }
-        
+
         #region Extended Properties
         bool IExtenderProvider.CanExtend(object obj) {
             Control control = obj as Control;
@@ -219,7 +219,7 @@ namespace System.Windows.Forms {
         public int GetRowSpan(Control control) {
             return _tableLayoutSettings.GetRowSpan(control);
         }
-        
+
         public void SetRowSpan(Control control, int value) {
             // layout.SetRowSpan() throws ArgumentException if out of range.
             _tableLayoutSettings.SetRowSpan(control, value);
@@ -257,7 +257,7 @@ namespace System.Windows.Forms {
             _tableLayoutSettings.SetCellPosition(control, position);
         }
 
-        
+
 
         //get the column position of the control
         [DefaultValue(-1)]  //if change this value, also change the SerializeViaAdd in TableLayoutControlCollectionCodeDomSerializer
@@ -268,13 +268,13 @@ namespace System.Windows.Forms {
         public int GetColumn(Control control) {
             return _tableLayoutSettings.GetColumn(control);
         }
-        
+
         //set the column position of the control
         public void SetColumn(Control control, int column) {
             _tableLayoutSettings.SetColumn(control, column);
             Debug.Assert(GetColumn(control) == column, "GetColumn should be the same as we set it");
         }
-        
+
         /// <devdoc>
         /// get the control which covers the specified row and column. return null if we can't find one
         /// </devdoc>
@@ -286,41 +286,41 @@ namespace System.Windows.Forms {
         public TableLayoutPanelCellPosition GetPositionFromControl (Control control) {
             return _tableLayoutSettings.GetPositionFromControl(control);
         }
-        
+
         /// <devdoc>
         /// This returns an array representing the widths (in pixels) of the columns in the TableLayoutPanel.
-        /// </devdoc>        
+        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public int[] GetColumnWidths() {
              TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(this);
              if (containerInfo.Columns == null) {
                  return new int[0];
              }
-             
+
              int[] cw = new int[containerInfo.Columns.Length];
              for(int i = 0; i < containerInfo.Columns.Length; i++) {
                  cw[i] = containerInfo.Columns[i].MinSize;
              }
              return cw;
-        }      
-        
+        }
+
         /// <devdoc>
         /// This returns an array representing the heights (in pixels) of the rows in the TableLayoutPanel.
-        /// </devdoc>        
+        /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public int[] GetRowHeights() {
             TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(this);
             if (containerInfo.Rows == null) {
                 return new int[0];
             }
-            
+
             int[] rh = new int[containerInfo.Rows.Length];
             for(int i = 0; i < containerInfo.Rows.Length; i++) {
                 rh[i] = containerInfo.Rows[i].MinSize;
             }
             return rh;
         }
-		
+
 
         #endregion
 
@@ -341,7 +341,7 @@ namespace System.Windows.Forms {
             base.OnLayout(levent);
             this.Invalidate();
         }
-        
+
 
         protected virtual void OnCellPaint(TableLayoutCellPaintEventArgs e) {
             TableLayoutCellPaintEventHandler handler = (TableLayoutCellPaintEventHandler)Events[EventCellPaint];
@@ -349,22 +349,22 @@ namespace System.Windows.Forms {
                 handler(this, e);
             }
         }
-        
+
         protected override void OnPaintBackground(PaintEventArgs e) {
             base.OnPaintBackground(e);
-            
-           
+
+
 
             // paint borderstyles on top of the background image in WM_ERASEBKGND
-            
+
             int cellBorderWidth = this.CellBorderWidth;
             TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(this);
             TableLayout.Strip[] colStrips = containerInfo.Columns;
             TableLayout.Strip[] rowStrips = containerInfo.Rows;
             TableLayoutPanelCellBorderStyle cellBorderStyle = this.CellBorderStyle;
 
-            
-            
+
+
             if (colStrips == null || rowStrips == null) {
                 return;
             }
@@ -378,25 +378,25 @@ namespace System.Windows.Forms {
             Rectangle clipRect = e.ClipRectangle;
 
             //leave the space for the border
-            int startx;  
+            int startx;
             bool isRTL = (RightToLeft == RightToLeft.Yes);
             if (isRTL) {
                 startx = displayRect.Right - (cellBorderWidth / 2);
             }
             else {
-                startx = displayRect.X + (cellBorderWidth / 2);  
+                startx = displayRect.X + (cellBorderWidth / 2);
             }
-            
-            for (int i = 0; i < cols; i++) { 
+
+            for (int i = 0; i < cols; i++) {
                 int starty = displayRect.Y + (cellBorderWidth / 2);
 
                 if (isRTL) {
                     startx -= colStrips[i].MinSize;
                 }
-                
-                for (int j = 0; j < rows; j++) {                 
-                    Rectangle outsideCellBounds = new Rectangle(startx, starty, ((TableLayout.Strip)colStrips[i]).MinSize, ((TableLayout.Strip)rowStrips[j]).MinSize);                
-                 
+
+                for (int j = 0; j < rows; j++) {
+                    Rectangle outsideCellBounds = new Rectangle(startx, starty, ((TableLayout.Strip)colStrips[i]).MinSize, ((TableLayout.Strip)rowStrips[j]).MinSize);
+
                     Rectangle insideCellBounds = new Rectangle(outsideCellBounds.X + (cellBorderWidth + 1) / 2, outsideCellBounds.Y + (cellBorderWidth + 1)/ 2, outsideCellBounds.Width - (cellBorderWidth + 1) / 2, outsideCellBounds.Height - (cellBorderWidth + 1) / 2);
 
                     if (clipRect.IntersectsWith(insideCellBounds)) {
@@ -405,7 +405,7 @@ namespace System.Windows.Forms {
                             OnCellPaint(pcea);
                         }
                         // paint the table border on top.
-                        ControlPaint.PaintTableCellBorder(cellBorderStyle, g, outsideCellBounds);  
+                        ControlPaint.PaintTableCellBorder(cellBorderStyle, g, outsideCellBounds);
                     }
                     starty += rowStrips[j].MinSize;
                     // Only sum this up once...
@@ -413,14 +413,14 @@ namespace System.Windows.Forms {
                         totalColumnHeights += rowStrips[j].MinSize;
                     }
                 }
-                
+
                 if (!isRTL) {
                     startx += colStrips[i].MinSize;
-                }                    
+                }
                 totalColumnWidths += colStrips[i].MinSize;
             }
 
-            
+
             if (!HScroll && !VScroll && cellBorderStyle != TableLayoutPanelCellBorderStyle.None) {
                 Rectangle tableBounds = new Rectangle(cellBorderWidth/2 + displayRect.X, cellBorderWidth/2 + displayRect.Y, displayRect.Width - cellBorderWidth, displayRect.Height - cellBorderWidth);
                 // paint the border of the table if we are not auto scrolling.
@@ -429,21 +429,21 @@ namespace System.Windows.Forms {
                     g.DrawLine(SystemPens.ControlDark, tableBounds.Right, tableBounds.Y, tableBounds.Right, tableBounds.Bottom);
                     g.DrawLine(SystemPens.ControlDark, tableBounds.X, tableBounds.Y + tableBounds.Height - 1, tableBounds.X + tableBounds.Width - 1, tableBounds.Y + tableBounds.Height - 1);
                 }
-                else if (cellBorderStyle == TableLayoutPanelCellBorderStyle.Outset) {  
+                else if (cellBorderStyle == TableLayoutPanelCellBorderStyle.Outset) {
                     using (Pen pen = new Pen(SystemColors.Window)) {
                         g.DrawLine(pen, tableBounds.X + tableBounds.Width - 1, tableBounds.Y, tableBounds.X + tableBounds.Width - 1, tableBounds.Y + tableBounds.Height - 1);
                         g.DrawLine(pen, tableBounds.X, tableBounds.Y + tableBounds.Height - 1, tableBounds.X + tableBounds.Width - 1, tableBounds.Y + tableBounds.Height - 1);
                     }
                 }
                 else {
-                    ControlPaint.PaintTableCellBorder(cellBorderStyle, g, tableBounds);     
+                    ControlPaint.PaintTableCellBorder(cellBorderStyle, g, tableBounds);
                 }
                 ControlPaint.PaintTableControlBorder(cellBorderStyle, g, displayRect);
             }
             else {
                 ControlPaint.PaintTableControlBorder(cellBorderStyle, g, displayRect);
             }
-            
+
         }
 
 
@@ -459,28 +459,28 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified) {
             base.ScaleControl(factor, specified);
-            ScaleAbsoluteStyles(factor);           
+            ScaleAbsoluteStyles(factor);
         }
 
         private void ScaleAbsoluteStyles(SizeF factor) {
             TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(this);
             int i = 0;
-            
-             // The last row/column can be larger than the 
+
+             // The last row/column can be larger than the
              // absolutely styled column width.
              int lastRowHeight = -1;
              int lastRow = containerInfo.Rows.Length -1;
              if (containerInfo.Rows.Length > 0) {
                 lastRowHeight = containerInfo.Rows[lastRow].MinSize;
              }
-    
+
              int lastColumnHeight = -1;
              int lastColumn = containerInfo.Columns.Length -1;
              if (containerInfo.Columns.Length > 0) {
                 lastColumnHeight = containerInfo.Columns[containerInfo.Columns.Length -1].MinSize;
-             }  
-    
-             foreach(ColumnStyle cs in ColumnStyles) {               
+             }
+
+             foreach(ColumnStyle cs in ColumnStyles) {
                  if (cs.SizeType == SizeType.Absolute){
                      if (i == lastColumn && lastColumnHeight > 0) {
                           // the last column is typically expanded to fill the table. use the actual
@@ -493,9 +493,9 @@ namespace System.Windows.Forms {
                  }
                  i++;
              }
-    
+
              i = 0;
-            
+
              foreach(RowStyle rs in RowStyles) {
                  if (rs.SizeType == SizeType.Absolute) {
                      if (i == lastRow && lastRowHeight > 0) {
@@ -511,7 +511,7 @@ namespace System.Windows.Forms {
 
         }
 
-        #endregion 
+        #endregion
     }
 
     /// <devdoc>
@@ -539,4 +539,4 @@ namespace System.Windows.Forms {
             Container.SetRow(control, row);
         }
     }
-}   
+}

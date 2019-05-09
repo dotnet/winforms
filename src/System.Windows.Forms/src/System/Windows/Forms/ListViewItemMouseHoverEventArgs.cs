@@ -16,7 +16,7 @@ namespace System.Windows.Forms
         {
             Item = item;
         }
-        
+
         public ListViewItem Item { get; }
     }
 }

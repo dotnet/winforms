@@ -22,7 +22,7 @@ namespace System.Experimental.Gdi
     {
         // Unknown device
         Unknown     = 0x00,
-        
+
         // Display DC - obtained from GetDC/GetDCEx/BeginPaint.
         Display     = 0x01,
 

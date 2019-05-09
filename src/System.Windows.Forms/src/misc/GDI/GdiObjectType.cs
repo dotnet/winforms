@@ -19,7 +19,7 @@ namespace System.Experimental.Gdi
     internal
 #endif
     enum GdiObjectType
-    {   
+    {
         Pen                 = 1,
         Brush               = 2,
         DisplayDC           = 3,
@@ -40,7 +40,7 @@ namespace System.Experimental.Gdi
         OBJ_BRUSH     = 2,
         OBJ_FONT      = 6,
         OBJ_EXTPEN    = 11,
-            
+
         OBJ_DC        = 3,
         OBJ_METADC    = 4,
         OBJ_MEMDC     = 10,

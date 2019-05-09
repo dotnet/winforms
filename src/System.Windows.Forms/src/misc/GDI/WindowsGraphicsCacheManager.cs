@@ -35,8 +35,8 @@ namespace System.Experimental.Gdi
 #endif
     class WindowsGraphicsCacheManager
     {
-        // From MSDN: Do not specify initial values for fields marked with ThreadStaticAttribute, because such initialization occurs only once, 
-        // when the class constructor executes, and therefore affects only one thread. 
+        // From MSDN: Do not specify initial values for fields marked with ThreadStaticAttribute, because such initialization occurs only once,
+        // when the class constructor executes, and therefore affects only one thread.
 
         // WindowsGraphics object used for measuring text based on the screen DC.  TLS to avoid synchronization issues.
         [ThreadStatic]
@@ -47,7 +47,7 @@ namespace System.Experimental.Gdi
         [ThreadStatic]
         private static int currentIndex;
         [ThreadStatic]
-        private static List<KeyValuePair<Font, WindowsFont>> windowsFontCache;        
+        private static List<KeyValuePair<Font, WindowsFont>> windowsFontCache;
 
         /// <devdoc>
         ///     Static constructor since this is a utility class.
@@ -66,11 +66,11 @@ namespace System.Experimental.Gdi
         /// <devdoc>
         ///     Initializes the WindowsFontCache object.
         /// </devdoc>
-        private static List<KeyValuePair<Font, WindowsFont>> WindowsFontCache 
+        private static List<KeyValuePair<Font, WindowsFont>> WindowsFontCache
         {
-            get 
+            get
             {
-                if (windowsFontCache == null) 
+                if (windowsFontCache == null)
                 {
                     currentIndex = -1;
                     windowsFontCache = new List<KeyValuePair<Font, WindowsFont>>(CacheSize);
@@ -79,17 +79,17 @@ namespace System.Experimental.Gdi
                 return windowsFontCache;
             }
         }
-        
+
         /// <devdoc>
-        ///     Get the cached screen (primary monitor) memory dc.  
+        ///     Get the cached screen (primary monitor) memory dc.
         ///     Users of this class should always use this property to get the WindowsGraphics and never cache it, it could be mistakenly
-        ///     disposed and we would recreate it if needed.  
+        ///     disposed and we would recreate it if needed.
         ///     Users should not dispose of the WindowsGraphics so it can be reused for the lifetime of the thread.
         /// </devdoc>
         public static WindowsGraphics MeasurementGraphics
         {
-            
-            
+
+
             get
             {
                 if (measurementGraphics == null || measurementGraphics.DeviceContext == null /*object disposed*/)
@@ -108,7 +108,7 @@ namespace System.Experimental.Gdi
 #if OPTIMIZED_MEASUREMENTDC
         // in some cases, we dont want to demand create MeasurementGraphics, as creating it has
         // re-entrant side effects.
-        internal static WindowsGraphics GetCurrentMeasurementGraphics() 
+        internal static WindowsGraphics GetCurrentMeasurementGraphics()
         {
             return measurementGraphics;
         }
@@ -119,16 +119,16 @@ namespace System.Experimental.Gdi
         ///     Get the cached WindowsFont associated with the specified font if one exists, otherwise create one and
         ///     add it to the cache.
         /// </devdoc>
-        
-        
+
+
         public static WindowsFont GetWindowsFont(Font font)
-        {    
+        {
             return GetWindowsFont(font, WindowsFontQuality.Default);
         }
 
 
-        
-        
+
+
         public static WindowsFont GetWindowsFont(Font font, WindowsFontQuality fontQuality)
         {
             if( font == null )
@@ -152,11 +152,11 @@ namespace System.Experimental.Gdi
                     Debug.Assert(WindowsFontCache[index].Value.Hfont != IntPtr.Zero, "Cached WindowsFont was disposed, enable GDI_FINALIZATION_WATCH to track who did it!");
 
                     WindowsFont wf = WindowsFontCache[index].Value;
-                    if(wf.Quality == fontQuality) 
+                    if(wf.Quality == fontQuality)
                     {
                         return wf;
                     }
-                } 
+                }
 
                 index--;
                 count++;
@@ -171,7 +171,7 @@ namespace System.Experimental.Gdi
 
             WindowsFont winFont = WindowsFont.FromFont(font, fontQuality);
             KeyValuePair<Font, WindowsFont> newEntry = new KeyValuePair<Font, WindowsFont>(font, winFont);
-        
+
             currentIndex++;
 
             if (currentIndex == CacheSize)
@@ -180,13 +180,13 @@ namespace System.Experimental.Gdi
             }
 
             if (WindowsFontCache.Count == CacheSize)  // No more room, update current index.
-            {                
-                WindowsFont wfont = null; 
+            {
+                WindowsFont wfont = null;
 
-                // Go through the existing fonts in the cache, and see if any 
-                // are not in use by a DC.  If one isn't, replace that.  If 
+                // Go through the existing fonts in the cache, and see if any
+                // are not in use by a DC.  If one isn't, replace that.  If
                 // all are in use, new up a new font and do not cache it.
-                
+
                 bool finished = false;
                 int startIndex = currentIndex;
                 int loopIndex = startIndex + 1;
@@ -198,7 +198,7 @@ namespace System.Experimental.Gdi
                     if (loopIndex == startIndex) {
                         finished = true;
                     }
-                    
+
                     wfont = WindowsFontCache[loopIndex].Value;
                     if (!DeviceContexts.IsFontInUse(wfont)) {
                         currentIndex = loopIndex;
@@ -210,12 +210,12 @@ namespace System.Experimental.Gdi
                         wfont = null;
                     }
                 }
-                    
+
                 if (wfont != null) {
                     WindowsFontCache[currentIndex] = newEntry;
                     winFont.OwnedByCacheManager = true;
 
-                    
+
 #if GDI_FONT_CACHE_TRACK
                     Debug.WriteLine("Removing from cache: " + wfont);
                     Debug.WriteLine( "Adding to cache: " + winFont );
@@ -226,24 +226,24 @@ namespace System.Experimental.Gdi
                     wfont.Dispose();
                 }
                 else {
-                    // do not cache font - caller is ALWAYS responsible for 
-                    // disposing now.  If it is owned  by the CM, it will not 
+                    // do not cache font - caller is ALWAYS responsible for
+                    // disposing now.  If it is owned  by the CM, it will not
                     // disposed.
 
                     winFont.OwnedByCacheManager = false;
 
-                    
+
 #if GDI_FONT_CACHE_TRACK
                     Debug.WriteLine("Creating uncached font: " + winFont);
-#endif                     
-                }                    
+#endif
+                }
             }
             else
             {
                 winFont.OwnedByCacheManager = true;
                 WindowsFontCache.Add(newEntry);
 
-                
+
 #if GDI_FONT_CACHE_TRACK
                 Debug.WriteLine( "Adding to cache: " + winFont );
 #endif
@@ -251,9 +251,9 @@ namespace System.Experimental.Gdi
             return winFont;
         }
 
-        
+
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-        /// The following methods are not needed in production code since the cached objects are meant to be reused and should not be explicitly disposed, 
+        /// The following methods are not needed in production code since the cached objects are meant to be reused and should not be explicitly disposed,
         /// left here for testing purposes.
 
         /// <devdoc>

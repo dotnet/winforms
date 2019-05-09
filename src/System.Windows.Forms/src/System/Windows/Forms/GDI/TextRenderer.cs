@@ -9,7 +9,7 @@ namespace System.Windows.Forms
     using System.Windows.Forms.Internal;
     using System.Diagnostics;
 
-    
+
     /// <devdoc>
     ///    <para>
     ///     This class provides API for drawing GDI text.
@@ -208,26 +208,26 @@ namespace System.Windows.Forms
         }
 
         /// MeasureText wrappers.
-       
+
         public static Size MeasureText(string text, Font font )
         {
-            if (string.IsNullOrEmpty(text)) 
+            if (string.IsNullOrEmpty(text))
             {
                 return Size.Empty;
             }
-            
+
             using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(font)) {
                 return WindowsGraphicsCacheManager.MeasurementGraphics.MeasureText(text, wf);
-            }           
+            }
         }
 
         public static Size MeasureText(string text, Font font, Size proposedSize )
         {
-            if (string.IsNullOrEmpty(text)) 
+            if (string.IsNullOrEmpty(text))
             {
                 return Size.Empty;
             }
-            
+
             using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(font)) {
                 return WindowsGraphicsCacheManager.MeasurementGraphics.MeasureText(text, WindowsGraphicsCacheManager.GetWindowsFont(font), proposedSize);
             }
@@ -235,7 +235,7 @@ namespace System.Windows.Forms
 
         public static Size MeasureText(string text, Font font, Size proposedSize, TextFormatFlags flags )
         {
-            if (string.IsNullOrEmpty(text)) 
+            if (string.IsNullOrEmpty(text))
             {
                 return Size.Empty;
             }
@@ -250,7 +250,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(dc));
             }
-            if (string.IsNullOrEmpty(text)) 
+            if (string.IsNullOrEmpty(text))
             {
                 return Size.Empty;
             }
@@ -279,7 +279,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(dc));
             }
-            if (string.IsNullOrEmpty(text)) 
+            if (string.IsNullOrEmpty(text))
             {
                 return Size.Empty;
             }
@@ -304,12 +304,12 @@ namespace System.Windows.Forms
         }
 
         public static Size MeasureText(IDeviceContext dc, string text, Font font, Size proposedSize, TextFormatFlags flags )
-        {            
+        {
             if (dc == null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
-            if (string.IsNullOrEmpty(text)) 
+            if (string.IsNullOrEmpty(text))
             {
                 return Size.Empty;
             }

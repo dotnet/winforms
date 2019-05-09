@@ -11,7 +11,7 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Diagnostics.CodeAnalysis;
     using System.ComponentModel.Design;
-    
+
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -28,7 +28,7 @@ namespace System.Windows.Forms {
 
         private static readonly object EventRendererChanged          = new object();
         private static readonly object EventLoad                     = new object();
-        
+
         public ToolStripContentPanel() {
 
             // Consider: OptimizedDoubleBuffer
@@ -53,7 +53,7 @@ namespace System.Windows.Forms {
          }
 
          [
-         Browsable(false), 
+         Browsable(false),
          EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
          ]
          public override AnchorStyles Anchor {
@@ -66,7 +66,7 @@ namespace System.Windows.Forms {
          }
 
          [
-        Browsable(false), 
+        Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public override bool AutoScroll {
@@ -75,7 +75,7 @@ namespace System.Windows.Forms {
         }
 
         [
-        Browsable(false), 
+        Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Size AutoScrollMargin {
@@ -84,7 +84,7 @@ namespace System.Windows.Forms {
         }
 
         [
-        Browsable(false), 
+        Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Size AutoScrollMinSize {
@@ -93,29 +93,29 @@ namespace System.Windows.Forms {
         }
 
         [
-        Browsable(false), 
+        Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public override bool AutoSize {
             get { return base.AutoSize; }
-            set { base.AutoSize = value; } 
+            set { base.AutoSize = value; }
         }
 
 
         public override Color BackColor {
-            get { 
-                return base.BackColor; 
+            get {
+                return base.BackColor;
             }
 
-            set { 
+            set {
 
                 // To support transparency on ToolStripContainer, we need this check
-                // to ensure that background color of the container reflects the 
+                // to ensure that background color of the container reflects the
                 // ContentPanel
                 if (this.ParentInternal is ToolStripContainer && value == Color.Transparent) {
                    this.ParentInternal.BackColor = Color.Transparent;
                 }
-                base.BackColor = value; 
+                base.BackColor = value;
             }
         }
 
@@ -137,7 +137,7 @@ namespace System.Windows.Forms {
             get { return base.CausesValidation; }
             set { base.CausesValidation = value; }
         }
-  
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler CausesValidationChanged {
             add => base.CausesValidationChanged += value;
@@ -157,7 +157,7 @@ namespace System.Windows.Forms {
             }
         }
         [
-        Browsable(false), 
+        Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new event EventHandler DockChanged {
@@ -172,7 +172,7 @@ namespace System.Windows.Forms {
         }
 
         [
-        Browsable(false), 
+        Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Point Location {
@@ -181,7 +181,7 @@ namespace System.Windows.Forms {
         }
 
         [
-        Browsable(false), 
+        Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new event EventHandler LocationChanged {
@@ -190,7 +190,7 @@ namespace System.Windows.Forms {
         }
 
         [
-        Browsable(false), 
+        Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public override Size MinimumSize {
@@ -200,7 +200,7 @@ namespace System.Windows.Forms {
 
 
         [
-        Browsable(false), 
+        Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public override Size MaximumSize {
@@ -211,7 +211,7 @@ namespace System.Windows.Forms {
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
         public new string Name {
             get {
@@ -222,7 +222,7 @@ namespace System.Windows.Forms {
             }
         }
 
-       
+
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -236,7 +236,7 @@ namespace System.Windows.Forms {
                 base.TabIndex = value;
             }
         }
-        
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler TabIndexChanged {
             add => base.TabIndexChanged += value;
@@ -274,7 +274,7 @@ namespace System.Windows.Forms {
             }
         }
 
-      
+
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
@@ -287,14 +287,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        
+
         [
         SRDescription(nameof(SR.ToolStripRenderModeDescr)),
         SRCategory(nameof(SR.CatAppearance)),
         ]
         public ToolStripRenderMode RenderMode {
             get {
-                return RendererSwitcher.RenderMode;      
+                return RendererSwitcher.RenderMode;
             }
             set {
                 RendererSwitcher.RenderMode = value;
@@ -318,7 +318,7 @@ namespace System.Windows.Forms {
                 OnLoad(EventArgs.Empty);
             }
         }
-      
+
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnLoad(EventArgs e) {
             // There is no good way to explain this event except to say
@@ -330,7 +330,7 @@ namespace System.Windows.Forms {
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnPaintBackground(PaintEventArgs e) {
             ToolStripContentPanelRenderEventArgs rea = new ToolStripContentPanelRenderEventArgs(e.Graphics, this);
-            
+
             Renderer.DrawToolStripContentPanelBackground(rea);
 
             if (!rea.Handled) {
@@ -352,14 +352,14 @@ namespace System.Windows.Forms {
                 // restore DBuf
                 this.DoubleBuffered = state[stateLastDoubleBuffer];
            }
-           
+
            Renderer.InitializeContentPanel(this);
 
            this.Invalidate();
-           
+
            EventHandler handler = (EventHandler)Events[EventRendererChanged];
            if (handler != null)  handler(this,e);
-           
+
         }
 
         private void ResetRenderMode() {

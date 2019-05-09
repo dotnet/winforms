@@ -57,7 +57,7 @@ namespace System.Windows.Forms.Design {
         ///    </para>
         /// </devdoc>
         public ComponentEditorForm(object component, Type[] pageTypes) : base() {
-        
+
             if (!(component is IComponent)) {
                throw new ArgumentException(SR.ComponentEditorFormBadComponent,"component");
             }
@@ -125,7 +125,7 @@ namespace System.Windows.Forms.Design {
                 /*
                 if (transaction != null) {
                     transaction.Commit();
-                    CreateNewTransaction();                    
+                    CreateNewTransaction();
                 }
                 */
             }
@@ -154,13 +154,13 @@ namespace System.Windows.Forms.Design {
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
-        }                
+        }
 
 
         /*
         private void CreateNewTransaction() {
             IDesignerHost host = component.Site.GetService(typeof(IDesignerHost)) as IDesignerHost;
-            transaction = host.CreateTransaction(string.Format(SR.ComponentEditorFormEditTransaction, component.Site.Name));            
+            transaction = host.CreateTransaction(string.Format(SR.ComponentEditorFormEditTransaction, component.Site.Name));
         }
         */
 
@@ -299,7 +299,7 @@ namespace System.Windows.Forms.Design {
             okButton.FlatStyle = FlatStyle.System;
             this.AcceptButton = okButton;
 
-            this.Controls.Clear();                     
+            this.Controls.Clear();
             this.Controls.AddRange(new Control[] {
                 selector,
                 grayStrip,
@@ -310,8 +310,8 @@ namespace System.Windows.Forms.Design {
                 helpButton
             });
 
-            #pragma warning disable 618            
-            // continuing with the old autoscale base size stuff, it works, 
+            #pragma warning disable 618
+            // continuing with the old autoscale base size stuff, it works,
             // and is currently set to a non-standard height
             AutoScaleBaseSize = new Size(5, 14);
             ApplyAutoScaling();
@@ -323,13 +323,13 @@ namespace System.Windows.Forms.Design {
         /// <devdoc>
         /// </devdoc>
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected override void OnActivated(EventArgs e) {
             base.OnActivated(e);
 
             if (firstActivate) {
                 firstActivate = false;
-                
+
                 selector.SelectedNode = selector.Nodes[initialActivePage];
                 pageSites[initialActivePage].Active = true;
                 activePage = initialActivePage;
@@ -341,7 +341,7 @@ namespace System.Windows.Forms.Design {
         /// <devdoc>
         /// </devdoc>
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected override void OnHelpRequested(HelpEventArgs e) {
             base.OnHelpRequested(e);
             ShowPageHelp();
@@ -385,7 +385,7 @@ namespace System.Windows.Forms.Design {
                 // the form is activated
                 return;
             }
-                
+
             int newPage = selector.SelectedNode.Index;
             Debug.Assert((newPage >= 0) && (newPage < pageSites.Length),
                          "Invalid page selected");
@@ -405,9 +405,9 @@ namespace System.Windows.Forms.Design {
         }
 
         /// <devdoc>
-        ///    <para>Provides a method to override in order to pre-process input messages before 
+        ///    <para>Provides a method to override in order to pre-process input messages before
         ///       they are dispatched.</para>
-        /// </devdoc>        
+        /// </devdoc>
         public override bool PreProcessMessage(ref Message msg) {
             if (null != pageSites && pageSites[activePage].GetPageControl().IsPageMessage(ref msg))
                 return true;
@@ -453,7 +453,7 @@ namespace System.Windows.Forms.Design {
             initialActivePage = page;
 
             // CreateNewTransaction();
-            try {                                                   
+            try {
                 ShowDialog(owner);
             }
             finally {
@@ -753,9 +753,9 @@ namespace System.Windows.Forms.Design {
                                 DrawTreeItem(itemNode.Text, itemNode.ImageIndex,
                                          nmtvcd.nmcd.hdc, nmtvcd.nmcd.rc,
                                          state, ColorTranslator.ToWin32(SystemColors.Control), ColorTranslator.ToWin32(SystemColors.ControlText));
-                            }     
+                            }
                             m.Result = (IntPtr)NativeMethods.CDRF_SKIPDEFAULT;
-                        
+
                         }
                         break;
                     case NativeMethods.CDDS_POSTPAINT:

@@ -124,7 +124,7 @@ namespace System.Windows.Forms {
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Appearance));
                     }
 
-                    using (LayoutTransaction.CreateTransactionIf(AutoSize, this.ParentInternal, this, PropertyNames.Appearance)) {                                                         
+                    using (LayoutTransaction.CreateTransactionIf(AutoSize, this.ParentInternal, this, PropertyNames.Appearance)) {
                         appearance = value;
                         if (OwnerDraw) {
                             Refresh();
@@ -132,7 +132,7 @@ namespace System.Windows.Forms {
                         else {
                             UpdateStyles();
                         }
-                        
+
                         OnAppearanceChanged(EventArgs.Empty);
                     }
                 }
@@ -153,7 +153,7 @@ namespace System.Windows.Forms {
         ///       Gets or
         ///       sets the location of the check box portion of the
         ///       radio button control.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         [
@@ -185,7 +185,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Gets or sets a value indicating whether the
         ///       control is checked or not.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         [
@@ -241,10 +241,10 @@ namespace System.Windows.Forms {
                     if (Appearance == Appearance.Button) {
                         cp.Style |= NativeMethods.BS_PUSHLIKE;
                     }
-                    
+
                     // Determine the alignment of the radio button
                     //
-                    ContentAlignment align = RtlTranslateContent(CheckAlign);                              
+                    ContentAlignment align = RtlTranslateContent(CheckAlign);
                     if ((int)(align & anyRight) != 0) {
                         cp.Style |= NativeMethods.BS_RIGHTBUTTON;
                     }
@@ -252,7 +252,7 @@ namespace System.Windows.Forms {
                 return cp;
             }
         }
-        
+
         /// <devdoc>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
@@ -266,8 +266,8 @@ namespace System.Windows.Forms {
         /// <summary>
         /// When overridden in a derived class, handles rescaling of any magic numbers used in control painting.
         /// For RadioButton controls, scale the width of the system-style padding and height of the radio button image.
-        /// Must call the base class method to get the current DPI values. This method is invoked only when 
-        /// Application opts-in into the Per-monitor V2 support, targets .NETFX 4.7 and has 
+        /// Must call the base class method to get the current DPI values. This method is invoked only when
+        /// Application opts-in into the Per-monitor V2 support, targets .NETFX 4.7 and has
         /// EnableDpiChangedMessageHandling and EnableDpiChangedHighDpiImprovements config switches turned on.
         /// </summary>
         /// <param name="deviceDpiOld">Old DPI value</param>
@@ -290,7 +290,7 @@ namespace System.Windows.Forms {
             Size size = SizeFromClientSize(textSize);
             size.Width += flatSystemStylePaddingWidth;
             size.Height = DpiHelper.IsScalingRequirementMet ? Math.Max(size.Height + 5, flatSystemStyleMinimumHeight) : size.Height + 5; // ensure minimum height to avoid truncation of RadioButton circle or text
-            return size;                
+            return size;
         }
 
         internal override Rectangle OverChangeRectangle {
@@ -336,7 +336,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Gets or sets the value indicating whether the user can give the focus to this
         ///       control using the TAB key.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         [
@@ -422,7 +422,7 @@ namespace System.Windows.Forms {
                     //Paint in raised state...
                     //
                     ResetFlagsandPaint();
-                    if(!ValidationCancelled){ 
+                    if(!ValidationCancelled){
                         OnClick(e);
                     }
                 }
@@ -430,7 +430,7 @@ namespace System.Windows.Forms {
                     //we enter the radioButton by pressing Tab
                     PerformAutoUpdates(true);
                     //reset the TabStop so we can come back later
-                    //notice that PerformAutoUpdates will set the 
+                    //notice that PerformAutoUpdates will set the
                     //TabStop of this button to false
                     TabStop = true;
                 }
@@ -472,7 +472,7 @@ namespace System.Windows.Forms {
 		    Control parent = ParentInternal;
             if (parent != null) {
                 Control.ControlCollection children = parent.Controls;
-                for (int i = 0; i < children.Count; i++) {                  
+                for (int i = 0; i < children.Count; i++) {
                     Control ctl = children[i];
                     if (ctl is RadioButton) {
                         RadioButton button = (RadioButton) ctl;
@@ -494,7 +494,7 @@ namespace System.Windows.Forms {
         internal override ButtonBaseAdapter CreatePopupAdapter() {
             return new RadioButtonPopupAdapter(this);
         }
-            
+
         internal override ButtonBaseAdapter CreateStandardAdapter() {
             return new RadioButtonStandardAdapter(this);
         }
@@ -509,7 +509,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnMouseUp'/> event.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         protected override void OnMouseUp(MouseEventArgs mevent) {
@@ -524,7 +524,7 @@ namespace System.Windows.Forms {
                             OnClick(mevent);
                             OnMouseClick(mevent);
                         }
-                        
+
                     }
                 }
             }
@@ -546,7 +546,7 @@ namespace System.Windows.Forms {
                     OnClick(EventArgs.Empty);
                 }
             }
-                
+
         }
 
         /// <devdoc>
@@ -575,7 +575,7 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         /// </devdoc>
-        [System.Runtime.InteropServices.ComVisible(true)]        
+        [System.Runtime.InteropServices.ComVisible(true)]
         public class RadioButtonAccessibleObject : ButtonBaseAccessibleObject {
 
             public RadioButtonAccessibleObject(RadioButton owner) : base(owner) {

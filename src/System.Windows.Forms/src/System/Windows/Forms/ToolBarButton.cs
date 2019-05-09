@@ -14,13 +14,13 @@ namespace System.Windows.Forms {
     using System.Text;
     using System.Drawing.Design;
     using Marshal = System.Runtime.InteropServices.Marshal;
-    using System.Windows.Forms;    
+    using System.Windows.Forms;
     using Microsoft.Win32;
     using System.Globalization;
 
 
     /// <devdoc>
-    ///    <para> 
+    ///    <para>
     ///       Represents a Windows toolbar button.</para>
     /// </devdoc>
     [
@@ -39,7 +39,7 @@ namespace System.Windows.Forms {
         bool pushed = false;
         bool partialPush = false;
         private int commandId = -1; // the cached command id of the button.
-        private ToolBarButtonImageIndexer imageIndexer; 
+        private ToolBarButtonImageIndexer imageIndexer;
 
         ToolBarButtonStyle style = ToolBarButtonStyle.PushButton;
 
@@ -70,26 +70,26 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public ToolBarButton() {
         }
-        
+
         public ToolBarButton(string text) : base() {
             this.Text = text;
         }
 
 
-        
+
         // We need a special way to defer to the ToolBar's image
         // list for indexing purposes.
         internal class ToolBarButtonImageIndexer : ImageList.Indexer {
             private ToolBarButton owner;
-           
+
 
 
            public ToolBarButtonImageIndexer(ToolBarButton button) {
               owner = button;
            }
-           
+
            public override ImageList ImageList {
-                get { 
+                get {
                         if ((owner != null) && (owner.parent != null)) {
                             return owner.parent.ImageList;
                         }
@@ -100,17 +100,17 @@ namespace System.Windows.Forms {
         }
 
         internal ToolBarButtonImageIndexer ImageIndexer {
-            get { 
+            get {
                    if (imageIndexer == null) {
                          imageIndexer = new ToolBarButtonImageIndexer(this);
                    }
 
-                   return imageIndexer; 
+                   return imageIndexer;
             }
         }
- 
+
         /// <devdoc>
-        ///    <para> 
+        ///    <para>
         ///       Indicates the menu to be displayed in
         ///       the drop-down toolbar button.</para>
         /// </devdoc>
@@ -168,7 +168,7 @@ namespace System.Windows.Forms {
         TypeConverterAttribute(typeof(ImageIndexConverter)),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         DefaultValue(-1),
-        RefreshProperties(RefreshProperties.Repaint),        
+        RefreshProperties(RefreshProperties.Repaint),
         Localizable(true),
         SRDescription(nameof(SR.ToolBarButtonImageIndexDescr))
         ]
@@ -235,7 +235,7 @@ namespace System.Windows.Forms {
 
 
         /// <devdoc>
-        ///    <para>Indicates the toolbar control that the toolbar button is assigned to. This property is 
+        ///    <para>Indicates the toolbar control that the toolbar button is assigned to. This property is
         ///       read-only.</para>
         /// </devdoc>
         [
@@ -248,7 +248,7 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        ///    <para> 
+        ///    <para>
         ///       Indicates whether a toggle-style toolbar button
         ///       is partially pushed.</para>
         /// </devdoc>
@@ -301,7 +301,7 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        ///    <para>Indicates the bounding rectangle for a toolbar button. This property is 
+        ///    <para>Indicates the bounding rectangle for a toolbar button. This property is
         ///       read-only.</para>
         /// </devdoc>
         public Rectangle Rectangle {
@@ -372,7 +372,7 @@ namespace System.Windows.Forms {
                 if (string.IsNullOrEmpty(value)) {
                     value = null;
                 }
-                
+
                 if ( (value == null && text != null) ||
                      (value != null && (text == null || !text.Equals(value)))) {
                     text = value;
@@ -382,10 +382,10 @@ namespace System.Windows.Forms {
             }
         }
 
-         
+
 
         /// <devdoc>
-        ///    <para> 
+        ///    <para>
         ///       Indicates
         ///       the text that appears as a tool tip for a control.</para>
         /// </devdoc>
@@ -404,7 +404,7 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        ///    <para> 
+        ///    <para>
         ///       Indicates whether the toolbar button
         ///       is visible.</para>
         /// </devdoc>
@@ -434,18 +434,18 @@ namespace System.Windows.Forms {
         internal short Width {
             get {
                 Debug.Assert(parent != null, "Parent should be non-null when button width is requested");
-                
+
                 int width = 0;
                 ToolBarButtonStyle style = Style;
 
                 Size edge = SystemInformation.Border3DSize;
                 if (style != ToolBarButtonStyle.Separator) {
 
-                    // COMPAT: this will force handle creation.  
+                    // COMPAT: this will force handle creation.
                     // we could use the measurement graphics, but it looks like this has been like this since Everett.
                     using (Graphics g = this.parent.CreateGraphicsInternal()) {
 
-                        Size buttonSize = this.parent.buttonSize;                                                      
+                        Size buttonSize = this.parent.buttonSize;
                         if (!(buttonSize.IsEmpty)) {
                             width = buttonSize.Width;
                         }
@@ -470,7 +470,7 @@ namespace System.Windows.Forms {
                                 }
                             }
                             else
-                                width = this.parent.ButtonSize.Width;                                                      
+                                width = this.parent.ButtonSize.Width;
                         }
                     }
                 }
@@ -516,19 +516,19 @@ namespace System.Windows.Forms {
 
             // Assume that this button is the same width as the parent's ButtonSize's Width
             int buttonWidth = Parent.ButtonSize.Width;
-            
+
             NativeMethods.TBBUTTONINFO button = new NativeMethods.TBBUTTONINFO();
             button.cbSize = Marshal.SizeOf<NativeMethods.TBBUTTONINFO>();
             button.dwMask = NativeMethods.TBIF_SIZE;
-            
+
             int buttonID = (int)UnsafeNativeMethods.SendMessage(new HandleRef(Parent, Parent.Handle), NativeMethods.TB_GETBUTTONINFO, commandId, ref button);
             if (buttonID != -1) {
                 buttonWidth = button.cx;
             }
-            
+
             return buttonWidth;
         }
-        
+
         private bool GetPushedState()
         {
             if ((int)parent.SendMessage(NativeMethods.TB_ISBUTTONCHECKED, FindButtonIndex(), 0) != 0) {
@@ -643,41 +643,41 @@ namespace System.Windows.Forms {
 
             return button;
         }
-        
+
         private void PrefixAmpersands(ref string value) {
-            // Due to a comctl32 problem, ampersands underline the next letter in the 
+            // Due to a comctl32 problem, ampersands underline the next letter in the
             // text string, but the accelerators don't work.
             // So in this function, we prefix ampersands with another ampersand
             // so that they actually appear as ampersands.
             //
-            
+
             // Sanity check parameter
             //
             if (value == null || value.Length == 0) {
                 return;
             }
-            
+
             // If there are no ampersands, we don't need to do anything here
             //
             if (value.IndexOf('&') < 0) {
                 return;
             }
-            
+
             // Insert extra ampersands
             //
             StringBuilder newString = new StringBuilder();
             for(int i=0; i < value.Length; ++i) {
-                if (value[i] == '&') { 
+                if (value[i] == '&') {
                     if (i < value.Length - 1 && value[i+1] == '&') {
                         ++i;    // Skip the second ampersand
                     }
                     newString.Append("&&");
                 }
                 else {
-                    newString.Append(value[i]);    
+                    newString.Append(value[i]);
                 }
             }
-            
+
             value = newString.ToString();
         }
 
@@ -693,7 +693,7 @@ namespace System.Windows.Forms {
         ///     If Text was changed, call the next overload.
         /// </devdoc>
         internal void UpdateButton(bool recreate) {
-            UpdateButton(recreate, false, true);        
+            UpdateButton(recreate, false, true);
         }
 
         /// <devdoc>
@@ -704,12 +704,12 @@ namespace System.Windows.Forms {
             // It looks like ToolBarButtons with a DropDownButton tend to
             // lose the DropDownButton very easily - so we need to recreate
             // the button each time it changes just to be sure.
-            //                                           
+            //
             if (style == ToolBarButtonStyle.DropDownButton && parent != null && parent.DropDownArrows) {
                 recreate = true;
             }
 
-            // we just need to get the Pushed state : this asks the Button its states and sets 
+            // we just need to get the Pushed state : this asks the Button its states and sets
             // the private member "pushed" to right value..
 
             // this member is used in "InternalSetButton" which calls GetTBBUTTONINFO(bool updateText)
@@ -724,6 +724,6 @@ namespace System.Windows.Forms {
                 if (index != -1)
                     parent.InternalSetButton(index, this, recreate, updateText);
             }
-        }    
+        }
     }
 }

@@ -47,7 +47,7 @@ namespace System.Windows.Forms.Design.Behavior
         private NativeMethods.TRACKMOUSEEVENT _trackMouseEvent; //demand created (once) used to track the mouse hover event
         private bool _trackingMouseEvent; //state identifying current mouse tracking
         private string[] _testHook_RecentSnapLines; //we keep track of the last snaplines we found - for testing purposes
-        private readonly MenuCommandHandler _menuCommandHandler; //private object that handles all menu commands 
+        private readonly MenuCommandHandler _menuCommandHandler; //private object that handles all menu commands
         private bool _useSnapLines; //indicates if this designer session is using snaplines or snapping to a grid
         private bool _queriedSnapLines; //only query for this once since we require the user restart design sessions when this changes
         private readonly Hashtable _dragEnterReplies; // we keep track of whether glyph has already responded to a DragEnter this D&D.
@@ -63,7 +63,7 @@ namespace System.Windows.Forms.Design.Behavior
         private static int WM_GETALLSNAPLINES;
         private static int WM_GETRECENTSNAPLINES;
 
-        private DesignerActionUI _actionPointer; // pointer to the designer action service so we can supply mouse over notifications      
+        private DesignerActionUI _actionPointer; // pointer to the designer action service so we can supply mouse over notifications
 
         private const string ToolboxFormat = ".NET Toolbox Item"; // used to detect if a drag is coming from the toolbox.
         [SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily")]
@@ -1056,7 +1056,7 @@ namespace System.Windows.Forms.Design.Behavior
             /// <summary>
             ///     This class knows how to hook all the messages to a given process/thread.
             ///     On any mouse clicks, it asks the designer what to do with the message, that is to eat it or propogate it to the control it was meant for.   This allows us to synchrounously process mouse messages when the AdornerWindow itself may be pumping messages.
-            /// </summary>           
+            /// </summary>
             [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
             private class MouseHook
             {
@@ -1307,23 +1307,23 @@ namespace System.Windows.Forms.Design.Behavior
             private readonly BehaviorService _owner; // ptr back to the behavior service
             private readonly IMenuCommandService _menuService; // core service used for most implementations of the IMCS interface
             private readonly Stack<CommandID> _currentCommands = new Stack<CommandID>();
-         
+
             public MenuCommandHandler(BehaviorService owner, IMenuCommandService menuService)
             {
                 _owner = owner;
                 _menuService = menuService;
             }
-          
+
             public IMenuCommandService MenuService
             {
                 get => _menuService;
             }
-          
+
             void IMenuCommandService.AddCommand(MenuCommand command)
             {
                 _menuService.AddCommand(command);
             }
-           
+
             void IMenuCommandService.RemoveVerb(DesignerVerb verb)
             {
                 _menuService.RemoveVerb(verb);
@@ -1333,7 +1333,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 _menuService.RemoveCommand(command);
             }
-         
+
             MenuCommand IMenuCommandService.FindCommand(CommandID commandID)
             {
                 try
@@ -1355,17 +1355,17 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 return _menuService.GlobalInvoke(commandID);
             }
-          
+
             void IMenuCommandService.ShowContextMenu(CommandID menuID, int x, int y)
             {
                 _menuService.ShowContextMenu(menuID, x, y);
             }
-          
+
             void IMenuCommandService.AddVerb(DesignerVerb verb)
             {
                 _menuService.AddVerb(verb);
             }
-           
+
             DesignerVerbCollection IMenuCommandService.Verbs
             {
                 get => _menuService.Verbs;
@@ -1410,11 +1410,11 @@ namespace System.Windows.Forms.Design.Behavior
             if (_behaviorStack != null && _behaviorStack.Count > 0) {
                 return _behaviorStack[0] as Behavior;
             }
-            
+
             if (g != null && g.Behavior != null) {
                 return g.Behavior;
             }
-            
+
             return null;
         }
 

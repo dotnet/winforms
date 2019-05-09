@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new MenuItem[0], false };
             yield return new object[] { new MenuItem[] { new MenuItem() }, true };
         }
-        
+
         [Theory]
         [MemberData(nameof(Ctor_MenuItemArray_TestData))]
         public void Menu_Ctor_MenuItemArray(MenuItem[] items, bool expectedIsParent)
@@ -180,7 +180,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new MenuItem[] { new MenuItem("parent", new MenuItem[] { listItem2 }) }, listItem2 };
             yield return new object[] { new MenuItem[] { new MenuItem("parent", new MenuItem[] { new MenuItem() }) }, null };
         }
-        
+
         [Theory]
         [MemberData(nameof(MdiListItem_TestData))]
         public void Menu_MdiListItem_Get_ReturnsExpected(MenuItem[] items, MenuItem expected)
@@ -289,7 +289,7 @@ namespace System.Windows.Forms.Tests
 
             var disabledParentChild = new MenuItem { Shortcut = Shortcut.CtrlA };
             var disabledParent = new MenuItem("text", new MenuItem[] { disabledParentChild }) { Enabled = false };
-            yield return new object[] { disabledParent, disabledParentChild, false, 0, 0, 0, 0 }; 
+            yield return new object[] { disabledParent, disabledParentChild, false, 0, 0, 0, 0 };
         }
 
         [Theory]

@@ -22,7 +22,7 @@ namespace System.Windows.Forms {
     ///      class through the TypeDescriptor.
     /// </devdoc>
     public class SelectionRangeConverter : TypeConverter {
-    
+
         /// <devdoc>
         ///      Determines if this converter can convert an object in the given source
         ///      type to the native type of the converter.
@@ -44,7 +44,7 @@ namespace System.Windows.Forms {
             }
             return base.CanConvertTo(context, destinationType);
         }
-        
+
         /// <devdoc>
         ///      Converts the given object to the converter's native type.
         /// </devdoc>
@@ -54,15 +54,15 @@ namespace System.Windows.Forms {
                 if (text.Length == 0) {
                     return new SelectionRange(DateTime.Now.Date, DateTime.Now.Date);
                 }
-                
+
                 // Separate the string into the two dates, and parse each one
                 //
                 if (culture == null) {
                     culture = CultureInfo.CurrentCulture;
-                }                    
+                }
                 char separator = culture.TextInfo.ListSeparator[0];
                 string[] tokens = text.Split(new char[] {separator});
-                
+
                 if (tokens.Length == 2) {
                     TypeConverter dateTimeConverter = TypeDescriptor.GetConverter(typeof(DateTime));
                     DateTime start = (DateTime)dateTimeConverter.ConvertFromString(context, culture, tokens[0]);
@@ -79,11 +79,11 @@ namespace System.Windows.Forms {
                 DateTime dt = (DateTime)value;
                 return new SelectionRange(dt, dt);
             }
-            
+
             return base.ConvertFrom(context, culture, value);
         }
 
-        
+
         /// <devdoc>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call
@@ -100,17 +100,17 @@ namespace System.Windows.Forms {
             if (range != null) {
                 if (destinationType == typeof(string)) {
                     if (culture == null) {
-                        culture = CultureInfo.CurrentCulture; 
+                        culture = CultureInfo.CurrentCulture;
                     }
                     string sep = culture.TextInfo.ListSeparator + " ";
                     PropertyDescriptorCollection props = GetProperties(value);
                     string[] args = new string[props.Count];
-                    
+
                     for (int i = 0; i < props.Count; i++) {
                         object propValue = props[i].GetValue(value);
                         args[i] = TypeDescriptor.GetConverter(propValue).ConvertToString(context, culture, propValue);
                     }
-                    
+
                     return string.Join(sep, args);
                 }
                 if (destinationType == typeof(DateTime)) {
@@ -123,10 +123,10 @@ namespace System.Windows.Forms {
                         return new InstanceDescriptor(ctor, new object[] {range.Start, range.End});
                     }
                 }
-            }            
+            }
             return base.ConvertTo(context, culture, value, destinationType);
         }
-        
+
         /// <devdoc>
         ///      Creates an instance of this type given a set of property values
         ///      for the object.  This is useful for objects that are immutable, but still
@@ -165,7 +165,7 @@ namespace System.Windows.Forms {
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(SelectionRange), attributes);
             return props.Sort(new string[] {"Start", "End"});
         }
-       
+
         /// <devdoc>
         ///      Determines if this object supports properties.  By default, this
         ///      is false.

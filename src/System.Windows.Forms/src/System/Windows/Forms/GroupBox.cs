@@ -44,7 +44,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public GroupBox() : base() {
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
-            SetState2(STATE2_USEPREFERREDSIZECACHE, true);  
+            SetState2(STATE2_USEPREFERREDSIZECACHE, true);
 
             SetStyle(ControlStyles.ContainerControl, true);
             SetStyle(ControlStyles.SupportsTransparentBackColor |
@@ -101,7 +101,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         SRDescription(nameof(SR.ControlAutoSizeModeDescr)),
-        SRCategory(nameof(SR.CatLayout)),        
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(true),
         DefaultValue(AutoSizeMode.GrowOnly),
         Localizable(true)
@@ -114,7 +114,7 @@ namespace System.Windows.Forms {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoSizeMode.GrowAndShrink, (int)AutoSizeMode.GrowOnly)){
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoSizeMode));
                 }
-                
+
                 if (GetAutoSizeMode() != value) {
                     SetAutoSizeMode(value);
                     if(ParentInternal != null) {
@@ -181,7 +181,7 @@ namespace System.Windows.Forms {
 
                 if (fontHeight == -1) {
                     fontHeight = (int)Font.Height;
-                    cachedFont = Font;                        
+                    cachedFont = Font;
                 }
                 else if (!object.ReferenceEquals(cachedFont, Font)) {
                     // Must also cache font identity here because
@@ -192,7 +192,7 @@ namespace System.Windows.Forms {
                     cachedFont = Font;
                 }
 
-                
+
                 //for efficiency, so that we don't need to read property store four times
                 Padding padding = Padding;
                 return new Rectangle(padding.Left, fontHeight + padding.Top, Math.Max(size.Width - padding.Horizontal, 0), Math.Max(size.Height - fontHeight - padding.Vertical, 0));
@@ -414,13 +414,13 @@ namespace System.Windows.Forms {
         }
 
         protected override void OnPaint(PaintEventArgs e) {
-            
-        
+
+
             // BACKCOMPAT requirement:
             // Why the Height/Width >= 10 check? This is because uxtheme doesn't seem to handle those cases
             // similar to what we do for the non-themed case, so if someone is using the groupbox as a
             // separator, their app will look weird in Whidbey. We render the old way in these cases.
-            
+
             if (Application.RenderWithVisualStyles && Width >= 10 && Height >= 10) {
                 GroupBoxState gbState = Enabled ? GroupBoxState.Normal : GroupBoxState.Disabled;
                 TextFormatFlags textFlags = TextFormatFlags.Default | TextFormatFlags.TextBoxControl | TextFormatFlags.WordBreak | TextFormatFlags.PreserveGraphicsTranslateTransform | TextFormatFlags.PreserveGraphicsClipping;
@@ -501,10 +501,10 @@ namespace System.Windows.Forms {
                             flags |= IntTextFormatFlags.Right;
                         }
 
-                        
+
                         using (WindowsFont wfont = WindowsGraphicsCacheManager.GetWindowsFont(this.Font)) {
                             textSize = wg.MeasureText(Text, wfont, new Size(textRectangle.Width , int.MaxValue), flags );
-                            
+
                             if( Enabled ) {
                                 wg.DrawText(Text, wfont, textRectangle, ForeColor, flags);
                             }
@@ -623,7 +623,7 @@ namespace System.Windows.Forms {
         }
         [SuppressMessage("Microsoft.Portability", "CA1902:AvoidTestingForFloatingPointEquality")]
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified) {
-            
+
             if (factor.Width != 1F && factor.Height != 1F) {
                 // Make sure when we're scaling by non-unity to clear the font cache
                 // as the font has likely changed, but we dont know it yet as OnFontChanged has yet to
@@ -662,7 +662,7 @@ namespace System.Windows.Forms {
         }
 
         protected override void WndProc(ref Message m) {
-       
+
             if (OwnerDraw) {
                 base.WndProc(ref m);
                 return;

@@ -6,7 +6,7 @@ namespace System.Windows.Forms {
 
     using System;
     using Microsoft.Win32;
-    using System.Diagnostics;    
+    using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.ComponentModel;
     using System.Collections;
@@ -22,7 +22,7 @@ namespace System.Windows.Forms {
         string dataField;
         PropertyDescriptor fieldInfo;
         static List<BindingManagerBase> IgnoreItemChangedTable = new List<BindingManagerBase>();
-        
+
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set the dataSource
                                                                                                     // it would be a breaking change.
@@ -30,7 +30,7 @@ namespace System.Windows.Forms {
         internal RelatedCurrencyManager(BindingManagerBase parentManager, string dataField) : base(null) {
             Bind(parentManager, dataField);
         }
-        
+
         internal void Bind(BindingManagerBase parentManager, string dataField) {
             Debug.Assert(parentManager != null, "How could this be a null parentManager.");
 
@@ -106,7 +106,7 @@ namespace System.Windows.Forms {
             }
             return base.GetListName();
         }
-        
+
         /// <devdoc>
         ///    <para>Gets the name of the specified list.</para>
         /// </devdoc>
@@ -114,12 +114,12 @@ namespace System.Windows.Forms {
             listAccessors.Insert(0, fieldInfo);
             return parentManager.GetListName(listAccessors);
         }
-        
+
         private void ParentManager_MetaDataChanged(object sender, EventArgs e) {
             // Propagate MetaDataChanged events from the parent manager
             base.OnMetaDataChanged(e);
         }
-        
+
         private void ParentManager_CurrentItemChanged(object sender, EventArgs e) {
             if (IgnoreItemChangedTable.Contains(parentManager)) {
                 return;
@@ -143,13 +143,13 @@ namespace System.Windows.Forms {
                     SetDataSource(fieldInfo.GetValue(curManager.Current));
                     listposition = (Count > 0 ? 0 : -1);
                 } else {
-                    // APPCOMPAT: bring back the Everett behavior where the currency manager adds an item and 
+                    // APPCOMPAT: bring back the Everett behavior where the currency manager adds an item and
                     // then it cancels the addition.
-                    // 
+                    //
                     // really, really hocky.
                     // will throw if the list in the curManager is not IBindingList
                     // and this will fail if the IBindingList does not have list change notification. read on....
-                    // when a new item will get added to an empty parent table, 
+                    // when a new item will get added to an empty parent table,
                     // the table will fire OnCurrentChanged and this method will get executed again
                     // allowing us to set the data source to an object with the right properties (so we can show
                     // metadata at design time).

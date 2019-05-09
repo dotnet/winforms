@@ -80,8 +80,8 @@ namespace System.Experimental.Gdi
         BLACKNESS               = 0x00000042, /* dest = BLACK                    */
         WHITENESS               = 0x00FF0062, /* dest = WHITE                    */
         CAPTUREBLT              = 0x40000000, /* Include layered windows */
-        
-    
+
+
         /* FONT WEIGHT (BOLD) VALUES */
         FW_DONTCARE         = 0,
         FW_NORMAL           = 400,
@@ -144,23 +144,23 @@ namespace System.Experimental.Gdi
         FORMAT_MESSAGE_DEFAULT         = FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_FROM_SYSTEM;
         // some others...
 
-        public enum RegionFlags 
+        public enum RegionFlags
         {
             ERROR           = 0,
             NULLREGION      = 1,
             SIMPLEREGION    = 2,
             COMPLEXREGION   = 3,
         }
-              
+
         [StructLayout(LayoutKind.Sequential)]
-        public struct RECT 
+        public struct RECT
         {
             public int left;
             public int top;
             public int right;
             public int bottom;
 
-            public RECT(int left, int top, int right, int bottom) 
+            public RECT(int left, int top, int right, int bottom)
             {
                 this.left = left;
                 this.top = top;
@@ -176,7 +176,7 @@ namespace System.Experimental.Gdi
                 this.bottom = r.Bottom;
             }
 
-            public static RECT FromXYWH(int x, int y, int width, int height) 
+            public static RECT FromXYWH(int x, int y, int width, int height)
             {
                 return new RECT(
                     x,
@@ -185,9 +185,9 @@ namespace System.Experimental.Gdi
                     y + height);
             }
 
-            public Size Size 
+            public Size Size
             {
-                get 
+                get
                 {
                     return new Size(this.right - this.left, this.bottom - this.top);
                 }
@@ -211,16 +211,16 @@ namespace System.Experimental.Gdi
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public class POINT 
+        public class POINT
         {
             public int x;
             public int y;
 
-            public POINT() 
+            public POINT()
             {
             }
 
-            public POINT(int x, int y) 
+            public POINT(int x, int y)
             {
                 this.x = x;
                 this.y = y;
@@ -237,19 +237,19 @@ namespace System.Experimental.Gdi
             }
 #endif
         }
-    
+
         [StructLayout(LayoutKind.Sequential)]
-        public class DRAWTEXTPARAMS 
-        { 
+        public class DRAWTEXTPARAMS
+        {
             private int cbSize = Marshal.SizeOf<DRAWTEXTPARAMS>();
             public int iTabLength;
             public int iLeftMargin;
             public int iRightMargin;
 
             /// <devdoc>
-            ///     Receives the number of characters processed by DrawTextEx, including white-space characters. 
-            ///     The number can be the length of the string or the index of the first line that falls below the drawing area. 
-            ///     Note that DrawTextEx always processes the entire string if the DT_NOCLIP formatting flag is specified. 
+            ///     Receives the number of characters processed by DrawTextEx, including white-space characters.
+            ///     The number can be the length of the string or the index of the first line that falls below the drawing area.
+            ///     Note that DrawTextEx always processes the entire string if the DT_NOCLIP formatting flag is specified.
             /// </devdoc>
             public int uiLengthDrawn;
 
@@ -278,7 +278,7 @@ namespace System.Experimental.Gdi
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public class LOGBRUSH 
+        public class LOGBRUSH
         {
             public int lbStyle;
             public int lbColor;
@@ -286,7 +286,7 @@ namespace System.Experimental.Gdi
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
-        public class LOGFONT 
+        public class LOGFONT
         {
             public int lfHeight;
             public int lfWidth;
@@ -311,7 +311,7 @@ namespace System.Experimental.Gdi
             public LOGFONT( LOGFONT lf )
             {
                 Debug.Assert( lf != null, "lf is null" );
-                
+
                 this.lfHeight           = lf.lfHeight;
                 this.lfWidth            = lf.lfWidth;
                 this.lfEscapement       = lf.lfEscapement;
@@ -329,9 +329,9 @@ namespace System.Experimental.Gdi
             }
 
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-            public override string ToString() 
+            public override string ToString()
             {
-                return 
+                return
                     "FaceName="  + lfFaceName + ", " +
                     "Height="    + lfHeight   + ", " +
                     "Width="     + lfWidth    + ", " +
@@ -342,9 +342,9 @@ namespace System.Experimental.Gdi
                     "CharSet="   + lfCharSet;
             }
 
-            public string DumpObject() 
+            public string DumpObject()
             {
-                return 
+                return
                     "Height="         + lfHeight         + ", " +
                     "Width="          + lfWidth          + ", " +
                     "Escapement="     + lfEscapement     + ", " +
@@ -364,55 +364,55 @@ namespace System.Experimental.Gdi
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Unicode)]
-        public struct TEXTMETRIC 
-        { 
-            public int  tmHeight; 
-            public int  tmAscent; 
-            public int  tmDescent; 
-            public int  tmInternalLeading; 
-            public int  tmExternalLeading; 
-            public int  tmAveCharWidth; 
-            public int  tmMaxCharWidth; 
-            public int  tmWeight; 
-            public int  tmOverhang; 
-            public int  tmDigitizedAspectX; 
-            public int  tmDigitizedAspectY; 
-            public char tmFirstChar; 
-            public char tmLastChar; 
-            public char tmDefaultChar; 
-            public char tmBreakChar; 
-            public byte tmItalic; 
-            public byte tmUnderlined; 
-            public byte tmStruckOut; 
-            public byte tmPitchAndFamily; 
-            public byte tmCharSet; 
+        public struct TEXTMETRIC
+        {
+            public int  tmHeight;
+            public int  tmAscent;
+            public int  tmDescent;
+            public int  tmInternalLeading;
+            public int  tmExternalLeading;
+            public int  tmAveCharWidth;
+            public int  tmMaxCharWidth;
+            public int  tmWeight;
+            public int  tmOverhang;
+            public int  tmDigitizedAspectX;
+            public int  tmDigitizedAspectY;
+            public char tmFirstChar;
+            public char tmLastChar;
+            public char tmDefaultChar;
+            public char tmBreakChar;
+            public byte tmItalic;
+            public byte tmUnderlined;
+            public byte tmStruckOut;
+            public byte tmPitchAndFamily;
+            public byte tmCharSet;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
-        public struct TEXTMETRICA 
-        { 
-            public int  tmHeight; 
-            public int  tmAscent; 
-            public int  tmDescent; 
-            public int  tmInternalLeading; 
-            public int  tmExternalLeading; 
-            public int  tmAveCharWidth; 
-            public int  tmMaxCharWidth; 
-            public int  tmWeight; 
-            public int  tmOverhang; 
-            public int  tmDigitizedAspectX; 
-            public int  tmDigitizedAspectY; 
-            public byte tmFirstChar; 
-            public byte tmLastChar; 
-            public byte tmDefaultChar; 
-            public byte tmBreakChar; 
-            public byte tmItalic; 
-            public byte tmUnderlined; 
-            public byte tmStruckOut; 
-            public byte tmPitchAndFamily; 
-            public byte tmCharSet; 
+        public struct TEXTMETRICA
+        {
+            public int  tmHeight;
+            public int  tmAscent;
+            public int  tmDescent;
+            public int  tmInternalLeading;
+            public int  tmExternalLeading;
+            public int  tmAveCharWidth;
+            public int  tmMaxCharWidth;
+            public int  tmWeight;
+            public int  tmOverhang;
+            public int  tmDigitizedAspectX;
+            public int  tmDigitizedAspectY;
+            public byte tmFirstChar;
+            public byte tmLastChar;
+            public byte tmDefaultChar;
+            public byte tmBreakChar;
+            public byte tmItalic;
+            public byte tmUnderlined;
+            public byte tmStruckOut;
+            public byte tmPitchAndFamily;
+            public byte tmCharSet;
         }
-       
+
         [StructLayout(LayoutKind.Sequential)]
         public class SIZE
         {

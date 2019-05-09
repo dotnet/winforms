@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Layout {
     public class ArrangedElementCollection : IList
     {
         internal static ArrangedElementCollection Empty = new ArrangedElementCollection(0);
-        
+
         // We wrap an ArrayList rather than inherit from CollectionBase because we
         // do not want to break binary compatibility with ControlCollection.
         private ArrayList _innerList;
@@ -27,8 +27,8 @@ namespace System.Windows.Forms.Layout {
         private ArrangedElementCollection(int size) {
             _innerList = new ArrayList(size);
         }
-        
-        internal ArrayList InnerList { 
+
+        internal ArrayList InnerList {
             get { return _innerList; }
         }
 
@@ -57,18 +57,18 @@ namespace System.Windows.Forms.Layout {
         // Repositions a element in this list.
         internal void MoveElement(IArrangedElement element, int fromIndex, int toIndex) {
             int delta = toIndex - fromIndex;
-        
+
             switch (delta) {
                 case -1:
                 case 1:
                     // simple swap
                     this.InnerList[fromIndex] = this.InnerList[toIndex];
                     break;
-        
+
                 default:
                     int start = 0;
                     int dest = 0;
-        
+
                     // which direction are we moving?
                     if (delta > 0) {
                         // shift down by the delta to open the new spot
@@ -79,7 +79,7 @@ namespace System.Windows.Forms.Layout {
                         // shift up by the delta to open the new spot
                         start = toIndex;
                         dest = toIndex + 1;
-        
+
                         // make it positive
                         delta = -delta;
                     }
@@ -96,7 +96,7 @@ namespace System.Windows.Forms.Layout {
                 // to point at the end of the spans to be copied.
                 sourceIndex = sourceIndex + length;
                 destinationIndex = destinationIndex + length;
-                
+
                 for(;length > 0; length--) {
                     destinationList.InnerList[--destinationIndex] = sourceList.InnerList[--sourceIndex];
                 }
@@ -106,7 +106,7 @@ namespace System.Windows.Forms.Layout {
                 }
             }
         }
-        
+
         #region IList Members
         void IList.Clear() { InnerList.Clear(); }
         bool IList.IsFixedSize { get { return InnerList.IsFixedSize; }}
@@ -119,13 +119,13 @@ namespace System.Windows.Forms.Layout {
         void IList.Insert(int index, object value) { throw new NotSupportedException(); /* InnerList.Insert(index, value); */ }
 
         object IList.this[int index] {
-            get { return InnerList[index]; }            
+            get { return InnerList[index]; }
             set { throw new NotSupportedException(); }
         }
         #endregion
 
         #region ICollection Members
-        public virtual int Count { 
+        public virtual int Count {
             get { return InnerList.Count; }
         }
         object ICollection.SyncRoot { get { return InnerList.SyncRoot; }}

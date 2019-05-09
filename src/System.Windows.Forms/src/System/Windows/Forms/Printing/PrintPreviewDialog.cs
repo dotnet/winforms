@@ -55,12 +55,12 @@ namespace System.Windows.Forms {
         private System.Windows.Forms.ToolStripButton closeToolStripButton;
         private System.Windows.Forms.ToolStripLabel pageToolStripLabel;
         ImageList imageList;
-        
+
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.PrintPreviewDialog'/> class.</para>
         /// </devdoc>
         public PrintPreviewDialog() {
-            
+
             #pragma warning disable 618
             base.AutoScaleBaseSize = new Size(5, 13);
             #pragma warning restore 618
@@ -115,8 +115,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override bool AutoScroll {
-            get { 
-                
+            get {
+
                 return base.AutoScroll;
             }
             set {
@@ -131,7 +131,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AutoSize {
-            get { 
+            get {
                 return base.AutoSize;
             }
             set {
@@ -143,7 +143,7 @@ namespace System.Windows.Forms {
         new public event EventHandler AutoSizeChanged {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
-        }                
+        }
 
         /// <devdoc>
         ///    <para>
@@ -165,7 +165,7 @@ namespace System.Windows.Forms {
             add => base.AutoValidateChanged += value;
             remove => base.AutoValidateChanged -= value;
         }
-        
+
         /// <devdoc>
         ///     The background color of this control. This is an ambient property and
         ///     will always return a non-null value.
@@ -231,7 +231,7 @@ namespace System.Windows.Forms {
             add => base.ContextMenuStripChanged += value;
             remove => base.ContextMenuStripChanged -= value;
         }
-        
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the border style of the form.
@@ -268,8 +268,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public Icon Icon {
-            
-            
+
+
             get {
                 return base.Icon;
             }
@@ -359,7 +359,7 @@ namespace System.Windows.Forms {
             add => base.MarginChanged += value;
             remove => base.MarginChanged -= value;
         }
-        
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.MainMenu'/>
@@ -416,7 +416,7 @@ namespace System.Windows.Forms {
             add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value;
         }
-        
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the size of the form.
@@ -490,7 +490,7 @@ namespace System.Windows.Forms {
                 base.UseWaitCursor = value;
             }
         }
-        
+
         /// <devdoc>
         ///    <para> Gets or sets the form's window state.
         ///       </para>
@@ -541,7 +541,7 @@ namespace System.Windows.Forms {
             }
         }
         /// <devdoc>
-        ///    <para> 
+        ///    <para>
         ///       Indicates whether entering the control causes validation on the controls requiring validation.</para>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -568,12 +568,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        
+
         protected override Size DefaultMinimumSize {
             get { return new Size(375, 250); }
         }
-        
-        
+
+
         /// <devdoc>
         ///    <para>Indicates whether the control is currently enabled.</para>
         /// </devdoc>
@@ -687,7 +687,7 @@ namespace System.Windows.Forms {
             remove => base.BackgroundImageLayoutChanged -= value;
         }
         /// <devdoc>
-        ///     Specifies a value that determines the IME (Input Method Editor) status of the 
+        ///     Specifies a value that determines the IME (Input Method Editor) status of the
         ///     object when that object is selected.
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -814,7 +814,7 @@ namespace System.Windows.Forms {
                 base.RightToLeftLayout = value;
             }
         }
-        
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler RightToLeftChanged {
             add => base.RightToLeftChanged += value;
@@ -826,10 +826,10 @@ namespace System.Windows.Forms {
             add => base.RightToLeftLayoutChanged += value;
             remove => base.RightToLeftLayoutChanged -= value;
         }
-        
+
 
         /// <devdoc>
-        ///    <para>Indicates whether the user can give the focus to this control using the TAB 
+        ///    <para>Indicates whether the user can give the focus to this control using the TAB
         ///       key. This property is read-only.</para>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -865,7 +865,7 @@ namespace System.Windows.Forms {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
         }
-        
+
         /// <devdoc>
         ///     The dock property. The dock property controls to which edge
         ///     of the container this control is docked to. For example, when docked to
@@ -936,9 +936,9 @@ namespace System.Windows.Forms {
         }
         //-------------------------------------------------------------------------------------------------------------
         //end addition
-        
+
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         SRDescription(nameof(SR.PrintPreviewAntiAliasDescr))
         ]
@@ -985,14 +985,14 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PrintPreviewDocumentDescr))
         ]
         public PrintDocument Document {
-            get { 
+            get {
                 return previewControl.Document;
             }
             set {
                 previewControl.Document = value;
             }
         }
-        
+
         [Browsable(false), DefaultValue(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new bool MinimizeBox {
             get {
@@ -1004,7 +1004,7 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        /// <para>Gets or sets a value indicating the <see cref='System.Windows.Forms.PrintPreviewControl'/> 
+        /// <para>Gets or sets a value indicating the <see cref='System.Windows.Forms.PrintPreviewControl'/>
         /// contained in this form.</para>
         /// </devdoc>
         [
@@ -1030,7 +1030,7 @@ namespace System.Windows.Forms {
                 base.Opacity = value;
             }
         }
-        
+
         [Browsable(false), DefaultValue(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new bool ShowInTaskbar {
             get {
@@ -1040,7 +1040,7 @@ namespace System.Windows.Forms {
                 base.ShowInTaskbar = value;
             }
         }
-        
+
         [Browsable(false), DefaultValue(SizeGripStyle.Hide), EditorBrowsable(EditorBrowsableState.Never)]
         public new SizeGripStyle SizeGripStyle {
             get {
@@ -1056,7 +1056,7 @@ namespace System.Windows.Forms {
                                                                                                         // So we don't have to localize it.
         ]
         void InitForm() {
-            
+
 
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PrintPreviewDialog));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -1085,9 +1085,9 @@ namespace System.Windows.Forms {
             ((System.ComponentModel.ISupportInitialize)(this.pageCounter)).BeginInit();
             this.SuspendLayout();
 
-            // 
+            //
             // toolStrip1
-            // 
+            //
             resources.ApplyResources(this.toolStrip1, "toolStrip1");
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.printToolStripButton,
@@ -1104,16 +1104,16 @@ namespace System.Windows.Forms {
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.toolStrip1.GripStyle = ToolStripGripStyle.Hidden;
 
-            // 
+            //
             // printToolStripButton
-            // 
+            //
             this.printToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.printToolStripButton.Name = "printToolStripButton";
             resources.ApplyResources(this.printToolStripButton, "printToolStripButton");
 
-            // 
+            //
             // zoomToolStripSplitButton
-            // 
+            //
             this.zoomToolStripSplitButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.zoomToolStripSplitButton.DoubleClickEnabled = true;
             this.zoomToolStripSplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1131,134 +1131,134 @@ namespace System.Windows.Forms {
             resources.ApplyResources(this.zoomToolStripSplitButton, "zoomToolStripSplitButton");
 
 
-            // 
+            //
             // autoToolStripMenuItem
-            // 
+            //
             this.autoToolStripMenuItem.CheckOnClick = true;
             this.autoToolStripMenuItem.DoubleClickEnabled = true;
             this.autoToolStripMenuItem.Checked = true;
             this.autoToolStripMenuItem.Name = "autoToolStripMenuItem";
             resources.ApplyResources(this.autoToolStripMenuItem, "autoToolStripMenuItem");
 
-            // 
+            //
             // toolStripMenuItem1
-            // 
+            //
             this.toolStripMenuItem1.CheckOnClick = true;
             this.toolStripMenuItem1.DoubleClickEnabled = true;
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             resources.ApplyResources(this.toolStripMenuItem1, "toolStripMenuItem1");
 
-            // 
+            //
             // toolStripMenuItem2
-            // 
+            //
             this.toolStripMenuItem2.CheckOnClick = true;
             this.toolStripMenuItem2.DoubleClickEnabled = true;
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
             resources.ApplyResources(this.toolStripMenuItem2, "toolStripMenuItem2");
 
-            // 
+            //
             // toolStripMenuItem3
-            // 
+            //
             this.toolStripMenuItem3.CheckOnClick = true;
             this.toolStripMenuItem3.DoubleClickEnabled = true;
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
             resources.ApplyResources(this.toolStripMenuItem3, "toolStripMenuItem3");
 
-            // 
+            //
             // toolStripMenuItem4
-            // 
+            //
             this.toolStripMenuItem4.CheckOnClick = true;
             this.toolStripMenuItem4.DoubleClickEnabled = true;
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
             resources.ApplyResources(this.toolStripMenuItem4, "toolStripMenuItem4");
 
-            // 
+            //
             // toolStripMenuItem5
-            // 
+            //
             this.toolStripMenuItem5.CheckOnClick = true;
             this.toolStripMenuItem5.DoubleClickEnabled = true;
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
             resources.ApplyResources(this.toolStripMenuItem5, "toolStripMenuItem5");
 
-            // 
+            //
             // toolStripMenuItem6
-            // 
+            //
             this.toolStripMenuItem6.CheckOnClick = true;
             this.toolStripMenuItem6.DoubleClickEnabled = true;
             this.toolStripMenuItem6.Name = "toolStripMenuItem6";
             resources.ApplyResources(this.toolStripMenuItem6, "toolStripMenuItem6");
 
-            // 
+            //
             // toolStripMenuItem7
-            // 
+            //
             this.toolStripMenuItem7.CheckOnClick = true;
             this.toolStripMenuItem7.DoubleClickEnabled = true;
             this.toolStripMenuItem7.Name = "toolStripMenuItem7";
             resources.ApplyResources(this.toolStripMenuItem7, "toolStripMenuItem7");
 
-            // 
+            //
             // toolStripMenuItem8
-            // 
+            //
             this.toolStripMenuItem8.CheckOnClick = true;
             this.toolStripMenuItem8.DoubleClickEnabled = true;
             this.toolStripMenuItem8.Name = "toolStripMenuItem8";
             resources.ApplyResources(this.toolStripMenuItem8, "toolStripMenuItem8");
 
-            // 
+            //
             // separatorToolStripSeparator
-            // 
+            //
             this.separatorToolStripSeparator.Name = "separatorToolStripSeparator";
 
-            // 
+            //
             // onepageToolStripButton
-            // 
+            //
             this.onepageToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.onepageToolStripButton.Name = "onepageToolStripButton";
             resources.ApplyResources(this.onepageToolStripButton, "onepageToolStripButton");
 
-            // 
+            //
             // twopagesToolStripButton
-            // 
+            //
             this.twopagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.twopagesToolStripButton.Name = "twopagesToolStripButton";
             resources.ApplyResources(this.twopagesToolStripButton, "twopagesToolStripButton");
 
-            // 
+            //
             // threepagesToolStripButton
-            // 
+            //
             this.threepagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.threepagesToolStripButton.Name = "threepagesToolStripButton";
             resources.ApplyResources(this.threepagesToolStripButton, "threepagesToolStripButton");
 
-            // 
+            //
             // fourpagesToolStripButton
-            // 
+            //
             this.fourpagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.fourpagesToolStripButton.Name = "fourpagesToolStripButton";
             resources.ApplyResources(this.fourpagesToolStripButton, "fourpagesToolStripButton");
 
-            // 
+            //
             // sixpagesToolStripButton
-            // 
+            //
             this.sixpagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.sixpagesToolStripButton.Name = "sixpagesToolStripButton";
             resources.ApplyResources(this.sixpagesToolStripButton, "sixpagesToolStripButton");
 
-            // 
+            //
             // separatorToolStripSeparator1
-            // 
+            //
             this.separatorToolStripSeparator1.Name = "separatorToolStripSeparator1";
 
-            // 
+            //
             // closeToolStripButton
-            // 
+            //
             this.closeToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Text;
             this.closeToolStripButton.Name = "closeToolStripButton";
             resources.ApplyResources(this.closeToolStripButton, "closeToolStripButton");
 
-            // 
+            //
             // pageCounter
-            // 
+            //
             resources.ApplyResources(this.pageCounter, "pageCounter");
             pageCounter.Text = "1";
             pageCounter.TextAlign = HorizontalAlignment.Right;
@@ -1268,9 +1268,9 @@ namespace System.Windows.Forms {
             pageCounter.ValueChanged += new EventHandler(UpdownMove);
             this.pageCounter.Name = "pageCounter";
 
-            // 
+            //
             // pageToolStripLabel
-            // 
+            //
             this.pageToolStripLabel.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.pageToolStripLabel.Name = "pageToolStripLabel";
             resources.ApplyResources(this.pageToolStripLabel, "pageToolStripLabel");
@@ -1322,7 +1322,7 @@ namespace System.Windows.Forms {
                 menu.ShowCheckMargin = true;
                 menu.ShowImageMargin = false;
                 menu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-                
+
             }
 
             //Create the ToolStripControlHost
@@ -1332,9 +1332,9 @@ namespace System.Windows.Forms {
             this.toolStrip1.Items.Add(pageCounterItem);
             this.toolStrip1.Items.Add(this.pageToolStripLabel);
 
-            // 
+            //
             // Form1
-            // 
+            //
             resources.ApplyResources(this, "$this");
 
             this.Controls.Add(previewControl);
@@ -1351,7 +1351,7 @@ namespace System.Windows.Forms {
 
 
         }
-        
+
 
         /// <devdoc>
         ///    <para>
@@ -1374,7 +1374,7 @@ namespace System.Windows.Forms {
             // the windows forms exception dialog.
             if (Document != null && !Document.PrinterSettings.IsValid)
                 throw new InvalidPrinterException(Document.PrinterSettings);
-            
+
             base.CreateHandle();
         }
 
@@ -1417,7 +1417,7 @@ namespace System.Windows.Forms {
             // We should use our own base size, not the base size of our container.
             return false;
         }
-                
+
         internal override bool ShouldSerializeText() {
             return !Text.Equals(string.Format(SR.PrintPreviewDialog_PrintPreview));
         }
@@ -1430,13 +1430,13 @@ namespace System.Windows.Forms {
             pageCounter.Value = previewControl.StartPage + 1;
         }
 
-        
+
         void CheckZoomMenu(ToolStripMenuItem toChecked) {
             foreach (ToolStripMenuItem item in zoomToolStripSplitButton.DropDownItems) {
                 item.Checked = toChecked == item;
             }
         }
-        
+
 
         void ZoomAuto(object sender, EventArgs eventargs) {
             ToolStripMenuItem item = sender as ToolStripMenuItem;
@@ -1498,13 +1498,13 @@ namespace System.Windows.Forms {
             if (item != null && !item.Selected)
             {
                 Rectangle rect = new Rectangle (0, 0 , item.Bounds.Width - 1, item.Bounds.Height - 1);
-                using (Pen pen = new Pen(SystemColors.ControlDark)) 
+                using (Pen pen = new Pen(SystemColors.ControlDark))
                 {
                     e.Graphics.DrawRectangle(pen, rect);
                 }
             }
         }
-            
+
 
         void OnprintToolStripButtonClick(object sender, System.EventArgs e) {
              if (previewControl.Document != null)
@@ -1512,7 +1512,7 @@ namespace System.Windows.Forms {
                 previewControl.Document.Print();
              }
         }
-        
+
         void OnzoomToolStripSplitButtonClick(object sender, System.EventArgs e) {
             ZoomAuto(null, EventArgs.Empty);
         }

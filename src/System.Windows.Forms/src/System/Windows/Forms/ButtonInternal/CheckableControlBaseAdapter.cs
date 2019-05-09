@@ -39,9 +39,9 @@ namespace System.Windows.Forms.ButtonInternal {
                     LayoutOptions options = Layout(pe);
                     return options.GetPreferredSizeCore(proposedSize);
                 }
-            }        
+            }
         }
-        
+
         protected abstract ButtonBaseAdapter CreateButtonAdapter();
 
         private Appearance Appearance {

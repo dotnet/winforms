@@ -71,11 +71,11 @@ namespace System.Windows.Forms
                 return this.host;
             }
         }
-        
+
         //
         // Interface implementations:
         //
-        
+
         //
         // IOleControlSite methods:
         //
@@ -135,7 +135,7 @@ namespace System.Windows.Forms
             msg.WParam = pMsg.wParam;
             msg.LParam = pMsg.lParam;
             msg.HWnd = pMsg.hwnd;
-            
+
             try {
                 bool f = ((Control)this.Host).PreProcessControlMessage(ref msg) == PreProcessControlState.MessageProcessed;
                 return f ? NativeMethods.S_OK : NativeMethods.S_FALSE;
@@ -236,12 +236,12 @@ namespace System.Windows.Forms
                                              NativeMethods.COMRECT lprcPosRect, NativeMethods.COMRECT lprcClipRect, NativeMethods.tagOIFI lpFrameInfo) {
             ppDoc = null;
             ppFrame = this.Host.GetParentContainer();
-            
+
             lprcPosRect.left = this.Host.Bounds.X;
             lprcPosRect.top = this.Host.Bounds.Y;
             lprcPosRect.right = this.Host.Bounds.Width + this.Host.Bounds.X;
             lprcPosRect.bottom = this.Host.Bounds.Height + this.Host.Bounds.Y;
-            
+
             lprcClipRect = WebBrowserHelper.GetClipRect();
             if (lpFrameInfo != null) {
                 lpFrameInfo.cb = Marshal.SizeOf<NativeMethods.tagOIFI>();

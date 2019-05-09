@@ -140,7 +140,7 @@ namespace System.Windows.Forms
                     return ImeContext.GetImeMode( this.Handle );
                 }
                 else {
-                    // window is not yet created hence no IME associated yet. 
+                    // window is not yet created hence no IME associated yet.
                     return ImeMode.Inherit;
                 }
             }
@@ -231,8 +231,8 @@ namespace System.Windows.Forms
         protected virtual ImeMode ImeModeBase {
             get {
                 Debug.WriteLineIf( CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside get_ImeModeBase(), this = " + this );
-                Debug.Indent(); 
-                
+                Debug.Indent();
+
                 ImeMode imeMode = CachedImeMode;
 
                 Debug.WriteLineIf( CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Value = " + imeMode );
@@ -242,8 +242,8 @@ namespace System.Windows.Forms
             }
             set {
                 Debug.WriteLineIf( CompModSwitches.ImeMode.Level >= TraceLevel.Info, string.Format( CultureInfo.CurrentCulture, "Inside set_ImeModeBase({0}), this = {1}", value, this ) );
-                Debug.Indent(); 
-                
+                Debug.Indent();
+
                 //valid values are -1 to 0xb
                 if( !ClientUtils.IsEnumValid( value, (int) value, (int) ImeMode.Inherit, (int) ImeMode.OnHalf ) ) {
                     throw new InvalidEnumArgumentException( "ImeMode", (int) value, typeof( ImeMode ) );
@@ -280,7 +280,7 @@ namespace System.Windows.Forms
 
                     VerifyImeModeChanged( oldImeMode, CachedImeMode );
                 }
-                
+
                 ImeContext.TraceImeStatus( this );
                 Debug.Unindent();
             }
@@ -306,8 +306,8 @@ namespace System.Windows.Forms
         /// </devdoc>
         internal int ImeWmCharsToIgnore {
             // The IME sends WM_IME_CHAR messages for each character in the composition string, and then
-            // after all messages are sent, corresponding WM_CHAR messages are also sent. (in non-unicode 
-            // windows two WM_CHAR messages are sent per char in the IME).  We need to keep a counter 
+            // after all messages are sent, corresponding WM_CHAR messages are also sent. (in non-unicode
+            // windows two WM_CHAR messages are sent per char in the IME).  We need to keep a counter
             // not to process each character twice or more.
             get {
                 return Properties.GetInteger( PropImeWmCharsToIgnore );
@@ -448,12 +448,12 @@ namespace System.Windows.Forms
                 // If PropagatingImeMode has not been initialized it will return ImeMode.Inherit above, need to check newImeContextMode for this.
                 if (CurrentImeContextMode != newImeContextMode && newImeContextMode != ImeMode.Inherit) {
                     // If the context changes the window will receive one or more WM_IME_NOTIFY messages and as part of its
-                    // processing it will raise the ImeModeChanged event if needed.  We need to prevent the event from been 
+                    // processing it will raise the ImeModeChanged event if needed.  We need to prevent the event from been
                     // raised here from here.
                     DisableImeModeChangedCount++;
 
-                    // Setting IME status to Disable will first close the IME and then disable it.  For CHN IME, the first action will 
-                    // update the PropagatingImeMode to ImeMode.Close which is incorrect.  We need to save the PropagatingImeMode in 
+                    // Setting IME status to Disable will first close the IME and then disable it.  For CHN IME, the first action will
+                    // update the PropagatingImeMode to ImeMode.Close which is incorrect.  We need to save the PropagatingImeMode in
                     // this case and restore it after the context has been changed.
                     // Also this call here is very important since it will initialize the PropagatingImeMode if not already initialized
                     // before setting the IME context to the control's ImeMode value which could be different from the propagating value.
@@ -509,7 +509,7 @@ namespace System.Windows.Forms
         }
 
         /// <devdoc>
-        ///     Verifies whether the IME context mode is correct based on the control's Ime restriction mode (CanEnableIme) 
+        ///     Verifies whether the IME context mode is correct based on the control's Ime restriction mode (CanEnableIme)
         ///     and updates the IME context if needed.
         /// </devdoc>
         internal void VerifyImeRestrictedModeChanged() {
@@ -703,13 +703,13 @@ namespace System.Windows.Forms
 
             ImeMode[] inputLanguageTable = ImeModeConversion.InputLanguageTable;
 
-            // During a change to the Chinese language with Focus already set, the Chinese IME will send several WmImeNotify messages 
-            // before ever sending a WmInputLangChange event. Also, the IME will report an IME input context during this time that we 
-            // interpret as On = 'OnHalf'. The combination of these causes us to update the default Cached ImeMode to OnHalf, overriding 
+            // During a change to the Chinese language with Focus already set, the Chinese IME will send several WmImeNotify messages
+            // before ever sending a WmInputLangChange event. Also, the IME will report an IME input context during this time that we
+            // interpret as On = 'OnHalf'. The combination of these causes us to update the default Cached ImeMode to OnHalf, overriding
             // the control's ImeMode property -- unwanted behavior. We workaround this by skipping our mode synchronization during these
             // IMENotify messages until we get a WmInputLangChange event.
             //
-            // If this is the first time here after conversion to chinese language, wait for WmInputLanguageChange 
+            // If this is the first time here after conversion to chinese language, wait for WmInputLanguageChange
             // before listening to WmImeNotifys.
             if ((inputLanguageTable == ImeModeConversion.ChineseTable) && !lastLanguageChinese) IgnoreWmImeNotify = true;
             lastLanguageChinese = (inputLanguageTable == ImeModeConversion.ChineseTable);
@@ -719,19 +719,19 @@ namespace System.Windows.Forms
 
                 // The WM_IME_NOTIFY message is not consistent across the different IMEs, particularly the notification type
                 // we care about (IMN_SETCONVERSIONMODE & IMN_SETOPENSTATUS).
-                // The IMN_SETOPENSTATUS command is sent when the open status of the input context is updated. 
+                // The IMN_SETOPENSTATUS command is sent when the open status of the input context is updated.
                 // The IMN_SETCONVERSIONMODE command is sent when the conversion mode of the input context is updated.
                 // - The Korean IME sents both msg notifications when changing the conversion mode (From/To Hangul/Alpha).
-                // - The Chinese IMEs sends the IMN_SETCONVERSIONMODE when changing mode (On/Close, Full Shape/Half Shape) 
+                // - The Chinese IMEs sends the IMN_SETCONVERSIONMODE when changing mode (On/Close, Full Shape/Half Shape)
                 //   and IMN_SETOPENSTATUS when getting disabled/enabled or closing/opening as well, but it does not send any
                 //   WM_IME_NOTIFY when associating an IME to the app for the first time; setting the IME mode to direct input
                 //   during WM_INPUTLANGCHANGED forces the IMN_SETOPENSTATUS message to be sent.
-                // - The Japanese IME sends IMN_SETCONVERSIONMODE when changing from Off to one of the active modes (Katakana..) 
+                // - The Japanese IME sends IMN_SETCONVERSIONMODE when changing from Off to one of the active modes (Katakana..)
                 //   and IMN_SETOPENSTATUS when changing beteween the active modes or when enabling/disabling the IME.
-                // In any case we update the cache. 
-                // Warning: 
+                // In any case we update the cache.
+                // Warning:
                 // Attempting to change the IME mode from here will cause re-entrancy - WM_IME_NOTIFY is resent.
-                // We guard against re-entrancy since the ImeModeChanged event can be raised and any changes from the handler could 
+                // We guard against re-entrancy since the ImeModeChanged event can be raised and any changes from the handler could
                 // lead to another WM_IME_NOTIFY loop.
 
                 if( wparam == NativeMethods.IMN_SETCONVERSIONMODE || wparam == NativeMethods.IMN_SETOPENSTATUS ) {
@@ -754,8 +754,8 @@ namespace System.Windows.Forms
         internal void WmImeSetFocus() {
             if (ImeModeConversion.InputLanguageTable != ImeModeConversion.UnsupportedTable) {
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside WmImeSetFocus(), this=" + this);
-                Debug.Indent(); 
-            
+                Debug.Indent();
+
                 // Make sure the IME context is set to the correct value.
                 // Consider - Perf improvement: ContainerControl controls should update the IME context only when they don't contain
                 //            a focusable control since it will be updated by that control.
@@ -782,17 +782,17 @@ namespace System.Windows.Forms
         private void WmImeKillFocus() {
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside WmImeKillFocus(), this=" + this);
             Debug.Indent();
-            
+
             Control topMostWinformsParent = TopMostParent;
             Form appForm = topMostWinformsParent as Form;
 
-            if( (appForm == null || appForm.Modal) && !topMostWinformsParent.ContainsFocus ) { 
+            if( (appForm == null || appForm.Modal) && !topMostWinformsParent.ContainsFocus ) {
                 // This means the winforms component container is not a WinForms host and it is no longer focused.
-                // Or it is not the main app host. 
+                // Or it is not the main app host.
 
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Unfocused TopMostParent = " + topMostWinformsParent);
 
-                // We need to reset the PropagatingImeMode to force reinitialization when the winforms component gets focused again; 
+                // We need to reset the PropagatingImeMode to force reinitialization when the winforms component gets focused again;
                 // this enables inheritting the propagating mode from an unmanaged application hosting a winforms component.
                 // But before leaving the winforms container we need to set the IME to the propagating IME mode since the focused control
                 // may not support IME which would leave the IME disabled.
@@ -917,7 +917,7 @@ namespace System.Windows.Forms
             //
             ImeMode[] countryTable = ImeModeConversion.InputLanguageTable;
             if( countryTable == ImeModeConversion.UnsupportedTable ) {
-                // No IME associated with current culture. 
+                // No IME associated with current culture.
                 retval = ImeMode.Inherit;
                 goto cleanup;
             }
@@ -1275,7 +1275,7 @@ namespace System.Windows.Forms
             ImeMode.On,
             ImeMode.OnHalf,
             ImeMode.Off,
-            ImeMode.Off 
+            ImeMode.Off
         };
 
         private static ImeMode[] unsupportedTable = {
@@ -1307,7 +1307,7 @@ namespace System.Windows.Forms
         }
 
         /// <devdoc>
-        ///     Gets the ImeMode table of the current input language.  
+        ///     Gets the ImeMode table of the current input language.
         ///     Although this property is per-thread based we cannot cache it and share it among controls running in the same thread
         ///     for two main reasons: we still have some controls that don't handle IME properly (TabControl, ComboBox, TreeView...)
         ///     and would render it invalid and since the IME API is not public third party controls would not have a way to update
@@ -1321,11 +1321,11 @@ namespace System.Windows.Forms
                 int lcid = (int)((long)inputLanguage.Handle & (long)0xFFFF);
 
                 switch (lcid) {
-                    case 0x0404:    
-                    case 0x0804:    
-                    case 0x0c04:    
-                    case 0x1004:    
-                    case 0x1404:    
+                    case 0x0404:
+                    case 0x0804:
+                    case 0x0c04:
+                    case 0x1004:
+                    case 0x1404:
                         return chineseTable;
 
                     case 0x0412:    // Korean

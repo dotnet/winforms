@@ -139,8 +139,8 @@ namespace System.Windows.Forms.Design {
         ///    <para>Gets or sets the icon for this page.</para>
         /// </devdoc>
         public Icon Icon {
-            
-            
+
+
             get {
                 if (icon == null) {
                     icon = new Icon(typeof(ComponentEditorPage), "ComponentEditorPage");
@@ -153,7 +153,7 @@ namespace System.Windows.Forms.Design {
         }
 
         /// <devdoc>
-        ///    <para> 
+        ///    <para>
         ///       Gets or sets the title of the page.</para>
         /// </devdoc>
         public virtual string Title {
@@ -249,7 +249,7 @@ namespace System.Windows.Forms.Design {
         protected abstract void LoadComponent();
 
         /// <devdoc>
-        ///    <para> 
+        ///    <para>
         ///       Called when the page along with its sibling
         ///       pages have applied their changes.</para>
         /// </devdoc>
@@ -299,7 +299,7 @@ namespace System.Windows.Forms.Design {
         }
 
         /// <devdoc>
-        ///    <para> 
+        ///    <para>
         ///       Provides help information to the help system.</para>
         /// </devdoc>
         public virtual void ShowHelp() {

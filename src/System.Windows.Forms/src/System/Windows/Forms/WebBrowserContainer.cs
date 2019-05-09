@@ -107,7 +107,7 @@ namespace System.Windows.Forms
                     ctlInEditMode.SetSelectionStyle(WebBrowserHelper.SelectionStyle.Selected);
                     ctlInEditMode.SetEditMode(WebBrowserHelper.AXEditMode.None);
                 }
-                
+
                 if (ctl == null) {
                     ctlInEditMode = null;
                 }
@@ -288,7 +288,7 @@ namespace System.Windows.Forms
                 throw new ArgumentException(string.Format(SR.AXDuplicateControl, GetNameForControl(ctl)), "ctl");
 
             containerCache.Add(ctl, ctl);
-                
+
             if (assocContainer == null) {
                 ISite site = ctl.Site;
                 if (site != null) {
@@ -379,5 +379,5 @@ namespace System.Windows.Forms
             }
         }
     }
-    
+
 }

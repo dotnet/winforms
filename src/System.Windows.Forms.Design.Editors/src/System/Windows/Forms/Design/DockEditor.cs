@@ -104,7 +104,7 @@ namespace System.Windows.Forms.Design
                 upDownOrder = new[] { top, fill, bottom, none };
                 leftRightOrder = new[] { left, fill, right };
                 tabOrder = new[] { top, left, fill, right, bottom, none };
-                
+
                 if (!isScalingInitialized)
                 {
                     if (DpiHelper.IsScalingRequired)

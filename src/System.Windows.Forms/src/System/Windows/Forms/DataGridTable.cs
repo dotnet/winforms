@@ -445,8 +445,8 @@ namespace System.Windows.Forms {
                 if (this.isDefaultTableStyle) {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "GridLineStyle"));
                 }
-                
-                //valid values are 0x0 to 0x1. 
+
+                //valid values are 0x0 to 0x1.
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridLineStyle.None, (int)DataGridLineStyle.Solid)) {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridLineStyle));
                 }
@@ -465,7 +465,7 @@ namespace System.Windows.Forms {
 
         [
          SRCategory(nameof(SR.CatColors)),
-         SRDescription(nameof(SR.DataGridHeaderBackColorDescr))         
+         SRDescription(nameof(SR.DataGridHeaderBackColorDescr))
         ]
         public Color HeaderBackColor {
             get {
@@ -567,7 +567,7 @@ namespace System.Windows.Forms {
 
         [
          SRCategory(nameof(SR.CatColors)),
-         SRDescription(nameof(SR.DataGridHeaderForeColorDescr))         
+         SRDescription(nameof(SR.DataGridHeaderForeColorDescr))
         ]
         public Color HeaderForeColor {
             get {
@@ -744,7 +744,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        public void ResetLinkHoverColor() { 
+        public void ResetLinkHoverColor() {
             /*if (ShouldSerializeLinkHoverColor())
                 LinkHoverColor = defaultLinkHoverBrush.Color;*/
         }
@@ -788,7 +788,7 @@ namespace System.Windows.Forms {
             add => Events.AddHandler(EventPreferredColumnWidth, value);
             remove => Events.RemoveHandler(EventPreferredColumnWidth, value);
         }
-        
+
         [
          SRCategory(nameof(SR.CatLayout)),
          Localizable(true),
@@ -980,7 +980,7 @@ namespace System.Windows.Forms {
         {
             return !DefaultSelectionBackBrush.Equals(selectionBackBrush);
         }
-        
+
         public void ResetSelectionBackColor() {
             if (ShouldSerializeSelectionBackColor())
                 SelectionBackColor = DefaultSelectionBackBrush.Color;
@@ -989,7 +989,7 @@ namespace System.Windows.Forms {
         [
          Description("The foreground color for the current data grid row"),
          SRCategory(nameof(SR.CatColors)),
-         SRDescription(nameof(SR.DataGridSelectionForeColorDescr))        
+         SRDescription(nameof(SR.DataGridSelectionForeColorDescr))
         ]
         public Color SelectionForeColor {
             get {

@@ -42,9 +42,9 @@ namespace WinformsControlsTest
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.SuspendLayout();
-            // 
+            //
             // treeView1
-            // 
+            //
             this.treeView1.CheckBoxes = true;
             this.treeView1.ImageIndex = 0;
             this.treeView1.ImageList = this.imageList1;
@@ -65,16 +65,16 @@ namespace WinformsControlsTest
             this.treeView1.ShowNodeToolTips = true;
             this.treeView1.Size = new System.Drawing.Size(145, 71);
             this.treeView1.TabIndex = 0;
-			// 
+			//
 			// imageList1
-			// 
+			//
 			this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
 			this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
 			this.imageList1.Images.SetKeyName(0, "SmallA.bmp");
-			this.imageList1.Images.SetKeyName(1, "SmallABlue.bmp");	
-			// 
+			this.imageList1.Images.SetKeyName(1, "SmallABlue.bmp");
+			//
 			// TreeViewTest
-			// 
+			//
 			this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(284, 261);

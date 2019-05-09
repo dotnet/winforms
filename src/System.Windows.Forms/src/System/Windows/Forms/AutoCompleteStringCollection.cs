@@ -16,10 +16,10 @@ namespace System.Windows.Forms {
 
         CollectionChangeEventHandler onCollectionChanged;
         private ArrayList data = new ArrayList();
-        
+
         public AutoCompleteStringCollection()
         {
-            
+
         }
 
         /// <devdoc>
@@ -30,14 +30,14 @@ namespace System.Windows.Forms {
                 return ((string)data[index]);
             }
             set {
-                OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Remove, data[index])); 
+                OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Remove, data[index]));
                 data[index] = value;
                 OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, value));
             }
         }
 
         /// <devdoc>
-        ///    <para>Gets the number of strings in the 
+        ///    <para>Gets the number of strings in the
         ///    <see cref='System.Collections.Specialized.AutoCompleteStringCollection'/> .</para>
         /// </devdoc>
         public int Count {
@@ -79,7 +79,7 @@ namespace System.Windows.Forms {
 
 
         /// <devdoc>
-        ///    <para>Adds a string with the specified value to the 
+        ///    <para>Adds a string with the specified value to the
         ///    <see cref='System.Collections.Specialized.AutoCompleteStringCollection'/> .</para>
         /// </devdoc>
         public int Add(string value) {
@@ -100,7 +100,7 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        ///    <para>Removes all the strings from the 
+        ///    <para>Removes all the strings from the
         ///    <see cref='System.Collections.Specialized.AutoCompleteStringCollection'/> .</para>
         /// </devdoc>
         public void Clear() {
@@ -109,8 +109,8 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        ///    <para>Gets a value indicating whether the 
-        ///    <see cref='System.Collections.Specialized.AutoCompleteStringCollection'/> contains a string with the specified 
+        ///    <para>Gets a value indicating whether the
+        ///    <see cref='System.Collections.Specialized.AutoCompleteStringCollection'/> contains a string with the specified
         ///       value.</para>
         /// </devdoc>
         public bool Contains(string value) {
@@ -118,7 +118,7 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        /// <para>Copies the <see cref='System.Collections.Specialized.AutoCompleteStringCollection'/> values to a one-dimensional <see cref='System.Array'/> instance at the 
+        /// <para>Copies the <see cref='System.Collections.Specialized.AutoCompleteStringCollection'/> values to a one-dimensional <see cref='System.Array'/> instance at the
         ///    specified index.</para>
         /// </devdoc>
         public void CopyTo(string[] array, int index) {
@@ -126,7 +126,7 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        ///    <para>Returns the index of the first occurrence of a string in 
+        ///    <para>Returns the index of the first occurrence of a string in
         ///       the <see cref='System.Collections.Specialized.AutoCompleteStringCollection'/> .</para>
         /// </devdoc>
         public int IndexOf(string value) {
@@ -134,7 +134,7 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        /// <para>Inserts a string into the <see cref='System.Collections.Specialized.AutoCompleteStringCollection'/> at the specified 
+        /// <para>Inserts a string into the <see cref='System.Collections.Specialized.AutoCompleteStringCollection'/> at the specified
         ///    index.</para>
         /// </devdoc>
         public void Insert(int index, string value) {
@@ -152,8 +152,8 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        ///    <para>Gets a value indicating whether access to the 
-        ///    <see cref='System.Collections.Specialized.AutoCompleteStringCollection'/> 
+        ///    <para>Gets a value indicating whether access to the
+        ///    <see cref='System.Collections.Specialized.AutoCompleteStringCollection'/>
         ///    is synchronized (thread-safe).</para>
         /// </devdoc>
         public bool IsSynchronized {
@@ -163,7 +163,7 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        ///    <para> Removes a specific string from the 
+        ///    <para> Removes a specific string from the
         ///    <see cref='System.Collections.Specialized.AutoCompleteStringCollection'/> .</para>
         /// </devdoc>
         public void Remove(string value) {
@@ -222,6 +222,6 @@ namespace System.Windows.Forms {
         public IEnumerator GetEnumerator() {
             return data.GetEnumerator();
         }
- 
+
     }
 }

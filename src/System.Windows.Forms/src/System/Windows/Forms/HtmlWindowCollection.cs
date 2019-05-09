@@ -12,11 +12,11 @@ namespace System.Windows.Forms
     {
         private UnsafeNativeMethods.IHTMLFramesCollection2 htmlFramesCollection2;
         private HtmlShimManager shimManager;
-        
+
         internal HtmlWindowCollection(HtmlShimManager shimManager, UnsafeNativeMethods.IHTMLFramesCollection2 collection) {
             this.htmlFramesCollection2 = collection;
             this.shimManager = shimManager;
-            
+
             Debug.Assert(this.NativeHTMLFramesCollection2 != null, "The window collection object should implement IHTMLFramesCollection2");
         }
 
@@ -69,7 +69,7 @@ namespace System.Windows.Forms
                 return false;
             }
         }
-        
+
         object ICollection.SyncRoot {
             get {
                 return this;
@@ -86,7 +86,7 @@ namespace System.Windows.Forms
         public IEnumerator GetEnumerator() {
             HtmlWindow[] htmlWindows = new HtmlWindow[this.Count];
             ((ICollection)this).CopyTo(htmlWindows, 0);
-            
+
             return htmlWindows.GetEnumerator();
         }
 

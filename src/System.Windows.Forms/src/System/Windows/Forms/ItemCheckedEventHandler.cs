@@ -6,7 +6,7 @@ namespace System.Windows.Forms
 {
     /// <devdoc>
     /// Represents the method that will handle the <see langword='ItemCheck'/>
-    /// event of a <see cref='System.Windows.Forms.CheckedListBox'/> or 
+    /// event of a <see cref='System.Windows.Forms.CheckedListBox'/> or
     /// <see cref='System.Windows.Forms.ListView'/>.
     /// </devdoc>
     public delegate void ItemCheckedEventHandler(object sender, ItemCheckedEventArgs e);

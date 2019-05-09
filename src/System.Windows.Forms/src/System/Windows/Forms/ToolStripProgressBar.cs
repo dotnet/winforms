@@ -79,7 +79,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         /// <value></value>
         protected override System.Drawing.Size DefaultSize {
-            get {              
+            get {
                 return new Size(100,15);
             }
         }
@@ -202,8 +202,8 @@ namespace System.Windows.Forms
         /// Hide the property.
         /// </devdoc>
         [
-        Browsable(false), 
-        EditorBrowsable(EditorBrowsableState.Never), 
+        Browsable(false),
+        EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public override string Text
@@ -267,7 +267,7 @@ namespace System.Windows.Forms
             ProgressBar bar = control as ProgressBar;
             if (bar != null) {
                 // Please keep this alphabetized and in sync with Unsubscribe
-                // 
+                //
                 bar.RightToLeftLayoutChanged += new EventHandler(HandleRightToLeftLayoutChanged);
             }
 
@@ -279,7 +279,7 @@ namespace System.Windows.Forms
             ProgressBar bar = control as ProgressBar;
             if (bar != null) {
                 // Please keep this alphabetized and in sync with Subscribe
-                // 
+                //
                 bar.RightToLeftLayoutChanged -= new EventHandler(HandleRightToLeftLayoutChanged);
             }
             base.OnUnsubscribeControlEvents(control);
@@ -410,7 +410,7 @@ namespace System.Windows.Forms
             public ToolStripProgressBarAccessibleObject(ToolStripProgressBar ownerItem) : base(ownerItem) {
               this.ownerItem = ownerItem;
             }
-         
+
             public override AccessibleRole Role {
                get {
                    AccessibleRole role = Owner.AccessibleRole;

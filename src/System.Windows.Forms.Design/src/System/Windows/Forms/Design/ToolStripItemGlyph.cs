@@ -49,7 +49,7 @@ namespace System.Windows.Forms.Design
             }
             return null;
         }
-        
+
         /// <summary>
         /// Control host dont draw on Invalidation...
         /// </summary>
@@ -59,7 +59,7 @@ namespace System.Windows.Forms.Design
             {
                 if (_item is System.Windows.Forms.ToolStripComboBox && VisualStyles.VisualStyleRenderer.IsSupported)
                 {
-                    // When processing WM_PAINT and the OS has a theme enabled, the native ComboBox sends a WM_PAINT  message to its parent when a theme is enabled in the OS forcing a repaint in the AdornerWindow  generating an infinite WM_PAINT message processing loop. We guard against this here. 
+                    // When processing WM_PAINT and the OS has a theme enabled, the native ComboBox sends a WM_PAINT  message to its parent when a theme is enabled in the OS forcing a repaint in the AdornerWindow  generating an infinite WM_PAINT message processing loop. We guard against this here.
                     return;
                 }
                 _item.Invalidate();

@@ -13,7 +13,7 @@ namespace System.Windows.Forms
         {
             Column = column;
         }
-        
+
         public int Column { get; }
     }
 }

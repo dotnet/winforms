@@ -11,7 +11,7 @@ namespace System.Windows.Forms {
     using System.Runtime.Versioning;
 
     /// <devdoc>
-    ///    <para> 
+    ///    <para>
     ///       Represents
     ///       a menu structure for a form.</para>
     /// </devdoc>
@@ -22,7 +22,7 @@ namespace System.Windows.Forms {
         internal Form ownerForm;  // this is the form that created this menu, and is the only form allowed to dispose it.
         private RightToLeft rightToLeft = System.Windows.Forms.RightToLeft.Inherit;
         private EventHandler onCollapse;
-       
+
         /// <devdoc>
         ///     Creates a new MainMenu control.
         /// </devdoc>
@@ -57,7 +57,7 @@ namespace System.Windows.Forms {
             remove => onCollapse -= value;
         }
 
-        
+
         /// <devdoc>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
@@ -84,7 +84,7 @@ namespace System.Windows.Forms {
                 }
             }
             set {
-            
+
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)RightToLeft.No, (int)RightToLeft.Inherit)){
                     throw new InvalidEnumArgumentException(nameof(RightToLeft), (int)value, typeof(RightToLeft));
@@ -96,7 +96,7 @@ namespace System.Windows.Forms {
 
             }
         }
-        
+
         internal override bool RenderIsRightToLeft {
             get {
                 return (RightToLeft == System.Windows.Forms.RightToLeft.Yes && (form == null || !form.IsMirrored));
@@ -114,8 +114,8 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         /// </devdoc>
-        
-        
+
+
         protected override IntPtr CreateMenuHandle() {
             return UnsafeNativeMethods.CreateMenu();
         }
@@ -168,7 +168,7 @@ namespace System.Windows.Forms {
                 onCollapse(this, e);
             }
         }
-        
+
         /// <devdoc>
         ///     Returns true if the RightToLeft should be persisted in code gen.
         /// </devdoc>
@@ -183,7 +183,7 @@ namespace System.Windows.Forms {
         ///     Returns a string representation for this control.
         /// </devdoc>
         public override string ToString() {
-            // Removing GetForm information 
+            // Removing GetForm information
             return base.ToString();
         }
     }

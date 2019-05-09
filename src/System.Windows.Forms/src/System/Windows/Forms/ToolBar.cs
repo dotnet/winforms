@@ -162,7 +162,7 @@ namespace System.Windows.Forms {
         DefaultValue(true),
         Localizable(true),
         SRDescription(nameof(SR.ToolBarAutoSizeDescr)),
-        Browsable(true), 
+        Browsable(true),
         EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)
         ]
@@ -939,12 +939,12 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected override void Dispose(bool disposing) {
             if (disposing) {
-                // 
+                //
                 lock(this) {
                     // We need to mark the Disposing state here so buttonsCollection won't attempt to update
                     // the buttons.
                     bool currentDisposing = GetState(STATE_DISPOSING);
-                    
+
                     try {
                         SetState(STATE_DISPOSING, true);
 

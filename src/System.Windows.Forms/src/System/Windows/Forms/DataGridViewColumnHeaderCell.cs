@@ -30,7 +30,7 @@ namespace System.Windows.Forms
         private static byte sortGlyphSeparatorWidth = DATAGRIDVIEWCOLUMNHEADERCELL_sortGlyphSeparatorWidth;
         private static byte sortGlyphHorizontalMargin = DATAGRIDVIEWCOLUMNHEADERCELL_sortGlyphHorizontalMargin;
         private static byte sortGlyphWidth = DATAGRIDVIEWCOLUMNHEADERCELL_sortGlyphWidth;
-        private static byte sortGlyphHeight = DATAGRIDVIEWCOLUMNHEADERCELL_sortGlyphHeight; 
+        private static byte sortGlyphHeight = DATAGRIDVIEWCOLUMNHEADERCELL_sortGlyphHeight;
 
         private static Type cellType = typeof(DataGridViewColumnHeaderCell);
 
@@ -75,7 +75,7 @@ namespace System.Windows.Forms
                 // Sequential enum.  Valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)SortOrder.None, (int)SortOrder.Descending))
                 {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(SortOrder)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(SortOrder));
                 }
                 if (this.OwningColumn == null || this.DataGridView == null)
                 {
@@ -113,7 +113,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                // 
+                //
 
                 dataGridViewCell = (DataGridViewColumnHeaderCell) System.Activator.CreateInstance(thisType);
             }
@@ -227,14 +227,14 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
-            
+
             if (this.DataGridView == null || this.OwningColumn == null)
             {
                 return Rectangle.Empty;
             }
 
             object value = GetValue(rowIndex);
-            
+
             // Intentionally not using GetFormattedValue because header cells don't typically perform formatting.
             // the content bounds are computed on demand
             // we mimic a lot of the painting code
@@ -328,7 +328,7 @@ namespace System.Windows.Forms
                 if (cellStyle != null && !cellStyle.BackColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.BackColor = cellStyle.BackColor;
-                } 
+                }
                 else if (!columnHeadersStyle.BackColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.BackColor = columnHeadersStyle.BackColor;
@@ -341,7 +341,7 @@ namespace System.Windows.Forms
                 if (cellStyle != null && !cellStyle.ForeColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.ForeColor = cellStyle.ForeColor;
-                } 
+                }
                 else if (!columnHeadersStyle.ForeColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.ForeColor = columnHeadersStyle.ForeColor;
@@ -354,7 +354,7 @@ namespace System.Windows.Forms
                 if (cellStyle != null && !cellStyle.SelectionBackColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.SelectionBackColor = cellStyle.SelectionBackColor;
-                } 
+                }
                 else if (!columnHeadersStyle.SelectionBackColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.SelectionBackColor = columnHeadersStyle.SelectionBackColor;
@@ -367,7 +367,7 @@ namespace System.Windows.Forms
                 if (cellStyle != null && !cellStyle.SelectionForeColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.SelectionForeColor = cellStyle.SelectionForeColor;
-                } 
+                }
                 else if (!columnHeadersStyle.SelectionForeColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.SelectionForeColor = columnHeadersStyle.SelectionForeColor;
@@ -381,7 +381,7 @@ namespace System.Windows.Forms
             if (cellStyle != null && cellStyle.Font != null)
             {
                 inheritedCellStyleTmp.Font = cellStyle.Font;
-            } 
+            }
             else if (columnHeadersStyle.Font != null)
             {
                 inheritedCellStyleTmp.Font = columnHeadersStyle.Font;
@@ -420,7 +420,7 @@ namespace System.Windows.Forms
             if (cellStyle != null && cellStyle.Format.Length != 0)
             {
                 inheritedCellStyleTmp.Format = cellStyle.Format;
-            } 
+            }
             else if (columnHeadersStyle.Format.Length != 0)
             {
                 inheritedCellStyleTmp.Format = columnHeadersStyle.Format;
@@ -446,7 +446,7 @@ namespace System.Windows.Forms
             if (cellStyle != null && cellStyle.Alignment != DataGridViewContentAlignment.NotSet)
             {
                 inheritedCellStyleTmp.AlignmentInternal = cellStyle.Alignment;
-            } 
+            }
             else if (columnHeadersStyle.Alignment != DataGridViewContentAlignment.NotSet)
             {
                 inheritedCellStyleTmp.AlignmentInternal = columnHeadersStyle.Alignment;
@@ -460,7 +460,7 @@ namespace System.Windows.Forms
             if (cellStyle != null && cellStyle.WrapMode != DataGridViewTriState.NotSet)
             {
                 inheritedCellStyleTmp.WrapModeInternal = cellStyle.WrapMode;
-            } 
+            }
             else if (columnHeadersStyle.WrapMode != DataGridViewTriState.NotSet)
             {
                 inheritedCellStyleTmp.WrapModeInternal = columnHeadersStyle.WrapMode;
@@ -542,27 +542,27 @@ namespace System.Windows.Forms
                     {
                         if (cellStyle.WrapMode == DataGridViewTriState.True)
                         {
-                            preferredSize = new Size(DataGridViewCell.MeasureTextWidth(graphics, 
-                                                                                       valStr, 
+                            preferredSize = new Size(DataGridViewCell.MeasureTextWidth(graphics,
+                                                                                       valStr,
                                                                                        cellStyle.Font,
                                                                                        Math.Max(1, constraintSize.Height - borderAndPaddingHeights - 2 * DATAGRIDVIEWCOLUMNHEADERCELL_verticalMargin),
-                                                                                       flags), 
+                                                                                       flags),
                                                      0);
                         }
                         else
                         {
-                            preferredSize = new Size(DataGridViewCell.MeasureTextSize(graphics, 
-                                                                                      valStr, 
-                                                                                      cellStyle.Font, 
-                                                                                      flags).Width, 
+                            preferredSize = new Size(DataGridViewCell.MeasureTextSize(graphics,
+                                                                                      valStr,
+                                                                                      cellStyle.Font,
+                                                                                      flags).Width,
                                                      0);
                         }
                     }
                     if (constraintSize.Height - borderAndPaddingHeights - 2 * DATAGRIDVIEWCOLUMNHEADERCELL_verticalMargin > sortGlyphHeight &&
-                        this.OwningColumn != null && 
+                        this.OwningColumn != null &&
                         this.OwningColumn.SortMode != DataGridViewColumnSortMode.NotSortable)
                     {
-                        preferredSize.Width += sortGlyphWidth + 
+                        preferredSize.Width += sortGlyphWidth +
                                                2 * sortGlyphHorizontalMargin;
                         if (!string.IsNullOrEmpty(valStr))
                         {
@@ -579,7 +579,7 @@ namespace System.Windows.Forms
                     preferredSize = new Size(0, 0);
 
                     if (allowedWidth >= sortGlyphWidth + 2 * sortGlyphHorizontalMargin &&
-                        this.OwningColumn != null && 
+                        this.OwningColumn != null &&
                         this.OwningColumn.SortMode != DataGridViewColumnSortMode.NotSortable)
                     {
                         glyphSize = new Size(sortGlyphWidth + 2 * sortGlyphHorizontalMargin,
@@ -603,8 +603,8 @@ namespace System.Windows.Forms
                                 glyphSize.Width > 0)
                             {
                                 preferredSize = new Size(0,
-                                                         DataGridViewCell.MeasureTextHeight(graphics, 
-                                                                                            valStr, 
+                                                         DataGridViewCell.MeasureTextHeight(graphics,
+                                                                                            valStr,
                                                                                             cellStyle.Font,
                                                                                             allowedWidth -
                                                                                             DATAGRIDVIEWCOLUMNHEADERCELL_horizontalTextMarginLeft -
@@ -616,8 +616,8 @@ namespace System.Windows.Forms
                             else
                             {
                                 preferredSize = new Size(0,
-                                                         DataGridViewCell.MeasureTextHeight(graphics, 
-                                                                                            valStr, 
+                                                         DataGridViewCell.MeasureTextHeight(graphics,
+                                                                                            valStr,
                                                                                             cellStyle.Font,
                                                                                             allowedWidth -
                                                                                             DATAGRIDVIEWCOLUMNHEADERCELL_horizontalTextMarginLeft -
@@ -628,9 +628,9 @@ namespace System.Windows.Forms
                         else
                         {
                             preferredSize = new Size(0,
-                                                     DataGridViewCell.MeasureTextSize(graphics, 
-                                                                                      valStr, 
-                                                                                      cellStyle.Font, 
+                                                     DataGridViewCell.MeasureTextSize(graphics,
+                                                                                      valStr,
+                                                                                      cellStyle.Font,
                                                                                       flags).Height);
                         }
                     }
@@ -722,11 +722,11 @@ namespace System.Windows.Forms
             }
         }
 
-        protected override void Paint(Graphics graphics, 
+        protected override void Paint(Graphics graphics,
             Rectangle clipBounds,
-            Rectangle cellBounds, 
-            int rowIndex, 
-            DataGridViewElementStates dataGridViewElementState, 
+            Rectangle cellBounds,
+            int rowIndex,
+            DataGridViewElementStates dataGridViewElementState,
             object value,
             object formattedValue,
             string errorText,
@@ -739,13 +739,13 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(cellStyle));
             }
 
-            PaintPrivate(graphics, 
+            PaintPrivate(graphics,
                          clipBounds,
-                         cellBounds, 
-                         rowIndex, 
-                         dataGridViewElementState, 
+                         cellBounds,
+                         rowIndex,
+                         dataGridViewElementState,
                          formattedValue,
-                         cellStyle, 
+                         cellStyle,
                          advancedBorderStyle,
                          paintParts,
                          true /*paint*/);
@@ -758,8 +758,8 @@ namespace System.Windows.Forms
         // PaintPrivate returns the content bounds;
         private Rectangle PaintPrivate(Graphics g,
             Rectangle clipBounds,
-            Rectangle cellBounds, 
-            int rowIndex, 
+            Rectangle cellBounds,
+            int rowIndex,
             DataGridViewElementStates dataGridViewElementState,
             object formattedValue,
             DataGridViewCellStyle cellStyle,
@@ -819,7 +819,7 @@ namespace System.Windows.Forms
                             Debug.Assert(this.ButtonState == ButtonState.Pushed);
                             state = (int) HeaderItemState.Pressed;
                         }
-                        else if (this.DataGridView.MouseEnteredCellAddress.Y == rowIndex && 
+                        else if (this.DataGridView.MouseEnteredCellAddress.Y == rowIndex &&
                                  this.DataGridView.MouseEnteredCellAddress.X == this.ColumnIndex)
                         {
                             state = (int) HeaderItemState.Hot;
@@ -835,13 +835,13 @@ namespace System.Windows.Forms
                         state = (int)HeaderItemState.Pressed;
                     }
 
-                    // Even though Windows provides support for theming the sort glyph, 
+                    // Even though Windows provides support for theming the sort glyph,
                     // we rely on our own implementation for painting the sort glyph
                     if (this.DataGridView.RightToLeftInternal)
                     {
                         // Flip the column header background
                         Bitmap bmFlipXPThemes = this.FlipXPThemesBitmap;
-                        if (bmFlipXPThemes == null || 
+                        if (bmFlipXPThemes == null ||
                             bmFlipXPThemes.Width < backgroundBounds.Width || bmFlipXPThemes.Width > 2 * backgroundBounds.Width ||
                             bmFlipXPThemes.Height < backgroundBounds.Height || bmFlipXPThemes.Height > 2 * backgroundBounds.Height)
                         {
@@ -850,7 +850,7 @@ namespace System.Windows.Forms
                         Graphics gFlip = Graphics.FromImage(bmFlipXPThemes);
                         DataGridViewColumnHeaderCellRenderer.DrawHeader(gFlip, new Rectangle(0, 0, backgroundBounds.Width, backgroundBounds.Height), state);
                         bmFlipXPThemes.RotateFlip(RotateFlipType.RotateNoneFlipX);
-                        g.DrawImage(bmFlipXPThemes, backgroundBounds, new Rectangle(bmFlipXPThemes.Width - backgroundBounds.Width, 0, backgroundBounds.Width, backgroundBounds.Height), GraphicsUnit.Pixel); 
+                        g.DrawImage(bmFlipXPThemes, backgroundBounds, new Rectangle(bmFlipXPThemes.Width - backgroundBounds.Width, 0, backgroundBounds.Width, backgroundBounds.Height), GraphicsUnit.Pixel);
                     }
                     else
                     {
@@ -876,7 +876,7 @@ namespace System.Windows.Forms
             {
                 if (paint && DataGridViewCell.PaintBackground(paintParts) && backgroundBounds.Width > 0 && backgroundBounds.Height > 0)
                 {
-                    br = this.DataGridView.GetCachedBrush((DataGridViewCell.PaintSelectionBackground(paintParts) && cellSelected) || IsHighlighted() ? 
+                    br = this.DataGridView.GetCachedBrush((DataGridViewCell.PaintSelectionBackground(paintParts) && cellSelected) || IsHighlighted() ?
                         cellStyle.SelectionBackColor : cellStyle.BackColor);
                     if (br.Color.A == 255)
                     {
@@ -950,16 +950,16 @@ namespace System.Windows.Forms
                                                               sortGlyphSeparatorWidth -
                                                               sortGlyphHorizontalMargin -
                                                               sortGlyphWidth,
-                                                              valBounds.Top + 
+                                                              valBounds.Top +
                                                               (valBounds.Height-sortGlyphHeight)/2);
                             }
                             else
                             {
                                 sortGlyphLocation = new Point(valBounds.Right +
                                                               DATAGRIDVIEWCOLUMNHEADERCELL_horizontalTextMarginRight +
-                                                              sortGlyphSeparatorWidth + 
+                                                              sortGlyphSeparatorWidth +
                                                               sortGlyphHorizontalMargin,
-                                                              valBounds.Top + 
+                                                              valBounds.Top +
                                                               (valBounds.Height-sortGlyphHeight)/2);
                             }
                         }
@@ -1012,15 +1012,15 @@ namespace System.Windows.Forms
                         case DataGridViewAdvancedCellBorderStyle.OutsetDouble:
                         case DataGridViewAdvancedCellBorderStyle.Outset:
                             // Sunken look
-                            g.DrawLine(penControlDark, 
-                                sortGlyphLocation.X, 
-                                sortGlyphLocation.Y + sortGlyphHeight-2, 
-                                sortGlyphLocation.X + sortGlyphWidth/2-1, 
+                            g.DrawLine(penControlDark,
+                                sortGlyphLocation.X,
+                                sortGlyphLocation.Y + sortGlyphHeight-2,
+                                sortGlyphLocation.X + sortGlyphWidth/2-1,
                                 sortGlyphLocation.Y);
-                            g.DrawLine(penControlDark, 
-                                sortGlyphLocation.X+1, 
-                                sortGlyphLocation.Y + sortGlyphHeight-2, 
-                                sortGlyphLocation.X + sortGlyphWidth/2-1, 
+                            g.DrawLine(penControlDark,
+                                sortGlyphLocation.X+1,
+                                sortGlyphLocation.Y + sortGlyphHeight-2,
+                                sortGlyphLocation.X + sortGlyphWidth/2-1,
                                 sortGlyphLocation.Y);
                             g.DrawLine(penControlLightLight,
                                 sortGlyphLocation.X + sortGlyphWidth/2,
@@ -1041,15 +1041,15 @@ namespace System.Windows.Forms
 
                         case DataGridViewAdvancedCellBorderStyle.Inset:
                             // Raised look
-                            g.DrawLine(penControlLightLight, 
-                                sortGlyphLocation.X, 
-                                sortGlyphLocation.Y + sortGlyphHeight - 2, 
-                                sortGlyphLocation.X + sortGlyphWidth / 2 - 1, 
+                            g.DrawLine(penControlLightLight,
+                                sortGlyphLocation.X,
+                                sortGlyphLocation.Y + sortGlyphHeight - 2,
+                                sortGlyphLocation.X + sortGlyphWidth / 2 - 1,
                                 sortGlyphLocation.Y);
-                            g.DrawLine(penControlLightLight, 
-                                sortGlyphLocation.X+1, 
-                                sortGlyphLocation.Y + sortGlyphHeight - 2, 
-                                sortGlyphLocation.X + sortGlyphWidth / 2 - 1, 
+                            g.DrawLine(penControlLightLight,
+                                sortGlyphLocation.X+1,
+                                sortGlyphLocation.Y + sortGlyphHeight - 2,
+                                sortGlyphLocation.X + sortGlyphWidth / 2 - 1,
                                 sortGlyphLocation.Y);
                             g.DrawLine(penControlDark,
                                 sortGlyphLocation.X + sortGlyphWidth / 2,
@@ -1095,15 +1095,15 @@ namespace System.Windows.Forms
                         case DataGridViewAdvancedCellBorderStyle.OutsetDouble:
                         case DataGridViewAdvancedCellBorderStyle.Outset:
                             // Sunken look
-                            g.DrawLine(penControlDark, 
-                                sortGlyphLocation.X, 
-                                sortGlyphLocation.Y+1, 
-                                sortGlyphLocation.X+sortGlyphWidth/2-1, 
+                            g.DrawLine(penControlDark,
+                                sortGlyphLocation.X,
+                                sortGlyphLocation.Y+1,
+                                sortGlyphLocation.X+sortGlyphWidth/2-1,
                                 sortGlyphLocation.Y+sortGlyphHeight-1);
-                            g.DrawLine(penControlDark, 
-                                sortGlyphLocation.X+1, 
-                                sortGlyphLocation.Y+1, 
-                                sortGlyphLocation.X+sortGlyphWidth/2-1, 
+                            g.DrawLine(penControlDark,
+                                sortGlyphLocation.X+1,
+                                sortGlyphLocation.Y+1,
+                                sortGlyphLocation.X+sortGlyphWidth/2-1,
                                 sortGlyphLocation.Y+sortGlyphHeight-1);
                             g.DrawLine(penControlLightLight,
                                 sortGlyphLocation.X+sortGlyphWidth/2,
@@ -1124,15 +1124,15 @@ namespace System.Windows.Forms
 
                         case DataGridViewAdvancedCellBorderStyle.Inset:
                             // Raised look
-                            g.DrawLine(penControlLightLight, 
-                                sortGlyphLocation.X, 
-                                sortGlyphLocation.Y+1, 
-                                sortGlyphLocation.X+sortGlyphWidth/2-1, 
+                            g.DrawLine(penControlLightLight,
+                                sortGlyphLocation.X,
+                                sortGlyphLocation.Y+1,
+                                sortGlyphLocation.X+sortGlyphWidth/2-1,
                                 sortGlyphLocation.Y+sortGlyphHeight-1);
-                            g.DrawLine(penControlLightLight, 
-                                sortGlyphLocation.X+1, 
-                                sortGlyphLocation.Y+1, 
-                                sortGlyphLocation.X+sortGlyphWidth/2-1, 
+                            g.DrawLine(penControlLightLight,
+                                sortGlyphLocation.X+1,
+                                sortGlyphLocation.Y+1,
+                                sortGlyphLocation.X+sortGlyphWidth/2-1,
                                 sortGlyphLocation.Y+sortGlyphHeight-1);
                             g.DrawLine(penControlDark,
                                 sortGlyphLocation.X+sortGlyphWidth/2,
@@ -1176,7 +1176,7 @@ namespace System.Windows.Forms
 
         private bool IsHighlighted()
         {
-            return this.DataGridView.SelectionMode == DataGridViewSelectionMode.FullRowSelect && 
+            return this.DataGridView.SelectionMode == DataGridViewSelectionMode.FullRowSelect &&
                 this.DataGridView.CurrentCell != null && this.DataGridView.CurrentCell.Selected &&
                 this.DataGridView.CurrentCell.OwningColumn == this.OwningColumn;
         }
@@ -1230,7 +1230,7 @@ namespace System.Windows.Forms
                 Rectangle rectClip = Rectangle.Truncate(g.ClipBounds);
                 if ((int) HeaderItemState.Hot == headerState)
                 {
-                    // Workaround for a 
+                    // Workaround for a
                     VisualStyleRenderer.SetParameters(HeaderElement);
                     Rectangle cornerClip = new Rectangle(bounds.Left, bounds.Bottom-2, 2, 2);
                     cornerClip.Intersect(rectClip);

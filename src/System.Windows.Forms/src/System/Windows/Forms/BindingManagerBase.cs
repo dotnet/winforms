@@ -107,7 +107,7 @@ namespace System.Windows.Forms
                 {
                     return TypeDescriptor.GetProperties(listType);
                 }
-                    
+
                 foreach (PropertyInfo property in listType.GetProperties())
                 {
                     if (property.Name == "Item" && property.PropertyType != typeof(object))
@@ -180,7 +180,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
-    
+
             return null;
         }
 

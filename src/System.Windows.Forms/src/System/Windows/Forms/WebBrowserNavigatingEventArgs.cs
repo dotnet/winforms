@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     {
         private readonly Uri _url;
         private readonly string _targetFrameName;
-        
+
         /// <devdoc>
         /// Creates an instance of the <see cref='System.Windows.Forms.WebBrowserNavigatingEventArgs'/> class.
         /// </devdoc>
@@ -22,7 +22,7 @@ namespace System.Windows.Forms
             _url = url;
             _targetFrameName = targetFrameName;
         }
-        
+
         /// <devdoc>
         /// Url the browser is navigating to.
         /// </devdoc>
@@ -33,7 +33,7 @@ namespace System.Windows.Forms
                 return _url;
             }
         }
-        
+
         /// <devdoc>
         /// In case an individual frame is about to be navigated, this contains the frame name.
         /// </devdoc>

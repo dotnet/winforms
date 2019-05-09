@@ -70,7 +70,7 @@ namespace System.Windows.Forms {
         BitVector32 labelState = new BitVector32();
         int         requestedHeight;
         int         requestedWidth;
-        LayoutUtils.MeasureTextCache textMeasurementCache; 
+        LayoutUtils.MeasureTextCache textMeasurementCache;
 
         //Tooltip is shown only if the Text in the Label is cut.
         internal bool showToolTip = false;
@@ -91,8 +91,8 @@ namespace System.Windows.Forms {
         public Label()
         : base() {
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
-            SetState2(STATE2_USEPREFERREDSIZECACHE, true);  
-           
+            SetState2(STATE2_USEPREFERREDSIZECACHE, true);
+
             SetStyle(ControlStyles.UserPaint |
                      ControlStyles.SupportsTransparentBackColor |
                      ControlStyles.OptimizedDoubleBuffer, IsOwnerDraw());
@@ -170,14 +170,14 @@ namespace System.Windows.Forms {
                     MeasureTextCache.InvalidateCache();
 
                     OnAutoEllipsisChanged(/*EventArgs.Empty*/);
-                    
+
                     if (value) {
                         if (textToolTip == null) {
                             textToolTip  = new ToolTip();
                         }
                     }
-          
-            
+
+
                     if (ParentInternal != null) {
                         LayoutTransaction.DoLayoutIf(AutoSize,ParentInternal, this, PropertyNames.AutoEllipsis);
                     }
@@ -393,7 +393,7 @@ namespace System.Windows.Forms {
                         if (AutoSize) {
                             AdjustSize();
                         }
-                        RecreateHandle();                       
+                        RecreateHandle();
                     }
                     else {
                         Refresh();
@@ -413,8 +413,8 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatAppearance))
         ]
         public Image Image {
-            
-            
+
+
             get {
                 Image image = (Image)Properties.GetObject(PropImage);
 
@@ -905,7 +905,7 @@ namespace System.Windows.Forms {
                 if (UseMnemonic != value) {
                    labelState[StateUseMnemonic] = value ? 1 : 0;
                    MeasureTextCache.InvalidateCache();
-                               
+
 
                    // The size of the label need to be adjusted when the Mnemonic
                    // is set irrespective of auto-sizing
@@ -1026,8 +1026,8 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Get StringFormat object for rendering text using GDI+ (Graphics).
         /// </devdoc>
-        
-        
+
+
         internal virtual StringFormat CreateStringFormat() {
             return ControlPaint.CreateStringFormat( this, this.TextAlign, this.AutoEllipsis, this.UseMnemonic );
         }
@@ -1040,19 +1040,19 @@ namespace System.Windows.Forms {
         /// </devdoc>
         internal virtual TextFormatFlags CreateTextFormatFlags(Size constrainingSize){
 
-            // PREFERRED SIZE CACHING: 
+            // PREFERRED SIZE CACHING:
             // Please read if you're adding a new TextFormatFlag.
             // whenever something can change the TextFormatFlags used
             // MeasureTextCache.InvalidateCache() should be called so we can approprately clear.
-            
+
             TextFormatFlags flags = ControlPaint.CreateTextFormatFlags( this, this.TextAlign, this.AutoEllipsis, this.UseMnemonic );
 
             // Remove WordBreak if the size is large enough to display all the text.
             if (!MeasureTextCache.TextRequiresWordBreak(Text, Font, constrainingSize, flags)) {
-                // The effect of the TextBoxControl flag is that in-word line breaking will occur if needed, this happens when AutoSize 
-                // is false and a one-word line still doesn't fit the binding box (width).  The other effect is that partially visible 
+                // The effect of the TextBoxControl flag is that in-word line breaking will occur if needed, this happens when AutoSize
+                // is false and a one-word line still doesn't fit the binding box (width).  The other effect is that partially visible
                 // lines are clipped; this is how GDI+ works by default.
-                flags &= ~(TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl); 
+                flags &= ~(TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl);
             }
 
             return flags;
@@ -1061,7 +1061,7 @@ namespace System.Windows.Forms {
         private void DetachImageList(object sender, EventArgs e) {
             ImageList = null;
         }
-    
+
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
@@ -1137,9 +1137,9 @@ namespace System.Windows.Forms {
         */
         private Size GetBordersAndPadding() {
            Size bordersAndPadding = Padding.Size;
-           
-           // COMPAT: Everett added random numbers to the height of the label               
-           if (UseCompatibleTextRendering) {               
+
+           // COMPAT: Everett added random numbers to the height of the label
+           if (UseCompatibleTextRendering) {
               //Always return the Fontheight + some buffer else the Text gets clipped for Autosize = true..
               //(
               if (BorderStyle != BorderStyle.None) {
@@ -1152,11 +1152,11 @@ namespace System.Windows.Forms {
            }
            else {
               // in Whidbey we'll actually ask the control the border size.
-              
+
               bordersAndPadding +=  SizeFromClientSize(Size.Empty);
               if (BorderStyle == BorderStyle.Fixed3D) {
                   bordersAndPadding += new Size(2, 2);
-              } 
+              }
            }
            return bordersAndPadding;
 
@@ -1177,7 +1177,7 @@ namespace System.Windows.Forms {
         internal virtual bool UseGDIMeasuring() {
             return (FlatStyle == FlatStyle.System || !UseCompatibleTextRendering);
         }
-       
+
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")] // See ComboBox.cs GetComboHeight
         internal override Size GetPreferredSizeCore(Size proposedConstraints) {
             Size bordersAndPadding = GetBordersAndPadding();
@@ -1190,10 +1190,10 @@ namespace System.Windows.Forms {
             Size requiredSize;
 
             //
-            // TEXT Measurement 
+            // TEXT Measurement
             //
-            
-            if (string.IsNullOrEmpty(Text)) {    
+
+            if (string.IsNullOrEmpty(Text)) {
                 // empty labels return the font height + borders
                 using (WindowsFont font = WindowsFont.FromFont(this.Font)) {
                     // this is the character that Windows uses to determine the extent
@@ -1204,7 +1204,7 @@ namespace System.Windows.Forms {
             else if (UseGDIMeasuring()) {
                 TextFormatFlags format = FlatStyle == FlatStyle.System ? TextFormatFlags.Default : CreateTextFormatFlags(proposedConstraints);
                 requiredSize = MeasureTextCache.GetTextSize(Text, Font, proposedConstraints, format);
-            } 
+            }
             else {
                 // GDI+ rendering.
                 using (Graphics measurementGraphics = WindowsFormsUtils.CreateMeasurementGraphics()) {
@@ -1216,9 +1216,9 @@ namespace System.Windows.Forms {
                         requiredSize = Size.Ceiling(measurementGraphics.MeasureString(Text, Font, bounds, stringFormat));
                     }
                 }
-                
+
             }
-           
+
             requiredSize += bordersAndPadding;
 
             return requiredSize;
@@ -1241,7 +1241,7 @@ namespace System.Windows.Forms {
             if (UseCompatibleTextRendering && FlatStyle != FlatStyle.System) {
                 return 0;
             }
-            
+
             using( WindowsGraphics wg = WindowsGraphics.FromHwnd(this.Handle) ){
                 TextFormatFlags flags = CreateTextFormatFlags();
 
@@ -1256,7 +1256,7 @@ namespace System.Windows.Forms {
                     IntNativeMethods.DRAWTEXTPARAMS dtParams = wg.GetTextMargins(wf);
 
                     // This is actually leading margin.
-                    return dtParams.iLeftMargin; 
+                    return dtParams.iLeftMargin;
                 }
             }
         }
@@ -1302,7 +1302,7 @@ namespace System.Windows.Forms {
                 finally {
                     controlToolTip = false;
                 }
-                    
+
             }
             base.OnMouseEnter(e);
         }
@@ -1343,7 +1343,7 @@ namespace System.Windows.Forms {
             Invalidate();
         }
 
-        
+
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         protected override void OnHandleDestroyed(EventArgs e) {
             base.OnHandleDestroyed(e);
@@ -1354,7 +1354,7 @@ namespace System.Windows.Forms {
         }
 
         protected override void OnTextChanged(EventArgs e) {
-  
+
             using(LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Text)) {
                 MeasureTextCache.InvalidateCache();
                 base.OnTextChanged(e);
@@ -1498,7 +1498,7 @@ namespace System.Windows.Forms {
         ///       key combination and determines if that combination is an interesting
         ///       mnemonic for this control.
         ///    </para>
-        /// </devdoc>        
+        /// </devdoc>
         protected internal override bool ProcessMnemonic(char charCode) {
             if (UseMnemonic && IsMnemonic(charCode, Text) && CanProcessMnemonic()) {
                 Control parent = ParentInternal;

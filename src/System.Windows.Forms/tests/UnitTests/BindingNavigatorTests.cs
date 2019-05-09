@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotNull(bn);
         }
-        
+
        [Fact]
         public void BindingNavigator_ConstructorBindingSource()
         {
@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotNull(bn);
             Assert.Equal(bindingSource, bn.BindingSource);
-            
+
             // need more thorough binding source testing
         }
 
@@ -50,7 +50,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(bn);
             mockContainer.Verify(x => x.Add(bn));
         }
-        
+
         [Fact]
         public void BindingNavigator_ConstructorBool()
         {

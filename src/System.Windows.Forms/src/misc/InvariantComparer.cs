@@ -6,16 +6,16 @@ namespace System {
     using System;
     using System.Collections;
     using System.Globalization;
- 
+
     [Serializable]
     internal class InvariantComparer : IComparer {
         private CompareInfo m_compareInfo;
         internal static readonly InvariantComparer Default = new InvariantComparer();
-        
+
         internal InvariantComparer() {
             m_compareInfo = CultureInfo.InvariantCulture.CompareInfo;
         }
-  
+
         public int Compare(object a, object b) {
             string sa = a as string;
             string sb = b as string;

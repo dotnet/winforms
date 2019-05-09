@@ -9,7 +9,7 @@ namespace System.Windows.Forms
     /// <devdoc>
     /// Constants that specify how the date and time picker control displays
     /// date and time information.
-    /// </devdoc>    
+    /// </devdoc>
     [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
     public enum DateTimePickerFormat
     {

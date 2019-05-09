@@ -26,8 +26,8 @@ namespace System.Windows.Forms
         public static readonly ContentAlignment AnyCenterAlign = ContentAlignment.TopCenter | ContentAlignment.MiddleCenter | ContentAlignment.BottomCenter;
 
         /// <summary>
-        /// The GetMessagePos function retrieves the cursor position for the last message 
-        /// retrieved by the GetMessage function. 
+        /// The GetMessagePos function retrieves the cursor position for the last message
+        /// retrieved by the GetMessage function.
         /// </summary>
         public static Point LastCursorPoint
         {
@@ -173,11 +173,11 @@ namespace System.Windows.Forms
                 return "Handle is IntPtr.Zero";
             }
 
-#if DEBUG      
+#if DEBUG
             int textLen = SafeNativeMethods.GetWindowTextLength(new HandleRef(null, hwnd));
             StringBuilder sb = new StringBuilder(textLen+1);
             UnsafeNativeMethods.GetWindowText(new HandleRef(null, hwnd), sb, sb.Capacity);
-    
+
             string typeOfControl = "Unknown";
             string nameOfControl = "Name: ";
             Control c = Control.FromHandle(hwnd);
@@ -191,7 +191,7 @@ namespace System.Windows.Forms
                 else
                 {
                     nameOfControl += "Unknown";
-                    
+
                     // Add some extra debug info for ToolStripDropDowns.
                     if (c is ToolStripDropDown dd && dd.OwnerItem != null)
                     {
@@ -200,7 +200,7 @@ namespace System.Windows.Forms
                 }
             }
             return sb.ToString() + Environment.NewLine + "\tType: " + typeOfControl + Environment.NewLine + "\t" + nameOfControl + Environment.NewLine;
-#else            
+#else
             return string.Empty;
 #endif
         }
@@ -325,10 +325,10 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Compares the strings using invariant culture for Turkish-I support. Returns true if they match.
-        /// 
+        ///
         /// If your strings are symbolic (returned from APIs, not from user) the following calls
         /// are faster than this method:
-        /// 
+        ///
         ///  String.Equals(s1, s2, StringComparison.Ordinal)
         ///  String.Equals(s1, s2, StringComparison.OrdinalIgnoreCase)
         /// </summary>
@@ -386,10 +386,10 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// shifts off the number of bits specified by numBitsToShift 
+            /// shifts off the number of bits specified by numBitsToShift
             ///   -  makes sure the bits we've shifted off are just zeros
             ///   -  then compares if the resulting value is between minValAfterShift and maxValAfterShift
-            ///  
+            ///
             /// EXAMPLE:
             ///    MessageBoxIcon. Valid values are 0x0, 0x10, 0x20, 0x30, 0x40
             ///    Method for verifying: chop off the last 0 by shifting right 4 bits, verify resulting number is between 0 & 4.
@@ -431,7 +431,7 @@ namespace System.Windows.Forms
                     _current++;
                     return true;
                 }
-                
+
                 return false;
             }
 
@@ -497,7 +497,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// This control collection only allows a specific type of control 
+        /// This control collection only allows a specific type of control
         /// into the controls collection. It optionally supports readonlyness.
         /// </summary>
         internal class TypedControlCollection : ReadOnlyControlCollection
@@ -534,7 +534,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfType, _typeOfControl.Name)), value.GetType().Name);
                 }
-    
+
                 base.Add(value);
             }
         }
@@ -546,33 +546,33 @@ namespace System.Windows.Forms
         /// are restored.
         ///
         /// Example:
-        /// 
+        ///
         /// using(WindowsFormsUtils.DCMapping mapping = new WindowsFormsUtils.DCMapping(hDC, new Rectangle(10,10, 50, 50) {
-        ///     // inside here the hDC's mapping of (0,0) is inset by (10,10) and 
+        ///     // inside here the hDC's mapping of (0,0) is inset by (10,10) and
         ///     // all painting is clipped at (0,0) - (50,50)
         ///  }
-        ///   
+        ///
         ///  To use with GDI+ you can get the hDC from the Graphics object. You'd want to do this in a situation where
-        ///  you're handing off a graphics object to someone, and you want the world translated some amount X,Y. This 
+        ///  you're handing off a graphics object to someone, and you want the world translated some amount X,Y. This
         ///  works better than g.TranslateTransform(x,y) - as if someone calls g.GetHdc and does a GDI operation - their
         ///  world is NOT transformed.
-        ///   
+        ///
         ///  HandleRef hDC = new HandleRef(this, originalGraphics.GetHdc());
         ///  try {
         ///    using(WindowsFormsUtils.DCMapping mapping = new WindowsFormsUtils.DCMapping(hDC, new Rectangle(10,10, 50, 50) {
-        ///        
+        ///
         ///        // DO NOT ATTEMPT TO USE originalGraphics here - you'll get an Object Busy error
         ///        // rather ask the mapping object for a graphics object.
         ///        mapping.Graphics.DrawRectangle(Pens.Black, rect);
-        ///    }     
+        ///    }
         ///  }
         ///  finally { g.ReleaseHdc(hDC.Handle);}
-        ///   
+        ///
         ///  PERF: DCMapping is a structure so that it will allocate on the stack rather than in GC managed
-        ///  memory. This way disposing the object does not force a GC. Since DCMapping objects aren't 
-        ///  likely to be passed between functions rather used and disposed in the same one, this reduces 
+        ///  memory. This way disposing the object does not force a GC. Since DCMapping objects aren't
+        ///  likely to be passed between functions rather used and disposed in the same one, this reduces
         ///  overhead.
-        /// </summary>     
+        /// </summary>
         internal struct DCMapping : IDisposable
         {
             private DeviceContext _dc;
@@ -596,7 +596,7 @@ namespace System.Windows.Forms
                 _dc = DeviceContext.FromHdc(hDC.Handle);
                 _dc.SaveHdc();
 
-                // Retrieve the x-coordinates and y-coordinates of the viewport origin for the specified device context. 
+                // Retrieve the x-coordinates and y-coordinates of the viewport origin for the specified device context.
                 success = SafeNativeMethods.GetViewportOrgEx(hDC, viewportOrg);
                 Debug.Assert(success, "GetViewportOrgEx() failed.");
 
@@ -614,7 +614,7 @@ namespace System.Windows.Forms
                     int result = SafeNativeMethods.GetClipRgn(hDC, hOriginalClippingRegion);
                     Debug.Assert(result != -1, "GetClipRgn() failed.");
 
-                    // Shift the viewpoint origint by coordinates specified in "bounds". 
+                    // Shift the viewpoint origint by coordinates specified in "bounds".
                     NativeMethods.POINT lastViewPort = new NativeMethods.POINT();
                     success = SafeNativeMethods.SetViewportOrgEx(hDC, viewportOrg.x + bounds.Left, viewportOrg.y + bounds.Top, lastViewPort);
                     Debug.Assert(success, "SetViewportOrgEx() failed.");
@@ -661,7 +661,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    // Delete the new clipping region, as the clipping region for the HDC is now set 
+                    // Delete the new clipping region, as the clipping region for the HDC is now set
                     // to this rectangle. Hold on to hOriginalClippingRegion, as we'll need to restore
                     // it when this object is disposed.
                     success = SafeNativeMethods.DeleteObject(hClippingRegion);
@@ -680,8 +680,8 @@ namespace System.Windows.Forms
                 if (_graphics != null)
                 {
                     // Reset GDI+ if used.
-                    // we need to dispose the graphics object first, as it will do 
-                    // some restoration to the ViewPort and ClipRectangle to restore the hDC to 
+                    // we need to dispose the graphics object first, as it will do
+                    // some restoration to the ViewPort and ClipRectangle to restore the hDC to
                     // the same state it was created in
                     _graphics.Dispose();
                     _graphics = null;

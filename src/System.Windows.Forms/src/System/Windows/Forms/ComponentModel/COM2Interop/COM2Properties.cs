@@ -17,48 +17,48 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     /// when the properties need to be refreshed, and owns the extended handlers for those properties.
     /// </devdoc>
     internal class Com2Properties {
-    
+
         private static TraceSwitch DbgCom2PropertiesSwitch = new TraceSwitch("DbgCom2Properties", "Com2Properties: debug Com2 properties manager");
-        
-        
-        
+
+
+
         /// <devdoc>
         /// This is the interval that we'll hold props for.  If someone doesn't touch an object
         /// for this amount of time, we'll dump the properties from our cache.
-        /// 
+        ///
         /// 5 minutes -- ticks are 1/10,000,000th of a second
         /// </devdoc>
         private static long AGE_THRESHHOLD = (long)(10000000L * 60L * 5L);
 
-        
+
         /// <devdoc>
         /// This is the object that gave us the properties.  We hold a WeakRef so we don't addref the object.
         /// </devdoc>
         internal WeakReference weakObjRef;
-        
+
         /// <devdoc>
         /// This is our list of properties.
         /// </devdoc>
         private Com2PropertyDescriptor[] props;
-        
+
         /// <devdoc>
         /// The index of the default property
         /// </devdoc>
         private int           defaultIndex = -1;
-        
-        
+
+
         /// <devdoc>
         /// The timestamp of the last operation on this property manager, usually
         /// when the property list was fetched.
         /// </devdoc>
-        private long          touchedTime;  
+        private long          touchedTime;
 
         /// <devdoc>
         /// For non-IProvideMultipleClassInfo ITypeInfos, this is the version number on the last
         /// ITypeInfo we looked at.  If this changes, we know we need to dump the cache.
         /// </devdoc>
         private long[]       typeInfoVersions;
-       
+
 
 #if DEBUG
         private string        dbgObjName;
@@ -87,7 +87,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                                                         typeof(Com2IPerPropertyBrowsingHandler),
                                                         typeof(Com2IVsPerPropertyBrowsingHandler),
                                                         typeof(Com2IManagedPerPropertyBrowsingHandler)};
-                                                
+
 
 
         public event EventHandler Disposed;
@@ -109,7 +109,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
             if (DbgCom2PropertiesSwitch.TraceVerbose) Debug.WriteLine("Creating Com2Properties for object " + dbgObjName + ", class=" + dbgObjClass);
 #endif
-            
+
             // set up our variables
             SetProps(props);
             weakObjRef = new WeakReference(obj);
@@ -244,11 +244,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             Type t;
             for (int i = 0; i < extendedInterfaces.Length; i++) {
                 t = extendedInterfaces[i];
-                
+
                 // is this object an implementor of the interface?
                 //
                 if (t.IsInstanceOfType(target)) {
-                
+
                     // since handlers must be stateless, check to see if we've already
                     // created one of this type
                     //
@@ -257,7 +257,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         handler = (Com2ExtendedBrowsingHandler)Activator.CreateInstance(extendedInterfaceHandlerTypes[i]);
                         handlers[t] = handler;
                     }
-                    
+
                     // make sure we got the right one
                     //
                     if (t.IsAssignableFrom(handler.Interface)) {
@@ -275,7 +275,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-       
+
         public void Dispose() {
 #if DEBUG
             if (DbgCom2PropertiesSwitch.TraceVerbose) Debug.WriteLine("Disposing property manager for " + dbgObjName + ", class=" + dbgObjClass);
@@ -287,7 +287,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
                     Disposed(this, EventArgs.Empty);
                 }
-            
+
                 weakObjRef = null;
                 props = null;
                 touchedTime = 0;
@@ -308,7 +308,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return CheckValid(checkVersions, true);
         }
 
-        
+
         /// <devdoc>
         /// Gets a list of version longs for each type info in the COM object
         /// representing hte current version stamp, function and variable count.
@@ -325,7 +325,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             long[] versions = new long[pTypeInfos.Length];
             for (int i = 0; i < pTypeInfos.Length; i++) {
                 versions [i] = GetTypeInfoVersion(pTypeInfos[i]);
-            }           
+            }
             return versions;
         }
 
@@ -352,17 +352,17 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             public   short wTypeFlags;              // 2
             public   short wMajorVerNum;            // 2
             public   short wMinorVerNum;            // 2
-            
-            public   int tdescAlias_unionMember;            
-            public   short tdescAlias_vt;            
-            public   int idldescType_dwReserved;            
+
+            public   int tdescAlias_unionMember;
+            public   short tdescAlias_vt;
+            public   int idldescType_dwReserved;
             public   short idldescType_wIDLFlags;
-        
+
         }*/
 
 
         // the offset of the cFunc member in the TYPEATTR structure.
-        //        
+        //
         private static int CountMemberOffset {
 
                 get {
@@ -382,7 +382,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     }
                     return versionOffset;
                 }
-                    
+
         }
 
         private unsafe long GetTypeInfoVersion(UnsafeNativeMethods.ITypeInfo pTypeInfo) {
@@ -408,7 +408,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
                 long result = 0;
 
-                // we pull two things out of the struct: the 
+                // we pull two things out of the struct: the
                 // number of functions and variables, and the version.
                 // since they are next to each other, we just pull the memory directly.
                 //
@@ -423,7 +423,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 *pResult = *(int*)(pbStruct + CountMemberOffset);
 
                 // move up to the high word of the long.
-                //                
+                //
                 pResult++;
 
                 // now pull out the version info.
@@ -451,7 +451,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             //
             if (valid && checkVersions) {
 
-               // 
+               //
                long[] newTypeInfoVersions = GetTypeInfoVersions(weakObjRef.Target);
 
                if (newTypeInfoVersions.Length != typeInfoVersions.Length) {
@@ -461,7 +461,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                    //
                    for (int i = 0; i < newTypeInfoVersions.Length; i++) {
 
-                        if (newTypeInfoVersions[i] != typeInfoVersions[i]) {                            
+                        if (newTypeInfoVersions[i] != typeInfoVersions[i]) {
                             valid = false;
                             break;
                         }
@@ -471,11 +471,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                if (!valid) {
 
                    // update to the new version list we have.
-                   // 
+                   //
                    typeInfoVersions = newTypeInfoVersions;
                }
             }
-            
+
             if (!valid && callDispose) {
                 // weak ref has died, so remove this from the hash table
                 //
@@ -500,6 +500,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     props[i].PropertyManager = this;
                 }
             }
-        }        
+        }
     }
 }

@@ -45,7 +45,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// need it a lot.
         /// </devdoc>
         private int  dispid;
-        
+
         private TypeConverter   converter;
         private object          editor;
 
@@ -64,7 +64,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// Keeps track of which data members need to be refreshed.
         /// </devdoc>
         private int  refreshState;
-        
+
         /// <devdoc>
         /// Should we bother asking if refresh is needed?
         /// </devdoc>
@@ -121,7 +121,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         private static readonly object EventResetValue         = new object();
 
         private static readonly Guid GUID_COLOR = new Guid("{66504301-BE0F-101A-8BBB-00AA00300CAB}");
-                        
+
         /// <devdoc>
         /// Our map of native types that we can map to managed types for editors
         /// </devdoc>
@@ -135,7 +135,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             oleConverters[typeof(UnsafeNativeMethods.IPictureDisp).GUID] = typeof(Com2PictureConverter);
             oleConverters[typeof(UnsafeNativeMethods.IPicture).GUID] = typeof(Com2PictureConverter);
         }
-       
+
         /// <devdoc>
         /// Should we convert our type?
         /// </devdoc>
@@ -158,7 +158,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             SetNeedsRefresh(Com2PropertyDescriptorRefresh.ReadOnly, readOnly);
 
             this.propertyType = propType;
-            
+
             this.dispid = dispid;
 
             if (typeData != null) {
@@ -182,7 +182,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     }
                 }
             }
-            
+
             if (this.canShow && (propType == typeof(object) || (valueConverter == null && propType == typeof(UnsafeNativeMethods.IDispatch)))) {
                 this.typeHide = true;
             }
@@ -207,7 +207,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     if (attrList.Count != baseCount) {
                         this.baseAttrs = new Attribute[attrList.Count];
                     }
-                    
+
                     if (baseAttrs != null) {
                         attrList.CopyTo(this.baseAttrs, 0);
                     }
@@ -261,7 +261,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         }
                     }
                 }
-                
+
                 this.inAttrQuery = true;
                 try {
 
@@ -271,7 +271,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     OnGetDynamicAttributes(new GetAttributesEvent(attrList));
 
                     Attribute ma;
-                    
+
                     if (attrList.Count != 0 && newAttributes == null) {
                         newAttributes = new ArrayList(AttributeArray);
                     }
@@ -288,7 +288,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
                 // these are now valid.
                 SetNeedsRefresh(Com2PropertyDescriptorRefresh.Attributes, false);
-                
+
                 // If we reconfigured attributes, then poke the new set back in.
                 //
                 if (newAttributes != null) {
@@ -296,7 +296,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     newAttributes.CopyTo(temp, 0);
                     AttributeArray = temp;
                 }
-                
+
                 return base.Attributes;
             }
 
@@ -336,7 +336,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 return typeof(UnsafeNativeMethods.IDispatch);
             }
         }
-        
+
         /// <devdoc>
         ///      Retrieves the type converter for this property.
         /// </devdoc>
@@ -347,15 +347,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                }
 
                 object typeEd = null;
-               
+
                GetTypeConverterAndTypeEditor(ref converter, typeof(UITypeEditor), ref typeEd);
-               
+
                if (!TypeEditorValid) {
                   this.editor = typeEd;
                   SetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeEditor, false);
                }
                SetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeConverter, false);
-               
+
                return converter;
             }
         }
@@ -367,7 +367,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             get {
                 return(valueConverter != null);
             }
-        }        
+        }
 
         /// <devdoc>
         ///      Retrieves the default value for this property.
@@ -484,9 +484,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 if (baseReadOnly) {
                     return true;
                 }
-                
+
                 bool currentRefresh = !GetNeedsRefresh(Com2PropertyDescriptorRefresh.ReadOnly);
-                
+
                 if (queryRefresh) {
                     GetRefreshStateEvent rse = new GetRefreshStateEvent(Com2ShouldRefreshTypes.ReadOnly, !currentRefresh);
                     OnShouldRefresh(rse);
@@ -510,7 +510,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 return null;
             }
         }
-        
+
         protected bool TypeConverterValid {
             get {
                 bool currentRefresh =!(converter == null || GetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeConverter));
@@ -523,11 +523,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 return currentRefresh;
             }
         }
-        
+
         protected bool TypeEditorValid {
             get {
                 bool currentRefresh = !(editor == null || GetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeEditor));
-                
+
                 if (queryRefresh) {
                     GetRefreshStateEvent rse = new GetRefreshStateEvent(Com2ShouldRefreshTypes.TypeEditor, !currentRefresh);
                     OnShouldRefresh(rse);
@@ -559,7 +559,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
         public event GetNameItemEventHandler QueryGetDisplayValue {
-            add => Events.AddHandler(EventGetDisplayValue, value); 
+            add => Events.AddHandler(EventGetDisplayValue, value);
             remove => Events.RemoveHandler(EventGetDisplayValue, value);
         }
 
@@ -572,7 +572,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             add => Events.AddHandler(EventGetTypeConverterAndTypeEditor, value);
             remove => Events.RemoveHandler(EventGetTypeConverterAndTypeEditor, value);
         }
-        
+
         public event Com2EventHandler QueryResetValue {
             add => Events.AddHandler(EventResetValue, value);
             remove => Events.RemoveHandler(EventResetValue, value);
@@ -596,7 +596,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             if (component is ICustomTypeDescriptor) {
                 component = ((ICustomTypeDescriptor)component).GetPropertyOwner(this);
             }
-        
+
             if (component == this.TargetObject) {
                 GetBoolValueEvent gbv = new GetBoolValueEvent(false);
                 OnCanResetValue(gbv);
@@ -637,15 +637,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         protected override AttributeCollection CreateAttributeCollection() {
             return new AttributeCollection(AttributeArray);
         }
-        
+
         private TypeConverter GetBaseTypeConverter() {
-        
+
             if (PropertyType == null) {
                 return new TypeConverter();
             }
-            
+
             TypeConverter localConverter = null;
-            
+
             TypeConverterAttribute attr = (TypeConverterAttribute)Attributes[typeof(TypeConverterAttribute)];
             if (attr != null) {
                string converterTypeName = attr.ConverterTypeName;
@@ -664,7 +664,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                    }
                }
             }
-            
+
             // if we didn't get one from the attribute, ask the type descriptor
             if (localConverter == null) {
                // we don't want to create the value editor for the IDispatch props because
@@ -677,15 +677,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                      localConverter = new Com2IDispatchConverter(this, false);
                 }
             }
-            
+
             if (localConverter == null) {
                 localConverter = new TypeConverter();
             }
             return localConverter;
         }
-        
+
         private object GetBaseTypeEditor(Type editorBaseType) {
-            
+
             if (PropertyType == null) {
                 return null;
             }
@@ -694,7 +694,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             EditorAttribute attr = (EditorAttribute)Attributes[typeof(EditorAttribute)];
             if (attr != null) {
                string editorTypeName = attr.EditorBaseTypeName;
-               
+
                if (editorTypeName != null && editorTypeName.Length > 0) {
                    Type attrEditorBaseType = Type.GetType(editorTypeName);
                    if (attrEditorBaseType != null && attrEditorBaseType == editorBaseType) {
@@ -707,7 +707,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                                }
                             }
                             catch (Exception ex) {
-                               Debug.Fail("Failed to create edtior of type '" + attr.EditorTypeName + "' from Attribute", ex.ToString()); 
+                               Debug.Fail("Failed to create edtior of type '" + attr.EditorTypeName + "' from Attribute", ex.ToString());
                             }
                         }
                    }
@@ -739,15 +739,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                if (TypeEditorValid) {
                   return editor;
                }
-               
+
                if (PropertyType == null) {
                    return null;
                }
-               
+
                if (editorBaseType == typeof(UITypeEditor)) {
                   TypeConverter c = null;
                   GetTypeConverterAndTypeEditor(ref c, editorBaseType, ref editor);
-                  
+
                   if (!TypeConverterValid) {
                      this.converter = c;
                      SetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeConverter, false);
@@ -758,7 +758,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                   editor = base.GetEditor(editorBaseType);
                }
                return editor;
-          
+
         }
 
         /// <devdoc>
@@ -840,7 +840,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
             return lastValue;
         }
-        
+
         /// <devdoc>
         ///     Retrieves the value editor for the property.  If a value editor is passed
         ///     in as a TypeConverterAttribute, that value editor will be instantiated.
@@ -850,19 +850,19 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         ///     takes an IEditorSite in its constructor, the parameter will be passed in.
         /// </devdoc>
         public void GetTypeConverterAndTypeEditor(ref TypeConverter typeConverter, Type editorBaseType, ref object typeEditor) {
-        
+
                 // get the base editor and converter, attributes first
                 TypeConverter localConverter = typeConverter;
             object localEditor    = typeEditor;
-                
+
                 if (localConverter == null) {
                      localConverter = GetBaseTypeConverter();
                 }
-                
+
                 if (localEditor == null) {
                      localEditor = GetBaseTypeEditor(editorBaseType);
                 }
-                
+
                 // if this is a object, get the value and attempt to create the correct value editor based on that value.
                 // we don't do this if the state came from an attribute
                 //
@@ -874,43 +874,43 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     }
                     ComNativeDescriptor.ResolveVariantTypeConverterAndTypeEditor(value, ref localConverter, editorBaseType, ref localEditor);
                 }
-                
+
                 // now see if someone else would like to serve up a value editor
                 //
-                
+
                 // unwrap the editor if it's one of ours.
                 if (localConverter is Com2PropDescMainConverter) {
                     localConverter = ((Com2PropDescMainConverter)localConverter).InnerConverter;
                 }
-                 
+
                 GetTypeConverterAndTypeEditorEvent e = new GetTypeConverterAndTypeEditorEvent(localConverter, localEditor);
                 OnGetTypeConverterAndTypeEditor(e);
                 localConverter = e.TypeConverter;
                 localEditor    = e.TypeEditor;
-                
+
                 // just in case one of the handlers removed our editor...
                 //
                 if (localConverter == null) {
                      localConverter = GetBaseTypeConverter();
                 }
-                
+
                 if (localEditor == null) {
                      localEditor = GetBaseTypeEditor(editorBaseType);
-                } 
-                               
+                }
+
                 // wrap the value editor in our main value editor, but only if it isn't "TypeConverter" or already a Com2PropDescMainTypeConverter
                 //
                 Type localConverterType = localConverter.GetType();
                 if (localConverterType != typeof(TypeConverter) && localConverterType != (typeof(Com2PropDescMainConverter))) {
                     localConverter = new Com2PropDescMainConverter(this, localConverter);
                 }
-                
+
                 // save the values back to the variables.
                 //
                 typeConverter = localConverter;
                 typeEditor    = localEditor;
         }
-        
+
         /// <devdoc>
         ///     Is the given value equal to the last known value for this object?
         /// </devdoc>
@@ -926,10 +926,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
         protected void OnGetBaseAttributes(GetAttributesEvent e) {
-            
+
             try {
                 com2props.AlwaysValid = com2props.CheckValid();
-    
+
                 GetAttributesEventHandler handler = (GetAttributesEventHandler)Events[EventGetBaseAttributes];
                 if (handler != null) handler(this, e);
             }
@@ -937,7 +937,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 com2props.AlwaysValid = false;
             }
         }
-        
+
         /// <devdoc>
         ///     Raises the appropriate event
         /// </devdoc>
@@ -978,13 +978,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             try {
                 com2props.AlwaysValid = com2props.CheckValid();
                 GetTypeConverterAndTypeEditorEventHandler handler = (GetTypeConverterAndTypeEditorEventHandler)Events[EventGetTypeConverterAndTypeEditor];
-                if (handler != null) handler(this, e);  
+                if (handler != null) handler(this, e);
             }
             finally {
                 com2props.AlwaysValid = false;
             }
         }
-        
+
         /// <devdoc>
         ///     Raises the appropriate event
         /// </devdoc>
@@ -1061,7 +1061,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             if (component is ICustomTypeDescriptor) {
                 component = ((ICustomTypeDescriptor)component).GetPropertyOwner(this);
             }
-        
+
             if (component == this.TargetObject) {
                 OnResetValue(EventArgs.Empty);
             }
@@ -1157,9 +1157,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         lastValue = value;
                         return;
                     default:
-                        
+
                         //Debug.Fail(String.Format("IDispatch::Invoke(INVOKE_PROPPUT) returned hr=0x{0:X}", hr));
-                        
+
                         if (pDisp is UnsafeNativeMethods.ISupportErrorInfo) {
                             g = typeof(UnsafeNativeMethods.IDispatch).GUID;
                             if (NativeMethods.Succeeded(((UnsafeNativeMethods.ISupportErrorInfo)pDisp).InterfaceSupportsErrorInfo(ref g))) {
@@ -1171,33 +1171,33 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                                         errorInfo = info;
                                     }
                                 }
-                                
+
                             }
                         }
                         else if (errorInfo == null) {
                             StringBuilder strMessage = new StringBuilder(256);
-                        
-                            int result = SafeNativeMethods.FormatMessage(NativeMethods.FORMAT_MESSAGE_FROM_SYSTEM | 
+
+                            int result = SafeNativeMethods.FormatMessage(NativeMethods.FORMAT_MESSAGE_FROM_SYSTEM |
                                                                     NativeMethods.FORMAT_MESSAGE_IGNORE_INSERTS,
-                                                                    NativeMethods.NullHandleRef, 
+                                                                    NativeMethods.NullHandleRef,
                                                                     hr,
                                                                     CultureInfo.CurrentCulture.LCID,
                                                                     strMessage,
                                                                     255,
                                                                     NativeMethods.NullHandleRef);
-                            
-                            
-                            if (result == 0) {   
+
+
+                            if (result == 0) {
                                 errorInfo = string.Format(CultureInfo.CurrentCulture, string.Format(SR.DispInvokeFailed, "SetValue", hr));
                             }
-                            else {       
+                            else {
                                 errorInfo = strMessage.ToString();
                                 // strip of any trailing cr/lf
-                                while (errorInfo.Length > 0 && 
+                                while (errorInfo.Length > 0 &&
                                         errorInfo[errorInfo.Length -1] == '\n' ||
                                         errorInfo[errorInfo.Length -1] == '\r') {
                                     errorInfo = errorInfo.Substring(0, errorInfo.Length-1);
-                                }    
+                                }
                             }
                         }
                         throw new ExternalException(errorInfo, hr);
@@ -1236,18 +1236,18 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// </devdoc>
         private class Com2PropDescMainConverter : Com2ExtendedTypeConverter {
             Com2PropertyDescriptor pd;
-            
+
             private const int CheckSubprops = 0;
             private const int AllowSubprops = 1;
             private const int SupressSubprops = 2;
-            
-            
+
+
             private int subprops = CheckSubprops;
-            
+
             public Com2PropDescMainConverter(Com2PropertyDescriptor pd, TypeConverter baseConverter) : base(baseConverter) {
                   this.pd = pd;
             }
-            
+
             public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
                 object baseConversion = base.ConvertTo(context, culture, value, destinationType);
                   if (destinationType == typeof(string)) {
@@ -1269,7 +1269,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                   }
                   return baseConversion;
             }
-            
+
             public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes) {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(value, attributes);
 
@@ -1282,8 +1282,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 }
 
                 return props;
-            }  
-            
+            }
+
             public override bool GetPropertiesSupported(ITypeDescriptorContext context) {
                   if (subprops == CheckSubprops) {
                      if (!base.GetPropertiesSupported(context)){
@@ -1377,7 +1377,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     }
 
     internal delegate void GetTypeConverterAndTypeEditorEventHandler(Com2PropertyDescriptor sender, GetTypeConverterAndTypeEditorEvent e);
-    
+
     internal class GetTypeConverterAndTypeEditorEvent : EventArgs {
         private TypeConverter typeConverter;
         private object typeEditor;
@@ -1386,7 +1386,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             this.typeEditor = typeEditor;
             this.typeConverter = typeConverter;
         }
-        
+
         public TypeConverter TypeConverter{
             get{
                 return typeConverter;
@@ -1395,7 +1395,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 typeConverter = value;
             }
         }
-        
+
         public object TypeEditor
         {
             get{

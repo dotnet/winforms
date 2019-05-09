@@ -64,7 +64,7 @@ namespace System.Windows.Forms
         /// <see cref='System.Windows.Forms.Control.KeyUp'/> event.
         /// </devdoc>
         public int KeyValue => (int)(KeyData & Keys.KeyCode);
-       
+
         /// <devdoc>
         /// Gets the key data for a <see cref='System.Windows.Forms.Control.KeyDown'/> or
         /// <see cref='System.Windows.Forms.Control.KeyUp'/> event.

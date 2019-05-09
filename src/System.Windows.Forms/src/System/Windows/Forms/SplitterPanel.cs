@@ -17,12 +17,12 @@ namespace System.Windows.Forms
     {
         SplitContainer owner  = null;
         private bool collapsed = false;
-        
+
         public SplitterPanel(SplitContainer owner)
         : base() {
               this.owner =   owner;
               SetStyle(ControlStyles.ResizeRedraw, true);
-          
+
         }
 
         internal bool Collapsed {
@@ -34,14 +34,14 @@ namespace System.Windows.Forms
             }
         }
 
-        
+
         /// <devdoc>
-        ///    Override AutoSize to make it hidden from the user in the designer 
+        ///    Override AutoSize to make it hidden from the user in the designer
         /// </devdoc>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
         public new bool AutoSize {
             get {
@@ -74,14 +74,14 @@ namespace System.Windows.Forms
             set {
             }
         }
-        
+
         /// <devdoc>
-        ///    Override Anchor to make it hidden from the user in the designer 
+        ///    Override Anchor to make it hidden from the user in the designer
         /// </devdoc>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
         public new AnchorStyles Anchor {
             get {
@@ -99,7 +99,7 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
         public new BorderStyle BorderStyle {
             get {
@@ -119,7 +119,7 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
         public new DockStyle Dock {
             get {
@@ -131,12 +131,12 @@ namespace System.Windows.Forms
         }
 
         /// <devdoc>
-        ///    Override DockPadding to make it hidden from the user in the designer 
+        ///    Override DockPadding to make it hidden from the user in the designer
         /// </devdoc>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
         new public DockPaddingEdges DockPadding {
             get {
@@ -161,7 +161,7 @@ namespace System.Windows.Forms
                 return base.Height;
             }
             set {
-                throw new NotSupportedException(SR.SplitContainerPanelHeight); 
+                throw new NotSupportedException(SR.SplitContainerPanelHeight);
             }
         }
 
@@ -180,7 +180,7 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
         public new Point Location {
             get {
@@ -203,12 +203,12 @@ namespace System.Windows.Forms
 
 
         /// <devdoc>
-        ///    Override AutoSize to make it hidden from the user in the designer 
+        ///    Override AutoSize to make it hidden from the user in the designer
         /// </devdoc>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
         public new Size MinimumSize {
             get {
@@ -221,12 +221,12 @@ namespace System.Windows.Forms
 
 
         /// <devdoc>
-        ///    Override AutoSize to make it hidden from the user in the designer 
+        ///    Override AutoSize to make it hidden from the user in the designer
         /// </devdoc>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
         public new Size MaximumSize {
             get {
@@ -236,7 +236,7 @@ namespace System.Windows.Forms
                 base.MaximumSize = value;
             }
         }
-        
+
         /// <devdoc>
         ///     Name of this control. The designer will set this to the same
         ///     as the programatic Id "(name)" of the control.  The name can be
@@ -245,7 +245,7 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
         public new string Name {
             get {
@@ -255,7 +255,7 @@ namespace System.Windows.Forms
                 base.Name = value;
             }
         }
-        
+
         /// <devdoc>
         ///     The parent of this control.
         /// </devdoc>
@@ -271,7 +271,7 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
         public new Control Parent {
             get {
@@ -288,7 +288,7 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
         public new Size Size {
             get {
@@ -308,7 +308,7 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
         public new int TabIndex {
             get {
@@ -326,7 +326,7 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
         public new bool TabStop {
             get {
@@ -343,7 +343,7 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
         public new bool Visible {
             get {
@@ -390,7 +390,7 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
         public new event EventHandler VisibleChanged {
             add => base.VisibleChanged += value;
@@ -403,7 +403,7 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
         public new event EventHandler DockChanged {
             add => base.DockChanged += value;
@@ -416,7 +416,7 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
         public new event EventHandler LocationChanged {
             add => base.LocationChanged += value;
@@ -429,12 +429,12 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
         public new event EventHandler TabIndexChanged {
             add => base.TabIndexChanged += value;
             remove => base.TabIndexChanged -= value;
-        }        
+        }
 
         /// <devdoc>
         ///     Override TabStopChanged to make it hidden from the user in the designer
@@ -442,7 +442,7 @@ namespace System.Windows.Forms
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
         public new event EventHandler TabStopChanged {
             add => base.TabStopChanged += value;

@@ -64,7 +64,7 @@ namespace System.Windows.Forms
             DefaultValue("")
         ]
         public string Description
-        { 
+        {
             get
             {
                 object description = this.Properties.GetObject(PropImageCellDescription);
@@ -152,7 +152,7 @@ namespace System.Windows.Forms
                 // Sequential enum.  Valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewImageCellLayout.NotSet, (int)DataGridViewImageCellLayout.Zoom))
                 {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewImageCellLayout)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewImageCellLayout));
                 }
                 if (this.ImageLayout != value)
                 {
@@ -217,9 +217,9 @@ namespace System.Windows.Forms
                     {
                         this.flags = (byte) (this.flags & ~DATAGRIDVIEWIMAGECELL_valueIsIcon);
                     }
-                    if (this.DataGridView != null && 
-                        this.RowIndex != -1 && 
-                        this.DataGridView.NewRowIndex == this.RowIndex && 
+                    if (this.DataGridView != null &&
+                        this.RowIndex != -1 &&
+                        this.DataGridView.NewRowIndex == this.RowIndex &&
                         !this.DataGridView.VirtualMode)
                     {
                         Debug.Assert(this.DataGridView.AllowUserToAddRowsInternal);
@@ -271,7 +271,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                // 
+                //
 
                 dataGridViewCell = (DataGridViewImageCell)System.Activator.CreateInstance(thisType);
             }
@@ -401,8 +401,8 @@ namespace System.Windows.Forms
             return errBounds;
         }
 
-        
-        
+
+
         protected override object GetFormattedValue(object value,
                                                     int rowIndex,
                                                     ref DataGridViewCellStyle cellStyle,
@@ -535,7 +535,7 @@ namespace System.Windows.Forms
                     preferredSize = new Size(1, 0);
                 }
             }
-            else 
+            else
             {
                 if (img != null)
                 {
@@ -725,15 +725,15 @@ namespace System.Windows.Forms
             return imgBounds;
         }
 
-        protected override void Paint(Graphics graphics, 
+        protected override void Paint(Graphics graphics,
             Rectangle clipBounds,
-            Rectangle cellBounds, 
-            int rowIndex, 
+            Rectangle cellBounds,
+            int rowIndex,
             DataGridViewElementStates elementState,
             object value,
             object formattedValue,
-            string errorText, 
-            DataGridViewCellStyle cellStyle, 
+            string errorText,
+            DataGridViewCellStyle cellStyle,
             DataGridViewAdvancedBorderStyle advancedBorderStyle,
             DataGridViewPaintParts paintParts)
         {
@@ -742,14 +742,14 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(cellStyle));
             }
 
-            PaintPrivate(graphics, 
+            PaintPrivate(graphics,
                 clipBounds,
-                cellBounds, 
-                rowIndex, 
+                cellBounds,
+                rowIndex,
                 elementState,
                 formattedValue,
-                errorText, 
-                cellStyle, 
+                errorText,
+                cellStyle,
                 advancedBorderStyle,
                 paintParts,
                 false /*computeContentBounds*/,
@@ -761,18 +761,18 @@ namespace System.Windows.Forms
         // 1. DataGridViewCell::Paint method
         // 2. DataGridViewCell::GetContentBounds
         // 3. DataGridViewCell::GetErrorIconBounds
-        // 
+        //
         // if computeContentBounds is true then PaintPrivate returns the contentBounds
         // else if computeErrorIconBounds is true then PaintPrivate returns the errorIconBounds
         // else it returns Rectangle.Empty;
-        private Rectangle PaintPrivate(Graphics g, 
+        private Rectangle PaintPrivate(Graphics g,
             Rectangle clipBounds,
-            Rectangle cellBounds, 
-            int rowIndex, 
+            Rectangle cellBounds,
+            int rowIndex,
             DataGridViewElementStates elementState,
             object formattedValue,
-            string errorText, 
-            DataGridViewCellStyle cellStyle, 
+            string errorText,
+            DataGridViewCellStyle cellStyle,
             DataGridViewAdvancedBorderStyle advancedBorderStyle,
             DataGridViewPaintParts paintParts,
             bool computeContentBounds,
@@ -855,7 +855,7 @@ namespace System.Windows.Forms
                                 {
                                     if (img != null)
                                     {
-                                        // 
+                                        //
 
                                         ImageAttributes attr = new ImageAttributes();
 
@@ -920,11 +920,11 @@ namespace System.Windows.Forms
                 }
 
                 Point ptCurrentCell = this.DataGridView.CurrentCellAddress;
-                if (paint && 
-                    DataGridViewCell.PaintFocus(paintParts) && 
-                    ptCurrentCell.X == this.ColumnIndex && 
+                if (paint &&
+                    DataGridViewCell.PaintFocus(paintParts) &&
+                    ptCurrentCell.X == this.ColumnIndex &&
                     ptCurrentCell.Y == rowIndex &&
-                    this.DataGridView.ShowFocusCues && 
+                    this.DataGridView.ShowFocusCues &&
                     this.DataGridView.Focused)
                 {
                     // Draw focus rectangle
@@ -994,7 +994,7 @@ namespace System.Windows.Forms
 
             public override string Value
             {
-                get 
+                get
                 {
                     return base.Value;
                 }

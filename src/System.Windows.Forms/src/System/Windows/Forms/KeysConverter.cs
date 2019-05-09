@@ -17,14 +17,14 @@ namespace System.Windows.Forms {
     using System.Diagnostics.CodeAnalysis;
 
     /// <devdoc>
-    /// <para>Provides a type converter to convert <see cref='System.Windows.Forms.Keys'/> objects to and from various 
+    /// <para>Provides a type converter to convert <see cref='System.Windows.Forms.Keys'/> objects to and from various
     ///    other representations.</para>
     /// </devdoc>
     public class KeysConverter : TypeConverter, IComparer {
         private IDictionary keyNames;
         private List<string> displayOrder;
         private StandardValuesCollection values;
-    
+
         private const Keys FirstDigit = System.Windows.Forms.Keys.D0;
         private const Keys LastDigit = System.Windows.Forms.Keys.D9;
         private const Keys FirstAscii = System.Windows.Forms.Keys.A;
@@ -103,7 +103,7 @@ namespace System.Windows.Forms {
                 return displayOrder;
             }
         }
-    
+
         /// <devdoc>
         ///    Determines if this converter can convert an object in the given source
         ///    type to the native type of the converter.
@@ -114,7 +114,7 @@ namespace System.Windows.Forms {
             }
             return base.CanConvertFrom(context, sourceType);
         }
-        
+
         /// <devdoc>
         ///    <para>Gets a value indicating whether this converter can
         ///       convert an object to the given destination type using the context.</para>
@@ -137,44 +137,44 @@ namespace System.Windows.Forms {
         ///    Converts the given object to the converter's native type.
         /// </devdoc>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
-        
+
             if (value is string) {
-            
+
                 string text = ((string)value).Trim();
-            
+
                 if (text.Length == 0) {
                     return null;
                 }
                 else {
-                
+
                     // Parse an array of key tokens.
                     //
                     string[] tokens = text.Split(new char[] {'+'});
                     for (int i = 0; i < tokens.Length; i++) {
                         tokens[i] = tokens[i].Trim();
                     }
-                    
+
                     // Now lookup each key token in our key hashtable.
                     //
                     Keys key = (Keys)0;
                     bool foundKeyCode = false;
-                    
+
                     for (int i = 0; i < tokens.Length; i++) {
                         object obj = KeyNames[tokens[i]];
-                        
+
                         if (obj == null) {
-                        
+
                             // Key was not found in our table.  See if it is a valid value in
                             // the Keys enum.
                             //
                             obj = Enum.Parse(typeof(Keys), tokens[i]);
                         }
-                        
+
                         if (obj != null) {
                             Keys currentKey = (Keys)obj;
-                            
+
                             if ((currentKey & Keys.KeyCode) != 0) {
-                            
+
                                 // We found a match.  If we have previously found a
                                 // key code, then check to see that this guy
                                 // isn't a key code (it is illegal to have, say,
@@ -185,20 +185,20 @@ namespace System.Windows.Forms {
                                 }
                                 foundKeyCode = true;
                             }
-                            
+
                             // Now OR the key into our current key
                             //
                             key |= currentKey;
                         }
                         else {
-                        
+
                             // We did not match this key.  Report this as an error too.
                             //
                             throw new FormatException(string.Format(SR.KeysConverterInvalidKeyName, tokens[i]));
-                            
+
                         }
                     }
-                    
+
                     return (object)key;
                 }
             }
@@ -209,7 +209,7 @@ namespace System.Windows.Forms {
                 }
                 return Enum.ToObject(typeof(Keys), finalValue);
             }
-            
+
             return base.ConvertFrom(context, culture, value);
         }
 
@@ -220,7 +220,7 @@ namespace System.Windows.Forms {
         ///    type is string.  If this cannot convert to the desitnation type, this will
         ///    throw a NotSupportedException.
         /// </devdoc>
-        [SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible")]            
+        [SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible")]
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
             if (destinationType == null) {
                 throw new ArgumentNullException(nameof(destinationType));
@@ -254,17 +254,17 @@ namespace System.Windows.Forms {
                             else {
                                 terms.Add(keyValue);
                             }
-                            
+
                             added = true;
                         }
                     }
-        
+
                     // Now reset and do the key values.  Here, we quit if
                     // we find a match.
                     //
                     Keys keyOnly = (key & Keys.KeyCode);
                     bool foundKey = false;
-                    
+
                     if (added && asString) {
                         terms.Add("+");
                     }
@@ -285,8 +285,8 @@ namespace System.Windows.Forms {
                             break;
                         }
                     }
-                    
-                    // Finally, if the key wasn't in our list, add it to 
+
+                    // Finally, if the key wasn't in our list, add it to
                     // the end anyway.  Here we just pull the key value out
                     // of the enum.
                     //
@@ -311,10 +311,10 @@ namespace System.Windows.Forms {
                     }
                 }
             }
-            
+
             return base.ConvertTo(context, culture, value, destinationType);
         }
-        
+
         /// <devdoc>
         ///    Retrieves a collection containing a set of standard values
         ///    for the data type this validator is designed for.  This
@@ -324,20 +324,20 @@ namespace System.Windows.Forms {
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context) {
             if (values == null) {
                 ArrayList list = new ArrayList();
-                
+
                 ICollection keys = KeyNames.Values;
-                
+
                 foreach (object o in keys) {
                     list.Add(o);
                 }
-                
+
                 list.Sort(this);
-                
+
                 values = new StandardValuesCollection(list.ToArray());
             }
             return values;
         }
-    
+
         /// <devdoc>
         ///    Determines if the list of standard values returned from
         ///    GetStandardValues is an exclusive list.  If the list
@@ -349,7 +349,7 @@ namespace System.Windows.Forms {
         public override bool GetStandardValuesExclusive(ITypeDescriptorContext context) {
             return false;
         }
-        
+
         /// <devdoc>
         ///    Determines if this object supports a standard set of values
         ///    that can be picked from a list.

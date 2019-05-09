@@ -18,13 +18,13 @@ namespace System.Windows.Forms
         public LinkLabelLinkClickedEventArgs(LinkLabel.Link link) : this(link, MouseButtons.Left)
         {
         }
-        
+
         public LinkLabelLinkClickedEventArgs(LinkLabel.Link link, MouseButtons button)
         {
             Link = link;
             Button = button;
         }
-        
+
         /// <devdoc>
         /// Gets the <see cref='System.Windows.Forms.LinkLabel.Link'/> that was clicked.
         /// </devdoc>

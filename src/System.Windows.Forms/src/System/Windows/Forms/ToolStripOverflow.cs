@@ -14,7 +14,7 @@ namespace System.Windows.Forms
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     public class ToolStripOverflow : ToolStripDropDown, IArrangedElement
     {
-#if DEBUG        
+#if DEBUG
         internal static readonly TraceSwitch PopupLayoutDebug = new TraceSwitch("PopupLayoutDebug", "Debug ToolStripPopup Layout code");
 #else
         internal static readonly TraceSwitch PopupLayoutDebug;
@@ -37,7 +37,7 @@ namespace System.Windows.Forms
                     return items;
                 }
                 return new ToolStripItemCollection(null, false);
-            } 
+            }
         }
 
         public override ToolStripItemCollection Items {
@@ -47,9 +47,9 @@ namespace System.Windows.Forms
        }
 
         private ToolStrip ParentToolStrip {
-            get { 
+            get {
                 if (ownerItem != null) {
-                    return ownerItem.ParentToolStrip;                     
+                    return ownerItem.ParentToolStrip;
                 }
                 return null;
             }
@@ -58,20 +58,20 @@ namespace System.Windows.Forms
         ArrangedElementCollection IArrangedElement.Children {
             get { return DisplayedItems; }
         }
-        
+
         IArrangedElement IArrangedElement.Container {
             get { return ParentInternal; }
         }
-        
+
         bool IArrangedElement.ParticipatesInLayout {
             get { return GetState(STATE_VISIBLE); }
         }
-                
+
 
         PropertyStore IArrangedElement.Properties {
             get { return Properties; }
         }
-        
+
         void IArrangedElement.SetBounds(Rectangle bounds, BoundsSpecified specified) {
             SetBoundsCore(bounds.X, bounds.Y, bounds.Width, bounds.Height, specified);
         }
@@ -82,7 +82,7 @@ namespace System.Windows.Forms
         /// <param name=item></param>
         public override LayoutEngine LayoutEngine {
             get {
-                return FlowLayout.Instance; 
+                return FlowLayout.Instance;
             }
         }
 
@@ -118,7 +118,7 @@ namespace System.Windows.Forms
         }
 
         protected override void SetDisplayedItems() {
-            // do nothing here.... this is really for the setting the overflow/displayed items on the 
+            // do nothing here.... this is really for the setting the overflow/displayed items on the
             // main ToolStrip.   Our working item collection is our displayed item collection... calling
             // base would clear it out.
             Size biggestItemSize = Size.Empty;

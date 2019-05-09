@@ -8,7 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms.VisualStyles
 {
-    public enum BorderType 
+    public enum BorderType
     {
     	Rectangle = 0,
     	RoundedRectangle = 1,

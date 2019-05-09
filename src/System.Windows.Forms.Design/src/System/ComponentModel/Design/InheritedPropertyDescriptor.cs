@@ -72,7 +72,7 @@ namespace System.ComponentModel.Design
                                 }
                                 else
                                 {
-                                    // this collection has at least one Add(IComponent) method. 
+                                    // this collection has at least one Add(IComponent) method.
                                     addComponentExists = true;
                                     break;
                                 }
@@ -239,7 +239,7 @@ namespace System.ComponentModel.Design
             try
             {
                 object currentValue;
-                // Don't just get the default value.  Check to see if the propertyDescriptor has indicated ShouldSerialize, and if it hasn't try to use the default value. 
+                // Don't just get the default value.  Check to see if the propertyDescriptor has indicated ShouldSerialize, and if it hasn't try to use the default value.
                 // We need to do this for properties that inherit from their parent.  If we are processing properties on the root component, we always favor the presence of a default value attribute.
                 // The root component is always inherited but some values should always be written into code.
                 if (!propertyDescriptor.ShouldSerializeValue(component))

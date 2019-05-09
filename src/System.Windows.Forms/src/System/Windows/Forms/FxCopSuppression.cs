@@ -200,7 +200,7 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Microsoft.Security", "CA2101:SpecifyMarshalingForPInvokeStringArguments", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.OleCreateFontIndirect(System.Windows.Forms.NativeMethods+tagFONTDESC,System.Guid&):System.Windows.Forms.UnsafeNativeMethods+IFont")]
 [assembly: SuppressMessage("Microsoft.Security", "CA2101:SpecifyMarshalingForPInvokeStringArguments", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.OleCreateIFontIndirect(System.Windows.Forms.NativeMethods+FONTDESC,System.Guid&):System.Windows.Forms.UnsafeNativeMethods+IFont")]
 
-// 
+//
 
 [assembly: SuppressMessage("Microsoft.Security", "CA2113:SecureLateBindingMethods", Scope="member", Target="System.Windows.Forms.ColumnHeader.Clone():System.Object")]
 [assembly: SuppressMessage("Microsoft.Security", "CA2113:SecureLateBindingMethods", Scope="member", Target="System.Windows.Forms.DataGridViewComboBoxColumn.Clone():System.Object")]

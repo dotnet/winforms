@@ -35,7 +35,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         SRDescription(nameof(SR.SaveFileDialogCreatePrompt))
         ]
@@ -55,7 +55,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         SRDescription(nameof(SR.SaveFileDialogOverWritePrompt))
         ]
@@ -73,7 +73,7 @@ namespace System.Windows.Forms {
         ///       Opens the file with read/write permission selected by the user.
         ///    </para>
         /// </devdoc>
-        
+
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
         public Stream OpenFile() {
             string filename = FileNames[0];
@@ -81,7 +81,7 @@ namespace System.Windows.Forms {
             {
                 throw new ArgumentNullException(nameof(FileName));
             }
-                
+
             return new FileStream(filename, FileMode.Create, FileAccess.ReadWrite);
         }
 
@@ -94,7 +94,7 @@ namespace System.Windows.Forms {
         ///       closing.
         ///    </para>
         /// </devdoc>
-        private bool PromptFileCreate(string fileName) 
+        private bool PromptFileCreate(string fileName)
         {
             return MessageBoxWithFocusRestore(string.Format(SR.FileDialogCreatePrompt, fileName),
                     DialogCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
@@ -106,7 +106,7 @@ namespace System.Windows.Forms {
         ///       invoked when the "overwritePrompt" property is true and the specified
         ///       file already exists. A return value of false prevents the dialog from
         ///       closing.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         private bool PromptFileOverwrite(string fileName) {
@@ -134,7 +134,7 @@ namespace System.Windows.Forms {
                     return false;
                 }
             }
-            
+
             return true;
         }
 
@@ -163,7 +163,7 @@ namespace System.Windows.Forms {
                         throw new InvalidOperationException(string.Format(SR.FileDialogInvalidFileName, FileName));
                 }
             }
-            
+
             return result;
         }
 

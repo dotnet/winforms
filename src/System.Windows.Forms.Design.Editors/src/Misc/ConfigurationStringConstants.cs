@@ -5,7 +5,7 @@
 namespace System.Configuration
 {
     /// <summary>
-    /// These configuration file values are added in .NET FX 4.7 and above frameworks only. 
+    /// These configuration file values are added in .NET FX 4.7 and above frameworks only.
     /// Sample usage:
     ///  <System.Windows.Forms.ApplicationConfigurationSection>
     ///      <add key="DpiAwareness" value="PerMonitorV2" />
@@ -15,7 +15,7 @@ namespace System.Configuration
     ///      <add key="DisableDpiChangedMessageHandling" value="false" />
     ///      <add key="MonthCalendar.DisableHighDpiImprovements" value="false" />
     ///      <add key="DisableDpiChangedHighDpiImprovements" value="false" />
-    ///  </System.Windows.Forms.ApplicationConfigurationSection>   
+    ///  </System.Windows.Forms.ApplicationConfigurationSection>
     /// </summary>
     internal static class ConfigurationStringConstants
     {

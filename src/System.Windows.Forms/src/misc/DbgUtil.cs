@@ -36,7 +36,7 @@ namespace System.Internal
     /// </devdoc>
     internal sealed class DbgUtil
     {
-        public const int 
+        public const int
             FORMAT_MESSAGE_ALLOCATE_BUFFER = 0x00000100,
             FORMAT_MESSAGE_IGNORE_INSERTS  = 0x00000200,
             FORMAT_MESSAGE_FROM_SYSTEM     = 0x00001000,
@@ -69,26 +69,26 @@ namespace System.Internal
                 return;
             }
 
-            try 
+            try
             {
                 BindingFlags bindingFlags = BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.Static | BindingFlags.Instance;
                 FieldInfo allocSiteFld = obj.GetType().GetField("AllocationSite", bindingFlags);
                 string allocationSite = allocSiteFld != null ? allocSiteFld.GetValue( obj ).ToString() : "<Allocation site unavailable>";
-                
+
                 // ignore ojects created by WindowsGraphicsCacheManager.
                 if( allocationSite.Contains("WindowsGraphicsCacheManager") )
                 {
                     return;
                 }
-    
+
                 Debug.Fail("Object Disposed through finalization - it should be explicitly disposed.");
-                Debug.WriteLine("Allocation stack:\r\n" + allocationSite); 
-            } 
+                Debug.WriteLine("Allocation stack:\r\n" + allocationSite);
+            }
             catch(Exception ex)
             {
                 try
                 {
-                    Debug.WriteLine("Exception thrown while trying to get allocation stack: " + ex); 
+                    Debug.WriteLine("Exception thrown while trying to get allocation stack: " + ex);
                 }
                 catch
                 {
@@ -197,15 +197,15 @@ namespace System.Internal
         //
         // WARNING: Your PInvoke function needs to have the DllImport.SetLastError=true for this method
         // to work properly.  From the MSDN:
-        // GetLastWin32Error exposes the Win32 GetLastError API method from Kernel32.DLL. This method exists 
-        // because it is not safe to make a direct platform invoke call to GetLastError to obtain this information. 
-        // If you want to access this error code, you must call GetLastWin32Error rather than writing your own 
-        // platform invoke definition for GetLastError and calling it. The common language runtime can make 
+        // GetLastWin32Error exposes the Win32 GetLastError API method from Kernel32.DLL. This method exists
+        // because it is not safe to make a direct platform invoke call to GetLastError to obtain this information.
+        // If you want to access this error code, you must call GetLastWin32Error rather than writing your own
+        // platform invoke definition for GetLastError and calling it. The common language runtime can make
         // internal calls to APIs that overwrite the operating system maintained GetLastError.
         //
         // You can only use this method to obtain error codes if you apply the System.Runtime.InteropServices.DllImportAttribute
         // to the method signature and set the SetLastError field to true.
-        //              
+        //
         [SuppressMessage("Microsoft.Interoperability", "CA1404:CallGetLastErrorImmediatelyAfterPInvoke")]
         public static string GetLastErrorStr()
         {
@@ -218,7 +218,7 @@ namespace System.Internal
             {
                 err = Marshal.GetLastWin32Error();
 
-                int retVal = FormatMessage(   
+                int retVal = FormatMessage(
                     FORMAT_MESSAGE_DEFAULT,
                     new HandleRef(null, IntPtr.Zero),
                     err,
@@ -236,7 +236,7 @@ namespace System.Internal
                     throw;  //rethrow critical exception.
                 }
                 message = ex.ToString();
-            } 
+            }
 
             return string.Format( CultureInfo.CurrentCulture, "0x{0:x8} - {1}", err, message);
         }
@@ -247,7 +247,7 @@ namespace System.Internal
         /// </devdoc>
         private static bool IsCriticalException( Exception ex )
         {
-            return		
+            return
                 //ex is NullReferenceException ||
                 ex is StackOverflowException ||
                 ex is OutOfMemoryException   ||
@@ -335,7 +335,7 @@ namespace System.Internal
                     {
                         args = args.Substring(0, args.Length - 2);
                     }
-                
+
                     trace += string.Format(CultureInfo.CurrentCulture, "at {0} {1}.{2}({3})\r\n", fileName, mi.DeclaringType, mi.Name, args );
                 }
             }
@@ -346,7 +346,7 @@ namespace System.Internal
                     throw;  //rethrow critical exception.
                 }
                 trace += ex.ToString();
-            } 
+            }
 
             return trace.ToString();
         }

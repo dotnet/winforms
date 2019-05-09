@@ -11,7 +11,7 @@ namespace System.Windows.Forms {
     using System.ComponentModel.Design;
     using System.ComponentModel.Design.Serialization;
     using System.Diagnostics;
-    using System.Drawing;    
+    using System.Drawing;
     using System.Runtime.InteropServices;
     using System.Windows.Forms.Design;
     using System.Windows.Forms.Layout;
@@ -44,7 +44,7 @@ namespace System.Windows.Forms {
             SetState(STATE_TOPLEVEL, false);
 	    SetStyle(ControlStyles.SupportsTransparentBackColor, true);
         }
-        
+
         /// <devdoc>
         ///    <para> Override to re-expose AutoSize.</para>
         /// </devdoc>
@@ -90,11 +90,11 @@ namespace System.Windows.Forms {
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoSizeMode));
                 }
-                
-                if (GetAutoSizeMode() != value) {                    
+
+                if (GetAutoSizeMode() != value) {
                     SetAutoSizeMode(value);
                     Control toLayout = DesignMode || ParentInternal == null ? this : ParentInternal;
-                    
+
                     if(toLayout != null) {
                         // DefaultLayout does not keep anchor information until it needs to.  When
                         // AutoSize became a common property, we could no longer blindly call into
@@ -134,7 +134,7 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        ///    <para> 
+        ///    <para>
         ///       Indicates the borderstyle for the UserControl.
         ///    </para>
         /// </devdoc>
@@ -167,7 +167,7 @@ namespace System.Windows.Forms {
         ///    Returns the parameters needed to create the handle.  Inheriting classes
         ///    can override this to provide extra functionality.  They should not,
         ///    however, forget to call base.getCreateParams() first to get the struct
-        ///    filled up with the basic info.This is required as we now need to pass the 
+        ///    filled up with the basic info.This is required as we now need to pass the
         ///    styles for appropriate BorderStyle that is set by the user.
         /// </devdoc>
         protected override CreateParams CreateParams {
@@ -189,7 +189,7 @@ namespace System.Windows.Forms {
                 return cp;
             }
         }
-        
+
         /// <devdoc>
         ///     The default size for this user control.
         /// </devdoc>
@@ -209,10 +209,10 @@ namespace System.Windows.Forms {
         }
 
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never), 
-        Bindable(false), 
+        Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
+        Bindable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]                
+        ]
         public override string Text {
             get {
                 return base.Text;
@@ -227,7 +227,7 @@ namespace System.Windows.Forms {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
         }
-        
+
         /// <devdoc>
         ///     Validates all selectable child controls in the container, including descendants. This is
         ///     equivalent to calling ValidateChildren(ValidationConstraints.Selectable). See <see cref='ValidationConstraints.Selectable'/>
@@ -266,7 +266,7 @@ namespace System.Windows.Forms {
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnCreateControl() {
             base.OnCreateControl();
-            
+
             OnLoad(EventArgs.Empty);
         }
 
@@ -306,7 +306,7 @@ namespace System.Windows.Forms {
             if (!ValidationCancelled) {
                 base.WndProc(ref m);
             }
-            
+
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]

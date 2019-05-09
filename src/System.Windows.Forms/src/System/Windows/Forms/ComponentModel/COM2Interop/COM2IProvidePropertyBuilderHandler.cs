@@ -24,7 +24,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             if (NativeMethods.Failed(target.MapPropertyToBuilder(dispid, bldrType, pGuidBldr, ref valid))) {
                 valid = false;
             }
-                        
+
             if (valid && (bldrType[0] & _CTLBLDTYPE.CTLBLDTYPE_FINTERNALBUILDER) == 0) {
                 valid = false;
                 Debug.Fail("Property Browser doesn't support standard builders -- NYI");
@@ -49,9 +49,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
             for (int i = 0; i < propDesc.Length; i++) {
                 propDesc[i].QueryGetBaseAttributes += new GetAttributesEventHandler(this.OnGetBaseAttributes);
-                
+
                 propDesc[i].QueryGetTypeConverterAndTypeEditor += new GetTypeConverterAndTypeEditorEventHandler(this.OnGetTypeConverterAndTypeEditor);
-                
+
             }
         }
 
@@ -74,7 +74,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 }
             }
         }
-        
+
         private void OnGetTypeConverterAndTypeEditor(Com2PropertyDescriptor sender, GetTypeConverterAndTypeEditorEvent gveevent) {
             object target = sender.TargetObject;
 

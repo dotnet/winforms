@@ -15,7 +15,7 @@ namespace System.Windows.Forms
     /// <devdoc>
     ///    <para>Identifies a cell in the dataGridView.</para>
     /// </devdoc>
-    /// 
+    ///
     public class DataGridViewHeaderCell : DataGridViewCell
     {
         private const byte DATAGRIDVIEWHEADERCELL_themeMargin = 100; // Used to calculate the margins required for theming rendering
@@ -67,7 +67,7 @@ namespace System.Windows.Forms
                   FlipXPThemesBitmap.Dispose();
              }
              base.Dispose(disposing);
-                             
+
         }
 
         [
@@ -256,7 +256,7 @@ namespace System.Windows.Forms
                 if (this.OwningColumn != null)
                 {
                     // column header cell
-                    return this.OwningColumn.Visible && 
+                    return this.OwningColumn.Visible &&
                             (this.DataGridView == null || this.DataGridView.ColumnHeadersVisible);
                 }
 
@@ -280,7 +280,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                // 
+                //
 
                 dataGridViewCell = (DataGridViewHeaderCell)System.Activator.CreateInstance(thisType);
             }
@@ -314,7 +314,7 @@ namespace System.Windows.Forms
             if (this.OwningRow != null)
             {
                 // row header cell
-                if ((this.DataGridView == null && rowIndex != -1) || 
+                if ((this.DataGridView == null && rowIndex != -1) ||
                     (this.DataGridView != null && (rowIndex < 0 || rowIndex >= this.DataGridView.Rows.Count)))
                 {
                     throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex));
@@ -536,7 +536,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
-            if (e.Button == MouseButtons.Left && 
+            if (e.Button == MouseButtons.Left &&
                 this.DataGridView.ApplyVisualStylesToHeaderCells &&
                 !this.DataGridView.ResizingOperationAboutToStart)
             {
@@ -595,11 +595,11 @@ namespace System.Windows.Forms
             }
         }
 
-        protected override void Paint(Graphics graphics, 
+        protected override void Paint(Graphics graphics,
                                       Rectangle clipBounds,
-                                      Rectangle cellBounds, 
-                                      int rowIndex, 
-                                      DataGridViewElementStates dataGridViewElementState, 
+                                      Rectangle cellBounds,
+                                      int rowIndex,
+                                      DataGridViewElementStates dataGridViewElementState,
                                       object value,
                                       object formattedValue,
                                       string errorText,

@@ -197,7 +197,7 @@ namespace System.Windows.Forms.Tests
             collection.Add(style);
             Assert.Equal(style, Assert.Single(collection));
         }
-        
+
         [Fact]
         public void TableLayoutStyleCollection_Remove_Null_Nop()
         {

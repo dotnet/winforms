@@ -261,7 +261,7 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         /// The TemplateNode. This is the object that actually creates miniToolStrip and manages InSitu editing.
-        /// </summary>       
+        /// </summary>
         internal ToolStripTemplateNode Editor
         {
             get => _tn;
@@ -578,7 +578,7 @@ namespace System.Windows.Forms.Design
                 _addingItem = true;
                 // Suspend the Layout as we are about to add Item to the ToolStrip
                 ToolStrip.SuspendLayout();
-                // The code in ComponentAdded will actually get the add done. 
+                // The code in ComponentAdded will actually get the add done.
                 IComponent component = _host.CreateComponent(t, NameFromText(text, t, Component.Site));
                 ToolStripItemDesigner designer = _host.GetDesigner(component) as ToolStripItemDesigner;
                 try
@@ -1570,7 +1570,7 @@ namespace System.Windows.Forms.Design
                     }
                     parent.Controls.SetChildIndex(ToolStrip, index);
                 }
-                // If we are not a MenuStrip then we still need to be first to be laid out "after the menuStrip" 
+                // If we are not a MenuStrip then we still need to be first to be laid out "after the menuStrip"
                 else
                 {
                     int index = -1;
@@ -1916,7 +1916,7 @@ namespace System.Windows.Forms.Design
                                 }
                             }
 
-                            // show the dropDown for the primarySelection before the Drag-Drop operation started. 
+                            // show the dropDown for the primarySelection before the Drag-Drop operation started.
                             if (primaryItem is ToolStripDropDownItem primaryDropDownItem)
                             {
                                 if (_host.GetDesigner(primaryDropDownItem) is ToolStripMenuItemDesigner dropDownItemDesigner)

@@ -3,10 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 ///  ***************** FxCop Suppressions for System.Windows.Forms & System.Drawing ********************
-///  
+///
 ///  WARNING:  When adding suppressions, make sure you add them to the right macro definition block,
 ///            this is because the different set of GDI library files compile into different assemblies.
-///            
+///
 ///  ***************************************************************************************************
 
 using System.Diagnostics.CodeAnalysis;

@@ -57,7 +57,7 @@ namespace System.Windows.Forms.Design
                     _currentItem = null;
                     _itemDesigner.IsEditorActive = false;
 
-                    // Show the previously edited glyph                
+                    // Show the previously edited glyph
                     if (_currentItem != null)
                     {
                         _currentItem = null;
@@ -75,7 +75,7 @@ namespace System.Windows.Forms.Design
                     // If we got an editor, position and focus it.
                     if (_editorUI != null)
                     {
-                        // Hide this glyph while it's being edited    
+                        // Hide this glyph while it's being edited
                         _itemDesigner.IsEditorActive = true;
                         _editor = new ToolStripEditorControl(_editorUI.EditorToolStrip, _editorUI.Bounds);
                         _behaviorService.AdornerWindowControl.Controls.Add(_editor);

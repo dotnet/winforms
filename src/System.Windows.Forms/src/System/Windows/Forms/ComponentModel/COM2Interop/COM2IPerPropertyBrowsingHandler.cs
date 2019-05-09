@@ -26,7 +26,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             for (int i = 0; i < propDesc.Length; i++) {
                 propDesc[i].QueryGetBaseAttributes += new GetAttributesEventHandler(this.OnGetBaseAttributes);
                 propDesc[i].QueryGetDisplayValue += new GetNameItemEventHandler(this.OnGetDisplayValue);
-                
+
                 propDesc[i].QueryGetTypeConverterAndTypeEditor += new GetTypeConverterAndTypeEditorEventHandler(this.OnGetTypeConverterAndTypeEditor);
             }
         }
@@ -40,7 +40,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
             return Guid.Empty;
         }
-        
+
         internal static string GetDisplayString(NativeMethods.IPerPropertyBrowsing ppb, int dispid, ref bool success) {
             string[] strVal = new string[1];
             int hr = ppb.GetDisplayString(dispid, strVal);
@@ -51,7 +51,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
             else {
                 success = false;
-            }   
+            }
             return null;
         }
 
@@ -63,9 +63,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             NativeMethods.IPerPropertyBrowsing target = sender.TargetObject as NativeMethods.IPerPropertyBrowsing;
             if (target != null) {
                 // we hide IDispatch props by default, we we need to force showing them here
-                                                                  
+
                 bool validPropPage = !Guid.Empty.Equals(GetPropertyPageGuid(target, sender.DISPID));
-                
+
                 if (sender.CanShow && validPropPage) {
                     if (typeof(UnsafeNativeMethods.IDispatch).IsAssignableFrom(sender.PropertyType)) {
                         attrEvent.Add(BrowsableAttribute.Yes);
@@ -84,11 +84,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     if (sender.Converter is Com2IPerPropertyEnumConverter || sender.ConvertingNativeType) {
                         return;
                     }
-                    
+
                     bool success = true;
-                    
+
                     string displayString = GetDisplayString((NativeMethods.IPerPropertyBrowsing)sender.TargetObject, sender.DISPID, ref success);
-                    
+
                     if (success) {
                         gnievent.Name = displayString;
                     }
@@ -136,7 +136,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
                     OleStrCAMarshaler stringMarshaler = new OleStrCAMarshaler(caStrings);
                     Int32CAMarshaler  intMarshaler = new Int32CAMarshaler(caCookies);
-                    
+
 
                     if (stringMarshaler.Count > 0 && intMarshaler.Count > 0) {
                         gveevent.TypeConverter = new Com2IPerPropertyEnumConverter(new Com2IPerPropertyBrowsingEnum(sender, this, stringMarshaler, intMarshaler, true));
@@ -169,14 +169,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        
+
          // this is just here so we can identify the enums that we added
          private class Com2IPerPropertyEnumConverter : Com2EnumConverter {
              private Com2IPerPropertyBrowsingEnum itemsEnum;
              public Com2IPerPropertyEnumConverter(Com2IPerPropertyBrowsingEnum items) : base(items) {
                 this.itemsEnum = items;
              }
-             
+
              public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destType) {
 
                  if (destType == typeof(string) && !itemsEnum.arraysFetched) {
@@ -192,20 +192,20 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                  return base.ConvertTo(context, culture, value, destType);
               }
          }
-         
-         
+
+
          // This exists for perf reasons.   We delay doing this until we
-         // are actually asked for the array of values. 
-         // 
+         // are actually asked for the array of values.
+         //
          private class Com2IPerPropertyBrowsingEnum : Com2Enum {
-         
+
              internal Com2PropertyDescriptor target;
              private Com2IPerPropertyBrowsingHandler handler;
              private OleStrCAMarshaler    nameMarshaller;
              private Int32CAMarshaler     valueMarshaller;
              internal bool                 arraysFetched;
              //private bool                 standardValuesQueried;
-         
+
              public Com2IPerPropertyBrowsingEnum(Com2PropertyDescriptor targetObject, Com2IPerPropertyBrowsingHandler handler, OleStrCAMarshaler names, Int32CAMarshaler values, bool allowUnknowns) : base(new string[0], new object[0], allowUnknowns) {
                 this.target = targetObject;
                 this.nameMarshaller = names;
@@ -223,7 +223,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     return base.Values;
                 }
              }
-    
+
              /// <devdoc>
              /// Retrieve a copy of the nme array.
              /// </devdoc>
@@ -233,14 +233,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     return base.Names;
                 }
              }
-             
+
              /*internal bool StandardValuesQueried {
                 get {
                     this.standardValuesQueried = value;
                 }
              } */
-             
-             
+
+
              // ensure that we have processed the caStructs into arrays
              // of values and strings
              //
@@ -248,7 +248,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 if (this.arraysFetched) {
                     return;
                 }
-                
+
                 this.arraysFetched = true;
 
                 try {
@@ -258,18 +258,18 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
                     NativeMethods.IPerPropertyBrowsing ppb = (NativeMethods.IPerPropertyBrowsing)target.TargetObject;
                     int itemCount = 0;
-                    
+
                     Debug.Assert(cookieItems != null && nameItems != null, "An item array is null");
-    
-                    
+
+
                     if (nameItems.Length > 0){
-    
+
                         object[] valueItems = new object[cookieItems.Length];
                         NativeMethods.VARIANT var = new NativeMethods.VARIANT();
                         int cookie;
-    
+
                         Debug.Assert(cookieItems.Length == nameItems.Length, "Got uneven names and cookies");
-    
+
                         // for each name item, we ask the object for it's corresponding value.
                         //
                         Type targetType = target.PropertyType;
@@ -297,7 +297,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                                     }
                                 }
                             }
-                            
+
                             var.Clear();
                             if (hr == NativeMethods.S_OK) {
                                 itemCount++;
@@ -310,10 +310,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                                 Array.Copy(nameItems, i, nameItems, i+1, itemCount);
                                 Array.Copy(valueItems, i, valueItems, i+1, itemCount);
                             }
-                            
+
                         }
-    
-                        // pass this data down to the base Com2Enum object... 
+
+                        // pass this data down to the base Com2Enum object...
                         string[] strings = new string[itemCount];
                         Array.Copy(nameItems, 0, strings, 0, itemCount);
                         base.PopulateArrays(strings, valueItems);
@@ -325,40 +325,40 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     Debug.Fail("Failed to build IPerPropertyBrowsing editor. " + ex.GetType().Name + ", " + ex.Message);
                 }
              }
-             
+
              protected override void PopulateArrays(string[] names, object[] values) {
                 // we call base.PopulateArrays directly when we actually want to do this.
              }
-             
+
              public override object FromString(string s) {
                 EnsureArrays();
                 return base.FromString(s);
              }
-             
+
              public override string ToString(object v) {
-                
+
                 // If the value is the object's current value, then
                 // ask GetDisplay string first.  This is a perf improvement
                 // because this way we don't populate the arrays when an object is selected, only
                 // when the dropdown is actually opened.
                 //
                 if (target.IsCurrentValue(v)) {
-             
+
                     bool success = false;
-                
+
                     string displayString = Com2IPerPropertyBrowsingHandler.GetDisplayString((NativeMethods.IPerPropertyBrowsing)target.TargetObject, target.DISPID, ref success);
-                    
+
                     if (success) {
                         return displayString;
                     }
                 }
-                
+
                 // couldn't get a display string...do the normal thing.
                 //
                 EnsureArrays();
                 return base.ToString(v);
              }
          }
-         
+
     }
 }

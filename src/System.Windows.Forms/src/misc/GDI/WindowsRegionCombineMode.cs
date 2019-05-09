@@ -18,7 +18,7 @@ namespace System.Experimental.Gdi
     internal
 #endif
     enum RegionCombineMode
-    {  
+    {
         AND  = 1,
         OR   = 2,
         XOR  = 3,

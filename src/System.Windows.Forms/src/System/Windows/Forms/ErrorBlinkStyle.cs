@@ -12,18 +12,18 @@ namespace System.Windows.Forms
     {
         /// <devdoc>
         /// Blink only if the error icon is already displayed, but a new
-        /// error string is set for the control.  If the icon did not blink 
+        /// error string is set for the control.  If the icon did not blink
         /// in this case, the user might not know that there is a new error.
         /// </devdoc>
         BlinkIfDifferentError,
-        
+
         /// <devdoc>
-        /// Blink the error icon when the error is first displayed, or when 
+        /// Blink the error icon when the error is first displayed, or when
         /// a new error description string is set for the control and the
         /// error icon is already displayed.
         /// </devdoc>
         AlwaysBlink,
-        
+
         /// <devdoc>
         /// Never blink the error icon.
         /// </devdoc>

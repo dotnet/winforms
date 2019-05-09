@@ -97,22 +97,22 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// </devdoc>
         public virtual object FromString(string s) {
             int bestMatch = -1;
-        
+
             for (int i = 0; i < stringValues.Length; i++) {
                 if (string.Compare(names[i], s, true, CultureInfo.InvariantCulture) == 0 ||
                     string.Compare(stringValues[i], s, true, CultureInfo.InvariantCulture) == 0) {
                     return values[i];
                 }
-                
+
                 if (bestMatch == -1 && 0 == string.Compare(names[i], s, true, CultureInfo.InvariantCulture)) {
                     bestMatch = i;
                 }
             }
-            
+
             if (bestMatch != -1) {
-                return values[bestMatch];    
+                return values[bestMatch];
             }
-            
+
             return allowUnknownValues ? s : null;
         }
 

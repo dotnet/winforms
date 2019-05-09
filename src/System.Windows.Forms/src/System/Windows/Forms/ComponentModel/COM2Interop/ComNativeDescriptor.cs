@@ -9,8 +9,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System;
-    using System.Collections;    
-    using System.Collections.Generic;    
+    using System.Collections;
+    using System.Collections.Generic;
     using System.ComponentModel.Design;
     using Microsoft.Win32;
 
@@ -19,7 +19,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     ///
     /// </devdoc>
     internal class ComNativeDescriptor : TypeDescriptionProvider {
-      
+
         private static ComNativeDescriptor handler = null;
 
         private AttributeCollection staticAttrs = new AttributeCollection(new Attribute[]{BrowsableAttribute.Yes, DesignTimeVisibleAttribute.No});
@@ -28,12 +28,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// Our collection of Object managers (Com2Properties) for native properties
         /// </devdoc>
         private WeakHashtable  nativeProps = new WeakHashtable();
-        
+
         /// <devdoc>
         /// Our collection of browsing handlers, which are stateless and shared across objects.
         /// </devdoc>
         private Hashtable         extendedBrowsingHandlers = new Hashtable();
-        
+
         /// <devdoc>
         /// We increment this every time we look at an Object, at specified
         /// intervals, we run through the properies list to see if we should
@@ -49,7 +49,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 }
                 return handler;
             }
-        }   
+        }
 
 
         [
@@ -57,23 +57,23 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         ]
         // called via reflection for AutomationExtender stuff. Don't delete!
         //
-        public static object GetNativePropertyValue(object component, string propertyName, ref bool succeeded) 
+        public static object GetNativePropertyValue(object component, string propertyName, ref bool succeeded)
         {
             return Instance.GetPropertyValue(component, propertyName, ref succeeded);
         }
 
 
         /// <devdoc>
-        ///     This method returns a custom type descriptor for the given type / object.  
-        ///     The objectType parameter is always valid, but the instance parameter may 
-        ///     be null if no instance was passed to TypeDescriptor.  The method should 
-        ///     return a custom type descriptor for the object.  If the method is not 
-        ///     interested in providing type information for the object it should 
+        ///     This method returns a custom type descriptor for the given type / object.
+        ///     The objectType parameter is always valid, but the instance parameter may
+        ///     be null if no instance was passed to TypeDescriptor.  The method should
+        ///     return a custom type descriptor for the object.  If the method is not
+        ///     interested in providing type information for the object it should
         ///     return null.
         ///
-        ///     This method is prototyped as virtual, and by default returns null 
-        ///     if no parent provider was passed.  If a parent provider was passed, 
-        ///     this method will invoke the parent provider's GetTypeDescriptor 
+        ///     This method is prototyped as virtual, and by default returns null
+        ///     if no parent provider was passed.  If a parent provider was passed,
+        ///     this method will invoke the parent provider's GetTypeDescriptor
         ///     method.
         /// </devdoc>
         public override ICustomTypeDescriptor GetTypeDescriptor(Type objectType, object instance)
@@ -105,7 +105,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 string desc = null;
                 try {
                     pTypeInfo.GetDocumentation(NativeMethods.MEMBERID_NIL, ref name, ref desc, null, null);
-                    
+
                     // strip the leading underscores
                     while (name != null && name.Length > 0 && name[0] == '_') {
                         name = name.Substring(1);
@@ -117,11 +117,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
             return "";
         }
-        
+
         internal TypeConverter GetConverter(object component) {
             return TypeDescriptor.GetConverter(typeof(IComponent));
         }
-        
+
         internal object GetEditor(object component, Type baseEditorType) {
             return TypeDescriptor.GetEditor(component.GetType(), baseEditorType);
         }
@@ -131,12 +131,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             if (!(component is UnsafeNativeMethods.IDispatch)) {
                 return "";
             }
-            
+
             int dispid = Com2TypeInfoProcessor.GetNameDispId((UnsafeNativeMethods.IDispatch)component);
             if (dispid != NativeMethods.MEMBERID_NIL) {
                 bool success = false;
                 object value = GetPropertyValue(component, dispid, ref success);
-                
+
                 if (success && value != null) {
                     return value.ToString();
                 }
@@ -157,13 +157,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             Guid g = Guid.Empty;
             try {
                int hr = iDispatch.GetIDsOfNames(ref g, names, 1, SafeNativeMethods.GetThreadLCID(), dispid);
-   
+
                if (dispid[0] == NativeMethods.DISPID_UNKNOWN || NativeMethods.Failed(hr)) {
                    return null;
                }
             }
             catch {
-                return null;   
+                return null;
             }
             return GetPropertyValue(component, dispid[0], ref succeeded);
         }
@@ -238,12 +238,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// Checks all our property manages to see if any have become invalid.
         /// </devdoc>
         private void CheckClear(object component) {
-            
+
             // walk the list every so many calls
             if ((++clearCount % CLEAR_INTERVAL) == 0) {
-            
+
                lock(nativeProps) {
-                   clearCount = 0;   
+                   clearCount = 0;
 
                    List<object> disposeList = null;
                    Com2Properties entry;
@@ -267,11 +267,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                    // there's going to be a very small number of these.
                    //
                    if (disposeList != null) {
-                       object oldKey; 
+                       object oldKey;
                        for (int i = disposeList.Count - 1; i >= 0; i--) {
-                          oldKey = disposeList[i]; 
+                          oldKey = disposeList[i];
                           entry = nativeProps[oldKey] as Com2Properties;
-                        
+
                           if (entry != null) {
                                entry.Disposed -= new EventHandler(OnPropsInfoDisposed);
                                entry.Dispose();
@@ -294,13 +294,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             // Get the property info Object
             //
             Com2Properties propsInfo = (Com2Properties)nativeProps[component];
-            
+
             // if we dont' have one, create one and set it up
             //
             if (propsInfo == null || !propsInfo.CheckValid()) {
                 propsInfo = Com2TypeInfoProcessor.GetProperties(component);
-                if (propsInfo != null) {                    
-                    propsInfo.Disposed += new EventHandler(OnPropsInfoDisposed);                    
+                if (propsInfo != null) {
+                    propsInfo.Disposed += new EventHandler(OnPropsInfoDisposed);
                     nativeProps.SetWeak(component, propsInfo);
                     propsInfo.AddExtendedBrowsingHandlers(extendedBrowsingHandlers);
                 }
@@ -321,7 +321,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     attrs.Add(temp[i]);
                 }
             }
-            
+
             if (Com2ComponentEditor.NeedsComponentEditor(component)) {
                 EditorAttribute a = new EditorAttribute(typeof(Com2ComponentEditor), typeof(ComponentEditor));
                 attrs.Add(a);
@@ -367,7 +367,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// </devdoc>
         [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]
         internal PropertyDescriptorCollection GetProperties(object component, Attribute[] attributes) {
-            
+
             Com2Properties propsInfo = GetPropsInfo(component);
 
             if (propsInfo == null) {
@@ -377,7 +377,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             try {
                 propsInfo.AlwaysValid = true;
                 PropertyDescriptor[] props = propsInfo.Properties;
-                
+
                 //Debug.Assert(propDescList.Count > 0, "Didn't add any properties! (propInfos=0)");
                 return new PropertyDescriptorCollection(props);
             }
@@ -388,7 +388,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         /// <devdoc>
         /// Fired when the property info gets disposed.
-        /// </devdoc>        
+        /// </devdoc>
         private void OnPropsInfoDisposed(object sender, EventArgs e) {
 
             Com2Properties propsInfo = sender as Com2Properties;
@@ -411,7 +411,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
                             if (de.Value == propsInfo) {
                                 key = de.Key;
-                                break;                                    
+                                break;
                             }
                         }
 
@@ -420,7 +420,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                             return;
                         }
                     }
-                    
+
                     nativeProps.Remove(key);
                }
             }

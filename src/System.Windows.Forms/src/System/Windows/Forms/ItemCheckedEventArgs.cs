@@ -13,7 +13,7 @@ namespace System.Windows.Forms
         {
             Item = item;
         }
-        
+
         /// <devdoc>
         /// The index of the item that is about to change.
         /// </devdoc>

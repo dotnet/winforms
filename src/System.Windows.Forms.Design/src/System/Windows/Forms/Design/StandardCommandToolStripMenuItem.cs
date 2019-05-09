@@ -21,7 +21,7 @@ namespace System.Windows.Forms.Design
         private readonly string _name;
         private readonly MenuCommand _menuCommand;
 
-        // Ok to call MenuService.FindComand to find the menuCommand mapping to the appropriated menuID.        
+        // Ok to call MenuService.FindComand to find the menuCommand mapping to the appropriated menuID.
         [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]

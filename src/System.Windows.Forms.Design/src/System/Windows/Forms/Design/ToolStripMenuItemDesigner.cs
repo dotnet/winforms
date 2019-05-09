@@ -68,7 +68,7 @@ namespace System.Windows.Forms.Design
         private bool dropDownSetFailed = false;
 
         /// <summary>
-        /// The ToolStripDropDownItems are the associated components.  
+        /// The ToolStripDropDownItems are the associated components.
         /// We want those to come with in any cut, copy opreations.
         /// </summary>
         public override ICollection AssociatedComponents
@@ -188,7 +188,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// ToolStripEditorManager used this internal property to 
+        /// ToolStripEditorManager used this internal property to
         /// Activate the editor.
         /// </summary>
         internal override ToolStripTemplateNode Editor
@@ -210,7 +210,7 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         /// True if the MenuItem is on ContextMenu.
-        /// </summary>        
+        /// </summary>
         private bool IsOnContextMenu
         {
             get
@@ -436,7 +436,7 @@ namespace System.Windows.Forms.Design
                         commitedEditorNode.Dispose();
                         commitedEditorNode = null;
                     }
-                    // If we have type "-" this means the user wants to add a Separator.                    
+                    // If we have type "-" this means the user wants to add a Separator.
                     if (text == "-")
                     {
                         if (designerHost.GetDesigner(editedItem) is ToolStripItemDesigner itemDesigner)
@@ -444,7 +444,7 @@ namespace System.Windows.Forms.Design
                             try
                             {
                                 editedItem = itemDesigner.MorphCurrentItem(typeof(ToolStripSeparator));
-                                //Remove the ActionGlyph Added by morphing 
+                                //Remove the ActionGlyph Added by morphing
                                 RemoveItemBodyGlyph(editedItem);
                             }
                             catch
@@ -473,7 +473,7 @@ namespace System.Windows.Forms.Design
                     }
                     else
                     {
-                        // We are adding the item through INSITU for the first time 
+                        // We are adding the item through INSITU for the first time
                         if (dummyItem)
                         {
                             try
@@ -481,7 +481,7 @@ namespace System.Windows.Forms.Design
                                 dummyItemAdded = true;
                                 CreateNewItem(type, index, text);
                                 designerHost.DestroyComponent(editedItem);
-                                // One place where we need to call this explicitly since the selection doesnt change. 
+                                // One place where we need to call this explicitly since the selection doesnt change.
                                 if (enterKeyPressed)
                                 {
                                     typeHereNode.SelectControl();
@@ -1197,7 +1197,7 @@ namespace System.Windows.Forms.Design
                 return;
             }
 
-            // Refresh the state of the 'TypeHere' node to NotSelected state            
+            // Refresh the state of the 'TypeHere' node to NotSelected state
             typeHereNode.RefreshSelectionGlyph();
             // Commit any InsituEdit Node.
             if (KeyboardHandlingService != null && KeyboardHandlingService.TemplateNodeActive)
@@ -1216,7 +1216,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            // always select the parent item... but dont redraw the control during this Selection Change as this causes flicker 
+            // always select the parent item... but dont redraw the control during this Selection Change as this causes flicker
             try
             {
                 ToolStripDesigner.s_editTemplateNode = true;
@@ -1638,7 +1638,7 @@ namespace System.Windows.Forms.Design
             Rectangle boundstoInvalidate = Rectangle.Union(hostingDropDownBounds, itemDropDownBounds);
             ToolStripAdornerWindowService toolStripservice = toolStripAdornerWindowService;
             ToolStripItem newItem = base.MorphCurrentItem(t);
-            // We loose the ToolStripWindowService after Morphing... so use the cached one. 
+            // We loose the ToolStripWindowService after Morphing... so use the cached one.
             if (toolStripservice != null)
             {
                 toolStripservice.Invalidate(boundstoInvalidate);
@@ -1895,7 +1895,7 @@ namespace System.Windows.Forms.Design
                             itemIndex = -1;
                         }
 
-                        // Looks like we need to invalidate the entire 
+                        // Looks like we need to invalidate the entire
                         if (toolStripAdornerWindowService != null && boundsToInvalidateOnRemove != Rectangle.Empty)
                         {
                             using (Region regionToInvalidate = new Region(boundsToInvalidateOnRemove))
@@ -2576,7 +2576,7 @@ namespace System.Windows.Forms.Design
                 }
                 return null;
             }
-  
+
             /// <summary>
             /// Overrides Glyph::Paint - this implementation does nothing.
             /// </summary>

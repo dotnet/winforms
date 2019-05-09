@@ -213,7 +213,7 @@ namespace System.Windows.Forms
                 {
                     return false;
                 }
-                
+
                 return _wRef.Target == keyTarget._wRef.Target && _dataMember == keyTarget._dataMember;
             }
         }

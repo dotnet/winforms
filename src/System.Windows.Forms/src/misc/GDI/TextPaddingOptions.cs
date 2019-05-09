@@ -22,7 +22,7 @@ namespace System.Experimental.Gdi
 #endif
     enum TextPaddingOptions
     {
-        // Add some extra points to account for some glyphs overhanging (like for letter f in some fonts or 
+        // Add some extra points to account for some glyphs overhanging (like for letter f in some fonts or
         // when italized).
         // For an illustration, type letter f in Wordpad and make it 72-point "Times New Roman" italic
         // observe that the lower left part of the letter is clipped.  Also, try selecting the letter,

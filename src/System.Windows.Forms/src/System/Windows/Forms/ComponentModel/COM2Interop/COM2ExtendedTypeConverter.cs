@@ -12,7 +12,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.Drawing;
     using Microsoft.Win32;
     using System.Globalization;
-    
+
     using System.Collections;
 
     /// <devdoc>
@@ -21,30 +21,30 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     /// </devdoc>
     internal class Com2ExtendedTypeConverter : TypeConverter {
          private TypeConverter innerConverter;
-         
+
          public Com2ExtendedTypeConverter(TypeConverter innerConverter) {
             this.innerConverter = innerConverter;
          }
-         
+
          public Com2ExtendedTypeConverter(Type baseType) {
             this.innerConverter = TypeDescriptor.GetConverter(baseType);
          }
-         
+
          public TypeConverter InnerConverter {
             get {
                return innerConverter;
             }
          }
-         
+
          public TypeConverter GetWrappedConverter(Type t) {
-            
+
             TypeConverter converter = innerConverter;
-            
+
             while (converter != null) {
                 if (t.IsInstanceOfType(converter)) {
                     return converter;
                 }
-                
+
                 if (converter is Com2ExtendedTypeConverter) {
                     converter = ((Com2ExtendedTypeConverter)converter).InnerConverter;
                 }
@@ -54,8 +54,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
             return null;
          }
-         
-         
+
+
         /// <devdoc>
         ///      Determines if this converter can convert an object in the given source
         ///      type to the native type of the converter.
@@ -66,7 +66,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
             return base.CanConvertFrom(context, sourceType);
         }
-        
+
         /// <devdoc>
         ///      Determines if this converter can convert an object to the given destination
         ///      type.
@@ -77,7 +77,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
             return base.CanConvertTo(context, destinationType);
         }
-        
+
         /// <devdoc>
         ///      Converts the given object to the converter's native type.
         /// </devdoc>
@@ -87,7 +87,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
             return base.ConvertFrom(context, culture, value);
         }
-        
+
         /// <devdoc>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call
@@ -101,7 +101,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
             return base.ConvertTo(context, culture, value, destinationType);
         }
-        
+
         /// <devdoc>
         ///      Creates an instance of this type given a set of property values
         ///      for the object.  This is useful for objects that are immutable, but still
@@ -113,7 +113,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
             return base.CreateInstance(context, propertyValues);
         }
-        
+
         /// <devdoc>
         ///      Determines if changing a value on this object should require a call to
         ///      CreateInstance to create a new value.
@@ -124,19 +124,19 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
             return base.GetCreateInstanceSupported(context);
         }
-        
+
         /// <devdoc>
         ///      Retrieves the set of properties for this type.  By default, a type has
         ///      does not return any properties.  An easy implementation of this method
         ///      can just call TypeDescriptor.GetProperties for the correct data type.
         /// </devdoc>
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes) {      
+        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes) {
             if (innerConverter != null) {
                return innerConverter.GetProperties(context, value, attributes);
             }
             return base.GetProperties(context, value, attributes);
         }
-        
+
         /// <devdoc>
         ///      Determines if this object supports properties.  By default, this
         ///      is false.
@@ -147,7 +147,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
             return base.GetPropertiesSupported(context);
         }
-        
+
         /// <devdoc>
         ///      Retrieves a collection containing a set of standard values
         ///      for the data type this validator is designed for.  This
@@ -160,7 +160,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
             return base.GetStandardValues(context);
         }
-        
+
         /// <devdoc>
         ///      Determines if the list of standard values returned from
         ///      GetStandardValues is an exclusive list.  If the list
@@ -175,7 +175,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
             return base.GetStandardValuesExclusive(context);
         }
-        
+
         /// <devdoc>
         ///      Determines if this object supports a standard set of values
         ///      that can be picked from a list.
@@ -186,7 +186,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
             return base.GetStandardValuesSupported(context);
         }
-        
+
         /// <devdoc>
         ///      Determines if the given object value is valid for this type.
         /// </devdoc>

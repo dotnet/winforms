@@ -581,7 +581,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.SelectedIndex);
             Assert.Equal(value == -1 ? null : control.Items[control.SelectedIndex], control.SelectedItem);
             Assert.Equal(expectedText, control.Text);
-            
+
             // Set same.
             control.SelectedIndex = value;
             Assert.Equal(value, control.SelectedIndex);
@@ -606,7 +606,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.SelectedIndex);
             Assert.Equal(value == -1 ? null : control.Items[control.SelectedIndex], control.SelectedItem);
             Assert.Equal(expectedText, control.Text);
-            
+
             // Set same.
             control.SelectedIndex = value;
             Assert.Equal(value, control.SelectedIndex);
@@ -681,7 +681,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { controlWithItems, null, 1, -1 };
             yield return new object[] { controlWithItems, null, 2, -1 };
             yield return new object[] { controlWithItems, null, 5, -1 };
-    
+
             yield return new object[] { controlWithItems, string.Empty, -1, 0 };
             yield return new object[] { controlWithItems, string.Empty, 0, 1 };
             yield return new object[] { controlWithItems, string.Empty, 1, 2 };
@@ -755,7 +755,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { controlWithItems, "abc", 2, ignoreCase, 0 };
                 yield return new object[] { controlWithItems, "abc", 5, ignoreCase, 0 };
             }
-            
+
             yield return new object[] { controlWithItems, "ABC", -1, false, 2 };
             yield return new object[] { controlWithItems, "ABC", 0, false, 2 };
             yield return new object[] { controlWithItems, "ABC", 1, false, 2 };
@@ -799,7 +799,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { controlWithItems, null, 1, ignoreCase, -1 };
                 yield return new object[] { controlWithItems, null, 2, ignoreCase, -1 };
                 yield return new object[] { controlWithItems, null, 5, ignoreCase, -1 };
-        
+
                 yield return new object[] { controlWithItems, string.Empty, -1, ignoreCase, 4 };
                 yield return new object[] { controlWithItems, string.Empty, 0, ignoreCase, 4 };
                 yield return new object[] { controlWithItems, string.Empty, 1, ignoreCase, 4 };

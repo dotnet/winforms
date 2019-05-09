@@ -5,13 +5,13 @@
 namespace System.Windows.Forms {
 
     using System;
-    
+
     using System.Windows.Forms;
     using System.ComponentModel;
     using System.ComponentModel.Design;
     using System.Windows.Forms.ComponentModel;
     using System.Drawing;
-    
+
     using Microsoft.Win32;
     using System.Diagnostics;
     using System.Globalization;
@@ -167,7 +167,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        // add the corresponding value Editor: rip one from the valueEditor for the DisplayMember in the 
+        // add the corresponding value Editor: rip one from the valueEditor for the DisplayMember in the
         // format object
         [DefaultValue(null), Editor("System.Windows.Forms.Design.DataGridColumnStyleFormatEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor))]
         public string Format {
@@ -209,7 +209,7 @@ namespace System.Windows.Forms {
                 return base.ReadOnly;
             }
             set {
-                // if the gridColumn is can't convert the string to 
+                // if the gridColumn is can't convert the string to
                 // the backGround propertyDescriptor, then make the column ReadOnly
                 if (!value && (format == null || format.Length == 0)) {
                     if (this.typeConverter != null && !this.typeConverter.CanConvertFrom(typeof(string)))
@@ -388,7 +388,7 @@ namespace System.Windows.Forms {
                     value = (object) parseMethod.Invoke(null, new object[] {edit.Text, this.FormatInfo});
                     if (value is IFormattable) {
                         edit.Text = ((IFormattable)value).ToString(format, formatInfo);
-                    }else 
+                    }else
                         edit.Text = value.ToString();
                 } else if (typeConverter != null && typeConverter.CanConvertFrom(typeof(string))) {
                     value = typeConverter.ConvertFromString(edit.Text);
@@ -465,7 +465,7 @@ namespace System.Windows.Forms {
 
             // select the text even if the text box is read only
             // because the navigation code in the DataGridTextBox::ProcessKeyMessage
-            // uses the SelectedText property 
+            // uses the SelectedText property
             if (displayText == null)
                 edit.SelectAll();
             else {
@@ -489,7 +489,7 @@ namespace System.Windows.Forms {
                     return ((IFormattable)value).ToString(format, this.formatInfo);
                 }
                 catch {
-                    // 
+                    //
                 }
             } else {
                 // use the typeConverter:
@@ -519,7 +519,7 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         /// <para>Paints a System.Windows.Forms.DataGridColumnStyle with the specified System.Drawing.Graphics,
-        /// System.Drawing.Rectangle, DataView.Rectangle, row number, background color, 
+        /// System.Drawing.Rectangle, DataView.Rectangle, row number, background color,
         ///    and foreground color..</para>
         /// </devdoc>
         protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum,

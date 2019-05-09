@@ -8,7 +8,7 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System;
     using System.Windows.Forms;
-    using System.ComponentModel.Design;    
+    using System.ComponentModel.Design;
     using System.Drawing;
     using Microsoft.Win32;
     using System.Reflection;
@@ -17,7 +17,7 @@ namespace System.Windows.Forms {
     using System.Collections.Specialized;
     using System.Drawing.Design;
     using System.Windows.Forms.VisualStyles;
-    
+
     /// <devdoc>
     ///    <para>
     ///       Represents a Windows text box control.
@@ -32,9 +32,9 @@ namespace System.Windows.Forms {
       SRDescription(nameof(SR.DescriptionTextBox))
     ]
     public class TextBox : TextBoxBase {
-    
+
         private static readonly object EVENT_TEXTALIGNCHANGED = new object();
-    
+
         /// <devdoc>
         ///     Controls whether or not the edit box consumes/respects ENTER key
         ///     presses.  While this is typically desired by multiline edits, this
@@ -43,7 +43,7 @@ namespace System.Windows.Forms {
         private bool acceptsReturn = false;
 
         /// <devdoc>
-        ///     Indicates what the current special password character is.  This is 
+        ///     Indicates what the current special password character is.  This is
         ///     displayed instead of any other text the user might enter.
         /// </devdoc>
         private char passwordChar = (char)0;
@@ -65,7 +65,7 @@ namespace System.Windows.Forms {
         ///     Controls text alignment in the edit box.
         /// </devdoc>
         private HorizontalAlignment textAlign = HorizontalAlignment.Left;
-        
+
         /// <devdoc>
         ///     True if the selection has been set by the user.  If the selection has
         ///     never been set and we get focus, we focus all the text in the control
@@ -78,7 +78,7 @@ namespace System.Windows.Forms {
         ///     None, AutoSuggest, AutoAppend or AutoSuggestAppend.
         /// </devdoc>
         private AutoCompleteMode autoCompleteMode = AutoCompleteMode.None;
-        
+
         /// <devdoc>
         ///     This stores the value for the autoCompleteSource mode which can be one of the values
         ///     from AutoCompleteSource enum.
@@ -96,7 +96,7 @@ namespace System.Windows.Forms {
         public TextBox(){
         }
 
-        
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether pressing ENTER
@@ -123,7 +123,7 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         ///     This is the AutoCompleteMode which can be either
-        ///     None, AutoSuggest, AutoAppend or AutoSuggestAppend. 
+        ///     None, AutoSuggest, AutoAppend or AutoSuggestAppend.
         ///     This property in conjunction with AutoCompleteSource enables the AutoComplete feature for TextBox.
         /// </devdoc>
         [
@@ -149,8 +149,8 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        ///     This is the AutoCompleteSource which can be one of the 
-        ///     values from AutoCompleteSource enumeration. 
+        ///     This is the AutoCompleteSource which can be one of the
+        ///     values from AutoCompleteSource enumeration.
         ///     This property in conjunction with AutoCompleteMode enables the AutoComplete feature for TextBox.
         /// </devdoc>
         [
@@ -165,9 +165,9 @@ namespace System.Windows.Forms {
             }
             set {
                 // FxCop: Avoid usage of Enum.IsDefined - this looks like an enum that could grow
-                if (!ClientUtils.IsEnumValid_NotSequential(value, 
+                if (!ClientUtils.IsEnumValid_NotSequential(value,
                                              (int)value,
-                                             (int)AutoCompleteSource.None, 
+                                             (int)AutoCompleteSource.None,
                                              (int)AutoCompleteSource.AllSystemSources,
                                              (int)AutoCompleteSource.AllUrl,
                                              (int)AutoCompleteSource.CustomSource,
@@ -175,7 +175,7 @@ namespace System.Windows.Forms {
                                              (int)AutoCompleteSource.FileSystemDirectories,
                                              (int)AutoCompleteSource.HistoryList,
                                              (int)AutoCompleteSource.ListItems,
-                                             (int)AutoCompleteSource.RecentlyUsedList)){   
+                                             (int)AutoCompleteSource.RecentlyUsedList)){
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoCompleteSource));
                 }
                 if (value == AutoCompleteSource.ListItems) {
@@ -188,8 +188,8 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        ///     This is the AutoCompleteCustomSource which is custom StringCollection used when the 
-        ///     AutoCompleteSource is CustomSource. 
+        ///     This is the AutoCompleteCustomSource which is custom StringCollection used when the
+        ///     AutoCompleteSource is CustomSource.
         /// </devdoc>
         [
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
@@ -211,15 +211,15 @@ namespace System.Windows.Forms {
                     if (autoCompleteCustomSource != null) {
                         autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(this.OnAutoCompleteCustomSourceChanged);
                     }
-                    
+
                     autoCompleteCustomSource = value;
-                    
+
                     if (value != null) {
                         autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(this.OnAutoCompleteCustomSourceChanged);
                     }
                     SetAutoComplete(false);
                 }
-                
+
             }
         }
 
@@ -257,7 +257,7 @@ namespace System.Windows.Forms {
                 return base.Multiline;
             }
             set {
-                
+
                 if (Multiline != value)
                 {
                     base.Multiline = value;
@@ -278,7 +278,7 @@ namespace System.Windows.Forms {
             }
         }
 
-     
+
         /// <devdoc>
         ///    <para>
         ///       Returns the parameters needed to create the handle. Inheriting classes
@@ -314,7 +314,7 @@ namespace System.Windows.Forms {
                         cp.Style |= NativeMethods.ES_RIGHT;
                         break;
                 }
-                
+
                 if (Multiline) {
                     // Don't show horizontal scroll bars which won't do anything
                     if ((scrollBars & ScrollBars.Horizontal) == ScrollBars.Horizontal
@@ -330,7 +330,7 @@ namespace System.Windows.Forms {
                 if (useSystemPasswordChar) {
                     cp.Style |= NativeMethods.ES_PASSWORD;
                 }
-                
+
                 return cp;
             }
         }
@@ -416,7 +416,7 @@ namespace System.Windows.Forms {
 
             // Subtract the scroll bar padding before measuring
             proposedConstraints -= scrollBarPadding;
-            
+
             Size prefSize = base.GetPreferredSizeCore(proposedConstraints);
 
             return prefSize + scrollBarPadding;
@@ -504,7 +504,7 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
+
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.RadioButtonOnTextAlignChangedDescr))]
         public event EventHandler TextAlignChanged {
             add => Events.AddHandler(EVENT_TEXTALIGNCHANGED, value);
@@ -530,7 +530,7 @@ namespace System.Windows.Forms {
             }
             base.Dispose(disposing);
         }
-       
+
         /// <devdoc>
         ///    <para>
         ///       Overridden to handle RETURN key.
@@ -625,7 +625,7 @@ namespace System.Windows.Forms {
             }
             base.OnHandleDestroyed(e);
         }
-        
+
         protected virtual void OnTextAlignChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_TEXTALIGNCHANGED] as EventHandler;
             if (eh != null) {
@@ -637,12 +637,12 @@ namespace System.Windows.Forms {
         /// Process a command key.
         /// Native "EDIT" control does not support "Select All" shorcut represented by Ctrl-A keys, when in multiline mode,
         /// and historically Winforms TextBox did not support it either.
-        /// We are adding support for this shortcut for application targeting 4.6.1 and newer and for applications targeting 4.0 and newer 
+        /// We are adding support for this shortcut for application targeting 4.6.1 and newer and for applications targeting 4.0 and newer
         /// versions of the .NET Framework if they opt into this feature by adding the following config switch to the 'runtime' section of the app.config file:
         ///   <runtime>
         ///       <AppContextSwitchOverrides value = "Switch.System.Windows.Forms.DoNotSupportSelectAllShortcutInMultilineTextBox=false" />
         ///   </ runtime>
-        /// To opt out of this feature, when targeting 4.6.1 and newer, please set the above mentioned switch to true. 
+        /// To opt out of this feature, when targeting 4.6.1 and newer, please set the above mentioned switch to true.
         /// <para>
         ///  m - the current windows message
         /// keyData - bitmask containing one or more keys
@@ -650,7 +650,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected override bool ProcessCmdKey(ref Message m, Keys keyData) {
             bool returnValue = base.ProcessCmdKey(ref m, keyData);
-            if (!returnValue && this.Multiline && !LocalAppContextSwitches.DoNotSupportSelectAllShortcutInMultilineTextBox 
+            if (!returnValue && this.Multiline && !LocalAppContextSwitches.DoNotSupportSelectAllShortcutInMultilineTextBox
                 && this.ShortcutsEnabled && (keyData == (Keys.Control | Keys.A))) {
                 SelectAll();
                 return true;
@@ -669,10 +669,10 @@ namespace System.Windows.Forms {
         public void Paste(string text){
             base.SetSelectedTextInternal(text, false);
         }
-     
+
         /// <devdoc>
         ///     Performs the actual select without doing arg checking.
-        /// </devdoc>        
+        /// </devdoc>
         internal override void SelectInternal(int start, int length, int textLen) {
             // If user set selection into text box, mark it so we don't
             // clobber it when we get focus.
@@ -711,7 +711,7 @@ namespace System.Windows.Forms {
                     RecreateHandle();
                     autoCompleteMode = backUpMode;
                 }
-                
+
                 if (AutoCompleteSource == AutoCompleteSource.CustomSource) {
                     if (IsHandleCreated && AutoCompleteCustomSource != null) {
                         if (AutoCompleteCustomSource.Count == 0) {
@@ -732,7 +732,7 @@ namespace System.Windows.Forms {
                             }
                         }
                     }
-        
+
                 }
                 else {
                     if (IsHandleCreated) {
@@ -784,7 +784,7 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
+
         /// <summary>
         ///  Gets or sets the text that is displayed when the control has no Text and is not on focus.
         /// </summary>
@@ -875,14 +875,14 @@ namespace System.Windows.Forms {
                     MouseButtons realState = MouseButtons;
                     bool wasValidationCancelled = ValidationCancelled;
                     Focus();
-                    if (realState == MouseButtons && 
+                    if (realState == MouseButtons &&
                        (!ValidationCancelled || wasValidationCancelled)) {
                            base.WndProc(ref m);
-                    }                    
+                    }
                     break;
                 //for readability ... so that we know whats happening ...
                 // case WM_LBUTTONUP is included here eventhough it just calls the base.
-                case Interop.WindowMessages.WM_LBUTTONUP:  
+                case Interop.WindowMessages.WM_LBUTTONUP:
                     base.WndProc(ref m);
                     break;
                 case Interop.WindowMessages.WM_PRINT:

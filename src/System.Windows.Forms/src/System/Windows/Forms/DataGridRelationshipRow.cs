@@ -6,11 +6,11 @@ namespace System.Windows.Forms {
 
     using System;
     using System.Runtime.InteropServices;
-    
+
     using System.Windows.Forms;
     using System.ComponentModel;
     using System.Drawing;
-    
+
     using Microsoft.Win32;
     using System.Diagnostics;
     using System.Collections;
@@ -150,7 +150,7 @@ namespace System.Windows.Forms {
                 DataGrid.OnRowHeightChanged(this);
             }
         }
-        
+
         protected override AccessibleObject CreateAccessibleObject() {
             return new DataGridRelationshipRowAccessibleObject(this);
         }
@@ -187,11 +187,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        // so the edit box will not paint under the 
+        // so the edit box will not paint under the
         // grid line of the row
         public override Rectangle GetCellBounds(int col) {
             Rectangle cellBounds = base.GetCellBounds(col);
-            // decrement base.Height by 1, so the edit box will not 
+            // decrement base.Height by 1, so the edit box will not
             // paint over the bottom line.
             cellBounds.Height = base.Height - 1;
             return cellBounds;
@@ -342,7 +342,7 @@ namespace System.Windows.Forms {
             return base.OnMouseMove(x, y, rowHeaders, alignToRight);
         }
 
-        // this function will not invalidate all of the 
+        // this function will not invalidate all of the
         // row
         public override void OnMouseLeft(Rectangle rowHeaders, bool alignToRight) {
             if (!expanded)
@@ -417,7 +417,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        // will reset the FocusedRelation and will invalidate the 
+        // will reset the FocusedRelation and will invalidate the
         // rectangle so that the linkFont is no longer shown
         internal override void LoseChildFocus(Rectangle rowHeaders, bool alignToRight) {
             // we only invalidate stuff if the row is expanded.
@@ -445,7 +445,7 @@ namespace System.Windows.Forms {
             Debug.Assert((keyData & Keys.Control) != Keys.Control, "the DataGridRelationshipRow only handles TAB and TAB-SHIFT");
             Debug.Assert((keyData & Keys.Alt) != Keys.Alt, "the DataGridRelationshipRow only handles TAB and TAB-SHIFT");
 
-            // if there are no relationships, this row can't do anything with the 
+            // if there are no relationships, this row can't do anything with the
             // key
             if (this.dgTable.RelationsList.Count == 0 || dgTable.DataGrid == null || !dgTable.DataGrid.AllowNavigation)
                 return false;
@@ -708,7 +708,7 @@ namespace System.Windows.Forms {
                 Font textFont = this.DataGrid.Font;
                 textBrush = this.dgTable.IsDefault ? this.DataGrid.LinkBrush : this.dgTable.LinkBrush;
                 textFont = this.DataGrid.LinkFont;
-                
+
                 g.FillRectangle(GetBackBrush(), textBounds);
 
                 StringFormat format = new StringFormat();
@@ -786,17 +786,17 @@ namespace System.Windows.Forms {
             return relation;
         }
 
-        // given the relRect and the rowHeader, this function will return the 
+        // given the relRect and the rowHeader, this function will return the
         // X coordinate of the relationship rectangle as it should appear on the screen
         private int MirrorRelationshipRectangle(Rectangle relRect, Rectangle rowHeader, bool alignToRight) {
             if (alignToRight)
                 return rowHeader.X - relRect.Width;
             else
                 return relRect.X;
-           
+
         }
 
-        // given the X and Width of a rectangle R1 contained in rect, 
+        // given the X and Width of a rectangle R1 contained in rect,
         // this will return the X coordinate of the rectangle that corresponds to R1 in Bi-Di transformation
         private int MirrorRectangle(int x, int width, Rectangle rect, bool alignToRight) {
             if (alignToRight)
@@ -805,7 +805,7 @@ namespace System.Windows.Forms {
                 return x;
         }
 
-        [ComVisible(true)]                                               
+        [ComVisible(true)]
         protected class DataGridRelationshipRowAccessibleObject : DataGridRowAccessibleObject {
             public DataGridRelationshipRowAccessibleObject(DataGridRow owner) : base(owner) {
             }
@@ -939,8 +939,8 @@ namespace System.Windows.Forms {
                         return AccessibleStates.Unavailable;
                     }
 
-                    AccessibleStates state = AccessibleStates.Selectable 
-                        | AccessibleStates.Focusable 
+                    AccessibleStates state = AccessibleStates.Selectable
+                        | AccessibleStates.Focusable
                         | AccessibleStates.Linked;
 
                     if (!owner.Expanded) {

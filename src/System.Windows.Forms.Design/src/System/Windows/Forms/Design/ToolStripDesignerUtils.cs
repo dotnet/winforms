@@ -38,16 +38,16 @@ namespace System.Windows.Forms.Design
         #region NewItemTypeLists
         // This section controls the ordering of standard item types in all the various pieces of toolstrip designer UI.
         // ToolStrip - Default item is determined by being first in the list
-        private static readonly Type[] s_newItemTypesForToolStrip = 
+        private static readonly Type[] s_newItemTypesForToolStrip =
             new Type[]{typeof(ToolStripButton), typeof(ToolStripLabel), typeof(ToolStripSplitButton), typeof(ToolStripDropDownButton), typeof(ToolStripSeparator), typeof(ToolStripComboBox), typeof(ToolStripTextBox), typeof(ToolStripProgressBar)};
         // StatusStrip - Default item is determined by being first in the list
-        private static readonly Type[] s_newItemTypesForStatusStrip = 
+        private static readonly Type[] s_newItemTypesForStatusStrip =
             new Type[]{typeof(ToolStripStatusLabel), typeof(ToolStripProgressBar), typeof(ToolStripDropDownButton), typeof(ToolStripSplitButton)};
         // MenuStrip - Default item is determined by being first in the list
-        private static readonly Type[] s_newItemTypesForMenuStrip = 
+        private static readonly Type[] s_newItemTypesForMenuStrip =
             new Type[]{typeof(ToolStripMenuItem), typeof(ToolStripComboBox), typeof(ToolStripTextBox)};
         // ToolStripDropDown - roughly same as menu strip.
-        private static readonly Type[] s_newItemTypesForToolStripDropDownMenu = 
+        private static readonly Type[] s_newItemTypesForToolStripDropDownMenu =
             new Type[]{typeof(ToolStripMenuItem), typeof(ToolStripComboBox), typeof(ToolStripSeparator), typeof(ToolStripTextBox)};
         #endregion
 
@@ -191,7 +191,7 @@ namespace System.Windows.Forms.Design
         }
 
 
-        /// <summary> 
+        /// <summary>
         /// The first item returned should be the DefaultItem to create on the ToolStrip
         /// </summary>
         public static Type[] GetStandardItemTypes(IComponent component)
@@ -316,7 +316,7 @@ namespace System.Windows.Forms.Design
             return new Type[0];
         }
 
-        /// <summary> 
+        /// <summary>
         /// wraps the result of GetStandardItemTypes in ItemTypeToolStripMenuItems.
         /// </summary>
         public static ToolStripItem[] GetStandardItemMenuItems(IComponent component, EventHandler onClick, bool convertTo)
@@ -338,7 +338,7 @@ namespace System.Windows.Forms.Design
             return items;
         }
 
-        /// <summary> 
+        /// <summary>
         /// wraps the result of GetCustomItemTypes in ItemTypeToolStripMenuItems.
         /// </summary>
         public static ToolStripItem[] GetCustomItemMenuItems(IComponent component, EventHandler onClick, bool convertTo, IServiceProvider serviceProvider)

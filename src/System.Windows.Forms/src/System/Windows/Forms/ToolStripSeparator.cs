@@ -26,12 +26,12 @@ namespace System.Windows.Forms {
             }
 
             [
-            Browsable(false), 
+            Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
             public new bool AutoToolTip {
-               get { 
+               get {
                     return base.AutoToolTip;
                }
                set {
@@ -41,14 +41,14 @@ namespace System.Windows.Forms {
 
 
             [
-            Browsable(false), 
+            Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
             public override Image BackgroundImage {
                 get {
                     return base.BackgroundImage;
-                     
+
                 }
                 set {
                     base.BackgroundImage = value;
@@ -56,7 +56,7 @@ namespace System.Windows.Forms {
             }
 
             [
-            Browsable(false), 
+            Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
@@ -68,11 +68,11 @@ namespace System.Windows.Forms {
                   base.BackgroundImageLayout = value;
               }
             }
-            
-            public override bool CanSelect { 
-                get  { 
-                    return DesignMode; 
-                } 
+
+            public override bool CanSelect {
+                get  {
+                    return DesignMode;
+                }
             }
 
 
@@ -95,7 +95,7 @@ namespace System.Windows.Forms {
 
 
            [
-           Browsable(false), 
+           Browsable(false),
            EditorBrowsable(EditorBrowsableState.Never),
            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
            ]
@@ -109,7 +109,7 @@ namespace System.Windows.Forms {
            }
 
             [
-            Browsable(false), 
+            Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
@@ -130,13 +130,13 @@ namespace System.Windows.Forms {
             }
 
             [
-            Browsable(false), 
+            Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
             public new ToolStripItemDisplayStyle DisplayStyle {
-                get { 
-                    return base.DisplayStyle; 
+                get {
+                    return base.DisplayStyle;
                 }
                 set {
                    base.DisplayStyle = value;
@@ -150,13 +150,13 @@ namespace System.Windows.Forms {
             }
 
             [
-            Browsable(false), 
+            Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
             public override Font Font {
-                get { 
-                    return base.Font; 
+                get {
+                    return base.Font;
                 }
                 set {
                    base.Font = value;
@@ -164,7 +164,7 @@ namespace System.Windows.Forms {
             }
 
             [
-            Browsable(false), 
+            Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
@@ -178,13 +178,13 @@ namespace System.Windows.Forms {
             }
 
             [
-            Browsable(false), 
+            Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
             public override Image Image {
-                
-                
+
+
                 get {
                     return base.Image;
                 }
@@ -194,9 +194,9 @@ namespace System.Windows.Forms {
             }
 
             [
-            Browsable(false), 
+            Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never),
-            RefreshProperties(RefreshProperties.Repaint),            
+            RefreshProperties(RefreshProperties.Repaint),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
             public new int ImageIndex {
@@ -209,7 +209,7 @@ namespace System.Windows.Forms {
             }
 
             [
-            Browsable(false), 
+            Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
@@ -223,7 +223,7 @@ namespace System.Windows.Forms {
             }
 
             [
-            Browsable(false), 
+            Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
@@ -232,12 +232,12 @@ namespace System.Windows.Forms {
                     return base.ImageTransparentColor;
                 }
                 set {
-                   base.ImageTransparentColor = value;                    
+                   base.ImageTransparentColor = value;
                 }
             }
 
             [
-            Browsable(false), 
+            Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
@@ -250,11 +250,11 @@ namespace System.Windows.Forms {
                 }
             }
 
-            
+
             private bool IsVertical {
                 get {
                     ToolStrip parent = this.ParentInternal;
-    
+
                     if (parent == null) {
                         parent = Owner;
                     }
@@ -265,18 +265,18 @@ namespace System.Windows.Forms {
                     switch (parent.LayoutStyle) {
                         case ToolStripLayoutStyle.VerticalStackWithOverflow:
                             return false;
-                        case ToolStripLayoutStyle.HorizontalStackWithOverflow:  
+                        case ToolStripLayoutStyle.HorizontalStackWithOverflow:
                         case ToolStripLayoutStyle.Flow:
                         case ToolStripLayoutStyle.Table:
-                        default:                            
+                        default:
                             return true;
                     }
                 }
             }
-            
+
 
             [
-            Browsable(false), 
+            Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
@@ -296,7 +296,7 @@ namespace System.Windows.Forms {
             }
 
             [
-            Browsable(false), 
+            Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
@@ -309,7 +309,7 @@ namespace System.Windows.Forms {
                  }
             }
 
-            
+
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DefaultValue(ToolStripTextDirection.Horizontal)]
             public override ToolStripTextDirection TextDirection {
                  get {
@@ -321,7 +321,7 @@ namespace System.Windows.Forms {
             }
 
             [
-            Browsable(false), 
+            Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
@@ -330,12 +330,12 @@ namespace System.Windows.Forms {
                    return base.TextImageRelation;
                }
                set {
-                   base.TextImageRelation = value;      
+                   base.TextImageRelation = value;
                }
             }
 
             [
-            Browsable(false), 
+            Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
@@ -347,7 +347,7 @@ namespace System.Windows.Forms {
                     base.ToolTipText = value;
                 }
             }
-            
+
             [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never),
@@ -377,28 +377,28 @@ namespace System.Windows.Forms {
                 if (parent == null) {
                     return new Size(ToolStrip_SEPARATORTHICKNESS, ToolStrip_SEPARATORTHICKNESS);
                 }
-                
+
                 ToolStripDropDownMenu dropDownMenu = parent as ToolStripDropDownMenu;
                 if (dropDownMenu != null) {
                     return new Size(parent.Width - (parent.Padding.Horizontal - dropDownMenu.ImageMargin.Width), ToolStrip_SEPARATORTHICKNESS);
                 }
-                else {        
+                else {
                     if (parent.LayoutStyle != ToolStripLayoutStyle.HorizontalStackWithOverflow || parent.LayoutStyle != ToolStripLayoutStyle.VerticalStackWithOverflow) {
                         // we dont actually know what size to make it, so just keep it a stock size.
                         constrainingSize.Width = ToolStrip_SEPARATORHEIGHT;
                         constrainingSize.Height = ToolStrip_SEPARATORHEIGHT;
                     }
                     if (IsVertical) {
-                        return new Size(ToolStrip_SEPARATORTHICKNESS, constrainingSize.Height);                        
+                        return new Size(ToolStrip_SEPARATORTHICKNESS, constrainingSize.Height);
                     }
                     else {
-                        return new Size(constrainingSize.Width, ToolStrip_SEPARATORTHICKNESS);   
+                        return new Size(constrainingSize.Width, ToolStrip_SEPARATORTHICKNESS);
                     }
                 }
-                
+
             }
 
-            
+
             protected override void OnPaint(System.Windows.Forms.PaintEventArgs e) {
                 if (this.Owner != null && this.ParentInternal != null) {
                     this.Renderer.DrawSeparator(new ToolStripSeparatorRenderEventArgs(e.Graphics, this, IsVertical));
@@ -407,7 +407,7 @@ namespace System.Windows.Forms {
 
             [EditorBrowsable(EditorBrowsableState.Never)]
             protected override void OnFontChanged(EventArgs e) {
-                // PERF: dont call base, we dont care if the font changes             
+                // PERF: dont call base, we dont care if the font changes
                 RaiseEvent(EventFontChanged, e);
             }
 
@@ -421,26 +421,26 @@ namespace System.Windows.Forms {
 
                 ToolStripDropDownMenu dropDownMenu = this.Owner as ToolStripDropDownMenu;
                 if (dropDownMenu != null) {
-             
-                   // Scooch over by the padding amount.  The padding is added to 
+
+                   // Scooch over by the padding amount.  The padding is added to
                    // the ToolStripDropDownMenu to keep the non-menu item riffraff
                    // aligned to the text rectangle. When flow layout comes through to set our position
                    // via IArrangedElement DEFY IT!
                    if (dropDownMenu != null) {
                         rect.X = 2;
-                        rect.Width = dropDownMenu.Width -4;                          
+                        rect.Width = dropDownMenu.Width -4;
                    }
                 }
-                base.SetBounds(rect); 
+                base.SetBounds(rect);
             }
 
             /// <devdoc>
-            /// An implementation of AccessibleChild for use with ToolStripItems        
+            /// An implementation of AccessibleChild for use with ToolStripItems
             /// </devdoc>
-            [System.Runtime.InteropServices.ComVisible(true)]        
+            [System.Runtime.InteropServices.ComVisible(true)]
             internal class ToolStripSeparatorAccessibleObject : ToolStripItemAccessibleObject {
                 private ToolStripSeparator ownerItem = null;
-            
+
                 public ToolStripSeparatorAccessibleObject(ToolStripSeparator ownerItem): base(ownerItem) {
                     this.ownerItem = ownerItem;
                 }

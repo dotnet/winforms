@@ -55,7 +55,7 @@ namespace System.Windows.Forms.Design
         public const int EC_LEFTMARGIN = 0x0001;
         public const int EC_RIGHTMARGIN = 0x0002;
         public const int IDOK = 1;
-        
+
         public const int VK_PROCESSKEY = 0xE5;
 
         public const int STGM_READ = 0x00000000;
@@ -2290,7 +2290,7 @@ namespace System.Windows.Forms.Design
 
             [return: MarshalAs(UnmanagedType.Bool)]
             bool FireEvent(
-                          [In, MarshalAs(UnmanagedType.BStr)] 
+                          [In, MarshalAs(UnmanagedType.BStr)]
                           string eventName,
                           [In, MarshalAs(UnmanagedType.Struct)]
                           Object eventObject);
@@ -2488,7 +2488,7 @@ namespace System.Windows.Forms.Design
         public interface IHTMLStyleSheet {
 
             void SetTitle(
-                         [In, MarshalAs(UnmanagedType.BStr)] 
+                         [In, MarshalAs(UnmanagedType.BStr)]
                          string p);
 
             [return: MarshalAs(UnmanagedType.BStr)]
@@ -2501,7 +2501,7 @@ namespace System.Windows.Forms.Design
             IHTMLElement GetOwningElement();
 
             void SetDisabled(
-                            [In, MarshalAs(UnmanagedType.Bool)] 
+                            [In, MarshalAs(UnmanagedType.Bool)]
                             bool p);
 
             [return: MarshalAs(UnmanagedType.Bool)]
@@ -2514,7 +2514,7 @@ namespace System.Windows.Forms.Design
             object GetImports();
 
             void SetHref(
-                        [In, MarshalAs(UnmanagedType.BStr)] 
+                        [In, MarshalAs(UnmanagedType.BStr)]
                         string p);
 
             [return: MarshalAs(UnmanagedType.BStr)]
@@ -2528,37 +2528,37 @@ namespace System.Windows.Forms.Design
 
             [return: MarshalAs(UnmanagedType.I4)]
             int AddImport(
-                         [In, MarshalAs(UnmanagedType.BStr)] 
+                         [In, MarshalAs(UnmanagedType.BStr)]
                          string bstrURL,
-                         [In, MarshalAs(UnmanagedType.I4)] 
+                         [In, MarshalAs(UnmanagedType.I4)]
                          int lIndex);
 
             [return: MarshalAs(UnmanagedType.I4)]
             int AddRule(
-                       [In, MarshalAs(UnmanagedType.BStr)] 
+                       [In, MarshalAs(UnmanagedType.BStr)]
                        string bstrSelector,
-                       [In, MarshalAs(UnmanagedType.BStr)] 
+                       [In, MarshalAs(UnmanagedType.BStr)]
                        string bstrStyle,
-                       [In, MarshalAs(UnmanagedType.I4)] 
+                       [In, MarshalAs(UnmanagedType.I4)]
                        int lIndex);
 
             void RemoveImport(
-                             [In, MarshalAs(UnmanagedType.I4)] 
+                             [In, MarshalAs(UnmanagedType.I4)]
                              int lIndex);
 
             void RemoveRule(
-                           [In, MarshalAs(UnmanagedType.I4)] 
+                           [In, MarshalAs(UnmanagedType.I4)]
                            int lIndex);
 
             void SetMedia(
-                         [In, MarshalAs(UnmanagedType.BStr)] 
+                         [In, MarshalAs(UnmanagedType.BStr)]
                          string p);
 
             [return: MarshalAs(UnmanagedType.BStr)]
             string GetMedia();
 
             void SetCssText(
-                           [In, MarshalAs(UnmanagedType.BStr)] 
+                           [In, MarshalAs(UnmanagedType.BStr)]
                            string p);
 
             [return: MarshalAs(UnmanagedType.BStr)]
@@ -3424,7 +3424,7 @@ namespace System.Windows.Forms.Design
             string toString();
 
             void SetLength(
-                          [In, MarshalAs(UnmanagedType.I4)] 
+                          [In, MarshalAs(UnmanagedType.I4)]
                           int p);
 
             [return: MarshalAs(UnmanagedType.I4)]
@@ -3435,14 +3435,14 @@ namespace System.Windows.Forms.Design
 
             [return: MarshalAs(UnmanagedType.Interface)]
             IHTMLElement Item(
-                       [In, MarshalAs(UnmanagedType.Struct)] 
+                       [In, MarshalAs(UnmanagedType.Struct)]
                        Object name,
-                       [In, MarshalAs(UnmanagedType.Struct)] 
+                       [In, MarshalAs(UnmanagedType.Struct)]
                        Object index);
 
             [return: MarshalAs(UnmanagedType.Interface)]
             object Tags(
-                       [In, MarshalAs(UnmanagedType.Struct)] 
+                       [In, MarshalAs(UnmanagedType.Struct)]
                        Object tagName);
         }
 
@@ -3450,28 +3450,28 @@ namespace System.Windows.Forms.Design
         public interface IHTMLRect {
 
             void SetLeft(
-                        [In, MarshalAs(UnmanagedType.I4)] 
+                        [In, MarshalAs(UnmanagedType.I4)]
                         int p);
 
             [return: MarshalAs(UnmanagedType.I4)]
             int GetLeft();
 
             void SetTop(
-                       [In, MarshalAs(UnmanagedType.I4)] 
+                       [In, MarshalAs(UnmanagedType.I4)]
                        int p);
 
             [return: MarshalAs(UnmanagedType.I4)]
             int GetTop();
 
             void SetRight(
-                         [In, MarshalAs(UnmanagedType.I4)] 
+                         [In, MarshalAs(UnmanagedType.I4)]
                          int p);
 
             [return: MarshalAs(UnmanagedType.I4)]
             int GetRight();
 
             void SetBottom(
-                          [In, MarshalAs(UnmanagedType.I4)] 
+                          [In, MarshalAs(UnmanagedType.I4)]
                           int p);
 
             [return: MarshalAs(UnmanagedType.I4)]

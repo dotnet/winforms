@@ -245,7 +245,7 @@ namespace WinForms.Common.Tests
         }
 
         public static TheoryData<Point> GetPointTheoryData() => GetPointTheoryData(TestIncludeType.All);
-        
+
         public static TheoryData<Point> GetPointTheoryData(TestIncludeType includeType)
         {
             var data = new TheoryData<Point>();
@@ -354,7 +354,7 @@ namespace WinForms.Common.Tests
             return data;
         }
 
-        #endregion        
+        #endregion
     }
 
     [Flags]

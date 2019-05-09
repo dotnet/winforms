@@ -6,7 +6,7 @@ namespace System.Windows.Forms.ButtonInternal {
     using System;
     using System.Diagnostics;
     using System.Drawing;
-    using System.Windows.Forms.Internal; 
+    using System.Windows.Forms.Internal;
     using System.Drawing.Drawing2D;
     using System.Drawing.Imaging;
     using System.Drawing.Text;
@@ -16,7 +16,7 @@ namespace System.Windows.Forms.ButtonInternal {
     using System.Runtime.InteropServices;
     using System.ComponentModel;
     using System.Diagnostics.CodeAnalysis;
-        
+
 
     internal class ButtonStandardAdapter : ButtonBaseAdapter {
 
@@ -26,7 +26,7 @@ namespace System.Windows.Forms.ButtonInternal {
 
         private PushButtonState DetermineState(bool up) {
             PushButtonState state = PushButtonState.Normal;
-        
+
             if (!up) {
                 state = PushButtonState.Pressed;
             }
@@ -72,14 +72,14 @@ namespace System.Windows.Forms.ButtonInternal {
                 ButtonRenderer.DrawButtonForHandle(e.Graphics, Control.ClientRectangle, false, pbState, this.Control.HandleInternal);
             }
 
-            // Now overlay the background image or backcolor (the former overrides the latter), leaving a 
+            // Now overlay the background image or backcolor (the former overrides the latter), leaving a
             // margin. We hardcode this margin for now since GetThemeMargins returns 0 all the
-            // time. 
+            // time.
             // Changing this because GetThemeMargins simply does not
             // work in some cases.
             bounds.Inflate(-buttonBorderSize, -buttonBorderSize);
 
-           
+
             //only paint if the user said not to use the themed backcolor.
             if (!Control.UseVisualStyleBackColor) {
                 bool painted = false;
@@ -93,7 +93,7 @@ namespace System.Windows.Forms.ButtonInternal {
                     if (DisplayInformation.BitsPerPixel > 8) {
                         NativeMethods.RECT r = new NativeMethods.RECT(bounds.X, bounds.Y, bounds.Right, bounds.Bottom);
                         // SysColorBrush does not have to be deleted.
-                        SafeNativeMethods.FillRect(new HandleRef(e, e.HDC), ref r, new HandleRef(this, 
+                        SafeNativeMethods.FillRect(new HandleRef(e, e.HDC), ref r, new HandleRef(this,
                             isHighContrastHighlighted ? SafeNativeMethods.GetSysColorBrush(ColorTranslator.ToOle(color) & 0xFF) : Control.BackColorBrush));
                         painted = true;
                     }
@@ -138,7 +138,7 @@ namespace System.Windows.Forms.ButtonInternal {
             }
 
             Graphics g = e.Graphics;
-            
+
             Button thisbutton = this.Control as Button;
             if (Application.RenderWithVisualStyles) {
                 PaintThemedButtonBackground(e, Control.ClientRectangle, up);
@@ -148,7 +148,7 @@ namespace System.Windows.Forms.ButtonInternal {
                 if (state == CheckState.Indeterminate) {
                     backbrush = CreateDitherBrush(colors.highlight, colors.buttonFace);
                 }
-    
+
                 try {
                     Rectangle bounds = Control.ClientRectangle;
                     if (up) {
@@ -159,7 +159,7 @@ namespace System.Windows.Forms.ButtonInternal {
                         // We are going to draw a 1 pixel border.
                         bounds.Inflate(-1, -1);
                     }
-                    
+
                     PaintButtonBackground(e, bounds, backbrush);
                 }
                 finally {
@@ -224,11 +224,11 @@ namespace System.Windows.Forms.ButtonInternal {
         private LayoutOptions PaintLayout(PaintEventArgs e, bool up) {
             LayoutOptions layout = CommonLayout();
             layout.textOffset        = !up;
-            layout.everettButtonCompat = !Application.RenderWithVisualStyles;            
+            layout.everettButtonCompat = !Application.RenderWithVisualStyles;
 
             return layout;
         }
 
         #endregion
-    }    
+    }
 }

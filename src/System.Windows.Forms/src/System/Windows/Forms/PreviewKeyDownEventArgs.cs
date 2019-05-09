@@ -15,7 +15,7 @@ namespace System.Windows.Forms
         {
             KeyData = keyData;
         }
-       
+
         /// <devdoc>
         /// Gets the key data for a <see cref='System.Windows.Forms.Control.KeyDown'/>
         /// or <see cref='System.Windows.Forms.Control.KeyUp'/> event.
@@ -43,7 +43,7 @@ namespace System.Windows.Forms
                 {
                     return Keys.None;
                 }
-                
+
                 return keyGenerated;
             }
         }

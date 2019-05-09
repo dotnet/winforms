@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms { 
+namespace System.Windows.Forms {
 
 using System;
 using System.Drawing;
@@ -33,7 +33,7 @@ using Microsoft.Win32;
 
         /// <devdoc>
         ///    <para>
-        ///      If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to 
+        ///      If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to
         /// determine how to render.
         ///      If this property is false, the renderer will always render with visualstyles.
         ///    </para>
@@ -67,7 +67,7 @@ using Microsoft.Win32;
                return false; //for downlevel, this is false
            }
         }
-        
+
         /// <devdoc>
         ///    <para>
         ///       This is just a convenience wrapper for VisualStyleRenderer.DrawThemeParentBackground. For downlevel,
@@ -195,7 +195,7 @@ using Microsoft.Win32;
             }
             clipMiddle.Y = textBounds.Bottom;
             clipMiddle.Height -= (textBounds.Bottom - boxBounds.Top);
-            
+
             Debug.Assert(textBounds.Y <= boxBounds.Y, "if text below box, need to render area of box above text");
 
             // Render clipped portion of background in each segment
@@ -208,7 +208,7 @@ using Microsoft.Win32;
         ///     Draws an un-themed GroupBox with no text label.
         /// </summary>
         private static void DrawUnthemedGroupBoxNoText(Graphics g, Rectangle bounds, GroupBoxState state) {
-            Color backColor = SystemColors.Control;         
+            Color backColor = SystemColors.Control;
             Pen light = new Pen(ControlPaint.Light(backColor, 1.0f));
             Pen dark = new Pen(ControlPaint.Dark(backColor, 0f));
             try {
@@ -223,7 +223,7 @@ using Microsoft.Win32;
                 // top
                 g.DrawLine(light, bounds.Left + 1, bounds.Top + 1, bounds.Width - 1, bounds.Top + 1);
                 g.DrawLine(dark, bounds.Left, bounds.Top, bounds.Width - 2, bounds.Top);
-                
+
                 // right
                 g.DrawLine(light, bounds.Width - 1, bounds.Top, bounds.Width - 1, bounds.Height - 1);
                 g.DrawLine(dark, bounds.Width - 2, bounds.Top, bounds.Width - 2, bounds.Height - 2);
@@ -268,7 +268,7 @@ using Microsoft.Win32;
             Pen dark = new Pen(SystemColors.ControlDark);
 
             int boxTop = bounds.Top + font.Height / 2;
-            
+
             // left
             g.DrawLine(light, bounds.Left + 1, boxTop, bounds.Left + 1, bounds.Height - 1);
             g.DrawLine(dark, bounds.Left, boxTop - 1, bounds.Left, bounds.Height - 2);
@@ -280,11 +280,11 @@ using Microsoft.Win32;
             // top-left
             g.DrawLine(light, bounds.Left + 1, boxTop, textBounds.X - 2, boxTop);
             g.DrawLine(dark, bounds.Left, boxTop - 1, textBounds.X - 3, boxTop - 1);
-            
+
             // top-right
             g.DrawLine(light, textBounds.X + textBounds.Width + 1, boxTop, bounds.Width - 1, boxTop);
             g.DrawLine(dark, textBounds.X + textBounds.Width + 2, boxTop - 1, bounds.Width - 2, boxTop - 1);
-            
+
             // right
             g.DrawLine(light, bounds.Width - 1, boxTop, bounds.Width - 1, bounds.Height - 1);
             g.DrawLine(dark, bounds.Width - 2, boxTop - 1, bounds.Width - 2, bounds.Height - 2);

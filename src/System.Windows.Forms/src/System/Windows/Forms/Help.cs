@@ -5,7 +5,7 @@
 namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;    
+    using System.Diagnostics.CodeAnalysis;
     using System;
     using System.Net;
     using System.Drawing;
@@ -14,14 +14,14 @@ namespace System.Windows.Forms {
     using System.Text;
     using Microsoft.Win32;
     using System.Globalization;
-    
+
     /// <devdoc>
     ///    <para>
     ///       Represents the HTML 1.0 Help engine.
     ///    </para>
     /// </devdoc>
     public class Help {
-#if DEBUG        
+#if DEBUG
         internal static readonly TraceSwitch WindowsFormsHelpTrace = new TraceSwitch("WindowsFormsHelpTrace", "Debug help system");
 #else
         internal static readonly TraceSwitch WindowsFormsHelpTrace;
@@ -62,7 +62,7 @@ namespace System.Windows.Forms {
         // not creatable
         //
         private Help() {
-        }        
+        }
 
         /// <devdoc>
         ///    <para>
@@ -145,13 +145,13 @@ namespace System.Windows.Forms {
 
             // We have to marshal the string ourselves to prevent access violations.
             IntPtr pszText = Marshal.StringToCoTaskMemAuto(caption);
-  	    
+
             try {
                 pop.pszText = pszText;
                 pop.idString = 0;
                 pop.pt = new NativeMethods.POINT(location.X, location.Y);
 
-                // Looks like a windows 
+                // Looks like a windows
 
 
                 pop.clrBackground = Color.FromKnownColor(KnownColor.Window).ToArgb() & 0x00ffffff;
@@ -169,14 +169,14 @@ namespace System.Windows.Forms {
         /// </devdoc>
         private static void ShowHTML10Help(Control parent, string url, HelpNavigator command, object param) {
             Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "Help:: ShowHTML10Help:: " + url + ", " + command.ToString("G") + ", " + param);
-            
+
             // See if we can get a full path and file name and if that will
             // resolve the out of memory condition with file names that include spaces.
             // If we can't, though, we can't assume that the path's no good: it might be in
             // the Windows help directory.
             Uri file = null;
             string pathAndFileName = url; //This is our best guess at the path yet.
-            
+
             file = Resolve(url);
             if (file != null) { // Can't assume we have a good url
                 pathAndFileName = file.AbsoluteUri;
@@ -208,7 +208,7 @@ namespace System.Windows.Forms {
             string stringParam = param as string;
             if (stringParam != null) {
                 int htmlCommand = MapCommandToHTMLCommand(command, stringParam, out htmlParam);
-                
+
                 string stringHtmlParam = htmlParam as string;
                 if (stringHtmlParam != null) {
                     SafeNativeMethods.HtmlHelp(handle, pathAndFileName, htmlCommand, stringHtmlParam);
@@ -246,7 +246,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Displays HTMLFile with the specified parameters
         /// </devdoc>
-        /// 
+        ///
 
 
         [SuppressMessage("Microsoft.Security", "CA2103:ReviewImperativeSecurity")]
@@ -317,7 +317,7 @@ namespace System.Windows.Forms {
                 try {
                     // try relative to AppBase...
                     //
-                    file = new Uri(new Uri(AppContext.BaseDirectory), 
+                    file = new Uri(new Uri(AppContext.BaseDirectory),
                                    partialUri);
                 }
                 catch (UriFormatException) {
@@ -377,13 +377,13 @@ namespace System.Windows.Forms {
             switch (command) {
                 case HelpNavigator.Topic:
                     return HH_DISPLAY_TOPIC;
-                
+
                 case HelpNavigator.TableOfContents:
                     return HH_DISPLAY_TOC;
-                
+
                 case HelpNavigator.Index:
                     return HH_DISPLAY_INDEX;
-                
+
                 case HelpNavigator.Find: {
                     NativeMethods.HH_FTS_QUERY ftsQuery = new NativeMethods.HH_FTS_QUERY();
                     ftsQuery.pszSearchQuery = param;
@@ -409,7 +409,7 @@ namespace System.Windows.Forms {
                     htmlParam = alink;
                     return (command == HelpNavigator.KeywordIndex) ? HH_KEYWORD_LOOKUP : HH_ALINK_LOOKUP;
                 }
-                
+
                 default:
                     return (int)command;
             }

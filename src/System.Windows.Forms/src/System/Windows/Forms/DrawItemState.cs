@@ -34,7 +34,7 @@ namespace System.Windows.Forms
         /// The item has focus.
         /// </devdoc>
         Focus = NativeMethods.ODS_FOCUS,
-        
+
         /// <devdoc>
         /// The item is grayed. Only menu controls use this value.
         /// </devdoc>

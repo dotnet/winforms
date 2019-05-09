@@ -25,10 +25,10 @@ namespace System.Experimental.Gdi
 #endif
     sealed class WindowsSolidBrush : WindowsBrush
     {
-        
-        
+
+
         protected override void CreateBrush()
-        { 
+        {
             IntPtr nativeHandle = IntSafeNativeMethods.CreateSolidBrush(ColorTranslator.ToWin32( this.Color));
             if(nativeHandle == IntPtr.Zero) // Don't use Debug.Assert, DbgUtil.GetLastErrorStr would always be evaluated.
             {
@@ -38,24 +38,24 @@ namespace System.Experimental.Gdi
             this.NativeHandle = nativeHandle;  // sets the handle value in the base class.
         }
 
-        
-        
+
+
         public WindowsSolidBrush(DeviceContext dc)  : base(dc)
         {
             // CreateBrush() on demand.
         }
 
-        
-        
+
+
         public WindowsSolidBrush(DeviceContext dc, Color color) : base( dc, color )
         {
             // CreateBrush() on demand.
         }
 
-        
-        
+
+
         public override object Clone()
-        { 
+        {
             return new WindowsSolidBrush(this.DC, this.Color);
         }
 

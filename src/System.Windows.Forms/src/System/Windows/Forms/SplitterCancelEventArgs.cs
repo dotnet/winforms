@@ -32,7 +32,7 @@ namespace System.Windows.Forms
         /// Gets the y-coordinate of the mouse pointer (in client coordinates).
         /// </devdoc>
         public int MouseCursorY { get; }
-        
+
         /// <devdoc>
         /// Gets the x-coordinate of the upper-left corner of the <see cref='System.Windows.Forms.SplitContainer'/> (in client coordinates).
         /// </devdoc>

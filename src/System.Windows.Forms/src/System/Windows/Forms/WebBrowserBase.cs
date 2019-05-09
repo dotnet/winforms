@@ -52,9 +52,9 @@ namespace System.Windows.Forms
         private UnsafeNativeMethods.IOleInPlaceActiveObject axOleInPlaceActiveObject;
         private UnsafeNativeMethods.IOleControl axOleControl;
         private WebBrowserBaseNativeWindow axWindow;
-        // We need to change the size of the inner ActiveX control before the 
-        //WebBrowserBase control's size is changed (i.e., before WebBrowserBase.Bounds 
-        //is changed) for better visual effect. We use this field to know what size 
+        // We need to change the size of the inner ActiveX control before the
+        //WebBrowserBase control's size is changed (i.e., before WebBrowserBase.Bounds
+        //is changed) for better visual effect. We use this field to know what size
         //the WebBrowserBase control is changing to.
         private Size webBrowserBaseChangingSize = Size.Empty;
         private WebBrowserContainer wbContainer = null;
@@ -110,7 +110,7 @@ namespace System.Windows.Forms
         //
         // The following are virtual methods that derived-classes can override
         //
-        
+
         //
         // The native ActiveX control QI's for interfaces on it's site to see if
         // it needs to change its behavior. Since the WebBrowserSiteBaseBase class is generic,
@@ -260,7 +260,7 @@ namespace System.Windows.Forms
                 win32Message.hwnd = msg.HWnd;
 
                 this.SetAXHostState(WebBrowserHelper.siteProcessedInputKey, false);
-                try 
+                try
                 {
                     if (axOleInPlaceObject != null)
                     {
@@ -316,7 +316,7 @@ namespace System.Windows.Forms
                     this.SetAXHostState(WebBrowserHelper.siteProcessedInputKey, false);
                 }
             }
-            
+
             return false;
         }
 
@@ -398,7 +398,7 @@ namespace System.Windows.Forms
                     if (!ReflectMessage(m.LParam, ref m))
                         DefWndProc(ref m);
                     break;
-                
+
                 case Interop.WindowMessages.WM_HELP:
                     // We want to both fire the event, and let the ActiveX have the message...
                     base.WndProc(ref m);
@@ -412,7 +412,7 @@ namespace System.Windows.Forms
                     if (!DesignMode) {
                         if (containingControl != null && containingControl.ActiveControl != this) {
                             Focus();
-                        } 
+                        }
                     }
                     DefWndProc(ref m);
                     break;
@@ -425,7 +425,7 @@ namespace System.Windows.Forms
                     finally {
                          hwndFocus = IntPtr.Zero;
                     }
-                    break;    
+                    break;
 
                 case Interop.WindowMessages.WM_DESTROY:
                     //
@@ -559,7 +559,7 @@ namespace System.Windows.Forms
                 base.RecreateHandleCore();
             }
         }
-        
+
 
         //
         // TransitionDownTo Passive when we are being disposed.
@@ -599,7 +599,7 @@ namespace System.Windows.Forms
         internal bool GetAXHostState(int mask) {
             return this.axHostState[mask];
         }
-        
+
         internal void SetAXHostState(int mask, bool value) {
             this.axHostState[mask] = value;
         }
@@ -705,7 +705,7 @@ namespace System.Windows.Forms
                     this.GetAXHostState(WebBrowserHelper.recomputeContainingControl)) {
                     containingControl = FindContainerControlInternal();
                 }
-                
+
                 return containingControl;
             }
         }
@@ -740,7 +740,7 @@ namespace System.Windows.Forms
                 this.selectionStyle = selectionStyle;
                 if (iss != null && iss.GetComponentSelected(this)) {
                     // The ActiveX Host designer will offer an extender property
-                    // called "SelectionStyle" 
+                    // called "SelectionStyle"
                     PropertyDescriptor prop = TypeDescriptor.GetProperties(this)["SelectionStyle"];
                     if (prop != null && prop.PropertyType == typeof(int)) {
                         prop.SetValue(this, (int)selectionStyle);
@@ -752,7 +752,7 @@ namespace System.Windows.Forms
         internal void AddSelectionHandler() {
             if (!this.GetAXHostState(WebBrowserHelper.addedSelectionHandler)) {
                 this.SetAXHostState(WebBrowserHelper.addedSelectionHandler, true);
-                
+
                 ISelectionService iss = WebBrowserHelper.GetSelectionService(this);
                 if (iss != null) {
                     iss.SelectionChanging += SelectionChangeHandler;
@@ -781,7 +781,7 @@ namespace System.Windows.Forms
             }
             this.axWindow = new WebBrowserBaseNativeWindow(this);
             this.axWindow.AssignHandle(hwnd, false);
-            
+
             UpdateZOrder();
             UpdateBounds();
 
@@ -821,7 +821,7 @@ namespace System.Windows.Forms
 
 
 
-        
+
 
 
 
@@ -1031,7 +1031,7 @@ namespace System.Windows.Forms
             // the ActiveX object to the appropriate interfaces.
             AttachInterfaces(activeXInstance);
         }
-        
+
         private void DetachInterfacesInternal() {
             this.axOleObject = null;
             this.axOleInPlaceObject = null;
@@ -1042,7 +1042,7 @@ namespace System.Windows.Forms
             // their cached interfaces of the ActiveX object.
             DetachInterfaces();
         }
-        
+
         //
         // We need to change the ActiveX control's state when selection changes.
         private EventHandler SelectionChangeHandler {
@@ -1108,7 +1108,7 @@ namespace System.Windows.Forms
                     Debug.Fail(e.ToString());
                 }
             }
-            return GetExtent();        
+            return GetExtent();
         }
 
         private Size GetExtent() {
@@ -1290,8 +1290,8 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnHandleCreated(EventArgs e) {
             //
-            // This is needed to prevent some controls (for e.g. Office Web Components) from 
-            // failing to InPlaceActivate() when they call RegisterDragDrop() but do not call 
+            // This is needed to prevent some controls (for e.g. Office Web Components) from
+            // failing to InPlaceActivate() when they call RegisterDragDrop() but do not call
             // OleInitialize(). The EE calls CoInitializeEx() on the thread, but I believe
             // that is not good enough for DragDrop.
             //
@@ -1315,7 +1315,7 @@ namespace System.Windows.Forms
 
         }
 
-        
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Color BackColor {
@@ -1471,7 +1471,7 @@ namespace System.Windows.Forms
         //
         // Unavailable events
         //
-        
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackgroundImageLayoutChanged"));
@@ -1489,7 +1489,7 @@ namespace System.Windows.Forms
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Leave"));
             remove { }
         }
-        
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseCaptureChanged {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseCaptureChanged"));
@@ -1513,7 +1513,7 @@ namespace System.Windows.Forms
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackColorChanged"));
             remove { }
         }
-        
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackgroundImageChanged"));
@@ -1555,7 +1555,7 @@ namespace System.Windows.Forms
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "RightToLeftChanged"));
             remove { }
         }
-        
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "TextChanged"));
@@ -1630,7 +1630,7 @@ namespace System.Windows.Forms
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DoubleClick"));
             remove { }
         }
-        
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ImeModeChanged {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ImeModeChanged"));
@@ -1708,7 +1708,7 @@ namespace System.Windows.Forms
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ChangeUICues"));
             remove { }
         }
-        
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler StyleChanged {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "StyleChanged"));
@@ -1724,7 +1724,7 @@ namespace System.Windows.Forms
             public WebBrowserBaseNativeWindow(WebBrowserBase ax) {
                 this.WebBrowserBase = ax;
             }
-            
+
             /// <devdoc>
             ///     Pass messages on to the NotifyIcon object's wndproc handler.
             /// </devdoc>

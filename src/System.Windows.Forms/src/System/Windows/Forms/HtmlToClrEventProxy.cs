@@ -19,7 +19,7 @@ namespace System.Windows.Forms
         private IReflect typeIReflectImplementation;
         private object sender = null;
         private string eventName;
-        
+
         public HtmlToClrEventProxy(object sender, string eventName, EventHandler eventHandler) {
             this.eventHandler = eventHandler;
             this.eventName = eventName;
@@ -31,7 +31,7 @@ namespace System.Windows.Forms
         public string EventName {
             get { return eventName; }
         }
-        
+
         [DispId(0)]
         public void OnHtmlEvent() {
             InvokeClrEvent();
@@ -45,8 +45,8 @@ namespace System.Windows.Forms
 
 
 #region IReflect
-  
-        Type IReflect.UnderlyingSystemType { 
+
+        Type IReflect.UnderlyingSystemType {
             get {
                 return typeIReflectImplementation.UnderlyingSystemType;
             }
@@ -89,7 +89,7 @@ namespace System.Windows.Forms
         //
         object IReflect.InvokeMember(string name, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, object target, object[] args, System.Reflection.ParameterModifier[] modifiers, System.Globalization.CultureInfo culture, string[] namedParameters) {
 
-            // 
+            //
             if (name == "[DISPID=0]") {
                 // we know we're getting called back to fire the event - translate this now into a CLR event.
                 OnHtmlEvent();

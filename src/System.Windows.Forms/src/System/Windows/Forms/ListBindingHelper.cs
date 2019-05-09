@@ -5,7 +5,7 @@
 namespace System.Windows.Forms {
 
     using System;
-    using System.Diagnostics;    
+    using System.Diagnostics;
     using System.ComponentModel;
     using System.Collections;
     using System.Collections.Generic;
@@ -160,7 +160,7 @@ namespace System.Windows.Forms {
             else if (target is IEnumerable enumerable) {
                 return GetListItemPropertiesByEnumerable(enumerable, listAccessors, 0);
             }
-            
+
             return GetListItemPropertiesByInstance(target, listAccessors, 0);
         }
 
@@ -228,7 +228,7 @@ namespace System.Windows.Forms {
             {
                 return GetListItemTypeByEnumerable(enumerable);
             }
-            
+
             return listType;
         }
 
@@ -448,7 +448,7 @@ namespace System.Windows.Forms {
                     return GetListItemProperties(value, accessors);
                 }
             }
-            
+
             return TypeDescriptor.GetProperties(target, BrowsableAttributeList);
         }
 
@@ -482,11 +482,11 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        /// 
+        ///
         /// Returns info about the 'indexer' property on the specified type. The presence of an indexer is used to
         /// determine that the type represents a collection or list. The return type of that indexer is used to
         /// determine the underlying item type.
-        /// 
+        ///
         /// PROCESS: We look for the first public instance property on the type that is an 'indexer'. This property
         /// is usually - but not always - called "Item". So we look at 'indexer parameters' to identify true indexers,
         /// rather than looking at the property name. And we also ignore any indexers that return an item type of just
@@ -581,7 +581,7 @@ namespace System.Windows.Forms {
                 }
                 else if (instance == null) {
                     pdc = new PropertyDescriptorCollection(null);
-                } 
+                }
                 else {
                     pdc = TypeDescriptor.GetProperties(instance, BrowsableAttributeList);
 
@@ -589,7 +589,7 @@ namespace System.Windows.Forms {
                         pdc = TypeDescriptor.GetProperties(enumerable, BrowsableAttributeList);
                     }
                 }
-                
+
             }
 
             // Return results

@@ -19,7 +19,7 @@ namespace System.Windows.Forms
         {
             NewRectangle = newRectangle;
         }
-        
+
         /// <devdoc>
         /// Represents the requested size of the <see cref='System.Windows.Forms.RichTextBox'/> control.
         /// </devdoc>

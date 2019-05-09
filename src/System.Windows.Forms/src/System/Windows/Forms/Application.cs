@@ -178,7 +178,7 @@ namespace System.Windows.Forms {
                 if (!checkedThreadAffinity) {
                     checkedThreadAffinity = true;
                     try {
-                        //We need access to be able to read from the registry here.  We're not creating a 
+                        //We need access to be able to read from the registry here.  We're not creating a
                         //registry key, nor are we returning information from the registry to the user.
                         RegistryKey key = Registry.LocalMachine.OpenSubKey(CommonAppDataRegistryKeyName);
                         if (key != null) {
@@ -326,7 +326,7 @@ namespace System.Windows.Forms {
         ///       path for the executable file that started the application.
         ///    </para>
         /// </devdoc>
-        /// 
+        ///
         [SuppressMessage("Microsoft.Security", "CA2103:ReviewImperativeSecurity")]
         public static string ExecutablePath {
             get {
@@ -525,14 +525,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        // Allows the hosting environment to register a callback 
+        // Allows the hosting environment to register a callback
         [
             EditorBrowsable(EditorBrowsableState.Advanced)
         ]
         public static void RegisterMessageLoop(MessageLoopCallback callback) {
             ThreadContext.FromCurrent().RegisterMessageLoop(callback);
         }
-        
+
         /// <devdoc>
         ///    Magic property that answers a simple question - are my controls currently going to render with
         //     visual styles? If you are doing visual styles rendering, use this to be consistent with the rest
@@ -568,7 +568,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
 
-        /// 
+        ///
         [SuppressMessage("Microsoft.Security", "CA2103:ReviewImperativeSecurity")]
         public static string StartupPath {
             get {
@@ -581,7 +581,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        // Allows the hosting environment to unregister a callback 
+        // Allows the hosting environment to unregister a callback
         [
             EditorBrowsable(EditorBrowsableState.Advanced)
         ]
@@ -598,7 +598,7 @@ namespace System.Windows.Forms {
                 return useWaitCursor;
             }
             set {
-                lock (FormCollection.CollectionSyncRoot) 
+                lock (FormCollection.CollectionSyncRoot)
                 {
                     useWaitCursor = value;
                     // Set the WaitCursor of all forms.
@@ -775,15 +775,15 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///  Processes all message filters for given message
         /// </devdoc>
-        [EditorBrowsable(EditorBrowsableState.Advanced),         
+        [EditorBrowsable(EditorBrowsableState.Advanced),
          SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference")  // using ref is OK.
         ]
-        public static bool FilterMessage(ref Message message) {            
+        public static bool FilterMessage(ref Message message) {
 
             bool modified;
 
             // Create copy of MSG structure
-            NativeMethods.MSG msg = new NativeMethods.MSG();           
+            NativeMethods.MSG msg = new NativeMethods.MSG();
             msg.hwnd = message.HWnd;
             msg.message = message.Msg;
             msg.wParam = message.WParam;
@@ -796,7 +796,7 @@ namespace System.Windows.Forms {
                 message.WParam = msg.wParam;
                 message.LParam = msg.lParam;
             }
-            
+
             return processed;
         }
 
@@ -809,7 +809,7 @@ namespace System.Windows.Forms {
         public static event EventHandler Idle {
             add {
                 ThreadContext current = ThreadContext.FromCurrent();
-                lock(current) {                    
+                lock(current) {
                     current.idleHandler += value;
                     // This just ensures that the component manager is hooked up.  We
                     // need it for idle time processing.
@@ -819,7 +819,7 @@ namespace System.Windows.Forms {
             }
             remove {
                 ThreadContext current = ThreadContext.FromCurrent();
-                lock(current) {                    
+                lock(current) {
                     current.idleHandler -= value;
                 }
             }
@@ -834,13 +834,13 @@ namespace System.Windows.Forms {
         public static event EventHandler EnterThreadModal {
             add {
                 ThreadContext current = ThreadContext.FromCurrent();
-                lock(current) {                    
+                lock(current) {
                     current.enterModalHandler += value;
                 }
-            }        
+            }
             remove {
                 ThreadContext current = ThreadContext.FromCurrent();
-                lock(current) {                    
+                lock(current) {
                     current.enterModalHandler -= value;
                 }
             }
@@ -855,13 +855,13 @@ namespace System.Windows.Forms {
         public static event EventHandler LeaveThreadModal {
             add {
                 ThreadContext current = ThreadContext.FromCurrent();
-                lock(current) {                    
+                lock(current) {
                     current.leaveModalHandler += value;
                 }
             }
             remove {
                 ThreadContext current = ThreadContext.FromCurrent();
-                lock(current) {                    
+                lock(current) {
                     current.leaveModalHandler -= value;
                 }
             }
@@ -873,7 +873,7 @@ namespace System.Windows.Forms {
         public static event ThreadExceptionEventHandler ThreadException {
             add {
                 ThreadContext current = ThreadContext.FromCurrent();
-                lock(current) {                    
+                lock(current) {
                     current.threadExceptionHandler = value;
                 }
             }
@@ -1314,8 +1314,8 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        ///     Sets the static UseCompatibleTextRenderingDefault field on Control to the value passed in. 
-        ///     This switch determines the default text rendering engine to use by some controls that support 
+        ///     Sets the static UseCompatibleTextRenderingDefault field on Control to the value passed in.
+        ///     This switch determines the default text rendering engine to use by some controls that support
         ///     switching rendering engine.
         /// </devdoc>
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
@@ -1337,7 +1337,7 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        ///      Overload version of SetUnhandledExceptionMode that sets the UnhandledExceptionMode 
+        ///      Overload version of SetUnhandledExceptionMode that sets the UnhandledExceptionMode
         ///      mode at the current thread level.
         /// </devdoc>
         public static void SetUnhandledExceptionMode(UnhandledExceptionMode mode)
@@ -1358,10 +1358,10 @@ namespace System.Windows.Forms {
         ///     code using this method.  Setting the unhandled exception mode does
         ///     not change the behavior of any NativeWindow objects that are currently
         ///     connected to window handles; it only affects new handle connections.
-        /// 
+        ///
         ///     The parameter threadScope defines the scope of the setting: either
         ///     the current thread or the application.
-        ///     When a thread exception mode isn't UnhandledExceptionMode.Automatic, it takes 
+        ///     When a thread exception mode isn't UnhandledExceptionMode.Automatic, it takes
         ///     precedence over the application exception mode.
         /// </devdoc>
         public static void SetUnhandledExceptionMode(UnhandledExceptionMode mode, bool threadScope) {
@@ -2045,8 +2045,8 @@ namespace System.Windows.Forms {
             private int                     modalCount;
 
             // used for correct restoration of focus after modality
-            private WeakReference           activatingControlRef;                  
-            
+            private WeakReference           activatingControlRef;
+
             // IMsoComponentManager stuff
             //
             private UnsafeNativeMethods.IMsoComponentManager componentManager;
@@ -2083,7 +2083,7 @@ namespace System.Windows.Forms {
                                                     NativeMethods.DUPLICATE_SAME_ACCESS);
 
                 handle = address;
-                
+
                 id = SafeNativeMethods.GetCurrentThreadId();
                 messageLoopCount = 0;
                 currentThreadContext = this;
@@ -2255,7 +2255,7 @@ namespace System.Windows.Forms {
             }
 
             internal bool CustomThreadExceptionHandlerAttached {
-                get {             
+                get {
                      return threadExceptionHandler != null;
                 }
             }
@@ -2318,7 +2318,7 @@ namespace System.Windows.Forms {
             }
 
             internal Control ActivatingControl {
-               get { 
+               get {
                     if ((activatingControlRef != null) && (activatingControlRef.IsAlive)) {
                         return activatingControlRef.Target as Control;
                     }
@@ -2403,11 +2403,11 @@ namespace System.Windows.Forms {
                 DisableWindowsForModalLoop(false, context); // onlyWinForms = false
 
                 modalCount++;
-                
+
                 if (enterModalHandler != null && modalCount == 1) {
                     enterModalHandler(Thread.CurrentThread, EventArgs.Empty);
                 }
-                
+
             }
 
             // Disables windows in preparation of going modal.  If parameter is true, we disable all
@@ -2672,7 +2672,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            // Sets this component as the tracking component - trumping any active component 
+            // Sets this component as the tracking component - trumping any active component
             // for message filtering.
             internal void TrackInput(bool track) {
 
@@ -2682,7 +2682,7 @@ namespace System.Windows.Forms {
                     if (cm != null && !(cm is ComponentManager)) {
                         cm.FSetTrackingComponent((IntPtr)componentID, track);
                         SetState(STATE_TRACKINGCOMPONENT, track);
-                    }                    
+                    }
                 }
             }
             /// <devdoc>
@@ -2776,7 +2776,7 @@ namespace System.Windows.Forms {
                     }
                 }
 
-                // Finally, check if a message loop has been registered 
+                // Finally, check if a message loop has been registered
                 MessageLoopCallback callback = messageLoopCallback;
                 if (callback != null) {
                     return callback();
@@ -2913,7 +2913,7 @@ namespace System.Windows.Forms {
                 SetState(STATE_POSTEDQUIT, true);
             }
 
-            // Allows the hosting environment to register a callback 
+            // Allows the hosting environment to register a callback
             internal void RegisterMessageLoop(MessageLoopCallback callback) {
                 messageLoopCallback = callback;
             }
@@ -2941,12 +2941,12 @@ namespace System.Windows.Forms {
                 }
 
                 try {
-                    RunMessageLoopInner(reason, context);                    
+                    RunMessageLoopInner(reason, context);
                 }
                 finally {
                     UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
                 }
-            }    
+            }
 
             private void RunMessageLoopInner(int reason, ApplicationContext context) {
 
@@ -3174,7 +3174,7 @@ namespace System.Windows.Forms {
                 modified = false;
 
                 // Account for the case where someone removes a message filter
-                // as a result of PreFilterMessage.  the message filter will be 
+                // as a result of PreFilterMessage.  the message filter will be
                 // removed from _the next_ message.
                 // If message filter is added or removed inside the user-provided PreFilterMessage function,
                 // and user code pumps messages, we might re-enter ProcessFilter on the same stack, we
@@ -3233,7 +3233,7 @@ namespace System.Windows.Forms {
                 if (ProcessFilters(ref msg, out modified)) {
                     return true;
                 }
-                
+
                 if (msg.message >= Interop.WindowMessages.WM_KEYFIRST
                         && msg.message <= Interop.WindowMessages.WM_KEYLAST) {
                     if (msg.message == Interop.WindowMessages.WM_CHAR) {
@@ -3260,7 +3260,7 @@ namespace System.Windows.Forms {
                             //
                             if (Control.PreProcessControlMessageInternal(target, ref m) == PreProcessControlState.MessageProcessed) {
                                 retValue = true;
-                            }                            
+                            }
                         }
                         else {
                             try
@@ -3270,7 +3270,7 @@ namespace System.Windows.Forms {
                                 }
                             }
                             catch (Exception e) {
-                                OnThreadException(e);                            
+                                OnThreadException(e);
                             }
                         }
                     }
@@ -3657,7 +3657,7 @@ namespace System.Windows.Forms {
 
             // WHIDBEY CHANGES
             //   in whidbey we now aggressively tear down the parking window
-            //   when the last control has been removed off of it.  
+            //   when the last control has been removed off of it.
 
             private const int WM_CHECKDESTROY = Interop.WindowMessages.WM_USER + 0x01;
 
@@ -3725,7 +3725,7 @@ namespace System.Windows.Forms {
                     }
                 }
             }
-            
+
             private void CheckDestroy() {
                 if (childCount == 0) {
                     IntPtr hwndChild = UnsafeNativeMethods.GetWindow(new HandleRef(this, Handle), NativeMethods.GW_CHILD);
@@ -3888,15 +3888,15 @@ namespace System.Windows.Forms {
             private ThreadContext parentWindowContext;
 
             private delegate void ThreadWindowCallback(ThreadContext context, bool onlyWinForms);
-            
+
             public ModalApplicationContext(Form modalForm) : base(modalForm) {
                 }
 
             public void DisableThreadWindows(bool disable, bool onlyWinForms) {
 
                 Control parentControl = null;
-                
-                // Get ahold of the parent HWND -- if it's a different thread we need to do 
+
+                // Get ahold of the parent HWND -- if it's a different thread we need to do
                 // do the disable over there too.  Note we only do this if we're parented by a Windows Forms
                 // parent.
                 //
@@ -3909,7 +3909,7 @@ namespace System.Windows.Forms {
                     parentControl = Control.FromHandle(parentHandle);
 
                     if (parentControl != null && parentControl.InvokeRequired) {
-                        parentWindowContext = GetContextForHandle(new HandleRef(this, parentHandle));                            
+                        parentWindowContext = GetContextForHandle(new HandleRef(this, parentHandle));
                     }
                     else {
                         parentWindowContext = null;
@@ -3926,22 +3926,22 @@ namespace System.Windows.Forms {
 
                         parentControl = parentWindowContext.ApplicationContext.MainForm;
                     }
-                    
+
                     if (disable) {
                         parentControl.Invoke(new ThreadWindowCallback(DisableThreadWindowsCallback), new object[]{parentWindowContext, onlyWinForms});
                     }
                     else {
                         parentControl.Invoke(new ThreadWindowCallback(EnableThreadWindowsCallback), new object[]{parentWindowContext, onlyWinForms});
-                    }                    
+                    }
                 }
             }
 
             private void DisableThreadWindowsCallback(ThreadContext context, bool onlyWinForms) {
-                context.DisableWindowsForModalLoop(onlyWinForms, this);                
+                context.DisableWindowsForModalLoop(onlyWinForms, this);
             }
 
             private void EnableThreadWindowsCallback(ThreadContext context, bool onlyWinForms) {
-                context.EnableWindowsForModalLoop(onlyWinForms, this);                
+                context.EnableWindowsForModalLoop(onlyWinForms, this);
             }
 
             protected override void ExitThreadCore() {

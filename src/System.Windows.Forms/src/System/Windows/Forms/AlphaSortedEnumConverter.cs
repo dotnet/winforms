@@ -6,7 +6,7 @@ namespace System.Windows.Forms {
     using System;
     using System.ComponentModel;
     using System.Collections;
-    
+
     internal class AlphaSortedEnumConverter : EnumConverter {
         public AlphaSortedEnumConverter(Type type) : base(type) {
         }

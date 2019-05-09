@@ -20,7 +20,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
     /// <devdoc>
-    ///    <para> Displays an image that can be a graphic from a bitmap, 
+    ///    <para> Displays an image that can be a graphic from a bitmap,
     ///       icon, or metafile, as well as from
     ///       an enhanced metafile, JPEG, or GIF files.</para>
     /// </devdoc>
@@ -62,7 +62,7 @@ namespace System.Windows.Forms {
         private int                contentLength;
         private int                totalBytesRead;
         private MemoryStream       tempDownloadStream;
-        private const int          readBlockSize = 4096;    
+        private const int          readBlockSize = 4096;
         private byte[]             readBuffer = null;
         private ImageInstallationType imageInstallationType;
         private SendOrPostCallback loadCompletedDelegate = null;
@@ -76,7 +76,7 @@ namespace System.Windows.Forms {
 
         [ ThreadStatic ]
         private static Image       defaultInitialImageForThread = null;
-        
+
         [ ThreadStatic ]
         private static Image       defaultErrorImageForThread = null;
 
@@ -85,7 +85,7 @@ namespace System.Windows.Forms {
         private static readonly object defaultErrorImageKey = new object();
         private static readonly object loadCompletedKey = new object();
         private static readonly object loadProgressChangedKey = new object();
-        
+
 
         private const int   PICTUREBOXSTATE_asyncOperationInProgress    = 0x00000001;
         private const int   PICTUREBOXSTATE_cancellationPending         = 0x00000002;
@@ -99,19 +99,19 @@ namespace System.Windows.Forms {
         private System.Collections.Specialized.BitVector32      pictureBoxState; // see PICTUREBOXSTATE_ consts above
 
         // http://msdn.microsoft.com/en-us/library/93z9ee4x(v=VS.100).aspx
-        // if we load an image from a stream, 
+        // if we load an image from a stream,
         // we must keep the stream open for the lifetime of the Image
         StreamReader localImageStreamReader = null;
         Stream uriImageStream = null;
- 
+
         /// <devdoc>
-        ///    <para>Creates a new picture with all default properties and no 
+        ///    <para>Creates a new picture with all default properties and no
         ///       Image. The default PictureBox.SizeMode will be PictureBoxSizeMode.NORMAL.
         ///    </para>
         /// </devdoc>
         public PictureBox() {
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
-            SetState2(STATE2_USEPREFERREDSIZECACHE, true);  
+            SetState2(STATE2_USEPREFERREDSIZECACHE, true);
 
             pictureBoxState = new System.Collections.Specialized.BitVector32(PICTUREBOXSTATE_useDefaultErrorImage |
                                                                              PICTUREBOXSTATE_useDefaultInitialImage);
@@ -123,7 +123,7 @@ namespace System.Windows.Forms {
             TabStop = false;
             savedSize = Size;
         }
-        
+
         /// <hideinheritance/>
         /// <devdoc>
         /// </devdoc>
@@ -178,7 +178,7 @@ namespace System.Windows.Forms {
             }
             catch (UriFormatException)
             {
-                // It's a relative pathname, get its full path as a file. 
+                // It's a relative pathname, get its full path as a file.
                 path = Path.GetFullPath(path);
                 uri = new Uri(path);
             }
@@ -204,7 +204,7 @@ namespace System.Windows.Forms {
                 base.CausesValidation = value;
             }
         }
-        
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler CausesValidationChanged {
             add => base.CausesValidationChanged += value;
@@ -233,7 +233,7 @@ namespace System.Windows.Forms {
                 return cp;
             }
         }
-        
+
         protected override ImeMode DefaultImeMode {
             get {
                 return ImeMode.Disable;
@@ -257,8 +257,8 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PictureBoxErrorImageDescr))
         ]
         public Image ErrorImage {
-            
-            
+
+
             get {
                 // Strange pictureBoxState[PICTUREBOXSTATE_useDefaultErrorImage] approach used
                 // here to avoid statically loading the default bitmaps from resources at
@@ -337,7 +337,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PictureBoxImageDescr))
         ]
         public Image Image {
-            
+
             get {
                 return image;
             }
@@ -354,21 +354,21 @@ namespace System.Windows.Forms {
          RefreshProperties(RefreshProperties.All),
          SRDescription(nameof(SR.PictureBoxImageLocationDescr))
         ]
-        public string ImageLocation 
+        public string ImageLocation
         {
-            get 
+            get
             {
                 return imageLocation;
             }
-            set 
+            set
             {
                 // Reload even if value hasn't changed, since Image itself may
                 // have changed.
                 imageLocation = value;
 
                 pictureBoxState[PICTUREBOXSTATE_needToLoadImageLocation] = !string.IsNullOrEmpty(imageLocation);
-                
-                // Reset main image if it hasn't been directly specified. 
+
+                // Reset main image if it hasn't been directly specified.
                 if (string.IsNullOrEmpty(imageLocation) &&
                     imageInstallationType != ImageInstallationType.DirectlySpecified)
                 {
@@ -380,7 +380,7 @@ namespace System.Windows.Forms {
                     // Load immediately, so any error will occur synchronously
                     Load();
                 }
-                
+
                 Invalidate();
             }
         }
@@ -390,7 +390,7 @@ namespace System.Windows.Forms {
                 return ImageRectangleFromSizeMode(sizeMode);
             }
         }
-        
+
         private Rectangle ImageRectangleFromSizeMode(PictureBoxSizeMode mode)
         {
             Rectangle result = LayoutUtils.DeflateRect(ClientRectangle, Padding);
@@ -413,7 +413,7 @@ namespace System.Windows.Forms {
                       result.Y += (result.Height - image.Height) / 2;
                       result.Size = image.Size;
                       break;
-                  
+
                   case PictureBoxSizeMode.Zoom:
                     Size imageSize = image.Size;
                     float ratio = Math.Min((float)ClientRectangle.Width / (float)imageSize.Width, (float)ClientRectangle.Height / (float)imageSize.Height);
@@ -431,7 +431,7 @@ namespace System.Windows.Forms {
 
             return result;
         }
-        
+
         [
         SRCategory(nameof(SR.CatAsynchronous)),
         Localizable(true),
@@ -439,13 +439,13 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PictureBoxInitialImageDescr))
         ]
         public Image InitialImage {
-            
-            
+
+
             get {
                 // Strange pictureBoxState[PICTUREBOXSTATE_useDefaultInitialImage] approach
                 // used here to avoid statically loading the default bitmaps from resources at
                 // runtime when they're never used.
-                
+
                 if (initialImage == null && pictureBoxState[PICTUREBOXSTATE_useDefaultInitialImage])
                 {
                     if (defaultInitialImage == null)
@@ -469,22 +469,22 @@ namespace System.Windows.Forms {
                 initialImage = value;
             }
         }
-        
+
         private void InstallNewImage(Image value,
                                      ImageInstallationType installationType)
         {
             StopAnimate();
             this.image = value;
-            
-            LayoutTransaction.DoLayoutIf(AutoSize, this, this, PropertyNames.Image); 
-            
+
+            LayoutTransaction.DoLayoutIf(AutoSize, this, this, PropertyNames.Image);
+
             Animate();
             if (installationType != ImageInstallationType.ErrorOrInitial)
             {
                 AdjustSize();
             }
             this.imageInstallationType = installationType;
-            
+
             Invalidate();
             CommonProperties.xClearPreferredSizeCache(this);
         }
@@ -590,7 +590,7 @@ namespace System.Windows.Forms {
             }
 
             pictureBoxState[PICTUREBOXSTATE_asyncOperationInProgress] = true;
-            
+
             if ((Image == null ||
                  (imageInstallationType == ImageInstallationType.ErrorOrInitial))
                 && InitialImage != null)
@@ -599,24 +599,24 @@ namespace System.Windows.Forms {
             }
 
             currentAsyncLoadOperation = AsyncOperationManager.CreateOperation(null);
-            
+
             if (loadCompletedDelegate == null)
             {
                 loadCompletedDelegate = new SendOrPostCallback(LoadCompletedDelegate);
                 loadProgressDelegate = new SendOrPostCallback(LoadProgressDelegate);
                 readBuffer = new byte[readBlockSize];
             }
-            
+
             pictureBoxState[PICTUREBOXSTATE_needToLoadImageLocation] = false;
             pictureBoxState[PICTUREBOXSTATE_cancellationPending] = false;
             contentLength = -1;
             tempDownloadStream = new MemoryStream();
-                        
+
             WebRequest req = WebRequest.Create(CalculateUri(imageLocation));
 
             // Invoke BeginGetResponse on a threadpool thread, as it has
             // unpredictable latency, since, on first call, it may load in the
-            // configuration system (this is NCL 
+            // configuration system (this is NCL
             (new WaitCallback(BeginGetResponseDelegate)).BeginInvoke(req, null, null);
         }
 
@@ -639,7 +639,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        private void LoadCompletedDelegate(object arg) 
+        private void LoadCompletedDelegate(object arg)
         {
             AsyncCompletedEventArgs e = (AsyncCompletedEventArgs)arg;
 
@@ -665,7 +665,7 @@ namespace System.Windows.Forms {
             {
                 InstallNewImage(img, installType);
             }
-            
+
             tempDownloadStream = null;
             pictureBoxState[PICTUREBOXSTATE_cancellationPending] = false;
             pictureBoxState[PICTUREBOXSTATE_asyncOperationInProgress] = false;
@@ -676,8 +676,8 @@ namespace System.Windows.Forms {
         {
             OnLoadProgressChanged((ProgressChangedEventArgs)arg);
         }
-        
-        private void GetResponseCallback(IAsyncResult result) 
+
+        private void GetResponseCallback(IAsyncResult result)
         {
             if (pictureBoxState[PICTUREBOXSTATE_cancellationPending])
             {
@@ -713,7 +713,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        private void ReadCallBack(IAsyncResult result) 
+        private void ReadCallBack(IAsyncResult result)
         {
             if (pictureBoxState[PICTUREBOXSTATE_cancellationPending])
             {
@@ -779,8 +779,8 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
-        
+
+
         [
         SRCategory(nameof(SR.CatAsynchronous)),
         SRDescription(nameof(SR.PictureBoxLoadAsync1Descr)),
@@ -811,19 +811,19 @@ namespace System.Windows.Forms {
             add => this.Events.AddHandler(loadProgressChangedKey, value);
             remove => this.Events.RemoveHandler(loadProgressChangedKey, value);
         }
-        
+
         private void ResetInitialImage()
         {
             pictureBoxState[PICTUREBOXSTATE_useDefaultInitialImage] = true;
             initialImage = defaultInitialImage;
         }
-        
+
         private void ResetErrorImage()
         {
             pictureBoxState[PICTUREBOXSTATE_useDefaultErrorImage] = true;
             errorImage = defaultErrorImage;
         }
-        
+
         private void ResetImage()
         {
             InstallNewImage(null, ImageInstallationType.DirectlySpecified);
@@ -848,13 +848,13 @@ namespace System.Windows.Forms {
             remove => base.RightToLeftChanged -= value;
         }
 
-        // Be sure not to re-serialized initial image if it's the default. 
+        // Be sure not to re-serialized initial image if it's the default.
         private bool ShouldSerializeInitialImage()
         {
             return !pictureBoxState[PICTUREBOXSTATE_useDefaultInitialImage];
         }
-        
-        // Be sure not to re-serialized error image if it's the default. 
+
+        // Be sure not to re-serialized error image if it's the default.
         private bool ShouldSerializeErrorImage()
         {
             return !pictureBoxState[PICTUREBOXSTATE_useDefaultErrorImage];
@@ -868,7 +868,7 @@ namespace System.Windows.Forms {
             return (imageInstallationType == ImageInstallationType.DirectlySpecified)
                 && (Image != null);
         }
-        
+
         /// <devdoc>
         ///    <para>Indicates how the image is displayed.</para>
         /// </devdoc>
@@ -877,7 +877,7 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
         SRDescription(nameof(SR.PictureBoxSizeModeDescr)),
-        RefreshProperties(RefreshProperties.Repaint)        
+        RefreshProperties(RefreshProperties.Repaint)
         ]
         public PictureBoxSizeMode SizeMode {
             get {
@@ -906,7 +906,7 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
+
         private static readonly object EVENT_SIZEMODECHANGED = new object();
 
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PictureBoxOnSizeModeChangedDescr))]
@@ -946,7 +946,7 @@ namespace System.Windows.Forms {
             set {
                 base.TabIndex = value;
             }
-        }     
+        }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabIndexChanged {
@@ -954,10 +954,10 @@ namespace System.Windows.Forms {
             remove => base.TabIndexChanged -= value;
         }
 
-        /// <hideinheritance/>        
+        /// <hideinheritance/>
         /// <devdoc>
         /// </devdoc>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]        
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
         public override string Text {
             get {
                 return base.Text;
@@ -966,13 +966,13 @@ namespace System.Windows.Forms {
                 base.Text = value;
             }
         }
-        
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
         }
-        
+
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Enter {
@@ -1012,7 +1012,7 @@ namespace System.Windows.Forms {
         private void AdjustSize() {
             if (sizeMode == PictureBoxSizeMode.AutoSize) {
                 Size = PreferredSize;
-            } 
+            }
             else {
                 Size = savedSize;
             }
@@ -1077,12 +1077,12 @@ namespace System.Windows.Forms {
                 return image.Size + bordersAndPadding;
             }
         }
-        
+
         protected override void OnEnabledChanged(EventArgs e) {
             base.OnEnabledChanged(e);
             Animate();
         }
-        
+
         private void OnFrameChanged(object o, EventArgs e) {
             if (Disposing || IsDisposed) {
                 return;
@@ -1096,8 +1096,8 @@ namespace System.Windows.Forms {
                     return;
                 }
             }
-            
-            Invalidate();  
+
+            Invalidate();
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -1162,19 +1162,19 @@ namespace System.Windows.Forms {
                     image = ErrorImage;
                 }
             }
-            
+
             if (image != null) {
                 Animate();
                 ImageAnimator.UpdateFrames(this.Image);
-                
+
                 // Error and initial image are drawn centered, non-stretched.
                 Rectangle drawingRect =
                     (imageInstallationType == ImageInstallationType.ErrorOrInitial)
                     ? ImageRectangleFromSizeMode(PictureBoxSizeMode.CenterImage)
                     : ImageRectangle;
-                
+
                 pe.Graphics.DrawImage(image, drawingRect);
-                
+
             }
 
             // Windows draws the border for us (see CreateParams)
@@ -1257,7 +1257,7 @@ namespace System.Windows.Forms {
                 // Load when initialization completes, so any error will occur synchronously
                 Load();
             }
-            
+
             pictureBoxState[PICTUREBOXSTATE_inInitialization] = false;
         }
     }

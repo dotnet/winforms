@@ -9,22 +9,22 @@ namespace System.Windows.Forms.Tests
 {
     public class CommonUnsafeNativeMethodsTests
     {
-        
+
 
         /*/// <summary>
         /// Data for the TryFindDpiAwarenessContextsEqual test
         /// </summary>
         public static TheoryData TryFindDpiAwarenessContextsEqualData =>
             CommonTestHelper.GetEnumTheoryData<DpiAwarenessContext>();
-        
+
 
         Theory]
         [MemberData(nameof(TryFindDpiAwarenessContextsEqualData))]
         internal void CommonUnsafeNativeMathods_TryFindDpiAwarenessContextsEqual(DpiAwarenessContext item)
-        { 
+        {
             Assert.True(CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(item, item));
         }
-    
+
 
         [Fact]
         public void CommonUnsafeNativeMethods_AreDpiAwarenessContextsEqualNotForUnspecified()

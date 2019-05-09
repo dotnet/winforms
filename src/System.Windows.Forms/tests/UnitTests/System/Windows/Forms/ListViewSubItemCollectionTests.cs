@@ -165,7 +165,7 @@ namespace System.Windows.Forms.Tests
             subItem2.Name = "text";
             collection.Add(subItem1);
             collection.Add(subItem2);
-            
+
             Assert.Equal(expectedIndex != -1 ? collection[expectedIndex] : null, collection[key]);
         }
 
@@ -439,7 +439,7 @@ namespace System.Windows.Forms.Tests
             var collection = new ListViewItem.ListViewSubItemCollection(item);
             var subItem = new ListViewItem.ListViewSubItem();
             collection.Add(subItem);
-            
+
             Assert.True(collection.Contains(subItem));
             Assert.False(collection.Contains(new ListViewItem.ListViewSubItem()));
             Assert.False(collection.Contains(null));
@@ -450,7 +450,7 @@ namespace System.Windows.Forms.Tests
         {
             var item = new ListViewItem();
             var collection = new ListViewItem.ListViewSubItemCollection(item);
-            
+
             Assert.False(collection.Contains(new ListViewItem.ListViewSubItem()));
             Assert.False(collection.Contains(null));
         }
@@ -472,7 +472,7 @@ namespace System.Windows.Forms.Tests
             subItem2.Name = "text";
             collection.Add(subItem1);
             collection.Add(subItem2);
-            
+
             Assert.Equal(expected, collection.ContainsKey(key));
         }
 
@@ -481,7 +481,7 @@ namespace System.Windows.Forms.Tests
         {
             var item = new ListViewItem();
             var collection = new ListViewItem.ListViewSubItemCollection(item);
-            
+
             Assert.False(collection.ContainsKey("text"));
             Assert.False(collection.ContainsKey(null));
         }
@@ -493,7 +493,7 @@ namespace System.Windows.Forms.Tests
             IList collection = new ListViewItem.ListViewSubItemCollection(item);
             var subItem = new ListViewItem.ListViewSubItem();
             collection.Add(subItem);
-            
+
             Assert.True(collection.Contains(subItem));
             Assert.False(collection.Contains(new ListViewItem.ListViewSubItem()));
             Assert.False(collection.Contains(new object()));
@@ -505,7 +505,7 @@ namespace System.Windows.Forms.Tests
         {
             var item = new ListViewItem();
             IList collection = new ListViewItem.ListViewSubItemCollection(item);
-            
+
             Assert.False(collection.Contains(new ListViewItem.ListViewSubItem()));
             Assert.False(collection.Contains(new object()));
             Assert.False(collection.Contains(null));
@@ -518,7 +518,7 @@ namespace System.Windows.Forms.Tests
             var collection = new ListViewItem.ListViewSubItemCollection(item);
             var subItem = new ListViewItem.ListViewSubItem();
             collection.Add(subItem);
-            
+
             Assert.Equal(0, collection.IndexOf(subItem));
             Assert.Equal(-1, collection.IndexOf(new ListViewItem.ListViewSubItem()));
             Assert.Equal(-1, collection.IndexOf(null));
@@ -529,7 +529,7 @@ namespace System.Windows.Forms.Tests
         {
             var item = new ListViewItem();
             var collection = new ListViewItem.ListViewSubItemCollection(item);
-            
+
             Assert.Equal(-1, collection.IndexOf(new ListViewItem.ListViewSubItem()));
             Assert.Equal(-1, collection.IndexOf(null));
         }
@@ -551,7 +551,7 @@ namespace System.Windows.Forms.Tests
             subItem2.Name = "text";
             collection.Add(subItem1);
             collection.Add(subItem2);
-            
+
             Assert.Equal(expected, collection.IndexOfKey(key));
 
             // Call again to validate caching behaviour.
@@ -564,7 +564,7 @@ namespace System.Windows.Forms.Tests
         {
             var item = new ListViewItem();
             var collection = new ListViewItem.ListViewSubItemCollection(item);
-            
+
             Assert.Equal(-1, collection.IndexOfKey("text"));
             Assert.Equal(-1, collection.IndexOf(null));
         }
@@ -576,7 +576,7 @@ namespace System.Windows.Forms.Tests
             IList collection = new ListViewItem.ListViewSubItemCollection(item);
             var subItem = new ListViewItem.ListViewSubItem();
             collection.Add(subItem);
-            
+
             Assert.Equal(0, collection.IndexOf(subItem));
             Assert.Equal(-1, collection.IndexOf(new ListViewItem.ListViewSubItem()));
             Assert.Equal(-1, collection.IndexOf(new object()));
@@ -588,7 +588,7 @@ namespace System.Windows.Forms.Tests
         {
             var item = new ListViewItem();
             IList collection = new ListViewItem.ListViewSubItemCollection(item);
-            
+
             Assert.Equal(-1, collection.IndexOf(new ListViewItem.ListViewSubItem()));
             Assert.Equal(-1, collection.IndexOf(new object()));
             Assert.Equal(-1, collection.IndexOf(null));

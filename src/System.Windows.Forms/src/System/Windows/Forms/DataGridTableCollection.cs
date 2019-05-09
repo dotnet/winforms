@@ -11,9 +11,9 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;
     using System.ComponentModel;
     using System.Globalization;
-    
+
     /// <devdoc>
-    /// <para>Represents a collection of <see cref='System.Windows.Forms.DataGridTableStyle'/> objects in the <see cref='System.Windows.Forms.DataGrid'/> 
+    /// <para>Represents a collection of <see cref='System.Windows.Forms.DataGridTableStyle'/> objects in the <see cref='System.Windows.Forms.DataGrid'/>
     /// control.</para>
     /// </devdoc>
     [ListBindable(false)]
@@ -23,7 +23,7 @@ namespace System.Windows.Forms {
         DataGrid         owner  = null;
 
         int IList.Add(object value) {
-            return this.Add((DataGridTableStyle) value);            
+            return this.Add((DataGridTableStyle) value);
         }
 
         void IList.Clear() {
@@ -92,7 +92,7 @@ namespace System.Windows.Forms {
                 return items;
             }
         }
-        
+
         /* implemented in BaseCollection
         /// <summary>
         ///      Retrieves the number of GridTables in the collection.
@@ -158,14 +158,14 @@ namespace System.Windows.Forms {
             table.MappingNameChanged += new EventHandler(TableStyleMappingNameChanged);
             int index = items.Add(table);
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, table));
-            
+
             return index;
         }
-        
+
         private void TableStyleMappingNameChanged(object sender, EventArgs pcea) {
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));
         }
-        
+
         public virtual void AddRange(DataGridTableStyle[] tables) {
             if (tables == null) {
                 throw new ArgumentNullException(nameof(tables));
@@ -182,7 +182,7 @@ namespace System.Windows.Forms {
             add => onCollectionChanged += value;
             remove => onCollectionChanged -= value;
         }
-        
+
         public void Clear() {
             for (int i = 0; i < items.Count; i++) {
                 DataGridTableStyle element = (DataGridTableStyle)items[i];

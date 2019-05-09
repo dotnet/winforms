@@ -1348,7 +1348,7 @@ namespace System.Windows.Forms.Tests
                 Font = value
             };
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
-            
+
             // Set same.
             control.Font = value;
             Assert.Equal(value ?? Control.DefaultFont, control.Font);

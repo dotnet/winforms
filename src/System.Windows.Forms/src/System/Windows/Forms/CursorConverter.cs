@@ -20,7 +20,7 @@ namespace System.Windows.Forms {
     ///      class through the TypeDescriptor.
     /// </devdoc>
     public class CursorConverter : TypeConverter {
-    
+
         private StandardValuesCollection values;
 
         /// <devdoc>
@@ -45,15 +45,15 @@ namespace System.Windows.Forms {
 
             return base.CanConvertTo(context, destinationType);
         }
-        
+
         /// <devdoc>
         ///      Converts the given object to the converter's native type.
         /// </devdoc>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
-        
+
             if (value is string) {
                 string text = ((string)value).Trim();
-                
+
                 PropertyInfo[] props = GetProperties();
                 for (int i = 0; i < props.Length; i++) {
                     PropertyInfo prop = props[i];
@@ -63,7 +63,7 @@ namespace System.Windows.Forms {
                     }
                 }
             }
-            
+
             if (value is byte[]) {
                 MemoryStream ms = new MemoryStream((byte[])value);
                 return new Cursor(ms);
@@ -105,7 +105,7 @@ namespace System.Windows.Forms {
                 if (bestMatch != -1) {
                     return props[bestMatch].Name;
                 }
-                
+
                 // We throw here because we cannot meaningfully convert a custom
                 // cursor into a string. In fact, the ResXResourceWriter will use
                 // this exception to indicate to itself that this object should
@@ -122,7 +122,7 @@ namespace System.Windows.Forms {
                     }
                 }
             }
-            
+
             if (destinationType == typeof(byte[])) {
                 if (value != null) {
                     MemoryStream ms = new MemoryStream();
@@ -131,13 +131,13 @@ namespace System.Windows.Forms {
                     ms.Close();
                     return ms.ToArray();
                 }
-                else 
+                else
                     return new byte[0];
             }
 
             return base.ConvertTo(context, culture, value, destinationType);
         }
-        
+
         /// <devdoc>
         ///      Retrieves the properties for the available cursors.
         /// </devdoc>
@@ -161,10 +161,10 @@ namespace System.Windows.Forms {
                     Debug.Assert(prop.GetValue(null, tempIndex) != null, "Property " + prop.Name + " returned NULL");
                     list.Add(prop.GetValue(null, tempIndex));
                 }
-                
+
                 values = new StandardValuesCollection(list.ToArray());
             }
-            
+
             return values;
         }
 

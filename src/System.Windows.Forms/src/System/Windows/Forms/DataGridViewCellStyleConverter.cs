@@ -15,10 +15,10 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Reflection;
 
-    /// <devdoc>    
+    /// <devdoc>
     /// </devdoc>
     public class DataGridViewCellStyleConverter : TypeConverter {
-    
+
         /// <devdoc>
         ///    <para>Gets a value indicating whether this converter can
         ///       convert an object to the given destination type using the context.</para>
@@ -29,7 +29,7 @@ namespace System.Windows.Forms {
             }
             return base.CanConvertTo(context, destinationType);
         }
-        
+
         /// <devdoc>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call
@@ -46,7 +46,7 @@ namespace System.Windows.Forms {
                 ConstructorInfo ctor = value.GetType().GetConstructor(new Type[0]);
                 return new InstanceDescriptor(ctor, new object[0], false);
             }
-            
+
             return base.ConvertTo(context, culture, value, destinationType);
         }
     }

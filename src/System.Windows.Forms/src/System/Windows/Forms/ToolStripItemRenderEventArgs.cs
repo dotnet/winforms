@@ -26,7 +26,7 @@ namespace System.Windows.Forms
         /// The item to draw
         /// </devdoc>
         public ToolStripItem Item { get; }
-        
+
 	    /// <devdoc>
 	    /// The toolstrip the item is currently parented to
 	    /// </devdoc>

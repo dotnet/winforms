@@ -83,7 +83,7 @@ namespace System.Windows.Forms
         [
             Browsable(true),
             DefaultValue(""),
-            SRCategory(nameof(SR.CatAppearance)), 
+            SRCategory(nameof(SR.CatAppearance)),
             SRDescription(nameof(SR.DataGridViewImageColumn_DescriptionDescr))
         ]
         public string Description
@@ -247,15 +247,15 @@ namespace System.Windows.Forms
                         }
                         this.DataGridView.OnColumnCommonChange(this.Index);
                     }
-                    
-                    if (value && 
-                        this.DefaultCellStyle.NullValue is Bitmap && 
+
+                    if (value &&
+                        this.DefaultCellStyle.NullValue is Bitmap &&
                         (Bitmap) this.DefaultCellStyle.NullValue == DataGridViewImageCell.ErrorBitmap)
                     {
                         this.DefaultCellStyle.NullValue = DataGridViewImageCell.ErrorIcon;
                     }
-                    else if (!value && 
-                             this.DefaultCellStyle.NullValue is Icon && 
+                    else if (!value &&
+                             this.DefaultCellStyle.NullValue is Icon &&
                              (Icon) this.DefaultCellStyle.NullValue == DataGridViewImageCell.ErrorIcon)
                     {
                         this.DefaultCellStyle.NullValue = DataGridViewImageCell.ErrorBitmap;
@@ -275,7 +275,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                // 
+                //
 
                 dataGridViewColumn = (DataGridViewImageColumn)System.Activator.CreateInstance(thisType);
             }

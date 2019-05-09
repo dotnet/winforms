@@ -8,19 +8,19 @@ namespace System.ComponentModel {
 
     // Shared between dlls
     [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-    internal static class CoreSwitches {   
-    
-        private static BooleanSwitch perfTrack;                        
-        
-        public static BooleanSwitch PerfTrack {            
+    internal static class CoreSwitches {
+
+        private static BooleanSwitch perfTrack;
+
+        public static BooleanSwitch PerfTrack {
             [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             get {
                 if (perfTrack == null) {
-                    perfTrack  = new BooleanSwitch("PERFTRACK", "Debug performance critical sections.");       
+                    perfTrack  = new BooleanSwitch("PERFTRACK", "Debug performance critical sections.");
                 }
                 return perfTrack;
             }
         }
     }
-}    
+}
 

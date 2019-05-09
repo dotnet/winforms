@@ -191,8 +191,8 @@ namespace System.Windows.Forms
             get
             {
                 // We can't have SmallChange > LargeChange, but we shouldn't manipulate
-                // the set values for these properties, so we just return the smaller 
-                // value here. 
+                // the set values for these properties, so we just return the smaller
+                // value here.
                 return Math.Min(_smallChange, LargeChange);
             }
             set

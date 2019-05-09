@@ -29,7 +29,7 @@ namespace System.Windows.Forms {
 
         public TreeViewCancelEventArgs(TreeNode node, bool cancel, TreeViewAction action)
         : base(cancel) {
-            this.node = node;                                           
+            this.node = node;
             this.action = action;
         }
 
@@ -38,7 +38,7 @@ namespace System.Windows.Forms {
                 return node;
             }
         }
-        
+
         public TreeViewAction Action {
             get {
                 return action;

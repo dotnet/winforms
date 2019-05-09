@@ -8,7 +8,7 @@ namespace System.ComponentModel {
     using System.Collections;
 
     /// <devdoc>
-    ///     This is a hashtable that stores object keys as weak references.  
+    ///     This is a hashtable that stores object keys as weak references.
     ///     It monitors memory usage and will periodically scavenge the
     ///     hash table to clean out dead references.
     /// </devdoc>
@@ -115,7 +115,7 @@ namespace System.ComponentModel {
                     }
                 }
             }
-        
+
             _lastGlobalMem = globalMem;
             _lastHashCount = hashCount;
         }

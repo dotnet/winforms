@@ -68,7 +68,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     label = new LinkLabel();
                     label.Dock = DockStyle.Fill;
                     label.LinkBehavior = LinkBehavior.AlwaysUnderline;
-                    
+
                     // use default LinkLabel colors for regular, active, and visited
                     label.DisabledLinkColor = SystemColors.ControlDark;
                     label.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkClicked);
@@ -126,11 +126,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
         private void OnCommandChanged(object sender, EventArgs e) {
             SetupLabel();
         }
-        
+
         protected override void OnGotFocus(EventArgs e) {
             Label.Focus();
             Label.Invalidate();
-        } 
+        }
 
         protected override void OnFontChanged(EventArgs e) {
             base.OnFontChanged(e);

@@ -20,17 +20,17 @@ namespace System.Windows.Forms {
     public class ImageIndexConverter : Int32Converter {
 
         private string parentImageListProperty  = "Parent";
-        
+
         protected virtual bool IncludeNoneAsStandardValue {
             get {
                 return true;
             }
-        }                                
+        }
 
-        /// <devdoc> 
+        /// <devdoc>
         /// this is the property to look at when there is no ImageList property
-        /// on the current object.  For example, in ToolBarButton - the ImageList is 
-        /// on the ToolBarButton.Parent property.  In ToolStripItem, the ImageList is on 
+        /// on the current object.  For example, in ToolBarButton - the ImageList is
+        /// on the ToolBarButton.Parent property.  In ToolStripItem, the ImageList is on
         /// the ToolStripItem.Owner property.
         /// </devdoc>
         internal string ParentImageListProperty {
@@ -41,7 +41,7 @@ namespace System.Windows.Forms {
                 parentImageListProperty = value;
             }
         }
-        
+
         /// <devdoc>
         ///    <para>
         ///       Converts the given value object to a 32-bit signed integer object.
@@ -85,7 +85,7 @@ namespace System.Windows.Forms {
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context) {
             if (context != null && context.Instance != null) {
                 object instance = context.Instance;
-                
+
                 PropertyDescriptor imageListProp = ImageListUtils.GetImageListProperty(context.PropertyDescriptor, ref instance);
 
                 while (instance != null && imageListProp == null) {
@@ -100,7 +100,7 @@ namespace System.Windows.Forms {
 
                     if (imageListProp == null) {
 
-                        // We didn't find the image list in this component.  See if the 
+                        // We didn't find the image list in this component.  See if the
                         // component has a "parent" property.  If so, walk the tree...
                         //
                         PropertyDescriptor parentProp = props[ParentImageListProperty];
@@ -119,7 +119,7 @@ namespace System.Windows.Forms {
                     ImageList imageList = (ImageList)imageListProp.GetValue(instance);
 
                     if (imageList != null) {
-                        
+
                         // Create array to contain standard values
                         //
                         object[] values;
@@ -131,14 +131,14 @@ namespace System.Windows.Forms {
                         else {
                             values = new object[nImages];
                         }
-                        
-                        
+
+
                         // Fill in the array
                         //
                         for (int i = 0; i < nImages; i++) {
                             values[i] = i;
                         }
-                        
+
                         return new StandardValuesCollection(values);
                     }
                 }

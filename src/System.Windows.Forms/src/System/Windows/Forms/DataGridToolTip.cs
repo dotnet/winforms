@@ -5,7 +5,7 @@
 namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Drawing;
-    
+
     using System.Windows.Forms;
     using Microsoft.Win32;
     using System.Diagnostics;

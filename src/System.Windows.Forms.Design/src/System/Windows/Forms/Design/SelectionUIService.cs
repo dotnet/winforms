@@ -50,7 +50,7 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         /// Creates a new selection manager object.  The selection manager manages all selection of all designers under the current form file.
-        /// </summary>        
+        /// </summary>
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
         public SelectionUIService(IDesignerHost host) : base()
         {
@@ -1388,7 +1388,7 @@ namespace System.Windows.Forms.Design
             private SelectionRules _selectionRules;
             private readonly ISelectionUIHandler _handler; // the components selection UI handler (can be null)
 
-            /// Its ok to call virtual method as this is a private class.            
+            /// Its ok to call virtual method as this is a private class.
             [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
             public SelectionUIItem(SelectionUIService selUIsvc, object component)
             {

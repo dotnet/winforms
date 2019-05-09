@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 namespace System.Windows.Forms {
-    
+
     using System.Threading;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -117,7 +117,7 @@ namespace System.Windows.Forms {
             else
                 return array.Length;
         }
-        
+
         /// <devdoc>
         ///     Compares two strings using the default locale and no additional string
         ///     comparison flags.

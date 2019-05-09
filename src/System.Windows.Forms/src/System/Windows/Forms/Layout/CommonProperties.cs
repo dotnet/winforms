@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Layout {
     using System.Drawing;
     using System.Windows.Forms;
     using System.ComponentModel;
-    
+
 
     // Some LayoutEngines extend the same properties to their children.  We want
     // these extended properties to retain their value when moved from one container
@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Layout {
     // accessors for such properties.
     internal class CommonProperties {
 
-       
+
         private static readonly int _layoutStateProperty = PropertyStore.CreateKey();
         private static readonly int _specifiedBoundsProperty = PropertyStore.CreateKey();
         private static readonly int _preferredSizeCacheProperty = PropertyStore.CreateKey();
@@ -28,18 +28,18 @@ namespace System.Windows.Forms.Layout {
 
         private static readonly int _marginProperty = PropertyStore.CreateKey();
         private static readonly int _minimumSizeProperty = PropertyStore.CreateKey();
-        private static readonly int _maximumSizeProperty = PropertyStore.CreateKey();             
+        private static readonly int _maximumSizeProperty = PropertyStore.CreateKey();
         private static readonly int _layoutBoundsProperty = PropertyStore.CreateKey();
-        
+
 #if DEBUG
         private static readonly int _lastKnownStateProperty = PropertyStore.CreateKey();
 
 #endif
-        
+
         internal const ContentAlignment DefaultAlignment = ContentAlignment.TopLeft;
         internal const AnchorStyles DefaultAnchor = AnchorStyles.Top | AnchorStyles.Left;
         internal const bool DefaultAutoSize = false;
-        
+
         internal const DockStyle DefaultDock = DockStyle.None;
         internal static readonly Padding DefaultMargin = new Padding(3);
         internal static readonly Size DefaultMinimumSize = new Size(0, 0);
@@ -62,7 +62,7 @@ namespace System.Windows.Forms.Layout {
         private static readonly BitVector32.Section _autoSizeModeSection   = BitVector32.CreateSection(0x01, _selfAutoSizingSection);
 
 
-                    
+
         private enum DockAnchorMode{
             Anchor = 0,
             Dock = 1
@@ -81,12 +81,12 @@ namespace System.Windows.Forms.Layout {
 
         /// GetAutoSize
         ///     Determines whether or not the System.Windows.Forms.Layout LayoutEngines
-        ///     think the element is AutoSized.  
+        ///     think the element is AutoSized.
         ///
         ///     A control can thwart the layout engine by overriding its virtual AutoSize
         ///     property and not calling base.  If CommonProperties.GetAutoSize(element) is false,
         ///     a layout engine will treat it as AutoSize = false and not size the element to its
-        ///     preferred size.        
+        ///     preferred size.
         internal static bool GetAutoSize(IArrangedElement element) {
             BitVector32 state = GetLayoutState(element);
             int value = state[_autoSizeSection];
@@ -119,10 +119,10 @@ namespace System.Windows.Forms.Layout {
            return defaultMaximumSize;
         }
 
-        
+
         /// GetMinimumSize
         ///     Returns the minimum size for an element
-        internal static Size GetMinimumSize(IArrangedElement element, Size defaultMinimumSize) {            
+        internal static Size GetMinimumSize(IArrangedElement element, Size defaultMinimumSize) {
             bool found;
             Size size = element.Properties.GetSize(_minimumSizeProperty, out found);
             if (found) {
@@ -158,7 +158,7 @@ namespace System.Windows.Forms.Layout {
             return element.Bounds;
         }
 
-        /// ResetPadding	
+        /// ResetPadding
         ///    clears out the padding from the property store
         internal static void ResetPadding(IArrangedElement element) {
             object value = element.Properties.GetObject(_paddingProperty);
@@ -167,7 +167,7 @@ namespace System.Windows.Forms.Layout {
             }
         }
 
- 
+
         /// SetAutoSize
         ///     Sets whether or not the layout engines should treat this control as auto sized.
         internal static void SetAutoSize(IArrangedElement element, bool value) {
@@ -182,22 +182,22 @@ namespace System.Windows.Forms.Layout {
             }
 
             Debug.Assert(GetAutoSize(element) == value, "Error detected setting AutoSize.");
-        }      
-               
+        }
+
         /// SetMargin
         ///     Sets the margin (exterior space) for an element.
         internal static void SetMargin(IArrangedElement element, Padding value) {
             Debug.Assert(value != GetMargin(element), "PERF: Caller should guard against setting Margin to original value.");
 
             element.Properties.SetPadding(_marginProperty, value);
-         
+
             Debug.Assert(GetMargin(element) == value, "Error detected setting Margin.");
 
             LayoutTransaction.DoLayout(element.Container, element, PropertyNames.Margin);
 
         }
-          
-        
+
+
         /// SetMaximumSize
         ///     Sets the maximum size for an element.
         internal static void SetMaximumSize(IArrangedElement element, Size value) {
@@ -205,9 +205,9 @@ namespace System.Windows.Forms.Layout {
                 "PERF: Caller should guard against setting MaximumSize to original value.");
 
             element.Properties.SetSize(_maximumSizeProperty, value);
-        
+
             // Element bounds may need to truncated to new maximum
-            // 
+            //
             Rectangle bounds = element.Bounds;
             bounds.Width = Math.Min(bounds.Width, value.Width);
             bounds.Height = Math.Min(bounds.Height, value.Height);
@@ -220,28 +220,28 @@ namespace System.Windows.Forms.Layout {
         }
 
         /// SetMinimumSize
-        ///     Sets the minimum size for an element.        
+        ///     Sets the minimum size for an element.
         internal static void SetMinimumSize(IArrangedElement element, Size value) {
             Debug.Assert(value != GetMinimumSize(element, new Size(-7109, -7107)),
                 "PERF: Caller should guard against setting MinimumSize to original value.");
-    
+
             element.Properties.SetSize(_minimumSizeProperty, value);
 
             using (new LayoutTransaction(element.Container as Control, element, PropertyNames.MinimumSize)) {
                 // Element bounds may need to inflated to new minimum
-                // 
+                //
                 Rectangle bounds = element.Bounds;
                 bounds.Width = Math.Max(bounds.Width, value.Width);
                 bounds.Height = Math.Max(bounds.Height, value.Height);
                 element.SetBounds(bounds, BoundsSpecified.Size);
             }
-           
+
             Debug.Assert(GetMinimumSize(element, new Size(-7109, -7107)) == value, "Error detected setting MinimumSize.");
         }
 
 
         /// SetPadding
-        ///     Sets the padding (interior space) for an element. See GetPadding for more detiails.        
+        ///     Sets the padding (interior space) for an element. See GetPadding for more detiails.
         ///     NOTE: It is the callers responsibility to do layout.  See Control.Padding for details.
         internal static void SetPadding(IArrangedElement element, Padding value) {
             Debug.Assert(value != GetPadding(element, new Padding(-7105)),
@@ -249,7 +249,7 @@ namespace System.Windows.Forms.Layout {
 
             value = LayoutUtils.ClampNegativePaddingToZero(value);
             element.Properties.SetPadding(_paddingProperty, value);
-            
+
 
             Debug.Assert(GetPadding(element, new Padding(-7105)) == value, "Error detected setting Padding.");
         }
@@ -262,33 +262,33 @@ namespace System.Windows.Forms.Layout {
         ///     set it back to DockStyle.None, the size switches back to 100,23.  How does this happen?
         ///
         ///     Setting the control to Dock.Fill (via DefaultLayout engine)
-        ///         element.SetBounds(newElementBounds, BoundsSpecified.None);  
-        ///     
+        ///         element.SetBounds(newElementBounds, BoundsSpecified.None);
+        ///
         ///     (If someone happens to set the Size property here the specified bounds gets updated via Control.Size)
         ///          SetBounds(x, y, value.Width, value.Height, BoundsSpecified.Size);
         ///
         ///     Setting the control to Dock.None (via DefaultLayout.SetDock)
-        ///         element.SetBounds(CommonProperties.GetSpecifiedBounds(element), BoundsSpecified.None);                                    
+        ///         element.SetBounds(CommonProperties.GetSpecifiedBounds(element), BoundsSpecified.None);
         internal static void UpdateSpecifiedBounds(IArrangedElement element, int x, int y, int width, int height, BoundsSpecified specified) {
             Rectangle originalBounds = CommonProperties.GetSpecifiedBounds(element);
- 
+
             // PERF note: Bitwise operator usage intentional to optimize out branching.
-            
+
             bool xChangedButNotSpecified = ((specified & BoundsSpecified.X) == BoundsSpecified.None) & x != originalBounds.X;
             bool yChangedButNotSpecified = ((specified & BoundsSpecified.Y) == BoundsSpecified.None) & y != originalBounds.Y;
             bool wChangedButNotSpecified = ((specified & BoundsSpecified.Width) == BoundsSpecified.None) & width != originalBounds.Width;
             bool hChangedButNotSpecified = ((specified & BoundsSpecified.Height) == BoundsSpecified.None) & height != originalBounds.Height;
- 
+
             if(xChangedButNotSpecified | yChangedButNotSpecified | wChangedButNotSpecified | hChangedButNotSpecified) {
                 // if any of them are changed and specified cache the new value.
-                
+
                 if (!xChangedButNotSpecified) originalBounds.X = x;
                 if (!yChangedButNotSpecified) originalBounds.Y = y;
                 if (!wChangedButNotSpecified) originalBounds.Width = width;
                 if (!hChangedButNotSpecified) originalBounds.Height = height;
 
                 element.Properties.SetRectangle(_specifiedBoundsProperty, originalBounds);
-          
+
             } else {
                 // SetBoundsCore is going to call this a lot with the same bounds.  Avoid the set object
                 // (which indirectly may causes an allocation) if we can.
@@ -306,12 +306,12 @@ namespace System.Windows.Forms.Layout {
         }
 
 
-        
+
         /// xClearPreferredSizeCache
         ///     clears the preferred size cached for any control that overrides
         ///     the internal GetPreferredSizeCore method.  DO NOT CALL DIRECTLY
         ///     unless it is understood how the size of the control is going to be updated.
-        ///     
+        ///
 
 
         internal static void xClearPreferredSizeCache(IArrangedElement element) {
@@ -319,7 +319,7 @@ namespace System.Windows.Forms.Layout {
 #if DEBUG
             Debug_ClearProperties(element);
 #endif
-            
+
             Debug.Assert(xGetPreferredSizeCache(element) == Size.Empty, "Error detected in xClearPreferredSizeCache.");
         }
 
@@ -340,7 +340,7 @@ namespace System.Windows.Forms.Layout {
         }
 
         /// xGetPreferredSizeCache
-        ///     This value is the cached result of the return value from 
+        ///     This value is the cached result of the return value from
         ///     a control's GetPreferredSizeCore implementation when asked
         ///     for a constraining value of LayoutUtils.MaxValue (or Size.Empty too).
         internal static Size xGetPreferredSizeCache(IArrangedElement element) {
@@ -350,7 +350,7 @@ namespace System.Windows.Forms.Layout {
                return size;
             }
             return Size.Empty;
-        }    
+        }
 
         /// xSetPreferredSizeCache
         ///     Sets a control's preferred size.  See xGetPreferredSizeCache.
@@ -363,10 +363,10 @@ namespace System.Windows.Forms.Layout {
             Debug.Assert(xGetPreferredSizeCache(element) == value, "Error detected in xGetPreferredSizeCache.");
         }
 
-#endregion     
+#endregion
 
-#region DockAndAnchorLayoutSpecific    
-     
+#region DockAndAnchorLayoutSpecific
+
         /// GetAutoSizeMode
         ///     Returns whether or not a control should snap to its smallest size
         ///     or retain its original size and only grow if the preferred size is larger.
@@ -390,7 +390,7 @@ namespace System.Windows.Forms.Layout {
                 && xGetDock(element) == DefaultDock
                 && GetAutoSize(element) == DefaultAutoSize) != result,
                 "Individual values of Anchor/Dock/AutoRelocate/Autosize contradict GetNeedsDockAndAnchorLayout().");
-            
+
             return result;
         }
 
@@ -408,7 +408,7 @@ namespace System.Windows.Forms.Layout {
 
             return result;
         }
-        
+
         /// GetNeedsDockLayout
         ///     Do not use.  Internal property for DockAndAnchor layout.
         ///     Returns true if DefaultLayout needs to do docking for this element.
@@ -428,7 +428,7 @@ namespace System.Windows.Forms.Layout {
         ///     In V2, the LayoutEngine is the one responsible for sizing the child items when
         ///     they're AutoSized.  For new layout engines, the controls will let the layout engine
         ///     size them, but for DefaultLayout, they're left to size themselves.
-        internal static bool GetSelfAutoSizeInDefaultLayout(IArrangedElement element) {         
+        internal static bool GetSelfAutoSizeInDefaultLayout(IArrangedElement element) {
             BitVector32 state = GetLayoutState(element);
             int value = state[_selfAutoSizingSection];
             return (value == 1);
@@ -479,11 +479,11 @@ namespace System.Windows.Forms.Layout {
             Debug.Assert(GetSelfAutoSizeInDefaultLayout(element) == value, "Error detected setting AutoSize.");
         }
 
-   
-        /// xGetAnchor - 
+
+        /// xGetAnchor -
         ///     Do not use this.  Use DefaultLayout.GetAnchor.
         ///     NOTE that Dock and Anchor are exclusive, so we store their enums in the same section.
-        internal static AnchorStyles xGetAnchor(IArrangedElement element) {            
+        internal static AnchorStyles xGetAnchor(IArrangedElement element) {
             BitVector32 state = GetLayoutState(element);
             AnchorStyles value = (AnchorStyles) state[_dockAndAnchorSection];
             DockAnchorMode mode = (DockAnchorMode) state[_dockModeSection];
@@ -500,7 +500,7 @@ namespace System.Windows.Forms.Layout {
         ///     Returns true if the element is both AutoSized and Anchored.
         internal static bool xGetAutoSizedAndAnchored(IArrangedElement element) {
             BitVector32 state = GetLayoutState(element);
-            
+
             if (state[_selfAutoSizingSection] != 0) {
                 return false;
             }
@@ -514,7 +514,7 @@ namespace System.Windows.Forms.Layout {
         /// xGetDock
         ///     Do not use this.  Use DefaultLayout.GetDock.
         ///     Note that Dock and Anchor are exclusive, so we store their enums in the same section.
-        internal static DockStyle xGetDock(IArrangedElement element) {            
+        internal static DockStyle xGetDock(IArrangedElement element) {
             BitVector32 state = GetLayoutState(element);
             DockStyle value = (DockStyle) state[_dockAndAnchorSection];
             DockAnchorMode mode = (DockAnchorMode) state[_dockModeSection];
@@ -529,14 +529,14 @@ namespace System.Windows.Forms.Layout {
             return value;
         }
 
-     
 
-        /// xSetAnchor - 
+
+        /// xSetAnchor -
         ///     Do not use this.  Use DefaultLayout.SetAnchor.
         ///     Note that Dock and Anchor are exclusive, so we store their enums in the same section.
         internal static void xSetAnchor(IArrangedElement element, AnchorStyles value) {
             Debug.Assert(value != xGetAnchor(element), "PERF: Caller should guard against setting Anchor to original value.");
-            
+
             BitVector32 state = GetLayoutState(element);
 
             // We translate DefaultAnchor to zero - see the _dockAndAnchorNeedsLayoutSection section above.
@@ -547,7 +547,7 @@ namespace System.Windows.Forms.Layout {
 
             Debug.Assert(GetLayoutState(element)[_dockModeSection] == (int) DockAnchorMode.Anchor,
                 "xSetAnchor did not set mode to Anchor.");
-        }   
+        }
 
         /// xSetDock
         ///     Do not use this.  Use DefaultLayout.SetDock.
@@ -568,8 +568,8 @@ namespace System.Windows.Forms.Layout {
                 == (value != DockStyle.None), "xSetDock set DockMode incorrectly.");
         }
 
-        /// xTranslateAnchorValue - 
-        ///     Helper method for xGetAnchor / xSetAnchor. 
+        /// xTranslateAnchorValue -
+        ///     Helper method for xGetAnchor / xSetAnchor.
         ///     We store anchor DefualtAnchor as None and vice versa.
         ///     We either had to do this or map Dock.None to DefaultAnchor (Dock & Anchor share the same section
         ///     in LayoutState.) Mapping DefaultAnchor to 0 is nicer because we do not need to allocate anything in
@@ -584,10 +584,10 @@ namespace System.Windows.Forms.Layout {
             return anchor;
         }
 
-#endregion     
+#endregion
 
-#region FlowLayoutSpecific       
-        // 
+#region FlowLayoutSpecific
+        //
 
 
 
@@ -597,23 +597,23 @@ namespace System.Windows.Forms.Layout {
             int value = state[_flowBreakSection];
             return value == 1;
         }
-        
-        
+
+
         /// SetFlowBreak
         ///     Use FlowLayoutSettings.SetFlowBreak instead.
         ///     See GetFlowBreak.
         internal static void SetFlowBreak(IArrangedElement element, bool value) {
             Debug.Assert(value != GetFlowBreak(element), "PERF: Caller should guard against setting FlowBreak to original value.");
-    
+
             BitVector32 state = GetLayoutState(element);
             state[_flowBreakSection] = value ? 1 : 0;
             SetLayoutState(element, state);
-            
+
             LayoutTransaction.DoLayout(element.Container, element, PropertyNames.FlowBreak);
-    
+
             Debug.Assert(GetFlowBreak(element) == value, "Error detected setitng SetFlowBreak.");
         }
-#endregion        
+#endregion
 #region AutoScrollSpecific
 
         /// GetLayoutBounds -
@@ -634,13 +634,13 @@ namespace System.Windows.Forms.Layout {
         /// SetLayoutBounds -
         ///     This is the size used to determine whether or not we need scrollbars.
         ///
-        ///     The TableLayout engine now calls CommonProperties.SetLayoutBounds when 
-        ///     it is done with its layout. The layoutbounds are the total column width 
-        ///     and the total row height. ScrollableControl checks if the LayoutBounds 
-        ///     has been set in the CommonProperties when it tries to figure out if it 
-        ///     should add scrollbars - but only if the layout engine is not the default 
-        ///     layout engine. If the bounds has been set, ScrollableControl will use 
-        ///     those bounds to check if scrollbars should be added, rather than doing 
+        ///     The TableLayout engine now calls CommonProperties.SetLayoutBounds when
+        ///     it is done with its layout. The layoutbounds are the total column width
+        ///     and the total row height. ScrollableControl checks if the LayoutBounds
+        ///     has been set in the CommonProperties when it tries to figure out if it
+        ///     should add scrollbars - but only if the layout engine is not the default
+        ///     layout engine. If the bounds has been set, ScrollableControl will use
+        ///     those bounds to check if scrollbars should be added, rather than doing
         ///     its own magic to figure it out.
         internal static void SetLayoutBounds(IArrangedElement element, Size value) {
             element.Properties.SetSize(_layoutBoundsProperty, value);
@@ -650,7 +650,7 @@ namespace System.Windows.Forms.Layout {
         /// HasLayoutBounds -
         ///     Returns whether we have layout bounds stored for this element.
         internal static bool HasLayoutBounds(IArrangedElement element) {
-            bool found; 
+            bool found;
             element.Properties.GetSize(_layoutBoundsProperty, out found);
             return found;
         }
@@ -672,8 +672,8 @@ namespace System.Windows.Forms.Layout {
 
 #region DebugHelpers
 #if DEBUG
-        
-                
+
+
         internal static readonly TraceSwitch PreferredSize = new TraceSwitch("PreferredSize", "Debug preferred size assertion");
 
         internal static string Debug_GetChangedProperties(IArrangedElement element) {
@@ -709,7 +709,7 @@ namespace System.Windows.Forms.Layout {
 
             Hashtable propertyHash = new Hashtable();
             if (PreferredSize.TraceVerbose) {
-         
+
                 foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(obj)) {
                     if (pd.Name == "PreferredSize") {
                         continue;  // avoid accidentally forcing a call to GetPreferredSize
@@ -724,11 +724,11 @@ namespace System.Windows.Forms.Layout {
                 }
             }
             return propertyHash;
-        
+
         }
 
-               
-#endif 
+
+#endif
 #endregion
     }
 }

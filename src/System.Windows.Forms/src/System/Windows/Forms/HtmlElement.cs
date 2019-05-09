@@ -128,7 +128,7 @@ namespace System.Windows.Forms
 
                 if( iHtmlDomNode != null )
                 {
-                    iHtmlElement = iHtmlDomNode.FirstChild() as UnsafeNativeMethods.IHTMLElement;               
+                    iHtmlElement = iHtmlDomNode.FirstChild() as UnsafeNativeMethods.IHTMLElement;
                 }
                 return iHtmlElement != null ? new HtmlElement(shimManager, iHtmlElement) : null;
             }
@@ -846,9 +846,9 @@ namespace System.Windows.Forms
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public void onmouseout(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public bool onselectstart(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
@@ -856,7 +856,7 @@ namespace System.Windows.Forms
             }
 
             public void onfilterchange(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public bool ondragstart(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
@@ -868,129 +868,129 @@ namespace System.Windows.Forms
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public void onafterupdate(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public bool onrowexit(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public void onrowenter(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void ondatasetchanged(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void ondataavailable(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void ondatasetcomplete(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void onlosecapture(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void onpropertychange(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void onscroll(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void onresize(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public bool ondragenter(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public bool ondrop(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public bool onbeforecut(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public bool oncut(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public bool onbeforecopy(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public bool oncopy(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public bool onbeforepaste(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public bool onpaste(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public bool oncontextmenu(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public void onrowsdelete(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void onrowsinserted(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void oncellchange(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void onreadystatechange(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void onlayoutcomplete(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void onpage(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void onactivate(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void ondeactivate(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public bool onbeforedeactivate(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public bool onbeforeactivate(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public void onmove(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public bool oncontrolselect(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public bool onmovestart(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public void onmoveend(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public bool onmousewheel(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
@@ -1002,45 +1002,45 @@ namespace System.Windows.Forms
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public void onselect(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void onload(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void onerror(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void onabort(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public bool onsubmit(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public bool onreset(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public void onchange_void(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void onbounce(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void onfinish(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void onstart(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
         }
 
 
         ///<devdoc>
         /// HtmlElementShim - this is the glue between the DOM eventing mechanisms
-        ///                    and our CLR callbacks.  
-        ///             
+        ///                    and our CLR callbacks.
+        ///
         ///     HTMLElementEvents2: we create an IConnectionPoint (via ConnectionPointCookie) between us and MSHTML and it calls back
         ///                        on our an instance of HTMLElementEvents2.  The HTMLElementEvents2 class then fires the event.
         ///
-        ///</devdoc>  
+        ///</devdoc>
         internal class HtmlElementShim : HtmlShim
         {
 
@@ -1108,8 +1108,8 @@ namespace System.Windows.Forms
             public override void AttachEventHandler(string eventName, System.EventHandler eventHandler)
             {
 
-                // IE likes to call back on an IDispatch of DISPID=0 when it has an event, 
-                // the HtmlToClrEventProxy helps us fake out the CLR so that we can call back on 
+                // IE likes to call back on an IDispatch of DISPID=0 when it has an event,
+                // the HtmlToClrEventProxy helps us fake out the CLR so that we can call back on
                 // our EventHandler properly.
 
                 HtmlToClrEventProxy proxy = AddEventProxy(eventName, eventHandler);
@@ -1127,7 +1127,7 @@ namespace System.Windows.Forms
                                                                                   new HTMLElementEvents2(htmlElement),
                                                                                   dispInterfaceTypes[i],
                                                                                   /*throwException*/ false);
-                        if (!cookie.Connected) 
+                        if (!cookie.Connected)
                         {
                             cookie = null;
                         }

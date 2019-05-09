@@ -27,7 +27,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Immediate parent - can be ToolStrip if the Item is on the toplevel 
+        /// Immediate parent - can be ToolStrip if the Item is on the toplevel
         /// </summary>
         private ToolStrip ParentTool
         {

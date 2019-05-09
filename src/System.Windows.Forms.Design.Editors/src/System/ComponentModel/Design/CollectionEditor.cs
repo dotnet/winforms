@@ -20,7 +20,7 @@ namespace System.ComponentModel.Design
     /// Provides a generic editor for most any collection.
     /// </summary>
     public class CollectionEditor : UITypeEditor
-    { 
+    {
         private Type _collectionItemType;
         private Type[] _newItemTypes;
         private ITypeDescriptorContext _currentContext;
@@ -226,7 +226,7 @@ namespace System.ComponentModel.Design
             {
                 _currentContext = context;
 
-                // child modal dialog -launching in System Aware mode 
+                // child modal dialog -launching in System Aware mode
                 CollectionForm localCollectionForm = DpiHelper.CreateInstanceInSystemAwareContext(() => CreateCollectionForm());
                 ITypeDescriptorContext lastContext = _currentContext;
                 localCollectionForm.EditValue = value;
@@ -306,7 +306,7 @@ namespace System.ComponentModel.Design
         private bool IsAnyObjectInheritedReadOnly(object[] items)
         {
             // If the object implements IComponent, and is not sited, check with the inheritance service (if it exists) to see if this is a component
-            // that is being inherited from another class. 
+            // that is being inherited from another class.
             // If it is, then we do not want to place it in the collection editor. If the inheritance service
             // chose not to site the component, that indicates it should be hidden from  the user.
             IInheritanceService inheritanceService = null;
@@ -493,7 +493,7 @@ namespace System.ComponentModel.Design
                 {
                     return true;
                 }
-                
+
                 return base.IsInputKey(keyData);
             }
 
@@ -825,7 +825,7 @@ namespace System.ComponentModel.Design
                     CreateAndAddInstance(typeMenuItem.ItemType);
                 }
             }
-            
+
             /// <summary>
             /// This Function adds the individual objects to the ListBox.
             /// </summary>
@@ -857,7 +857,7 @@ namespace System.ComponentModel.Design
 
                 if (instances.Count == 1)
                 {
-                    // optimize for the case where we just added one thing... 
+                    // optimize for the case where we just added one thing...
                     UpdateItemWidths(_listbox.Items[_listbox.Items.Count - 1] as ListItem);
                 }
                 else
@@ -909,7 +909,7 @@ namespace System.ComponentModel.Design
                 {
                     return true;
                 }
-                
+
                 return CanRemoveInstance(value);
             }
 
@@ -1000,7 +1000,7 @@ namespace System.ComponentModel.Design
                     DisplayError(ex);
                 }
             }
-            
+
             /// <summary>
             /// Performs a create instance and then adds the instance to the list box.
             /// </summary>
@@ -1629,7 +1629,7 @@ namespace System.ComponentModel.Design
                     UpdateItemWidths(null);
                 }
             }
-            
+
             /// <summary>
             /// Removes the selected item.
             /// </summary>
@@ -1669,9 +1669,9 @@ namespace System.ComponentModel.Design
             /// Calls to UpdateEnabled will return silently until Resume is called
             /// </summary>
             private void SuspendEnabledUpdates() => _suspendEnabledCount++;
-            
+
             /// <summary>
-            /// Called to show the dialog via the IWindowsFormsEditorService 
+            /// Called to show the dialog via the IWindowsFormsEditorService
             /// </summary>
             protected internal override DialogResult ShowEditorDialog(IWindowsFormsEditorService edSvc)
             {
@@ -2017,7 +2017,7 @@ namespace System.ComponentModel.Design
                 /// <summary>
                 /// Retrieves the object that directly depends on this value being edited.
                 /// This is generally the object that is required for the PropertyDescriptor's GetValue and SetValue  methods.
-                /// If 'null' is passed for the PropertyDescriptor, the ICustomComponent descripotor implemementation should return the default object, 
+                /// If 'null' is passed for the PropertyDescriptor, the ICustomComponent descripotor implemementation should return the default object,
                 /// that is the main object that exposes the properties and attributes
                 /// </summary>
                 object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor pd)
@@ -2094,7 +2094,7 @@ namespace System.ComponentModel.Design
                 public Type ItemType { get; }
             }
         }
-        
+
         /// <summary>
         /// List box filled with ListItem objects representing the collection.
         /// </summary>
@@ -2205,7 +2205,7 @@ namespace System.ComponentModel.Design
             private const short EditableDynamic = 0;
             private const short EditableYes = 1;
             private const short EditableNo = 2;
-            
+
             /// <summary>
             /// Initializes a new instance of the <see cref='System.ComponentModel.Design.CollectionEditor.CollectionForm'/> class.
             /// </summary>
@@ -2213,17 +2213,17 @@ namespace System.ComponentModel.Design
             {
                 _editor = editor ?? throw new ArgumentNullException(nameof(editor));
             }
-            
+
             /// <summary>
             /// Gets or sets the data type of each item in the collection.
             /// </summary>
             protected Type CollectionItemType => _editor.CollectionItemType;
-            
+
             /// <summary>
             /// Gets or sets the type of the collection.
             /// </summary>
             protected Type CollectionType => _editor.CollectionType;
-            
+
             internal virtual bool CollectionEditable
             {
                 get
@@ -2247,12 +2247,12 @@ namespace System.ComponentModel.Design
                 }
                 set => _editableState = value ? EditableYes : EditableNo;
             }
-            
+
             /// <summary>
             /// Gets or sets a type descriptor that indicates the current context.
             /// </summary>
             protected ITypeDescriptorContext Context => _editor.Context;
-            
+
             /// <summary>
             /// Gets or sets the value of the item being edited.
             /// </summary>
@@ -2265,7 +2265,7 @@ namespace System.ComponentModel.Design
                     OnEditValueChanged();
                 }
             }
-            
+
             /// <summary>
             /// Gets or sets the array of items this form is to display.
             /// </summary>
@@ -2301,32 +2301,32 @@ namespace System.ComponentModel.Design
                     }
                 }
             }
-            
+
             /// <summary>
             /// Gets or sets the available item types that can be created for this collection.
             /// </summary>
             protected Type[] NewItemTypes => _editor.NewItemTypes;
-            
+
             /// <summary>
             /// Gets or sets a value indicating whether original members of the collection can be removed.
             /// </summary>
             protected bool CanRemoveInstance(object value) => _editor.CanRemoveInstance(value);
-            
+
             /// <summary>
             /// Gets or sets a value indicating whether multiple collection members can be selected.
             /// </summary>
             protected virtual bool CanSelectMultipleInstances() => _editor.CanSelectMultipleInstances();
-            
+
             /// <summary>
             /// Creates a new instance of the specified collection item type.
             /// </summary>
             protected object CreateInstance(Type itemType) => _editor.CreateInstance(itemType);
-            
+
             /// <summary>
             /// Destroys the specified instance of the object.
             /// </summary>
             protected void DestroyInstance(object instance) =>  _editor.DestroyInstance(instance);
-            
+
             /// <summary>
             /// Displays the given exception to the user.
             /// </summary>
@@ -2347,12 +2347,12 @@ namespace System.ComponentModel.Design
                     RTLAwareMessageBox.Show(null, message, null, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1, 0);
                 }
             }
-            
+
             /// <summary>
             /// Gets the requested service, if it is available.
             /// </summary>
             protected override object GetService(Type serviceType) => _editor.GetService(serviceType);
-            
+
             /// <summary>
             /// Called to show the dialog via the IWindowsFormsEditorService
             /// </summary>
@@ -2365,7 +2365,7 @@ namespace System.ComponentModel.Design
 
                 return edSvc.ShowDialog(this);
             }
-            
+
             /// <summary>
             /// This is called when the value property in the <see cref='System.ComponentModel.Design.CollectionEditor.CollectionForm'/> has changed.
             /// </summary>
@@ -2409,7 +2409,7 @@ namespace System.ComponentModel.Design
                         _inGetService = false;
                     }
                 }
-    
+
                 return null;
             }
         }

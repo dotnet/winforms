@@ -22,9 +22,9 @@ namespace System.Windows.Forms {
     using System.Runtime.Versioning;
 
     using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
-    using Util = NativeMethods.Util;    
+    using Util = NativeMethods.Util;
 
-    //     
+    //
 
 
 
@@ -316,14 +316,14 @@ namespace System.Windows.Forms {
 
                     int lastWin32Error = Marshal.GetLastWin32Error();
 
-                    // This code has been here since the inception of the project, 
+                    // This code has been here since the inception of the project,
                     // we can't determine why we have to compare w/ 32 here.
-                    // This fails on 3-GB mode, (once the dll is loaded above 3GB memory space) (see Dev10 
+                    // This fails on 3-GB mode, (once the dll is loaded above 3GB memory space) (see Dev10
                     if ((ulong)moduleHandle < (ulong)32) {
                         throw new Win32Exception(lastWin32Error, string.Format(SR.LoadDLLError, richEditControlDllVersion));
                     }
 
-                    //Determine whether we're Rich Edit 2.0 or 3.0: see 
+                    //Determine whether we're Rich Edit 2.0 or 3.0: see
                     //http://msdn.microsoft.com/library/default.asp?url=/library/en-us/shellcc/platform/commctls/richedit/richeditcontrols/aboutricheditcontrols.asp
 
                     StringBuilder pathBuilder = UnsafeNativeMethods.GetModuleFileNameLongPath(new HandleRef(null, moduleHandle));
@@ -493,7 +493,7 @@ namespace System.Windows.Forms {
 
             // Subtract the scroll bar padding before measuring
             proposedConstraints -= scrollBarPadding;
-            
+
             Size prefSize = base.GetPreferredSizeCore(proposedConstraints);
 
             return prefSize + scrollBarPadding;
@@ -506,7 +506,7 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         ///     Sets or gets the rich text box control' language option.
-        ///     The IMF_AUTOFONT flag is set by default. 
+        ///     The IMF_AUTOFONT flag is set by default.
         ///     The IMF_AUTOKEYBOARD and IMF_IMECANCELCOMPLETE flags are cleared by default.
         /// </devdoc>
         [
@@ -599,11 +599,11 @@ namespace System.Windows.Forms {
         ]
         public bool RichTextShortcutsEnabled {
             get { return richTextBoxFlags[richTextShortcutsEnabledSection] != 0; }
-            set { 
+            set {
                 if (shortcutsToDisable == null) {
                     shortcutsToDisable = new int[] {(int)Shortcut.CtrlL, (int)Shortcut.CtrlR, (int)Shortcut.CtrlE, (int)Shortcut.CtrlJ};
                 }
-                richTextBoxFlags[richTextShortcutsEnabledSection] = value ? 1 : 0; 
+                richTextBoxFlags[richTextShortcutsEnabledSection] = value ? 1 : 0;
             }
         }
 
@@ -701,9 +701,9 @@ namespace System.Windows.Forms {
                 return (RichTextBoxScrollBars) richTextBoxFlags[scrollBarsSection];
             }
             set {
-                // we could be more clever here, but it doesnt seem like this would get set enough 
+                // we could be more clever here, but it doesnt seem like this would get set enough
                 // to warrant a clever bitmask.
-                if (!ClientUtils.IsEnumValid_NotSequential(value, 
+                if (!ClientUtils.IsEnumValid_NotSequential(value,
                     (int)value,
                     (int)RichTextBoxScrollBars.Both,
                     (int)RichTextBoxScrollBars.None,
@@ -775,7 +775,7 @@ namespace System.Windows.Forms {
                 NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT();
                 pf.dwMask = RichTextBoxConstants.PFM_ALIGNMENT;
                 switch (value) {
-                    
+
                     case HorizontalAlignment.Left:
                         pf.wAlignment = RichTextBoxConstants.PFA_LEFT;
                         break;
@@ -824,7 +824,7 @@ namespace System.Windows.Forms {
                 else {
                     // For paragraphs with mixed SelectionBullets, we just return false
                     return false;
-                }                  
+                }
 
                 return selectionBullet == RichTextBoxSelectionAttribute.All;
             }
@@ -958,7 +958,7 @@ namespace System.Windows.Forms {
             }
             set
             {
-                //Note: don't compare the value to the old value here: it's possible that 
+                //Note: don't compare the value to the old value here: it's possible that
                 //you have a different range selected.
                 selectionBackColorToSetOnHandleCreated = value;
                 if (IsHandleCreated)
@@ -1343,7 +1343,7 @@ namespace System.Windows.Forms {
                 }
                 else {
                     // if the handle is created, we are golden, however
-                    // if the handle isn't created, but textRtf was 
+                    // if the handle isn't created, but textRtf was
                     // specified, we need the RichEdit to translate
                     // for us, so we must create the handle;
                     //
@@ -1373,10 +1373,10 @@ namespace System.Windows.Forms {
 
         private bool SuppressTextChangedEvent {
             get { return richTextBoxFlags[suppressTextChangedEventSection] != 0; }
-            set { 
+            set {
                 bool oldValue = SuppressTextChangedEvent;
                 if (value != oldValue) {
-                    richTextBoxFlags[suppressTextChangedEventSection] = value ? 1 : 0; 
+                    richTextBoxFlags[suppressTextChangedEventSection] = value ? 1 : 0;
                     CommonProperties.xClearPreferredSizeCache(this);
                 }
             }
@@ -1456,7 +1456,7 @@ namespace System.Windows.Forms {
                     int denominator = 0;
                     SendMessage(Interop.EditMessages.EM_GETZOOM, ref numerator, ref denominator);
                     if ( (numerator != 0) && (denominator != 0) ) {
-                        zoomMultiplier = ((float)numerator)/((float)denominator);                        
+                        zoomMultiplier = ((float)numerator)/((float)denominator);
                     }
                     else {
                         zoomMultiplier = 1.0f;
@@ -1485,7 +1485,7 @@ namespace System.Windows.Forms {
         public event ContentsResizedEventHandler ContentsResized {
             add => Events.AddHandler(EVENT_REQUESTRESIZE, value);
             remove => Events.RemoveHandler(EVENT_REQUESTRESIZE, value);
-        }        
+        }
 
 
         /// <devdoc>
@@ -1536,34 +1536,34 @@ namespace System.Windows.Forms {
         public event EventHandler HScroll {
             add => Events.AddHandler(EVENT_HSCROLL, value);
             remove => Events.RemoveHandler(EVENT_HSCROLL, value);
-        }        
+        }
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxLinkClick))]
         public event LinkClickedEventHandler LinkClicked {
             add => Events.AddHandler(EVENT_LINKACTIVATE, value);
             remove => Events.RemoveHandler(EVENT_LINKACTIVATE, value);
-        }        
+        }
 
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxIMEChange))]
         public event EventHandler ImeChange {
             add => Events.AddHandler(EVENT_IMECHANGE, value);
             remove => Events.RemoveHandler(EVENT_IMECHANGE, value);
-        }        
+        }
 
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxProtected))]
         public event EventHandler Protected {
             add => Events.AddHandler(EVENT_PROTECTED, value);
             remove => Events.RemoveHandler(EVENT_PROTECTED, value);
-        }        
+        }
 
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxSelChange))]
         public event EventHandler SelectionChanged {
             add => Events.AddHandler(EVENT_SELCHANGE, value);
             remove => Events.RemoveHandler(EVENT_SELCHANGE, value);
-        }        
+        }
 
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxVScroll))]
@@ -1571,7 +1571,7 @@ namespace System.Windows.Forms {
             add => Events.AddHandler(EVENT_VSCROLL, value);
             remove => Events.RemoveHandler(EVENT_VSCROLL, value);
         }
-   
+
         /// <devdoc>
         ///     Returns a boolean indicating whether the RichTextBoxConstants control can paste the
         ///     given clipboard format.
@@ -1597,7 +1597,7 @@ namespace System.Windows.Forms {
             byte[] bytes = new byte[cb];
 
             int cookieVal = (int)dwCookie;
-            
+
             transferred = 0;
             try {
                 switch (cookieVal & DIRECTIONMASK) {
@@ -1681,7 +1681,7 @@ namespace System.Windows.Forms {
                         // We have to guard against this.
                         if (editStream != null) {
                             transferred = editStream.Read(bytes, 0, cb);
-                            
+
                             Marshal.Copy(bytes, 0, buf, transferred);
                             // set up number of bytes transferred
                             if (transferred < 0) transferred = 0;
@@ -1729,7 +1729,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public int Find(string str, int start, RichTextBoxFinds options) {
             return Find(str, start, -1, options);
-        }                                   
+        }
 
         /// <devdoc>
         ///     Searches the text in a RichTextBox control for a given string.
@@ -1802,7 +1802,7 @@ namespace System.Windows.Forms {
             int position;
 
             position = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_FINDTEXT, findOptions, ft);
-            
+
 
             // if we didn't find anything, or we don't have to select what was found,
             // we're done
@@ -1810,8 +1810,8 @@ namespace System.Windows.Forms {
                 // Select the string found, this is done in ubyte units
                 NativeMethods.CHARRANGE chrg = new NativeMethods.CHARRANGE();
                 chrg.cpMin = position;
-                //Look for kashidas in the string.  A kashida is an arabic visual justification character 
-                //that's not semantically meaningful.  Searching for ABC might find AB_C (where A,B, and C 
+                //Look for kashidas in the string.  A kashida is an arabic visual justification character
+                //that's not semantically meaningful.  Searching for ABC might find AB_C (where A,B, and C
                 //represent Arabic characters and _ represents a kashida).  We should highlight the text
                 //including the kashida.
                 char kashida = (char)0x640;
@@ -1905,7 +1905,7 @@ namespace System.Windows.Forms {
             txrg.chrg.cpMax = chrg.cpMax;
             UnsafeNativeMethods.CharBuffer charBuffer;
             charBuffer = UnsafeNativeMethods.CharBuffer.CreateBuffer(CHAR_BUFFER_LEN + 1);
-            
+
             txrg.lpstrText = charBuffer.AllocCoTaskMem();
             if (txrg.lpstrText == IntPtr.Zero)
                 throw new OutOfMemoryException();
@@ -1950,7 +1950,7 @@ namespace System.Windows.Forms {
                     // get the data from RichTextBoxConstants into a string for us to use.
                     charBuffer.PutCoTaskMem(txrg.lpstrText);
                     string str = charBuffer.GetString();
-                    
+
                     // Loop through our text
                     if (forward) {
                         // Start at the begining of the buffer
@@ -2003,7 +2003,7 @@ namespace System.Windows.Forms {
         // Sends set color message to HWND; doesn't call Control.SetForeColor
         private bool InternalSetForeColor(Color value) {
             NativeMethods.CHARFORMATA cf = GetCharFormat(false);
-            if ((cf.dwMask & RichTextBoxConstants.CFM_COLOR) != 0 
+            if ((cf.dwMask & RichTextBoxConstants.CFM_COLOR) != 0
                 && ColorTranslator.ToWin32(value) == cf.crTextColor) {
 
                 return true;
@@ -2160,8 +2160,8 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Loads the contents of the given RTF or text file into a RichTextBox control.
         /// </devdoc>
-        
-        
+
+
         public void LoadFile(string path) {
             LoadFile(path, RichTextBoxStreamType.RichText);
         }
@@ -2169,14 +2169,14 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Loads the contents of a RTF or text into a RichTextBox control.
         /// </devdoc>
-        
-        
+
+
         public void LoadFile(string path, RichTextBoxStreamType fileType) {
             //valid values are 0x0 to 0x4
             if (!ClientUtils.IsEnumValid(fileType, (int)fileType, (int)RichTextBoxStreamType.RichText, (int)RichTextBoxStreamType.UnicodePlainText)){
                 throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType));
             }
-        
+
             Stream file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
             try {
                 LoadFile(file, fileType);
@@ -2195,7 +2195,7 @@ namespace System.Windows.Forms {
             {
                 throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType));
             }
-        
+
             int flags;
             switch (fileType) {
                 case RichTextBoxStreamType.RichText:
@@ -2256,7 +2256,7 @@ namespace System.Windows.Forms {
 
             // So the fix is to force windowtext, whether or not that window text is equal to what's already there.
             // Note that in doing so we will lose any formatting info you might have set on the RTF. We are okay with that.
-            
+
             // We use WindowText rather than Text because this way we can avoid
             // spurious TextChanged events.
             //
@@ -2314,10 +2314,10 @@ namespace System.Windows.Forms {
             AutoWordSelection = AutoWordSelection;
             SendMessage(Interop.EditMessages.EM_SETBKGNDCOLOR, 0, ColorTranslator.ToWin32(BackColor));
             InternalSetForeColor(ForeColor);
-            
+
             // base sets the Text property.  It's important to do this *after* setting EM_AUTOUrlDETECT.
             base.OnHandleCreated(e);
-            
+
             // For some reason, we need to set the OleCallback before setting the RTF property.
             UpdateOleCallback();
 
@@ -2340,7 +2340,7 @@ namespace System.Windows.Forms {
             finally {
                 SuppressTextChangedEvent = false;
             }
-            
+
             // Since we can't send EM_SETSEL until RTF has been set,
             // we can't rely on base to do it for us.
             base.SetSelectionOnHandle();
@@ -2358,14 +2358,14 @@ namespace System.Windows.Forms {
 
             ClearUndo();
 
-            SendZoomFactor(zoomMultiplier);            
+            SendZoomFactor(zoomMultiplier);
 
             SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(UserPreferenceChangedHandler);
         }
 
         protected override void OnHandleDestroyed(EventArgs e) {
             base.OnHandleDestroyed(e);
-            
+
             if (!InConstructor) {
                 textRtf = Rtf;
                 if (textRtf.Length == 0)
@@ -2421,7 +2421,7 @@ namespace System.Windows.Forms {
             EventHandler handler = (EventHandler)Events[EVENT_SELCHANGE];
             if (handler != null) handler(this,e);
         }
-        
+
         /// <devdoc>
         ///     Fires an event when the user clicks a RichTextBox control's vertical
         ///     scroll bar.
@@ -2462,8 +2462,8 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Saves the contents of a RichTextBox control to a file.
         /// </devdoc>
-        
-        
+
+
         public void SaveFile(string path) {
             SaveFile(path, RichTextBoxStreamType.RichText);
         }
@@ -2471,15 +2471,15 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Saves the contents of a RichTextBox control to a file.
         /// </devdoc>
-        
-        
+
+
         public void SaveFile(string path, RichTextBoxStreamType fileType) {
             //valid values are 0x0 to 0x4
             if (!ClientUtils.IsEnumValid(fileType, (int)fileType, (int)RichTextBoxStreamType.RichText, (int)RichTextBoxStreamType.UnicodePlainText))
             {
                 throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType));
             }
-            
+
             Stream file = File.Create(path);
             try {
                 SaveFile(file, fileType);
@@ -2516,7 +2516,7 @@ namespace System.Windows.Forms {
 
             StreamOut(data, flags, true);
         }
-        
+
         /// <devdoc>
         ///     Core Zoom calculation and message passing (used by ZoomFactor property and CreateHandle()
         /// </devdoc>
@@ -2529,7 +2529,7 @@ namespace System.Windows.Forms {
                 numerator = 0;
             }
             else {
-                denominator = 1000; 
+                denominator = 1000;
                 float multiplier = 1000 * zoom;
                 numerator = (int)Math.Ceiling(multiplier);
                 if (numerator >= 64000) {
@@ -2547,11 +2547,11 @@ namespace System.Windows.Forms {
                 SendMessage(Interop.EditMessages.EM_GETZOOM, ref n, ref d);
                 Debug.Assert(n == numerator && d == denominator, "EM_SETZOOM failed");
                 // END DEBUG CODE
-#endif                
+#endif
             }
 
             if (numerator != 0) {
-                zoomMultiplier = ((float)numerator)/((float)denominator);                
+                zoomMultiplier = ((float)numerator)/((float)denominator);
             }
             else {
                 zoomMultiplier = 1.0f;
@@ -2699,7 +2699,7 @@ namespace System.Windows.Forms {
 
                 // If SF_RTF is requested then check for the RTF tag at the start
                 // of the file.  We don't load if the tag is not there
-                // 
+                //
                 if ((flags & RichTextBoxConstants.SF_RTF) != 0) {
                     long streamStart = editStream.Position;
                     byte[] bytes = new byte[SZ_RTF_TAG.Length];
@@ -2736,10 +2736,10 @@ namespace System.Windows.Forms {
                 SendMessage(Interop.EditMessages.EM_EXLIMITTEXT, 0, int.MaxValue);
 
 
-        
+
                 // go get the text for the control
                 // Needed for 64-bit
-                if (IntPtr.Size == 8) { 
+                if (IntPtr.Size == 8) {
                     NativeMethods.EDITSTREAM64 es64 = ConvertToEDITSTREAM64(es);
                     UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_STREAMIN, flags, es64);
 
@@ -2749,7 +2749,7 @@ namespace System.Windows.Forms {
                 else {
                     UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_STREAMIN, flags, es);
                 }
-          
+
                 UpdateMaxLength();
 
                 // If we failed to load because of protected
@@ -2766,8 +2766,8 @@ namespace System.Windows.Forms {
 
                 // EM_GETLINECOUNT will cause the RichTextBoxConstants to recalculate its line indexes
                 SendMessage(Interop.EditMessages.EM_GETLINECOUNT, 0, 0);
-                
-                
+
+
             }
             finally {
                 // release any storage space held.
@@ -2783,7 +2783,7 @@ namespace System.Windows.Forms {
             stream.Position = 0;
             int streamLength = (int)stream.Length;
             string result = string.Empty;
-            
+
             if (streamLength > 0) {
                 byte[] bytes = new byte[streamLength];
                 stream.Read(bytes, 0, streamLength);
@@ -2794,7 +2794,7 @@ namespace System.Windows.Forms {
                 else {
                     result = Encoding.Default.GetString(bytes, 0, bytes.Length);
                 }
-                // workaround ??? for 
+                // workaround ??? for
 
                 if(!string.IsNullOrEmpty(result) && (result[result.Length-1] == '\0')) {
                     result = result.Substring(0, result.Length-1);
@@ -2834,7 +2834,7 @@ namespace System.Windows.Forms {
 
                 // Get Text
                 // Needed for 64-bit
-                if (IntPtr.Size == 8) { 
+                if (IntPtr.Size == 8) {
                     NativeMethods.EDITSTREAM64 es64 = ConvertToEDITSTREAM64(es);
                     UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_STREAMOUT, flags, es64);
 
@@ -2861,7 +2861,7 @@ namespace System.Windows.Forms {
             fixed (byte* es64p =  &es64.contents[0]) {
                 byte *bp;
                 long l;
-                
+
                 /*
                 l = (long) es.dwCookie;
                 bp = (byte *) &l;
@@ -2876,7 +2876,7 @@ namespace System.Windows.Forms {
                     es64.contents[i+8] = bp[i];
                 }*/
                 *((int *)(es64p + 8)) = es.dwError;
-                
+
                 l = (long) Marshal.GetFunctionPointerForDelegate(es.pfnCallback);
                 bp = (byte *) &l;
                 for (int i=0; i < sizeof(long); i++) {
@@ -2884,7 +2884,7 @@ namespace System.Windows.Forms {
                 }
                 //*((long *)(es64p + 12)) = (long) Marshal.GetFunctionPointerForDelegate(es.pfnCallback);
             }
-        
+
             return es64;
         }
 
@@ -2955,7 +2955,7 @@ namespace System.Windows.Forms {
         }
 
         //Note: RichTextBox doesn't work like other controls as far as setting ForeColor/
-        //BackColor -- you need to send messages to update the colors 
+        //BackColor -- you need to send messages to update the colors
         private void UserPreferenceChangedHandler(object o, UserPreferenceChangedEventArgs e)
         {
             if (IsHandleCreated)
@@ -2973,7 +2973,7 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         ///   Creates the IRichEditOleCallback compatible object for handling RichEdit callbacks. For more
-        ///   information look up the MSDN info on this interface. This is designed to be a back door of 
+        ///   information look up the MSDN info on this interface. This is designed to be a back door of
         ///   sorts, which is why it is fairly obscure, and uses the RichEdit name instead of RichTextBox.
         /// </devdoc>
         protected virtual object CreateRichEditOleCallback() {
@@ -3023,7 +3023,7 @@ namespace System.Windows.Forms {
             txrg.chrg = c;
             Debug.Assert((c.cpMax-c.cpMin)>0, "CHARRANGE was null or negative - can't do it!");
 
-            //Windows 
+            //Windows
 
             if (c.cpMax > Text.Length || c.cpMax-c.cpMin <= 0) {
                 return string.Empty;
@@ -3045,7 +3045,7 @@ namespace System.Windows.Forms {
             string result = charBuffer.GetString();
             return result;
         }
-        
+
         internal override void UpdateMaxLength() {
             if (IsHandleCreated) {
                 SendMessage(Interop.EditMessages.EM_EXLIMITTEXT, 0, MaxLength);
@@ -3062,7 +3062,7 @@ namespace System.Windows.Forms {
             if (m.LParam == Handle && !GetState(STATE_CREATINGHANDLE))
             {
                 switch (Util.HIWORD(m.WParam)) {
-                    
+
                     case NativeMethods.EN_HSCROLL:
                         OnHScroll(EventArgs.Empty);
                         break;
@@ -3135,10 +3135,10 @@ namespace System.Windows.Forms {
 
                     case RichTextBoxConstants.EN_PROTECTED: {
                             NativeMethods.ENPROTECTED enprotected;
-                             
+
                             //On 64-bit, we do some custom marshalling to get this to work. The richedit control
                             //unfortunately does not respect IA64 struct alignment conventions.
-                            if (IntPtr.Size == 8) { 
+                            if (IntPtr.Size == 8) {
                                 enprotected = ConvertFromENPROTECTED64((NativeMethods.ENPROTECTED64)m.GetLParam(typeof(NativeMethods.ENPROTECTED64)));
                             }
                             else {
@@ -3217,7 +3217,7 @@ namespace System.Windows.Forms {
                 es.chrg.cpMin = Marshal.ReadInt32((IntPtr)(es64p + 44));
                 es.chrg.cpMax = Marshal.ReadInt32((IntPtr)(es64p + 48));
             }
-        
+
             return es;
         }
 
@@ -3237,7 +3237,7 @@ namespace System.Windows.Forms {
                 es.charrange.cpMin = Marshal.ReadInt32((IntPtr)(es64p + 44));
                 es.charrange.cpMax = Marshal.ReadInt32((IntPtr)(es64p + 48));
             }
-        
+
             return es;
         }
 
@@ -3306,7 +3306,7 @@ namespace System.Windows.Forms {
             InternalSetForeColor(ForeColor);
         }
 
-        // 
+        //
         // </doc>
         //
         protected override void WndProc(ref Message m) {
@@ -3343,7 +3343,7 @@ namespace System.Windows.Forms {
                 case Interop.WindowMessages.WM_SETFONT:
                     WmSetFont(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_IME_NOTIFY:
                     OnImeChange(EventArgs.Empty);
                     base.WndProc(ref m);
@@ -3469,30 +3469,30 @@ namespace System.Windows.Forms {
             public int QueryAcceptData(IComDataObject lpdataobj,
                                        /* CLIPFORMAT* */ IntPtr lpcfFormat, int reco,
                                        int fReally, IntPtr hMetaPict) {
-                                       
+
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::QueryAcceptData(reco=" + reco + ")");
 
                 if (reco == NativeMethods.RECO_DROP) {
                     if (owner.AllowDrop || owner.EnableAutoDragDrop) {
-                        
+
                         MouseButtons b = Control.MouseButtons;
                         Keys k = Control.ModifierKeys;
-                        
+
                         int keyState = 0;
 
                         // Due to the order in which we get called, we have to set up the keystate here.
                         // First GetDragDropEffect is called with grfKeyState == 0, and then
                         // QueryAcceptData is called. Since this is the time we want to fire
                         // OnDragEnter, but we have yet to get the keystate, we set it up ourselves.
-                        
+
                         if ((b & MouseButtons.Left) == MouseButtons.Left) {
                             keyState |= NativeMethods.MK_LBUTTON;
                         }
-                        
+
                         if ((b & MouseButtons.Right) == MouseButtons.Right) {
                             keyState |= NativeMethods.MK_RBUTTON;
                         }
-                        
+
                         if ((b & MouseButtons.Middle) == MouseButtons.Middle) {
                             keyState |= NativeMethods.MK_MBUTTON;
                         }
@@ -3504,18 +3504,18 @@ namespace System.Windows.Forms {
                         if ((k & Keys.Shift) == Keys.Shift) {
                             keyState |= NativeMethods.MK_SHIFT;
                         }
-                        
+
                         lastDataObject = new DataObject(lpdataobj);
-                        
+
                         if (!owner.EnableAutoDragDrop) {
                             lastEffect = DragDropEffects.None;
                         }
 
-                        DragEventArgs e = new DragEventArgs(lastDataObject, 
-                                                        keyState, 
-                                                        Control.MousePosition.X, 
-                                                        Control.MousePosition.Y, 
-                                                        DragDropEffects.All, 
+                        DragEventArgs e = new DragEventArgs(lastDataObject,
+                                                        keyState,
+                                                        Control.MousePosition.X,
+                                                        Control.MousePosition.Y,
+                                                        DragDropEffects.All,
                                                         lastEffect);
                         if (fReally == 0) {
                             // we are just querying
@@ -3525,7 +3525,7 @@ namespace System.Windows.Forms {
                             // GetDragDropEffects will first be called for rtb1, then QueryAcceptData for rtb1 just
                             // like in the local drag case. Then you drag into rtb2. rtb2 will first be called in this method,
                             // and not GetDragDropEffects. Now lastEffect is initialized to None for rtb2, so we would not allow
-                            // the drag. Thus we need to set the effect here as well. 
+                            // the drag. Thus we need to set the effect here as well.
                             e.Effect = ((keyState & NativeMethods.MK_CONTROL) == NativeMethods.MK_CONTROL) ? DragDropEffects.Copy : DragDropEffects.Move;
                             owner.OnDragEnter(e);
                         }
@@ -3533,7 +3533,7 @@ namespace System.Windows.Forms {
                             owner.OnDragDrop(e);
                             lastDataObject = null;
                         }
-                        
+
                         lastEffect = e.Effect;
                         if (e.Effect == DragDropEffects.None) {
                             Debug.WriteLineIf(RichTextDbg.TraceVerbose, "\tCancel data");
@@ -3570,29 +3570,29 @@ namespace System.Windows.Forms {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetDragDropEffect");
 
                 if (owner.AllowDrop || owner.EnableAutoDragDrop) {
-                    
+
                     if (fDrag && grfKeyState == 0) {
-                        // This is the very first call we receive in a Drag-Drop operation, 
+                        // This is the very first call we receive in a Drag-Drop operation,
                         // so we will let the control know what we support.
 
                         // Note that we haven't gotten any data yet, so we will let QueryAcceptData
                         // do the OnDragEnter. Note too, that grfKeyState does not yet reflect the
                         // current keystate
                         if (owner.EnableAutoDragDrop) {
-                            lastEffect = (DragDropEffects.All | DragDropEffects.None);                            
+                            lastEffect = (DragDropEffects.All | DragDropEffects.None);
                         }
                         else
                             lastEffect = DragDropEffects.None;
-                            
+
                     }
                     else {
                         // We are either dragging over or dropping
-                        
+
 
                         // The below is the complete reverse of what the docs on MSDN suggest,
                         // but if we follow the docs, we would be firing OnDragDrop all the
-                        // time instead of OnDragOver (see 
-                        
+                        // time instead of OnDragOver (see
+
                         // drag - fDrag = false, grfKeyState != 0
                         // drop - fDrag = false, grfKeyState = 0
                         // We only care about the drag.
@@ -3600,11 +3600,11 @@ namespace System.Windows.Forms {
                         // When we drop, lastEffect will have the right state
                         if (!fDrag && lastDataObject != null && grfKeyState != 0) {
 
-                            DragEventArgs e = new DragEventArgs(lastDataObject, 
-                                                                grfKeyState, 
-                                                                Control.MousePosition.X, 
-                                                                Control.MousePosition.Y, 
-                                                                DragDropEffects.All, 
+                            DragEventArgs e = new DragEventArgs(lastDataObject,
+                                                                grfKeyState,
+                                                                Control.MousePosition.X,
+                                                                Control.MousePosition.Y,
+                                                                DragDropEffects.All,
                                                                 lastEffect);
 
                             // Now tell which of the allowable effects we want to use, but only if we are not already none
@@ -3618,7 +3618,7 @@ namespace System.Windows.Forms {
                     }
 
                     pdwEffect = (int)lastEffect;
-                    
+
                 }
                 else {
                     pdwEffect = (int)DragDropEffects.None;

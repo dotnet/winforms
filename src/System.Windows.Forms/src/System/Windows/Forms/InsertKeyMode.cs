@@ -9,19 +9,19 @@ namespace System.Windows.Forms
     /// </summary>
     public enum InsertKeyMode
     {
-        /// <devdoc> 
-        /// Honors the Insert key mode. 
+        /// <devdoc>
+        /// Honors the Insert key mode.
         /// </devdoc>
         Default,
 
-        /// <devdoc> 
-        /// Forces insertion mode to be 'on' regardless of the Insert key mode. 
+        /// <devdoc>
+        /// Forces insertion mode to be 'on' regardless of the Insert key mode.
         /// </devdoc>
         Insert,
 
-        /// <devdoc> 
-        /// Forces insertion mode to be 'off' regardless of the Insert key mode. 
+        /// <devdoc>
+        /// Forces insertion mode to be 'off' regardless of the Insert key mode.
         /// </devdoc>
-        Overwrite        
+        Overwrite
     }
 }

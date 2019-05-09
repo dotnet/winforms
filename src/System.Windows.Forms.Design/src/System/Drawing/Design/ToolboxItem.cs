@@ -106,7 +106,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Gets or sets the bitmap that will be used on the toolbox for this item. 
+        /// Gets or sets the bitmap that will be used on the toolbox for this item.
         /// Use this property on the design surface as this bitmap is scaled according to the current the DPI setting.
         /// </summary>
         public Bitmap Bitmap
@@ -422,11 +422,11 @@ namespace System.Drawing.Design
 
         protected virtual void Deserialize(SerializationInfo info, StreamingContext context)
         {
-            // Do this in a couple of passes -- first pass, try to pull	
-            // out our dictionary of property names.  We need to do this	
-            // for backwards compatibilty because if we throw everything	
-            // into the property dictionary we'll duplicate stuff people	
-            // have serialized by hand.	
+            // Do this in a couple of passes -- first pass, try to pull
+            // out our dictionary of property names.  We need to do this
+            // for backwards compatibilty because if we throw everything
+            // into the property dictionary we'll duplicate stuff people
+            // have serialized by hand.
 
             string[] propertyNames = null;
             foreach (SerializationEntry entry in info)
@@ -440,8 +440,8 @@ namespace System.Drawing.Design
 
             if (propertyNames == null)
             {
-                // For backwards compat, here are the default property	
-                // names we use	
+                // For backwards compat, here are the default property
+                // names we use
                 propertyNames = new string[] {
                     "AssemblyName",
                     "Bitmap",
@@ -455,8 +455,8 @@ namespace System.Drawing.Design
             foreach (SerializationEntry entry in info)
             {
 
-                // Check to see if this name is in our	
-                // propertyNames array.	
+                // Check to see if this name is in our
+                // propertyNames array.
                 foreach (string validName in propertyNames)
                 {
                     if (validName.Equals(entry.Name))
@@ -467,7 +467,7 @@ namespace System.Drawing.Design
                 }
             }
 
-            // Always do "Locked" last (otherwise we can't do the others!)	
+            // Always do "Locked" last (otherwise we can't do the others!)
             bool isLocked = info.GetBoolean("Locked");
             if (isLocked)
             {
@@ -592,8 +592,8 @@ namespace System.Drawing.Design
                     }
                     else
                     {
-                        // Just try loading the type.  If we succeed, then use this as the	
-                        // reference.	
+                        // Just try loading the type.  If we succeed, then use this as the
+                        // reference.
                         type = ts.GetType(typeName);
                         if (type == null)
                         {
@@ -715,8 +715,8 @@ namespace System.Drawing.Design
                 AssemblyName = assemblyName;
                 DisplayName = type.Name;
 
-                //if the Type is a reflectonly type, these values must be set through a config object or manually	
-                //after construction.	
+                //if the Type is a reflectonly type, these values must be set through a config object or manually
+                //after construction.
                 if (!type.Assembly.ReflectionOnly)
                 {
 
@@ -729,7 +729,7 @@ namespace System.Drawing.Design
                         }
                     }
 
-                    //set the description based off the description attribute of the given type.	
+                    //set the description based off the description attribute of the given type.
                     DescriptionAttribute descattr = (DescriptionAttribute)TypeDescriptor.GetAttributes(type)[typeof(DescriptionAttribute)];
                     if (descattr != null)
                     {
@@ -742,8 +742,8 @@ namespace System.Drawing.Design
                         Bitmap itemBitmap = attr.GetImage(type, false) as Bitmap;
                         if (itemBitmap != null)
                         {
-                            // Original bitmap is used when adding the item to the Visual Studio toolbox 	
-                            // if running on a machine with HDPI scaling enabled.	
+                            // Original bitmap is used when adding the item to the Visual Studio toolbox
+                            // if running on a machine with HDPI scaling enabled.
                             OriginalBitmap = itemBitmap;
                             if ((itemBitmap.Width != s_iconWidth || itemBitmap.Height != s_iconHeight))
                             {
@@ -783,30 +783,30 @@ namespace System.Drawing.Design
             if (policiedAssemblyName == null)
                 return null;
 
-            //if looking for myself, just return it. (not a reference)	
+            //if looking for myself, just return it. (not a reference)
             if (type.Assembly.FullName == policiedAssemblyName.FullName)
             {
                 return policiedAssemblyName;
             }
 
-            //first search for an exact match -- we prefer this over a partial match.	
+            //first search for an exact match -- we prefer this over a partial match.
             foreach (AssemblyName name in type.Assembly.GetReferencedAssemblies())
             {
                 if (name.FullName == policiedAssemblyName.FullName)
                     return name;
             }
 
-            //next search for a partial match -- we just compare the Name portions (ignore version and publickey)	
+            //next search for a partial match -- we just compare the Name portions (ignore version and publickey)
             foreach (AssemblyName name in type.Assembly.GetReferencedAssemblies())
             {
                 if (name.Name == policiedAssemblyName.Name)
                     return name;
             }
 
-            //finally, the most expensive -- its possible that retargeting policy is on an assembly whose name changes	
-            // an example of this is the device System.Windows.Forms.Datagrid.dll	
-            // in this case, we need to try to load each device assemblyname through policy to see if it results	
-            // in assemblyname.	
+            //finally, the most expensive -- its possible that retargeting policy is on an assembly whose name changes
+            // an example of this is the device System.Windows.Forms.Datagrid.dll
+            // in this case, we need to try to load each device assemblyname through policy to see if it results
+            // in assemblyname.
             foreach (AssemblyName name in type.Assembly.GetReferencedAssemblies())
             {
                 try
@@ -819,7 +819,7 @@ namespace System.Drawing.Design
                 }
                 catch
                 {
-                    // Ignore all exceptions and just fall through if it fails (it shouldn't, but who knows).	
+                    // Ignore all exceptions and just fall through if it fails (it shouldn't, but who knows).
                 }
             }
 
@@ -827,7 +827,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Locks this toolbox item.  Locking a toolbox item makes it read-only and 
+        /// Locks this toolbox item.  Locking a toolbox item makes it read-only and
         /// prevents any changes to its properties.
         /// </summary>
         public virtual void Lock()
@@ -902,7 +902,7 @@ namespace System.Drawing.Design
 
         /// <summary>
         /// This is called whenever a value is set in the property dictionary.  It gives you a chance
-        /// to change the value of an object before comitting it, our reject it by throwing an 
+        /// to change the value of an object before comitting it, our reject it by throwing an
         /// exception.
         /// </summary>
         protected virtual object ValidatePropertyValue(string propertyName, object value)

@@ -12,7 +12,7 @@ namespace System.Windows.Forms
     /// Control's inherited properties.
     /// </devdoc>
     public sealed class AmbientProperties
-    {        
+    {
         /// <devdoc>
         /// Gets the ambient BackColor, or Color.Empty if there is none.
         /// </devdoc>
@@ -27,7 +27,7 @@ namespace System.Windows.Forms
         /// Gets the ambient Font, or null if there is none.
         /// </devdoc>
         public Font Font { get; set; }
-        
+
         /// <devdoc>
         /// Gets the ambient ForeColor, or Color.Empty if there is none.
         /// </devdoc>

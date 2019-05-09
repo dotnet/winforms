@@ -25,7 +25,7 @@ namespace System.ComponentModel.Design.Serialization
         internal new static CollectionCodeDomSerializer Default
         {
             get
-            {      
+            {
                 if (s_defaultSerializer == null)
                 {
                     s_defaultSerializer = new CollectionCodeDomSerializer();
@@ -534,7 +534,7 @@ namespace System.ComponentModel.Design.Serialization
                             };
                             CodeExpression serializedObj = null;
 
-                            // If there is an expression context on the stack at this point, 
+                            // If there is an expression context on the stack at this point,
                             // we need to fix up the ExpressionType on it to be the element type.
                             ExpressionContext newCxt = null;
 

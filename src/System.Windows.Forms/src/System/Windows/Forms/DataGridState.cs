@@ -44,7 +44,7 @@ namespace System.Windows.Forms {
         public DataGridState(DataGrid dataGrid) {
             PushState(dataGrid);
         }
-        
+
         internal AccessibleObject ParentRowAccessibleObject {
             get {
                 if (parentRowAccessibleObject == null) {
@@ -86,12 +86,12 @@ namespace System.Windows.Forms {
             this.FirstVisibleCol = dataGrid.firstVisibleCol;
             this.CurrentRow = dataGrid.currentRow;
             this.GridColumnStyles = new GridColumnStylesCollection(dataGrid.myGridTable);
-            
+
             this.GridColumnStyles.Clear();
             foreach(DataGridColumnStyle style in dataGrid.myGridTable.GridColumnStyles) {
                 this.GridColumnStyles.Add(style);
             }
-            
+
             this.ListManager = dataGrid.ListManager;
             this.ListManager.ItemChanged += new ItemChangedEventHandler(DataSource_Changed);
             this.ListManager.MetaDataChanged += new EventHandler(DataSource_MetaDataChanged);

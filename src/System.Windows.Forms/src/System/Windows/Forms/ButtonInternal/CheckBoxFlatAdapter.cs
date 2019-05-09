@@ -14,7 +14,7 @@ namespace System.Windows.Forms.ButtonInternal {
     internal class CheckBoxFlatAdapter : CheckBoxBaseAdapter {
 
         internal CheckBoxFlatAdapter(ButtonBase control) : base(control) {}
-        
+
         internal override void PaintDown(PaintEventArgs e, CheckState state) {
             if (Control.Appearance == Appearance.Button) {
                 ButtonAdapter.PaintDown(e, Control.CheckState);
@@ -28,8 +28,8 @@ namespace System.Windows.Forms.ButtonInternal {
             else {
                 PaintFlatWorker(e, colors.buttonShadow, colors.buttonFace, colors.buttonShadow, colors);
             }
-        } 
-        
+        }
+
         internal override void PaintOver(PaintEventArgs e, CheckState state) {
             if (Control.Appearance == Appearance.Button) {
                 ButtonAdapter.PaintOver(e, Control.CheckState);
@@ -44,7 +44,7 @@ namespace System.Windows.Forms.ButtonInternal {
                 PaintFlatWorker(e, colors.buttonShadow, colors.buttonFace, colors.buttonShadow, colors);
             }
         }
-        
+
         internal override void PaintUp(PaintEventArgs e, CheckState state) {
             if (Control.Appearance == Appearance.Button) {
                 ButtonAdapter.PaintUp(e, Control.CheckState);
@@ -59,7 +59,7 @@ namespace System.Windows.Forms.ButtonInternal {
                 PaintFlatWorker(e, colors.buttonShadow, colors.buttonFace, colors.buttonShadow, colors);
             }
         }
-        
+
         private void PaintFlatWorker(PaintEventArgs e, Color checkColor, Color checkBackground, Color checkBorder, ColorData colors) {
             System.Drawing.Graphics g = e.Graphics;
             LayoutData layout = Layout(e).Layout();

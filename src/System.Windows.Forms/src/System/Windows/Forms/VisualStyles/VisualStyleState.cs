@@ -30,7 +30,7 @@ namespace System.Windows.Forms.VisualStyles
         NonClientAreaEnabled = NativeMethods.STAP_ALLOW_NONCLIENT,
 
         /// <devdoc>
-        /// Visual styles enabled only for client and non-client areas. 
+        /// Visual styles enabled only for client and non-client areas.
         /// </devdoc>
        ClientAndNonClientAreasEnabled = NativeMethods.STAP_ALLOW_NONCLIENT | NativeMethods.STAP_ALLOW_CONTROLS
     }

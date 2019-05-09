@@ -26,7 +26,7 @@ namespace System.Windows.Forms
 #endif
 
             private DragEventArgs CreateDragEventArgs(object pDataObj, int grfKeyState, NativeMethods.POINTL pt, int pdwEffect) {
-            
+
                 IDataObject data = null;
 
                 if (pDataObj == null) {
@@ -59,7 +59,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\t" + (ptl.x) + "," + (ptl.y));
                 Debug.Assert(pDataObj != null, "OleDragEnter didn't give us a valid data object.");
                 DragEventArgs drgevent = CreateDragEventArgs(pDataObj, grfKeyState, ptl, pdwEffect);
-                
+
                 if (drgevent != null) {
                     owner.OnDragEnter(drgevent);
                     pdwEffect = (int)drgevent.Effect;
@@ -94,7 +94,7 @@ namespace System.Windows.Forms
                 ptl.y = pt.y;
                 Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\t" + (ptl.x) + "," + (ptl.y));
                 DragEventArgs drgevent = CreateDragEventArgs(pDataObj, grfKeyState, ptl, pdwEffect);
-                
+
                 if (drgevent != null) {
                     owner.OnDragDrop(drgevent);
                     pdwEffect = (int)drgevent.Effect;
@@ -102,7 +102,7 @@ namespace System.Windows.Forms
                 else {
                     pdwEffect = (int)DragDropEffects.None;
                 }
-                
+
                 lastEffect = DragDropEffects.None;
                 lastDataObject = null;
                 return NativeMethods.S_OK;

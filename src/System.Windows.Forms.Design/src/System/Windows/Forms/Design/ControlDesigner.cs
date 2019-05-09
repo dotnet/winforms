@@ -2178,7 +2178,7 @@ namespace System.Windows.Forms.Design
                     //{
                     //    DefWndProc(ref m);
                     //}
-                    //else 
+                    //else
                     if (_host != null && _host.RootComponent != null)
                     {
                         if (_host.GetDesigner(_host.RootComponent) is IRootDesigner rd)
@@ -2519,7 +2519,7 @@ namespace System.Windows.Forms.Design
             }
 
             public override int GetChildCount() => _control.AccessibilityObject.GetChildCount();
-            
+
             private AccessibleObject GetDesignerAccessibleObject(Control.ControlAccessibleObject cao)
             {
                 if (cao == null)
@@ -2733,7 +2733,7 @@ namespace System.Windows.Forms.Design
                 }
                 if (m.Msg == Interop.WindowMessages.WM_PARENTNOTIFY && NativeMethods.Util.LOWORD(unchecked((int)(long)m.WParam)) == (short)Interop.WindowMessages.WM_CREATE)
                 {
-                    _designer.HookChildHandles(m.LParam); // they will get removed from the collection just above 
+                    _designer.HookChildHandles(m.LParam); // they will get removed from the collection just above
                 }
 
                 // We want these messages to go through the designer's WndProc method, and we want people to be able to do default processing with the designer's DefWndProc.  So, we stuff ourselves into the designers window target and call their WndProc.
@@ -3005,7 +3005,7 @@ namespace System.Windows.Forms.Design
 
             public override int GetChildIndex(Control child, bool throwException) => _realCollection.GetChildIndex(child, throwException);
 
-            // we also need to redirect this guy 
+            // we also need to redirect this guy
             public override void SetChildIndex(Control child, int newIndex) => _realCollection.SetChildIndex(child, newIndex);
 
             public override void Clear()

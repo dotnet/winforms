@@ -11,7 +11,7 @@ namespace System.Windows.Forms {
     using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics;
-    
+
     public class ProfessionalColorTable {
 
         private Dictionary<KnownColors,Color> professionalRGB = null;
@@ -28,10 +28,10 @@ namespace System.Windows.Forms {
         private const string lunaFileName =  "luna.msstyles";
         private const string royaleFileName = "royale.msstyles";
         private const string aeroFileName = "aero.msstyles";
-         
+
 
         private object colorFreshnessKey = null;
-        
+
         public ProfessionalColorTable() {
         }
 
@@ -83,10 +83,10 @@ namespace System.Windows.Forms {
                 }
             }
         }
-      
+
         internal Color FromKnownColor(ProfessionalColorTable.KnownColors color) {
             if (ProfessionalColors.ColorFreshnessKey != colorFreshnessKey  || ProfessionalColors.ColorScheme  != lastKnownColorScheme) {
-                ResetRGBTable();               
+                ResetRGBTable();
             }
             colorFreshnessKey = ProfessionalColors.ColorFreshnessKey;
             lastKnownColorScheme = ProfessionalColors.ColorScheme;
@@ -100,10 +100,10 @@ namespace System.Windows.Forms {
             if (professionalRGB != null) {
                professionalRGB.Clear();
             }
-            professionalRGB = null;           
+            professionalRGB = null;
         }
 
-       
+
 #region Colors
 
         [SRDescription(nameof(SR.ProfessionalColorsButtonSelectedHighlightDescr))]
@@ -136,7 +136,7 @@ namespace System.Windows.Forms {
             get { return SystemColors.Highlight; }
         }
 
-       [SRDescription(nameof(SR.ProfessionalColorsButtonPressedBorderDescr))]     
+       [SRDescription(nameof(SR.ProfessionalColorsButtonPressedBorderDescr))]
         public virtual Color ButtonPressedBorder {
             get { return FromKnownColor(KnownColors.msocbvcrCBCtlBdrMouseOver); }
         }
@@ -149,13 +149,13 @@ namespace System.Windows.Forms {
         [SRDescription(nameof(SR.ProfessionalColorsButtonCheckedGradientBeginDescr))]
         public virtual Color ButtonCheckedGradientBegin {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradSelectedBegin); }
-        }  
-        
+        }
+
         [SRDescription(nameof(SR.ProfessionalColorsButtonCheckedGradientMiddleDescr))]
         public virtual Color ButtonCheckedGradientMiddle {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradSelectedMiddle); }
         }
-        
+
         [SRDescription(nameof(SR.ProfessionalColorsButtonCheckedGradientEndDescr))]
         public virtual Color ButtonCheckedGradientEnd {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradSelectedEnd); }
@@ -170,12 +170,12 @@ namespace System.Windows.Forms {
         public virtual Color ButtonSelectedGradientMiddle {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMouseOverMiddle); }
         }
-        
+
         [SRDescription(nameof(SR.ProfessionalColorsButtonSelectedGradientEndDescr))]
         public virtual Color ButtonSelectedGradientEnd {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMouseOverEnd); }
         }
-        
+
         [SRDescription(nameof(SR.ProfessionalColorsButtonPressedGradientBeginDescr))]
         public virtual Color ButtonPressedGradientBegin {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMouseDownBegin); }
@@ -194,8 +194,8 @@ namespace System.Windows.Forms {
         public virtual Color CheckBackground {
             get { return FromKnownColor(KnownColors.msocbvcrCBCtlBkgdSelected); }
         }
-        
-        [SRDescription(nameof(SR.ProfessionalColorsCheckSelectedBackgroundDescr))]        
+
+        [SRDescription(nameof(SR.ProfessionalColorsCheckSelectedBackgroundDescr))]
         public virtual Color CheckSelectedBackground {
             get { return FromKnownColor(KnownColors.msocbvcrCBCtlBkgdSelectedMouseOver); }
         }
@@ -230,7 +230,7 @@ namespace System.Windows.Forms {
             get { return (usingSystemColors) ? SystemColors.Control : FromKnownColor(KnownColors.msocbvcrCBGradVertEnd); }
         }
 
-        [SRDescription(nameof(SR.ProfessionalColorsImageMarginRevealedGradientBeginDescr))]       
+        [SRDescription(nameof(SR.ProfessionalColorsImageMarginRevealedGradientBeginDescr))]
         public virtual Color ImageMarginRevealedGradientBegin {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMenuIconBkgdDroppedBegin); }
         }
@@ -257,7 +257,7 @@ namespace System.Windows.Forms {
 
         [SRDescription(nameof(SR.ProfessionalColorsMenuItemSelectedDescr))]
         public virtual Color MenuItemSelected {
-           get { return FromKnownColor(KnownColors.msocbvcrCBCtlBkgdMouseOver); }  
+           get { return FromKnownColor(KnownColors.msocbvcrCBCtlBkgdMouseOver); }
         }
 
         [SRDescription(nameof(SR.ProfessionalColorsMenuItemBorderDescr))]
@@ -315,12 +315,12 @@ namespace System.Windows.Forms {
         public virtual Color SeparatorLight {
             get { return FromKnownColor(KnownColors.msocbvcrCBSplitterLineLight); }
         }
-      
+
         [SRDescription(nameof(SR.ProfessionalColorsStatusStripGradientBeginDescr))]
         public virtual Color StatusStripGradientBegin {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzBegin); }
         }
-   
+
         [SRDescription(nameof(SR.ProfessionalColorsStatusStripGradientEndDescr))]
         public virtual Color StatusStripGradientEnd {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzEnd); }
@@ -350,7 +350,7 @@ namespace System.Windows.Forms {
         public virtual Color ToolStripGradientEnd {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradVertEnd); }
         }
-   
+
         [SRDescription(nameof(SR.ProfessionalColorsToolStripContentPanelGradientBeginDescr))]
         public virtual Color ToolStripContentPanelGradientBegin {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzBegin); }
@@ -376,7 +376,7 @@ namespace System.Windows.Forms {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradOptionsBegin); }
         }
 
-        [SRDescription(nameof(SR.ProfessionalColorsOverflowButtonGradientMiddleDescr))]  
+        [SRDescription(nameof(SR.ProfessionalColorsOverflowButtonGradientMiddleDescr))]
         public virtual Color OverflowButtonGradientMiddle {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradOptionsMiddle); }
         }
@@ -386,10 +386,10 @@ namespace System.Windows.Forms {
             get { return FromKnownColor(KnownColors.msocbvcrCBGradOptionsEnd); }
         }
 #endregion Colors
-      
+
 
 #region NotDirectlyExposed
-         // 
+         //
 
 
 
@@ -426,7 +426,7 @@ namespace System.Windows.Forms {
       /*  public virtual Color ControlLight {
             get { return FromKnownColor(KnownColors.msocbvcrCBCtlBkgdLight); }
         } */
-            
+
         private static  Color GetAlphaBlendedColor(Graphics g, Color src, Color dest, int alpha) {
             int red = (src.R * alpha + (255 - alpha) * dest.R) / 255;
             int green = (src.G * alpha + (255 - alpha) * dest.G) / 255;
@@ -441,7 +441,7 @@ namespace System.Windows.Forms {
         }
 
 
-        // this particular method gets us closer to office by increasing the resolution...  
+        // this particular method gets us closer to office by increasing the resolution...
 
         private static Color GetAlphaBlendedColorHighRes(Graphics graphics, Color src, Color dest, int alpha) {
 
@@ -478,7 +478,7 @@ namespace System.Windows.Forms {
 
         private void InitCommonColors(ref Dictionary<KnownColors,Color> rgbTable) {
             /// we need to calculate our own alpha blended color based on the Higlight and Window
-            /// colors on the system.  Since terminalserver + alphablending doesnt work we cant just do a 
+            /// colors on the system.  Since terminalserver + alphablending doesnt work we cant just do a
             /// FromARGB here.  So we have a simple function which calculates the blending for us.
 
             if (!DisplayInformation.LowResolution) {
@@ -522,7 +522,7 @@ namespace System.Windows.Forms {
 
             bool lowResolution = DisplayInformation.LowResolution;
             bool highContrast = DisplayInformation.HighContrast;
-            
+
             if (lowResolution) {
                 msocbvcrCBCtlBkgdMouseOver = window;
             }
@@ -531,14 +531,14 @@ namespace System.Windows.Forms {
                 gradientMiddle  = GetAlphaBlendedColorHighRes(null, buttonFace, window, 50 );
                 gradientEnd     = SystemColors.ButtonFace;
 
-                
+
                 msocbvcrCBCtlBkgdMouseOver  = GetAlphaBlendedColorHighRes(null, highlight, window, 30);
                 msocbvcrCBCtlBkgdMouseDown = GetAlphaBlendedColorHighRes(null, highlight, window, 50);
-  
-	           
+
+
             }
-            
- 
+
+
 
             if (lowResolution || highContrast) {
                 rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBkgd]                     =  buttonFace;
@@ -552,33 +552,33 @@ namespace System.Windows.Forms {
                 rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBGradMenuIconBkgdDroppedEnd]       =  buttonShadow;
                 rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBMenuBdrOuter]                     =  controlText;
                 rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBMenuBkgd]                         =  window;
-                rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBSplitterLine]                     =  buttonShadow; 
+                rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBSplitterLine]                     =  buttonShadow;
             }
             else {
                 rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBkgd]                     =  GetAlphaBlendedColorHighRes(null, window, buttonFace, 165);
                 rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBCtlBkgdSelectedMouseOver] =  GetAlphaBlendedColorHighRes(null, highlight, window, 50);
-                rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBDragHandle]               =  GetAlphaBlendedColorHighRes(null, buttonShadow, window, 75);            
+                rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBDragHandle]               =  GetAlphaBlendedColorHighRes(null, buttonShadow, window, 75);
                 rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBGradMainMenuHorzEnd]      =  GetAlphaBlendedColorHighRes(null, buttonFace, window, 205);
                 rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBGradOptionsBegin]         =  GetAlphaBlendedColorHighRes(null, buttonFace, window, 70);
                 rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBGradOptionsMiddle]        =  GetAlphaBlendedColorHighRes(null, buttonFace, window, 90);
                 rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBGradMenuIconBkgdDroppedBegin]     = GetAlphaBlendedColorHighRes(null, buttonFace, window, 40);
                 rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBGradMenuIconBkgdDroppedMiddle]    = GetAlphaBlendedColorHighRes(null, buttonFace, window, 70);
                 rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBGradMenuIconBkgdDroppedEnd]       = GetAlphaBlendedColorHighRes(null, buttonFace, window, 90);
-                rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBMenuBdrOuter]                     = GetAlphaBlendedColorHighRes(null, controlText, buttonShadow, 20); 
-                rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBMenuBkgd]                         = GetAlphaBlendedColorHighRes(null, buttonFace, window, 143); 
+                rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBMenuBdrOuter]                     = GetAlphaBlendedColorHighRes(null, controlText, buttonShadow, 20);
+                rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBMenuBkgd]                         = GetAlphaBlendedColorHighRes(null, buttonFace, window, 143);
                 rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBSplitterLine]                     = GetAlphaBlendedColorHighRes(null, buttonShadow, window, 70);
 
             }
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBCtlBkgdSelected]          = (lowResolution) ? SystemColors.ControlLight : highlight;
 
 
-		
+
 			rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterDocked]           = buttonFace;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterDocked]           = buttonShadow;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterFloating]         = buttonShadow;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBCtlBdrMouseDown]          = highlight;
 
-            
+
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBCtlBdrMouseOver]          = highlight;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBCtlBdrSelected]           = highlight;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBCtlBdrSelectedMouseOver]  = highlight;
@@ -596,14 +596,14 @@ namespace System.Windows.Forms {
 
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBDragHandleShadow]         = window;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBDropDownArrow]            = empty;
-            
-            rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBGradMainMenuHorzBegin]    = buttonFace;           
+
+            rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBGradMainMenuHorzBegin]    = buttonFace;
 
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBGradMouseOverEnd]         = msocbvcrCBCtlBkgdMouseOver;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBGradMouseOverBegin]       = msocbvcrCBCtlBkgdMouseOver;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBGradMouseOverMiddle]      = msocbvcrCBCtlBkgdMouseOver;
 
-            
+
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBGradOptionsEnd]           = buttonShadow;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBGradOptionsMouseOverBegin]    = empty;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBGradOptionsMouseOverEnd]      = empty;
@@ -621,7 +621,7 @@ namespace System.Windows.Forms {
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBGradVertMiddle]               = gradientMiddle;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBGradVertEnd]                  = gradientEnd;
 
-          
+
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBGradMouseDownBegin]   = msocbvcrCBCtlBkgdMouseDown;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBGradMouseDownMiddle]  = msocbvcrCBCtlBkgdMouseDown;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBGradMouseDownEnd]     = msocbvcrCBCtlBkgdMouseDown;
@@ -631,13 +631,13 @@ namespace System.Windows.Forms {
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBGradMenuTitleBkgdEnd]     = gradientMiddle;
 
 
-            
+
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBIconDisabledDark]             = buttonShadow;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBIconDisabledLight]            = buttonFace;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBLabelBkgnd]                   = buttonShadow;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBLowColorIconDisabled]         = empty;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBMainMenuBkgd]                 = buttonFace;
-            
+
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBMenuCtlText]                  = windowText;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBMenuCtlTextDisabled]          = grayText;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBMenuIconBkgd]                 = empty;
@@ -648,7 +648,7 @@ namespace System.Windows.Forms {
 
 
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBShadow] = rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBkgd];
-            
+
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBSplitterLineLight]        = buttonHighlight;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBTearOffHandle]            = empty;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBTearOffHandleMouseOver]   = empty;
@@ -1301,7 +1301,7 @@ namespace System.Windows.Forms {
         }
 
         private void InitRoyaleColors(ref Dictionary<KnownColors,Color> rgbTable) {
-            
+
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBkgd] =     Color.FromArgb(238,237,240); // msocbvcrCBBkgd
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBDragHandle ] =     Color.FromArgb(189,188,191); // msocbvcrCBDragHandle -> Needs to equal VSCOLOR_COMMANDBAR_DRAGHANDLE in vscolors.cpp
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBSplitterLine] =     Color.FromArgb(193,193,196); // msocbvcrCBSplitterLine
@@ -1310,7 +1310,7 @@ namespace System.Windows.Forms {
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterFloating] =     Color.FromArgb(142,141,145); // msocbvcrCBBdrOuterFloating
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterDocked] =     Color.FromArgb(235,233,237); // msocbvcrCBBdrOuterDocked
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBTearOffHandle] =     Color.FromArgb(238,237,240); // msocbvcrCBTearOffHandle
-            rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBTearOffHandleMouseOver] =     Color.FromArgb(194,207,229); // msocbvcrCBTearOffHandleMouseOver 
+            rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBTearOffHandleMouseOver] =     Color.FromArgb(194,207,229); // msocbvcrCBTearOffHandleMouseOver
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBCtlBkgd] =     Color.FromArgb(238,237,240); // msocbvcrCBCtlBkgd
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBCtlText] =     Color.FromArgb(000,000,000); // msocbvcrCBCtlText
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBCtlTextDisabled] =     Color.FromArgb(176,175,179); // msocbvcrCBCtlTextDisabled
@@ -1331,7 +1331,7 @@ namespace System.Windows.Forms {
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBMenuCtlText] =     Color.FromArgb(0,0,0); // msocbvcrCBMenuCtlText
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBMenuCtlTextDisabled] =     Color.FromArgb(193,193,196); // msocbvcrCBMenuCtlTextDisabled
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBMenuBdrOuter] =     Color.FromArgb(134,133,136); // msocbvcrCBMenuBdrOuter
-            rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBMenuIconBkgd] =     Color.FromArgb(238,237,240); // msocbvcrCBMenuIconBkgd 
+            rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBMenuIconBkgd] =     Color.FromArgb(238,237,240); // msocbvcrCBMenuIconBkgd
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBMenuIconBkgdDropped] =     Color.FromArgb(228,226,230); // msocbvcrCBMenuIconBkgdDropped
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBMenuSplitArrow] =     Color.FromArgb(167,166,170); // msocbvcrCBMenuSplitArrow
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPBkgd] =     Color.FromArgb(245,244,246); // msocbvcrWPBkgd
@@ -1494,8 +1494,8 @@ namespace System.Windows.Forms {
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabBdrSelected] =     Color.FromArgb(124,124,148); // msocbvcrDocTabBdrSelected
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabBkgdMouseOver] =     Color.FromArgb(193,210,238); // msocbvcrDocTabBkgdMouseOver
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabTextMouseOver] =     Color.FromArgb(49,106,197);  // msocbvcrDocTabTextMouseOver
-            rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabBdrMouseOver] =     Color.FromArgb(49,106,197);  // msocbvcrDocTabBdrMouseOver 
-            rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabBdrLightMouseOver] =     Color.FromArgb(49,106,197);  // msocbvcrDocTabBdrLightMouseOver 
+            rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabBdrMouseOver] =     Color.FromArgb(49,106,197);  // msocbvcrDocTabBdrMouseOver
+            rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabBdrLightMouseOver] =     Color.FromArgb(49,106,197);  // msocbvcrDocTabBdrLightMouseOver
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabBdrDarkMouseOver] =     Color.FromArgb(49,106,197);  // msocbvcrDocTabBdrDarkMouseOver
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabBkgdMouseDown] =     Color.FromArgb(154,183,228); // msocbvcrDocTabBkgdMouseDown
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabTextMouseDown] =     Color.FromArgb(000,000,000); // msocbvcrDocTabTextMouseDown
@@ -1516,8 +1516,8 @@ namespace System.Windows.Forms {
         }
 
 
- 
-        
+
+
         internal void InitThemedColors(ref Dictionary<KnownColors,Color> rgbTable) {
 
             string colorScheme = VisualStyleInformation.ColorScheme;
@@ -1526,7 +1526,7 @@ namespace System.Windows.Forms {
 
             // VS compares the filename of the theme to determine luna v. royale.
             if (string.Equals(lunaFileName, themeFileName, StringComparison.OrdinalIgnoreCase)) {
-                // once we know it's luna we've got to pick between 
+                // once we know it's luna we've got to pick between
                 // normal (blue) homestead (olive) and metallic (silver)
                 if (colorScheme == normalColorScheme) {
                     InitBlueLunaColors(ref rgbTable);
@@ -1552,7 +1552,7 @@ namespace System.Windows.Forms {
                 InitSystemColors(ref rgbTable);
                 usingSystemColors = true;
                 initializedTable = true;
-                
+
                 // Exception to SystemColors, use the ButtonSelectedHighlight color otherwise
                 // the background for DropDown MenuStrip items will have no contrast
                 rgbTable[KnownColors.msocbvcrCBCtlBkgdMouseOver] = rgbTable[KnownColors.ButtonSelectedHighlight];
@@ -1562,8 +1562,8 @@ namespace System.Windows.Forms {
             }
             else if (string.Equals(royaleFileName, themeFileName,StringComparison.OrdinalIgnoreCase)) {
 
-                // once we know it's royale (TabletPC/MCE) we know about two color scheme names 
-                // which should do exactly the same thing                
+                // once we know it's royale (TabletPC/MCE) we know about two color scheme names
+                // which should do exactly the same thing
                 if (colorScheme == normalColorScheme || colorScheme == royaleColorScheme ) {
                     InitRoyaleColors(ref rgbTable);
                     usingSystemColors = false;
@@ -1571,21 +1571,21 @@ namespace System.Windows.Forms {
                 }
 
             }
-            
-           
+
+
             if (!initializedTable) {
-                // unknown color scheme - bailing 
+                // unknown color scheme - bailing
 
                 InitSystemColors(ref rgbTable);
                 usingSystemColors = true;
             }
 
             InitCommonColors(ref rgbTable);
-            
+
         }
 
         internal void InitBlueLunaColors(ref Dictionary<KnownColors,Color> rgbTable) {
-       
+
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterDocked] = Color.FromArgb(196, 205, 218);
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterDocked] = Color.FromArgb(196, 205, 218);
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterFloating] = Color.FromArgb(42, 102, 201);
@@ -1830,7 +1830,7 @@ namespace System.Windows.Forms {
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrXLFormulaBarBkgd] = Color.FromArgb(158, 190, 245);
         }
 
-        
+
 
         internal enum KnownColors {
             msocbvcrCBBdrOuterDocked,
@@ -2051,6 +2051,6 @@ namespace System.Windows.Forms {
 
     }
 
-    
+
 }
 

@@ -19,13 +19,13 @@ namespace System.Windows.Forms {
 
         // we need to cache this away as the Parent property gets reset a lot.
         private ToolStrip parentToolStrip;
-       
+
         private static bool isScalingInitialized = false;
         private const int MAX_WIDTH = 16;
         private const int MAX_HEIGHT = 16;
         private static int maxWidth = MAX_WIDTH;
         private static int maxHeight = MAX_HEIGHT;
-        
+
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         internal ToolStripOverflowButton(ToolStrip parentToolStrip) {
             if (!isScalingInitialized)
@@ -42,7 +42,7 @@ namespace System.Windows.Forms {
             SupportsItemClick = false;
             this.parentToolStrip = parentToolStrip;
         }
-       
+
         protected override void Dispose(bool disposing) {
             if (disposing && this.HasDropDownItems) {
                 this.DropDown.Dispose();
@@ -94,7 +94,7 @@ namespace System.Windows.Forms {
             // AutoGenerate a ToolStrip DropDown - set the property so we hook events
              return new ToolStripOverflow(this);
         }
-       
+
         public override Size GetPreferredSize(Size constrainingSize) {
             Size preferredSize = constrainingSize;
             if (this.ParentInternal != null)  {
@@ -103,7 +103,7 @@ namespace System.Windows.Forms {
               }
               else {
                   preferredSize.Height = Math.Min(constrainingSize.Height, maxHeight);
-              }                
+              }
             }
             return preferredSize + this.Padding.Size;
         }
@@ -111,7 +111,7 @@ namespace System.Windows.Forms {
         // make sure the Overflow button extends from edge-edge. (Ignore Padding/Margin).
         internal protected override void SetBounds(Rectangle bounds) {
             if (ParentInternal != null && ParentInternal.LayoutEngine is ToolStripSplitStackLayout) {
-                
+
                 if (ParentInternal.Orientation == Orientation.Horizontal) {
                     bounds.Height = ParentInternal.Height;
                     bounds.Y = 0;
@@ -126,7 +126,7 @@ namespace System.Windows.Forms {
 
         protected override void OnPaint(PaintEventArgs e) {
             if (this.ParentInternal != null) {
-                ToolStripRenderer renderer = this.ParentInternal.Renderer;            
+                ToolStripRenderer renderer = this.ParentInternal.Renderer;
                 renderer.DrawOverflowButtonBackground(new ToolStripItemRenderEventArgs(e.Graphics, this));
             }
         }
@@ -136,8 +136,8 @@ namespace System.Windows.Forms {
 
             public ToolStripOverflowButtonAccessibleObject(ToolStripOverflowButton owner) : base(owner){
             }
- 
-            
+
+
             public override string Name {
                 get {
                     string name = Owner.AccessibleName;

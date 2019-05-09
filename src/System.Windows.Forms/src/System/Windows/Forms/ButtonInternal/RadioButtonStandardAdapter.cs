@@ -47,7 +47,7 @@ namespace System.Windows.Forms.ButtonInternal {
             else {
                 PaintUp(e, state);
             }
-        }        
+        }
 
         private new ButtonStandardAdapter ButtonAdapter {
             get {
@@ -64,10 +64,10 @@ namespace System.Windows.Forms.ButtonInternal {
         protected override LayoutOptions Layout(PaintEventArgs e) {
             LayoutOptions layout = CommonLayout();
             layout.hintTextUp        = false;
-            layout.everettButtonCompat = !Application.RenderWithVisualStyles;            
+            layout.everettButtonCompat = !Application.RenderWithVisualStyles;
 
             if (Application.RenderWithVisualStyles) {
-                ButtonBase b = Control; 
+                ButtonBase b = Control;
                 using (Graphics g = WindowsFormsUtils.CreateMeasurementGraphics()) {
                     layout.checkSize = RadioButtonRenderer.GetGlyphSize(g, RadioButtonRenderer.ConvertFromButtonState(GetState(), b.MouseIsOver), b.HandleInternal).Width;
                 }
@@ -75,7 +75,7 @@ namespace System.Windows.Forms.ButtonInternal {
             else {
                 layout.checkSize = (int)(layout.checkSize * GetDpiScaleRatio(e.Graphics));
             }
-            
+
             return layout;
         }
 

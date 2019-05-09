@@ -97,8 +97,8 @@ namespace System.Windows.Forms
             }
             set
             {
-               switch (value) 
-               { 
+               switch (value)
+               {
                    case DataGridViewAutoSizeColumnMode.NotSet:
                    case DataGridViewAutoSizeColumnMode.None:
                    case DataGridViewAutoSizeColumnMode.ColumnHeader:
@@ -108,8 +108,8 @@ namespace System.Windows.Forms
                    case DataGridViewAutoSizeColumnMode.DisplayedCells:
                    case DataGridViewAutoSizeColumnMode.Fill:
                        break;
-                   default: 
-                       throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAutoSizeColumnMode)); 
+                   default:
+                       throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAutoSizeColumnMode));
                 }
                 if (this.autoSizeMode != value)
                 {
@@ -136,7 +136,7 @@ namespace System.Windows.Forms
                     this.autoSizeMode = value;
                     if (this.DataGridView == null)
                     {
-                        if (this.InheritedAutoSizeMode != DataGridViewAutoSizeColumnMode.Fill && 
+                        if (this.InheritedAutoSizeMode != DataGridViewAutoSizeColumnMode.Fill &&
                             this.InheritedAutoSizeMode != DataGridViewAutoSizeColumnMode.None &&
                             this.InheritedAutoSizeMode != DataGridViewAutoSizeColumnMode.NotSet)
                         {
@@ -300,9 +300,9 @@ namespace System.Windows.Forms
 
             DataGridViewCellStyle defaultCellStyle = this.DefaultCellStyle;
 
-            return (!defaultCellStyle.BackColor.IsEmpty || 
+            return (!defaultCellStyle.BackColor.IsEmpty ||
                     !defaultCellStyle.ForeColor.IsEmpty ||
-                    !defaultCellStyle.SelectionBackColor.IsEmpty || 
+                    !defaultCellStyle.SelectionBackColor.IsEmpty ||
                     !defaultCellStyle.SelectionForeColor.IsEmpty ||
                     defaultCellStyle.Font != null ||
                     !defaultCellStyle.IsNullValueDefault ||
@@ -345,11 +345,11 @@ namespace System.Windows.Forms
         ]
         public int DisplayIndex
         {
-            get 
+            get
             {
                 return this.displayIndex;
             }
-            set 
+            set
             {
                 if (this.displayIndex != value)
                 {
@@ -442,11 +442,11 @@ namespace System.Windows.Forms
         ]
         public int DividerWidth
         {
-            get 
+            get
             {
                 return this.DividerThickness;
             }
-            set 
+            set
             {
                 this.DividerThickness = value;
             }
@@ -783,7 +783,7 @@ namespace System.Windows.Forms
 
         [
             DefaultValue(DATAGRIDVIEWCOLUMN_defaultMinColumnThickness),
-            Localizable(true), 
+            Localizable(true),
             SRCategory(nameof(SR.CatLayout)),
             SRDescription(nameof(SR.DataGridView_ColumnMinimumWidthDescr)),
             RefreshProperties(RefreshProperties.Repaint)
@@ -811,18 +811,18 @@ namespace System.Windows.Forms
                 // Change needed to bring the design time and the runtime "Name" property together.
                 // The ExtenderProvider adds a "Name" property of its own. It does this for all IComponents.
                 // The "Name" property added by the ExtenderProvider interacts only w/ the Site property.
-                // The Control class' Name property can be changed only thru the "Name" property provided by the 
+                // The Control class' Name property can be changed only thru the "Name" property provided by the
                 // Extender Service.
                 //
                 // However, the user can change the DataGridView::Name property in the DataGridViewEditColumnDialog.
-                // So while the Control can fall back to Site.Name if the user did not explicitly set Control::Name, 
+                // So while the Control can fall back to Site.Name if the user did not explicitly set Control::Name,
                 // the DataGridViewColumn should always go first to the Site.Name to retrieve the name.
                 //
                 // NOTE: one side effect of bringing together the design time and the run time "Name" properties is that DataGridViewColumn::Name changes.
                 // However, DataGridView does not fire ColumnNameChanged event.
                 // We can't fix this because ISite does not provide Name change notification. So in effect
                 // DataGridViewColumn does not know when its name changed.
-                // I talked w/ MarkRi and he is perfectly fine w/ DataGridViewColumn::Name changing w/o ColumnNameChanged 
+                // I talked w/ MarkRi and he is perfectly fine w/ DataGridViewColumn::Name changing w/o ColumnNameChanged
                 // being fired.
                 //
                 if (this.Site != null && !string.IsNullOrEmpty(this.Site.Name))
@@ -833,7 +833,7 @@ namespace System.Windows.Forms
                 return name;
             }
             set
-            {                
+            {
                 string oldName = this.name;
                 if (string.IsNullOrEmpty(value))
                 {
@@ -843,7 +843,7 @@ namespace System.Windows.Forms
                 {
                     this.name = value;
                 }
-               
+
                 if (this.DataGridView != null && !string.Equals(this.name, oldName,StringComparison.Ordinal))
                 {
                     this.DataGridView.OnColumnNameChanged(this);
@@ -866,7 +866,7 @@ namespace System.Windows.Forms
                 if (this.IsDataBound &&
                     this.DataGridView != null &&
                     this.DataGridView.DataConnection != null &&
-                    this.boundColumnIndex != -1 && 
+                    this.boundColumnIndex != -1 &&
                     this.DataGridView.DataConnection.DataFieldIsReadOnly(this.boundColumnIndex) &&
                     !value)
                 {
@@ -970,7 +970,7 @@ namespace System.Windows.Forms
 
         [
             DefaultValue(""),
-            Localizable(true), 
+            Localizable(true),
             SRCategory(nameof(SR.CatAppearance)),
             SRDescription(nameof(SR.DataGridView_ColumnToolTipTextDescr))
         ]
@@ -1027,7 +1027,7 @@ namespace System.Windows.Forms
 
         [
             DefaultValue(true),
-            Localizable(true), 
+            Localizable(true),
             SRCategory(nameof(SR.CatAppearance)),
             SRDescription(nameof(SR.DataGridView_ColumnVisibleDescr))
         ]
@@ -1045,7 +1045,7 @@ namespace System.Windows.Forms
 
         [
             SRCategory(nameof(SR.CatLayout)),
-            Localizable(true), 
+            Localizable(true),
             SRDescription(nameof(SR.DataGridView_ColumnWidthDescr)),
             RefreshProperties(RefreshProperties.Repaint)
         ]
@@ -1063,7 +1063,7 @@ namespace System.Windows.Forms
 
         public override object Clone()
         {
-            // 
+            //
 
             DataGridViewColumn dataGridViewColumn = (DataGridViewColumn) System.Activator.CreateInstance(this.GetType());
             if (dataGridViewColumn != null)
@@ -1103,11 +1103,11 @@ namespace System.Windows.Forms
         }
 
         protected override void Dispose(bool disposing) {
-            try 
+            try
             {
                 if (disposing)
                 {
-                    // 
+                    //
                     lock(this)
                     {
                         if (this.site != null && this.site.Container != null)
@@ -1122,7 +1122,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
-            finally 
+            finally
             {
                 base.Dispose(disposing);
             }
@@ -1167,7 +1167,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(string.Format(SR.DataGridView_NeedColumnAutoSizingCriteria, "autoSizeColumnMode"));
             }
-            switch (autoSizeColumnMode) { 
+            switch (autoSizeColumnMode) {
                 case DataGridViewAutoSizeColumnMode.NotSet:
                 case DataGridViewAutoSizeColumnMode.None:
                 case DataGridViewAutoSizeColumnMode.ColumnHeader:
@@ -1177,8 +1177,8 @@ namespace System.Windows.Forms
                 case DataGridViewAutoSizeColumnMode.DisplayedCells:
                 case DataGridViewAutoSizeColumnMode.Fill:
                     break;
-                default: 
-                    throw new InvalidEnumArgumentException(nameof(autoSizeColumnMode), (int) autoSizeColumnMode, typeof(DataGridViewAutoSizeColumnMode)); 
+                default:
+                    throw new InvalidEnumArgumentException(nameof(autoSizeColumnMode), (int) autoSizeColumnMode, typeof(DataGridViewAutoSizeColumnMode));
              }
 
             DataGridView dataGridView = this.DataGridView;

@@ -17,10 +17,10 @@ namespace System.Experimental.Gdi
     /// <devdoc>
     ///     Represents a Win32 device context.  Provides operations for setting some of the properties
     ///     of a device context.  It's the managed wrapper for an HDC.
-    ///     
+    ///
     ///     This class is divided into two files separating the code that needs to be compiled into
     ///     reatail builds and debugging code.
-    ///     
+    ///
     ///     WARNING: The properties of the dc are obtained on-demand, this object is light-weight because
     ///     of that; if you need to put back the old value after changing a property you need to get it
     ///     first and cache it.
@@ -33,13 +33,13 @@ namespace System.Experimental.Gdi
     sealed partial class DeviceContext : MarshalByRefObject, IDeviceContext, IDisposable
     {
         WindowsFont selectedFont;
-        
+
         /// <devdoc>
         ///     See DeviceContext.cs for information about this class.  The class has been split to be able
         ///     to compile the right set of functionalities into different assemblies.
         /// </devdoc>
 
-        
+
         public WindowsFont ActiveFont {
             get {
                 return selectedFont;
@@ -48,7 +48,7 @@ namespace System.Experimental.Gdi
 
         /// <devdoc>
         ///     DC background color.
-        /// </devdoc>  
+        /// </devdoc>
         public Color BackgroundColor
         {
             get
@@ -65,7 +65,7 @@ namespace System.Experimental.Gdi
 
         /// <devdoc>
         ///     Sets the DC background color and returns the old value.
-        /// </devdoc> 
+        /// </devdoc>
         public Color SetBackgroundColor( Color newColor )
         {
             return ColorTranslator.FromWin32(IntUnsafeNativeMethods.SetBkColor( new HandleRef( this, this.Hdc ), ColorTranslator.ToWin32(newColor)));
@@ -73,8 +73,8 @@ namespace System.Experimental.Gdi
 
         /// <devdoc>
         ///     DC background mode.
-        /// </devdoc>  
-        public DeviceContextBackgroundMode BackgroundMode 
+        /// </devdoc>
+        public DeviceContextBackgroundMode BackgroundMode
         {
             get
             {
@@ -90,7 +90,7 @@ namespace System.Experimental.Gdi
 
         /// <devdoc>
         ///     Sets the DC background mode and returns the old value.
-        /// </devdoc> 
+        /// </devdoc>
         public DeviceContextBackgroundMode SetBackgroundMode( DeviceContextBackgroundMode newMode )
         {
             return (DeviceContextBackgroundMode) IntUnsafeNativeMethods.SetBkMode(new HandleRef(this, this.Hdc), (int) newMode);
@@ -109,17 +109,17 @@ namespace System.Experimental.Gdi
             /*
              * CONSIDER: implement if needed.
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
-             * 
+             *
             set
             {
             }
-#endif            
+#endif
             */
         }
 
         /// <devdoc>
         ///     Sets the DC ROP2 and returns the old value.
-        /// </devdoc> 
+        /// </devdoc>
         public DeviceContextBinaryRasterOperationFlags SetRasterOperation(DeviceContextBinaryRasterOperationFlags rasterOperation )
         {
             return (DeviceContextBinaryRasterOperationFlags) IntUnsafeNativeMethods.SetROP2(new HandleRef(this, this.Hdc), (int) rasterOperation);
@@ -160,25 +160,25 @@ namespace System.Experimental.Gdi
                 return GetDeviceCapabilities(DeviceCapabilities.LogicalPixelsY);
             }
         }
-                       
+
         /// <devdoc>
-        ///     The font selected into the device context.  
+        ///     The font selected into the device context.
         ///     It's OK to call dispose on it, the HFONT won't be deleted since the WindowsFont did not create it,
         ///     it got it from the HDC.
         /// </devdoc>
-        
+
         public WindowsFont Font
         {
-            
-            
+
+
             get
             {
-#if OPTIMIZED_MEASUREMENTDC                
-                if (MeasurementDCInfo.IsMeasurementDC(this)) 
-                {                    
+#if OPTIMIZED_MEASUREMENTDC
+                if (MeasurementDCInfo.IsMeasurementDC(this))
+                {
                     WindowsFont font = MeasurementDCInfo.LastUsedFont;
                     if (font != null && (font.Hfont != IntPtr.Zero)) {
-#if DEBUG   
+#if DEBUG
                         WindowsFont currentDCFont = WindowsFont.FromHdc( this.Hdc );
                         if (!font.Equals(currentDCFont) ) {
                             // just use the face name, as ToString will call here re-entrantly.
@@ -186,15 +186,15 @@ namespace System.Experimental.Gdi
                             string currentFontInfo = (currentDCFont != null) ?  currentDCFont.Name : "null";
                             Debug.Fail("Font does not match... Current: " + currentFontInfo + " Last known: " + lastUsedFontInfo);
                         }
-                        
-#endif                  
+
+#endif
                         return font;
 
                     }
                 }
-#endif                
+#endif
                 // Returns the currently selected object in the dc.
-                // Note: for common DCs, GetDC assigns default attributes to the DC each time it is retrieved, 
+                // Note: for common DCs, GetDC assigns default attributes to the DC each time it is retrieved,
                 // the default font is System.
                 return WindowsFont.FromHdc( this.Hdc );
             }
@@ -223,7 +223,7 @@ namespace System.Experimental.Gdi
         internal void DisposeFont(bool disposing) {
             if (disposing) {
                 DeviceContexts.RemoveDeviceContext(this);
-            }            
+            }
 
             if (selectedFont != null && selectedFont.Hfont != IntPtr.Zero) {
                 IntPtr hCurrentFont = IntUnsafeNativeMethods.GetCurrentObject(new HandleRef(this, hDC), IntNativeMethods.OBJ_FONT);
@@ -233,7 +233,7 @@ namespace System.Experimental.Gdi
                     hCurrentFont = hInitialFont;
                 }
 
-                selectedFont.Dispose(disposing);                                 
+                selectedFont.Dispose(disposing);
                 selectedFont = null;
             }
         }
@@ -241,14 +241,14 @@ namespace System.Experimental.Gdi
         /// <devdoc>
         ///     Selects the specified object into the dc.  If the specified object is the same as the one currently selected
         ///     in the dc, the object is not set and a null value is returned.
-        /// </devdoc>                         
+        /// </devdoc>
         public IntPtr SelectFont( WindowsFont font )
         {
-           
+
             // Fonts are one of the most expensive objects to select in an hdc and in many cases we are passed a Font that is the
-            // same as the one already selected in the dc so to avoid a perf hit we get the hdc font's log font and compare it 
+            // same as the one already selected in the dc so to avoid a perf hit we get the hdc font's log font and compare it
             // with the one passed in before selecting it in the hdc.
-            // Also, we avoid performing GDI operations that if done on an enhanced metafile DC would add an entry to it, hence 
+            // Also, we avoid performing GDI operations that if done on an enhanced metafile DC would add an entry to it, hence
             // reducing the size of the metafile.
             if( font.Equals( this.Font ))
             {
@@ -256,54 +256,54 @@ namespace System.Experimental.Gdi
             }
             IntPtr result = SelectObject( font.Hfont, GdiObjectType.Font);
 
-            WindowsFont previousFont = selectedFont;            
+            WindowsFont previousFont = selectedFont;
             selectedFont = font;
-            hCurrentFont = font.Hfont;          
+            hCurrentFont = font.Hfont;
 
             // the measurement DC always leaves fonts selected for pref reasons.
-            // in this case, we need to diposse the font since the original 
+            // in this case, we need to diposse the font since the original
             // creator didn't fully dispose.
             if (previousFont != null) {
                 if (MeasurementDCInfo.IsMeasurementDC(this)) {
                     previousFont.Dispose();
                 }
             }
-            
+
 #if OPTIMIZED_MEASUREMENTDC
             // once we've changed the font, update the last used font.
-            if (MeasurementDCInfo.IsMeasurementDC(this)) 
+            if (MeasurementDCInfo.IsMeasurementDC(this))
             {
-                if (result != IntPtr.Zero) 
+                if (result != IntPtr.Zero)
                 {
                     MeasurementDCInfo.LastUsedFont = font;
                 }
-                else 
+                else
                 {
                    // there was an error selecting the Font into the DC, we dont know anything about it.
                    MeasurementDCInfo.Reset();
                 }
             }
-#endif            
+#endif
             return result;
         }
 
         public void ResetFont()
         {
-            
+
 #if OPTIMIZED_MEASUREMENTDC
             // in this case, GDI will copy back the previously saved font into the DC.
-            // we dont actually know what the font is in our measurement DC so 
+            // we dont actually know what the font is in our measurement DC so
             // we need to clear it off.
             MeasurementDCInfo.ResetIfIsMeasurementDC(this.Hdc);
-#endif        
+#endif
             IntUnsafeNativeMethods.SelectObject(new HandleRef(this, this.Hdc), new HandleRef( null, hInitialFont ));
             selectedFont = null;
             hCurrentFont = hInitialFont;
         }
 
         /// <devdoc>
-        ///     Retrieves device-specific information for this device. 
-        /// </devdoc> 
+        ///     Retrieves device-specific information for this device.
+        /// </devdoc>
         public int GetDeviceCapabilities( DeviceCapabilities capabilityIndex )
         {
             return IntUnsafeNativeMethods.GetDeviceCaps( new HandleRef( this, this.Hdc ), (int) capabilityIndex );
@@ -311,7 +311,7 @@ namespace System.Experimental.Gdi
 
         /// <devdoc>
         ///     DC map mode.
-        /// </devdoc>  
+        /// </devdoc>
         public DeviceContextMapMode MapMode
         {
             get
@@ -365,13 +365,13 @@ namespace System.Experimental.Gdi
                 case GdiObjectType.Bitmap:
                     hCurrentBmp = hObj;
                     break;
-            }            
+            }
             return IntUnsafeNativeMethods.SelectObject(new HandleRef(this, this.Hdc), new HandleRef( null, hObj));
         }
 
         /// <devdoc>
         ///     DC text alignment.
-        /// </devdoc>  
+        /// </devdoc>
         public DeviceContextTextAlignment TextAlignment
         {
             get
@@ -388,7 +388,7 @@ namespace System.Experimental.Gdi
 
         /// <devdoc>
         ///     Sets the DC text alignment and returns the old value.
-        /// </devdoc>  
+        /// </devdoc>
         public DeviceContextTextAlignment SetTextAlignment( DeviceContextTextAlignment newAligment )
         {
             return (DeviceContextTextAlignment) IntUnsafeNativeMethods.SetTextAlign(new HandleRef(this, this.Hdc), (int) newAligment );
@@ -397,7 +397,7 @@ namespace System.Experimental.Gdi
 
         /// <devdoc>
         ///     DC current text color.
-        /// </devdoc>  
+        /// </devdoc>
         public Color TextColor
         {
             get
@@ -414,7 +414,7 @@ namespace System.Experimental.Gdi
 
         /// <devdoc>
         ///     Sets the DC text color and returns the old value.
-        /// </devdoc>  
+        /// </devdoc>
         public Color SetTextColor( Color newColor )
         {
             return ColorTranslator.FromWin32(IntUnsafeNativeMethods.SetTextColor(new HandleRef( this, this.Hdc), ColorTranslator.ToWin32(newColor)));
@@ -422,7 +422,7 @@ namespace System.Experimental.Gdi
 
         /// <devdoc>
         ///     DC Viewport Extent in device units.
-        /// </devdoc>  
+        /// </devdoc>
         public Size ViewportExtent
         {
             get
@@ -440,19 +440,19 @@ namespace System.Experimental.Gdi
 
         /// <devdoc>
         ///     Sets the DC Viewport extent to the specified value and returns its previous value; extent values are in device units.
-        /// </devdoc> 
+        /// </devdoc>
         public Size SetViewportExtent( Size newExtent )
         {
             IntNativeMethods.SIZE oldExtent = new IntNativeMethods.SIZE();
-            
+
             IntUnsafeNativeMethods.SetViewportExtEx( new HandleRef( this, this.Hdc ), newExtent.Width, newExtent.Height, oldExtent );
 
             return oldExtent.ToSize();
-        } 
+        }
 
         /// <devdoc>
         ///     DC Viewport Origin in device units.
-        /// </devdoc>  
+        /// </devdoc>
         public Point ViewportOrigin
         {
             get
@@ -470,7 +470,7 @@ namespace System.Experimental.Gdi
 
         /// <devdoc>
         ///     Sets the DC Viewport origin to the specified value and returns its previous value; origin values are in device units.
-        /// </devdoc> 
+        /// </devdoc>
         public Point SetViewportOrigin( Point newOrigin )
         {
             IntNativeMethods.POINT oldOrigin = new IntNativeMethods.POINT();
@@ -478,7 +478,7 @@ namespace System.Experimental.Gdi
 
             return oldOrigin.ToPoint();
         }
-        
+
     }
 }
 

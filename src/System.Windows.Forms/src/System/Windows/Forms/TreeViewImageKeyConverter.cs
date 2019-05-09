@@ -31,7 +31,7 @@ namespace System.Windows.Forms {
             if (destinationType == null) {
                 throw new ArgumentNullException(nameof(destinationType));
             }
-                
+
             if (destinationType == typeof(string) && (value == null)) {
                 return SR.toStringDefault;
             }

@@ -66,11 +66,11 @@ namespace System.Windows.Forms {
             Size = new Size(100, 100);
             SetStyle(ControlStyles.ResizeRedraw, false);
             SetStyle(ControlStyles.Opaque | ControlStyles.OptimizedDoubleBuffer, true);
-            
+
         }
 
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         SRDescription(nameof(SR.PrintPreviewAntiAliasDescr))
         ]
@@ -107,7 +107,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating the document to preview.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         [
@@ -150,7 +150,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Gets the CreateParams used to create the window.
         ///       If a subclass overrides this function, it must call the base implementation.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         protected override CreateParams CreateParams {
@@ -193,7 +193,7 @@ namespace System.Windows.Forms {
         public int Rows {
             get { return rows;}
             set {
-                
+
                 if (value < 1 ) {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Rows), value, 1));
                 }
@@ -225,10 +225,10 @@ namespace System.Windows.Forms {
         }
 
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never), 
-        Bindable(false), 
+        Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
+        Bindable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]                
+        ]
         public override string Text {
             get {
                 return base.Text;
@@ -237,17 +237,17 @@ namespace System.Windows.Forms {
                 base.Text = value;
             }
         }
-        
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
         }
-        
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the page number of the upper left page.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         [
@@ -256,7 +256,7 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatBehavior))
         ]
         public int StartPage {
-            get { 
+            get {
                 int value = startPage;
                 if (pageInfo != null) {
                     value = Math.Min(value, pageInfo.Length - (rows * columns));
@@ -379,7 +379,7 @@ namespace System.Windows.Forms {
 
 
         // This function computes everything in terms of physical size (millimeters), not pixels
-        // 
+        //
         private void ComputeLayout() {
             Debug.Assert(pageInfo != null, "Must call ComputePreview first");
             layoutOk = true;
@@ -421,7 +421,7 @@ namespace System.Windows.Forms {
                 PrintController oldController = document.PrintController;
                 PreviewPrintController previewController = new PreviewPrintController();
                 previewController.UseAntiAlias = UseAntiAlias;
-                document.PrintController = new PrintControllerWithStatusDialog(previewController, 
+                document.PrintController = new PrintControllerWithStatusDialog(previewController,
                                                                                string.Format(SR.PrintControllerWithStatusDialog_DialogTitlePreview));
 
                 document.Print();
@@ -438,7 +438,7 @@ namespace System.Windows.Forms {
 
         // Recomputes the sizes and positions of pages without forcing a new "preview print"
         private void InvalidateLayout() {
-            layoutOk = false;        
+            layoutOk = false;
             Invalidate();
         }
 
@@ -486,7 +486,7 @@ namespace System.Windows.Forms {
                 pageInfoCalcPending = false;
             }
         }
-            
+
 
         /// <devdoc>
         ///    <para>
@@ -548,13 +548,13 @@ namespace System.Windows.Forms {
                     Rectangle[] pageRenderArea = new Rectangle[rows * columns];
                     Point lastImageSize = Point.Empty;
                     int maxImageHeight = 0;
-                    
+
                     try {
                         for (int row = 0; row < rows; row++) {
                             //Initialize our LastImageSize variable...
                             lastImageSize.X = 0;
                             lastImageSize.Y = maxImageHeight * row;
-                            
+
                             for (int column = 0; column < columns; column++) {
                                 int imageIndex = StartPage + column + row*columns;
                                 if (imageIndex < pageInfo.Length) {
@@ -568,15 +568,15 @@ namespace System.Windows.Forms {
 
                                     imageSize = new Size((int) (zoom*pageSize.Width), (int) (zoom*pageSize.Height));
                                     Point imagePixels = PhysicalToPixels(new Point(imageSize), screendpi);
-                                    
-            
+
+
                                     int x = offset.X + borderPixelsX * (column + 1) + lastImageSize.X;
                                     int y = offset.Y + borderPixelsY * (row + 1) + lastImageSize.Y;
 
                                     lastImageSize.X += imagePixels.X;
                                     //The Height is the Max of any PageHeight..
                                     maxImageHeight = Math.Max(maxImageHeight, imagePixels.Y);
-                                    
+
                                     pageRenderArea[imageIndex - StartPage] = new Rectangle(x, y, imagePixels.X, imagePixels.Y);
                                     pevent.Graphics.ExcludeClip(pageRenderArea[imageIndex - StartPage]);
                                 }
@@ -620,7 +620,7 @@ namespace System.Windows.Forms {
                 eh(this, e);
             }
         }
-        
+
         private static int PhysicalToPixels(int physicalSize, int dpi) {
             return(int) (physicalSize * dpi / 100.0);
         }
@@ -711,7 +711,7 @@ namespace System.Windows.Forms {
         internal void SetVirtualSizeNoInvalidate(Size value) {
             virtualSize = value;
             SetPositionNoInvalidate(position); // Make sure it's within range
-            
+
             NativeMethods.SCROLLINFO info = new NativeMethods.SCROLLINFO();
             info.fMask = NativeMethods.SIF_RANGE | NativeMethods.SIF_PAGE;
             info.nMin = 0;
@@ -759,10 +759,10 @@ namespace System.Windows.Forms {
             Point locPos = Position;
             int pos = 0;
             int maxPos = 0;
-            
+
             switch (keyData & Keys.KeyCode) {
                 case Keys.PageUp:
-                    if ((keyData & Keys.Modifiers) == Keys.Control) 
+                    if ((keyData & Keys.Modifiers) == Keys.Control)
                     {
                         pos = locPos.X;
                         if (pos > SCROLL_PAGE) {
@@ -780,7 +780,7 @@ namespace System.Windows.Forms {
                     }
                     break;
                 case Keys.PageDown:
-                    if ((keyData & Keys.Modifiers) == Keys.Control) 
+                    if ((keyData & Keys.Modifiers) == Keys.Control)
                     {
                         pos = locPos.X;
                         maxPos = Math.Max(Width, virtualSize.Width /*- Width*/);
@@ -799,14 +799,14 @@ namespace System.Windows.Forms {
                     }
                     break;
                 case Keys.Home:
-                    if ((keyData & Keys.Modifiers) == Keys.Control)      
+                    if ((keyData & Keys.Modifiers) == Keys.Control)
                          StartPage=0;
                     break;
                 case Keys.End:
                     if ((keyData & Keys.Modifiers) == Keys.Control)
                          StartPage=pageInfo.Length;
                     break;
-                    
+
                 case Keys.Up:
                     pos = locPos.Y;
                     if (pos > SCROLL_LINE)
@@ -823,7 +823,7 @@ namespace System.Windows.Forms {
 
                     pos = locPos.Y;
                     maxPos = Math.Max(Height, virtualSize.Height/* - Height*/);
-                    
+
                     if (pos < maxPos-SCROLL_LINE) {
                         pos+=SCROLL_LINE;
                     }
@@ -834,7 +834,7 @@ namespace System.Windows.Forms {
                     Position = locPos;
                     break;
                 case Keys.Left:
-                  
+
                     pos = locPos.X;
                     if (pos > SCROLL_LINE) {
                         pos-=SCROLL_LINE;

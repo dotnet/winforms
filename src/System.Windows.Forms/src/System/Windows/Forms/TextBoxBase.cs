@@ -103,13 +103,13 @@ namespace System.Windows.Forms {
         ///     set.
         /// </devdoc>
         internal TextBoxBase() : base() {
-        
+
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
-            SetState2(STATE2_USEPREFERREDSIZECACHE, true); 
-            
+            SetState2(STATE2_USEPREFERREDSIZECACHE, true);
+
             textBoxFlags[autoSize | hideSelection | wordWrap | shortcutsEnabled] = true;
             SetStyle(ControlStyles.FixedHeight, textBoxFlags[autoSize]);
-            SetStyle(ControlStyles.StandardClick 
+            SetStyle(ControlStyles.StandardClick
                     | ControlStyles.StandardDoubleClick
                     | ControlStyles.UseTextForAccessibility
                     | ControlStyles.UserPaint, false);
@@ -356,7 +356,7 @@ namespace System.Windows.Forms {
 
                     borderStyle = value;
                     UpdateStyles();
-                    RecreateHandle();            
+                    RecreateHandle();
 
                     // PreferredSize depends on BorderStyle : thru CreateParams.ExStyle in User32!AdjustRectEx.
                     // So when the BorderStyle changes let the parent of this control know about it.
@@ -818,7 +818,7 @@ namespace System.Windows.Forms {
         public int PreferredHeight {
             get {
                 // COMPAT we must return the same busted height we did in Everett, even
-                // if it doesnt take multiline and word wrap into account.  For better accuracy and/or wrapping use 
+                // if it doesnt take multiline and word wrap into account.  For better accuracy and/or wrapping use
                 // GetPreferredSize instead.
                 int height = FontHeight;
                 if (borderStyle != BorderStyle.None) {
@@ -831,7 +831,7 @@ namespace System.Windows.Forms {
         //  GetPreferredSizeCore
         //  This method can return a different value than PreferredHeight!  It properly handles
         //  border style + multiline and wordwrap.
-        
+
         internal override Size GetPreferredSizeCore(Size proposedConstraints)
         {
             // 3px vertical space is required between the text and the border to keep the last
@@ -854,7 +854,7 @@ namespace System.Windows.Forms {
             proposedConstraints -= bordersAndPadding;
 
             // Fit the text to the remaining space
-            // Fix for Dev10 
+            // Fix for Dev10
 
             TextFormatFlags format = TextFormatFlags.NoPrefix;
             if(!Multiline) {
@@ -1149,7 +1149,7 @@ namespace System.Windows.Forms {
             if (value == null) {
                 value = "";
             }
-            
+
             textBoxFlags[codeUpdateText] = true;
             try {
                 if (IsHandleCreated) {
@@ -1313,7 +1313,7 @@ namespace System.Windows.Forms {
                     // send EM_SETSEL message
                     SetSelectionOnHandle();
                 }
-                
+
             }
             finally {
                 textBoxFlags[creatingHandle] = false;
@@ -1392,7 +1392,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected override void OnHandleDestroyed(EventArgs e) {
             textBoxFlags[modified] = Modified;
-            textBoxFlags[setSelectionOnHandleCreated] = true;            
+            textBoxFlags[setSelectionOnHandleCreated] = true;
             // Update text selection cached values to be restored when recreating the handle.
             GetSelectionStartAndLength( out this.selectionStart, out this.selectionLength );
             base.OnHandleDestroyed(e);
@@ -1507,9 +1507,9 @@ namespace System.Windows.Forms {
         }
 
         protected override void OnTextChanged(EventArgs e) {
-            // since AutoSize existed in Everett, (and is the default) we can't 
+            // since AutoSize existed in Everett, (and is the default) we can't
             // relayout the parent when the "preferredsize" of the control changes.
-            // this means a multiline = true textbox wont natrually grow in height when 
+            // this means a multiline = true textbox wont natrually grow in height when
             // the text changes.
             CommonProperties.xClearPreferredSizeCache(this);
             base.OnTextChanged(e);
@@ -1723,7 +1723,7 @@ namespace System.Windows.Forms {
                 AdjustSelectionStartAndEnd(start, length, out s, out e, textLen);
 
                 SendMessage(Interop.EditMessages.EM_SETSEL, s, e);
-                // 
+                //
 
             }
             else {
@@ -1795,7 +1795,7 @@ namespace System.Windows.Forms {
                 checked {
                     try {
                         end = start + selLength;
-                    } 
+                    }
                     catch (OverflowException) {
                         //Since we overflowed, cap at the max/min value: we'll correct the value below
                         end = start > 0 ? int.MaxValue : int.MinValue;
@@ -1822,11 +1822,11 @@ namespace System.Windows.Forms {
                 SendMessage(Interop.EditMessages.EM_SETSEL, start, end);
             }
         }
- 
+
         /// <devdoc>
         ///     Converts byte offsset to unicode offsets.
         ///     When procssing WM_GETSEL/WM_SETSEL, EDIT control works with byte offsets instead of character positions
-        ///     as opposed to RICHEDIT which does it always as character positions.  
+        ///     as opposed to RICHEDIT which does it always as character positions.
         ///     This method is used when handling the WM_GETSEL message.
         /// </devdoc>
         static void ToUnicodeOffsets(string str, ref int start, ref int end) {
@@ -1850,8 +1850,8 @@ namespace System.Windows.Forms {
             if (end > bytes.Length){
                 end = bytes.Length;
             }
-            
-            // IMPORTANT: Avoid off-by-1 errors! 
+
+            // IMPORTANT: Avoid off-by-1 errors!
             // The end value passed in is the character immediately after the last character selected.
 
             int newStart = start == 0 ? 0 : e.GetCharCount(bytes, 0, start);
@@ -1866,7 +1866,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Converts unicode offsset to byte offsets.
         ///     When procssing WM_GETSEL/WM_SETSEL, EDIT control works with byte offsets instead of character positions
-        ///     as opposed to RICHEDIT which does it always as character positions.  
+        ///     as opposed to RICHEDIT which does it always as character positions.
         ///     This method is used when handling the WM_SETSEL message.
         /// </devdoc>
         static internal void ToDbcsOffsets(string str, ref int start, ref int end) {
@@ -2009,7 +2009,7 @@ namespace System.Windows.Forms {
                     client = PointToClient(new Point(x, y));
                 }
 
-                // 
+                //
 
                 // VisualStudio7 # 156, only show the context menu when clicked in the client area
                 if (ClientRectangle.Contains( client )) {

@@ -46,7 +46,7 @@ internal static partial class Interop
 
         /// <summary>
         /// Resumes GC.Collect
-        /// </summary>        
+        /// </summary>
         [SuppressMessage("Microsoft.Reliability", "CA2001:AvoidCallingProblematicMethods")]
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal static void ResumeCollect()
@@ -141,7 +141,7 @@ internal static partial class Interop
 
             /// <summary>
             /// Adds a handle to this handle type for monitoring.
-            /// </summary>            
+            /// </summary>
             [SuppressMessage("Microsoft.Reliability", "CA2001:AvoidCallingProblematicMethods")]
             internal void Add(IntPtr handle)
             {
@@ -181,7 +181,7 @@ internal static partial class Interop
                     Debug.WriteLine("HC>     threshHold  :" + _threshHold.ToString());
                     Debug.WriteLine("HC>     handleCount :" + _handleCount).ToString());
                     Debug.WriteLine("HC>     deltaPercent:" + _deltaPercent.ToString());
-#endif                  
+#endif
                     GC.Collect();
 
                     // We just performed a GC. If the main thread is in a tight
@@ -222,7 +222,7 @@ internal static partial class Interop
                     _threshold = _handleCount + ((_handleCount * _deltaPercent) / 100);
 #if DEBUG_HANDLECOLLECTOR
                     Debug.WriteLine("HC> NeedCollection: increase threshHold to " + _threshjold);
-#endif                  
+#endif
                     return true;
                 }
 
@@ -235,7 +235,7 @@ internal static partial class Interop
                 {
 #if DEBUG_HANDLECOLLECTOR
                     Debug.WriteLine("HC> NeedCollection: throttle threshhold " + _threshHold + " down to " + oldThreshHold);
-#endif                  
+#endif
                     _threshold = oldThreshHold;
                 }
 
@@ -251,7 +251,7 @@ internal static partial class Interop
                 {
                     return handle;
                 }
-    
+
                 int currentCount = 0;
                 lock (this)
                 {

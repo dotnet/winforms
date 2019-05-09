@@ -14,7 +14,7 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.Windows.Forms;
     using System.Windows.Forms.Design;
-    using System.Windows.Forms.Internal;    
+    using System.Windows.Forms.Internal;
     using System.Runtime.Versioning;
 
     /// <devdoc>
@@ -67,7 +67,7 @@ namespace System.Windows.Forms {
 
         private EventHandler onRightToLeftChanged;
         private bool rightToLeft = false;
-        
+
         private object userData;
 
         //
@@ -231,7 +231,7 @@ namespace System.Windows.Forms {
         public event EventHandler RightToLeftChanged {
             add => onRightToLeftChanged += value;
             remove => onRightToLeftChanged -= value;
-        }        
+        }
 
         /// <devdoc>
         ///    User defined data associated with the control.
@@ -569,8 +569,8 @@ namespace System.Windows.Forms {
         ///     Create the icon region on demand.
         /// </devdoc>
         internal IconRegion Region {
-            
-            
+
+
             get {
                 if (region == null)
                     region = new IconRegion(Icon);
@@ -753,7 +753,7 @@ namespace System.Windows.Forms {
             {
                 w.Update(false);
             }
-        
+
             if (onRightToLeftChanged != null) {
                  onRightToLeftChanged(this, e);
             }
@@ -804,7 +804,7 @@ namespace System.Windows.Forms {
             Rectangle windowBounds = Rectangle.Empty;
             System.Windows.Forms.Timer timer;
             NativeWindow tipWindow;
-            
+
             DeviceContext mirrordc= null;
             Size mirrordcExtent = Size.Empty;
             Point mirrordcOrigin = Point.Empty;
@@ -930,7 +930,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>            
+            /// <devdoc>
             ///
             /// Since we added mirroring to certain controls, we need to make sure the
             /// error icons show up in the correct place. We cannot mirror the errorwindow
@@ -958,7 +958,7 @@ namespace System.Windows.Forms {
             }
 
             void RestoreMirrorDC() {
-                                    
+
                 if (parent.IsMirrored && mirrordc != null) {
                     mirrordc.ViewportExtent = mirrordcExtent;
                     mirrordc.ViewportOrigin = mirrordcOrigin;
@@ -993,7 +993,7 @@ namespace System.Windows.Forms {
                     finally {
                         RestoreMirrorDC();
                     }
-                } 
+                }
                 finally {
                     UnsafeNativeMethods.EndPaint(new HandleRef(this, Handle), ref ps);
                 }
@@ -1156,7 +1156,7 @@ namespace System.Windows.Forms {
                     dc = DeviceContext.FromHwnd(this.Handle);
                     try {
                         CreateMirrorDC(dc.Hdc, windowBounds.Width);
-                        
+
                         Graphics graphics = Graphics.FromHdcInternal(mirrordc.Hdc);
                         try {
                             windowRegionHandle = windowRegion.GetHrgn(graphics);
@@ -1166,13 +1166,13 @@ namespace System.Windows.Forms {
                             graphics.Dispose();
                             RestoreMirrorDC();
                         }
-                        
+
                         if (UnsafeNativeMethods.SetWindowRgn(new HandleRef(this, Handle), new HandleRef(windowRegion, windowRegionHandle), true) != 0) {
                             //The HWnd owns the region.
                             windowRegionHandle = IntPtr.Zero;
                         }
                     }
-                    
+
                     finally {
                         if (dc != null) {
                             dc.Dispose();
@@ -1554,8 +1554,8 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     Constructor that takes an Icon and extracts its 16x16 version.
             /// </devdoc>
-            
-            
+
+
             public IconRegion(Icon icon) {
                 this.icon = new Icon(icon, 16, 16);
             }
@@ -1577,7 +1577,7 @@ namespace System.Windows.Forms {
             ///     Returns the handle of the region.
             /// </devdoc>
             public Region Region {
-                
+
                 get {
                     if (region == null) {
                         region = new Region(new Rectangle(0,0,0,0));
@@ -1589,7 +1589,7 @@ namespace System.Windows.Forms {
                             mask = ControlPaint.CreateHBitmapTransparencyMask(bitmap);
                             bitmap.Dispose();
 
-                            // It is been observed that users can use non standard size icons (not a 16 bit multiples for width and height) 
+                            // It is been observed that users can use non standard size icons (not a 16 bit multiples for width and height)
                             // and GetBitmapBits method allocate bytes in multiple of 16 bits for each row. Following calculation is to get right width in bytes.
                             int bitmapBitsAllocationSize = 16;
 
@@ -1601,10 +1601,10 @@ namespace System.Windows.Forms {
                             for (int y = 0; y < size.Height; y++) {
                                 for (int x = 0; x < size.Width; x++) {
 
-                                    // see if bit is set in mask.  bits in byte are reversed. 0 is black (set).                                    
+                                    // see if bit is set in mask.  bits in byte are reversed. 0 is black (set).
                                     if ((bits[y * widthInBytes + x / 8] & (1 << (7 - (x % 8)))) == 0) {
                                         region.Union(new Rectangle(x, y, 1, 1));
-                                    }                                   
+                                    }
                                 }
                             }
                             region.Intersect(new Rectangle(0, 0, size.Width, size.Height));

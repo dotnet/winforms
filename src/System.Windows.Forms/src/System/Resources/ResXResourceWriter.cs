@@ -7,7 +7,7 @@ namespace System.Resources {
     using System.Diagnostics;
     using System.Reflection;
     using System;
-    using System.Windows.Forms;    
+    using System.Windows.Forms;
     using Microsoft.Win32;
     using System.Drawing;
     using System.IO;
@@ -20,7 +20,7 @@ namespace System.Resources {
     using System.Diagnostics.CodeAnalysis;
 
     /// <devdoc>
-    ///     ResX resource writer. See the text in "ResourceSchema" for more 
+    ///     ResX resource writer. See the text in "ResourceSchema" for more
     ///     information.
     /// </devdoc>
     public class ResXResourceWriter : IResourceWriter {
@@ -47,9 +47,9 @@ namespace System.Resources {
 
         // These two "compat" mimetypes are here. In Beta 2 and RTM we used the term "URT"
         // internally to refer to parts of the .NET Framework. Since these references
-        // will be in Beta 2 ResX files, and RTM ResX files for customers that had 
-        // early access to releases, we don't want to break that. We will read 
-        // and parse these types correctly in version 1.0, but will always 
+        // will be in Beta 2 ResX files, and RTM ResX files for customers that had
+        // early access to releases, we don't want to break that. We will read
+        // and parse these types correctly in version 1.0, but will always
         // write out the new version. So, opening and editing a ResX file in VS will
         // update it to the new types.
         //
@@ -77,7 +77,7 @@ namespace System.Resources {
                             <xsd:attribute name=""name"" use=""required"" type=""xsd:string""/>
                             <xsd:attribute name=""type"" type=""xsd:string""/>
                             <xsd:attribute name=""mimetype"" type=""xsd:string""/>
-                            <xsd:attribute ref=""xml:space""/>                            
+                            <xsd:attribute ref=""xml:space""/>
                         </xsd:complexType>
                     </xsd:element>
                     <xsd:element name=""assembly"">
@@ -111,7 +111,7 @@ namespace System.Resources {
         </xsd:element>
         </xsd:schema>
         ";
-        
+
         string fileName;
         Stream stream;
         TextWriter textWriter;
@@ -121,7 +121,7 @@ namespace System.Resources {
         bool initialized;
 
         private Func<Type, string> typeNameConverter; // no public property to be consistent with ResXDataNode class.
-        
+
         /// <devdoc>
         ///     Base Path for ResXFileRefs.
         /// </devdoc>
@@ -166,7 +166,7 @@ namespace System.Resources {
 
         private void InitializeWriter() {
             if (xmlTextWriter == null) {
-                // 
+                //
 
                 bool writeHeaderRequired = false;
 
@@ -256,12 +256,12 @@ namespace System.Resources {
                cachedAliases = new Hashtable();
            }
 
-           cachedAliases[assemblyName.FullName] = aliasName; 
+           cachedAliases[assemblyName.FullName] = aliasName;
        }
 
 
         /// <devdoc>
-        ///    Adds the given value to the collection of metadata.  These name/value pairs 
+        ///    Adds the given value to the collection of metadata.  These name/value pairs
         ///    will be emitted to the <metadata> elements in the .resx file.
         /// </devdoc>
         public void AddMetadata(string name, byte[] value) {
@@ -269,7 +269,7 @@ namespace System.Resources {
         }
 
         /// <devdoc>
-        ///    Adds the given value to the collection of metadata.  These name/value pairs 
+        ///    Adds the given value to the collection of metadata.  These name/value pairs
         ///    will be emitted to the <metadata> elements in the .resx file.
         /// </devdoc>
         public void AddMetadata(string name, string value) {
@@ -277,7 +277,7 @@ namespace System.Resources {
         }
 
         /// <devdoc>
-        ///    Adds the given value to the collection of metadata.  These name/value pairs 
+        ///    Adds the given value to the collection of metadata.  These name/value pairs
         ///    will be emitted to the <metadata> elements in the .resx file.
         /// </devdoc>
         public void AddMetadata(string name, object value) {
@@ -323,10 +323,10 @@ namespace System.Resources {
             // this is BAD, so we clone it. adding it to a writer doesnt change it
             // we're messing with a copy
             ResXDataNode nodeClone = node.DeepClone();
-            
+
             ResXFileRef fileRef = nodeClone.FileRef;
             string modifiedBasePath = BasePath;
-            
+
             if (!string.IsNullOrEmpty(modifiedBasePath)) {
                 if (!modifiedBasePath.EndsWith("\\"))
                 {
@@ -377,7 +377,7 @@ namespace System.Resources {
                     break;
                 }
             }
-        }        
+        }
 
         /// <devdoc>
         ///     Adds a string resource to the resources.
@@ -389,7 +389,7 @@ namespace System.Resources {
                 value == null
                     ? MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXNullRef), this.typeNameConverter)
                     : null;
-            AddDataRow(elementName, name, value, typeName, null, null);     
+            AddDataRow(elementName, name, value, typeName, null, null);
         }
 
         /// <devdoc>
@@ -400,7 +400,7 @@ namespace System.Resources {
         private void AddDataRow(string elementName, string name, string value, string type, string mimeType, string comment) {
             if (hasBeenSaved)
                 throw new InvalidOperationException(SR.ResXResourceWriterSaved);
-            
+
             string alias = null;
             if (!string.IsNullOrEmpty(type) && elementName == DataStr)
             {
@@ -421,10 +421,10 @@ namespace System.Resources {
                 }
                 //AddAssemblyRow(AssemblyStr, alias, GetFullName(type));
             }
-            
+
             Writer.WriteStartElement(elementName); {
                 Writer.WriteAttributeString(NameStr, name);
-                
+
                 if (!string.IsNullOrEmpty(alias) && !string.IsNullOrEmpty(type) && elementName == DataStr) {
                      // CHANGE: we still output version information. This might have
                     // to change in 3.2
@@ -442,11 +442,11 @@ namespace System.Resources {
                 if (mimeType != null) {
                     Writer.WriteAttributeString(MimeTypeStr, mimeType);
                 }
-                
+
                 if((type == null && mimeType == null) || (type != null && type.StartsWith("System.Char", StringComparison.Ordinal))) {
                     Writer.WriteAttributeString("xml", "space", null, "preserve");
                 }
-                
+
                 Writer.WriteStartElement(ValueStr); {
                     if(!string.IsNullOrEmpty(value)) {
                         Writer.WriteString(value);
@@ -470,7 +470,7 @@ namespace System.Resources {
                 if (!string.IsNullOrEmpty(alias)) {
                       Writer.WriteAttributeString(AliasStr, alias);
                 }
-            
+
                 if (!string.IsNullOrEmpty(name)) {
                     Writer.WriteAttributeString(NameStr, name);
                 }
@@ -485,11 +485,11 @@ namespace System.Resources {
             {
                 cachedAliases = new Hashtable();
             }
-            string alias = (string)cachedAliases[assemblyName.FullName]; 
+            string alias = (string)cachedAliases[assemblyName.FullName];
             if (string.IsNullOrEmpty(alias))
             {
                 alias =  assemblyName.Name;
-                AddAlias(alias, assemblyName);               
+                AddAlias(alias, assemblyName);
                 AddAssemblyRow(AssemblyStr, alias, assemblyName.FullName);
             }
             return alias;
@@ -539,7 +539,7 @@ namespace System.Resources {
              if(indexStart == -1)
                 return null;
              return typeName.Substring(indexStart + 2);
-        }    
+        }
 
         static string ToBase64WrappedString(byte[] data) {
             const int lineWrap = 80;
@@ -560,7 +560,7 @@ namespace System.Resources {
                 output.Append(crlf);
                 return output.ToString();
             }
-            
+
             return raw;
         }
 

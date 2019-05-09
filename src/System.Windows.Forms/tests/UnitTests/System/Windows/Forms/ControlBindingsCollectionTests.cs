@@ -60,7 +60,7 @@ namespace System.Windows.Forms.Tests
         {
             var control = new Control();
             var collection = new ControlBindingsCollection(control);
-            
+
             collection.Add(binding);
             Assert.Same(binding, Assert.Single(collection));
             Assert.Same(control, binding.BindableComponent);
@@ -107,7 +107,7 @@ namespace System.Windows.Forms.Tests
             var binding3 = new Binding(null, 1, "dataMember");
             var binding4 = new Binding("", 1, "dataMember");
             var binding5 = new Binding(nameof(SubControl.text), 1, "dataMember");
-    
+
             collection.Add(binding1);
             collection.Add(binding2);
             collection.Add(binding3);
@@ -305,7 +305,7 @@ namespace System.Windows.Forms.Tests
             var control = new Control();
             var collection = new ControlBindingsCollection(control);
             var binding = new Binding(null, new object(), "member");
-            
+
             collection.Add(binding);
             Assert.Same(binding, Assert.Single(collection));
             Assert.Same(control, binding.BindableComponent);
@@ -325,7 +325,7 @@ namespace System.Windows.Forms.Tests
             var control = new Control();
             var collection = new ControlBindingsCollection(control);
             var binding = new Binding(null, new object(), "member");
-            
+
             collection.Add(binding);
             Assert.Same(binding, Assert.Single(collection));
             Assert.Same(control, binding.BindableComponent);
@@ -383,7 +383,7 @@ namespace System.Windows.Forms.Tests
             var control = new Control();
             var collection = new ControlBindingsCollection(control);
             var binding = new Binding(null, new object(), "member");
-            
+
             collection.Add(binding);
             Assert.Same(binding, Assert.Single(collection));
             Assert.Same(control, binding.BindableComponent);

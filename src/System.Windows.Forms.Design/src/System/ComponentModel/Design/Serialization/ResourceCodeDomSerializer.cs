@@ -154,11 +154,11 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected override object DeserializeInstance(IDesignerSerializationManager manager, Type type, object[] parameters, string name, bool addToContainer)
         {
-            if (manager == null) 
+            if (manager == null)
             {
                 throw new ArgumentNullException(nameof(manager));
             }
-            if (type == null) 
+            if (type == null)
             {
                 throw new ArgumentNullException(nameof(type));
             }
@@ -750,7 +750,7 @@ namespace System.ComponentModel.Design.Serialization
                     if (culture == CultureInfo.InvariantCulture)
                     {
                         se = new SerializationException(
-                            
+
                             string.Format(SR.SerializerResourceExceptionInvariant, message), e);
                     }
                     else

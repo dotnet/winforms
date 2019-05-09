@@ -96,11 +96,11 @@ namespace System.Windows.Forms {
         DrawMode drawMode = System.Windows.Forms.DrawMode.Normal;
         BorderStyle borderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
         SelectionMode selectionMode = System.Windows.Forms.SelectionMode.One;
-               
+
         SelectionMode cachedSelectionMode = System.Windows.Forms.SelectionMode.One;
-        //We need to know that we are in middle of handleRecreate through Setter of SelectionMode. 
-        //In this case we set a bool denoting that we are changing SelectionMode and 
-        //in this case we should always use the cachedValue instead of the currently set value. 
+        //We need to know that we are in middle of handleRecreate through Setter of SelectionMode.
+        //In this case we set a bool denoting that we are changing SelectionMode and
+        //in this case we should always use the cachedValue instead of the currently set value.
         //We need to change this in the count as well as SelectedIndex code where we access the SelectionMode.
         private bool selectionModeChanging = false;
 
@@ -121,7 +121,7 @@ namespace System.Windows.Forms {
         private const int defaultListItemBorderHeight = 1;
 
         /// <summary>
-        /// Borders are 1 pixel width and a pixel buffer 
+        /// Borders are 1 pixel width and a pixel buffer
         /// </summary>
         private const int defaultListItemPaddingBuffer = 3;
 
@@ -135,12 +135,12 @@ namespace System.Windows.Forms {
         ///     Creates a basic win32 list box with default values for everything.
         /// </devdoc>
         public ListBox() : base() {
-            SetStyle(ControlStyles.UserPaint | 
-                     ControlStyles.StandardClick | 
+            SetStyle(ControlStyles.UserPaint |
+                     ControlStyles.StandardClick |
                      ControlStyles.UseTextForAccessibility, false);
 
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
-            SetState2(STATE2_USEPREFERREDSIZECACHE, true);  
+            SetState2(STATE2_USEPREFERREDSIZECACHE, true);
 
             SetBounds(0, 0, 120, 96);
 
@@ -159,7 +159,7 @@ namespace System.Windows.Forms {
             if (DpiHelper.IsScalingRequirementMet) {
                 scaledListItemStartPosition = LogicalToDeviceUnits(defaultListItemStartPos);
 
-                // height inlude 2 borders ( top and bottom). we are using multiplication by 2 instead of scaling doubled value to get an even number 
+                // height inlude 2 borders ( top and bottom). we are using multiplication by 2 instead of scaling doubled value to get an even number
                 // that might helps us in positioning control in the center for list items.
                 scaledListItemBordersHeight = 2 * LogicalToDeviceUnits(defaultListItemBorderHeight);
                 scaledListItemPaddingBuffer = LogicalToDeviceUnits(defaultListItemPaddingBuffer);
@@ -781,7 +781,7 @@ namespace System.Windows.Forms {
             get {
 
                 SelectionMode current = (selectionModeChanging) ? cachedSelectionMode : selectionMode;
-                
+
                 if (current == SelectionMode.None) {
                     return -1;
                 }
@@ -1136,7 +1136,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add => base.PaddingChanged += value; 
+            add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value; }
 
         /// <devdoc>
@@ -1551,7 +1551,7 @@ namespace System.Windows.Forms {
         protected override void OnHandleCreated(EventArgs e) {
             base.OnHandleCreated(e);
 
-            
+
             //for getting the current Locale to set the Scrollbars...
             //
             SendMessage(NativeMethods.LB_SETLOCALE, CultureInfo.CurrentCulture.LCID, 0);
@@ -1628,7 +1628,7 @@ namespace System.Windows.Forms {
             UpdateFontCache();
         }
 
-       
+
         /// <devdoc>
         ///    <para>We override this so we can re-create the handle if the parent has changed.</para>
         /// </devdoc>
@@ -1818,10 +1818,10 @@ namespace System.Windows.Forms {
         private void ResetItemHeight() {
             itemHeight = DefaultItemHeight;
         }
-      
+
        [SuppressMessage("Microsoft.Portability", "CA1902:AvoidTestingForFloatingPointEquality")]
        protected override void ScaleControl(SizeF factor, BoundsSpecified specified) {
-           
+
            if (factor.Width != 1F && factor.Height != 1F) {
                UpdateFontCache();
            }
@@ -1858,7 +1858,7 @@ namespace System.Windows.Forms {
                 // it will be provided before changing the list though...
                 if (this.DataManager != null) {
                     if (this.DataSource is ICurrencyManagerProvider) {
-                        // Everett ListControl's had a 
+                        // Everett ListControl's had a
 
 
 
@@ -2074,7 +2074,7 @@ namespace System.Windows.Forms {
 
                 try {
                     Rectangle bounds = Rectangle.FromLTRB(dis.rcItem.left, dis.rcItem.top, dis.rcItem.right, dis.rcItem.bottom);
-                    
+
                     if (HorizontalScrollbar) {
                         if (MultiColumn) {
                             bounds.Width = Math.Max(ColumnWidth, bounds.Width);
@@ -2083,7 +2083,7 @@ namespace System.Windows.Forms {
                             bounds.Width = Math.Max(MaxItemWidth, bounds.Width);
                         }
                     }
-                    
+
 
                     OnDrawItem(new DrawItemEventArgs(g, Font, bounds, dis.itemID, (DrawItemState)dis.itemState, ForeColor, BackColor));
                 }
@@ -2823,11 +2823,11 @@ namespace System.Windows.Forms {
                         InnerArray.Remove(item);
                     }
                 }
-              
+
                 return index;
             }
 
- 
+
             int IList.Add(object item) {
                 return Add(item);
             }
@@ -2841,7 +2841,7 @@ namespace System.Windows.Forms {
                 owner.CheckNoDataSource();
                 AddRangeInternal((ICollection)items);
             }
-           
+
             internal void AddRangeInternal(ICollection items) {
 
                 if (items == null)
@@ -2853,7 +2853,7 @@ namespace System.Windows.Forms {
                 {
                     foreach (object item in items)
                     {
-                        // adding items one-by-one for performance 
+                        // adding items one-by-one for performance
                         // not using sort because after the array is sorted index of each newly added item will need to be found
                         // AddInternal is based on BinarySearch and finds index without any additional cost
                         AddInternal(item);
@@ -3147,7 +3147,7 @@ namespace System.Windows.Forms {
                 if (innerArray != null) {
                     index = Array.IndexOf(innerArray, item);
 
-                    // We initialize innerArray with more elements than needed in the method EnsureSpace, 
+                    // We initialize innerArray with more elements than needed in the method EnsureSpace,
                     // and we don't actually remove element from innerArray in the method RemoveAt,
                     // so there maybe some elements which are not actually in innerArray will be found
                     // and we need to filter them out

@@ -55,7 +55,7 @@ namespace System.Windows.Forms {
         private static readonly ContentAlignment anyBottom = ContentAlignment.BottomLeft | ContentAlignment.BottomCenter | ContentAlignment.BottomRight;
         private static readonly ContentAlignment anyCenter = ContentAlignment.TopCenter | ContentAlignment.MiddleCenter | ContentAlignment.BottomCenter;
         private static readonly ContentAlignment anyMiddle = ContentAlignment.MiddleLeft | ContentAlignment.MiddleCenter | ContentAlignment.MiddleRight;
-        
+
         // not creatable...
         //
         private ControlPaint() {
@@ -78,7 +78,7 @@ namespace System.Windows.Forms {
                    case ImageLayout.Center:
                        result.Size = backgroundImage.Size;
                        Size szCtl = bounds.Size;
-                       
+
                        if (szCtl.Width > result.Width) {
                            result.X = (szCtl.Width - result.Width) / 2;
                        }
@@ -98,13 +98,13 @@ namespace System.Windows.Forms {
                             // adding .5 to round to the nearest pixel
                             result.Height = (int) ((imageSize.Height * xRatio) +.5);
                             if (bounds.Y >= 0)
-                            {                               
+                            {
                                 result.Y = (bounds.Height - result.Height) /2;
                             }
                         }
                         else {
                             // width should fill the entire bounds
-                            result.Height = bounds.Height;                       
+                            result.Height = bounds.Height;
                             // preserve the aspect ratio by multiplying the xRatio by the height
                             // adding .5 to round to the nearest pixel
                             result.Width = (int) ((imageSize.Width * yRatio) +.5);
@@ -113,7 +113,7 @@ namespace System.Windows.Forms {
                                 result.X = (bounds.Width - result.Width) /2;
                             }
                         }
-                                              
+
                         break;
                }
            }
@@ -165,7 +165,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Creates a 16-bit color bitmap.
         ///     Sadly, this must be public for the designer to get at it.
-        ///     From MSDN: 
+        ///     From MSDN:
         ///       This member supports the .NET Framework infrastructure and is not intended to be used directly from your code.
         /// </devdoc>
         public static IntPtr CreateHBitmap16Bit(Bitmap bitmap, Color background) {
@@ -188,7 +188,7 @@ namespace System.Windows.Forms {
                     if (hBitmap == IntPtr.Zero) {
                         throw new Win32Exception();
                     }
-                    
+
                     try {
                         IntPtr previousBitmap = SafeNativeMethods.SelectObject(new HandleRef(null, dc), new HandleRef(null, hBitmap));
                         if (previousBitmap == IntPtr.Zero) {
@@ -232,7 +232,7 @@ namespace System.Windows.Forms {
             int monochromeStride = width / 8;
             if ((width % 8) != 0) // wanted division to round up, not down
                 monochromeStride++;
-            // must be multiple of two -- i.e., bitmap 
+            // must be multiple of two -- i.e., bitmap
             // scanlines must fall on double-byte boundaries
             if ((monochromeStride % 2) != 0)
                 monochromeStride++;
@@ -325,12 +325,12 @@ namespace System.Windows.Forms {
             DeviceContext dc = DeviceContext.FromHwnd(sourceHwnd);
             HandleRef targetHDC = new HandleRef( null, targetDC.GetHdc());
             HandleRef screenHDC = new HandleRef( null, dc.Hdc );
-            
+
             try {
-                bool result = SafeNativeMethods.BitBlt(targetHDC, destinationLocation.X, destinationLocation.Y, destWidth, destHeight, 
+                bool result = SafeNativeMethods.BitBlt(targetHDC, destinationLocation.X, destinationLocation.Y, destWidth, destHeight,
                                                       screenHDC,
                                                       sourceLocation.X, sourceLocation.Y, (int) copyPixelOperation);
-                
+
                 //a zero result indicates a win32 exception has been thrown
                 if (!result) {
                     throw new Win32Exception();
@@ -354,7 +354,7 @@ namespace System.Windows.Forms {
                     Debug.Fail("border style has no corresponding dash style");
                     return DashStyle.Solid;
             }
-        } 
+        }
 
         /// <devdoc>
         ///      Creates a new color that is a object of the given color.
@@ -413,15 +413,15 @@ namespace System.Windows.Forms {
         internal static void DrawBackgroundImage(Graphics g, Image backgroundImage, Color backColor, ImageLayout backgroundImageLayout, Rectangle bounds, Rectangle clipRect, Point scrollOffset) {
               DrawBackgroundImage(g, backgroundImage, backColor, backgroundImageLayout, bounds, clipRect, scrollOffset, RightToLeft.No);
         }
-        
+
         internal static void DrawBackgroundImage(Graphics g, Image backgroundImage, Color backColor, ImageLayout backgroundImageLayout, Rectangle bounds, Rectangle clipRect, Point scrollOffset, RightToLeft rightToLeft) {
             if (g == null) {
                 throw new ArgumentNullException(nameof(g));
             }
-         
+
             if(backgroundImageLayout == ImageLayout.Tile) {
                 // tile
-                
+
                 using (TextureBrush textureBrush = new TextureBrush(backgroundImage,WrapMode.Tile)) {
                       // Make sure the brush origin matches the display rectangle, not the client rectangle,
                       // so the background image scrolls on AutoScroll forms.
@@ -433,15 +433,15 @@ namespace System.Windows.Forms {
                       g.FillRectangle(textureBrush, clipRect);
                 }
             }
-  
+
             else {
                 // Center, Stretch, Zoom
-                
+
                 Rectangle imageRectangle = CalculateBackgroundImageRectangle(bounds, backgroundImage, backgroundImageLayout);
 
                 //flip the coordinates only if we don't do any layout, since otherwise the image should be at the center of the
                 //displayRectangle anyway.
-                
+
                 if (rightToLeft == RightToLeft.Yes && backgroundImageLayout == ImageLayout.None) {
                     imageRectangle.X += clipRect.Width - imageRectangle.Width;
                 }
@@ -482,9 +482,9 @@ namespace System.Windows.Forms {
                     imageAttrib.SetWrapMode(WrapMode.TileFlipXY);
                     g.DrawImage(backgroundImage, imageRectangle, 0, 0, backgroundImage.Width, backgroundImage.Height, GraphicsUnit.Pixel, imageAttrib);
                     imageAttrib.Dispose();
-                    
+
                 }
-            }   
+            }
         }
 
         public static void DrawBorder(Graphics graphics, Rectangle bounds, Color color, ButtonBorderStyle style) {
@@ -493,7 +493,7 @@ namespace System.Windows.Forms {
                 case ButtonBorderStyle.None:
                     // nothing
                     break;
-                
+
                 case ButtonBorderStyle.Dotted:
                 case ButtonBorderStyle.Dashed:
                 case ButtonBorderStyle.Solid:
@@ -923,7 +923,7 @@ namespace System.Windows.Forms {
                 SafeNativeMethods.DrawEdge(new HandleRef(wg, wg.DeviceContext.Hdc), ref rc, edge, flags);
             }
         }
-        
+
         /// <devdoc>
         ///     Helper function that draws a more complex border. This is used by DrawBorder for less common
         ///     rendering cases. We split DrawBorder into DrawBorderSimple and DrawBorderComplex so we maximize
@@ -938,16 +938,16 @@ namespace System.Windows.Forms {
 
                 // top + left
                 Pen pen = new Pen(hls.Darker(1.0f));
-                graphics.DrawLine(pen, bounds.X, bounds.Y, 
+                graphics.DrawLine(pen, bounds.X, bounds.Y,
                                   bounds.X + bounds.Width - 1, bounds.Y);
-                graphics.DrawLine(pen, bounds.X, bounds.Y, 
+                graphics.DrawLine(pen, bounds.X, bounds.Y,
                                   bounds.X, bounds.Y + bounds.Height - 1);
 
                 // bottom + right
                 pen.Color = hls.Lighter(1.0f);
-                graphics.DrawLine(pen, bounds.X, bounds.Y + bounds.Height - 1, 
+                graphics.DrawLine(pen, bounds.X, bounds.Y + bounds.Height - 1,
                                   bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);
-                graphics.DrawLine(pen, bounds.X + bounds.Width - 1, bounds.Y, 
+                graphics.DrawLine(pen, bounds.X + bounds.Width - 1, bounds.Y,
                                   bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);
 
                 // Top + left inset
@@ -970,7 +970,7 @@ namespace System.Windows.Forms {
             }
             else { // Standard button
                 Debug.Assert(style == ButtonBorderStyle.Outset, "Caller should have known how to use us.");
-                
+
                 bool stockColor = color.ToKnownColor() == SystemColors.Control.ToKnownColor();
                 HLSColor hls = new HLSColor(color);
 
@@ -978,7 +978,7 @@ namespace System.Windows.Forms {
                 Pen pen = stockColor ? SystemPens.ControlLightLight : new Pen(hls.Lighter(1.0f));
                 graphics.DrawLine(pen, bounds.X, bounds.Y,
                                             bounds.X + bounds.Width - 1, bounds.Y);
-                graphics.DrawLine(pen, bounds.X, bounds.Y, 
+                graphics.DrawLine(pen, bounds.X, bounds.Y,
                                   bounds.X, bounds.Y + bounds.Height - 1);
                 // bottom + right
                 if (stockColor) {
@@ -987,9 +987,9 @@ namespace System.Windows.Forms {
                 else {
                     pen.Color = hls.Darker(1.0f);
                 }
-                graphics.DrawLine(pen, bounds.X, bounds.Y + bounds.Height - 1, 
+                graphics.DrawLine(pen, bounds.X, bounds.Y + bounds.Height - 1,
                                   bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);
-                graphics.DrawLine(pen, bounds.X + bounds.Width - 1, bounds.Y, 
+                graphics.DrawLine(pen, bounds.X + bounds.Width - 1, bounds.Y,
                                   bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);
                 // top + left inset
                 if (stockColor) {
@@ -1008,7 +1008,7 @@ namespace System.Windows.Forms {
                 graphics.DrawLine(pen, bounds.X + 1, bounds.Y + 1,
                                   bounds.X + 1, bounds.Y + bounds.Height - 2);
 
-                // Bottom + right inset                        
+                // Bottom + right inset
                 if (stockColor) {
                     pen = SystemPens.ControlDark;
                 }
@@ -1020,13 +1020,13 @@ namespace System.Windows.Forms {
                                   bounds.X + bounds.Width - 2, bounds.Y + bounds.Height - 2);
                 graphics.DrawLine(pen, bounds.X + bounds.Width - 2, bounds.Y + 1,
                                   bounds.X + bounds.Width - 2, bounds.Y + bounds.Height - 2);
-                                  
+
                 if (!stockColor) {
                     pen.Dispose();
                 }
             }
         }
-        
+
         /// <devdoc>
         ///     Helper function that draws a simple border. This is used by DrawBorder for the most common rendering cases.
         /// </devdoc>
@@ -1046,9 +1046,9 @@ namespace System.Windows.Forms {
                     pen.DashStyle = BorderStyleToDashStyle(style);
                 }
             }
-                
+
             graphics.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
-            
+
             if (!stockBorder) {
                 pen.Dispose();
             }
@@ -1132,7 +1132,7 @@ namespace System.Windows.Forms {
             Pen pen = Pens.Black;
 
             graphics.FillRectangle(brush, bounds.Left + 1, bounds.Top + 1, bounds.Width - 2, bounds.Height - 2);
-            
+
             //draw the bounding rect w/o the four corners
             graphics.DrawLine(pen, bounds.X + 1, bounds.Y, bounds.Right -2, bounds.Y);
             graphics.DrawLine(pen, bounds.X + 1, bounds.Bottom - 1, bounds.Right -2, bounds.Bottom - 1);
@@ -1154,7 +1154,7 @@ namespace System.Windows.Forms {
 
             // left hash
             graphics.DrawLine(pen, bounds.X+2, midy - 1, bounds.X + 2, midy + 1);
-            graphics.DrawLine(pen, bounds.X+3, midy - 2, bounds.X + 3, midy + 2);            
+            graphics.DrawLine(pen, bounds.X+3, midy - 2, bounds.X + 3, midy + 2);
 
             // right hash
             graphics.DrawLine(pen, bounds.Right - 3, midy - 1, bounds.Right - 3, midy + 1);
@@ -1270,7 +1270,7 @@ namespace System.Windows.Forms {
             graphics.DrawRectangle(GetFocusPen(color,
                 // we want the corner to be penned
                 // see GetFocusPen for more explanation
-                (rectangle.X + rectangle.Y) % 2 == 1, 
+                (rectangle.X + rectangle.Y) % 2 == 1,
                 highContrast),
                     rectangle);
         }
@@ -1278,7 +1278,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Draws a win32 frame control.
         /// </devdoc>
-        private static void DrawFrameControl(Graphics graphics, int x, int y, int width, int height, 
+        private static void DrawFrameControl(Graphics graphics, int x, int y, int width, int height,
                                              int kind, int state, Color foreColor, Color backColor) {
             if (graphics == null) {
                 throw new ArgumentNullException(nameof(graphics));
@@ -1298,7 +1298,7 @@ namespace System.Windows.Forms {
                     using( WindowsGraphics wg = WindowsGraphics.FromGraphics(g2) ){ // Get Win32 dc with Graphics properties applied to it.
                         SafeNativeMethods.DrawFrameControl(new HandleRef(wg, wg.DeviceContext.Hdc), ref rcFrame, kind, (int) state);
                     }
-                
+
                     if (foreColor == Color.Empty || backColor == Color.Empty) {
                         graphics.DrawImage(bitmap, x, y);
                     }
@@ -1326,7 +1326,7 @@ namespace System.Windows.Forms {
         public static void DrawGrabHandle(Graphics graphics, Rectangle rectangle, bool primary, bool enabled) {
             Pen pen;
             Brush brush;
-            
+
             if (graphics == null) {
                 throw new ArgumentNullException(nameof(graphics));
             }
@@ -1385,8 +1385,8 @@ namespace System.Windows.Forms {
 
             float intensity = backColor.GetBrightness();
             bool invert = (intensity < .5);
-            
-            if (gridBrush == null || gridSize.Width != pixelsBetweenDots.Width 
+
+            if (gridBrush == null || gridSize.Width != pixelsBetweenDots.Width
                 || gridSize.Height != pixelsBetweenDots.Height || invert != gridInvert) {
 
                 if (gridBrush != null) {
@@ -1419,17 +1419,17 @@ namespace System.Windows.Forms {
 
         /* Unused
         // Takes a black and white image, and paints it in color
-        internal static void DrawImageColorized(Graphics graphics, Image image, Rectangle destination, 
+        internal static void DrawImageColorized(Graphics graphics, Image image, Rectangle destination,
                                                 Color replaceBlack, Color replaceWhite) {
-            DrawImageColorized(graphics, image, destination, 
+            DrawImageColorized(graphics, image, destination,
                                RemapBlackAndWhiteAndTransparentMatrix(replaceBlack, replaceWhite));
         }
         */
 
         // Takes a black and transparent image, turns black pixels into some other color, and leaves transparent pixels alone
-        internal static void DrawImageColorized(Graphics graphics, Image image, Rectangle destination, 
+        internal static void DrawImageColorized(Graphics graphics, Image image, Rectangle destination,
                                                 Color replaceBlack) {
-            DrawImageColorized(graphics, image, destination, 
+            DrawImageColorized(graphics, image, destination,
                                RemapBlackAndWhitePreserveTransparentMatrix(replaceBlack, Color.White));
         }
 
@@ -1456,7 +1456,7 @@ namespace System.Windows.Forms {
         }
 
         // Takes a black and white image, and paints it in color
-        private static void DrawImageColorized(Graphics graphics, Image image, Rectangle destination, 
+        private static void DrawImageColorized(Graphics graphics, Image image, Rectangle destination,
                                                ColorMatrix matrix) {
             if (graphics == null) {
                 throw new ArgumentNullException(nameof(graphics));
@@ -1478,7 +1478,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Draws an image and makes it look disabled.
         /// </devdoc>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]        
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]
         internal static void DrawImageDisabled(Graphics graphics, Image image, Rectangle imageBounds, Color background, bool unscaledImage) {
             if (graphics == null) {
                 throw new ArgumentNullException(nameof(graphics));
@@ -1505,7 +1505,7 @@ namespace System.Windows.Forms {
                 // Black becomes a shade of gray as well.
                 //
                 // btw, if you do come up with something better let me know - Microsoft
-                
+
                 float[][] array = new float[5][];
                     array[0] = new float[5] {0.2125f, 0.2125f, 0.2125f, 0, 0};
                 array[1] = new float[5] {0.2577f, 0.2577f, 0.2577f, 0, 0};
@@ -1523,20 +1523,20 @@ namespace System.Windows.Forms {
             if (unscaledImage) {
                 using (Bitmap bmp = new Bitmap(image.Width, image.Height)) {
                     using (Graphics g = Graphics.FromImage(bmp)) {
-                        g.DrawImage(image, 
+                        g.DrawImage(image,
                                    new Rectangle(0, 0, imageSize.Width, imageSize.Height),
                                    0, 0, imageSize.Width, imageSize.Height,
-                                   GraphicsUnit.Pixel, 
+                                   GraphicsUnit.Pixel,
                                    disabledImageAttr);
                     }
                     graphics.DrawImageUnscaled(bmp, imageBounds);
                 }
             }
             else {
-                graphics.DrawImage(image, 
-                                   imageBounds, 
+                graphics.DrawImage(image,
+                                   imageBounds,
                                    0, 0, imageSize.Width, imageSize.Height,
-                                   GraphicsUnit.Pixel, 
+                                   GraphicsUnit.Pixel,
                                    disabledImageAttr);
             }
 #else
@@ -1567,7 +1567,7 @@ namespace System.Windows.Forms {
 
                 disposeBitmap = true;
             }
-            
+
             Color highlight = ControlPaint.LightLight(background);
             Bitmap monochrome = MakeMonochrome(bitmap, highlight);
             graphics.DrawImage(monochrome, new Rectangle(imageBounds.X + 1, imageBounds.Y + 1, imageBounds.Width, imageBounds.Height));
@@ -1634,7 +1634,7 @@ namespace System.Windows.Forms {
         ///     Draws a menu glyph for a Win32 menu in the given rectangle with the given state.
         /// </devdoc>
         public static void DrawMenuGlyph(Graphics graphics, int x, int y, int width, int height, MenuGlyph glyph) {
-            DrawFrameControl(graphics, x, y, width, height, NativeMethods.DFC_MENU, 
+            DrawFrameControl(graphics, x, y, width, height, NativeMethods.DFC_MENU,
                              (int) glyph, Color.Empty, Color.Empty);
         }
 
@@ -1718,7 +1718,7 @@ namespace System.Windows.Forms {
             SafeNativeMethods.SelectObject(new HandleRef(null, dc), new HandleRef(null, oldPen));
 
             if (pen != IntPtr.Zero)
-            { 
+            {
                 SafeNativeMethods.DeleteObject(new HandleRef(null, pen));
             }
 
@@ -1730,8 +1730,8 @@ namespace System.Windows.Forms {
         ///      be erased by just drawing over it again.
         /// </devdoc>
         public static void DrawReversibleLine(Point start, Point end, Color backColor) {
-            int rop2 = GetColorRop(backColor, 
-                                   0xA, // RasterOp.PEN.Invert().XorWith(RasterOp.TARGET), 
+            int rop2 = GetColorRop(backColor,
+                                   0xA, // RasterOp.PEN.Invert().XorWith(RasterOp.TARGET),
                                    0x7); //RasterOp.PEN.XorWith(RasterOp.TARGET));
 
             IntPtr dc = UnsafeNativeMethods.GetDCEx(new HandleRef(null, UnsafeNativeMethods.GetDesktopWindow()), NativeMethods.NullHandleRef, NativeMethods.DCX_WINDOW | NativeMethods.DCX_LOCKWINDOWUPDATE | NativeMethods.DCX_CACHE);
@@ -1776,7 +1776,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException(nameof(graphics));
             }
 
-            Brush frameBrush;            
+            Brush frameBrush;
             if (active) {
                 frameBrush = GetActiveBrush(backColor);
             }
@@ -1838,7 +1838,7 @@ namespace System.Windows.Forms {
             }
 
             if (SystemInformation.HighContrast) {
-                // Ignore the foreground color argument and don't do shading in high contrast, 
+                // Ignore the foreground color argument and don't do shading in high contrast,
                 // as colors should match the OS-defined ones.
                 graphics.DrawString(s, font, SystemBrushes.GrayText, layoutRectangle, format);
             }
@@ -1858,7 +1858,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Draws a string in the style appropriate for disabled items, using GDI-based TextRenderer.
         /// </devdoc>
-        public static void DrawStringDisabled(IDeviceContext dc, string s, Font font, 
+        public static void DrawStringDisabled(IDeviceContext dc, string s, Font font,
                                               Color color, Rectangle layoutRectangle,
                                               TextFormatFlags format) {
             if (dc == null) {
@@ -1871,7 +1871,7 @@ namespace System.Windows.Forms {
             else {
                 layoutRectangle.Offset(1, 1);
                 Color paintcolor = LightLight(color);
-           
+
                 TextRenderer.DrawText(dc, s, font, layoutRectangle, paintcolor, format);
                 layoutRectangle.Offset(-1, -1);
                 paintcolor = Dark(color);
@@ -1898,11 +1898,11 @@ namespace System.Windows.Forms {
         ///      a wider variety of colors.
         /// </devdoc>
         public static void FillReversibleRectangle(Rectangle rectangle, Color backColor) {
-            int rop3 = GetColorRop(backColor, 
-                                   0xa50065, // RasterOp.BRUSH.Invert().XorWith(RasterOp.TARGET), 
+            int rop3 = GetColorRop(backColor,
+                                   0xa50065, // RasterOp.BRUSH.Invert().XorWith(RasterOp.TARGET),
                                    0x5a0049); // RasterOp.BRUSH.XorWith(RasterOp.TARGET));
-            int rop2 = GetColorRop(backColor, 
-                                   0x6, // RasterOp.BRUSH.Invert().XorWith(RasterOp.TARGET), 
+            int rop2 = GetColorRop(backColor,
+                                   0x6, // RasterOp.BRUSH.Invert().XorWith(RasterOp.TARGET),
                                    0x6); // RasterOp.BRUSH.XorWith(RasterOp.TARGET));
 
             IntPtr dc = UnsafeNativeMethods.GetDCEx(new HandleRef(null, UnsafeNativeMethods.GetDesktopWindow()), NativeMethods.NullHandleRef, NativeMethods.DCX_WINDOW | NativeMethods.DCX_LOCKWINDOWUPDATE | NativeMethods.DCX_CACHE);
@@ -1932,7 +1932,7 @@ namespace System.Windows.Forms {
 
         // Returns whether or not target was changed
         internal static bool FontToIFont(Font source, UnsafeNativeMethods.IFont target) {
-            bool changed = false; 
+            bool changed = false;
 
             // we need to go through all the pain of the diff here because
             // it looks like setting them all has different results based on the
@@ -2029,7 +2029,7 @@ namespace System.Windows.Forms {
             else {
                 brushColor = SystemColors.ControlDark;
             }
-            
+
             if (frameBrushActive == null ||
                 !frameColorActive.Equals(brushColor)) {
 
@@ -2225,7 +2225,7 @@ namespace System.Windows.Forms {
         // Returns a monochrome bitmap based on the input.
         private static Bitmap MakeMonochrome(Bitmap input, Color color) {
             Bitmap output = new Bitmap(input.Width, input.Height);
-            output.SetResolution(input.HorizontalResolution, input.VerticalResolution);        
+            output.SetResolution(input.HorizontalResolution, input.VerticalResolution);
             Size size = input.Size;
             int width = input.Width;
             int height = input.Height;
@@ -2266,7 +2266,7 @@ namespace System.Windows.Forms {
             for (int row = 0; row < size; row++){
                  result[row] = new float[size];
             }
-           
+
             float[] column = new float[size];
             for (int j = 0; j < size; j++) {
                 for (int k = 0; k < size; k++) {
@@ -2279,9 +2279,9 @@ namespace System.Windows.Forms {
                         s += row[k] * column[k];
                     }
                     result[i][j] = s;
-                 } 
+                 }
             }
-            
+
             return new ColorMatrix(result);
 
         }
@@ -2296,7 +2296,7 @@ namespace System.Windows.Forms {
                 case TableLayoutPanelCellBorderStyle.None:
                 case TableLayoutPanelCellBorderStyle.Single:
                     break;
-                    
+
                 case TableLayoutPanelCellBorderStyle.Inset:
                 case TableLayoutPanelCellBorderStyle.InsetDouble:
                     g.DrawLine(SystemPens.ControlDark, x, y, right - 1, y);
@@ -2306,7 +2306,7 @@ namespace System.Windows.Forms {
                         g.DrawLine(pen, x, bottom - 1, right - 1, bottom - 1);
                     }
                     break;
-                    
+
                 case TableLayoutPanelCellBorderStyle.Outset:
                 case TableLayoutPanelCellBorderStyle.OutsetDouble:
                 case TableLayoutPanelCellBorderStyle.OutsetPartial:
@@ -2316,13 +2316,13 @@ namespace System.Windows.Forms {
                     }
                     g.DrawLine(SystemPens.ControlDark, right - 1, y, right - 1, bottom - 1);
                     g.DrawLine(SystemPens.ControlDark, x, bottom - 1, right - 1, bottom - 1);
-                    break; 
-             }            
+                    break;
+             }
         }
 
         //paint individual cell of the table
         internal static void PaintTableCellBorder(TableLayoutPanelCellBorderStyle borderStyle, Graphics g, Rectangle bound) {
-            
+
             //next, paint the cell border
             switch (borderStyle) {
                 case TableLayoutPanelCellBorderStyle.None :
@@ -2400,7 +2400,7 @@ namespace System.Windows.Forms {
             float normWhiteBlue  = ((float)replaceWhite.B)/(float)255.0;
             float normWhiteAlpha = ((float)replaceWhite.A)/(float)255.0;
 
-            // Set up a matrix that will map white to replaceWhite and 
+            // Set up a matrix that will map white to replaceWhite and
             // black and transparent black to replaceBlack.
             //
             //                | -B  -B  -B  -B   0 |
@@ -2459,7 +2459,7 @@ namespace System.Windows.Forms {
             float normWhiteBlue  = ((float)replaceWhite.B)/(float)255.0;
             float normWhiteAlpha = ((float)replaceWhite.A)/(float)255.0;
 
-            // Set up a matrix that will map white to replaceWhite and 
+            // Set up a matrix that will map white to replaceWhite and
             // black to replaceBlack, using the source bitmap's alpha value for the output
             //
             //                | -B  -B  -B   0   0 |
@@ -2496,7 +2496,7 @@ namespace System.Windows.Forms {
 
             return matrix;
         }
-        
+
         /* Unused
         internal static StringAlignment TranslateAlignment(HorizontalAlignment align) {
             StringAlignment result;
@@ -2630,7 +2630,7 @@ namespace System.Windows.Forms {
             textAlign = ctl.RtlTranslateContent( textAlign );
             TextFormatFlags flags = ControlPaint.TextFormatFlagsForAlignmentGDI( textAlign );
 
-            // The effect of the TextBoxControl flag is that in-word line breaking will occur if needed, this happens when AutoSize 
+            // The effect of the TextBoxControl flag is that in-word line breaking will occur if needed, this happens when AutoSize
             // is false and a one-word line still doesn't fit the binding box (width). The other effect is that partially visible
             // lines are clipped; this is how GDI+ works by default.
             flags |= TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl;
@@ -2782,7 +2782,7 @@ namespace System.Windows.Forms {
                     int oneLum = 0;
                     int zeroLum = NewLuma(ShadowAdj, true);
 
-                    /*                                        
+                    /*
                     if (luminosity < 40) {
                         zeroLum = NewLuma(120, ShadowAdj, true);
                     }
@@ -2794,20 +2794,20 @@ namespace System.Windows.Forms {
                     return ColorFromHLS(hue, zeroLum - (int)((zeroLum - oneLum) * percDarker), saturation);
                 }
             }
-            
+
             public override bool Equals(object o) {
                 if (!(o is HLSColor)) {
                     return false;
                 }
-                
+
                 HLSColor c = (HLSColor)o;
-                return hue == c.hue && 
-                       saturation == c.saturation && 
-                       luminosity == c.luminosity && 
+                return hue == c.hue &&
+                       saturation == c.saturation &&
+                       luminosity == c.luminosity &&
                        isSystemColors_Control == c.isSystemColors_Control;
             }
 
-            public static bool operator ==(HLSColor a, HLSColor b) {            
+            public static bool operator ==(HLSColor a, HLSColor b) {
                 return a.Equals(b);
             }
 
@@ -2818,7 +2818,7 @@ namespace System.Windows.Forms {
             public override int GetHashCode() {
                 return hue << 6 | saturation << 2 | luminosity;
             }
-    
+
             /// <devdoc>
             /// </devdoc>
             public Color Lighter(float percLighter) {
@@ -2858,7 +2858,7 @@ namespace System.Windows.Forms {
                         oneLum = NewLuma(HilightAdj, true);
                     }
                     */
-                    
+
                     return ColorFromHLS(hue, zeroLum + (int)((oneLum - zeroLum) * percLighter), saturation);
                 }
             }

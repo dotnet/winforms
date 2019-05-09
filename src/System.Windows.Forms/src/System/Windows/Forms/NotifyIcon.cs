@@ -8,7 +8,7 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System;
     using System.Runtime.InteropServices;
-    using System.Windows.Forms;    
+    using System.Windows.Forms;
     using System.Windows.Forms.Design;
     using Microsoft.Win32;
     using System.Drawing;
@@ -58,7 +58,7 @@ namespace System.Windows.Forms {
         private object userData;
         private bool doubleClick = false; // checks if doubleclick is fired
 
-        // Visible defaults to false, but the NotifyIconDesigner makes it seem like the default is 
+        // Visible defaults to false, but the NotifyIconDesigner makes it seem like the default is
         // true.  We do this because while visible is the more common case, if it was a true default,
         // there would be no way to create a hidden NotifyIcon without being visible for a moment.
         private bool visible = false;
@@ -101,8 +101,8 @@ namespace System.Windows.Forms {
         Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor))
         ]
         public string BalloonTipText {
-            get { 
-                return balloonTipText; 
+            get {
+                return balloonTipText;
             }
             set {
                 if (value != balloonTipText) {
@@ -123,8 +123,8 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.NotifyIconBalloonTipIconDescr))
         ]
         public ToolTipIcon BalloonTipIcon {
-            get { 
-                return balloonTipIcon; 
+            get {
+                return balloonTipIcon;
             }
             set {
                 //valid values are 0x0 to 0x3
@@ -150,8 +150,8 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.NotifyIconBalloonTipTitleDescr))
         ]
         public string BalloonTipTitle {
-            get { 
-                return balloonTipTitle; 
+            get {
+                return balloonTipTitle;
             }
             set {
                 if (value != balloonTipTitle) {
@@ -220,7 +220,7 @@ namespace System.Windows.Forms {
             get {
                 return contextMenuStrip;
             }
-    
+
             set {
                 this.contextMenuStrip = value;
             }
@@ -367,7 +367,7 @@ namespace System.Windows.Forms {
         public event MouseEventHandler MouseDown {
             add => Events.AddHandler(EVENT_MOUSEDOWN, value);
             remove => Events.RemoveHandler(EVENT_MOUSEDOWN, value);
-        }        
+        }
 
         /// <devdoc>
         ///    <para>
@@ -379,7 +379,7 @@ namespace System.Windows.Forms {
         public event MouseEventHandler MouseMove {
             add => Events.AddHandler(EVENT_MOUSEMOVE, value);
             remove => Events.RemoveHandler(EVENT_MOUSEMOVE, value);
-        }        
+        }
 
         /// <devdoc>
         ///    <para>
@@ -392,7 +392,7 @@ namespace System.Windows.Forms {
         public event MouseEventHandler MouseUp {
             add => Events.AddHandler(EVENT_MOUSEUP, value);
             remove => Events.RemoveHandler(EVENT_MOUSEUP, value);
-        }        
+        }
 
         /// <devdoc>
         ///    <para>
@@ -426,7 +426,7 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         ///    <para>
-        ///       This method raised the BalloonTipClicked event. 
+        ///       This method raised the BalloonTipClicked event.
         ///    </para>
         /// </devdoc>
         private void OnBalloonTipClicked() {
@@ -438,7 +438,7 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         ///    <para>
-        ///       This method raised the BalloonTipClosed event. 
+        ///       This method raised the BalloonTipClosed event.
         ///    </para>
         /// </devdoc>
         private void OnBalloonTipClosed() {
@@ -450,7 +450,7 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         ///    <para>
-        ///       This method raised the BalloonTipShown event. 
+        ///       This method raised the BalloonTipShown event.
         ///    </para>
         /// </devdoc>
         private void OnBalloonTipShown() {
@@ -495,7 +495,7 @@ namespace System.Windows.Forms {
             if (handler != null)
                 handler( this, mea );
         }
-        
+
         /// <devdoc>
         ///     Inheriting classes should override this method to handle this event.
         ///     Call base.OnMouseDoubleClick to send this event to any registered event listeners.
@@ -511,7 +511,7 @@ namespace System.Windows.Forms {
         ///       Raises the <see cref='System.Windows.Forms.NotifyIcon.MouseDown'/> event.
         ///       Inheriting classes should override this method to handle this event.
         ///       Call base.onMouseDown to send this event to any registered event listeners.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         private void OnMouseDown(MouseEventArgs e) {
@@ -524,7 +524,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Inheriting classes should override this method to handle this event.
         ///       Call base.onMouseMove to send this event to any registered event listeners.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         private void OnMouseMove(MouseEventArgs e) {
@@ -548,19 +548,19 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>
         ///       Displays a balloon tooltip in the taskbar.
-        /// 
-        ///       The system enforces minimum and maximum timeout values. Timeout 
-        ///       values that are too large are set to the maximum value and values 
-        ///       that are too small default to the minimum value. The operating system's 
-        ///       default minimum and maximum timeout values are 10 seconds and 30 seconds, 
+        ///
+        ///       The system enforces minimum and maximum timeout values. Timeout
+        ///       values that are too large are set to the maximum value and values
+        ///       that are too small default to the minimum value. The operating system's
+        ///       default minimum and maximum timeout values are 10 seconds and 30 seconds,
         ///       respectively.
-        ///       
-        ///       No more than one balloon ToolTip at at time is displayed for the taskbar. 
-        ///       If an application attempts to display a ToolTip when one is already being displayed, 
-        ///       the ToolTip will not appear until the existing balloon ToolTip has been visible for at 
-        ///       least the system minimum timeout value. For example, a balloon ToolTip with timeout 
-        ///       set to 30 seconds has been visible for seven seconds when another application attempts 
-        ///       to display a balloon ToolTip. If the system minimum timeout is ten seconds, the first 
+        ///
+        ///       No more than one balloon ToolTip at at time is displayed for the taskbar.
+        ///       If an application attempts to display a ToolTip when one is already being displayed,
+        ///       the ToolTip will not appear until the existing balloon ToolTip has been visible for at
+        ///       least the system minimum timeout value. For example, a balloon ToolTip with timeout
+        ///       set to 30 seconds has been visible for seven seconds when another application attempts
+        ///       to display a balloon ToolTip. If the system minimum timeout is ten seconds, the first
         ///       ToolTip displays for an additional three seconds before being replaced by the second ToolTip.
         ///    </para>
         /// </devdoc>
@@ -573,19 +573,19 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Displays a balloon tooltip in the taskbar with the specified title,
         ///       text, and icon for a duration of the specified timeout value.
-        /// 
-        ///       The system enforces minimum and maximum timeout values. Timeout 
-        ///       values that are too large are set to the maximum value and values 
-        ///       that are too small default to the minimum value. The operating system's 
-        ///       default minimum and maximum timeout values are 10 seconds and 30 seconds, 
+        ///
+        ///       The system enforces minimum and maximum timeout values. Timeout
+        ///       values that are too large are set to the maximum value and values
+        ///       that are too small default to the minimum value. The operating system's
+        ///       default minimum and maximum timeout values are 10 seconds and 30 seconds,
         ///       respectively.
-        ///       
-        ///       No more than one balloon ToolTip at at time is displayed for the taskbar. 
-        ///       If an application attempts to display a ToolTip when one is already being displayed, 
-        ///       the ToolTip will not appear until the existing balloon ToolTip has been visible for at 
-        ///       least the system minimum timeout value. For example, a balloon ToolTip with timeout 
-        ///       set to 30 seconds has been visible for seven seconds when another application attempts 
-        ///       to display a balloon ToolTip. If the system minimum timeout is ten seconds, the first 
+        ///
+        ///       No more than one balloon ToolTip at at time is displayed for the taskbar.
+        ///       If an application attempts to display a ToolTip when one is already being displayed,
+        ///       the ToolTip will not appear until the existing balloon ToolTip has been visible for at
+        ///       least the system minimum timeout value. For example, a balloon ToolTip with timeout
+        ///       set to 30 seconds has been visible for seven seconds when another application attempts
+        ///       to display a balloon ToolTip. If the system minimum timeout is ten seconds, the first
         ///       ToolTip displays for an additional three seconds before being replaced by the second ToolTip.
         ///    </para>
         /// </devdoc>
@@ -604,8 +604,8 @@ namespace System.Windows.Forms {
             if (!ClientUtils.IsEnumValid(tipIcon, (int)tipIcon, (int)ToolTipIcon.None, (int)ToolTipIcon.Error)){
                 throw new InvalidEnumArgumentException(nameof(tipIcon), (int)tipIcon, typeof(ToolTipIcon));
             }
-            
-            
+
+
            if (added ) {
                 // Bail if in design mode...
                 if (DesignMode) {
@@ -640,7 +640,7 @@ namespace System.Windows.Forms {
             if (contextMenu != null || contextMenuStrip != null) {
                 NativeMethods.POINT pt = new NativeMethods.POINT();
                 UnsafeNativeMethods.GetCursorPos(pt);
-                                
+
                 // Summary: the current window must be made the foreground window
                 // before calling TrackPopupMenuEx, and a task switch must be
                 // forced after the call.
@@ -666,7 +666,7 @@ namespace System.Windows.Forms {
                 }
             }
         }
-    
+
         /// <devdoc>
         ///     Updates the icon in the system tray.
         /// </devdoc>
@@ -826,7 +826,7 @@ namespace System.Windows.Forms {
                         WmMeasureMenuItem(ref msg);
                     }
                     break;
-                    
+
                 case Interop.WindowMessages.WM_INITMENUPOPUP:
                     WmInitMenuPopup(ref msg);
                     break;
@@ -909,7 +909,7 @@ namespace System.Windows.Forms {
                 if (Handle != IntPtr.Zero) {
                     UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_CLOSE, 0, 0);
                 }
-                
+
                 // This releases the handle from our window proc, re-routing it back to
                 // the system.
             }

@@ -19,7 +19,7 @@ namespace System.Experimental.Gdi
     internal
 #endif
     enum DeviceCapabilities
-    {  
+    {
         /* Device Parameters for GetDeviceCaps() */
         DriverVersion       = 0,     /* device driver version                    */
         Technology          = 2,     /* device classification                    */

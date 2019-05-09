@@ -110,9 +110,9 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc> 
+        /// <devdoc>
         /// Find a toolstrip in the weak ref arraylist, return null if nothing was found
-        /// </devdoc>        
+        /// </devdoc>
         public static ToolStrip FindToolStrip(string toolStripName) {
             ToolStrip result = null;
             for (int i = 0; i < ToolStrips.Count; i++) {
@@ -125,9 +125,9 @@ namespace System.Windows.Forms {
             return result;
         }
 
-        /// <devdoc> 
+        /// <devdoc>
         /// Find a toolstrip in the weak ref arraylist, return null if nothing was found
-        /// </devdoc>        
+        /// </devdoc>
         internal static ToolStrip FindToolStrip(Form owningForm, string toolStripName)
         {
             ToolStrip result = null;
@@ -233,7 +233,7 @@ namespace System.Windows.Forms {
         internal static void NotifyMenuModeChange(bool invalidateText, bool activationChange) {
             bool toolStripPruneNeeded = false;
 
-            // If we've toggled the ShowUnderlines value, we'll need to invalidate 
+            // If we've toggled the ShowUnderlines value, we'll need to invalidate
             for (int i = 0; i < ToolStrips.Count; i++) {
                 ToolStrip toolStrip = ToolStrips[i] as ToolStrip;
                 if (toolStrip == null) {
@@ -275,7 +275,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        // this is a special version of SelectNextControl which looks for ToolStrips 
+        // this is a special version of SelectNextControl which looks for ToolStrips
         // that are TabStop = false in TabOrder.  This is used from Control+Tab
         // handling to swap focus between ToolStrips.
         internal static bool SelectNextToolStrip(ToolStrip start, bool forward) {
@@ -304,9 +304,9 @@ namespace System.Windows.Forms {
 
                 int nextControlTabIndex = toolStrip.TabIndex;
                 Debug.WriteLineIf(ToolStrip.ControlTabDebug.TraceVerbose, "SELECTNEXTTOOLSTRIP: start: " + startTabIndex.ToString(CultureInfo.CurrentCulture) + " " + start.Name);
-                // since CanChangeSelection can iterate through all the items in a toolstrip, 
+                // since CanChangeSelection can iterate through all the items in a toolstrip,
                 // defer the checking until we think we've got a viable TabIndex candidate.
-                // this brings it to O(n+m) instead of O(n*m) where n is # toolstrips & m is avg number 
+                // this brings it to O(n+m) instead of O(n*m) where n is # toolstrips & m is avg number
                 // items/toolstrip
                 if (forward) {
                     if (nextControlTabIndex >= startTabIndex && CanChangeSelection(start, toolStrip)) {
@@ -315,7 +315,7 @@ namespace System.Windows.Forms {
                             nextControl = toolStrip;
                         }
                         else if (toolStrip.TabIndex < nextControl.TabIndex) {
-                            // we want to pick a larger index, but one that's 
+                            // we want to pick a larger index, but one that's
                             // closest to the start tab index.
                             nextControl = toolStrip;
                         }
@@ -334,7 +334,7 @@ namespace System.Windows.Forms {
                             nextControl = toolStrip;
                         }
                         else if (toolStrip.TabIndex > nextControl.TabIndex) {
-                            // we want to pick a smaller index, but one that's 
+                            // we want to pick a smaller index, but one that's
                             // closest to the start tab index.
                             nextControl = toolStrip;
                         }
@@ -376,12 +376,12 @@ namespace System.Windows.Forms {
         /// ============================================================================
         ///  BEGIN task specific functions.  Since ToolStripManager is used
         ///  for Painting, Merging and Rafting, and who knows what else in the future
-        ///  the following properties/methods/events are organized in regions 
+        ///  the following properties/methods/events are organized in regions
         ///  alphabetically by task
         /// ----------------------------------------------------------------------------
 
         ///
-        ///  ToolStripManager Default Renderer 
+        ///  ToolStripManager Default Renderer
         ///
         #region DefaultRenderer
 
@@ -428,7 +428,7 @@ namespace System.Windows.Forms {
                 return defaultRenderer;
             }
             set {
-                /// 
+                ///
 
                 if (defaultRenderer != value) {
                     CurrentRendererType = (value == null) ? DefaultRendererType : value.GetType();
@@ -479,7 +479,7 @@ namespace System.Windows.Forms {
             }
             set {
 
-                /// 
+                ///
 
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripManagerRenderMode.Custom, (int)ToolStripManagerRenderMode.Professional)) {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripManagerRenderMode));
@@ -589,8 +589,8 @@ namespace System.Windows.Forms {
 
         #region ToolStripSettings
 
-        /// <devdoc> 
-        ///     Loads settings for the given Form using the form type's fullname as settings key. 
+        /// <devdoc>
+        ///     Loads settings for the given Form using the form type's fullname as settings key.
         /// </devdoc>
         public static void LoadSettings(Form targetForm) {
             if (targetForm == null) {
@@ -600,8 +600,8 @@ namespace System.Windows.Forms {
             LoadSettings(targetForm, targetForm.GetType().FullName);
         }
 
-        /// <devdoc> 
-        ///     Loads settings for the given Form with the given settings key. 
+        /// <devdoc>
+        ///     Loads settings for the given Form with the given settings key.
         /// </devdoc>
         public static void LoadSettings(Form targetForm, string key) {
             if (targetForm == null) {
@@ -617,8 +617,8 @@ namespace System.Windows.Forms {
             settingsManager.Load();
         }
 
-        /// <devdoc> 
-        ///     Saves settings for the given form using the form type's fullname as settings key. 
+        /// <devdoc>
+        ///     Saves settings for the given form using the form type's fullname as settings key.
         /// </devdoc>
         public static void SaveSettings(Form sourceForm) {
             if (sourceForm == null) {
@@ -628,8 +628,8 @@ namespace System.Windows.Forms {
             SaveSettings(sourceForm, sourceForm.GetType().FullName);
         }
 
-        /// <devdoc> 
-        ///     Saves settings for the given form with the given settings key. 
+        /// <devdoc>
+        ///     Saves settings for the given form with the given settings key.
         /// </devdoc>
         public static void SaveSettings(Form sourceForm, string key) {
             if (sourceForm == null) {
@@ -648,7 +648,7 @@ namespace System.Windows.Forms {
         #endregion
 
         ///
-        ///  ToolStripManager ALT key PreProcessing 
+        ///  ToolStripManager ALT key PreProcessing
         ///
 
         #region MenuKeyAndShortcutProcessing
@@ -739,7 +739,7 @@ namespace System.Windows.Forms {
 
                         _activeHwnd = value;
 
-                        // make sure we watch out for handle recreates.  
+                        // make sure we watch out for handle recreates.
                         control = Control.FromHandle(_activeHwnd.Handle);
                         if (control != null) {
                             control.HandleCreated += new EventHandler(OnActiveHwndHandleCreated);
@@ -793,14 +793,14 @@ namespace System.Windows.Forms {
                         ActiveHwndInternal = new HandleRef(this, hwndActive);
                     }
 
-                    // PERF, 
+                    // PERF,
 
                     Application.ThreadContext.FromCurrent().AddMessageFilter(this);
                     Application.ThreadContext.FromCurrent().TrackInput(true);
 
                     if (!Application.ThreadContext.FromCurrent().GetMessageLoop(true)) {
                         // message filter isnt going to help as we dont own the message pump
-                        // switch over to a MessageHook                        
+                        // switch over to a MessageHook
                         MessageHook.HookMessages = true;
                     }
                     _inMenuMode = true;
@@ -827,7 +827,7 @@ namespace System.Windows.Forms {
 
             // ToolStrip analog to WM_EXITMENULOOP
             private void ExitMenuModeCore() {
-                
+
                 // ensure we've cleaned up the timer.
                 ProcessMessages(false);
 
@@ -837,10 +837,10 @@ namespace System.Windows.Forms {
 
                         if (messageHook != null) {
                             // message filter isnt going to help as we dont own the message pump
-                            // switch over to a MessageHook                        
+                            // switch over to a MessageHook
                             messageHook.HookMessages = false;
                         }
-                        // PERF, 
+                        // PERF,
 
                         Application.ThreadContext.FromCurrent().RemoveMessageFilter(this);
                         Application.ThreadContext.FromCurrent().TrackInput(false);
@@ -896,7 +896,7 @@ namespace System.Windows.Forms {
                 return null;
             }
 
-            // return the toolstrip that is at the root. 
+            // return the toolstrip that is at the root.
             private ToolStrip GetCurrentToplevelToolStrip() {
                 if (_toplevelToolStrip == null) {
                     ToolStrip activeToolStrip = GetActiveToolStripInternal();
@@ -968,7 +968,7 @@ namespace System.Windows.Forms {
                     _ensureMessageProcessingTimer = null;
                 }
             }
-                        
+
 
             private void ProcessMouseButtonPressed(IntPtr hwndMouseMessageIsFrom, int x, int y) {
                 Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ModalMenuFilter.ProcessMouseButtonPressed] Found a mouse down.");
@@ -990,7 +990,7 @@ namespace System.Windows.Forms {
                                     && activeToolStripDropDown.OwnerToolStrip.Handle == hwndMouseMessageIsFrom
                                     && activeToolStripDropDown.OwnerDropDownItem != null
                                      && activeToolStripDropDown.OwnerDropDownItem.DropDownButtonArea.Contains(x, y))) {
-                                    // the owner item should handle closing the dropdown 
+                                    // the owner item should handle closing the dropdown
                                     // this allows code such as if (DropDown.Visible) { Hide, Show } etc.
                                     CloseActiveDropDown(activeToolStripDropDown, ToolStripDropDownCloseReason.AppClicked);
                                 }
@@ -1052,7 +1052,7 @@ namespace System.Windows.Forms {
                 if (toolStrip.IsDropDown) {
                     // for something that never closes, dont use menu mode.
                     ToolStripDropDown dropDown = toolStrip as ToolStripDropDown;
-                    
+
                     if (dropDown.AutoClose == false) {
                         // store off the current active hwnd
                         IntPtr hwndActive = UnsafeNativeMethods.GetActiveWindow();
@@ -1184,7 +1184,7 @@ namespace System.Windows.Forms {
                 if (hwndCurrentActiveWindow.Handle != _lastActiveWindow.Handle) {
                     // if another window has gotten activation - we should dismiss.
                     if (hwndCurrentActiveWindow.Handle == IntPtr.Zero) {
-                        // we dont know what it was cause it's on another thread or doesnt exist 
+                        // we dont know what it was cause it's on another thread or doesnt exist
                         Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ModalMenuFilter.PreFilterMessage] Dismissing because: " + WindowsFormsUtils.GetControlInformation(hwndCurrentActiveWindow.Handle) + " has gotten activation. ");
                         ProcessActivationChange();
                     }
@@ -1210,7 +1210,7 @@ namespace System.Windows.Forms {
                     case Interop.WindowMessages.WM_NCMOUSEMOVE:
                         // Mouse move messages should be eaten if they arent for a dropdown.
                         // this prevents things like ToolTips and mouse over highlights from
-                        // being processed.  
+                        // being processed.
                         Control control = Control.FromChildHandle(m.HWnd);
                         if (control == null || !(control.TopLevelControlInternal is ToolStripDropDown)) {
                             // double check it's not a child control of the active toolstrip.
@@ -1235,7 +1235,7 @@ namespace System.Windows.Forms {
                                     return false;
                                 }
                                 // EAT mouse message
-                                // the HWND is 
+                                // the HWND is
                                 //      not part of the active toolstrip
                                 //      not the toplevel toolstrip (e.g. MenuStrip).
                                 //      not parented to the toplevel toolstrip (e.g a combo box on a menu strip).
@@ -1248,7 +1248,7 @@ namespace System.Windows.Forms {
                     case Interop.WindowMessages.WM_MBUTTONDOWN:
                         //
                         // When a mouse button is pressed, we should determine if it is within the client coordinates
-                        // of the active dropdown.  If not, we should dismiss it.  
+                        // of the active dropdown.  If not, we should dismiss it.
                         //
                         ProcessMouseButtonPressed(m.HWnd,
                             /*x=*/NativeMethods.Util.SignedLOWORD(m.LParam),
@@ -1260,7 +1260,7 @@ namespace System.Windows.Forms {
                     case Interop.WindowMessages.WM_NCMBUTTONDOWN:
                         //
                         // When a mouse button is pressed, we should determine if it is within the client coordinates
-                        // of the active dropdown.  If not, we should dismiss it.  
+                        // of the active dropdown.  If not, we should dismiss it.
                         //
                         ProcessMouseButtonPressed(/*nc messages are in screen coords*/IntPtr.Zero,
                             /*x=*/NativeMethods.Util.SignedLOWORD(m.LParam),
@@ -1400,7 +1400,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc> determines if the key combination is valid for a shortcut.  
+        /// <devdoc> determines if the key combination is valid for a shortcut.
         ///          must have a modifier key + a regular key.
         /// </devdoc>
         public static bool IsValidShortcut(Keys shortcut) {
@@ -1454,7 +1454,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc> this function is called for toplevel controls to process shortcuts. 
+        /// <devdoc> this function is called for toplevel controls to process shortcuts.
         ///          this function should be called from the topmost container control only.
         /// </devdoc>
         internal static bool ProcessCmdKey(ref Message m, Keys keyData) {
@@ -1462,7 +1462,7 @@ namespace System.Windows.Forms {
             Debug.WriteLineIf(Control.ControlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessCmdKey - processing: [" + keyData.ToString() + "]");
             if (ToolStripManager.IsValidShortcut(keyData)) {
                 // if we're at the toplevel, check the toolstrips for matching shortcuts.
-                // Win32 menus are handled in Form.ProcessCmdKey, but we cant guarantee that 
+                // Win32 menus are handled in Form.ProcessCmdKey, but we cant guarantee that
                 // toolstrips will be hosted in a form.  ToolStrips have a hash of shortcuts
                 // per container, so this should hopefully be a quick search.
                 Debug.WriteLineIf(Control.ControlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessCmdKey - IsValidShortcut: [" + keyData.ToString() + "]");
@@ -1478,7 +1478,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc> we're halfway to an accellerator table system here. 
+        /// <devdoc> we're halfway to an accellerator table system here.
         ///          each toolstrip maintains a hash of the current shortcuts its using.
         ///          this way the search only takes O(number of toolstrips in the thread)
         ///          ToolStripMenuItem pushes itself into this table as the owner is set or the shortcut changes.
@@ -1542,7 +1542,7 @@ namespace System.Windows.Forms {
                             ToolStripDropDown dropDown = toolStrip as ToolStripDropDown;
                             ContextMenuStrip toplevelContextMenu = dropDown.GetFirstDropDown() as ContextMenuStrip;
 
-                            // If a context menu is re-used between the main menu and the 
+                            // If a context menu is re-used between the main menu and the
                             // and some other control's context menu, we should go ahead and evaluate it.
 
                             if (toplevelContextMenu != null) {
@@ -1565,7 +1565,7 @@ namespace System.Windows.Forms {
 
                         if (!isAssociatedContextMenu) {
                             // make sure that were processing shortcuts for the correct window.
-                            // since the shortcut lookup is faster than this check we've postponed this to the last 
+                            // since the shortcut lookup is faster than this check we've postponed this to the last
                             // possible moment.
                             ToolStrip topMostToolStrip = toolStrip.GetToplevelOwnerToolStrip();
                             if (topMostToolStrip != null && activeControl != null) {
@@ -1578,12 +1578,12 @@ namespace System.Windows.Forms {
                                     Form mainForm = Control.FromHandle(rootWindowOfControl.Handle) as Form;
                                     if (mainForm != null && mainForm.IsMdiContainer) {
                                         Form toolStripForm = topMostToolStrip.FindForm();
-                                        if (toolStripForm != mainForm && toolStripForm != null) {                     
+                                        if (toolStripForm != mainForm && toolStripForm != null) {
                                            // we should only process shortcuts of the ActiveMDIChild or the Main Form.
-                                           rootWindowsMatch = (toolStripForm == mainForm.ActiveMdiChildInternal);                                            
-                                        }                     
+                                           rootWindowsMatch = (toolStripForm == mainForm.ActiveMdiChildInternal);
+                                        }
                                     }
-                                    
+
                                 }
                             }
                         }
@@ -1610,7 +1610,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc> this function handles when Alt is pressed.  
+        /// <devdoc> this function handles when Alt is pressed.
         ///          if it finds a menustrip to select, it returns true,
         ///          if it doesnt it returns false.
         ///          if it finds a win32 menu is already associated with the control it bails, returning false.
@@ -1646,8 +1646,8 @@ namespace System.Windows.Forms {
                 }
             }
             // the data that comes into the LParam is the ASCII code, not the VK_* code.
-            // we need to compare against char instead.   
-            if ((char)keyData == ' ') { // dont process system menu 
+            // we need to compare against char instead.
+            if ((char)keyData == ' ') { // dont process system menu
                 ModalMenuFilter.MenuKeyToggle = false;
             }
             else if ((char)keyData == '-') {
@@ -1738,7 +1738,7 @@ namespace System.Windows.Forms {
                 }
             }
             catch (Exception e) {
-                // Make sure we deal with non-critical failures gracefully. 
+                // Make sure we deal with non-critical failures gracefully.
                 if (ClientUtils.IsCriticalException(e)) {
                     throw;
                 }
@@ -1776,7 +1776,7 @@ namespace System.Windows.Forms {
             return result;
         }
 
-        /// <devdoc> 
+        /// <devdoc>
         /// </devdoc>
         internal static ArrayList FindMergeableToolStrips(ContainerControl container) {
             ArrayList result = new ArrayList();
@@ -1801,7 +1801,7 @@ namespace System.Windows.Forms {
             return (toolStrip is MdiControlStrip || toolStrip is MdiWindowListStrip);
         }
 
-        /// <devdoc> 
+        /// <devdoc>
         /// merge two toolstrips
         /// </devdoc>
         public static bool Merge(ToolStrip sourceToolStrip, ToolStrip targetToolStrip) {
@@ -1968,7 +1968,7 @@ namespace System.Windows.Forms {
             Debug.Unindent();
         }
 
-        /// <devdoc> 
+        /// <devdoc>
         /// merge two toolstrips
         /// </devdoc>
         public static bool Merge(ToolStrip sourceToolStrip, string targetName) {
@@ -1978,7 +1978,7 @@ namespace System.Windows.Forms {
             if (targetName == null) {
                 throw new ArgumentNullException(nameof(targetName));
             }
-            
+
             ToolStrip target = FindToolStrip(targetName);
             if (target == null) {
                 return false;
@@ -1988,7 +1988,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc> 
+        /// <devdoc>
         /// doesn't do a null check on source... if it's null we unmerge everything
         /// </devdoc>
         internal static bool RevertMergeInternal(ToolStrip targetToolStrip, ToolStrip sourceToolStrip, bool revertMDIControls) {
@@ -2005,7 +2005,7 @@ namespace System.Windows.Forms {
                 // we have a specific toolstrip to pull out.
 
 
-                // make sure the sourceToolStrip is even merged into the targetToolStrip 
+                // make sure the sourceToolStrip is even merged into the targetToolStrip
                 foreach (MergeHistory history in targetToolStrip.MergeHistoryStack) {
                     foundToolStrip = (history.MergedToolStrip == sourceToolStrip);
                     if (foundToolStrip) {
@@ -2013,7 +2013,7 @@ namespace System.Windows.Forms {
                     }
                 }
 
-                // PERF: if we dont have the toolstrip in our merge history, bail.  
+                // PERF: if we dont have the toolstrip in our merge history, bail.
                 if (!foundToolStrip) {
                     //Debug.WriteLine("source toolstrip not contained within target " + history.MergedToolStrip.Name);
                     return false;
@@ -2080,14 +2080,14 @@ namespace System.Windows.Forms {
             //ToolStripMergeNode.SynchronizeFromToolStripMergeNode(targetToolStrip.Items, targetToolStrip.MergeItems);
         }
 
-        /// <devdoc> 
+        /// <devdoc>
         /// unmerge two toolstrips
         /// </devdoc>
         public static bool RevertMerge(ToolStrip targetToolStrip) {
             return RevertMergeInternal(targetToolStrip, null, /*revertMDIControls*/false);
         }
 
-        /// <devdoc> 
+        /// <devdoc>
         /// unmerge two toolstrips
         /// </devdoc>
         public static bool RevertMerge(ToolStrip targetToolStrip, ToolStrip sourceToolStrip) {
@@ -2097,7 +2097,7 @@ namespace System.Windows.Forms {
             return RevertMergeInternal(targetToolStrip, sourceToolStrip, /*revertMDIControls*/false);
         }
 
-        /// <devdoc> 
+        /// <devdoc>
         /// unmerge two toolstrips
         /// </devdoc>
         public static bool RevertMerge(string targetName) {

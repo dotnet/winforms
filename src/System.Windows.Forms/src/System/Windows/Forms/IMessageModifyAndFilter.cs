@@ -4,10 +4,9 @@
 
 namespace System.Windows.Forms
 {
-    // this is used by Application.cs to detect if we should respect changes to 
+    // this is used by Application.cs to detect if we should respect changes to
     // the message as well as whether or not we should filter the message.
     internal interface IMessageModifyAndFilter : IMessageFilter
     {
     }
 }
-        

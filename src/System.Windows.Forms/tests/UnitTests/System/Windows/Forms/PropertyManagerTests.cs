@@ -173,7 +173,7 @@ namespace System.Windows.Forms.Tests
             {
                 e.Cancel = cancel;
             };
-            
+
             cancelBinding.BindingComplete += bindingCompleteHandler;
             controlBindings.Add(cancelBinding);
             manager.Bindings.Add(cancelBinding);

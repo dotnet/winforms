@@ -4,7 +4,7 @@
 
 
 
- 
+
 namespace System.Windows.Forms {
 
     using System.Collections;
@@ -12,7 +12,7 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Globalization;
     using System.Collections.Specialized;
-    
+
     /// <devdoc>
     ///      TreeViewImageIndexConverter is a class that can be used to convert
     ///      image index values one data type to another.
@@ -34,10 +34,10 @@ namespace System.Windows.Forms {
 
             string strValue = value as string;
             if (strValue != null) {
-               
+
                if (string.Compare(strValue, SR.toStringDefault, true, culture) == 0) {
                    return -1;
-               } 
+               }
                else if (string.Compare(strValue, SR.toStringNone, true, culture) == 0) {
                    return -2;
                }
@@ -58,7 +58,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException(nameof(destinationType));
             }
 
-            
+
             if (destinationType == typeof(string) && value is int) {
                 int intValue = (int)value;
                 if (intValue == -1) {
@@ -81,7 +81,7 @@ namespace System.Windows.Forms {
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context) {
             if (context != null && context.Instance != null) {
                 object instance = context.Instance;
-                
+
                 PropertyDescriptor imageListProp = ImageListUtils.GetImageListProperty(context.PropertyDescriptor, ref instance);
 
                 while (instance != null && imageListProp == null) {
@@ -95,7 +95,7 @@ namespace System.Windows.Forms {
                     }
 
                     if (imageListProp == null) {
-                        // We didn't find the image list in this component.  See if the 
+                        // We didn't find the image list in this component.  See if the
                         // component has a "parent" property.  If so, walk the tree...
                         //
                         PropertyDescriptor parentProp = props[ParentImageListProperty];
@@ -121,7 +121,7 @@ namespace System.Windows.Forms {
                         values = new object[nImages];
 			values[nImages-2] = -1;
 			values[nImages-1] = -2;
-                        
+
                         // Fill in the array
                         //
                         for (int i = 0; i < nImages-2; i++) {

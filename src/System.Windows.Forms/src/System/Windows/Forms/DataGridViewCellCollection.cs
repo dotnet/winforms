@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     using System.Diagnostics.CodeAnalysis;
 
     /// <devdoc>
-    /// <para>Represents a collection of <see cref='System.Windows.Forms.DataGridViewCell'/> objects in the <see cref='System.Windows.Forms.DataGridView'/> 
+    /// <para>Represents a collection of <see cref='System.Windows.Forms.DataGridViewCell'/> objects in the <see cref='System.Windows.Forms.DataGridView'/>
     /// control.</para>
     /// </devdoc>
     [
@@ -28,7 +28,7 @@ namespace System.Windows.Forms
 
         int IList.Add(object value)
         {
-            return this.Add((DataGridViewCell) value);            
+            return this.Add((DataGridViewCell) value);
         }
 
         void IList.Clear()
@@ -239,7 +239,7 @@ namespace System.Windows.Forms
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, dataGridViewCell));
             return index;
         }
-        
+
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual void AddRange(params DataGridViewCell[] dataGridViewCells)
         {
@@ -285,7 +285,7 @@ namespace System.Windows.Forms
             }
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));
         }
-        
+
         public virtual void Clear()
         {
             if (this.owner.DataGridView != null)
@@ -367,7 +367,7 @@ namespace System.Windows.Forms
             int itemsCount = this.items.Count;
             for (int i = 0; i < itemsCount; ++i)
             {
-                if (this.items[i] == cell) 
+                if (this.items[i] == cell)
                 {
                     cellIndex = i;
                     break;

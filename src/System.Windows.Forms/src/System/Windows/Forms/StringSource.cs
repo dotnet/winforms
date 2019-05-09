@@ -9,9 +9,9 @@ namespace System.Windows.Forms {
     using System.Collections;
     using System.Diagnostics.CodeAnalysis;
 
-    
+
     /// <devdoc>
-    ///    <para> 
+    ///    <para>
     ///       Represents an internal class that is used bu ComboBox and TextBox AutoCompleteCustomSoucr property.
     ///       This class is reponsible for initializing the SHAutoComplete COM object and setting options in it.
     ///       The StringSource contains an array of Strings which is passed to the COM object as the custom source.
@@ -23,22 +23,22 @@ namespace System.Windows.Forms {
         private int current;
         private int size;
         private UnsafeNativeMethods.IAutoComplete2 autoCompleteObject2;
-        
+
         /// <devdoc>
-        ///    <para> 
+        ///    <para>
         ///       SHAutoComplete COM object CLSID.
         ///    </para>
         /// </devdoc>
         private static Guid   autoCompleteClsid = new Guid("{00BB2763-6A77-11D0-A535-00C04FD7D062}");
 
         /// <devdoc>
-        ///    <para> 
+        ///    <para>
         ///       Constructor.
         ///    </para>
         /// </devdoc>
         public StringSource(string[] strings) {
             Array.Clear(strings,0, size);
-    
+
             if (strings != null) {
                 this.strings = strings;
             }
@@ -52,15 +52,15 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        ///    <para> 
-        ///       This is the method that binds the custom source with the IAutoComplete interface.The "hWndEdit" is the handle 
+        ///    <para>
+        ///       This is the method that binds the custom source with the IAutoComplete interface.The "hWndEdit" is the handle
         ///       to the edit Control and the "options' are the options that need to be set in the AUTOCOMPLETE mode.
         ///    </para>
         /// </devdoc>
         public bool Bind(HandleRef edit, int options) {
-            
+
             bool retVal = false;
-            
+
             if (autoCompleteObject2 != null) {
                 try
                 {
@@ -88,7 +88,7 @@ namespace System.Windows.Forms {
         public void RefreshList(string[] newSource)
         {
             Array.Clear(strings,0, size);
-    
+
             if (strings != null) {
                 this.strings = newSource;
             }
@@ -144,4 +144,4 @@ namespace System.Windows.Forms {
         #endregion
     }
 }
-       
+

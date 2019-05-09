@@ -157,7 +157,7 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<TargetException>(() => FeatureSupport.IsPresent(featureClassType.AssemblyQualifiedName, featureConstName));
             Assert.Throws<TargetException>(() => FeatureSupport.IsPresent(featureClassType.AssemblyQualifiedName, featureConstName, new Version(1, 2, 3, 4)));
         }
-        
+
         private class IFeatureSupportClass : IFeatureSupport
         {
             public bool IsPresent(object feature) => throw new NotImplementedException();

@@ -24,7 +24,7 @@ internal static partial class Interop
             public const uint BIF_EDITBOX = 0x00000010;
             public const uint BIF_NEWDIALOGSTYLE = 0x00000040;
             public const uint BIF_NONEWFOLDERBUTTON = 0x00000200;
-            
+
             public const uint BIF_BROWSEFORCOMPUTER = 0x00001000;
             public const uint BIF_BROWSEFORPRINTER = 0x00002000;
             public const uint BIF_BROWSEFOREVERYTHING = 0x00004000;

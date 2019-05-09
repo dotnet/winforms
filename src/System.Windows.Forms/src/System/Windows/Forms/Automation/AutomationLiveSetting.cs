@@ -16,14 +16,14 @@ namespace System.Windows.Forms.Automation
 
         /// <summary>
         /// The element sends non-interruptive notifications if the content of the live region has
-        /// changed. With this setting, UI Automation clients and assistive technologies are expected 
+        /// changed. With this setting, UI Automation clients and assistive technologies are expected
         /// to not interrupt the user to inform of changes to the live region.
         /// </summary>
         Polite = 1,
 
         /// <summary>
-        /// The element sends interruptive notifications if the content of the live region has changed. 
-        /// With this setting, UI Automation clients and assistive technologies are expected to interrupt 
+        /// The element sends interruptive notifications if the content of the live region has changed.
+        /// With this setting, UI Automation clients and assistive technologies are expected to interrupt
         /// the user to inform of changes to the live region.
         /// </summary>
         Assertive = 2

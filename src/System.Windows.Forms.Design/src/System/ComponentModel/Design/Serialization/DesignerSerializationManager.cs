@@ -311,7 +311,7 @@ namespace System.ComponentModel.Design.Serialization
                                     match = false;
                                     break;
                                 }
-                                // all of the parameters were converted or matched, so try the creation again. if that works, we're in the money. 
+                                // all of the parameters were converted or matched, so try the creation again. if that works, we're in the money.
                                 if (match)
                                 {
                                     instance = TypeDescriptor.CreateInstance(provider, type, null, tempArgs);
@@ -379,7 +379,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Creates a new serialization session.  Most data within the serialization manager is transient and only lives for the life of a serialization session.  When a session is disposed, serialization is considered to be complete and this transient state is cleared.  This allows a single instance of a serialization manager to be used to serialize multiple object trees.  Some state, including the service provider and any custom serialization providers that were added to the serialization manager, span sessions.	
+        /// Creates a new serialization session.  Most data within the serialization manager is transient and only lives for the life of a serialization session.  When a session is disposed, serialization is considered to be complete and this transient state is cleared.  This allows a single instance of a serialization manager to be used to serialize multiple object trees.  Some state, including the service provider and any custom serialization providers that were added to the serialization manager, span sessions.
         /// </summary>
         public IDisposable CreateSession()
         {
@@ -635,7 +635,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// The Properties property provides a set of custom properties the serialization manager may surface.  The set of properties exposed here is defined by the implementor of  IDesignerSerializationManager.  
+        /// The Properties property provides a set of custom properties the serialization manager may surface.  The set of properties exposed here is defined by the implementor of  IDesignerSerializationManager.
         /// </summary>
         PropertyDescriptorCollection IDesignerSerializationManager.Properties
         {
@@ -692,7 +692,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// This method adds a custom serialization provider to the serialization manager. A custom serialization provider will get the opportunity to return a serializer for a data type before the serialization manager looks in the type's metadata.  
+        /// This method adds a custom serialization provider to the serialization manager. A custom serialization provider will get the opportunity to return a serializer for a data type before the serialization manager looks in the type's metadata.
         /// </summary>
         void IDesignerSerializationManager.AddSerializationProvider(IDesignerSerializationProvider provider)
         {
@@ -706,7 +706,7 @@ namespace System.ComponentModel.Design.Serialization
             }
         }
 
-        /// <summary>                
+        /// <summary>
         /// Creates an instance of the given type and adds it to a collection of named instances.  Objects that implement IComponent will be added to the design time container if addToContainer is true.
         /// </summary>
         object IDesignerSerializationManager.CreateInstance(Type type, ICollection arguments, string name, bool addToContainer)

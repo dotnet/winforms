@@ -25,7 +25,7 @@ namespace System.Windows.Forms
             int lastListCount = -1;
 
             //
-            // data connection state variables 
+            // data connection state variables
             //
             private BitVector32 dataConnectionState;
             private const int DATACONNECTIONSTATE_dataConnection_inSetDataConnection = 0x00000001;
@@ -293,7 +293,7 @@ namespace System.Windows.Forms
             //      2. Changes to DataGridView::SortGlyphDirection.
             //          Go thru all the data bound columns on the back end and if they map to the sorted dataField
             //          set their SortGlyphDirection to the sort direction on the back end.
-            //          
+            //
             // Note: on IBindingList there is only one column that can be sorted.
             // So if the back end is an IBindingView ( which supports sorting on multiple columns ) this code will not take into
             // account the case that multiple columns are sorted.
@@ -507,7 +507,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                // if the list changed the AddNew and we did not finish the AddNew operation then 
+                // if the list changed the AddNew and we did not finish the AddNew operation then
                 // finish it now and return
                 if (!this.dataConnectionState[DATACONNECTIONSTATE_finishedAddNew] && this.owner.newRowIndex == e.NewIndex)
                 {
@@ -603,7 +603,7 @@ namespace System.Windows.Forms
 
                         // if we were on an AddNew transaction then the MASTER table would have had more than 1 row.
                         // So the Child table should not have forcefully added a row on the MASTER table");
-                        // 
+                        //
                         Debug.Assert(this.dataConnectionState[DATACONNECTIONSTATE_finishedAddNew]);
                     }
 
@@ -646,7 +646,7 @@ namespace System.Windows.Forms
                 }
 
                 // when we get the ListChanged notification the position in the currency manager already changed
-                // so do not change the position when we get the RowEnter event 
+                // so do not change the position when we get the RowEnter event
                 this.dataConnectionState[DATACONNECTIONSTATE_doNotChangePositionInTheCurrencyManager] = true;
 
                 try
@@ -805,7 +805,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                   
+
 
                 this.dataConnectionState[DATACONNECTIONSTATE_positionChangingInCurrencyManager] = true;
                 try
@@ -813,7 +813,7 @@ namespace System.Windows.Forms
                     if (!this.owner.InSortOperation)
                     {
                         bool scrollIntoView = true;
-                        // When an item is repositioned in a sorted column, while its 
+                        // When an item is repositioned in a sorted column, while its
                         // row is being committed, don't scroll it into view.
                         if (this.dataConnectionState[DATACONNECTIONSTATE_rowValidatingInAddNew])
                         {
@@ -986,7 +986,7 @@ namespace System.Windows.Forms
                 // Set the currency manager to null so if someone would want to resurect this data grid view data connection
                 // we would not unwire the events from the curency manager twice.
                 // (NOTE: resurecting a disposed data grid view data connection is not allowed.)
-                // 
+                //
                 this.currencyManager = null;
             }
 
@@ -1074,10 +1074,10 @@ namespace System.Windows.Forms
                 else if (iblv != null)
                 {
                     // Maybe the data view is sorted on multiple columns.
-                    // Go thru the IBindingListView which offers the entire list of sorted columns 
+                    // Go thru the IBindingListView which offers the entire list of sorted columns
                     // and pick the first one as the SortedColumn.
                     ListSortDescriptionCollection sorts = iblv.SortDescriptions;
-                    if (sorts != null && 
+                    if (sorts != null &&
                         sorts.Count > 0 &&
                         sorts[0].PropertyDescriptor != null)
                     {
@@ -1208,7 +1208,7 @@ namespace System.Windows.Forms
             public string GetError(int rowIndex)
             {
                 IDataErrorInfo errInfo = null;
-                try 
+                try
                 {
                     errInfo = this.currencyManager[rowIndex] as IDataErrorInfo;
                 }
@@ -1365,7 +1365,7 @@ namespace System.Windows.Forms
 
                     // Scroll target cell into view first.
                     if ((scrollIntoView && !this.owner.ScrollIntoView(columnIndex, rowIndex, true)) ||
-                        (columnIndex < this.owner.Columns.Count && rowIndex < this.owner.Rows.Count && 
+                        (columnIndex < this.owner.Columns.Count && rowIndex < this.owner.Rows.Count &&
                          !this.owner.SetAndSelectCurrentCellAddress(columnIndex, rowIndex,
                                                                    true,  /*setAnchorCellAddress*/
                                                                    false, /*validateCurrentCell*/

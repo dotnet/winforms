@@ -69,7 +69,7 @@ namespace System.Windows.Forms
 
             return !this.ActiveLinkColor.Equals(LinkUtilities.IEActiveLinkColor);
         }
-        
+
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -357,7 +357,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                // 
+                //
 
                 dataGridViewColumn = (DataGridViewLinkColumn)System.Activator.CreateInstance(thisType);
             }

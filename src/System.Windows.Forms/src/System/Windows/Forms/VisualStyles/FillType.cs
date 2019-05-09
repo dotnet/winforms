@@ -8,7 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms.VisualStyles
 {
-    public enum FillType 
+    public enum FillType
     {
     	Solid = 0,
     	VerticalGradient = 1,

@@ -10,7 +10,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
     using System;
     using System.Windows.Forms;
-    
+
     using System.ComponentModel;
     using System.ComponentModel.Design;
     using System.Drawing;
@@ -18,11 +18,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
     using System.Windows.Forms.Layout;
 
     internal class DocComment : PropertyGrid.SnappableControl {
-        
+
         private Label m_labelTitle;
         private Label m_labelDesc;
         private string fullDesc;
-        
+
         protected int lineHeight;
         private bool needUpdateUIWithFont = true;
 
@@ -110,7 +110,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             m_labelDesc.AccessibleName = this.fullDesc; // Don't crop the description for accessibility clients
             base.OnLayout(e);
         }
-        
+
         protected override void OnResize(EventArgs e) {
             Rectangle newRect = ClientRectangle;
             if (!rect.IsEmpty && newRect.Width > rect.Width) {
@@ -139,7 +139,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             Size size = ClientSize;
 
             // if the client size is 0, setting this to a negative number
-            // will force an extra layout.  
+            // will force an extra layout.
             size.Width = Math.Max(0, size.Width - 2 * cBorder);
             size.Height = Math.Max(0, size.Height - 2 * cBorder);
 
@@ -178,7 +178,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             if (m_labelDesc.Text != title) {
                 m_labelTitle.Text = title;
             }
-            
+
             if (desc != fullDesc) {
                 this.fullDesc = desc;
                 m_labelDesc.Text = fullDesc;

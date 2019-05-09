@@ -39,7 +39,7 @@ namespace System.Windows.Forms {
         private const int InvalidDimensionValue = int.MinValue;
 
         /// <devdoc>
-        ///     For buttons whose FaltStyle = FlatStyle.Flat, this property specifies the size, in pixels  
+        ///     For buttons whose FaltStyle = FlatStyle.Flat, this property specifies the size, in pixels
         ///     of the border around the button.
         /// </devdoc>
         private Size systemSize = new Size(InvalidDimensionValue, InvalidDimensionValue);
@@ -76,8 +76,8 @@ namespace System.Windows.Forms {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoSizeMode.GrowAndShrink, (int)AutoSizeMode.GrowOnly)){
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoSizeMode));
                 }
-                
-                if (GetAutoSizeMode() != value) {                    
+
+                if (GetAutoSizeMode() != value) {
                     SetAutoSizeMode(value);
                     if(ParentInternal != null) {
                         // DefaultLayout does not keep anchor information until it needs to.  When
@@ -99,7 +99,7 @@ namespace System.Windows.Forms {
         internal override ButtonBaseAdapter CreatePopupAdapter() {
             return new ButtonPopupAdapter(this);
         }
-            
+
         internal override ButtonBaseAdapter CreateStandardAdapter() {
             return new ButtonStandardAdapter(this);
         }
@@ -107,7 +107,7 @@ namespace System.Windows.Forms {
         internal override Size GetPreferredSizeCore(Size proposedConstraints) {
             if(FlatStyle != FlatStyle.System) {
                 Size prefSize = base.GetPreferredSizeCore(proposedConstraints);
-                return AutoSizeMode == AutoSizeMode.GrowAndShrink ? prefSize : LayoutUtils.UnionSizes(prefSize, Size);                
+                return AutoSizeMode == AutoSizeMode.GrowAndShrink ? prefSize : LayoutUtils.UnionSizes(prefSize, Size);
             }
 
             if (systemSize.Width == InvalidDimensionValue) {
@@ -124,7 +124,7 @@ namespace System.Windows.Forms {
                 requiredSize.Height += 9;
                 systemSize = requiredSize;
             }
-            Size paddedSize = systemSize + Padding.Size;            
+            Size paddedSize = systemSize + Padding.Size;
             return AutoSizeMode == AutoSizeMode.GrowAndShrink ? paddedSize : LayoutUtils.UnionSizes(paddedSize, Size);
         }
 
@@ -140,7 +140,7 @@ namespace System.Windows.Forms {
         protected override CreateParams CreateParams {
             get {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = "BUTTON";                
+                cp.ClassName = "BUTTON";
                 if (GetStyle(ControlStyles.UserPaint)) {
                     cp.Style |= NativeMethods.BS_OWNERDRAW;
                 }
@@ -216,12 +216,12 @@ namespace System.Windows.Forms {
         ///       Notifies the <see cref='System.Windows.Forms.Button'/>
         ///       whether it is the default button so that it can adjust its appearance
         ///       accordingly.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         public virtual void NotifyDefault(bool value) {
             if (IsDefault != value) {
-                IsDefault = value;                
+                IsDefault = value;
             }
         }
 
@@ -256,7 +256,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnMouseUp'/> event.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         protected override void OnMouseUp(MouseEventArgs mevent) {
@@ -287,8 +287,8 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// When overridden in a derived class, handles rescaling of any magic numbers used in control painting.
-        /// Must call the base class method to get the current DPI values. This method is invoked only when 
-        /// Application opts-in into the Per-monitor V2 support, targets .NETFX 4.7 and has 
+        /// Must call the base class method to get the current DPI values. This method is invoked only when
+        /// Application opts-in into the Per-monitor V2 support, targets .NETFX 4.7 and has
         /// EnableDpiChangedMessageHandling and EnableDpiChangedHighDpiImprovements config switches turned on.
         /// </summary>
         /// <param name="deviceDpiOld">Old DPI value</param>
@@ -363,7 +363,7 @@ namespace System.Windows.Forms {
                         Debug.Assert(!GetStyle(ControlStyles.UserPaint), "Shouldn't get BN_CLICKED when UserPaint");
                         if (!ValidationCancelled) {
                             OnClick(EventArgs.Empty);
-                        }                        
+                        }
                     }
                     break;
                 case Interop.WindowMessages.WM_ERASEBKGND:

@@ -552,7 +552,7 @@ namespace System.Windows.Forms {
         protected override void CreateHandle() {
             if (!RecreatingHandle) {
                 IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
-            
+
                 try {
                     NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX();
                     icc.dwICC = NativeMethods.ICC_BAR_CLASSES;
@@ -562,7 +562,7 @@ namespace System.Windows.Forms {
                     UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
                 }
             }
-            
+
             base.CreateHandle();
         }
 
@@ -889,7 +889,7 @@ namespace System.Windows.Forms {
         internal void UpdateTooltip(StatusBarPanel panel) {
             if (tooltips == null) {
                 if (IsHandleCreated && !DesignMode) {
-                    //This shouldn't happen: tooltips should've already been set.  The best we can 
+                    //This shouldn't happen: tooltips should've already been set.  The best we can
                     //do here is reset it.
                     tooltips = new ControlToolTip(this);
                 }
@@ -1686,7 +1686,7 @@ namespace System.Windows.Forms {
                 }
                 StatusBar p = (StatusBar)parent;
                 if (p != null && p.ToolTipSet) {
-                   ti.uId = parent.Handle; 
+                   ti.uId = parent.Handle;
                 }
                 else {
                     ti.uId = tool.id;
@@ -1729,7 +1729,7 @@ namespace System.Windows.Forms {
             protected void WndProc(ref Message msg) {
                 switch (msg.Msg) {
                     case Interop.WindowMessages.WM_SETFOCUS:
-                        // 
+                        //
 
 
 

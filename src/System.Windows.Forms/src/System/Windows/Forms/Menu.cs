@@ -40,7 +40,7 @@ namespace System.Windows.Forms
         internal bool created;
         private object userData;
         private string name;
-        
+
         /// <devdoc>
         ///     This is an abstract class.  Instances cannot be created, so the constructor
         ///     is only called from derived classes.
@@ -55,7 +55,7 @@ namespace System.Windows.Forms
         ///     The HMENU handle corresponding to this menu.
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), 
+        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.ControlHandleDescr))
         ]
@@ -135,7 +135,7 @@ namespace System.Windows.Forms
                 }
             }
         }
-        
+
 
         [
         Browsable(false),
@@ -156,7 +156,7 @@ namespace System.Windows.Forms
             get {
                 Debug.Assert(true, "Should never get called");
                 return false;
-                
+
             }
         }
 
@@ -177,7 +177,7 @@ namespace System.Windows.Forms
                 userData = value;
             }
         }
-        
+
         /// <devdoc>
         ///     Notifies Menu that someone called Windows.DeleteMenu on its handle.
         /// </devdoc>
@@ -221,8 +221,8 @@ namespace System.Windows.Forms
 
         /// <devdoc>
         /// </devdoc>
-        
-        
+
+
         protected virtual IntPtr CreateMenuHandle() {
             return UnsafeNativeMethods.CreatePopupMenu();
         }
@@ -237,7 +237,7 @@ namespace System.Windows.Forms
                 created = true;
             }
         }
-   
+
         /// <devdoc>
         /// </devdoc>
         internal void DestroyMenuItems() {
@@ -315,7 +315,7 @@ namespace System.Windows.Forms
             }
             return iMin;
         }
-        
+
         /// <devdoc>
         /// </devdoc>
         // A new method for finding the approximate merge position. The original
@@ -461,7 +461,7 @@ namespace System.Windows.Forms
             MenuItem itemDst;
 
             if (menuSrc.items != null && items == null) {
-                MenuItems.Clear();                
+                MenuItems.Clear();
             }
 
             for (i = 0; i < menuSrc.ItemCount; i++) {
@@ -617,7 +617,7 @@ namespace System.Windows.Forms
             public MenuItemCollection(Menu owner) {
                 this.owner = owner;
             }
-            
+
             public virtual MenuItem this[int index] {
                 get {
                     if (index < 0 || index >= owner.ItemCount)
@@ -626,7 +626,7 @@ namespace System.Windows.Forms
                 }
                 // set not supported
             }
-            
+
             object IList.this[int index] {
                 get {
                     return this[index];
@@ -657,7 +657,7 @@ namespace System.Windows.Forms
 
                 }
             }
-  
+
             public int Count {
                 get {
                     return owner.ItemCount;
@@ -675,13 +675,13 @@ namespace System.Windows.Forms
                     return false;
                 }
             }
-            
+
             bool IList.IsFixedSize {
                 get {
                     return false;
                 }
             }
-           
+
             public bool IsReadOnly {
                 get {
                     return false;
@@ -723,7 +723,7 @@ namespace System.Windows.Forms
             ///     MenuItems can only be contained in one menu at a time, and may not be added
             ///     more than once to the same menu.
             /// </devdoc>
-            public virtual int Add(MenuItem item) {                
+            public virtual int Add(MenuItem item) {
                 return Add(owner.ItemCount, item);
             }
 
@@ -738,7 +738,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentNullException(nameof(item));
                 }
-                
+
                 // MenuItems can only belong to one menu at a time
                 if (item.Parent != null) {
 
@@ -752,7 +752,7 @@ namespace System.Windows.Forms
                             }
                             if (parent.Parent is MenuItem)
                                 parent = (MenuItem)parent.Parent;
-                            else 
+                            else
                                 break;
                         }
                     }
@@ -771,7 +771,7 @@ namespace System.Windows.Forms
                 if (index < 0 || index > owner.ItemCount) {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
-                                
+
                 if (owner.items == null || owner.items.Length == owner.ItemCount) {
                     MenuItem[] newItems = new MenuItem[owner.ItemCount < 2? 4: owner.ItemCount * 2];
                     if (owner.ItemCount > 0) System.Array.Copy(owner.items, 0, newItems, 0, owner.ItemCount);
@@ -788,7 +788,7 @@ namespace System.Windows.Forms
 
                 return index;
             }
-            
+
             public virtual void AddRange(MenuItem[] items) {
                 if (items == null) {
                     throw new ArgumentNullException(nameof(items));
@@ -802,34 +802,34 @@ namespace System.Windows.Forms
                 if (value is MenuItem) {
                     return Add((MenuItem)value);
                 }
-                else {  
+                else {
                     throw new ArgumentException(SR.MenuBadMenuItem, "value");
                 }
             }
-           
+
             public bool Contains(MenuItem value) {
                 return IndexOf(value) != -1;
             }
-        
+
             bool IList.Contains(object value) {
                 if (value is MenuItem) {
                     return Contains((MenuItem)value);
                 }
-                else {  
+                else {
                     return false;
                 }
             }
-            
+
             /// <devdoc>
             ///     <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
             /// </devdoc>
             public virtual bool ContainsKey(string key) {
-               return IsValidIndex(IndexOfKey(key)); 
+               return IsValidIndex(IndexOfKey(key));
             }
 
             /// <devdoc>
-            ///     <para>Searches for Controls by their Name property, builds up an array 
-            ///           of all the controls that match. 
+            ///     <para>Searches for Controls by their Name property, builds up an array
+            ///           of all the controls that match.
             ///     </para>
             /// </devdoc>
             public MenuItem [] Find(string key, bool searchAllChildren) {
@@ -838,11 +838,11 @@ namespace System.Windows.Forms
                     throw new System.ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
                 }
 
-                
+
                 ArrayList foundMenuItems =  FindInternal(key, searchAllChildren, this, new ArrayList());
 
                 // Make this a stongly typed collection.
-                MenuItem[] stronglyTypedfoundMenuItems = new MenuItem[foundMenuItems.Count]; 
+                MenuItem[] stronglyTypedfoundMenuItems = new MenuItem[foundMenuItems.Count];
                 foundMenuItems.CopyTo(stronglyTypedfoundMenuItems, 0);
 
                 return stronglyTypedfoundMenuItems;
@@ -850,31 +850,31 @@ namespace System.Windows.Forms
 
             /// <devdoc>
             ///     <para>Searches for Controls by their Name property, builds up an array list
-            ///           of all the controls that match. 
+            ///           of all the controls that match.
             ///     </para>
             /// </devdoc>
             private ArrayList FindInternal(string key, bool searchAllChildren, MenuItemCollection menuItemsToLookIn, ArrayList foundMenuItems) {
                 if ((menuItemsToLookIn == null) || (foundMenuItems == null)) {
-                    return null;  // 
+                    return null;  //
                 }
 
                 // Perform breadth first search - as it's likely people will want controls belonging
                 // to the same parent close to each other.
-                
+
                 for (int i = 0; i < menuItemsToLookIn.Count; i++) {
                       if (menuItemsToLookIn[i] == null){
                           continue;
                       }
-                      
+
                       if (WindowsFormsUtils.SafeCompareStrings(menuItemsToLookIn[i].Name, key, /* ignoreCase = */ true)) {
                            foundMenuItems.Add(menuItemsToLookIn[i]);
                       }
                 }
 
                 // Optional recurive search for controls in child collections.
-                
+
                 if (searchAllChildren){
-                    for (int i = 0; i < menuItemsToLookIn.Count; i++) {    
+                    for (int i = 0; i < menuItemsToLookIn.Count; i++) {
                       if (menuItemsToLookIn[i] == null){
                           continue;
                       }
@@ -891,20 +891,20 @@ namespace System.Windows.Forms
                 for(int index=0; index < Count; ++index) {
                     if (this[index] == value) {
                         return index;
-                    } 
+                    }
                 }
                 return -1;
             }
-            
+
             int IList.IndexOf(object value) {
                 if (value is MenuItem) {
                     return IndexOf((MenuItem)value);
                 }
-                else {  
+                else {
                     return -1;
                 }
             }
-            
+
             /// <devdoc>
             ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
             /// </devdoc>
@@ -937,13 +937,13 @@ namespace System.Windows.Forms
 
             void IList.Insert(int index, object value) {
                 if (value is MenuItem) {
-                    Add(index, (MenuItem)value);                    
+                    Add(index, (MenuItem)value);
                 }
-                else {  
+                else {
                     throw new ArgumentException(SR.MenuBadMenuItem,"value");
                 }
             }
-            
+
 
            /// <devdoc>
            ///     <para>Determines if the index is valid for the collection.</para>
@@ -958,7 +958,7 @@ namespace System.Windows.Forms
             /// </devdoc>
             public virtual void Clear() {
                 if (owner.ItemCount > 0) {
-                    
+
                     for (int i = 0; i < owner.ItemCount; i++) {
                         owner.items[i].Parent = null;
                     }
@@ -979,7 +979,7 @@ namespace System.Windows.Forms
                     System.Array.Copy(owner.items, 0, dest, index, owner.ItemCount);
                 }
             }
-            
+
             public IEnumerator GetEnumerator() {
                 return new WindowsFormsUtils.ArraySubsetEnumerator(owner.items, owner.ItemCount);
             }
@@ -1005,7 +1005,7 @@ namespace System.Windows.Forms
                 if (owner.ItemCount == 0) {
                     Clear();
                 }
-            
+
             }
 
            /// <devdoc>
@@ -1014,7 +1014,7 @@ namespace System.Windows.Forms
            public virtual void RemoveByKey(string key) {
                 int index = IndexOfKey(key);
                 if (IsValidIndex(index)) {
-                    RemoveAt(index); 
+                    RemoveAt(index);
                  }
             }
 
@@ -1031,7 +1031,7 @@ namespace System.Windows.Forms
             void IList.Remove(object value) {
                 if (value is MenuItem) {
                     Remove((MenuItem)value);
-                }                
+                }
             }
         }
     }

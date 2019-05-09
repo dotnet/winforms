@@ -13,7 +13,7 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Windows.Forms;
     using System.Collections;
-    
+
     /// <devdoc>
     ///    <para>
     ///       Displays a
@@ -37,7 +37,7 @@ namespace System.Windows.Forms {
         [ ThreadStatic ]
         private static HelpInfo[] helpInfoTable;
 
-        
+
 
         /// <devdoc>
         ///     This constructor is private so people aren't tempted to try and create
@@ -68,7 +68,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        
+
         internal static HelpInfo HelpInfo {
             get {
                 // unfortunately, there's no easy way to obtain handle of a message box.
@@ -78,7 +78,7 @@ namespace System.Windows.Forms {
                     // the top of the stack is actually at the end of the array.
                     return helpInfoTable[helpInfoTable.Length - 1];
                 }
-                
+
                 return null;
             }
         }
@@ -92,8 +92,8 @@ namespace System.Windows.Forms {
              // we've got to gracefully handle the current help info.
              if (helpInfoTable == null) {
                 Debug.Fail("Why are we being called when there's nothing to pop?");
-                
-             } 
+
+             }
              else {
                 if (helpInfoTable.Length == 1) {
                     helpInfoTable = null;
@@ -103,25 +103,25 @@ namespace System.Windows.Forms {
                    HelpInfo[] newTable = new HelpInfo[newCount];
                    Array.Copy(helpInfoTable, newTable, newCount);
                    helpInfoTable = newTable;
-                
+
                 }
              }
-                
+
         }
         private static void PushHelpInfo(HelpInfo hpi) {
-            
+
             // we roll our own stack here because we want a pretty lightweight implementation.
             // usually there's only going to be one message box shown at a time.  But if
             // someone shows two message boxes (say by launching them via a WM_TIMER message)
             // we've got to gracefully handle the current help info.
 
             int lastCount = 0;
-            HelpInfo[] newTable; 
-   
+            HelpInfo[] newTable;
+
             if (helpInfoTable == null) {
                newTable = new HelpInfo[lastCount+1];
             }
-            else {       
+            else {
                 // if we already have a table - allocate a new slot
                 lastCount = helpInfoTable.Length;
                 newTable = new HelpInfo[lastCount+1];
@@ -129,22 +129,22 @@ namespace System.Windows.Forms {
             }
             newTable[lastCount] = hpi;
             helpInfoTable = newTable;
-        
+
         }
 
-      
+
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //START WHIDBEY ADDS                                                                                           //
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        
+
         /// <devdoc>
         ///    <para>
         ///       Displays a message box with specified text, caption, and style with Help Button.
         ///    </para>
         /// </devdoc>
-        public static DialogResult Show(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, 
+        public static DialogResult Show(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon,
                                         MessageBoxDefaultButton defaultButton, MessageBoxOptions options,bool displayHelpButton) {
-          
+
             return ShowCore(null, text, caption, buttons, icon, defaultButton, options, displayHelpButton);
         }
 
@@ -154,7 +154,7 @@ namespace System.Windows.Forms {
         ///       Displays a message box with specified text, caption, style and Help file Path .
         ///    </para>
         /// </devdoc>
-        public static DialogResult Show(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, 
+        public static DialogResult Show(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon,
                                         MessageBoxDefaultButton defaultButton, MessageBoxOptions options, string helpFilePath) {
 
             HelpInfo hpi = new HelpInfo(helpFilePath);
@@ -167,21 +167,21 @@ namespace System.Windows.Forms {
         ///       Displays a message box with specified text, caption, style and Help file Path for a IWin32Window.
         ///    </para>
         /// </devdoc>
-        public static DialogResult Show(IWin32Window owner, string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, 
+        public static DialogResult Show(IWin32Window owner, string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon,
                                         MessageBoxDefaultButton defaultButton, MessageBoxOptions options, string helpFilePath) {
 
             HelpInfo hpi = new HelpInfo(helpFilePath);
             return ShowCore(owner, text, caption, buttons, icon, defaultButton, options, hpi);
         }
 
-        
+
 
         /// <devdoc>
         ///    <para>
         ///       Displays a message box with specified text, caption, style, Help file Path and keyword.
         ///    </para>
         /// </devdoc>
-        public static DialogResult Show(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, 
+        public static DialogResult Show(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon,
                                         MessageBoxDefaultButton defaultButton, MessageBoxOptions options, string helpFilePath, string keyword) {
 
             HelpInfo hpi = new HelpInfo(helpFilePath, keyword);
@@ -194,7 +194,7 @@ namespace System.Windows.Forms {
         ///       Displays a message box with specified text, caption, style, Help file Path and keyword for a IWin32Window.
         ///    </para>
         /// </devdoc>
-        public static DialogResult Show(IWin32Window owner, string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, 
+        public static DialogResult Show(IWin32Window owner, string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon,
                                         MessageBoxDefaultButton defaultButton, MessageBoxOptions options, string helpFilePath, string keyword) {
 
             HelpInfo hpi = new HelpInfo(helpFilePath, keyword);
@@ -207,7 +207,7 @@ namespace System.Windows.Forms {
         ///       Displays a message box with specified text, caption, style, Help file Path and HelpNavigator.
         ///    </para>
         /// </devdoc>
-        public static DialogResult Show(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, 
+        public static DialogResult Show(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon,
                                         MessageBoxDefaultButton defaultButton, MessageBoxOptions options,string helpFilePath, HelpNavigator navigator) {
 
             HelpInfo hpi = new HelpInfo(helpFilePath, navigator);
@@ -219,7 +219,7 @@ namespace System.Windows.Forms {
         ///       Displays a message box with specified text, caption, style, Help file Path and HelpNavigator for IWin32Window.
         ///    </para>
         /// </devdoc>
-        public static DialogResult Show(IWin32Window owner, string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, 
+        public static DialogResult Show(IWin32Window owner, string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon,
                                         MessageBoxDefaultButton defaultButton, MessageBoxOptions options, string helpFilePath, HelpNavigator navigator) {
 
             HelpInfo hpi = new HelpInfo(helpFilePath, navigator);
@@ -231,7 +231,7 @@ namespace System.Windows.Forms {
         ///       Displays a message box with specified text, caption, style, Help file Path ,HelpNavigator and object.
         ///    </para>
         /// </devdoc>
-        public static DialogResult Show(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, 
+        public static DialogResult Show(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon,
                                         MessageBoxDefaultButton defaultButton, MessageBoxOptions options,string helpFilePath, HelpNavigator navigator, object param) {
 
             HelpInfo hpi = new HelpInfo(helpFilePath, navigator, param);
@@ -245,11 +245,11 @@ namespace System.Windows.Forms {
         ///      Displays a message box with specified text, caption, style, Help file Path ,HelpNavigator and object for a IWin32Window.
         ///    </para>
         /// </devdoc>
-        public static DialogResult Show(IWin32Window owner, string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, 
+        public static DialogResult Show(IWin32Window owner, string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon,
                                         MessageBoxDefaultButton defaultButton, MessageBoxOptions options, string helpFilePath, HelpNavigator navigator, object param) {
 
             HelpInfo hpi = new HelpInfo(helpFilePath, navigator, param);
-      
+
             return ShowCore(owner, text, caption, buttons, icon, defaultButton, options, hpi);
         }
 
@@ -263,7 +263,7 @@ namespace System.Windows.Forms {
         ///       Displays a message box with specified text, caption, and style.
         ///    </para>
         /// </devdoc>
-        public static DialogResult Show(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, 
+        public static DialogResult Show(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon,
                                         MessageBoxDefaultButton defaultButton, MessageBoxOptions options) {
             return ShowCore(null, text, caption, buttons, icon, defaultButton, options, false);
         }
@@ -273,7 +273,7 @@ namespace System.Windows.Forms {
         ///       Displays a message box with specified text, caption, and style.
         ///    </para>
         /// </devdoc>
-        public static DialogResult Show(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, 
+        public static DialogResult Show(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon,
                                         MessageBoxDefaultButton defaultButton) {
             return ShowCore(null, text, caption, buttons, icon, defaultButton, 0, false);
         }
@@ -319,7 +319,7 @@ namespace System.Windows.Forms {
         ///       Displays a message box with specified text, caption, and style.
         ///    </para>
         /// </devdoc>
-        public static DialogResult Show(IWin32Window owner, string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, 
+        public static DialogResult Show(IWin32Window owner, string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon,
                                         MessageBoxDefaultButton defaultButton, MessageBoxOptions options) {
             return ShowCore(owner, text, caption, buttons, icon, defaultButton, options, false);
         }
@@ -329,7 +329,7 @@ namespace System.Windows.Forms {
         ///       Displays a message box with specified text, caption, and style.
         ///    </para>
         /// </devdoc>
-        public static DialogResult Show(IWin32Window owner, string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, 
+        public static DialogResult Show(IWin32Window owner, string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon,
                                         MessageBoxDefaultButton defaultButton) {
             return ShowCore(owner, text, caption, buttons, icon, defaultButton, 0, false);
         }
@@ -370,7 +370,7 @@ namespace System.Windows.Forms {
             return ShowCore(owner, text, string.Empty, MessageBoxButtons.OK, MessageBoxIcon.None, MessageBoxDefaultButton.Button1, 0, false);
         }
 
-        private static DialogResult ShowCore(IWin32Window owner, string text, string caption,   
+        private static DialogResult ShowCore(IWin32Window owner, string text, string caption,
                                      MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton,
                                      MessageBoxOptions options, HelpInfo hpi) {
             DialogResult result = DialogResult.None;
@@ -382,13 +382,13 @@ namespace System.Windows.Forms {
                 PopHelpInfo();
             }
             return result;
-            
+
         }
 
-        private static DialogResult ShowCore(IWin32Window owner, string text, string caption,   
+        private static DialogResult ShowCore(IWin32Window owner, string text, string caption,
                                              MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton,
                                              MessageBoxOptions options, bool showHelp) {
-       
+
             if (!ClientUtils.IsEnumValid(buttons, (int)buttons, (int)MessageBoxButtons.OK, (int)MessageBoxButtons.RetryCancel)){
                throw new InvalidEnumArgumentException(nameof(buttons), (int)buttons, typeof(MessageBoxButtons));
             }
@@ -401,7 +401,7 @@ namespace System.Windows.Forms {
             if (!WindowsFormsUtils.EnumValidator.IsEnumWithinShiftedRange(defaultButton, /*numBitsToShift*/8, /*min*/0x0,/*max*/0x2)) {
                 throw new InvalidEnumArgumentException(nameof(defaultButton), (int)defaultButton, typeof(DialogResult));
             }
-            
+
             // options intentionally not verified because we don't expose all the options Win32 supports.
 
             if (!SystemInformation.UserInteractive && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) == 0) {
@@ -414,7 +414,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentException(SR.CantShowMBServiceWithHelp, "options");
             }
 
-            int style = (showHelp) ? HELP_BUTTON : 0; 
+            int style = (showHelp) ? HELP_BUTTON : 0;
             style |= (int) buttons | (int) icon | (int) defaultButton | (int) options;
 
             IntPtr handle = IntPtr.Zero;
@@ -453,7 +453,7 @@ namespace System.Windows.Forms {
                 UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
             }
 
-            // Right after the dialog box is closed, Windows sends WM_SETFOCUS back to the previously active control 
+            // Right after the dialog box is closed, Windows sends WM_SETFOCUS back to the previously active control
             // but since we have disabled this thread main window the message is lost. So we have to send it again after
             // we enable the main window.
             //

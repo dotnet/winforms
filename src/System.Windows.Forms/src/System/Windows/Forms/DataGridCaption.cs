@@ -7,7 +7,7 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
 
     using System;
-    
+
     using System.Windows.Forms;
     using System.ComponentModel;
     using System.Drawing;
@@ -22,7 +22,7 @@ namespace System.Windows.Forms {
     ///    </para>
     /// </devdoc>
     internal class DataGridCaption {
-    
+
         internal EventHandlerList events;
 
         private const int xOffset = 3;
@@ -125,19 +125,19 @@ namespace System.Windows.Forms {
                 return (SolidBrush)SystemBrushes.ActiveCaption;
             }
         }
-        
+
         internal static Pen DefaultTextBorderPen {
             get {
                 return new Pen(SystemColors.ActiveCaptionText);
             }
         }
-        
+
         internal static SolidBrush DefaultForeBrush {
             get {
                 return (SolidBrush)SystemBrushes.ActiveCaptionText;
             }
         }
-        
+
         internal Color BackColor {
             get {
                 return backBrush.Color;
@@ -151,7 +151,7 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
+
         internal EventHandlerList Events {
             get {
                 if (events == null) {
@@ -163,7 +163,7 @@ namespace System.Windows.Forms {
 
         internal Font Font {
             get {
-                // use the dataGridFont only if the user 
+                // use the dataGridFont only if the user
                 // did not set the CaptionFont
                 //
                 if (textFont == null)
@@ -192,7 +192,7 @@ namespace System.Windows.Forms {
         internal bool ShouldSerializeBackColor() {
             return !backBrush.Equals(DefaultBackBrush);
         }
-        
+
         internal void ResetBackColor() {
             if (ShouldSerializeBackColor()) {
                 backBrush = DefaultBackBrush;
@@ -361,7 +361,7 @@ namespace System.Windows.Forms {
         }
 
         protected void OnDownClicked(EventArgs e) {
-            if (downActive && downButtonVisible) {        
+            if (downActive && downButtonVisible) {
                 EventHandler handler = (EventHandler)Events[EVENT_DOWNCLICKED];
                 if (handler != null) handler(this,e);
             }
@@ -498,7 +498,7 @@ namespace System.Windows.Forms {
             if (downButtonVisible && !dataGrid.ParentRowsIsEmpty()) {
                 PaintDownButton(g, downButtonRect);
                 // the rules have changed, yet again.
-                // now: if we show the parent rows and the mouse is 
+                // now: if we show the parent rows and the mouse is
                 // not on top of this icon, then let the icon be depressed.
                 // if the mouse is pressed over the icon, then show the icon pressed
                 // if the mouse is over the icon and not pressed, then show the icon SunkenInner;

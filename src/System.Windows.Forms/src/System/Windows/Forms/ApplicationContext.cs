@@ -129,7 +129,7 @@ namespace System.Windows.Forms {
         protected virtual void OnMainFormClosed(object sender, EventArgs e) {
             ExitThreadCore();
         }
-    
+
         /// <devdoc>
         ///     Called when the mainForm is closed. The default implementation
         ///     of this will call ExitThreadCore.

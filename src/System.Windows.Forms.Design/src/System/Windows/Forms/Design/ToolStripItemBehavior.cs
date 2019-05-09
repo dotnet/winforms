@@ -148,7 +148,7 @@ namespace System.Windows.Forms.Design
             return null;
         }
 
-        // Gets the painting rect for SelectionRects 
+        // Gets the painting rect for SelectionRects
         private static Rectangle GetPaintingBounds(IDesignerHost designerHost, ToolStripItem item)
         {
             Rectangle bounds = Rectangle.Empty;
@@ -275,7 +275,7 @@ namespace System.Windows.Forms.Design
             {
                 if (keyService.ActiveTemplateNode.IsSystemContextMenuDisplayed)
                 {
-                    // skip behaviors when the context menu is displayed 
+                    // skip behaviors when the context menu is displayed
                     return false;
                 }
             }
@@ -323,7 +323,7 @@ namespace System.Windows.Forms.Design
             if (glyph != null && button == MouseButtons.Left)
             {
                 ToolStripItem selectedItem = selSvc.PrimarySelection as ToolStripItem;
-                // Always set the Drag-Rect for Drag-Drop...   
+                // Always set the Drag-Rect for Drag-Drop...
                 SetParentDesignerValuesForDragDrop(glyphItem, true, mouseLoc);
                 // Check if this item is already selected ...
                 if (selectedItem != null && selectedItem == glyphItem)
@@ -931,7 +931,7 @@ namespace System.Windows.Forms.Design
             {
                 return;
             }
-            // Remember the point where the mouse down occurred. The DragSize indicates the size that the mouse can move before a drag event should be started.                
+            // Remember the point where the mouse down occurred. The DragSize indicates the size that the mouse can move before a drag event should be started.
             Size dragSize = new Size(1, 1);
 
             IDesignerHost designerHost = (IDesignerHost)glyphItem.Site.GetService(typeof(IDesignerHost));

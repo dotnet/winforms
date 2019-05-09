@@ -24,22 +24,22 @@ namespace System.Windows.Forms {
     public class Screen {
 
         readonly IntPtr hmonitor;
-        /// <devdoc>         
-        ///     Bounds of the screen         
-        /// </devdoc>         
+        /// <devdoc>
+        ///     Bounds of the screen
+        /// </devdoc>
         readonly Rectangle    bounds;
-        /// <devdoc>         
-        ///     Available working area on the screen. This excludes taskbars and other         
-        ///     docked windows.         
-        /// </devdoc>         
+        /// <devdoc>
+        ///     Available working area on the screen. This excludes taskbars and other
+        ///     docked windows.
+        /// </devdoc>
         private Rectangle    workingArea = Rectangle.Empty;
-        /// <devdoc>         
-        ///     Set to true if this screen is the primary monitor         
-        /// </devdoc>         
+        /// <devdoc>
+        ///     Set to true if this screen is the primary monitor
+        /// </devdoc>
         readonly bool         primary;
-        /// <devdoc>         
-        ///     Device name associated with this monitor         
-        /// </devdoc>         
+        /// <devdoc>
+        ///     Device name associated with this monitor
+        /// </devdoc>
         readonly string       deviceName;
 
         readonly int          bitDepth;
@@ -137,7 +137,7 @@ namespace System.Windows.Forms {
                 return screens;
             }
         }
-        
+
         /// <devdoc>
         ///    <para>
         ///       Gets Bits per Pixel value.
@@ -214,7 +214,7 @@ namespace System.Windows.Forms {
         public Rectangle WorkingArea {
             get {
 
-                //if the static Screen class has a different desktop change count 
+                //if the static Screen class has a different desktop change count
                 //than this instance then update the count and recalculate our working area
                 if (currentDesktopChangedCount != Screen.DesktopChangedCount) {
 
@@ -232,7 +232,7 @@ namespace System.Windows.Forms {
                         workingArea = Rectangle.FromLTRB(info.rcWork.left, info.rcWork.top, info.rcWork.right, info.rcWork.bottom);
                     }
                 }
-                
+
                 return workingArea;
             }
         }
@@ -249,8 +249,8 @@ namespace System.Windows.Forms {
 
                         //now that we have a lock, verify (again) our changecount...
                         if (desktopChangedCount == -1) {
-                            //sync the UserPreference.Desktop change event.  We'll keep count 
-                            //of desktop changes so that the WorkingArea property on Screen 
+                            //sync the UserPreference.Desktop change event.  We'll keep count
+                            //of desktop changes so that the WorkingArea property on Screen
                             //instances know when to invalidate their cache.
                             SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
 
@@ -282,7 +282,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Retrieves a <see cref='System.Windows.Forms.Screen'/>
         ///       for the monitor that contains the specified point.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         public static Screen FromPoint(Point point) {
@@ -300,7 +300,7 @@ namespace System.Windows.Forms {
         ///       Retrieves a <see cref='System.Windows.Forms.Screen'/>
         ///       for the monitor that contains the
         ///       largest region of the rectangle.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         public static Screen FromRectangle(Rectangle rect) {
@@ -339,7 +339,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Retrieves the working area for the monitor that is closest to the
         ///       specified point.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         public static Rectangle GetWorkingArea(Point pt) {
@@ -349,7 +349,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Retrieves the working area for the monitor that contains the largest region
         ///       of the specified rectangle.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         public static Rectangle GetWorkingArea(Rectangle rect) {
@@ -359,7 +359,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Retrieves the working area for the monitor that contains the largest
         ///       region of the specified control.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         public static Rectangle GetWorkingArea(Control ctl) {
@@ -442,8 +442,8 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>         
-        /// </devdoc>         
+        /// <devdoc>
+        /// </devdoc>
         private class MonitorEnumCallback {
             public ArrayList screens = new ArrayList();
 

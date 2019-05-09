@@ -182,14 +182,14 @@ namespace System.Windows.Forms
             {
                 val = null;
             }
-            return DataGridViewUtilities.GetPreferredRowHeaderSize(graphics, 
-                                                                   (string) val, 
-                                                                   cellStyle, 
-                                                                   borderAndPaddingWidths, 
+            return DataGridViewUtilities.GetPreferredRowHeaderSize(graphics,
+                                                                   (string) val,
+                                                                   cellStyle,
+                                                                   borderAndPaddingWidths,
                                                                    borderAndPaddingHeights,
                                                                    this.DataGridView.ShowCellErrors,
                                                                    false /*showGlyph*/,
-                                                                   constraintSize, 
+                                                                   constraintSize,
                                                                    flags);
         }
 
@@ -229,7 +229,7 @@ namespace System.Windows.Forms
         // 1. DataGridViewCell::Paint method
         // 2. DataGridViewCell::GetContentBounds
         // 3. DataGridViewCell::GetErrorIconBounds
-        // 
+        //
         // if computeContentBounds is true then PaintPrivate returns the contentBounds
         // else if computeErrorIconBounds is true then PaintPrivate returns the errorIconBounds
         // else it returns Rectangle.Empty;
@@ -326,9 +326,9 @@ namespace System.Windows.Forms
             valBounds.Offset(DATAGRIDVIEWTOPLEFTHEADERCELL_horizontalTextMarginLeft, DATAGRIDVIEWTOPLEFTHEADERCELL_verticalTextMargin);
             valBounds.Width -= DATAGRIDVIEWTOPLEFTHEADERCELL_horizontalTextMarginLeft + DATAGRIDVIEWTOPLEFTHEADERCELL_horizontalTextMarginRight;
             valBounds.Height -= 2 * DATAGRIDVIEWTOPLEFTHEADERCELL_verticalTextMargin;
-            if (valBounds.Width > 0 && 
-                valBounds.Height > 0 && 
-                !string.IsNullOrEmpty(formattedValueStr) && 
+            if (valBounds.Width > 0 &&
+                valBounds.Height > 0 &&
+                !string.IsNullOrEmpty(formattedValueStr) &&
                 (paint || computeContentBounds))
             {
                 Color textColor;
@@ -419,7 +419,7 @@ namespace System.Windows.Forms
         /// <devdoc>
         ///    <para></para>
         /// </devdoc>
-        public override string ToString() 
+        public override string ToString()
         {
             return "DataGridViewTopLeftHeaderCell";
         }

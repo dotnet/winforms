@@ -276,7 +276,7 @@ namespace System.Windows.Forms
                 // Sequential enum.  Valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)FlatStyle.Flat, (int)FlatStyle.System))
                 {
-                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlatStyle)); 
+                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlatStyle));
                 }
                 if (value != this.FlatStyle)
                 {
@@ -466,11 +466,11 @@ namespace System.Windows.Forms
             Type thisType = this.GetType();
             if (thisType == cellType) //performance improvement
             {
-                dataGridViewCell = new DataGridViewCheckBoxCell(); 
+                dataGridViewCell = new DataGridViewCheckBoxCell();
             }
             else
             {
-                // 
+                //
 
                 dataGridViewCell = (DataGridViewCheckBoxCell)System.Activator.CreateInstance(thisType);
             }
@@ -574,7 +574,7 @@ namespace System.Windows.Forms
             {
                 return Rectangle.Empty;
             }
-            
+
             Point ptCurrentCell = this.DataGridView.CurrentCellAddress;
             if (ptCurrentCell.X == this.ColumnIndex &&
                 ptCurrentCell.Y == rowIndex && this.DataGridView.IsCurrentCellInEditMode)
@@ -735,7 +735,7 @@ namespace System.Windows.Forms
                     }
                     default:
                     {
-                        preferredSize = new Size(checkBoxSize.Width + borderAndPaddingWidths + 2 * DATAGRIDVIEWCHECKBOXCELL_margin, 
+                        preferredSize = new Size(checkBoxSize.Width + borderAndPaddingWidths + 2 * DATAGRIDVIEWCHECKBOXCELL_margin,
                                                  checkBoxSize.Height + borderAndPaddingHeights + 2 * DATAGRIDVIEWCHECKBOXCELL_margin);
                         break;
                     }
@@ -949,7 +949,7 @@ namespace System.Windows.Forms
             }
 
             if ((this.ButtonState & ButtonState.Pushed) != 0 &&
-                this.ColumnIndex == this.DataGridView.MouseDownCellAddress.X && 
+                this.ColumnIndex == this.DataGridView.MouseDownCellAddress.X &&
                 rowIndex == this.DataGridView.MouseDownCellAddress.Y)
             {
                 UpdateButtonState(this.ButtonState & ~ButtonState.Pushed, rowIndex);
@@ -962,7 +962,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
-            
+
             bool oldMouseInContentBounds = mouseInContentBounds;
             mouseInContentBounds = GetContentBounds(e.RowIndex).Contains(e.X, e.Y);
             if (oldMouseInContentBounds != mouseInContentBounds)
@@ -976,7 +976,7 @@ namespace System.Windows.Forms
                     e.RowIndex == this.DataGridView.MouseDownCellAddress.Y &&
                     Control.MouseButtons == MouseButtons.Left)
                 {
-                    if ((this.ButtonState & ButtonState.Pushed) == 0 && 
+                    if ((this.ButtonState & ButtonState.Pushed) == 0 &&
                         mouseInContentBounds &&
                         this.DataGridView.CellMouseDownInContentBounds)
                     {
@@ -1025,10 +1025,10 @@ namespace System.Windows.Forms
             (this.DataGridView.AccessibilityObject as Control.ControlAccessibleObject).NotifyClients(AccessibleEvents.StateChange, objectID, childID);
         }
 
-        protected override void Paint(Graphics graphics, 
+        protected override void Paint(Graphics graphics,
             Rectangle clipBounds,
-            Rectangle cellBounds, 
-            int rowIndex, 
+            Rectangle cellBounds,
+            int rowIndex,
             DataGridViewElementStates elementState,
             object value,
             object formattedValue,
@@ -1042,10 +1042,10 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(cellStyle));
             }
 
-            PaintPrivate(graphics, 
+            PaintPrivate(graphics,
                 clipBounds,
-                cellBounds, 
-                rowIndex, 
+                cellBounds,
+                rowIndex,
                 elementState,
                 formattedValue,
                 errorText,
@@ -1061,14 +1061,14 @@ namespace System.Windows.Forms
         // 1. DataGridViewCell::Paint method
         // 2. DataGridViewCell::GetContentBounds
         // 3. DataGridViewCell::GetErrorIconBounds
-        // 
+        //
         // if computeContentBounds is true then PaintPrivate returns the contentBounds
         // else if computeErrorIconBounds is true then PaintPrivate returns the errorIconBounds
         // else it returns Rectangle.Empty;
-        private Rectangle PaintPrivate(Graphics g, 
+        private Rectangle PaintPrivate(Graphics g,
             Rectangle clipBounds,
-            Rectangle cellBounds, 
-            int rowIndex, 
+            Rectangle cellBounds,
+            int rowIndex,
             DataGridViewElementStates elementState,
             object formattedValue,
             string errorText,
@@ -1104,7 +1104,7 @@ namespace System.Windows.Forms
             CheckState checkState;
             ButtonState bs;
             Point ptCurrentCell = this.DataGridView.CurrentCellAddress;
-            if (ptCurrentCell.X == this.ColumnIndex && 
+            if (ptCurrentCell.X == this.ColumnIndex &&
                 ptCurrentCell.Y == rowIndex && this.DataGridView.IsCurrentCellInEditMode)
             {
                 drawErrorText = false;
@@ -1160,11 +1160,11 @@ namespace System.Windows.Forms
                 valBounds.Height -= cellStyle.Padding.Vertical;
             }
 
-            if (paint && 
+            if (paint &&
                 DataGridViewCell.PaintFocus(paintParts) &&
-                this.DataGridView.ShowFocusCues && 
-                this.DataGridView.Focused && 
-                ptCurrentCell.X == this.ColumnIndex && 
+                this.DataGridView.ShowFocusCues &&
+                this.DataGridView.Focused &&
+                ptCurrentCell.X == this.ColumnIndex &&
                 ptCurrentCell.Y == rowIndex)
             {
                 // Draw focus rectangle
@@ -1174,16 +1174,16 @@ namespace System.Windows.Forms
             Rectangle errorBounds = valBounds;
 
             valBounds.Inflate(-DATAGRIDVIEWCHECKBOXCELL_margin, -DATAGRIDVIEWCHECKBOXCELL_margin);
-            
+
             Size checkBoxSize;
 
             CheckBoxState themeCheckBoxState = CheckBoxState.UncheckedNormal;
 
             if (this.DataGridView.ApplyVisualStylesToInnerCells)
             {
-                themeCheckBoxState = CheckBoxRenderer.ConvertFromButtonState(bs, drawAsMixedCheckBox, 
-                    this.DataGridView.MouseEnteredCellAddress.Y == rowIndex && 
-                    this.DataGridView.MouseEnteredCellAddress.X == this.ColumnIndex && 
+                themeCheckBoxState = CheckBoxRenderer.ConvertFromButtonState(bs, drawAsMixedCheckBox,
+                    this.DataGridView.MouseEnteredCellAddress.Y == rowIndex &&
+                    this.DataGridView.MouseEnteredCellAddress.X == this.ColumnIndex &&
                     mouseInContentBounds);
                 checkBoxSize = CheckBoxRenderer.GetGlyphSize(g, themeCheckBoxState);
                 switch (this.FlatStyle)
@@ -1255,8 +1255,8 @@ namespace System.Windows.Forms
                 {
                     if (paint && DataGridViewCell.PaintContentForeground(paintParts))
                     {
-                        DataGridViewCheckBoxCellRenderer.DrawCheckBox(g, 
-                            new Rectangle(checkBoxX, checkBoxY, checkBoxSize.Width, checkBoxSize.Height), 
+                        DataGridViewCheckBoxCellRenderer.DrawCheckBox(g,
+                            new Rectangle(checkBoxX, checkBoxY, checkBoxSize.Width, checkBoxSize.Height),
                             (int) themeCheckBoxState);
                     }
 
@@ -1406,8 +1406,8 @@ namespace System.Windows.Forms
                                                                                                                         this.DataGridView.RightToLeft);
                             options.everettButtonCompat = false;
                             ButtonBaseAdapter.LayoutData layout = options.Layout();
-                            
-                            
+
+
                             if (paint && DataGridViewCell.PaintContentForeground(paintParts))
                             {
                                 ButtonBaseAdapter.ColorData colors = ButtonBaseAdapter.PaintPopupRender(g,
@@ -1423,7 +1423,7 @@ namespace System.Windows.Forms
                                                                         true /*disabledColors*/,
                                                                         colors);
                                 CheckBoxBaseAdapter.DrawPopupBorder(g, layout.checkBounds, colors);
-                                CheckBoxBaseAdapter.DrawCheckOnly(checkBoxSize.Width, 
+                                CheckBoxBaseAdapter.DrawCheckOnly(checkBoxSize.Width,
                                                                     checkState == CheckState.Checked || checkState == CheckState.Indeterminate,
                                                                     this.DataGridView.Enabled,
                                                                     checkState,
@@ -1439,8 +1439,8 @@ namespace System.Windows.Forms
                                  this.DataGridView.MouseEnteredCellAddress.X == this.ColumnIndex &&
                                  mouseInContentBounds)
                         {
-                            // paint over 
-                            
+                            // paint over
+
                             ButtonBaseAdapter.LayoutOptions options = ButtonInternal.CheckBoxPopupAdapter.PaintPopupLayout(g,
                                                                                                                         true /*show3D*/,
                                                                                                                         checkBoxSize.Width,
@@ -1499,7 +1499,7 @@ namespace System.Windows.Forms
 
                             options.everettButtonCompat = false;
                             ButtonBaseAdapter.LayoutData layout = options.Layout();
-                            
+
                             if (paint && DataGridViewCell.PaintContentForeground(paintParts))
                             {
                                 ButtonBaseAdapter.ColorData colors = ButtonBaseAdapter.PaintPopupRender(g,

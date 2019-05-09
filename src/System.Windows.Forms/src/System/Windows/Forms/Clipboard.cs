@@ -4,7 +4,7 @@
 
 
 namespace System.Windows.Forms {
-    
+
     using System;
     using System.Collections.Specialized;
     using System.ComponentModel;
@@ -17,7 +17,7 @@ namespace System.Windows.Forms {
     using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
     using System.Globalization;
     using System.Collections;
-    
+
     /// <devdoc>
     ///    <para>Provides methods to place data on and retrieve data from the system clipboard. This class cannot be inherited.</para>
     /// </devdoc>
@@ -28,7 +28,7 @@ namespace System.Windows.Forms {
         private Clipboard() {
         }
 
-        // 
+        //
         // Checks the validity of format while setting data into ClipBoard
         //
         private static bool IsFormatValid(DataObject data) {
@@ -66,7 +66,7 @@ namespace System.Windows.Forms {
                     for (int i = 0; i < formats.Length; i++) {
                         short format = formats[i].cfFormat;
                         if (format != NativeMethods.CF_TEXT &&
-                            format !=  NativeMethods.CF_UNICODETEXT && 
+                            format !=  NativeMethods.CF_UNICODETEXT &&
                             format !=  DataFormats.GetFormat("System.String").Id &&
                             format !=  DataFormats.GetFormat("Csv").Id) {
                                 return false;
@@ -93,7 +93,7 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        /// <para>Places data on the system <see cref='System.Windows.Forms.Clipboard'/> and uses copy to specify whether the data 
+        /// <para>Places data on the system <see cref='System.Windows.Forms.Clipboard'/> and uses copy to specify whether the data
         ///    should remain on the <see cref='System.Windows.Forms.Clipboard'/>
         ///    after the application exits.</para>
         /// </devdoc>
@@ -114,19 +114,19 @@ namespace System.Windows.Forms {
                 throw new ArgumentOutOfRangeException(nameof(retryDelay), retryDelay, string.Format(SR.InvalidLowBoundArgumentEx, nameof(retryDelay), retryDelay, 0));
             }
 
-            
+
             DataObject dataObject = null;
             if (!(data is IComDataObject)) {
                 dataObject = new DataObject(data);
             }
 
             // Compute the format of the "data" passed in iff setText == true;
-            
+
             if (dataObject != null) {
                 dataObject.RestrictedFormats = false;
             }
             int hr, retry = retryTimes;
-            
+
             do {
                 if (data is IComDataObject) {
                     hr = UnsafeNativeMethods.OleSetClipboard((IComDataObject)data);
@@ -171,7 +171,7 @@ namespace System.Windows.Forms {
                 // to query the clipboard from your finalizer or non-ui MTA thread
                 // silently fail, instead of making your app die.
                 //
-                // however, if you are trying to write a normal windows forms app and 
+                // however, if you are trying to write a normal windows forms app and
                 // forget to set the STAThread attribute, we will correctly report
                 // an error to aid in debugging.
                 //
@@ -214,7 +214,7 @@ namespace System.Windows.Forms {
             return null;
         }
 
-        // <-- WHIDBEY ADDITIONS 
+        // <-- WHIDBEY ADDITIONS
 
         public static void Clear() {
             Clipboard.SetDataObject(new DataObject());
@@ -418,19 +418,19 @@ namespace System.Windows.Forms {
 
         private static string ConvertToDataFormats(TextDataFormat format) {
             switch (format) {
-            case TextDataFormat.Text: 
+            case TextDataFormat.Text:
                 return DataFormats.Text;
-                
-            case TextDataFormat.UnicodeText: 
+
+            case TextDataFormat.UnicodeText:
                 return DataFormats.UnicodeText;
-            
-            case TextDataFormat.Rtf: 
+
+            case TextDataFormat.Rtf:
                 return DataFormats.Rtf;
-                
-            case TextDataFormat.Html: 
+
+            case TextDataFormat.Html:
                 return DataFormats.Html;
-                
-            case TextDataFormat.CommaSeparatedValue: 
+
+            case TextDataFormat.CommaSeparatedValue:
                 return DataFormats.CommaSeparatedValue;
             }
 
@@ -440,7 +440,7 @@ namespace System.Windows.Forms {
         // END - WHIDBEY ADDITIONS -->
 
         private static void ThrowIfFailed(int hr) {
-            // 
+            //
             if (hr != 0) {
                 ExternalException e = new ExternalException(SR.ClipboardOperationFailed, hr);
                 throw e;

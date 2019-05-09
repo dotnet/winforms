@@ -1498,7 +1498,7 @@ namespace System.Windows.Forms
             int ret = -1;
 
             // Special case: If no data source has been assigned, the inner list will just
-            // be an empty un-typed binding list. 
+            // be an empty un-typed binding list.
             if (_dataSource == null && List.Count == 0)
             {
                 SetList(CreateBindingList((value == null) ? typeof(object) : value.GetType()), true, true);

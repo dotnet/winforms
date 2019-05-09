@@ -23,7 +23,7 @@ namespace System.Windows.Forms
             ItemHeight = itemHeight;
             ItemWidth = 0;
         }
-        
+
         /// <devdoc>
         /// A Graphics object to measure relative to.
         /// </devdoc>

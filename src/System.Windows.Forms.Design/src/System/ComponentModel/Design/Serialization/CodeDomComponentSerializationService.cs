@@ -56,7 +56,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// This method serializes the given object to the store.  The store  can be used to serialize more than one object by calling this method  more than once. 
+        /// This method serializes the given object to the store.  The store  can be used to serialize more than one object by calling this method  more than once.
         /// </summary>
         public override void Serialize(SerializationStore store, object value)
         {
@@ -67,7 +67,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// This method serializes the given object to the store.  The store can be used to serialize more than one object by calling this method more than once. 
+        /// This method serializes the given object to the store.  The store can be used to serialize more than one object by calling this method more than once.
         /// </summary>
         public override void SerializeAbsolute(SerializationStore store, object value)
         {
@@ -90,7 +90,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// This method serializes the given member on the given object,  but also serializes the member if it contains the default value.  
+        /// This method serializes the given member on the given object,  but also serializes the member if it contains the default value.
         /// Note that for some members, containing the default value and setting  the same value back to the member are different concepts.  For example, if a property inherits its value from a parent object if no local value  is set, setting the value back to the property can may not be what is desired.   SerializeMemberAbsolute takes this into account and would clear the state of  the property in this case.
         /// </summary>
         public override void SerializeMemberAbsolute(SerializationStore store, object owningObject, MemberDescriptor member)
@@ -103,7 +103,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// This method deserializes the given store to produce a collection of  objects contained within it.  If a container is provided, objects  that are created that implement IComponent will be added to the container. 
+        /// This method deserializes the given store to produce a collection of  objects contained within it.  If a container is provided, objects  that are created that implement IComponent will be added to the container.
         /// </summary>
         public override ICollection Deserialize(SerializationStore store)
         {
@@ -113,7 +113,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// This method deserializes the given store to produce a collection of  objects contained within it.  If a container is provided, objects  that are created that implement IComponent will be added to the container. 
+        /// This method deserializes the given store to produce a collection of  objects contained within it.  If a container is provided, objects  that are created that implement IComponent will be added to the container.
         /// </summary>
         public override ICollection Deserialize(SerializationStore store, IContainer container)
         {
@@ -527,7 +527,7 @@ namespace System.ComponentModel.Design.Serialization
 
 #pragma warning disable 618
                 System.CodeDom.Compiler.ICodeGenerator codeGenerator = new Microsoft.CSharp.CSharpCodeProvider().CreateGenerator();
-#pragma warning restore 618    
+#pragma warning restore 618
                 StringWriter sw = new StringWriter(CultureInfo.InvariantCulture);
                 Trace("Stored CodeDom for {0}: ", name);
                 Debug.Indent();
@@ -771,7 +771,7 @@ namespace System.ComponentModel.Design.Serialization
                 /// <summary>
                 /// This is used to resolve nested component references.  NestedComponents don't exist as sited components within the DesignerHost, they are actually sited within a parent component.  This method takes the FullName defined on INestedSite and returns the component which matches it. outerComponent is the name of the topmost component which does exist in the DesignerHost
                 /// This code also exists in VSCodeDomDesignerLoader -- please keep them in sync.
-                /// </summary>                               
+                /// </summary>
                 private IComponent ResolveNestedName(IDesignerSerializationManager manager, string name, ref string outerComponent)
                 {
                     IComponent curComp = null;
@@ -970,7 +970,7 @@ namespace System.ComponentModel.Design.Serialization
                                 resolved = manager.GetInstance(name) != null;
                             }
 
-                            // In this case we still need to correctly deserialize default properties &  design-time only properties.  
+                            // In this case we still need to correctly deserialize default properties &  design-time only properties.
                             if (resolved && state != null && state[StateProperties] != null)
                             {
                                 DeserializeDefaultProperties(manager, name, state[StateProperties]);
@@ -1106,7 +1106,7 @@ namespace System.ComponentModel.Design.Serialization
                             // Slot 2 is an array of default properites.
                             // Slot 3 is for design time props.Any may be null.
                             // Slot 4 is for events that need to be reset.
-                            // Slot 5 is for the modifier property of the object.  
+                            // Slot 5 is for the modifier property of the object.
                             // Since it is DSV.Hidden, it won't be serialized. We special case it here.
 
                             object[] state = new object[6];

@@ -162,7 +162,7 @@ namespace System.Windows.Forms
                     }
                     return type;
                 }
-                
+
                 return _fieldInfo?.PropertyType;
             }
         }
@@ -192,7 +192,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            // Update IDataErrorInfo text. 
+            // Update IDataErrorInfo text.
             _errorText = GetErrorText(obj);
         }
 
@@ -237,7 +237,7 @@ namespace System.Windows.Forms
                     throw new ArgumentException(string.Format(SR.ListBindingBindField, dataField), "dataMember");
                 }
 
-                // Do not add propertyChange notification if the fieldInfo is null                
+                // Do not add propertyChange notification if the fieldInfo is null
                 //
                 // We add an event handler to the dataSource in the BindingManagerBase because
                 // if the binding is of the form (Control, ControlProperty, DataSource, Property1.Property2.Property3)

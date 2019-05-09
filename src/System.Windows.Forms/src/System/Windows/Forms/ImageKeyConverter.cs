@@ -21,17 +21,17 @@ namespace System.Windows.Forms {
     public class ImageKeyConverter : StringConverter {
 
         private string parentImageListProperty  = "Parent";
-   
+
         protected virtual bool IncludeNoneAsStandardValue {
             get {
                 return true;
             }
-        }     
+        }
 
-        /// <devdoc> 
+        /// <devdoc>
         /// this is the property to look at when there is no ImageList property
-        /// on the current object.  For example, in ToolBarButton - the ImageList is 
-        /// on the ToolBarButton.Parent property.  In ToolStripItem, the ImageList is on 
+        /// on the current object.  For example, in ToolBarButton - the ImageList is
+        /// on the ToolBarButton.Parent property.  In ToolStripItem, the ImageList is on
         /// the ToolStripItem.Owner property.
         /// </devdoc>
         internal string ParentImageListProperty {
@@ -67,7 +67,7 @@ namespace System.Windows.Forms {
         }
 
 
-        
+
         /// <devdoc>
         /// Converts the given object to another type.  The most common types to convert
         /// are to and from a string object.  The default implementation will make a call
@@ -90,7 +90,7 @@ namespace System.Windows.Forms {
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
-     
+
         /// <devdoc>
         /// Retrieves a collection containing a set of standard values
         /// for the data type this validator is designed for.  This
@@ -99,7 +99,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context) {
             if (context != null && context.Instance != null) {
-                object instance = context.Instance;               
+                object instance = context.Instance;
                 PropertyDescriptor imageListProp = ImageListUtils.GetImageListProperty(context.PropertyDescriptor, ref instance);
 
                 while (instance != null && imageListProp == null) {
@@ -114,7 +114,7 @@ namespace System.Windows.Forms {
 
                     if (imageListProp == null) {
 
-                        // We didn't find the image list in this component.  See if the 
+                        // We didn't find the image list in this component.  See if the
                         // component has a "parent" property.  If so, walk the tree...
                         //
                         PropertyDescriptor parentProp = props[ParentImageListProperty];
@@ -133,7 +133,7 @@ namespace System.Windows.Forms {
                     ImageList imageList = (ImageList)imageListProp.GetValue(instance);
 
                     if (imageList != null) {
-                        
+
                         // Create array to contain standard values
                         //
                         object[] values;
@@ -145,8 +145,8 @@ namespace System.Windows.Forms {
                         else {
                             values = new object[nImages];
                         }
-                        
-                        
+
+
                         // Fill in the array
                         //
                         StringCollection imageKeys = imageList.Images.Keys;
@@ -154,7 +154,7 @@ namespace System.Windows.Forms {
                             if ((imageKeys[i] != null) && (imageKeys[i].Length != 0))
                                 values[i] = imageKeys[i];
                         }
-                        
+
                         return new StandardValuesCollection(values);
                     }
                 }
@@ -167,7 +167,7 @@ namespace System.Windows.Forms {
                 return new StandardValuesCollection(new object[0]);
             }
         }
-    
+
         /// <devdoc>
         /// Determines if the list of standard values returned from
         /// GetStandardValues is an exclusive list.  If the list

@@ -28,7 +28,7 @@ namespace System.Windows.Forms
 
         private Padding scaledDropDownPadding = dropDownPadding;
         private Padding scaledPadding = padding;
-    
+
         public ToolStripComboBox() : base(CreateControlInstance()) {
             ToolStripComboBoxControl combo = Control as ToolStripComboBoxControl;
             combo.Owner = this;
@@ -126,14 +126,14 @@ namespace System.Windows.Forms
                 }
             }
         }
-      
+
         [EditorBrowsable(EditorBrowsableState.Never)]
         public ToolStripComboBox(Control c) : base(c) {
             throw new NotSupportedException(SR.ToolStripMustSupplyItsOwnComboBox);
         }
 
         private static Control CreateControlInstance() {
-            ComboBox comboBox = new ToolStripComboBoxControl();  
+            ComboBox comboBox = new ToolStripComboBoxControl();
             comboBox.FlatStyle = FlatStyle.Popup;
             comboBox.Font = ToolStripManager.DefaultFont;
             return comboBox;
@@ -145,7 +145,7 @@ namespace System.Windows.Forms
         Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
-        public System.Windows.Forms.AutoCompleteStringCollection AutoCompleteCustomSource { 
+        public System.Windows.Forms.AutoCompleteStringCollection AutoCompleteCustomSource {
             get { return ComboBox.AutoCompleteCustomSource; }
             set { ComboBox.AutoCompleteCustomSource = value;}
         }
@@ -155,17 +155,17 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.ComboBoxAutoCompleteModeDescr)),
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
-        public AutoCompleteMode AutoCompleteMode { 
+        public AutoCompleteMode AutoCompleteMode {
             get { return ComboBox.AutoCompleteMode; }
             set { ComboBox.AutoCompleteMode = value;}
         }
-        
+
         [
         DefaultValue(AutoCompleteSource.None),
         SRDescription(nameof(SR.ComboBoxAutoCompleteSourceDescr)),
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
-        public AutoCompleteSource AutoCompleteSource { 
+        public AutoCompleteSource AutoCompleteSource {
             get { return ComboBox.AutoCompleteSource; }
             set { ComboBox.AutoCompleteSource = value;}
         }
@@ -226,7 +226,7 @@ namespace System.Windows.Forms
             }
         }
         [
-        Browsable(false), 
+        Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler DoubleClick {
@@ -258,7 +258,7 @@ namespace System.Windows.Forms
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always),
         DefaultValue(106)
         ]
-        public int DropDownHeight { 
+        public int DropDownHeight {
             get { return ComboBox.DropDownHeight; }
             set { ComboBox.DropDownHeight = value;}
 
@@ -279,7 +279,7 @@ namespace System.Windows.Forms
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.ComboBoxDropDownWidthDescr))
         ]
-        public int DropDownWidth { 
+        public int DropDownWidth {
             get { return ComboBox.DropDownWidth; }
             set { ComboBox.DropDownWidth = value;}
         }
@@ -289,7 +289,7 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.ComboBoxDroppedDownDescr))
         ]
-        public bool DroppedDown { 
+        public bool DroppedDown {
             get { return ComboBox.DroppedDown; }
             set { ComboBox.DroppedDown = value;}
         }
@@ -300,7 +300,7 @@ namespace System.Windows.Forms
         Localizable(true),
         SRDescription(nameof(SR.ComboBoxFlatStyleDescr))
         ]
-        public FlatStyle FlatStyle { 
+        public FlatStyle FlatStyle {
             get { return ComboBox.FlatStyle; }
             set { ComboBox.FlatStyle = value;}
         }
@@ -337,7 +337,7 @@ namespace System.Windows.Forms
         Localizable(true),
         SRDescription(nameof(SR.ComboBoxMaxDropDownItemsDescr))
         ]
-        public int MaxDropDownItems { 
+        public int MaxDropDownItems {
             get { return ComboBox.MaxDropDownItems; }
             set { ComboBox.MaxDropDownItems = value;}
         }
@@ -357,7 +357,7 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.ComboBoxSelectedIndexDescr))
         ]
-        public int SelectedIndex { 
+        public int SelectedIndex {
             get { return ComboBox.SelectedIndex; }
             set { ComboBox.SelectedIndex = value;}
         }
@@ -372,10 +372,10 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.ComboBoxSelectedItemDescr))
         ]
-        public object SelectedItem { 
+        public object SelectedItem {
             get { return ComboBox.SelectedItem; }
             set { ComboBox.SelectedItem = value;}
-        }  
+        }
 
         [
         Browsable(false),
@@ -391,7 +391,7 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.ComboBoxSelectionLengthDescr))
         ]
-        public int SelectionLength { 
+        public int SelectionLength {
             get { return ComboBox.SelectionLength; }
             set { ComboBox.SelectionLength = value;}
         }
@@ -401,7 +401,7 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.ComboBoxSelectionStartDescr))
         ]
-        public int SelectionStart { 
+        public int SelectionStart {
             get { return ComboBox.SelectionStart; }
             set { ComboBox.SelectionStart = value;}
         }
@@ -410,7 +410,7 @@ namespace System.Windows.Forms
         DefaultValue(false),
         SRDescription(nameof(SR.ComboBoxSortedDescr))
         ]
-        public bool Sorted { 
+        public bool Sorted {
             get { return ComboBox.Sorted; }
             set {ComboBox.Sorted = value;}
         }
@@ -422,7 +422,7 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EventTextUpdate, value);
         }
 
-#region WrappedMethods        
+#region WrappedMethods
 
         public void BeginUpdate() { ComboBox.BeginUpdate(); }
         public void EndUpdate() { ComboBox.EndUpdate(); }
@@ -438,7 +438,7 @@ namespace System.Windows.Forms
 
         public override Size GetPreferredSize(Size constrainingSize) {
 
-            // 
+            //
             Size preferredSize = base.GetPreferredSize(constrainingSize);
             preferredSize.Width = Math.Max(preferredSize.Width, 75);
 
@@ -463,64 +463,64 @@ namespace System.Windows.Forms
         private void HandleTextUpdate(object sender, System.EventArgs e) {
             OnTextUpdate(e);
         }
-     
+
         protected virtual void OnDropDown(EventArgs e) {
             if (ParentInternal != null) {
-                Application.ThreadContext.FromCurrent().RemoveMessageFilter(ParentInternal.RestoreFocusFilter); 
+                Application.ThreadContext.FromCurrent().RemoveMessageFilter(ParentInternal.RestoreFocusFilter);
                 ToolStripManager.ModalMenuFilter.SuspendMenuMode();
-            }            
-            RaiseEvent(EventDropDown, e);            
+            }
+            RaiseEvent(EventDropDown, e);
         }
         protected virtual void OnDropDownClosed(EventArgs e) {
             if (ParentInternal != null) {
-                // PERF, 
+                // PERF,
 
-                Application.ThreadContext.FromCurrent().RemoveMessageFilter(ParentInternal.RestoreFocusFilter);  
+                Application.ThreadContext.FromCurrent().RemoveMessageFilter(ParentInternal.RestoreFocusFilter);
                 ToolStripManager.ModalMenuFilter.ResumeMenuMode();
             }
-            RaiseEvent(EventDropDownClosed, e);            
+            RaiseEvent(EventDropDownClosed, e);
         }
         protected virtual void OnDropDownStyleChanged(EventArgs e) {
-            RaiseEvent(EventDropDownStyleChanged, e);            
+            RaiseEvent(EventDropDownStyleChanged, e);
         }
         protected virtual void OnSelectedIndexChanged(EventArgs e) {
-            RaiseEvent(EventSelectedIndexChanged, e);            
+            RaiseEvent(EventSelectedIndexChanged, e);
         }
         protected virtual void OnSelectionChangeCommitted(EventArgs e) {
-            RaiseEvent(EventSelectionChangeCommitted, e);            
+            RaiseEvent(EventSelectionChangeCommitted, e);
         }
         protected virtual void OnTextUpdate(EventArgs e) {
-            RaiseEvent(EventTextUpdate, e);            
+            RaiseEvent(EventTextUpdate, e);
         }
-       
+
         protected override void OnSubscribeControlEvents(Control control) {
             ComboBox comboBox = control as ComboBox;
             if (comboBox != null) {
                 // Please keep this alphabetized and in sync with Unsubscribe
-                // 
+                //
                 comboBox.DropDown                   += new EventHandler(HandleDropDown);
                 comboBox.DropDownClosed             += new EventHandler(HandleDropDownClosed);
                 comboBox.DropDownStyleChanged       += new EventHandler(HandleDropDownStyleChanged);
                 comboBox.SelectedIndexChanged       += new EventHandler(HandleSelectedIndexChanged);
                 comboBox.SelectionChangeCommitted   += new EventHandler(HandleSelectionChangeCommitted);
                 comboBox.TextUpdate                 += new EventHandler(HandleTextUpdate);
-            }      
-    
+            }
+
             base.OnSubscribeControlEvents(control);
         }
-      
+
         protected override void OnUnsubscribeControlEvents(Control control) {
             ComboBox comboBox = control as ComboBox;
             if (comboBox != null) {
                // Please keep this alphabetized and in sync with Unsubscribe
-               // 
+               //
                comboBox.DropDown                   -= new EventHandler(HandleDropDown);
                comboBox.DropDownClosed             -= new EventHandler(HandleDropDownClosed);
                comboBox.DropDownStyleChanged       -= new EventHandler(HandleDropDownStyleChanged);
                comboBox.SelectedIndexChanged       -= new EventHandler(HandleSelectedIndexChanged);
                comboBox.SelectionChangeCommitted   -= new EventHandler(HandleSelectionChangeCommitted);
                comboBox.TextUpdate                 -= new EventHandler(HandleTextUpdate);
-            }    
+            }
             base.OnUnsubscribeControlEvents(control);
         }
 
@@ -594,13 +594,13 @@ namespace System.Windows.Forms
                     if (toolStripComboBoxControl != null) {
                         return toolStripComboBoxControl.ColorTable;
                     }
-                    return ProfessionalColors.ColorTable;                    
+                    return ProfessionalColors.ColorTable;
                 }
 
                 protected override Color GetOuterBorderColor(ComboBox comboBox) {
                     if (UseBaseAdapter(comboBox)) {
                         return base.GetOuterBorderColor(comboBox);
-                    }                            
+                    }
                     return (comboBox.Enabled) ? SystemColors.Window : GetColorTable(comboBox as ToolStripComboBoxControl).ComboBoxBorder;
                 }
 
@@ -645,7 +645,7 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
-                        else {                              
+                        else {
                             using (Brush b = new LinearGradientBrush(dropDownRect, colorTable.ComboBoxButtonPressedGradientBegin, colorTable.ComboBoxButtonPressedGradientEnd, LinearGradientMode.Vertical)) {
                                 g.FillRectangle(b, dropDownRect);
                             }
@@ -669,8 +669,8 @@ namespace System.Windows.Forms
                     // if the width is odd - favor pushing it over one pixel right.
                     middle.X += (dropDownRect.Width % 2);
                     g.FillPolygon(brush, new Point[] {
-                        new Point(middle.X - FlatComboAdapter.Offset2Pixels, middle.Y - 1), 
-                        new Point(middle.X + FlatComboAdapter.Offset2Pixels + 1, middle.Y - 1), 
+                        new Point(middle.X - FlatComboAdapter.Offset2Pixels, middle.Y - 1),
+                        new Point(middle.X + FlatComboAdapter.Offset2Pixels + 1, middle.Y - 1),
                         new Point(middle.X, middle.Y + FlatComboAdapter.Offset2Pixels)
                     });
 
@@ -689,7 +689,7 @@ namespace System.Windows.Forms
             protected override void OnDropDownClosed(EventArgs e) {
                 base.OnDropDownClosed(e);
                 Invalidate();
-                Update(); 
+                Update();
             }
 
             internal override bool SupportsUiaProviders => true;

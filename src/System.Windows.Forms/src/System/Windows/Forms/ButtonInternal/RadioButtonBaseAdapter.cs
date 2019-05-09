@@ -30,8 +30,8 @@ namespace System.Windows.Forms.ButtonInternal {
         }
 
         protected void DrawCheckBackground3DLite(PaintEventArgs e, Rectangle bounds, Color checkColor, Color checkBackground, ColorData colors, bool disabledColors) {
-            Graphics g = e.Graphics;            
-            
+            Graphics g = e.Graphics;
+
             Color field = checkBackground;
             if (!Control.Enabled && disabledColors) {
                 field = SystemColors.Control;
@@ -59,13 +59,13 @@ namespace System.Windows.Forms.ButtonInternal {
         protected void DrawCheckBackgroundFlat(PaintEventArgs e, Rectangle bounds, Color borderColor, Color checkBackground) {
             Color field = checkBackground;
             Color border = borderColor;
-            
+
             if (!Control.Enabled) {
                 // if we are not in HighContrast mode OR we opted into the legacy behavior
                 if (!SystemInformation.HighContrast) {
                     border = ControlPaint.ContrastControlDark;
                 }
-                // otherwise we are in HighContrast mode 
+                // otherwise we are in HighContrast mode
                 field = SystemColors.Control;
             }
 
@@ -73,8 +73,8 @@ namespace System.Windows.Forms.ButtonInternal {
 
             using( WindowsGraphics wg = WindowsGraphics.FromGraphics(e.Graphics) ) {
                 using( WindowsPen borderPen = new WindowsPen(wg.DeviceContext, border) ) {
-                    using( WindowsBrush fieldBrush = new WindowsSolidBrush(wg.DeviceContext, field) ) {                                                
-                        // In high DPI mode when we draw ellipse as three rectantles, 
+                    using( WindowsBrush fieldBrush = new WindowsSolidBrush(wg.DeviceContext, field) ) {
+                        // In high DPI mode when we draw ellipse as three rectantles,
                         // the quality of ellipse is poor. Draw it directly as ellipse
                         if(scale > 1.1) {
                             bounds.Width--;
@@ -90,14 +90,14 @@ namespace System.Windows.Forms.ButtonInternal {
             }
         }
 
-		// Helper method to overcome the poor GDI ellipse drawing routine		
+		// Helper method to overcome the poor GDI ellipse drawing routine
 		private static void DrawAndFillEllipse(WindowsGraphics wg, WindowsPen borderPen, WindowsBrush fieldBrush, Rectangle bounds)
 		{
             Debug.Assert(wg != null,"Calling DrawAndFillEllipse with null wg");
 		    if (wg == null) {
                 return;
 		    }
-            
+
 			wg.FillRectangle(fieldBrush, new Rectangle(bounds.X + 2, bounds.Y + 2, 8, 8));
 			wg.FillRectangle(fieldBrush, new Rectangle(bounds.X + 4, bounds.Y + 1, 4, 10));
 			wg.FillRectangle(fieldBrush, new Rectangle(bounds.X + 1, bounds.Y + 4, 10, 4));
@@ -139,7 +139,7 @@ namespace System.Windows.Forms.ButtonInternal {
                 using( WindowsGraphics wg = WindowsGraphics.FromGraphics(e.Graphics) ) {
                     using (WindowsBrush brush = new WindowsSolidBrush(wg.DeviceContext, checkColor)) {
                         // circle drawing doesn't work at this size
-                        int offset = 5;                                                                   
+                        int offset = 5;
                         Rectangle vCross = new Rectangle (layout.checkBounds.X + GetScaledNumber(offset, scale), layout.checkBounds.Y + GetScaledNumber(offset - 1, scale), GetScaledNumber(2, scale), GetScaledNumber(4, scale));
                         wg.FillRectangle(brush, vCross);
                         Rectangle hCross = new Rectangle (layout.checkBounds.X + GetScaledNumber(offset - 1, scale), layout.checkBounds.Y + GetScaledNumber(offset, scale), GetScaledNumber(4, scale), GetScaledNumber(2, scale));
@@ -170,17 +170,17 @@ namespace System.Windows.Forms.ButtonInternal {
             return style;
 
         }
-        
+
         protected void DrawCheckBox(PaintEventArgs e, LayoutData layout) {
             Graphics g = e.Graphics;
-            
+
             Rectangle check = layout.checkBounds;
             if (!Application.RenderWithVisualStyles) {
                 check.X--;      // compensate for Windows drawing slightly offset to right
             }
 
             ButtonState style = GetState();
-            
+
             if (Application.RenderWithVisualStyles) {
                 RadioButtonRenderer.DrawRadioButton(g, new Point(check.Left, check.Top), RadioButtonRenderer.ConvertFromButtonState(style, Control.MouseIsOver), Control.HandleInternal);
               }
@@ -193,7 +193,7 @@ namespace System.Windows.Forms.ButtonInternal {
 
         protected void AdjustFocusRectangle(LayoutData layout) {
             if (string.IsNullOrEmpty(Control.Text)) {
-                // When a RadioButton has no text, AutoSize sets the size to zero 
+                // When a RadioButton has no text, AutoSize sets the size to zero
                 // and thus there's no place around which to draw the focus rectangle.
                 // So, when AutoSize == true we want the focus rectangle to be rendered around the circle area.
                 // Otherwise, it should encircle all the available space next to the box (like it's done in WPF and ComCtl32).
@@ -203,10 +203,10 @@ namespace System.Windows.Forms.ButtonInternal {
 
         internal override LayoutOptions CommonLayout() {
             LayoutOptions layout = base.CommonLayout();
-            layout.checkAlign        = Control.CheckAlign;        
+            layout.checkAlign        = Control.CheckAlign;
 
             return layout;
         }
-        
+
     }
 }

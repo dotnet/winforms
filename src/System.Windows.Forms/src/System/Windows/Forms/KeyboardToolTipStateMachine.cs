@@ -4,16 +4,16 @@
 
 
 /*
- * KeyboardToolTipStateMachine implements keyboard ToolTips for controls with ToolTip set on them. 
- * 
+ * KeyboardToolTipStateMachine implements keyboard ToolTips for controls with ToolTip set on them.
+ *
  * A keyboard ToolTip is shown when a user focuses a control using keyboard keys such as Tab, arrow keys etc.
  * This state machine attempts to simulate the mouse ToolTip behavior.
  * The control should be focused with keyboard for an amount of time specified with TTDT_INITIAL flag to make the keyboard ToolTip appear.
  * Once visible, the keyboard ToolTip will be demonstrated for an amount of time specified with TTDT_AUTOPOP flag. The ToolTip will disappear afterwards.
  * If the keyboard ToolTip is visible and the focus moves from one ToolTip-enabled control to another, the keyboard ToolTip will be shown after a time interval specified with TTDT_RESHOW flag has passed.
- * 
+ *
  * This behavior is disabled by default and can be enabled by adding the "Switch.System.Windows.Forms.UseLegacyToolTipDisplay=false" line to an application's App.config file:
- 
+
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
   <runtime>

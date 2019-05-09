@@ -11,7 +11,7 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Runtime.Versioning;
 
-    /// <devdoc> this is the toolstrip used for merging the [:)]    [_][#][X] buttons onto an 
+    /// <devdoc> this is the toolstrip used for merging the [:)]    [_][#][X] buttons onto an
     ///          mdi parent when an MDI child is maximized.
     /// </devdoc>
     internal class MdiControlStrip : MenuStrip {
@@ -21,7 +21,7 @@ namespace System.Windows.Forms {
             private ToolStripMenuItem minimize;
             private ToolStripMenuItem restore;
             private MenuStrip mergedMenu;
-            
+
             private IWin32Window target;
 
             /// <devdoc> target is ideally the MDI Child to send the system commands to.
@@ -39,7 +39,7 @@ namespace System.Windows.Forms {
 
                 // The dropDown of the system menu is the one that talks to native.
                 system = new SystemMenuItem();
-             
+
                 // However in the event that the target handle changes we have to push the new handle into everyone.
                 Control controlTarget = target as Control;
                 if (controlTarget != null) {
@@ -57,16 +57,16 @@ namespace System.Windows.Forms {
                     item.Overflow       = ToolStripItemOverflow.Never;
                     item.Alignment      = ToolStripItemAlignment.Right;
                     item.Padding        = Padding.Empty;
-                    // image is not scaled well on high dpi devices. Setting property to fit to size.                    
+                    // image is not scaled well on high dpi devices. Setting property to fit to size.
                     item.ImageScaling   = ToolStripItemImageScaling.SizeToFit;
                 }
 
                 // set up the sytem menu
-          
-          
+
+
                 system.Image            = GetTargetWindowIcon();
                 system.Alignment        = ToolStripItemAlignment.Left;
-                system.DropDownOpening += new EventHandler(OnSystemMenuDropDownOpening);   
+                system.DropDownOpening += new EventHandler(OnSystemMenuDropDownOpening);
                 system.ImageScaling     = ToolStripItemImageScaling.None;
                 system.DoubleClickEnabled = true;
                 system.DoubleClick     += new EventHandler(OnSystemMenuDoubleClick);
@@ -91,7 +91,7 @@ namespace System.Windows.Forms {
             public ToolStripMenuItem Minimize {
                 get { return minimize; }
             }
-            
+
             public ToolStripMenuItem Restore {
                 get { return restore; }
             }
@@ -106,11 +106,11 @@ namespace System.Windows.Forms {
                     mergedMenu = value;
                 }
             }
-                
+
 /* PERF: consider shutting off layout
 #region ShutOffLayout
             protected override void OnLayout(LayoutEventArgs e) {
-                return;  // if someone attempts 
+                return;  // if someone attempts
             }
 
             protected override Size GetPreferredSize(Size proposedSize) {
@@ -128,12 +128,12 @@ namespace System.Windows.Forms {
                 systemIcon = smallIcon.ToBitmap();
                 smallIcon.Dispose();
 
-                return systemIcon;                
+                return systemIcon;
             }
-            
+
             protected internal override void OnItemAdded(ToolStripItemEventArgs e) {
                 base.OnItemAdded(e);
-                Debug.Assert(Items.Count <= 4, "Too many items in the MDIControlStrip.  How did we get into this situation?");    
+                Debug.Assert(Items.Count <= 4, "Too many items in the MDIControlStrip.  How did we get into this situation?");
             }
 
             private void OnTargetWindowDisposed(object sender, EventArgs e) {
@@ -143,9 +143,9 @@ namespace System.Windows.Forms {
 
             private void OnTargetWindowHandleRecreated(object sender, EventArgs e) {
 
-                // in the case that the handle for the form is recreated we need to set 
+                // in the case that the handle for the form is recreated we need to set
                 // up the handles to point to the new window handle for the form.
-                
+
                 system.SetNativeTargetWindow(target);
                 minimize.SetNativeTargetWindow(target);
                 close.SetNativeTargetWindow(target);
@@ -166,13 +166,13 @@ namespace System.Windows.Forms {
 
                 system.Image = GetTargetWindowIcon();
             }
-            
+
             private void OnSystemMenuDropDownOpening(object sender, EventArgs e) {
                 if (!system.HasDropDownItems && (target != null)) {
                     system.DropDown = ToolStripDropDownMenu.FromHMenu(UnsafeNativeMethods.GetSystemMenu(new HandleRef(this, Control.GetSafeHandle(target)), /*bRevert=*/false), target);
                 }
                 else if (MergedMenu == null) {
-                    system.DropDown.Dispose(); 
+                    system.DropDown.Dispose();
                 }
             }
 
@@ -200,20 +200,20 @@ namespace System.Windows.Forms {
 
             }
 
-            // when the system menu item shortcut is evaluated - pop the dropdown          
+            // when the system menu item shortcut is evaluated - pop the dropdown
             internal class ControlBoxMenuItem : ToolStripMenuItem {
                 internal ControlBoxMenuItem(IntPtr hMenu, int nativeMenuCommandId, IWin32Window targetWindow) :
                                             base(hMenu, nativeMenuCommandId, targetWindow) {
                 }
-                
+
                 internal override bool CanKeyboardSelect {
-                    get { 
+                    get {
                         return false;
                     }
                 }
             }
 
-            // when the system menu item shortcut is evaluated - pop the dropdown          
+            // when the system menu item shortcut is evaluated - pop the dropdown
             internal class SystemMenuItem : ToolStripMenuItem {
                    public SystemMenuItem(){
                        AccessibleName = SR.MDIChildSystemMenuItemAccessibleName;
@@ -228,7 +228,7 @@ namespace System.Windows.Forms {
                    }
                    protected override void OnOwnerChanged(EventArgs e) {
                        if (HasDropDownItems && DropDown.Visible) {
-                            HideDropDown(); 
+                            HideDropDown();
                        }
                        base.OnOwnerChanged(e);
                    }

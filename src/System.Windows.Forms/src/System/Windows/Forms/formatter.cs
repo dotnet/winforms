@@ -22,17 +22,17 @@ namespace System.Windows.Forms
         /// Used when pushing a value from a back-end data source into a data-bound property on a control.
         ///
         /// The real conversion work happens inside FormatObjectInternal(). Before calling FormatObjectInternal(),
-        /// we check for any use of nullable types or values (eg. Nullable<T>) and 'unwrap' them to get at the real 
+        /// we check for any use of nullable types or values (eg. Nullable<T>) and 'unwrap' them to get at the real
         /// types and values, which are then used in the actual conversion. If the caller is expecting a nullable
         /// value back, we must also re-wrap the final result inside a nullable value before returning.
         ///
         /// </devdoc>
         public static object FormatObject(object value,
-                                          Type targetType, 
-                                          TypeConverter sourceConverter, 
-                                          TypeConverter targetConverter, 
-                                          string formatString, 
-                                          IFormatProvider formatInfo, 
+                                          Type targetType,
+                                          TypeConverter sourceConverter,
+                                          TypeConverter targetConverter,
+                                          string formatString,
+                                          IFormatProvider formatInfo,
                                           object formattedNullValue,
                                           object dataSourceNullValue) {
             //
@@ -82,11 +82,11 @@ namespace System.Windows.Forms
         ///
         /// </devdoc>
         private static object FormatObjectInternal(object value,
-                                                   Type targetType, 
-                                                   TypeConverter sourceConverter, 
-                                                   TypeConverter targetConverter, 
-                                                   string formatString, 
-                                                   IFormatProvider formatInfo, 
+                                                   Type targetType,
+                                                   TypeConverter sourceConverter,
+                                                   TypeConverter targetConverter,
+                                                   string formatString,
+                                                   IFormatProvider formatInfo,
                                                    object formattedNullValue) {
             if (value == System.DBNull.Value || value == null) {
                 //
@@ -104,14 +104,14 @@ namespace System.Windows.Forms
                 {
                     return string.Empty;
                 }
-                
+
                 if (targetType == checkStateType) {
                     return CheckState.Indeterminate;
                 }
-                
-                // Just pass null through: if this is a value type, it's been unwrapped here, so we return null 
+
+                // Just pass null through: if this is a value type, it's been unwrapped here, so we return null
                 // and the caller has to wrap if appropriate.
-                return null; 
+                return null;
             }
 
             //
@@ -124,7 +124,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            //The converters for properties should take precedence.  Unfortunately, we don't know whether we have one.  Check vs. the 
+            //The converters for properties should take precedence.  Unfortunately, we don't know whether we have one.  Check vs. the
             //type's TypeConverter.  We're punting the case where the property-provided converter is the same as the type's converter.
             Type sourceType = value.GetType();
             TypeConverter sourceTypeTypeConverter = TypeDescriptor.GetConverter(sourceType);
@@ -140,7 +140,7 @@ namespace System.Windows.Forms
             if (targetType == checkStateType) {
                 if (sourceType == booleanType) {
                     return ((bool)value) ? CheckState.Checked : CheckState.Unchecked;
-                } 
+                }
                 else {
                     if (sourceConverter == null) {
                         sourceConverter = sourceTypeTypeConverter;
@@ -195,17 +195,17 @@ namespace System.Windows.Forms
         /// Used when pulling input from a data-bound property on a control to store in a back-end data source.
         ///
         /// The real conversion work happens inside ParseObjectInternal(). Before calling ParseObjectInternal(),
-        /// we check for any use of nullable types or values (eg. Nullable<T>) and 'unwrap' them to get at the real 
+        /// we check for any use of nullable types or values (eg. Nullable<T>) and 'unwrap' them to get at the real
         /// types and values, which are then used in the actual conversion. If the caller is expecting a nullable
         /// value back, we must also re-wrap the final result inside a nullable value before returning.
         ///
         /// </devdoc>
-        public static object ParseObject(object value, 
-                                         Type targetType, 
-                                         Type sourceType, 
-                                         TypeConverter targetConverter, 
-                                         TypeConverter sourceConverter, 
-                                         IFormatProvider formatInfo, 
+        public static object ParseObject(object value,
+                                         Type targetType,
+                                         Type sourceType,
+                                         TypeConverter targetConverter,
+                                         TypeConverter sourceConverter,
+                                         IFormatProvider formatInfo,
                                          object formattedNullValue,
                                          object dataSourceNullValue) {
             //
@@ -249,12 +249,12 @@ namespace System.Windows.Forms
         /// - Throws a FormatException is no suitable conversion can be found
         ///
         /// </devdoc>
-        private static object ParseObjectInternal(object value, 
-                                                  Type targetType, 
-                                                  Type sourceType, 
-                                                  TypeConverter targetConverter, 
-                                                  TypeConverter sourceConverter, 
-                                                  IFormatProvider formatInfo, 
+        private static object ParseObjectInternal(object value,
+                                                  Type targetType,
+                                                  Type sourceType,
+                                                  TypeConverter targetConverter,
+                                                  TypeConverter sourceConverter,
+                                                  IFormatProvider formatInfo,
                                                   object formattedNullValue) {
             //
             // Convert the formatted representation of 'null' to DBNull (if possible)
@@ -362,7 +362,7 @@ namespace System.Windows.Forms
             string formattedNullValueStr = formattedNullValue as string;
             string valueStr = value as string;
             if (formattedNullValueStr != null && valueStr != null) {
-                // Use same optimization as in WindowsFormsUtils.SafeCompareStrings(...). This addresses 
+                // Use same optimization as in WindowsFormsUtils.SafeCompareStrings(...). This addresses
                 if (formattedNullValueStr.Length != valueStr.Length) {
                     return false;
                 }
@@ -402,28 +402,28 @@ namespace System.Windows.Forms
             try {
                 MethodInfo mi;
 
-                mi = targetType.GetMethod("Parse", 
-                                        BindingFlags.Public | BindingFlags.Static, 
-                                        null, 
-                                        new Type[] {stringType, typeof(System.Globalization.NumberStyles), typeof(System.IFormatProvider)}, 
+                mi = targetType.GetMethod("Parse",
+                                        BindingFlags.Public | BindingFlags.Static,
+                                        null,
+                                        new Type[] {stringType, typeof(System.Globalization.NumberStyles), typeof(System.IFormatProvider)},
                                         null);
                 if (mi != null) {
                     return mi.Invoke(null, new object [] {(string) value, NumberStyles.Any, formatInfo});
                 }
 
                 mi = targetType.GetMethod("Parse",
-                                        BindingFlags.Public | BindingFlags.Static, 
-                                        null, 
-                                        new Type[] {stringType, typeof(System.IFormatProvider)}, 
+                                        BindingFlags.Public | BindingFlags.Static,
+                                        null,
+                                        new Type[] {stringType, typeof(System.IFormatProvider)},
                                         null);
                 if (mi != null) {
                     return mi.Invoke(null, new object [] {(string) value, formatInfo});
                 }
 
                 mi = targetType.GetMethod("Parse",
-                                        BindingFlags.Public | BindingFlags.Static, 
-                                        null, 
-                                        new Type[] {stringType}, 
+                                        BindingFlags.Public | BindingFlags.Static,
+                                        null,
+                                        new Type[] {stringType},
                                         null);
                 if (mi != null) {
                     return mi.Invoke(null, new object [] {(string) value});

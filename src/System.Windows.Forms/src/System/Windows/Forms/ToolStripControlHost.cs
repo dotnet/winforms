@@ -21,7 +21,7 @@ namespace System.Windows.Forms
         private int suspendSyncSizeCount = 0;
         private ContentAlignment controlAlign = ContentAlignment.MiddleCenter;
         private bool inSetVisibleCore = false;
-        
+
         internal static readonly object EventGotFocus                        = new object();
         internal static readonly object EventLostFocus                       = new object();
         internal static readonly object EventKeyDown                         = new object();
@@ -36,7 +36,7 @@ namespace System.Windows.Forms
         /// <devdoc>
         /// Constructs a ToolStripControlHost
         /// </devdoc>
-        
+
         public ToolStripControlHost(Control c) {
             if (c == null) {
                 throw new ArgumentNullException(nameof(c), SR.ControlCannotBeNull);
@@ -45,7 +45,7 @@ namespace System.Windows.Forms
             SyncControlParent();
             c.Visible = true;
             SetBounds(c.Bounds);
-            
+
             // now that we have a control set in, update the bounds.
             Rectangle bounds = this.Bounds;
             CommonProperties.UpdateSpecifiedBounds(c, bounds.X, bounds.Y, bounds.Width, bounds.Height);
@@ -57,7 +57,7 @@ namespace System.Windows.Forms
         public ToolStripControlHost(Control c, string name) : this (c){
             this.Name = name;
         }
-     
+
         public override Color BackColor {
             get {
                 return Control.BackColor;
@@ -66,7 +66,7 @@ namespace System.Windows.Forms
                 Control.BackColor = value;
             }
         }
-        
+
         /// <devdoc>
         /// <para>
         /// Gets or sets the image that is displayed on a <see cref='System.Windows.Forms.Label'/>.
@@ -86,7 +86,7 @@ namespace System.Windows.Forms
                 Control.BackgroundImage = value;
             }
         }
- 
+
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(ImageLayout.Tile),
@@ -105,10 +105,10 @@ namespace System.Windows.Forms
         /// Overriden to return value from Control.CanSelect.
         /// </devdoc>
         public override bool CanSelect {
-            get { 
+            get {
                 if (control != null) {
-                    return (DesignMode || this.Control.CanSelect); 
-                }   
+                    return (DesignMode || this.Control.CanSelect);
+                }
                 return false;
             }
         }
@@ -126,7 +126,7 @@ namespace System.Windows.Forms
         [DefaultValue(ContentAlignment.MiddleCenter), Browsable(false)]
         public ContentAlignment ControlAlign {
             get { return controlAlign; }
-            set { 
+            set {
                 if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value)) {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
                 }
@@ -142,7 +142,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Control Control {
-            get {  
+            get {
                 return control;
             }
         }
@@ -170,8 +170,8 @@ namespace System.Windows.Forms
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new ToolStripItemDisplayStyle DisplayStyle {
-            get { 
-                return base.DisplayStyle; 
+            get {
+                return base.DisplayStyle;
             }
             set {
                base.DisplayStyle = value;
@@ -180,14 +180,14 @@ namespace System.Windows.Forms
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DisplayStyleChanged {
-            add => Events.AddHandler(EventDisplayStyleChanged, value); 
+            add => Events.AddHandler(EventDisplayStyleChanged, value);
             remove => Events.RemoveHandler(EventDisplayStyleChanged, value);
         }
 
-        /// <devdoc> 
+        /// <devdoc>
         //  For control hosts, this property has no effect
         /// as they get their own clicks.  Use ControlStyles.StandardClick
-        /// instead. 
+        /// instead.
         /// </devdoc>
         [DefaultValue(false), Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new bool DoubleClickEnabled {
@@ -227,7 +227,7 @@ namespace System.Windows.Forms
         Browsable(false), EditorBrowsable(EditorBrowsableState.Always)
         ]
         public virtual bool Focused {
-            get { 
+            get {
                 return Control.Focused;
            }
         }
@@ -242,9 +242,9 @@ namespace System.Windows.Forms
         }
 
         [
-        SRCategory(nameof(SR.CatFocus)), 
-        SRDescription(nameof(SR.ToolStripItemOnGotFocusDescr)), 
-        Browsable(false), 
+        SRCategory(nameof(SR.CatFocus)),
+        SRDescription(nameof(SR.ToolStripItemOnGotFocusDescr)),
+        Browsable(false),
         EditorBrowsable(EditorBrowsableState.Advanced)
         ]
         public event EventHandler GotFocus {
@@ -253,13 +253,13 @@ namespace System.Windows.Forms
         }
 
         [
-        Browsable(false), 
-        EditorBrowsable(EditorBrowsableState.Never), 
+        Browsable(false),
+        EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public override Image Image {
-            
-            
+
+
             get {
                 return base.Image;
             }
@@ -268,8 +268,8 @@ namespace System.Windows.Forms
             }
         }
         [
-        Browsable(false), 
-        EditorBrowsable(EditorBrowsableState.Never), 
+        Browsable(false),
+        EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new ToolStripItemImageScaling ImageScaling {
@@ -281,8 +281,8 @@ namespace System.Windows.Forms
             }
         }
         [
-        Browsable(false), 
-        EditorBrowsable(EditorBrowsableState.Never), 
+        Browsable(false),
+        EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Color ImageTransparentColor {
@@ -295,8 +295,8 @@ namespace System.Windows.Forms
         }
 
         [
-        Browsable(false), 
-        EditorBrowsable(EditorBrowsableState.Never), 
+        Browsable(false),
+        EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new ContentAlignment ImageAlign {
@@ -319,9 +319,9 @@ namespace System.Windows.Forms
          /// <para>Occurs when the control loses focus.</para>
          /// </devdoc>
          [
-         SRCategory(nameof(SR.CatFocus)), 
-         SRDescription(nameof(SR.ToolStripItemOnLostFocusDescr)), 
-         Browsable(false), 
+         SRCategory(nameof(SR.CatFocus)),
+         SRDescription(nameof(SR.ToolStripItemOnLostFocusDescr)),
+         Browsable(false),
          EditorBrowsable(EditorBrowsableState.Advanced)
          ]
          public event EventHandler LostFocus {
@@ -338,7 +338,7 @@ namespace System.Windows.Forms
              add => Events.AddHandler(EventKeyDown, value);
              remove => Events.RemoveHandler(EventKeyDown, value);
          }
-      
+
          /// <devdoc>
          /// <para> Occurs when a key is pressed while the control has focus.</para>
          /// </devdoc>
@@ -347,7 +347,7 @@ namespace System.Windows.Forms
              add => Events.AddHandler(EventKeyPress, value);
              remove => Events.RemoveHandler(EventKeyPress, value);
          }
-      
+
          /// <devdoc>
          /// <para> Occurs when a key is released while the control has focus.</para>
          /// </devdoc>
@@ -363,7 +363,7 @@ namespace System.Windows.Forms
         /// control placement and text will be from right to left.
         /// </devdoc>
         public override RightToLeft RightToLeft {
-            get { 
+            get {
                 if (control != null) {
                     return control.RightToLeft;
                 }
@@ -391,7 +391,7 @@ namespace System.Windows.Forms
         }
 
         public override bool Selected {
-            get { 
+            get {
                 if (Control != null)
                 {
                     return Control.Focused;
@@ -413,7 +413,7 @@ namespace System.Windows.Forms
                     specifiedBounds.Size = value;
                     CommonProperties.UpdateSpecifiedBounds(control, specifiedBounds.X, specifiedBounds.Y, specifiedBounds.Width, specifiedBounds.Height);
                 }
-        
+
 
                 base.Size = value;
 
@@ -428,7 +428,7 @@ namespace System.Windows.Forms
         }
 
         /// <devdoc>
-        /// Overriden to set the Site for the control hosted. This is set at DesignTime when the component is added to the Container. 
+        /// Overriden to set the Site for the control hosted. This is set at DesignTime when the component is added to the Container.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public override ISite Site {
@@ -487,7 +487,7 @@ namespace System.Windows.Forms
                return base.TextImageRelation;
            }
            set {
-               base.TextImageRelation = value;      
+               base.TextImageRelation = value;
            }
         }
 
@@ -518,11 +518,11 @@ namespace System.Windows.Forms
             // unparent the host item which will cause a SyncControlParent, so the control
             // will be correctly unparented before being disposed.
             base.Dispose (disposing);
-           
+
             if (disposing && Control != null) {
 
                 OnUnsubscribeControlEvents(Control);
-                
+
                 // we only call control.Dispose if we are NOT being disposed in the finalizer.
                 Control.Dispose();
                 control = null;
@@ -530,19 +530,19 @@ namespace System.Windows.Forms
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public void Focus() 
+        public void Focus()
         {
            Control.Focus();
         }
 
-    
+
         public override Size GetPreferredSize(Size constrainingSize) {
             if (control != null) {
                 return Control.GetPreferredSize(constrainingSize - Padding.Size) + Padding.Size;
             }
             return base.GetPreferredSize(constrainingSize);
         }
-        
+
         ///
         ///  Handle* wrappers:
         ///    We sync the event from the hosted control and call resurface it on ToolStripItem.
@@ -550,13 +550,13 @@ namespace System.Windows.Forms
 
         private void HandleClick(object sender, System.EventArgs e) {
             OnClick(e);
-        }   
+        }
         private void HandleBackColorChanged(object sender, System.EventArgs e) {
             OnBackColorChanged(e);
-        }   
+        }
         private void HandleDoubleClick(object sender, System.EventArgs e) {
             OnDoubleClick(e);
-        }   
+        }
         private void HandleDragDrop(object sender, DragEventArgs e) {
             OnDragDrop(e);
         }
@@ -571,13 +571,13 @@ namespace System.Windows.Forms
         }
         private void HandleEnter(object sender, System.EventArgs e) {
             OnEnter(e);
-        }   
+        }
         private void HandleEnabledChanged(object sender, System.EventArgs e) {
             OnEnabledChanged(e);
         }
         private void HandleForeColorChanged(object sender, System.EventArgs e) {
             OnForeColorChanged(e);
-        }   
+        }
         private void HandleGiveFeedback(object sender, GiveFeedbackEventArgs e) {
             OnGiveFeedback(e);
         }
@@ -585,10 +585,10 @@ namespace System.Windows.Forms
             OnGotFocus(e);
         }
         private void HandleLocationChanged(object sender, EventArgs e) {
-            OnLocationChanged(e);            
+            OnLocationChanged(e);
         }
         private void HandleLostFocus(object sender, EventArgs e) {
-            OnLostFocus(e);            
+            OnLostFocus(e);
         }
         private void HandleKeyDown(object sender, KeyEventArgs e) {
             OnKeyDown(e);
@@ -601,21 +601,21 @@ namespace System.Windows.Forms
         }
         private void HandleLeave(object sender, System.EventArgs e) {
             OnLeave(e);
-        }   
+        }
         private void HandleMouseDown(object sender, MouseEventArgs e) {
             OnMouseDown(e);
             RaiseMouseEvent(ToolStripItem.EventMouseDown, e);
         }
         private void HandleMouseEnter(object sender, EventArgs e) {
-            OnMouseEnter(e);   
+            OnMouseEnter(e);
             RaiseEvent(ToolStripItem.EventMouseEnter, e);
         }
         private void HandleMouseLeave(object sender, EventArgs e) {
-            OnMouseLeave(e);   
+            OnMouseLeave(e);
             RaiseEvent(ToolStripItem.EventMouseLeave, e);
         }
         private void HandleMouseHover(object sender, EventArgs e) {
-            OnMouseHover(e);   
+            OnMouseHover(e);
             RaiseEvent(ToolStripItem.EventMouseHover, e);
         }
         private void HandleMouseMove(object sender, MouseEventArgs e) {
@@ -645,7 +645,7 @@ namespace System.Windows.Forms
                OnHostedControlResize(e);
             }
         }
-    
+
         private void HandleTextChanged(object sender, EventArgs e) {
             OnTextChanged(e);
         }
@@ -655,7 +655,7 @@ namespace System.Windows.Forms
             // the easiest way to do this is to use ParticipatesInLayout.
             bool controlVisibleStateFlag = ((IArrangedElement)Control).ParticipatesInLayout;
             bool itemVisibleStateFlag = ((IArrangedElement)(this)).ParticipatesInLayout;
-            
+
             if (itemVisibleStateFlag != controlVisibleStateFlag) {
                 this.Visible = Control.Visible;
                 // this should fire the OnVisibleChanged and raise events appropriately.
@@ -664,11 +664,11 @@ namespace System.Windows.Forms
 
         private void HandleValidating(object sender, CancelEventArgs e) {
             OnValidating(e);
-        }   
-        
+        }
+
         private void HandleValidated(object sender, System.EventArgs e) {
             OnValidated(e);
-        }   
+        }
 
         internal override void OnAccessibleDescriptionChanged(EventArgs e) {
             Control.AccessibleDescription = AccessibleDescription;
@@ -683,38 +683,38 @@ namespace System.Windows.Forms
             Control.AccessibleRole = AccessibleRole;
         }
 
-        
+
         protected virtual void OnEnter(EventArgs e) {
             RaiseEvent(EventEnter, e);
         }
-        
-        
+
+
         /// <devdoc>
         /// called when the control has lost focus
         /// </devdoc>
         protected virtual void OnGotFocus(EventArgs e) {
-            RaiseEvent(EventGotFocus, e);            
+            RaiseEvent(EventGotFocus, e);
         }
 
         protected virtual void OnLeave(EventArgs e) {
             RaiseEvent(EventLeave, e);
         }
-        
+
         /// <devdoc>
         /// called when the control has lost focus
         /// </devdoc >
-        protected virtual void OnLostFocus(EventArgs e) {         
-            RaiseEvent(EventLostFocus, e);                              
-        } 
-        protected virtual void OnKeyDown(KeyEventArgs e) {         
-            RaiseKeyEvent(EventKeyDown, e);                              
-        } 
-        protected virtual void OnKeyPress(KeyPressEventArgs e) {         
-            RaiseKeyPressEvent(EventKeyPress, e);                              
-        } 
-        protected virtual void OnKeyUp(KeyEventArgs e) {         
-            RaiseKeyEvent(EventKeyUp, e);                              
-        } 
+        protected virtual void OnLostFocus(EventArgs e) {
+            RaiseEvent(EventLostFocus, e);
+        }
+        protected virtual void OnKeyDown(KeyEventArgs e) {
+            RaiseKeyEvent(EventKeyDown, e);
+        }
+        protected virtual void OnKeyPress(KeyPressEventArgs e) {
+            RaiseKeyPressEvent(EventKeyPress, e);
+        }
+        protected virtual void OnKeyUp(KeyEventArgs e) {
+            RaiseKeyEvent(EventKeyUp, e);
+        }
         /// <devdoc>
         /// Called when the items bounds are changed.  Here, we update the Control's bounds.
         /// </devdoc>
@@ -726,16 +726,16 @@ namespace System.Windows.Forms
                     Debug.Fail("why are we here? control should not be null");
                     return;
                 }
-                
+
                 Size size = LayoutUtils.DeflateRect(this.Bounds, this.Padding).Size;
                 Rectangle bounds = LayoutUtils.Align(size, this.Bounds, ControlAlign);
-                
+
                 // use BoundsSpecified.None so we dont deal w/specified bounds - this way we can tell what someone has set the size to.
                 element.SetBounds(bounds, BoundsSpecified.None);
 
-                // sometimes a control can ignore the size passed in, use the adjustment 
+                // sometimes a control can ignore the size passed in, use the adjustment
                 // to re-align.
-                if (bounds != control.Bounds) {                
+                if (bounds != control.Bounds) {
                     bounds = LayoutUtils.Align(control.Size, this.Bounds, ControlAlign);
                     element.SetBounds(bounds,  BoundsSpecified.None);
                 }
@@ -750,11 +750,11 @@ namespace System.Windows.Forms
             // do nothing....
         }
 
-        
-        protected internal override void OnLayout(LayoutEventArgs e) {    
+
+        protected internal override void OnLayout(LayoutEventArgs e) {
             // do nothing... called via the controls collection
         }
-    
+
         /// <devdoc>
         /// Called when the item's parent has been changed.
         /// </devdoc>
@@ -762,7 +762,7 @@ namespace System.Windows.Forms
             if (oldParent != null && Owner == null  && newParent == null && Control != null) {
                 // if we've really been removed from the item collection,
                 // politely remove ourselves from the control collection
-                WindowsFormsUtils.ReadOnlyControlCollection  oldControlCollection 
+                WindowsFormsUtils.ReadOnlyControlCollection  oldControlCollection
                                 = GetControlCollection(Control.ParentInternal as ToolStrip);
                 if (oldControlCollection != null) {
                      oldControlCollection.RemoveInternal(Control);
@@ -771,7 +771,7 @@ namespace System.Windows.Forms
             else {
                SyncControlParent();
             }
-            
+
             base.OnParentChanged(oldParent, newParent);
         }
 
@@ -779,7 +779,7 @@ namespace System.Windows.Forms
 
 
         /// <devdoc>
-        /// The events from the hosted control are subscribed here.  
+        /// The events from the hosted control are subscribed here.
         /// Override to add/prevent syncing of control events.
         /// NOTE: if you override and hook up events here, you should unhook in OnUnsubscribeControlEvents.
         /// </devdoc>
@@ -787,7 +787,7 @@ namespace System.Windows.Forms
 
             if (control != null) {
                 // Please keep this alphabetized and in sync with Unsubscribe
-                // 
+                //
                 control.Click                       += new EventHandler(HandleClick);
                 control.BackColorChanged            += new EventHandler(HandleBackColorChanged);
                 control.DoubleClick                 += new EventHandler(HandleDoubleClick);
@@ -821,20 +821,20 @@ namespace System.Windows.Forms
                 control.VisibleChanged              += new EventHandler(HandleControlVisibleChanged);
                 control.Validating                  += new CancelEventHandler(HandleValidating);
                 control.Validated                   += new EventHandler(HandleValidated);
-                
+
             }
-    
+
         }
-      
+
 
         /// <devdoc>
-        /// The events from the hosted control are unsubscribed here.  
+        /// The events from the hosted control are unsubscribed here.
         /// Override to unhook events subscribed in OnSubscribeControlEvents.
         /// </devdoc>
         protected virtual void OnUnsubscribeControlEvents(Control control) {
              if (control != null) {
                 // Please keep this alphabetized and in sync with Subscribe
-                // 
+                //
                 control.Click                       -= new EventHandler(HandleClick);
                 control.BackColorChanged            -= new EventHandler(HandleBackColorChanged);
                 control.DoubleClick                 -= new EventHandler(HandleDoubleClick);
@@ -868,9 +868,9 @@ namespace System.Windows.Forms
                 control.VisibleChanged              -= new EventHandler(HandleControlVisibleChanged);
                 control.Validating                  -= new CancelEventHandler(HandleValidating);
                 control.Validated                   -= new EventHandler(HandleValidated);
-        
+
             }
-    
+
         }
 
         protected virtual void OnValidating(CancelEventArgs e) {
@@ -900,7 +900,7 @@ namespace System.Windows.Forms
             // support for syncing the wrapper when the control size has changed
             this.Size = Control.Size;
         }
-    
+
         protected internal override bool ProcessCmdKey(ref Message m, Keys keyData) => false;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters")] // 'charCode' matches control.cs
@@ -932,7 +932,7 @@ namespace System.Windows.Forms
                 inSetVisibleCore = false;
             }
 
-            
+
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -948,7 +948,7 @@ namespace System.Windows.Forms
         private void SuspendSizeSync() {
             this.suspendSyncSizeCount++;
         }
-        
+
         private void ResumeSizeSync() {
             this.suspendSyncSizeCount--;
         }
@@ -956,12 +956,12 @@ namespace System.Windows.Forms
             if (control != null) {
                 return control.ShouldSerializeBackColor();
             }
-            return base.ShouldSerializeBackColor();   
+            return base.ShouldSerializeBackColor();
         }
         internal override bool ShouldSerializeForeColor() {
             if (control != null) {
                 return control.ShouldSerializeForeColor();
-            }        
+            }
             return base.ShouldSerializeForeColor();
         }
 
@@ -976,7 +976,7 @@ namespace System.Windows.Forms
             if (control != null) {
                 return control.ShouldSerializeRightToLeft();
             }
-            return base.ShouldSerializeRightToLeft();   
+            return base.ShouldSerializeRightToLeft();
         }
 
         internal override void OnKeyboardToolTipHook(ToolTip toolTip) {
@@ -992,17 +992,17 @@ namespace System.Windows.Forms
         }
 
         // Our implementation of ISite:
-        // Since the Control which is wrapped by ToolStripControlHost is a runtime instance, there is no way of knowing 
+        // Since the Control which is wrapped by ToolStripControlHost is a runtime instance, there is no way of knowing
         // whether the control is in runtime or designtime.
         // This implementation of ISite would be set to Control.Site when ToolStripControlHost.Site is set at DesignTime. (Refer to Site property on ToolStripControlHost)
-        // This implementation just returns the DesigMode property to be ToolStripControlHost's DesignMode property. 
+        // This implementation just returns the DesigMode property to be ToolStripControlHost's DesignMode property.
         // Everything else is pretty much default implementation.
         private class StubSite : ISite, IDictionaryService
         {
             private Hashtable _dictionary = null;
             IComponent comp = null;
             IComponent owner = null;
-            
+
             public StubSite(Component control, Component host)
             {
                 comp = control as IComponent;
@@ -1018,7 +1018,7 @@ namespace System.Windows.Forms
                     return comp;
                 }
             }
-        
+
             // The container in which the component is sited.
             /// <devdoc>
             /// <para>When implemented by a class, gets the container associated with the <see cref='System.ComponentModel.ISite'/>.</para>
@@ -1028,7 +1028,7 @@ namespace System.Windows.Forms
                     return owner.Site.Container;
                 }
             }
-        
+
             // Indicates whether the component is in design mode.
             /// <devdoc>
             ///    <para>When implemented by a class, determines whether the component is in design mode.</para>

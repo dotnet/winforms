@@ -41,11 +41,11 @@ namespace System.Windows.Forms
             Active = 2
         };
 
-        
+
         //
         // Static members:
         //
-        
+
         //
         // BitVector32 masks for various internal state flags.
         internal static readonly int sinkAttached = BitVector32.CreateMask();
@@ -103,7 +103,7 @@ namespace System.Windows.Forms
         internal static void ResetLogPixelsX() {
             logPixelsX = -1;
         }
-            
+
         //
         // We cache LOGPIXELSY for optimization
         internal static int LogPixelsY {

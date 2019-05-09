@@ -14,7 +14,7 @@ namespace System.Windows.Forms
     {
         public TabControlCancelEventArgs(TabPage tabPage, int tabPageIndex, bool cancel, TabControlAction action) : base(cancel)
         {
-            TabPage = tabPage;                                           
+            TabPage = tabPage;
             TabPageIndex = tabPageIndex;
             Action = action;
         }

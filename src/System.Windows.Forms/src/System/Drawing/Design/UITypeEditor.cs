@@ -33,7 +33,7 @@ namespace System.Drawing.Design
             // Add our intrinsic editors to TypeDescriptor.
             TypeDescriptor.AddEditorTable(typeof(UITypeEditor), intrinsicEditors);
         }
-        
+
         /// <summary>
         /// Determines if drop-down editors should be resizable by the user.
         /// </summary>
@@ -53,12 +53,12 @@ namespace System.Drawing.Design
         /// <param name="provider">The <see cref="System.IServiceProvider" /> that this editor can use to obtain services.</param>
         /// <param name="value">The object to edit.</param>
         public virtual object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value) => value;
-        
+
         /// <summary>
         /// Gets the <see cref='System.Drawing.Design.UITypeEditorEditStyle'/> of the Edit method.
         /// </summary>
         public UITypeEditorEditStyle GetEditStyle() => GetEditStyle(null);
-        
+
         /// <summary>
         /// Gets a value indicating whether this editor supports painting a representation of an object's value.
         /// </summary>

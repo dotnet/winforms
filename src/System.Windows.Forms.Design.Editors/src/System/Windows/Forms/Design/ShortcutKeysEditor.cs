@@ -204,9 +204,9 @@ namespace System.Windows.Forms.Design
                 tlpInner.SuspendLayout();
                 SuspendLayout();
 
-                // 
+                //
                 // tlpOuter
-                // 
+                //
                 resources.ApplyResources(tlpOuter, "tlpOuter");
                 tlpOuter.ColumnCount = 3;
                 tlpOuter.ColumnStyles.Add(new ColumnStyle());
@@ -221,16 +221,16 @@ namespace System.Windows.Forms.Design
                 tlpOuter.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
                 tlpOuter.RowStyles.Add(new RowStyle(SizeType.Absolute, 24F));
 
-                // 
+                //
                 // lblModifiers
-                // 
+                //
                 resources.ApplyResources(lblModifiers, "lblModifiers");
                 tlpOuter.SetColumnSpan(lblModifiers, 3);
                 lblModifiers.Name = "lblModifiers";
 
-                // 
+                //
                 // chkCtrl
-                // 
+                //
                 resources.ApplyResources(chkCtrl, "chkCtrl");
                 chkCtrl.Name = "chkCtrl";
                 // this margin setting makes this control left-align with cmbKey and indented from lblModifiers/lblKey
@@ -238,25 +238,25 @@ namespace System.Windows.Forms.Design
 
                 chkCtrl.CheckedChanged += chkModifier_CheckedChanged;
 
-                // 
+                //
                 // chkAlt
-                // 
+                //
                 resources.ApplyResources(chkAlt, "chkAlt");
                 chkAlt.Name = "chkAlt";
 
                 chkAlt.CheckedChanged += chkModifier_CheckedChanged;
 
-                // 
+                //
                 // chkShift
-                // 
+                //
                 resources.ApplyResources(chkShift, "chkShift");
                 chkShift.Name = "chkShift";
 
                 chkShift.CheckedChanged += chkModifier_CheckedChanged;
 
-                // 
+                //
                 // tlpInner
-                // 
+                //
                 resources.ApplyResources(tlpInner, "tlpInner");
                 tlpInner.ColumnCount = 2;
                 tlpInner.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
@@ -269,16 +269,16 @@ namespace System.Windows.Forms.Design
                 tlpInner.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
                 tlpInner.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 
-                // 
+                //
                 // lblKey
-                // 
+                //
                 resources.ApplyResources(lblKey, "lblKey");
                 tlpInner.SetColumnSpan(lblKey, 2);
                 lblKey.Name = "lblKey";
 
-                // 
+                //
                 // cmbKey
-                // 
+                //
                 resources.ApplyResources(cmbKey, "cmbKey");
                 cmbKey.DropDownStyle = ComboBoxStyle.DropDownList;
                 cmbKey.Name = "cmbKey";
@@ -290,9 +290,9 @@ namespace System.Windows.Forms.Design
                 foreach (Keys keyCode in validKeys) cmbKey.Items.Add(KeysConverter.ConvertToString(keyCode));
                 cmbKey.SelectedIndexChanged += cmbKey_SelectedIndexChanged;
 
-                // 
+                //
                 // btnReset
-                // 
+                //
                 resources.ApplyResources(btnReset, "btnReset");
                 btnReset.Name = "btnReset";
 

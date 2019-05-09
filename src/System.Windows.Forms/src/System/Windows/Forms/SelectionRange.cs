@@ -45,7 +45,7 @@ namespace System.Windows.Forms {
             //NOTE: simcooke: we explicitly DO NOT want to throw an exception here - just silently
             //                swap them around. This is because the win32 control can return non-
             //                normalized ranges.
-            
+
             // We use lower.Date and upper.Date to remove any time component
             //
             if (lower < upper) {
@@ -55,7 +55,7 @@ namespace System.Windows.Forms {
             else {
                 start = upper.Date;
                 end = lower.Date;
-            }                        
+            }
         }
 
         /// <devdoc>
@@ -70,10 +70,10 @@ namespace System.Windows.Forms {
         ///     Returns the ending time of this range.
         /// </devdoc>
         public DateTime End {
-            get { 
+            get {
                 return end;
             }
-            set { 
+            set {
                 end = value.Date;
             }
         }
@@ -85,7 +85,7 @@ namespace System.Windows.Forms {
             get {
                 return start;
             }
-            set { 
+            set {
                 start = value.Date;
             }
         }

@@ -96,8 +96,8 @@ namespace System.Windows.Forms
             }
             set
             {
-               switch (value) 
-               { 
+               switch (value)
+               {
                     case DataGridViewContentAlignment.NotSet:
                     case DataGridViewContentAlignment.TopLeft:
                     case DataGridViewContentAlignment.TopCenter:
@@ -109,8 +109,8 @@ namespace System.Windows.Forms
                     case DataGridViewContentAlignment.BottomCenter:
                     case DataGridViewContentAlignment.BottomRight:
                         break;
-                    default: 
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewContentAlignment)); 
+                    default:
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewContentAlignment));
                 }
                 this.AlignmentInternal = value;
             }
@@ -139,7 +139,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.Properties.GetColor(PropBackColor);              
+                return this.Properties.GetColor(PropBackColor);
             }
             set
             {
@@ -156,7 +156,7 @@ namespace System.Windows.Forms
         }
 
         [
-            Browsable(false), 
+            Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
@@ -180,7 +180,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (value == System.DBNull.Value && 
+                if (value == System.DBNull.Value &&
                     this.Properties.ContainsObject(PropDataSourceNullValue))
                 {
                     this.Properties.RemoveObject(PropDataSourceNullValue);
@@ -222,7 +222,7 @@ namespace System.Windows.Forms
                 }
             }
         }
-        
+
         [
             SRCategory(nameof(SR.CatAppearance))
         ]
@@ -239,7 +239,7 @@ namespace System.Windows.Forms
                 {
                     this.Properties.SetColor(PropForeColor, value);
                 }
-                if (!c.Equals(this.ForeColor)) 
+                if (!c.Equals(this.ForeColor))
                 {
                     OnPropertyChanged(DataGridViewCellStylePropertyInternal.ForeColor);
                 }
@@ -468,7 +468,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.Properties.GetColor(PropSelectionBackColor);              
+                return this.Properties.GetColor(PropSelectionBackColor);
             }
             set
             {
@@ -483,7 +483,7 @@ namespace System.Windows.Forms
                 }
             }
         }
-        
+
         [
             SRCategory(nameof(SR.CatAppearance))
         ]
@@ -491,7 +491,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.Properties.GetColor(PropSelectionForeColor);        
+                return this.Properties.GetColor(PropSelectionForeColor);
             }
             set
             {
@@ -500,7 +500,7 @@ namespace System.Windows.Forms
                 {
                     this.Properties.SetColor(PropSelectionForeColor, value);
                 }
-                if (!c.Equals(this.SelectionForeColor)) 
+                if (!c.Equals(this.SelectionForeColor))
                 {
                     OnPropertyChanged(DataGridViewCellStylePropertyInternal.Color);
                 }
@@ -547,7 +547,7 @@ namespace System.Windows.Forms
             {
                 // Sequential enum.  Valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewTriState.NotSet, (int)DataGridViewTriState.False)){
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewTriState)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewTriState));
                 }
                 this.WrapModeInternal = value;
             }
@@ -636,7 +636,7 @@ namespace System.Windows.Forms
             return new DataGridViewCellStyle(this);
         }
 
-        public override bool Equals(object o) 
+        public override bool Equals(object o)
         {
             DataGridViewCellStyle dgvcs = o as DataGridViewCellStyle;
             if (dgvcs != null)
@@ -785,7 +785,7 @@ namespace System.Windows.Forms
             this.Properties.GetColor(PropSelectionForeColor, out found);
             return found;
         }
-        
+
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder(128);

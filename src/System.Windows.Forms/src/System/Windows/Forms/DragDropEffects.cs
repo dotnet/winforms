@@ -36,7 +36,7 @@ namespace System.Windows.Forms
         Scroll = unchecked((int)0x80000000),
 
         /// <devdoc>
-        /// The data is copied, removed from the drag source, and scrolled in the 
+        /// The data is copied, removed from the drag source, and scrolled in the
         /// drop target. NOTE: Link is intentionally not present in All.
         /// </devdoc>
         All = Copy | Move | Scroll,

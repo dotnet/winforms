@@ -11,7 +11,7 @@ namespace System.Windows.Forms
     using System.Drawing;
     using System.Drawing.Design;
     using System.Globalization;
-    
+
     [
         Designer("System.Windows.Forms.Design.DataGridViewComboBoxColumnDesigner, " + AssemblyRef.SystemDesign),
         ToolboxBitmapAttribute(typeof(DataGridViewComboBoxColumn), "DataGridViewComboBoxColumn")
@@ -148,7 +148,7 @@ namespace System.Windows.Forms
         ]
         public string DisplayMember
         {
-            get 
+            get
             {
                 if (this.ComboBoxCellTemplate == null)
                 {
@@ -156,7 +156,7 @@ namespace System.Windows.Forms
                 }
                 return this.ComboBoxCellTemplate.DisplayMember;
             }
-            set 
+            set
             {
                 if (this.ComboBoxCellTemplate == null)
                 {
@@ -367,7 +367,7 @@ namespace System.Windows.Forms
         ]
         public string ValueMember
         {
-            get 
+            get
             {
                 if (this.ComboBoxCellTemplate == null)
                 {
@@ -375,7 +375,7 @@ namespace System.Windows.Forms
                 }
                 return this.ComboBoxCellTemplate.ValueMember;
             }
-            set 
+            set
             {
                 if (this.ComboBoxCellTemplate == null)
                 {
@@ -415,7 +415,7 @@ namespace System.Windows.Forms
                 }
                 return this.ComboBoxCellTemplate.MaxDropDownItems;
             }
-            set 
+            set
             {
                 if (this.MaxDropDownItems != value)
                 {
@@ -445,7 +445,7 @@ namespace System.Windows.Forms
         ]
         public bool Sorted
         {
-            get 
+            get
             {
                 if (this.ComboBoxCellTemplate == null)
                 {
@@ -453,7 +453,7 @@ namespace System.Windows.Forms
                 }
                 return this.ComboBoxCellTemplate.Sorted;
             }
-            set 
+            set
             {
                 if (this.Sorted != value)
                 {
@@ -487,7 +487,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                // 
+                //
 
                 dataGridViewColumn = (DataGridViewComboBoxColumn)System.Activator.CreateInstance(thisType);
             }
@@ -525,7 +525,7 @@ namespace System.Windows.Forms
         /// <devdoc>
         ///    <para></para>
         /// </devdoc>
-        public override string ToString() 
+        public override string ToString()
         {
             StringBuilder sb = new StringBuilder(64);
             sb.Append("DataGridViewComboBoxColumn { Name=");

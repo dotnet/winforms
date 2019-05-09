@@ -38,7 +38,7 @@ namespace System.Windows.Forms {
         private bool leaveFired = false;
         private bool useVisualStyleBackColor = false;
 
-        
+
         /// <devdoc>
         ///     Constructs an empty TabPage.
         /// </devdoc>
@@ -278,7 +278,7 @@ namespace System.Windows.Forms {
                 this.Invalidate(true);
             }
         }
-        
+
         // Make the Location property non-browsable for the TabPages.
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public Point Location {
@@ -290,7 +290,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler LocationChanged {
             add => base.LocationChanged += value;
@@ -302,7 +302,7 @@ namespace System.Windows.Forms {
         public override Size MaximumSize {
             get { return base.MaximumSize; }
 
-            set { 
+            set {
                 base.MaximumSize = value;
             }
         }
@@ -311,7 +311,7 @@ namespace System.Windows.Forms {
         public override Size MinimumSize {
             get { return base.MinimumSize; }
 
-            set { 
+            set {
                 base.MinimumSize = value;
             }
         }
@@ -484,7 +484,7 @@ namespace System.Windows.Forms {
         }
 
         private void PrefixAmpersands (ref string value) {
-            // Due to a comctl32 problem, ampersands underline the next letter in the 
+            // Due to a comctl32 problem, ampersands underline the next letter in the
             // text string, but the accelerators don't work.
             // So in this function, we prefix ampersands with another ampersand
             // so that they actually appear as ampersands.
@@ -543,7 +543,7 @@ namespace System.Windows.Forms {
         ///     adding an event handler on yourself for this event].  They should,
         ///     however, remember to call base.OnEnter(e); to ensure the event is
         ///     still fired to external listeners
-        ///     This listener is overidden so that we can fire SAME ENTER and LEAVE 
+        ///     This listener is overidden so that we can fire SAME ENTER and LEAVE
         ///     events on the TabPage.
         ///     TabPage should fire enter when the focus is on the TABPAGE and not when the control
         ///     within the TabPage gets Focused.
@@ -566,12 +566,12 @@ namespace System.Windows.Forms {
         ///     adding an event handler on yourself for this event].  They should,
         ///     however, remember to call base.OnLeave(e); to ensure the event is
         ///     still fired to external listeners
-        ///     This listener is overidden so that we can fire SAME ENTER and LEAVE 
+        ///     This listener is overidden so that we can fire SAME ENTER and LEAVE
         ///     events on the TabPage.
         ///     TabPage should fire enter when the focus is on the TABPAGE and not when the control
         ///     within the TabPage gets Focused.
         ///     Similary the Leave should fire when the TabControl (and hence the TabPage) looses
-        ///     Focus. 
+        ///     Focus.
         /// </devdoc>
         protected override void OnLeave (EventArgs e) {
             TabControl parent = ParentInternal as TabControl;
@@ -611,7 +611,7 @@ namespace System.Windows.Forms {
                 //Rectangle rectWithBorder = new Rectangle(inflateRect.X - themePadding.Left,
                 //    inflateRect.Y - themePadding.Top,
                 //    inflateRect.Width + themePadding.Right + themePadding.Left,
-                //    inflateRect.Height + themePadding.Bottom + themePadding.Top); 
+                //    inflateRect.Height + themePadding.Bottom + themePadding.Top);
                 Rectangle rectWithBorder = new Rectangle(inflateRect.X - 4, inflateRect.Y - 2, inflateRect.Width + 8, inflateRect.Height + 6);
 
                 TabRenderer.DrawTabPage(e.Graphics, rectWithBorder);

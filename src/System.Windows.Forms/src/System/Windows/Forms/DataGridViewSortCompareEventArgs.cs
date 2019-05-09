@@ -13,9 +13,9 @@ namespace System.Windows.Forms
         private DataGridViewColumn dataGridViewColumn;
         private object cellValue1, cellValue2;
         private int sortResult, rowIndex1, rowIndex2;
-    
+
         public DataGridViewSortCompareEventArgs(DataGridViewColumn dataGridViewColumn,
-            object cellValue1, 
+            object cellValue1,
             object cellValue2,
             int rowIndex1,
             int rowIndex2)

@@ -137,14 +137,14 @@ namespace System.Windows.Forms
                 {
                     return (LinkBehavior)linkBehavior;
                 }
-                return LinkBehavior.SystemDefault; 
+                return LinkBehavior.SystemDefault;
             }
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)LinkBehavior.SystemDefault, (int)LinkBehavior.NeverUnderline))
                 {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(LinkBehavior)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(LinkBehavior));
                 }
                 if (value != this.LinkBehavior)
                 {
@@ -473,7 +473,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                // 
+                //
 
                 dataGridViewCell = (DataGridViewLinkCell)System.Activator.CreateInstance(thisType);
             }
@@ -564,7 +564,7 @@ namespace System.Windows.Forms
                 false /*computeErrorIconBounds*/,
                 false /*paint*/);
 
-#if DEBUG            
+#if DEBUG
             Rectangle linkBoundsDebug = PaintPrivate(graphics,
                 cellBounds,
                 cellBounds,
@@ -672,7 +672,7 @@ namespace System.Windows.Forms
                     case DataGridViewFreeDimension.Height:
                     {
                         preferredSize = new Size(0,
-                                                 DataGridViewCell.MeasureTextHeight(graphics, 
+                                                 DataGridViewCell.MeasureTextHeight(graphics,
                                                                                     formattedString,
                                                                                     cellStyle.Font,
                                                                                     Math.Max(1, constraintSize.Width - borderAndPaddingWidths - DATAGRIDVIEWLINKCELL_horizontalTextMarginLeft - DATAGRIDVIEWLINKCELL_horizontalTextMarginRight),
@@ -681,10 +681,10 @@ namespace System.Windows.Forms
                     }
                     default:
                     {
-                        preferredSize = DataGridViewCell.MeasureTextPreferredSize(graphics, 
-                                                                                  formattedString, 
-                                                                                  cellStyle.Font, 
-                                                                                  5.0F, 
+                        preferredSize = DataGridViewCell.MeasureTextPreferredSize(graphics,
+                                                                                  formattedString,
+                                                                                  cellStyle.Font,
+                                                                                  5.0F,
                                                                                   flags);
                         break;
                     }
@@ -696,7 +696,7 @@ namespace System.Windows.Forms
                 {
                     case DataGridViewFreeDimension.Width:
                     {
-                        preferredSize = new Size(DataGridViewCell.MeasureTextSize(graphics, formattedString, cellStyle.Font, flags).Width, 
+                        preferredSize = new Size(DataGridViewCell.MeasureTextSize(graphics, formattedString, cellStyle.Font, flags).Width,
                                                  0);
                         break;
                     }
@@ -742,9 +742,9 @@ namespace System.Windows.Forms
         protected override object GetValue(int rowIndex)
         {
             if (this.UseColumnTextForLinkValue &&
-                this.DataGridView != null && 
-                this.DataGridView.NewRowIndex != rowIndex && 
-                this.OwningColumn != null && 
+                this.DataGridView != null &&
+                this.DataGridView.NewRowIndex != rowIndex &&
+                this.OwningColumn != null &&
                 this.OwningColumn is DataGridViewLinkColumn)
             {
                 return ((DataGridViewLinkColumn) this.OwningColumn).Text;
@@ -905,10 +905,10 @@ namespace System.Windows.Forms
             }
         }
 
-        protected override void Paint(Graphics graphics, 
+        protected override void Paint(Graphics graphics,
             Rectangle clipBounds,
-            Rectangle cellBounds, 
-            int rowIndex, 
+            Rectangle cellBounds,
+            int rowIndex,
             DataGridViewElementStates cellState,
             object value,
             object formattedValue,
@@ -922,14 +922,14 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(cellStyle));
             }
 
-            PaintPrivate(graphics, 
+            PaintPrivate(graphics,
                 clipBounds,
-                cellBounds, 
+                cellBounds,
                 rowIndex,
                 cellState,
                 formattedValue,
-                errorText, 
-                cellStyle, 
+                errorText,
+                cellStyle,
                 advancedBorderStyle,
                 paintParts,
                 false /*computeContentBounds*/,
@@ -942,13 +942,13 @@ namespace System.Windows.Forms
         // 1. DataGridViewCell::Paint method
         // 2. DataGridViewCell::GetContentBounds
         // 3. DataGridViewCell::GetErrorIconBounds
-        // 
+        //
         // if computeContentBounds is true then PaintPrivate returns the contentBounds
         // else if computeErrorIconBounds is true then PaintPrivate returns the errorIconBounds
         // else it returns Rectangle.Empty;
         private Rectangle PaintPrivate(Graphics g,
             Rectangle clipBounds,
-            Rectangle cellBounds, 
+            Rectangle cellBounds,
             int rowIndex,
             DataGridViewElementStates cellState,
             object formattedValue,
@@ -1104,11 +1104,11 @@ namespace System.Windows.Forms
             else if (paint || computeContentBounds)
             {
                 if (cellCurrent &&
-                    this.DataGridView.ShowFocusCues && 
-                    this.DataGridView.Focused && 
-                    DataGridViewCell.PaintFocus(paintParts) && 
-                    paint && 
-                    valBounds.Width > 0 && 
+                    this.DataGridView.ShowFocusCues &&
+                    this.DataGridView.Focused &&
+                    DataGridViewCell.PaintFocus(paintParts) &&
+                    paint &&
+                    valBounds.Width > 0 &&
                     valBounds.Height > 0)
                 {
                     // Draw focus rectangle

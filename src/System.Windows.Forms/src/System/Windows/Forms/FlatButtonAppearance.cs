@@ -76,7 +76,7 @@ namespace System.Windows.Forms {
                 if (value.Equals(Color.Transparent)) {
                     throw new NotSupportedException(SR.ButtonFlatAppearanceInvalidBorderColor);
                 }
-                
+
                 if (borderColor != value) {
                     borderColor = value;
                     owner.Invalidate();

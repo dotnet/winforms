@@ -9,21 +9,21 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System;
-    using System.ComponentModel.Design;    
+    using System.ComponentModel.Design;
     using Microsoft.Win32;
     using System.Collections;
     using System.Drawing.Design;
-    
+
     internal class Com2AboutBoxPropertyDescriptor : Com2PropertyDescriptor {
         private TypeConverter converter;
         private UITypeEditor  editor;
-    
-        public Com2AboutBoxPropertyDescriptor() : base(NativeMethods.ActiveX.DISPID_ABOUTBOX, "About", new Attribute[]{new DispIdAttribute(NativeMethods.ActiveX.DISPID_ABOUTBOX), 
-                                                                                      DesignerSerializationVisibilityAttribute.Hidden, 
-                                                                                      new DescriptionAttribute(SR.AboutBoxDesc), 
+
+        public Com2AboutBoxPropertyDescriptor() : base(NativeMethods.ActiveX.DISPID_ABOUTBOX, "About", new Attribute[]{new DispIdAttribute(NativeMethods.ActiveX.DISPID_ABOUTBOX),
+                                                                                      DesignerSerializationVisibilityAttribute.Hidden,
+                                                                                      new DescriptionAttribute(SR.AboutBoxDesc),
                                                                                       new ParenthesizePropertyNameAttribute(true)}, true, typeof(string), null, false) {
         }
-    
+
         /// <devdoc>
         ///     Retrieves the type of the component this PropertyDescriptor is bound to.
         /// </devdoc>
@@ -32,8 +32,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                return typeof(UnsafeNativeMethods.IDispatch);
             }
         }
-        
-        
+
+
         /// <devdoc>
         ///      Retrieves the type converter for this property.
         /// </devdoc>
@@ -41,14 +41,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             get {
                 if (converter == null) {
                     converter = new TypeConverter();
-                }       
+                }
                 return converter;
             }
         }
         /// <devdoc>
         ///     Indicates whether this property is read only.
         /// </devdoc>
-        public override bool IsReadOnly { 
+        public override bool IsReadOnly {
             get {
                return true;
             }
@@ -62,7 +62,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                return typeof(string);
             }
         }
-        
+
         /// <devdoc>
         ///     Indicates whether reset will change the value of the component.  If there
         ///     is a DefaultValueAttribute, then this will return true if getValue returns
@@ -74,7 +74,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         public override bool CanResetValue(object component) {
             return false;
         }
-    
+
         /// <devdoc>
         ///      Retrieves an editor of the requested type.
         /// </devdoc>
@@ -84,7 +84,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     editor = new AboutBoxUITypeEditor();
                 }
             }
-            
+
             return editor;
         }
 
@@ -115,7 +115,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         ///     which will be passed up.  The component designer should design the
         ///     property so that getXXX following a setXXX should return the value
         ///     passed in if no exception was thrown in the setXXX call.
-        /// </devdoc>        
+        /// </devdoc>
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
         public override void SetValue(object component, object value) {
             throw new ArgumentException();
@@ -135,7 +135,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         public override bool ShouldSerializeValue(object component) {
             return false;
         }
-        
+
         public class AboutBoxUITypeEditor : UITypeEditor {
             /// <devdoc>
             ///      Edits the given object value using the editor style provided by
@@ -144,12 +144,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             /// </devdoc>
             public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value) {
                      object component = context.Instance;
-                     
+
                      if (Marshal.IsComObject(component) && component is UnsafeNativeMethods.IDispatch) {
                         UnsafeNativeMethods.IDispatch pDisp = (UnsafeNativeMethods.IDispatch)component;
                         NativeMethods.tagEXCEPINFO pExcepInfo = new NativeMethods.tagEXCEPINFO();
                         Guid g = Guid.Empty;
-            
+
                         int hr = pDisp.Invoke(NativeMethods.ActiveX.DISPID_ABOUTBOX,
                                               ref g,
                                               SafeNativeMethods.GetThreadLCID(),
@@ -157,12 +157,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                                               new NativeMethods.tagDISPPARAMS(),
                                               null,
                                               pExcepInfo, null);
-                                              
+
                         Debug.Assert(NativeMethods.Succeeded(hr), "Failed to launch about box.");
                      }
                      return value;
             }
-            
+
             /// <devdoc>
             ///      Retrieves the editing style of the Edit method.  If the method
             ///      is not supported, this will return None.

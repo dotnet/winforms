@@ -9,7 +9,7 @@ namespace System.Windows.Forms {
     using System.ComponentModel.Design.Serialization;
     using System.Diagnostics;
     using System.Drawing;
-    using System.Drawing.Design;    
+    using System.Drawing.Design;
     using System.Globalization;
     using System.Windows.Forms.Layout;
     using System.Reflection;
@@ -19,13 +19,13 @@ namespace System.Windows.Forms {
         private IArrangedElement _owner;
         private SizeType _sizeType = SizeType.AutoSize;
         private float _size;
-        
+
         [DefaultValue(SizeType.AutoSize)]
         public SizeType SizeType {
             get { return _sizeType; }
-            set { 
+            set {
                 if (_sizeType != value) {
-                    _sizeType = value; 
+                    _sizeType = value;
                     if(Owner != null) {
                         LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.Style);
                         Control owner = Owner as Control;

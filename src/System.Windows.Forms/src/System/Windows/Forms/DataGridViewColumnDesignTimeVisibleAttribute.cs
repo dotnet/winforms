@@ -12,7 +12,7 @@ using System.Diagnostics.CodeAnalysis;
         public DataGridViewColumnDesignTimeVisibleAttribute (bool visible) {
             this.visible = visible;
         }
-        
+
         public DataGridViewColumnDesignTimeVisibleAttribute () {
         }
 
@@ -23,23 +23,23 @@ using System.Diagnostics.CodeAnalysis;
         }
 
         [
-            SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")   // DataGridViewColumnDesignTimeVisibleAttribute 
+            SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")   // DataGridViewColumnDesignTimeVisibleAttribute
                                                                                                         // actually immutable.
         ]
         public static readonly DataGridViewColumnDesignTimeVisibleAttribute Yes = new DataGridViewColumnDesignTimeVisibleAttribute(true);
 
         [
-            SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")   // DataGridViewColumnDesignTimeVisibleAttribute 
+            SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")   // DataGridViewColumnDesignTimeVisibleAttribute
                                                                                                         // actually immutable.
         ]
         public static readonly DataGridViewColumnDesignTimeVisibleAttribute No = new DataGridViewColumnDesignTimeVisibleAttribute(false);
 
         [
-            SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")   // DataGridViewColumnDesignTimeVisibleAttribute 
+            SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")   // DataGridViewColumnDesignTimeVisibleAttribute
                                                                                                         // actually immutable.
         ]
         public static readonly DataGridViewColumnDesignTimeVisibleAttribute Default = Yes;
-        
+
         public override bool Equals(object obj) {
             if (obj == this) {
                 return true;
@@ -52,7 +52,7 @@ using System.Diagnostics.CodeAnalysis;
         public override int GetHashCode() {
             return typeof(DataGridViewColumnDesignTimeVisibleAttribute).GetHashCode() ^ (visible ? -1 : 0);
         }
-        
+
         public override bool IsDefaultAttribute() {
             return (this.Visible == Default.Visible);
         }

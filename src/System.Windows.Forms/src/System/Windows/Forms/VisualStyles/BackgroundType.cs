@@ -8,7 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms.VisualStyles
 {
-    public enum BackgroundType 
+    public enum BackgroundType
     {
     	ImageFile = 0,
     	BorderFill = 1,

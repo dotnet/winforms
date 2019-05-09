@@ -8,7 +8,7 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Identifies a cell in the grid.
-    /// </summary>    
+    /// </summary>
     [SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes")]
     public struct DataGridCell
     {
@@ -34,7 +34,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Gets a value indicating whether the <see cref='System.Windows.Forms.DataGridCell'/> is
         /// identical to a second <see cref='System.Windows.Forms.DataGridCell'/>.
-        /// </summary>        
+        /// </summary>
         [SuppressMessage("Microsoft.Usage", "CA2231:OverrideOperatorEqualsOnOverridingValueTypeEquals")]
         public override bool Equals(object o)
         {

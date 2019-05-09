@@ -73,12 +73,12 @@ namespace System.Windows.Forms {
                      ControlStyles.StandardDoubleClick, false);
 
             SetAutoSizeMode(AutoSizeMode.GrowAndShrink);
-        
+
             autoCheck = true;
-            TextAlign = ContentAlignment.MiddleLeft;        
-            
+            TextAlign = ContentAlignment.MiddleLeft;
+
         }
-        
+
         private bool AccObjDoDefaultAction {
             get {
                 return this.accObjDoDefaultAction;
@@ -156,7 +156,7 @@ namespace System.Windows.Forms {
         ///       Gets or sets
         ///       the horizontal and vertical alignment of a check box on a check box
         ///       control.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         [
@@ -239,15 +239,15 @@ namespace System.Windows.Forms {
                 }
 
                 if (checkState != value) {
-                
+
                     bool oldChecked = Checked;
-                
+
                     checkState = value;
 
                     if (IsHandleCreated) {
                         SendMessage(NativeMethods.BM_SETCHECK, (int)checkState, 0);
                     }
-                    
+
                     if (oldChecked != Checked) {
                         OnCheckedChanged(EventArgs.Empty);
                     }
@@ -289,10 +289,10 @@ namespace System.Windows.Forms {
                     if (Appearance == Appearance.Button) {
                         cp.Style |= NativeMethods.BS_PUSHLIKE;
                     }
-                    
+
                     // Determine the alignment of the check box
                     //
-                    ContentAlignment align = RtlTranslateContent(CheckAlign);                              
+                    ContentAlignment align = RtlTranslateContent(CheckAlign);
                     if ((int)(align & anyRight) != 0) {
                         cp.Style |= NativeMethods.BS_RIGHTBUTTON;
                     }
@@ -302,7 +302,7 @@ namespace System.Windows.Forms {
                 return cp;
             }
         }
-        
+
         /// <devdoc>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
@@ -316,8 +316,8 @@ namespace System.Windows.Forms {
         /// <summary>
         /// When overridden in a derived class, handles rescaling of any magic numbers used in control painting.
         /// For CheckBox controls, scale the width of the system-style padding, and height of the box.
-        /// Must call the base class method to get the current DPI values. This method is invoked only when 
-        /// Application opts-in into the Per-monitor V2 support, targets .NETFX 4.7 and has 
+        /// Must call the base class method to get the current DPI values. This method is invoked only when
+        /// Application opts-in into the Per-monitor V2 support, targets .NETFX 4.7 and has
         /// EnableDpiChangedMessageHandling and EnableDpiChangedHighDpiImprovements config switches turned on.
         /// </summary>
         /// <param name="deviceDpiOld">Old DPI value</param>
@@ -333,7 +333,7 @@ namespace System.Windows.Forms {
             if (Appearance == Appearance.Button) {
                 ButtonStandardAdapter adapter = new ButtonStandardAdapter(this);
                 return adapter.GetPreferredSizeCore(proposedConstraints);
-            } 
+            }
 
             if(FlatStyle != FlatStyle.System) {
                 return base.GetPreferredSizeCore(proposedConstraints);
@@ -366,7 +366,7 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
+
         /// <devdoc>
         /// </devdoc>
         internal override Rectangle DownChangeRectangle {
@@ -380,12 +380,12 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating the alignment of the
         ///       text on the checkbox control.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         [
@@ -429,7 +429,7 @@ namespace System.Windows.Forms {
             add => Events.AddHandler(EVENT_CHECKEDCHANGED, value);
             remove => Events.RemoveHandler(EVENT_CHECKEDCHANGED, value);
         }
-        
+
         /// <devdoc>
         ///    <para>Occurs when the
         ///       value of the <see cref='System.Windows.Forms.CheckBox.CheckState'/>
@@ -450,7 +450,7 @@ namespace System.Windows.Forms {
         protected override AccessibleObject CreateAccessibilityInstance() {
             return new CheckBoxAccessibleObject(this);
         }
-        
+
         protected virtual void OnAppearanceChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_APPEARANCECHANGED] as EventHandler;
             if (eh != null) {
@@ -486,7 +486,7 @@ namespace System.Windows.Forms {
             if (OwnerDraw) {
                 Refresh();
             }
-            
+
             EventHandler handler = (EventHandler)Events[EVENT_CHECKSTATECHANGED];
             if (handler != null) handler(this,e);
         }
@@ -497,7 +497,7 @@ namespace System.Windows.Forms {
         ///       Inheriting controls should use this in favour of actually listening to
         ///       the event, but should not forget to call base.onClicked() to
         ///       ensure that the event is still fired for external listeners.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         protected override void OnClick(EventArgs e) {
@@ -535,10 +535,10 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected override void OnHandleCreated(EventArgs e) {
             base.OnHandleCreated(e);
-            
+
             // Since this is a protected override...
             // this can be directly called in by a overriden class..
-            // and the Handle need not be created... 
+            // and the Handle need not be created...
             // So Check for the handle
             if (IsHandleCreated) {
                 SendMessage(NativeMethods.BM_SETCHECK, (int)checkState, 0);
@@ -562,11 +562,11 @@ namespace System.Windows.Forms {
             */
             base.OnKeyDown(e);
         }
-        
+
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnMouseUp'/> event.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         protected override void OnMouseUp(MouseEventArgs mevent) {
@@ -596,7 +596,7 @@ namespace System.Windows.Forms {
         internal override ButtonBaseAdapter CreatePopupAdapter() {
             return new CheckBoxPopupAdapter(this);
         }
-            
+
         internal override ButtonBaseAdapter CreateStandardAdapter() {
             return new CheckBoxStandardAdapter(this);
         }
@@ -613,7 +613,7 @@ namespace System.Windows.Forms {
                     if (!ValidationCancelled) {
                         OnClick(EventArgs.Empty);
                     }
-                    
+
                 }
                 return true;
             }
@@ -634,7 +634,7 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         /// </devdoc>
-        [System.Runtime.InteropServices.ComVisible(true)]        
+        [System.Runtime.InteropServices.ComVisible(true)]
         public class CheckBoxAccessibleObject : ButtonBaseAccessibleObject {
 
             public CheckBoxAccessibleObject(Control owner) : base(owner) {
@@ -665,7 +665,7 @@ namespace System.Windows.Forms {
                     return AccessibleRole.CheckButton;
                 }
             }
-            
+
             public override AccessibleStates State {
                 get {
                     switch (((CheckBox)Owner).CheckState) {
@@ -677,7 +677,7 @@ namespace System.Windows.Forms {
 
                     return base.State;
                 }
-            }                        
+            }
 
             public override void DoDefaultAction() {
                 CheckBox cb = this.Owner as CheckBox;

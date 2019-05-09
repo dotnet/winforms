@@ -22,11 +22,11 @@ namespace System.Windows.Forms
             private static readonly Padding CheckPadding    = new Padding(5,2,2,2);
             private static readonly Padding ArrowPadding    = new Padding(0,0,8,0);
 
-            // This is totally a UI Fudge - if we have an image or check margin with 
-            // no image or checks in it use this - which is consistent with office 
+            // This is totally a UI Fudge - if we have an image or check margin with
+            // no image or checks in it use this - which is consistent with office
             // and an image margin with a 16x16 icon in it.
             private static int DefaultImageMarginWidth = 24; // 24+1px border - with scaling we add this 1px to new, scaled, field value
-            private static int DefaultImageAndCheckMarginWidth = 46;  // 46+1px border - with scaling we add this 1px to new, scaled, field value    
+            private static int DefaultImageAndCheckMarginWidth = 46;  // 46+1px border - with scaling we add this 1px to new, scaled, field value
 
             private static int ArrowSize = 10;
 
@@ -97,17 +97,17 @@ namespace System.Windows.Forms
                     return arrowRectangle;
                 }
             }
-            
+
             internal Rectangle CheckRectangle {
                 get {
                     return checkRectangle;
                 }
             }
-            
+
             protected override Padding DefaultPadding {
-                get { 
+                get {
                     RightToLeft rightToLeft = RightToLeft;
-                    
+
                     int textPadding = (rightToLeft == RightToLeft.Yes) ? scaledTextPadding.Right : scaledTextPadding.Left;
                     int padding = (ShowCheckMargin || ShowImageMargin) ? textPadding + ImageMargin.Width : textPadding;
 
@@ -143,7 +143,7 @@ namespace System.Windows.Forms
                 }
             }
             /// <devdoc>
-            ///  the rectangle representing 
+            ///  the rectangle representing
             /// </devdoc>
             internal Rectangle ImageRectangle {
                 get {
@@ -160,23 +160,23 @@ namespace System.Windows.Forms
                         paddingToTrim = value;
                         AdjustSize();
                     }
-                    
+
                 }
             }
-            
+
             /// <devdoc>
             ///  the rectangle representing the color stripe in the menu - this will appear as AffectedBounds
             ///  in the ToolStripRenderEventArgs
             /// </devdoc>
             internal Rectangle ImageMargin {
                 get {
-                    imageMarginBounds.Height =this.Height; 
+                    imageMarginBounds.Height =this.Height;
                     return imageMarginBounds;
                 }
             }
-            
+
             public override LayoutEngine LayoutEngine {
-                get { 
+                get {
                      return ToolStripDropDownLayoutEngine.LayoutInstance;
                 }
             }
@@ -197,7 +197,7 @@ namespace System.Windows.Forms
                     return maxItemSize;
                 }
             }
-            
+
             [
             DefaultValue(true),
             SRDescription(nameof(SR.ToolStripDropDownMenuShowImageMarginDescr)),
@@ -231,7 +231,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
-    
+
 
             internal Rectangle TextRectangle {
                 get {
@@ -254,12 +254,12 @@ namespace System.Windows.Forms
             ///          targetWindow is the window to send WM_COMMAND, WM_SYSCOMMAND to
             ///          hmenu is a handle to the native menu
             ///
-            ///  
+            ///
 
             internal static ToolStripDropDownMenu FromHMenu(IntPtr hmenu, IWin32Window targetWindow) {
                 ToolStripDropDownMenu managedDropDown = new ToolStripDropDownMenu();
                 managedDropDown.SuspendLayout();
-             
+
 
                 HandleRef menuHandle = new HandleRef(null, hmenu);
                 int count = UnsafeNativeMethods.GetMenuItemCount(menuHandle);
@@ -275,7 +275,7 @@ namespace System.Windows.Forms
                     info.fMask = NativeMethods.MIIM_FTYPE;
                     info.fType = NativeMethods.MIIM_FTYPE;
                     UnsafeNativeMethods.GetMenuItemInfo(menuHandle, i, /*fByPosition=*/ true, info);
-                    
+
                     if (info.fType == NativeMethods.MFT_SEPARATOR){
                         // its a separator.
                     	itemToAdd = new ToolStripSeparator();
@@ -314,20 +314,20 @@ namespace System.Windows.Forms
             [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")] // using "\t" to figure out the width of tab
             private void  CalculateInternalLayoutMetrics() {
 
-               
+
                 Size maxTextSize    = Size.Empty;
                 Size maxImageSize   = Size.Empty;
                 Size maxCheckSize   = scaledDefaultImageSize;
                 Size maxArrowSize   = Size.Empty;
                 Size maxNonMenuItemSize = Size.Empty;
-            
+
                 // determine Text Metrics
                 for (int i = 0; i < Items.Count; i++)  {
                     ToolStripItem item = Items[i];
                     ToolStripMenuItem menuItem = item as ToolStripMenuItem;
 
                     if (menuItem != null) {
-                        
+
                         Size menuItemTextSize = menuItem.GetTextSize();
 
                         if (menuItem.ShowShortcutKeys)  {
@@ -335,11 +335,11 @@ namespace System.Windows.Forms
                             if (tabWidth == -1) {
                                 tabWidth = TextRenderer.MeasureText("\t", this.Font).Width;
                             }
-                            menuItemTextSize.Width += tabWidth + shortcutTextSize.Width; 
+                            menuItemTextSize.Width += tabWidth + shortcutTextSize.Width;
                             menuItemTextSize.Height = Math.Max(menuItemTextSize.Height, shortcutTextSize.Height);
                         }
 
-                        // we truly only care about the maximum size we find. 
+                        // we truly only care about the maximum size we find.
                         maxTextSize.Width = Math.Max(maxTextSize.Width, menuItemTextSize.Width);
                         maxTextSize.Height = Math.Max(maxTextSize.Height, menuItemTextSize.Height);
 
@@ -348,7 +348,7 @@ namespace System.Windows.Forms
                         if (menuItem.Image != null) {
                             imageSize = (menuItem.ImageScaling == ToolStripItemImageScaling.SizeToFit) ? ImageScalingSize : menuItem.Image.Size;
                         }
-                            
+
                         maxImageSize.Width = Math.Max(maxImageSize.Width, imageSize.Width);
                         maxImageSize.Height = Math.Max(maxImageSize.Height, imageSize.Height);
 
@@ -363,36 +363,36 @@ namespace System.Windows.Forms
                         maxNonMenuItemSize.Width = Math.Max(item.Bounds.Width, maxNonMenuItemSize.Width);
                     }
                 }
-        
+
                 this.maxItemSize.Height =  Math.Max(maxTextSize.Height + scaledTextPadding.Vertical, Math.Max(maxCheckSize.Height + scaledCheckPadding.Vertical, maxArrowSize.Height + scaledArrowPadding.Vertical));
 
                 if (ShowImageMargin) {
                     // only add in the image into the calculation if we're going to render it.
                     this.maxItemSize.Height = Math.Max(maxImageSize.Height + scaledImagePadding.Vertical, maxItemSize.Height);
                 }
-       
+
                 bool  useDefaultCheckMarginWidth = (ShowCheckMargin && (maxCheckSize.Width == 0));
                 bool  useDefaultImageMarginWidth = (ShowImageMargin && (maxImageSize.Width == 0));
                 // Always save space for an arrow
                 maxArrowSize = new Size(scaledArrowSize, maxItemSize.Height);
-                
-                maxTextSize.Height = maxItemSize.Height -  scaledTextPadding.Vertical;                
+
+                maxTextSize.Height = maxItemSize.Height -  scaledTextPadding.Vertical;
                 maxImageSize.Height = maxItemSize.Height - scaledImagePadding.Vertical;
                 maxCheckSize.Height = maxItemSize.Height - scaledCheckPadding.Vertical;
 
                // fixup if there are non-menu items that are larger than our normal menu items
                maxTextSize.Width = Math.Max(maxTextSize.Width, maxNonMenuItemSize.Width);
-            
+
                Point nextPoint = Point.Empty;
                int checkAndImageMarginWidth = 0;
 
                int extraImageWidth = Math.Max(0, maxImageSize.Width - scaledDefaultImageSize.Width);
-         
+
                if (ShowCheckMargin && ShowImageMargin) {
                     // double column - check margin then image margin
                     // default to 46px - grow if necessary.
                     checkAndImageMarginWidth = scaledDefaultImageAndCheckMarginWidth;
-              
+
                     // add in the extra space for the image... since the check size is locked down to 16x16.
                     checkAndImageMarginWidth += extraImageWidth;
 
@@ -404,34 +404,34 @@ namespace System.Windows.Forms
                     nextPoint.X = checkRectangle.Right + scaledCheckPadding.Right + scaledImagePadding.Left;
                     nextPoint.Y = scaledImagePadding.Top;
                     imageRectangle = LayoutUtils.Align(maxImageSize, new Rectangle(nextPoint.X, nextPoint.Y, maxImageSize.Width, maxItemSize.Height), ContentAlignment.MiddleCenter);
-                    
+
                }
                else if (ShowCheckMargin) {
                    // no images should be shown in a ShowCheckMargin only scenario.
                    // default to 24px - grow if necessary.
                    checkAndImageMarginWidth = scaledDefaultImageMarginWidth;
-                   
+
                    // align the checkmark
                     nextPoint = new Point(1,scaledCheckPadding.Top);
                //    nextPoint = new Point(scaledCheckPadding.Left, scaledCheckPadding.Top);
                    checkRectangle = LayoutUtils.Align(maxCheckSize, new Rectangle(nextPoint.X, nextPoint.Y, checkAndImageMarginWidth, maxItemSize.Height), ContentAlignment.MiddleCenter);
-                   
+
                    imageRectangle = Rectangle.Empty;
 
                }
                else if (ShowImageMargin) {
                    // checks and images render in the same area.
-                   
+
                    // default to 24px - grow if necessary.
                    checkAndImageMarginWidth = scaledDefaultImageMarginWidth;
-                   
+
                    // add in the extra space for the image... since the check size is locked down to 16x16.
                    checkAndImageMarginWidth += extraImageWidth;
 
                    // NOTE due to the Padding property, we're going to have to recalc the vertical alignment in ToolStripMenuItemInternalLayout.
                    // Dont fuss here over the Y, X is what's critical.
-                   
-                   // check and image rect are the same - take the max of the image size and the check size and align 
+
+                   // check and image rect are the same - take the max of the image size and the check size and align
                    nextPoint = new Point(1, scaledCheckPadding.Top);
                    checkRectangle = LayoutUtils.Align(LayoutUtils.UnionSizes(maxCheckSize,maxImageSize), new Rectangle(nextPoint.X, nextPoint.Y, checkAndImageMarginWidth-1, maxItemSize.Height), ContentAlignment.MiddleCenter);
 
@@ -443,15 +443,15 @@ namespace System.Windows.Forms
                     checkAndImageMarginWidth = 0;
                }
                nextPoint.X = checkAndImageMarginWidth+1;
-               
-           
+
+
                 // calculate space for image
                 // if we didnt have a check - make sure to ignore check padding
-               
+
                 // consider: should we constrain to a reasonable width?
                 //imageMarginBounds = new Rectangle(0, 0, Math.Max(imageMarginWidth,DefaultImageMarginWidth), this.Height);
                 imageMarginBounds = new Rectangle(0,0,checkAndImageMarginWidth, this.Height);
-                                
+
                 // calculate space for shortcut and text
                 nextPoint.X = imageMarginBounds.Right+ scaledTextPadding.Left;
                 nextPoint.Y = scaledTextPadding.Top;
@@ -461,13 +461,13 @@ namespace System.Windows.Forms
                 nextPoint.X = textRectangle.Right+ scaledTextPadding.Right + scaledArrowPadding.Left;
                 nextPoint.Y = scaledArrowPadding.Top;
                 arrowRectangle = new Rectangle(nextPoint, maxArrowSize);
-           
+
                 // calculate space required for all of these pieces
                 this.maxItemSize.Width =  (arrowRectangle.Right + scaledArrowPadding.Right) - imageMarginBounds.Left;
 
                 this.Padding = DefaultPadding;
                 int trimPadding = imageMarginBounds.Width;
-            
+
                 if (RightToLeft == RightToLeft.Yes) {
                     // reverse the rectangle alignment in RightToLeft.Yes
                     trimPadding += scaledTextPadding.Right;
@@ -477,15 +477,15 @@ namespace System.Windows.Forms
                     textRectangle.X         = width - textRectangle.Right;
                     arrowRectangle.X        = width - arrowRectangle.Right;
                     imageMarginBounds.X     = width - imageMarginBounds.Right;
-                    
+
                 }
                 else {
                     trimPadding += scaledTextPadding.Left;
                 }
 
 
-                
-                // We need to make sure that the text really appears vertically centered - this can be a problem in 
+
+                // We need to make sure that the text really appears vertically centered - this can be a problem in
                 // systems which force the text rectangle to be odd.
 
                 // force this to be an even height.
@@ -495,7 +495,7 @@ namespace System.Windows.Forms
                 textRectangle.Y += (textRectangle.Height %2); // if the height is odd, push down by one px
                 state[stateMaxItemSizeValid]=true;
                 this.PaddingToTrim = trimPadding;
-                
+
             }
 
             internal override void ChangeSelection(ToolStripItem nextItem) {
@@ -575,7 +575,7 @@ namespace System.Windows.Forms
             protected override void OnFontChanged(EventArgs e) {
                 tabWidth = -1;
                 base.OnFontChanged(e);
-                
+
             }
             protected override void OnPaintBackground(PaintEventArgs e) {
                 base.OnPaintBackground(e);
@@ -617,7 +617,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                // We don't just scroll by the amount, because that might 
+                // We don't just scroll by the amount, because that might
                 // cause the bottom of the menu to be blank if some items have
                 // been removed/hidden since the last time we were displayed.
                 // This also deals with items of different height, so that we don't truncate
@@ -744,7 +744,7 @@ namespace System.Windows.Forms
 
                 if (GetToolStripState(STATE_SCROLLBUTTONS)) {
                     Size upSize = UpScrollButton.GetPreferredSize(Size.Empty);
-                    // 
+                    //
                     Point upLocation = new Point(1, 0);
 
                     UpScrollButton.SetBounds(new Rectangle(upLocation, upSize));
@@ -793,7 +793,7 @@ namespace System.Windows.Forms
             internal sealed class ToolStripDropDownLayoutEngine : FlowLayout {
 
                 public static ToolStripDropDownLayoutEngine LayoutInstance = new ToolStripDropDownLayoutEngine();
-                
+
                 internal override Size GetPreferredSize(IArrangedElement container, Size proposedConstraints) {
                         Size preferredSize = base.GetPreferredSize(container, proposedConstraints);
                         ToolStripDropDownMenu dropDownMenu = container as ToolStripDropDownMenu;

@@ -155,7 +155,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <summary> 
+        /// <summary>
         /// shadowing the SettingsKey so we can default it to be RootComponent.Name + "." + Control.Name
         /// </summary>
         private string SettingsKey
@@ -449,7 +449,7 @@ namespace System.Windows.Forms.Design
                     comp = (IComponent)keyboardHandlingService.SelectedDesignerControl;
                 }
             }
-            // This case covers (a) and (b) above.... 
+            // This case covers (a) and (b) above....
             if (comp is ToolStripDropDownItem)
             {
                 if (comp is ToolStripDropDownItem currentItem && currentItem == menuItem)
@@ -761,7 +761,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This is an internal class which provides the Behavior for our MenuStrip Body Glyph. This will just eat the MouseUps... 
+        /// This is an internal class which provides the Behavior for our MenuStrip Body Glyph. This will just eat the MouseUps...
         /// </summary>
         internal class ContextMenuStripBehavior : System.Windows.Forms.Design.Behavior.Behavior
         {

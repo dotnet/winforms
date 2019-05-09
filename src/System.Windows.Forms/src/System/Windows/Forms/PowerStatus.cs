@@ -10,7 +10,7 @@ namespace System.Windows.Forms
 
         internal PowerStatus() {
         }
-        
+
         public PowerLineStatus PowerLineStatus
         {
             get
@@ -57,7 +57,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void UpdateSystemPowerStatus() {                
+        private void UpdateSystemPowerStatus() {
             UnsafeNativeMethods.GetSystemPowerStatus(ref systemPowerStatus);
         }
     }

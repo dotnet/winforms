@@ -138,7 +138,7 @@ namespace System.Drawing.Design
 
             public ColorPalette(ColorUI colorUI, Color[] customColors)
             {
-                
+
                 if (!isScalingInitialized)
                 {
                     if (DpiHelper.IsScalingRequired)
@@ -718,7 +718,7 @@ namespace System.Drawing.Design
             /// </summary>
             public IWindowsFormsEditorService EditorService => edSvc;
 
-            /// <summary> 
+            /// <summary>
             /// Array of system colors.
             /// </summary>
             private object[] SystemColorValues => systemColorConstants ?? (systemColorConstants = GetConstants(typeof(SystemColors)));

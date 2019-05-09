@@ -1140,7 +1140,7 @@ namespace System.Windows.Forms.Tests
             {
                 Parent = parent
             };
-            
+
             item.ForeColor = value;
             Assert.Equal(expected, item.ForeColor);
 
@@ -4103,7 +4103,7 @@ namespace System.Windows.Forms.Tests
         {
             yield return new object[] { new SubToolStripItem(), true };
             yield return new object[] { new CannotSelectToolStripItem(), false };
-            
+
             var toolStrip = new ToolStrip();
             var toolStripItem = new SubToolStripItem();
             toolStrip.Items.Add(toolStripItem);
@@ -4126,7 +4126,7 @@ namespace System.Windows.Forms.Tests
                 Parent = toolStripDropDown
             };
             yield return new object[] { toolStripDropDownParentItem, true };
-            
+
             var toolStripDropDownWithOwnerItemOwnerItem = new SubToolStripItem();
             var toolStripDropDownWithOwnerItem = new ToolStripDropDown
             {

@@ -13,7 +13,7 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Text;
     using System.Globalization;
-    
+
     /// <devdoc>
     ///    <para> Represents
     ///       a dialog box that allows users to manipulate page settings, including margins and paper orientation.</para>
@@ -35,7 +35,7 @@ namespace System.Windows.Forms {
         private bool showHelp;
         private bool showNetwork;
         private bool enableMetric;
-        
+
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.PageSetupDialog'/> class.</para>
         /// </devdoc>
@@ -46,19 +46,19 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the margins section of the dialog box is enabled.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         SRDescription(nameof(SR.PSDallowMarginsDescr))
         ]
         public bool AllowMargins {
-            get { 
+            get {
                 return allowMargins;
             }
-            set { 
+            set {
                 allowMargins = value;
             }
         }
@@ -69,7 +69,7 @@ namespace System.Windows.Forms {
         ///       </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         SRDescription(nameof(SR.PSDallowOrientationDescr))
         ]
@@ -82,11 +82,11 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Gets or sets a value indicating whether the paper section of the dialog box (paper size and paper source)
         ///       is enabled.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         SRDescription(nameof(SR.PSDallowPaperDescr))
         ]
@@ -98,11 +98,11 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the Printer button is enabled.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         SRDescription(nameof(SR.PSDallowPrinterDescr))
         ]
@@ -112,18 +112,18 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        /// <para>Gets or sets a value indicating the <see cref='System.Drawing.Printing.PrintDocument'/> 
+        /// <para>Gets or sets a value indicating the <see cref='System.Drawing.Printing.PrintDocument'/>
         /// to get page settings from.
         /// </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatData)), 
+        SRCategory(nameof(SR.CatData)),
         DefaultValue(null),
         SRDescription(nameof(SR.PDdocumentDescr))
         ]
         public PrintDocument Document {
             get { return printDocument;}
-            set { 
+            set {
                 printDocument = value;
                 if (printDocument != null) {
                     pageSettings = printDocument.DefaultPageSettings;
@@ -150,16 +150,16 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Gets or sets a value indicating the minimum margins the
         ///       user is allowed to select, in hundredths of an inch.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatData)), 
+        SRCategory(nameof(SR.CatData)),
         SRDescription(nameof(SR.PSDminMarginsDescr))
         ]
         public Margins MinMargins {
             get { return minMargins;}
-            set { 
+            set {
                 if (value == null)
                     value = new Margins(0, 0, 0, 0);
                 minMargins = value;
@@ -172,11 +172,11 @@ namespace System.Windows.Forms {
         ///       or sets
         ///       a value indicating
         ///       the page settings modified by the dialog box.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatData)), 
+        SRCategory(nameof(SR.CatData)),
         DefaultValue(null),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -198,7 +198,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatData)), 
+        SRCategory(nameof(SR.CatData)),
         DefaultValue(null),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -218,7 +218,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         SRDescription(nameof(SR.PSDshowHelpDescr))
         ]
@@ -233,7 +233,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         SRDescription(nameof(SR.PSDshowNetworkDescr))
         ]
@@ -256,7 +256,7 @@ namespace System.Windows.Forms {
             if (minMargins != null) flags |= NativeMethods.PSD_MINMARGINS;
             if (pageSettings.Margins != null) flags |= NativeMethods.PSD_MARGINS;
 
-            // 
+            //
             return flags;
         }
 
@@ -313,7 +313,7 @@ namespace System.Windows.Forms {
             PrinterUnit fromUnit = ((data.Flags & NativeMethods.PSD_INHUNDREDTHSOFMILLIMETERS) != 0)
                                    ? PrinterUnit.HundredthsOfAMillimeter
                                    : PrinterUnit.ThousandthsOfAnInch;
-            
+
             pageSettings.Margins = PrinterUnitConvert.Convert(newMargins, fromUnit, PrinterUnit.Display);
         }
 
@@ -331,7 +331,7 @@ namespace System.Windows.Forms {
             data.Flags = GetFlags();
             data.hwndOwner = hwndOwner;
             data.lpfnPageSetupHook = hookProcPtr;
-            
+
             PrinterUnit toUnit = PrinterUnit.ThousandthsOfAnInch;
 
             // Below was a breaking change from RTM and EVERETT even though this was a correct FIX.
@@ -342,7 +342,7 @@ namespace System.Windows.Forms {
                 //
                 StringBuilder sb = new StringBuilder(2);
                 int result = UnsafeNativeMethods.GetLocaleInfo(NativeMethods.LOCALE_USER_DEFAULT,NativeMethods.LOCALE_IMEASURE, sb,sb.Capacity);
-                
+
                 if (result > 0 && int.Parse(sb.ToString(), CultureInfo.InvariantCulture) == 0) {
                     toUnit = PrinterUnit.HundredthsOfAMillimeter;
                 }
@@ -370,7 +370,7 @@ namespace System.Windows.Forms {
             data.marginLeft = Math.Max(data.marginLeft, data.minMarginLeft);
             data.marginTop = Math.Max(data.marginTop, data.minMarginTop);
             data.marginRight = Math.Max(data.marginRight, data.minMarginRight);
-            data.marginBottom = Math.Max(data.marginBottom, data.minMarginBottom);           
+            data.marginBottom = Math.Max(data.marginBottom, data.minMarginBottom);
 
             PrinterSettings printer = (printerSettings == null) ? pageSettings.PrinterSettings : printerSettings;
 
@@ -383,7 +383,7 @@ namespace System.Windows.Forms {
                     // Debug.WriteLine(Windows.CommonDialogErrorToString(Windows.CommDlgExtendedError()));
                     return false;
                 }
-                
+
                 UpdateSettings(data, pageSettings, printerSettings); // yes, printerSettings, not printer
                 return true;
             }

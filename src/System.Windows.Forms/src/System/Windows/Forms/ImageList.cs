@@ -10,8 +10,8 @@ namespace System.Windows.Forms {
     using System;
     using System.Collections.Specialized;
     using System.Collections;
-    using System.Drawing;   
-    using System.Drawing.Imaging;  
+    using System.Drawing;
+    using System.Drawing.Imaging;
     using System.Drawing.Design;
     using System.Windows.Forms;
     using System.Windows.Forms.Design;
@@ -159,7 +159,7 @@ namespace System.Windows.Forms {
             }
             set {
                 // ColorDepth is not conitguous - list the members instead.
-                if (!ClientUtils.IsEnumValid_NotSequential(value, 
+                if (!ClientUtils.IsEnumValid_NotSequential(value,
                                                      (int)value,
                                                     (int)ColorDepth.Depth4Bit,
                                                     (int)ColorDepth.Depth8Bit,
@@ -396,8 +396,8 @@ namespace System.Windows.Forms {
         //Creates a bitmap from the original image source..
         //
 
-        
-        
+
+
         private Bitmap CreateBitmap(Original original, out bool ownsBitmap) {
             Color transparent = transparentColor;
             ownsBitmap = false;
@@ -613,19 +613,19 @@ namespace System.Windows.Forms {
                         srcPtr = new IntPtr(sourceData.Scan0.ToInt64() + offsetSrc);
                         destPtr = new IntPtr(targetData.Scan0.ToInt64() + offsetDest);
                     }
-                    UnsafeNativeMethods.CopyMemory(new HandleRef(this, destPtr), new HandleRef(this, srcPtr), Math.Abs(targetData.Stride)); 
+                    UnsafeNativeMethods.CopyMemory(new HandleRef(this, destPtr), new HandleRef(this, srcPtr), Math.Abs(targetData.Stride));
                     offsetSrc += sourceData.Stride;
                     offsetDest += targetData.Stride;
                 }
             }
         }
-        
+
         private static bool BitmapHasAlpha(BitmapData bmpData) {
             if(bmpData.PixelFormat != PixelFormat.Format32bppArgb && bmpData.PixelFormat != PixelFormat.Format32bppRgb) {
                 return false;
             }
-            bool hasAlpha = false;          
-            unsafe {    
+            bool hasAlpha = false;
+            unsafe {
                 for (int i = 0; i < bmpData.Height; i++) {
                     int offsetRow = i * bmpData.Stride;
                     for (int j = 3; j < bmpData.Width*4; j += 4) { // *4 is safe since we know PixelFormat is ARGB
@@ -648,7 +648,7 @@ namespace System.Windows.Forms {
         ///     copy of the original image.
         /// </devdoc>
         // NOTE: forces handle creation, so doesn't return things from the original list
-        
+
         private Bitmap GetBitmap(int index) {
             if (index < 0 || index >= Images.Count)
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
@@ -661,7 +661,7 @@ namespace System.Windows.Forms {
             // we're not using the mask. That means that
             // we can just get the whole image strip, cut out the piece that we want
             // and return that, that way we don't flatten the alpha by painting the value with the alpha... (ie using the alpha)
-         
+
             if(ColorDepth == ColorDepth.Depth32Bit) {
 
                 NativeMethods.IMAGEINFO imageInfo = new NativeMethods.IMAGEINFO(); // review? do I need to delete the mask and image inside of imageinfo?
@@ -671,7 +671,7 @@ namespace System.Windows.Forms {
                     BitmapData targetData = null;
                     try {
                         tmpBitmap = Bitmap.FromHbitmap(imageInfo.hbmImage);
-                        // 
+                        //
 
 
 
@@ -684,7 +684,7 @@ namespace System.Windows.Forms {
                             result = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format32bppArgb);
                             targetData = result.LockBits(new Rectangle(0, 0, imageSize.Width, imageSize.Height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
                             CopyBitmapData(bmpData, targetData);
-                        }                        
+                        }
                     } finally {
                         if(tmpBitmap != null) {
                             if(bmpData != null) {
@@ -696,8 +696,8 @@ namespace System.Windows.Forms {
                             result.UnlockBits(targetData);
                         }
                     }
-                }                 
-            } 
+                }
+            }
 
             if(result == null) { // paint with the mask but no alpha...
                 result = new Bitmap(imageSize.Width, imageSize.Height);
@@ -716,7 +716,7 @@ namespace System.Windows.Forms {
                 }
                 finally {
                     graphics.Dispose();
-                }                
+                }
             }
 
             // gpr: See Icon for description of fakeTransparencyColor
@@ -990,7 +990,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            [Conditional("DEBUG")]            
+            [Conditional("DEBUG")]
             private void AssertInvariant() {
                 Debug.Assert(owner != null, "ImageCollection has no owner (ImageList)");
                 Debug.Assert( (owner.originals == null) == (owner.HandleCreated), " Either we should have the original images, or the handle should be created");
@@ -998,7 +998,7 @@ namespace System.Windows.Forms {
 
             [Browsable(false)]
             public int Count {
-                
+
                 get {
                     Debug.Assert(owner != null, "ImageCollection has no owner (ImageList)");
 
@@ -1052,8 +1052,8 @@ namespace System.Windows.Forms {
 
             [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public Image this[int index] {
-                
-                
+
+
                 get {
                     if (index < 0 || index >= Count)
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
@@ -1078,7 +1078,7 @@ namespace System.Windows.Forms {
                         // Since there's no ImageList_ReplaceMasked, we need to generate
                         // a transparent bitmap
                         Bitmap source = bitmap;
-                        bitmap = (Bitmap) bitmap.Clone(); 
+                        bitmap = (Bitmap) bitmap.Clone();
                         bitmap.MakeTransparent(owner.transparentColor);
                         ownsImage = true;
                     }
@@ -1092,7 +1092,7 @@ namespace System.Windows.Forms {
 
                         if (!ok)
                             throw new InvalidOperationException(SR.ImageListReplaceFailed);
-                        
+
                     } finally {
                         if(ownsImage) {
                             bitmap.Dispose();
@@ -1102,8 +1102,8 @@ namespace System.Windows.Forms {
             }
 
             object IList.this[int index] {
-                
-                
+
+
                 get {
                     return this[index];
                 }
@@ -1121,8 +1121,8 @@ namespace System.Windows.Forms {
             ///     <para>Retrieves the child control with the specified key.</para>
             /// </devdoc>
             public Image this[string key] {
-                
-                
+
+
                 get {
                     // We do not support null and empty string as valid keys.
                     if ((key == null) || (key.Length == 0)){
@@ -1469,7 +1469,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public void SetKeyName(int index, string name) {
                 if (!IsValidIndex(index)) {
-                    throw new IndexOutOfRangeException(); // 
+                    throw new IndexOutOfRangeException(); //
                 }
 
                 if (imageInfoCollection[index] == null) {

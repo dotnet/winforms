@@ -8,29 +8,29 @@ namespace System.Windows.Forms {
     using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis; 
+    using System.Diagnostics.CodeAnalysis;
     using System.Drawing;
     using System.Text;
     using System.Text.RegularExpressions;
 
-    /// <devdoc> 
+    /// <devdoc>
     ///     A settings class used by the ToolStripManager to save toolstrip settings.
     /// </devdoc>
     internal class ToolStripSettings : ApplicationSettingsBase {
 
         internal ToolStripSettings(string settingsKey) : base(settingsKey) {}
-        
+
         [UserScopedSetting]
         [DefaultSettingValue("true")]
         public bool IsDefault {
             get {
-                return (bool) this["IsDefault"]; 
+                return (bool) this["IsDefault"];
             }
             set {
                 this["IsDefault"] = value;
             }
         }
-        
+
         [UserScopedSetting]
         public string ItemOrder {
             get {
@@ -40,7 +40,7 @@ namespace System.Windows.Forms {
                 this["ItemOrder"] = value;
             }
         }
-        
+
         [UserScopedSetting]
         public string Name {
             get {
@@ -82,7 +82,7 @@ namespace System.Windows.Forms {
                 this["ToolStripPanelName"] = value;
             }
         }
-        
+
         [UserScopedSetting]
         [DefaultSettingValue("true")]
         public bool Visible {
@@ -93,22 +93,22 @@ namespace System.Windows.Forms {
                 this["Visible"] = value;
             }
         }
-        
-        
+
+
         public override void Save() {
             this.IsDefault = false;
             base.Save();
         }
     }
 
-    /// <devdoc> 
+    /// <devdoc>
     ///     Helper class used by ToolStripManager that implements most of the logic to save out and apply
     ///     settings for toolstrips on a form.
     /// </devdoc>
     internal class ToolStripSettingsManager {
         private Form form;
         private string formKey;
-        
+
         internal ToolStripSettingsManager(Form owner, string formKey) {
             this.form = owner;
             this.formKey = formKey;
@@ -120,7 +120,7 @@ namespace System.Windows.Forms {
             foreach (ToolStrip toolStrip in FindToolStrips(true, form.Controls)) {
                 if (toolStrip != null && !string.IsNullOrEmpty(toolStrip.Name)) {
                     ToolStripSettings toolStripSettings = new ToolStripSettings(GetSettingsKey(toolStrip));
-                    
+
                     // Check if we have settings saved out for this toolstrip. If so, add it to our apply list.
                     if (!toolStripSettings.IsDefault) {
                         savedToolStripSettingsObjects.Add(new SettingsStub(toolStripSettings));
@@ -130,7 +130,7 @@ namespace System.Windows.Forms {
 
             ApplySettings(savedToolStripSettingsObjects);
         }
-        
+
         internal void Save() {
             foreach (ToolStrip toolStrip in FindToolStrips(true, form.Controls)) {
                 if (toolStrip != null && !string.IsNullOrEmpty(toolStrip.Name)) {
@@ -143,7 +143,7 @@ namespace System.Windows.Forms {
                     toolStripSettings.Size = stub.Size;
                     toolStripSettings.ToolStripPanelName = stub.ToolStripPanelName;
                     toolStripSettings.Visible = stub.Visible;
-                    
+
                     toolStripSettings.Save();
                 }
             }
@@ -167,15 +167,15 @@ namespace System.Windows.Forms {
             }
 
             SuspendAllLayout(form);
-        
-        
+
+
             // iterate through all the toolstrips and build up a hash of where the items
             // are right now.
             Dictionary<string, ToolStrip> itemLocationHash = BuildItemOriginationHash();
-           
+
             // build up a hash of where we want the ToolStrips to go
             Dictionary<object, List<SettingsStub>> toolStripPanelDestinationHash = new Dictionary<object, List<SettingsStub>>();
-            
+
             foreach (SettingsStub toolStripSettings in toolStripSettingsToApply) {
                 object destinationPanel = !string.IsNullOrEmpty(toolStripSettings.ToolStripPanelName) ? toolStripSettings.ToolStripPanelName : null;
 
@@ -192,20 +192,20 @@ namespace System.Windows.Forms {
                     if (!toolStripPanelDestinationHash.ContainsKey(destinationPanel)) {
                         toolStripPanelDestinationHash[destinationPanel] = new List<SettingsStub>();
                     }
-            
+
                     toolStripPanelDestinationHash[destinationPanel].Add(toolStripSettings);
                 }
             }
-            
+
             // build up a list of the toolstrippanels to party on
             ArrayList toolStripPanels = FindToolStripPanels(true, form.Controls);
-        
+
             foreach (ToolStripPanel toolStripPanel in toolStripPanels) {
                 // set all the controls to visible false/
                 foreach (Control c in toolStripPanel.Controls) {
                     c.Visible = false;
                 }
-                
+
                 string toolStripPanelName = toolStripPanel.Name;
 
                 // Handle the ToolStripPanels inside a ToolStripContainer
@@ -216,7 +216,7 @@ namespace System.Windows.Forms {
                 // get the associated toolstrips for this panel
                 if (toolStripPanelDestinationHash.ContainsKey(toolStripPanelName)) {
                     List<SettingsStub> stubSettings = toolStripPanelDestinationHash[toolStripPanelName];
-        
+
                     if (stubSettings != null) {
                         foreach (SettingsStub settings in stubSettings) {
                             if (!string.IsNullOrEmpty(settings.Name)) {
@@ -238,13 +238,13 @@ namespace System.Windows.Forms {
             if (toolStrip != null) {
                 toolStrip.Visible = settings.Visible;
                 toolStrip.Size = settings.Size;
-                
+
                 // Apply the item order changes.
                 string itemNames = settings.ItemOrder;
                 if (!string.IsNullOrEmpty(itemNames)) {
                     string[] keys = itemNames.Split(',');
                     Regex r = new Regex("(\\S+)");
-            
+
                     // Shuffle items according to string.
                     for (int i = 0; ((i < toolStrip.Items.Count) && (i < keys.Length)); i++) {
                         Match match = r.Match(keys[i]);
@@ -262,7 +262,7 @@ namespace System.Windows.Forms {
         private Dictionary<string, ToolStrip> BuildItemOriginationHash() {
            ArrayList toolStrips = FindToolStrips(true, form.Controls);
            Dictionary<string, ToolStrip> itemLocationHash = new Dictionary<string, ToolStrip>();
-        
+
            if (toolStrips != null) {
                foreach (ToolStrip toolStrip in toolStrips) {
                    foreach (ToolStripItem item in toolStrip.Items) {
@@ -284,23 +284,23 @@ namespace System.Windows.Forms {
             if ((controlsToLookIn == null) || (foundControls == null)) {
                 return null;
             }
-        
+
             try {
                 // Perform breadth first search - as it's likely people will want controls belonging
                 // to the same parent close to each other.
-        
+
                 for (int i = 0; i < controlsToLookIn.Count; i++) {
                     if (controlsToLookIn[i] == null) {
                         continue;
                     }
-        
+
                     if (baseType.IsAssignableFrom(controlsToLookIn[i].GetType())) {
                         foundControls.Add(controlsToLookIn[i]);
                     }
                 }
-        
+
                 // Optional recurive search for controls in child collections.
-        
+
                 if (searchAllChildren) {
                     for (int i = 0; i < controlsToLookIn.Count; i++) {
                         if (controlsToLookIn[i] == null || controlsToLookIn[i] is Form) {
@@ -324,11 +324,11 @@ namespace System.Windows.Forms {
         private ArrayList FindToolStripPanels(bool searchAllChildren, Control.ControlCollection controlsToLookIn) {
             return FindControls(typeof(ToolStripPanel), true, form.Controls, new ArrayList());
         }
-        
+
         private ArrayList FindToolStrips(bool searchAllChildren, Control.ControlCollection controlsToLookIn) {
             return FindControls(typeof(ToolStrip), true, form.Controls, new ArrayList());
         }
-        
+
         private string GetSettingsKey(ToolStrip toolStrip) {
             if (toolStrip != null) {
                 return formKey + "." + toolStrip.Name;
@@ -339,24 +339,24 @@ namespace System.Windows.Forms {
 
         private void ResumeAllLayout(Control start, bool performLayout) {
             Control.ControlCollection controlsCollection = start.Controls;
-        
+
             for (int i = 0; i < controlsCollection.Count; i++) {
                 ResumeAllLayout(controlsCollection[i], performLayout);
             }
-        
+
             start.ResumeLayout(performLayout);
         }
-        
+
         private void SuspendAllLayout(Control start) {
             start.SuspendLayout();
-        
+
             Control.ControlCollection controlsCollection = start.Controls;
             for (int i = 0; i < controlsCollection.Count; i++) {
                 SuspendAllLayout(controlsCollection[i]);
             }
         }
 
-        /// <devdoc> 
+        /// <devdoc>
         ///     Light weight structure that captures the properties we want to save as settings.
         /// </devdoc>
         private struct SettingsStub {
@@ -388,7 +388,7 @@ namespace System.Windows.Forms {
                 this.Location = toolStrip.Location;
                 this.Name = toolStrip.Name;
                 this.ItemOrder = GetItemOrder(toolStrip);
-               
+
             }
             public SettingsStub(ToolStripSettings toolStripSettings) {
                 this.ToolStripPanelName = toolStripSettings.ToolStripPanelName;

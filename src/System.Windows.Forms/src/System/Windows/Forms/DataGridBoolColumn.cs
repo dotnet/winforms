@@ -7,7 +7,7 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
 
     using System;
-    
+
     using System.Windows.Forms;
     using System.ComponentModel;
     using System.Drawing;
@@ -26,7 +26,7 @@ namespace System.Windows.Forms {
         private bool allowNull = true;
         private int  editingRow = -1;
         private object currentValue = Convert.DBNull;
-        
+
         private object trueValue = true;
         private object falseValue = false;
         private object nullValue = Convert.DBNull;
@@ -34,7 +34,7 @@ namespace System.Windows.Forms {
         private static readonly object  EventTrueValue      = new object();
         private static readonly object  EventFalseValue     = new object();
         private static readonly object  EventAllowNull      = new object();
-        
+
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataGridBoolColumn'/> class.</para>
         /// </devdoc>
@@ -50,7 +50,7 @@ namespace System.Windows.Forms {
             : base(prop, isDefault){}
 
         /// <devdoc>
-        ///    <para>Gets or sets the actual value used when setting the 
+        ///    <para>Gets or sets the actual value used when setting the
         ///       value of the column to <see langword='true'/> .</para>
         /// </devdoc>
         [TypeConverterAttribute(typeof(StringConverter)),
@@ -68,13 +68,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        public event EventHandler TrueValueChanged { 
+        public event EventHandler TrueValueChanged {
             add => Events.AddHandler(EventTrueValue, value);
             remove => Events.RemoveHandler(EventTrueValue, value);
         }
-        
+
         /// <devdoc>
-        ///    <para>Gets or sets the actual value used when setting the value of the column to 
+        ///    <para>Gets or sets the actual value used when setting the value of the column to
         ///    <see langword='false'/>.</para>
         /// </devdoc>
         [TypeConverterAttribute(typeof(StringConverter)), DefaultValue(false)]
@@ -90,14 +90,14 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
-        public event EventHandler FalseValueChanged { 
+
+        public event EventHandler FalseValueChanged {
             add => Events.AddHandler(EventFalseValue, value);
             remove => Events.RemoveHandler(EventFalseValue, value);
         }
-        
+
         /// <devdoc>
-        ///    <para>Gets or sets the actual value used when setting the value of the column to 
+        ///    <para>Gets or sets the actual value used when setting the value of the column to
         ///    <see langword='null'/>.</para>
         /// </devdoc>
         [TypeConverterAttribute(typeof(StringConverter))]
@@ -113,7 +113,7 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
+
         // =------------------------------------------------------------------
         // =        Methods
         // =------------------------------------------------------------------
@@ -183,7 +183,7 @@ namespace System.Windows.Forms {
             currentValue = baseValue;
             base.SetColumnValueAtRow(lm, row, baseValue);
         }
-        
+
         /// <devdoc>
         ///    <para>Gets the optimum width and height of a cell given
         ///       a specific value to contain.</para>
@@ -408,11 +408,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        public event EventHandler AllowNullChanged { 
+        public event EventHandler AllowNullChanged {
             add => Events.AddHandler(EventAllowNull, value);
             remove => Events.RemoveHandler(EventAllowNull, value);
         }
-        
+
         /// <devdoc>
         /// <para>Enters a <see langword='null'/> into the column.</para>
         /// </devdoc>
@@ -437,7 +437,7 @@ namespace System.Windows.Forms {
         }
 
         private void ToggleValue() {
-         
+
             if (currentValue is bool && ((bool)currentValue) == false) {
                 currentValue = true;
             }

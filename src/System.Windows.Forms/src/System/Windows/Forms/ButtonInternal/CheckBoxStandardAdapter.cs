@@ -27,7 +27,7 @@ namespace System.Windows.Forms.ButtonInternal {
                 PaintButtonBackground(e, Control.ClientRectangle, null);
 
                 if (!layout.options.everettButtonCompat) {
-                    layout.textBounds.Offset(-1, -1); 
+                    layout.textBounds.Offset(-1, -1);
                 }
                 layout.imageBounds.Offset(-1, -1);
 
@@ -54,7 +54,7 @@ namespace System.Windows.Forms.ButtonInternal {
                 PaintField(e, layout, colors, colors.windowText, true);
             }
         }
-        
+
         internal override void PaintDown(PaintEventArgs e, CheckState state) {
             if (Control.Appearance == Appearance.Button) {
 				ButtonAdapter.PaintDown(e, Control.CheckState);
@@ -63,7 +63,7 @@ namespace System.Windows.Forms.ButtonInternal {
                 PaintUp(e, state);
             }
         }
-        
+
         internal override void PaintOver(PaintEventArgs e, CheckState state) {
             if (Control.Appearance == Appearance.Button) {
 				ButtonAdapter.PaintOver(e, Control.CheckState);
@@ -71,18 +71,18 @@ namespace System.Windows.Forms.ButtonInternal {
             else {
                 PaintUp(e, state);
             }
-        }        
+        }
 
         internal override Size GetPreferredSizeCore(Size proposedSize) {
             if (Control.Appearance == Appearance.Button) {
 				ButtonStandardAdapter adapter = new ButtonStandardAdapter(Control);
                 return adapter.GetPreferredSizeCore(proposedSize);
-            } 
+            }
             else {
                 using (Graphics measurementGraphics = WindowsFormsUtils.CreateMeasurementGraphics()) {
                     using (PaintEventArgs pe = new PaintEventArgs(measurementGraphics, new Rectangle())) {
                         LayoutOptions options = Layout(pe);
-                        
+
                         return options.GetPreferredSizeCore(proposedSize);
                     }
                 }
@@ -104,7 +104,7 @@ namespace System.Windows.Forms.ButtonInternal {
         protected override LayoutOptions Layout(PaintEventArgs e) {
             LayoutOptions layout = CommonLayout();
             layout.checkPaddingSize  = 1;
-            layout.everettButtonCompat = !Application.RenderWithVisualStyles;            
+            layout.everettButtonCompat = !Application.RenderWithVisualStyles;
 
             if (Application.RenderWithVisualStyles) {
                 using (Graphics g = WindowsFormsUtils.CreateMeasurementGraphics()) {

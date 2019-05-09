@@ -10,7 +10,7 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.Collections;
     using System.Diagnostics;
-    
+
     public sealed class ProfessionalColors {
         [ThreadStatic]
         private static ProfessionalColorTable professionalColorTable = null;
@@ -21,7 +21,7 @@ namespace System.Windows.Forms {
         [ThreadStatic]
         private static object colorFreshnessKey = null;
 
-            
+
         internal static ProfessionalColorTable ColorTable {
             get {
                 if (professionalColorTable == null) {
@@ -38,7 +38,7 @@ namespace System.Windows.Forms {
 
         private ProfessionalColors() {
         }
-        
+
         internal static string ColorScheme {
             get { return colorScheme; }
         }
@@ -72,7 +72,7 @@ namespace System.Windows.Forms {
         public static Color ButtonPressedHighlightBorder {
            get { return ColorTable.ButtonPressedHighlightBorder; }
         }
-        
+
         [SRDescription(nameof(SR.ProfessionalColorsButtonCheckedHighlightDescr))]
         public static Color ButtonCheckedHighlight {
             get { return ColorTable.ButtonCheckedHighlight; }
@@ -127,12 +127,12 @@ namespace System.Windows.Forms {
         public static Color ButtonPressedGradientBegin {
             get { return ColorTable.ButtonPressedGradientBegin; }
         }
-     
+
         [SRDescription(nameof(SR.ProfessionalColorsButtonPressedGradientMiddleDescr))]
         public static Color ButtonPressedGradientMiddle {
             get { return ColorTable.ButtonPressedGradientMiddle; }
         }
-        
+
         [SRDescription(nameof(SR.ProfessionalColorsButtonPressedGradientEndDescr))]
         public static Color ButtonPressedGradientEnd {
             get { return ColorTable.ButtonPressedGradientEnd; }
@@ -142,17 +142,17 @@ namespace System.Windows.Forms {
         public static Color CheckBackground {
             get { return ColorTable.CheckBackground; }
         }
-            
+
         [SRDescription(nameof(SR.ProfessionalColorsCheckSelectedBackgroundDescr))]
         public static Color CheckSelectedBackground {
             get { return ColorTable.CheckSelectedBackground; }
         }
-        
+
         [SRDescription(nameof(SR.ProfessionalColorsCheckPressedBackgroundDescr))]
         public static Color CheckPressedBackground {
             get { return ColorTable.CheckPressedBackground; }
         }
-        
+
         [SRDescription(nameof(SR.ProfessionalColorsGripDarkDescr))]
         public static Color GripDark {
             get { return ColorTable.GripDark; }
@@ -163,27 +163,27 @@ namespace System.Windows.Forms {
             get { return ColorTable.GripLight; }
         }
 
-          
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         [SRDescription(nameof(SR.ProfessionalColorsImageMarginGradientBeginDescr))]
         public static Color ImageMarginGradientBegin {
@@ -232,7 +232,7 @@ namespace System.Windows.Forms {
 
         [SRDescription(nameof(SR.ProfessionalColorsMenuItemSelectedDescr))]
         public static Color MenuItemSelected {
-            get { return ColorTable.MenuItemSelected; }  
+            get { return ColorTable.MenuItemSelected; }
         }
 
         [SRDescription(nameof(SR.ProfessionalColorsMenuItemBorderDescr))]
@@ -265,7 +265,7 @@ namespace System.Windows.Forms {
             get { return ColorTable.MenuItemPressedGradientEnd; }
         }
 
-   
+
         [SRDescription(nameof(SR.ProfessionalColorsRaftingContainerGradientBeginDescr))]
         public static Color RaftingContainerGradientBegin {
             get { return ColorTable.RaftingContainerGradientBegin; }
@@ -289,7 +289,7 @@ namespace System.Windows.Forms {
         public static Color StatusStripGradientBegin {
             get { return ColorTable.StatusStripGradientBegin; }
         }
-   
+
         [SRDescription(nameof(SR.ProfessionalColorsStatusStripGradientEndDescr))]
         public static Color StatusStripGradientEnd {
             get { return ColorTable.StatusStripGradientEnd; }
@@ -324,17 +324,17 @@ namespace System.Windows.Forms {
         public static Color ToolStripContentPanelGradientBegin {
             get { return ColorTable.ToolStripContentPanelGradientBegin; }
         }
-   
+
         [SRDescription(nameof(SR.ProfessionalColorsToolStripContentPanelGradientEndDescr))]
         public static Color ToolStripContentPanelGradientEnd {
             get { return ColorTable.ToolStripContentPanelGradientEnd; }
         }
-        
+
         [SRDescription(nameof(SR.ProfessionalColorsToolStripPanelGradientBeginDescr))]
         public static Color ToolStripPanelGradientBegin {
             get { return ColorTable.ToolStripPanelGradientBegin; }
         }
-  
+
         [SRDescription(nameof(SR.ProfessionalColorsToolStripPanelGradientEndDescr))]
         public static Color ToolStripPanelGradientEnd {
             get { return ColorTable.ToolStripPanelGradientEnd; }
@@ -359,8 +359,8 @@ namespace System.Windows.Forms {
       /*  public static Color ControlLight {
             get { return FromKnownColor(KnownColors.msocbvcrCBCtlBkgdLight); }
         } */
-            
- 
+
+
         private static void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e) {
             SetScheme();
             if (e.Category == UserPreferenceCategory.Color) {
@@ -379,6 +379,6 @@ namespace System.Windows.Forms {
 
     }
 
-    
+
 }
 

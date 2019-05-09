@@ -46,7 +46,7 @@ namespace System.Windows.Forms
 
         // Directly holding onto the Thread can prevent ThreadStatics from finalizing.
         private Thread DestinationThread {
-            get { 
+            get {
                 if ((destinationThreadRef != null) && (destinationThreadRef.IsAlive)) {
                     return destinationThreadRef.Target as Thread;
                 }
@@ -107,7 +107,7 @@ namespace System.Windows.Forms
 
         // Instantiate and install a WF op sync context, and save off the old one.
         internal static void InstallIfNeeded() {
-            // Exit if we shouldn't auto-install, if we've already installed and we haven't uninstalled, 
+            // Exit if we shouldn't auto-install, if we've already installed and we haven't uninstalled,
             // or if we're being called recursively (creating the WF
             // async op sync context can create a parking window control).
             if (!AutoInstall || inSyncContextInstallation) {

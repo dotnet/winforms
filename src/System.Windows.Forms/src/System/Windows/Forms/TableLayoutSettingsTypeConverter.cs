@@ -11,8 +11,8 @@ namespace System.Windows.Forms.Layout {
     using System.Text;
     using System.Globalization;
     using System.Diagnostics;
-    using System.ComponentModel.Design.Serialization;    
-    
+    using System.ComponentModel.Design.Serialization;
+
     public class TableLayoutSettingsTypeConverter : TypeConverter {
 
         /// <devdoc>
@@ -25,7 +25,7 @@ namespace System.Windows.Forms.Layout {
             }
             return base.CanConvertFrom(context, sourceType);
         }
-    
+
         /// <devdoc>
         ///    <para>Gets a value indicating whether this converter can
         ///       convert an object to the given destination type using the context.</para>
@@ -41,13 +41,13 @@ namespace System.Windows.Forms.Layout {
         ///      Converts the given object to the converter's native type.
         /// </devdoc>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
-        
+
             if (value is string) {
                 XmlDocument tableLayoutSettingsXml = new XmlDocument();
                 tableLayoutSettingsXml.LoadXml(value as string);
 
                 TableLayoutSettings settings = new TableLayoutSettings();
-                
+
                 ParseControls(settings, tableLayoutSettingsXml.GetElementsByTagName("Control"));
                 ParseStyles(settings, tableLayoutSettingsXml.GetElementsByTagName("Columns"), /*isColumn=*/true);
                 ParseStyles(settings, tableLayoutSettingsXml.GetElementsByTagName("Rows"), /*isColumn=*/false);
@@ -57,7 +57,7 @@ namespace System.Windows.Forms.Layout {
         }
 
 
-        
+
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
             if (destinationType == null) {
                 throw new ArgumentNullException(nameof(destinationType));
@@ -65,34 +65,34 @@ namespace System.Windows.Forms.Layout {
 
             if (value is TableLayoutSettings && (destinationType == typeof(string))) {
                 TableLayoutSettings tableLayoutSettings = value as TableLayoutSettings;
-                 
+
                 StringBuilder xmlStringBuilder = new StringBuilder();
                 XmlWriter xmlWriter = XmlWriter.Create(xmlStringBuilder);
                 xmlWriter.WriteStartElement("TableLayoutSettings");
-    
+
                 //
-                // write controls 
+                // write controls
                 //
                 xmlWriter.WriteStartElement("Controls");
-    
+
                 foreach (TableLayoutSettings.ControlInformation c in tableLayoutSettings.GetControlsInformation()) {
-                    
-                    
+
+
                     xmlWriter.WriteStartElement("Control");
                     xmlWriter.WriteAttributeString("Name", c.Name.ToString());
                     xmlWriter.WriteAttributeString("Row",c.Row.ToString(CultureInfo.CurrentCulture));
                     xmlWriter.WriteAttributeString("RowSpan", c.RowSpan.ToString(CultureInfo.CurrentCulture));
-    
+
                     xmlWriter.WriteAttributeString("Column", c.Column.ToString(CultureInfo.CurrentCulture));
                     xmlWriter.WriteAttributeString("ColumnSpan", c.ColumnSpan.ToString(CultureInfo.CurrentCulture));
-                
+
                     xmlWriter.WriteEndElement();
-    
+
                 }
                 xmlWriter.WriteEndElement(); // end Controls
-    
+
                 //
-                // write columns 
+                // write columns
                 //
                 xmlWriter.WriteStartElement("Columns");
                 StringBuilder columnStyles = new StringBuilder();
@@ -104,9 +104,9 @@ namespace System.Windows.Forms.Layout {
                 }
                 xmlWriter.WriteAttributeString("Styles", columnStyles.ToString());
                 xmlWriter.WriteEndElement(); // end columns
-    
+
                 //
-                // write rows 
+                // write rows
                 //
                 xmlWriter.WriteStartElement("Rows");
                 StringBuilder rowStyles = new StringBuilder();
@@ -118,14 +118,14 @@ namespace System.Windows.Forms.Layout {
                 }
                 xmlWriter.WriteAttributeString("Styles", rowStyles.ToString());
                 xmlWriter.WriteEndElement(); // end Rows
-    
-    
+
+
                 xmlWriter.WriteEndElement(); // end TableLayoutSettings
-    
+
                 xmlWriter.Close();
                 return xmlStringBuilder.ToString();
 
-            }      
+            }
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
@@ -148,8 +148,8 @@ namespace System.Windows.Forms.Layout {
             return valueIfNotFound;
         }
 
-       
-       
+
+
        private void ParseControls(TableLayoutSettings settings, XmlNodeList controlXmlFragments) {
            foreach (XmlNode controlXmlNode in controlXmlFragments) {
                string name     = GetAttributeValue(controlXmlNode, "Name");
@@ -159,19 +159,19 @@ namespace System.Windows.Forms.Layout {
                    int rowSpan    = GetAttributeValue(controlXmlNode, "RowSpan",   /*default*/1);
                    int column     = GetAttributeValue(controlXmlNode, "Column",    /*default*/-1);
                    int columnSpan = GetAttributeValue(controlXmlNode, "ColumnSpan",/*default*/1);
-       
+
                    settings.SetRow(name, row);
                    settings.SetColumn(name, column);
                    settings.SetRowSpan(name, rowSpan);
                    settings.SetColumnSpan(name, columnSpan);
                }
-               
+
            }
-       
-       
+
+
        }
-    
-    
+
+
         private void ParseStyles(TableLayoutSettings settings, XmlNodeList controlXmlFragments, bool columns) {
             foreach (XmlNode styleXmlNode in controlXmlFragments) {
                 string styleString = GetAttributeValue(styleXmlNode, "Styles");
@@ -195,7 +195,7 @@ namespace System.Windows.Forms.Layout {
                             nextIndex++;
                         }
                         SizeType type = (SizeType)Enum.Parse(sizeTypeType, styleString.Substring(currentIndex, nextIndex - currentIndex), true);
-                        
+
                         // ----- Float Parsing --------------
                         // Find the next Digit (start of the float)
                         while (!char.IsDigit(styleString[nextIndex])) {
@@ -236,12 +236,12 @@ namespace System.Windows.Forms.Layout {
                 }
             }
         }
-    
-    
+
+
     }
 
 }
-   
+
 
 
 

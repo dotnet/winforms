@@ -12,14 +12,14 @@ namespace System.Windows.Forms
         private UnsafeNativeMethods.IHTMLElementCollection htmlElementCollection;
         private HtmlElement[] elementsArray;
         private HtmlShimManager shimManager;
-        
+
         internal HtmlElementCollection(HtmlShimManager shimManager) {
             this.htmlElementCollection = null;
             this.elementsArray = null;
 
             this.shimManager = shimManager;
         }
-        
+
         internal HtmlElementCollection(HtmlShimManager shimManager, UnsafeNativeMethods.IHTMLElementCollection elements) {
             this.htmlElementCollection = elements;
             this.elementsArray = null;
@@ -87,7 +87,7 @@ namespace System.Windows.Forms
             int count = this.Count;
             HtmlElement[] temp = new HtmlElement[count];    // count is the maximum # of matches
             int tempIndex = 0;
-            
+
             for (int i = 0; i < count; i++) {
                 HtmlElement element = this[i];
                 if (element.GetAttribute("name") == name) {
@@ -95,7 +95,7 @@ namespace System.Windows.Forms
                     tempIndex++;
                 }
             }
-            
+
             if (tempIndex == 0) {
                 return new HtmlElementCollection(shimManager);
             }
@@ -124,13 +124,13 @@ namespace System.Windows.Forms
                 }
             }
         }
-        
+
         bool ICollection.IsSynchronized {
             get {
                 return false;
             }
         }
-        
+
         object ICollection.SyncRoot {
             get {
                 return this;
@@ -147,7 +147,7 @@ namespace System.Windows.Forms
         public IEnumerator GetEnumerator() {
             HtmlElement[] htmlElements = new HtmlElement[this.Count];
             ((ICollection)this).CopyTo(htmlElements, 0);
-            
+
             return htmlElements.GetEnumerator();
         }
     }

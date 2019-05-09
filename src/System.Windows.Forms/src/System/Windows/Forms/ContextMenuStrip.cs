@@ -49,8 +49,8 @@ namespace System.Windows.Forms {
         // minimal Clone implementation for DGV support only.
         internal ContextMenuStrip Clone() {
 
-           // VERY limited support for cloning.  
-           
+           // VERY limited support for cloning.
+
            ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
 
            // copy over events
@@ -62,13 +62,13 @@ namespace System.Windows.Forms {
            contextMenuStrip.ImageList = ImageList;
            contextMenuStrip.ShowCheckMargin = ShowCheckMargin;
            contextMenuStrip.ShowImageMargin = ShowImageMargin;
-           
+
 
            // copy over relevant properties
 
            for (int i = 0; i < Items.Count; i++) {
               ToolStripItem item = Items[i];
-              
+
               if (item is ToolStripSeparator) {
                 contextMenuStrip.Items.Add(new ToolStripSeparator());
               }
@@ -90,7 +90,7 @@ namespace System.Windows.Forms {
                 ToolStripManager.ModalMenuFilter.Instance.ShowUnderlines = true;
             }
         }
-        
+
         internal void ShowInTaskbar(int x, int y) {
             // we need to make ourselves a topmost window
             WorkingAreaConstrained = false;
@@ -103,7 +103,7 @@ namespace System.Windows.Forms {
                 bounds = CalculateDropDownLocation(new Point(x,y), ToolStripDropDownDirection.AboveRight);
             }
             bounds = WindowsFormsUtils.ConstrainToBounds(screenBounds, bounds);
-            
+
             Show(bounds.X, bounds.Y);
         }
 
@@ -114,4 +114,4 @@ namespace System.Windows.Forms {
             base.SetVisibleCore(visible);
         }
     }
-}    
+}

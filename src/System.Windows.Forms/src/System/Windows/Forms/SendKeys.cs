@@ -9,12 +9,12 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
 
     using System;
-    
+
     using System.Drawing;
     using System.Collections;
     using System.ComponentModel;
     using System.Globalization;
-    
+
     /// <devdoc>
     ///    <para>Provides methods for sending keystrokes to an application.</para>
     /// </devdoc>
@@ -22,12 +22,12 @@ namespace System.Windows.Forms {
         private const int  HAVESHIFT = 0;
         private const int  HAVECTRL  = 1;
         private const int  HAVEALT   = 2;
-        
+
         // I'm unsure what significance the value 10 has, but it seems to make sense
         // to make this a constant rather than have 10 sprinkled throughout the code.
         // It appears to be a sentinel value of some sort - indicating an unknown
         // grouping level.
-        //                                                 
+        //
         private const int  UNKNOWN_GROUPING = 10;
 
         private static KeywordVk [] keywords = new KeywordVk[] {
@@ -104,7 +104,7 @@ namespace System.Windows.Forms {
         private static Queue events;
 
         private static bool fStartNewChar;
-        
+
         private static SKWindow messageWindow;
 
         private enum SendMethodTypes
@@ -129,7 +129,7 @@ namespace System.Windows.Forms {
             messageWindow = new SKWindow();
             messageWindow.CreateControl();
         }
-        
+
         /// <devdoc>
         ///     private constructor to prevent people from creating one of these.  they
         ///     should use public static methods
@@ -170,7 +170,7 @@ namespace System.Windows.Forms {
                     fStartNewChar = false;
                     haveKeys[HAVEALT] = UNKNOWN_GROUPING;
                 }
-            
+
                 AddMsgsForVK(vk & 0xff, repeat, haveKeys[HAVEALT] > 0 && haveKeys[HAVECTRL] == 0, hwnd);
                 CancelMods(haveKeys, UNKNOWN_GROUPING, hwnd);
             }
@@ -306,7 +306,7 @@ namespace System.Windows.Forms {
         private static void SetKeyboardState(byte[] keystate) {
             UnsafeNativeMethods.SetKeyboardState(keystate);
         }
-        
+
         /// <devdoc>
         ///     before we do a sendkeys, we want to  clear the state
         ///     of a couple of keys [capslock, numlock, scrolllock] so they don't
@@ -347,7 +347,7 @@ namespace System.Windows.Forms {
             catch {
             }
         }
-        
+
         /// <devdoc>
         ///     parse the string the user has given us, and generate the appropriate
         ///     events for the journaling hook
@@ -384,7 +384,7 @@ namespace System.Windows.Forms {
 
                     case '{':
                         int j = i + 1;
-                        
+
                         // There's a unique class of strings of the form "{} n}" where
                         // n is an integer - in this case we want to send n copies of the '}' character.
                         // Here we test for the possibility of this class of problems, and skip the
@@ -402,18 +402,18 @@ namespace System.Windows.Forms {
                                 j++;
                             }
                         }
-                        
+
                         // okay, we're in a {<KEYWORD>...} situation.  look for the keyword
                         //
                         while (j < keysLen && keys[j] != '}'
                                && !char.IsWhiteSpace(keys[j])) {
                             j++;
                         }
-                        
+
                         if (j >= keysLen) {
                             throw new ArgumentException(SR.SendKeysKeywordDelimError);
                         }
-                        
+
                         // okay, have our KEYWORD.  verify it's one we know about
                         //
                         string keyName = keys.Substring(i + 1, j - (i + 1));
@@ -425,11 +425,11 @@ namespace System.Windows.Forms {
                             while (j < keysLen && char.IsWhiteSpace(keys[j])) {
                                 j++;
                             }
-                            
+
                             if (j >= keysLen) {
-                                throw new ArgumentException(SR.SendKeysKeywordDelimError);                            
+                                throw new ArgumentException(SR.SendKeysKeywordDelimError);
                             }
-                            
+
                             if (char.IsDigit(keys[j])) {
                                 digit = j;
                                 while (j < keysLen && char.IsDigit(keys[j])) {
@@ -438,9 +438,9 @@ namespace System.Windows.Forms {
                                 repeat = int.Parse(keys.Substring(digit, j - digit), CultureInfo.InvariantCulture);
                             }
                         }
-                        
+
                         if (j >= keysLen) {
-                            throw new ArgumentException(SR.SendKeysKeywordDelimError);                            
+                            throw new ArgumentException(SR.SendKeysKeywordDelimError);
                         }
                         if (keys[j] != '}') {
                             throw new ArgumentException(SR.InvalidSendKeysRepeat);
@@ -454,13 +454,13 @@ namespace System.Windows.Forms {
                                 fStartNewChar = false;
                                 haveKeys[HAVESHIFT] = UNKNOWN_GROUPING;
                             }
-                
+
                             if (haveKeys[HAVECTRL] == 0 && (vk & (int)Keys.Control) != 0) {
                                 AddEvent(new SKEvent(Interop.WindowMessages.WM_KEYDOWN, (int)Keys.ControlKey, fStartNewChar, hwnd));
                                 fStartNewChar = false;
                                 haveKeys[HAVECTRL] = UNKNOWN_GROUPING;
                             }
-                
+
                             if (haveKeys[HAVEALT] == 0 && (vk & (int)Keys.Alt) != 0) {
                                 AddEvent(new SKEvent(Interop.WindowMessages.WM_KEYDOWN, (int)Keys.Menu, fStartNewChar, hwnd));
                                 fStartNewChar = false;
@@ -581,8 +581,8 @@ namespace System.Windows.Forms {
 
             // A lock here will allow multiple threads to SendInput at the same time.
             // This mimics the JournalHook method of using the message loop to mitigate
-            // threading issues.  There is still a theoretical thread issue with adding 
-            // to the events Queue (both JournalHook and SendInput), but we do not want 
+            // threading issues.  There is still a theoretical thread issue with adding
+            // to the events Queue (both JournalHook and SendInput), but we do not want
             // to alter the timings of the existing shipped behavior.  I did not run into
             // problems with 2 threads on a multiproc machine
             lock (events.SyncRoot)
@@ -842,11 +842,11 @@ namespace System.Windows.Forms {
         //
 
         // No one is calling this method so it is safe to comment it out
-        
+
         //private static void Send(string keys, /*bogus*/ Control control) {
         //    Send(keys, control, false);
         //}
-        
+
 
         private static void Send(string keys, Control control, bool wait) {
 
@@ -941,7 +941,7 @@ namespace System.Windows.Forms {
                 Application.DoEvents();
             }
         }
-    
+
         /// <devdoc>
         ///     cleans up and uninstalls the hook
         /// </devdoc>
@@ -955,19 +955,19 @@ namespace System.Windows.Forms {
                 hhook = IntPtr.Zero;
             }
         }
-        
+
         /// <devdoc>
         ///     SendKeys creates a window to monitor WM_CANCELJOURNAL messages.
         /// </devdoc>
         private class SKWindow : Control {
-        
+
             public SKWindow() {
                 SetState(STATE_TOPLEVEL, true);
                 SetState2(STATE2_INTERESTEDINUSERPREFERENCECHANGED, false);
                 SetBounds(-1, -1, 0, 0);
                 Visible = false;
             }
-            
+
             protected override void WndProc(ref Message m) {
                 if (m.Msg == Interop.WindowMessages.WM_CANCELJOURNAL) {
                     try {
@@ -978,7 +978,7 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
+
         /// <devdoc>
         ///     helps us hold information about the various events we're going to journal
         /// </devdoc>
@@ -987,7 +987,7 @@ namespace System.Windows.Forms {
             internal int paramL;
             internal int paramH;
             internal IntPtr hwnd;
-    
+
             public SKEvent(int a, int b, bool c, IntPtr hwnd) {
                 wm = a;
                 paramL = b;
@@ -1002,20 +1002,20 @@ namespace System.Windows.Forms {
                 this.hwnd = hwnd;
             }
         }
-    
+
         /// <devdoc>
         ///     holds a keyword and the associated VK_ for it
         /// </devdoc>
         private class KeywordVk {
             internal string keyword;
             internal int    vk;
-    
+
             public KeywordVk(string key, int v) {
                 keyword = key;
                 vk = v;
             }
         }
-    
+
         /// <devdoc>
         ///     this class is our callback for the journaling hook we install
         /// </devdoc>
@@ -1028,15 +1028,15 @@ namespace System.Windows.Forms {
             // until we get an HC_GETNEXT.  We also sleep a bit in the Unhook...
             //
             private bool gotNextEvent = false;
-    
+
             public virtual IntPtr Callback(int code, IntPtr wparam, IntPtr lparam) {
                 NativeMethods.EVENTMSG eventmsg = Marshal.PtrToStructure<NativeMethods.EVENTMSG>(lparam);
-                
-    
+
+
                 if (UnsafeNativeMethods.GetAsyncKeyState((int)Keys.Pause) != 0) {
                     SendKeys.stopHook = true;
                 }
-                
+
                 //
                 switch (code) {
                     case NativeMethods.HC_SKIP:
@@ -1050,15 +1050,15 @@ namespace System.Windows.Forms {
                         }
                         SendKeys.stopHook = SendKeys.events == null || SendKeys.events.Count == 0;
                         break;
-    
+
                     case NativeMethods.HC_GETNEXT:
 
                         gotNextEvent = true;
-                        
+
                         #if DEBUG
                         Debug.Assert(SendKeys.events != null && SendKeys.events.Count > 0 && !SendKeys.stopHook, "HC_GETNEXT when queue is empty!");
                         #endif
-                        
+
                         SKEvent evt = (SKEvent)SendKeys.events.Peek();
                         eventmsg.message = evt.wm;
                         eventmsg.paramL = evt.paramL;
@@ -1067,13 +1067,13 @@ namespace System.Windows.Forms {
                         eventmsg.time = SafeNativeMethods.GetTickCount();
                         Marshal.StructureToPtr(eventmsg, lparam, true);
                         break;
-    
+
                     default:
                         if (code < 0)
                             UnsafeNativeMethods.CallNextHookEx(new HandleRef(null, SendKeys.hhook), code, wparam, lparam);
                         break;
                 }
-                
+
                 if (SendKeys.stopHook) {
                     SendKeys.UninstallJournalingHook();
                     gotNextEvent = false;

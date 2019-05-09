@@ -287,7 +287,7 @@ namespace System.Windows.Forms {
                 if (movePreviousItem != null && movePreviousItem.IsDisposed) {
                     movePreviousItem = null;
                 }
-                
+
                 return movePreviousItem;
             }
 
@@ -463,7 +463,7 @@ namespace System.Windows.Forms {
             add => onRefreshItems += value;
             remove => onRefreshItems -= value;
         }
-        
+
         /// <devdoc>
         ///     Refreshes the state of the standard items to reflect the current state of the data.
         /// </devdoc>
@@ -588,7 +588,7 @@ namespace System.Windows.Forms {
             // (causing position item's new value to get blasted away)
             RefreshItemsInternal();
         }
-  
+
         /// <devdoc>
         ///     Navigates to first item in BindingSource's list when the MoveFirstItem is clicked.
         /// </devdoc>

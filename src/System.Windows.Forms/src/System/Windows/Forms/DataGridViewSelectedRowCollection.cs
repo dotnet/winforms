@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     using System.Diagnostics.CodeAnalysis;
 
     /// <devdoc>
-    /// <para>Represents a collection of selected <see cref='System.Windows.Forms.DataGridViewCell'/> objects in the <see cref='System.Windows.Forms.DataGridView'/> 
+    /// <para>Represents a collection of selected <see cref='System.Windows.Forms.DataGridViewCell'/> objects in the <see cref='System.Windows.Forms.DataGridView'/>
     /// control.</para>
     /// </devdoc>
     [
@@ -111,7 +111,7 @@ namespace System.Windows.Forms
                 return this.items;
             }
         }
-        
+
         public DataGridViewRow this[int index]
         {
             get
@@ -127,12 +127,12 @@ namespace System.Windows.Forms
         {
             return this.items.Add(dataGridViewRow);
         }
-        
+
         /* Unused at this point
         internal void AddRange(DataGridViewRow[] dataGridViewRows)
         {
             Debug.Assert(dataGridViewRows != null);
-            foreach(DataGridViewRow dataGridViewRow in dataGridViewRows) 
+            foreach(DataGridViewRow dataGridViewRow in dataGridViewRows)
             {
                 this.items.Add(dataGridViewRow);
             }
@@ -141,7 +141,7 @@ namespace System.Windows.Forms
         internal void AddRowCollection(DataGridViewRowCollection dataGridViewRows)
         {
             Debug.Assert(dataGridViewRows != null);
-            foreach(DataGridViewRow dataGridViewRow in dataGridViewRows) 
+            foreach(DataGridViewRow dataGridViewRow in dataGridViewRows)
             {
                 this.items.Add(dataGridViewRow);
             }

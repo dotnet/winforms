@@ -7,17 +7,17 @@ namespace System.Windows.Forms {
     using System.Collections;
     using System.ComponentModel;
     using System.Globalization;
-    
+
     /// <devdoc>
     ///    <para>
-    ///       This is a read only collection of Forms exposed as a static property of the 
+    ///       This is a read only collection of Forms exposed as a static property of the
     ///       Application class. This is used to store all the currently loaded forms in an app.
     ///    </para>
     /// </devdoc>
     public class FormCollection : ReadOnlyCollectionBase {
 
         internal static object CollectionSyncRoot = new object();
-        
+
         /// <devdoc>
         ///    <para>
         ///       Gets a form specified by name, if present, else returns null. If there are multiple
@@ -38,7 +38,7 @@ namespace System.Windows.Forms {
                 return null;
             }
         }
-        
+
         /// <devdoc>
         ///    <para>
         ///       Gets a form specified by index.
@@ -54,7 +54,7 @@ namespace System.Windows.Forms {
                 return f;
             }
         }
-        
+
         /// <devdoc>
         ///    Used internally to add a Form to the FormCollection
         /// </devdoc>

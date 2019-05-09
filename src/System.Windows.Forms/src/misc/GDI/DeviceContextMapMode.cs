@@ -19,7 +19,7 @@ namespace System.Experimental.Gdi
     internal
 #endif
     enum DeviceContextMapMode
-    {   
+    {
         Text             = 1, // MM_TEXT
         LoMetric         = 2,
         HiMetric         = 3,
@@ -30,15 +30,15 @@ namespace System.Experimental.Gdi
         Anisotropic      = 8
 
         /*
-        Mapping Mode        Logical Unit        x-axis      y-axis 
-        MM_TEXT             Pixel               Right       Down 
-        MM_LOMETRIC         0.1 mm              Right       Up 
-        MM_HIMETRIC         0.01 mm             Right       Up 
-        MM_LOENGLISH        0.01 in.            Right       Up 
-        MM_HIENGLISH        0.001 in.           Right       Up 
-        MM_TWIPS            1/1440 in.          Right       Up 
-        MM_ISOTROPIC        Arbitrary (x = y)   Selectable  Selectable 
-        MM_ANISOTROPIC      Arbitrary (x !=y)   Selectable  Selectable 
+        Mapping Mode        Logical Unit        x-axis      y-axis
+        MM_TEXT             Pixel               Right       Down
+        MM_LOMETRIC         0.1 mm              Right       Up
+        MM_HIMETRIC         0.01 mm             Right       Up
+        MM_LOENGLISH        0.01 in.            Right       Up
+        MM_HIENGLISH        0.001 in.           Right       Up
+        MM_TWIPS            1/1440 in.          Right       Up
+        MM_ISOTROPIC        Arbitrary (x = y)   Selectable  Selectable
+        MM_ANISOTROPIC      Arbitrary (x !=y)   Selectable  Selectable
         */
 
     }

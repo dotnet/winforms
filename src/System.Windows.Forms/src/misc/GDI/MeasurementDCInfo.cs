@@ -24,35 +24,35 @@ namespace System.Experimental.Gdi {
 
         /// MeasurementDCInfo
         /// This class optimizes the MeasurmentGraphics as it caches in the last used font and TextMargins used.
-        /// This prevents unnecessary p/invoke calls to GetCurrentObject, etc 
-        /// It has been found to give close to 2x performance when drawing lots of text in rapid succession 
+        /// This prevents unnecessary p/invoke calls to GetCurrentObject, etc
+        /// It has been found to give close to 2x performance when drawing lots of text in rapid succession
         /// DataGridView with lots of text, etc.
         /// To turn it on for your DLL, use the OPTIMIZED_MEASUREMENTDC compiler switch and add this class to the sources.
 
-       [ThreadStatic]        
+       [ThreadStatic]
        private static CachedInfo cachedMeasurementDCInfo;
 
        /// IsMeasurementDC
        ///  Returns whether the IDeviceContext passed in is our static MeasurementDC.
        ///  If it is, we know a bit more information about it.
-       internal static bool IsMeasurementDC(DeviceContext dc) 
+       internal static bool IsMeasurementDC(DeviceContext dc)
        {
-            WindowsGraphics sharedGraphics = WindowsGraphicsCacheManager.GetCurrentMeasurementGraphics();           
+            WindowsGraphics sharedGraphics = WindowsGraphicsCacheManager.GetCurrentMeasurementGraphics();
             return sharedGraphics != null && sharedGraphics.DeviceContext != null && sharedGraphics.DeviceContext.Hdc == dc.Hdc;
        }
 
        /// LastUsedFont -
        ///  Returns the font we think was last selected into the MeasurementGraphics.
        ///
-       internal static WindowsFont LastUsedFont 
+       internal static WindowsFont LastUsedFont
        {
-          get 
+          get
           {
              return (cachedMeasurementDCInfo == null) ? null : cachedMeasurementDCInfo.LastUsedFont;
           }
-          set 
+          set
           {
-             if (cachedMeasurementDCInfo == null) 
+             if (cachedMeasurementDCInfo == null)
              {
                 cachedMeasurementDCInfo = new CachedInfo();
              }
@@ -68,13 +68,13 @@ namespace System.Experimental.Gdi {
 
             // PERF: operate on a local reference rather than party directly on the thread static one.
             CachedInfo currentCachedInfo = cachedMeasurementDCInfo;
-            
-            if (currentCachedInfo != null && currentCachedInfo.LeftTextMargin >0 && currentCachedInfo.RightTextMargin >0 && font == currentCachedInfo.LastUsedFont) 
+
+            if (currentCachedInfo != null && currentCachedInfo.LeftTextMargin >0 && currentCachedInfo.RightTextMargin >0 && font == currentCachedInfo.LastUsedFont)
             {
                 // we have to return clones as DrawTextEx will modify this struct
-                return new IntNativeMethods.DRAWTEXTPARAMS(currentCachedInfo.LeftTextMargin,currentCachedInfo.RightTextMargin);                    
+                return new IntNativeMethods.DRAWTEXTPARAMS(currentCachedInfo.LeftTextMargin,currentCachedInfo.RightTextMargin);
             }
-            else if (currentCachedInfo == null) 
+            else if (currentCachedInfo == null)
             {
                 currentCachedInfo = new CachedInfo();
                 cachedMeasurementDCInfo = currentCachedInfo;
@@ -82,46 +82,46 @@ namespace System.Experimental.Gdi {
             IntNativeMethods.DRAWTEXTPARAMS drawTextParams = wg.GetTextMargins(font);
             currentCachedInfo.LeftTextMargin = drawTextParams.iLeftMargin;
             currentCachedInfo.RightTextMargin = drawTextParams.iRightMargin;
-            
+
             // returning a copy here to be consistent with the return value from the cache.
             return new IntNativeMethods.DRAWTEXTPARAMS(currentCachedInfo.LeftTextMargin,currentCachedInfo.RightTextMargin);
-            
+
        }
 
         internal static void ResetIfIsMeasurementDC(IntPtr hdc) {
-           WindowsGraphics sharedGraphics = WindowsGraphicsCacheManager.GetCurrentMeasurementGraphics();           
-           if (sharedGraphics != null && sharedGraphics.DeviceContext != null && sharedGraphics.DeviceContext.Hdc == hdc) {            
+           WindowsGraphics sharedGraphics = WindowsGraphicsCacheManager.GetCurrentMeasurementGraphics();
+           if (sharedGraphics != null && sharedGraphics.DeviceContext != null && sharedGraphics.DeviceContext.Hdc == hdc) {
                CachedInfo currentCachedInfo = cachedMeasurementDCInfo;
-               if (currentCachedInfo != null) 
+               if (currentCachedInfo != null)
                {
                     currentCachedInfo.UpdateFont(null);
-               }                
+               }
            }
        }
        /// Reset
        ///  clear the current cached information about the measurement dc.
        internal static void Reset() {
            CachedInfo currentCachedInfo = cachedMeasurementDCInfo;
-           if (currentCachedInfo != null) 
+           if (currentCachedInfo != null)
            {
                 currentCachedInfo.UpdateFont(null);
-           }                
+           }
        }
        /// CachedInfo
        ///  store all the thread statics together so we dont have to fetch individual fields out of TLS
-       private sealed class CachedInfo 
+       private sealed class CachedInfo
        {
             public WindowsFont LastUsedFont;
-            public int LeftTextMargin;            
+            public int LeftTextMargin;
             public int RightTextMargin;
-            
-            internal void UpdateFont(WindowsFont font) 
+
+            internal void UpdateFont(WindowsFont font)
             {
-                if (LastUsedFont != font) 
+                if (LastUsedFont != font)
                 {
                     LastUsedFont = font;
                     LeftTextMargin = -1;
-                    RightTextMargin = -1;                    
+                    RightTextMargin = -1;
                 }
             }
        }

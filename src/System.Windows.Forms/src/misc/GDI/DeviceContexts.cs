@@ -34,13 +34,13 @@ namespace System.Experimental.Gdi
 #endif
     static class DeviceContexts
     {
-        [ThreadStatic] 
+        [ThreadStatic]
         private static ClientUtils.WeakRefCollection activeDeviceContexts;
 
         /// <devdoc>
         /// WindowsGraphicsCacheManager needs to track DeviceContext
-        /// objects so it can ask them if a font is in use before they 
-        /// it's deleted.  
+        /// objects so it can ask them if a font is in use before they
+        /// it's deleted.
         internal static void AddDeviceContext(DeviceContext dc) {
             if (activeDeviceContexts == null) {
                 activeDeviceContexts = new ClientUtils.WeakRefCollection();
@@ -63,7 +63,7 @@ namespace System.Experimental.Gdi
                 RemoveDeviceContext(dc);
             }
         }
-        
+
         internal static void RemoveDeviceContext(DeviceContext dc) {
             if (activeDeviceContexts == null) {
                 return;
@@ -76,7 +76,7 @@ namespace System.Experimental.Gdi
             if (wf == null) {
                 return false;
             }
-            
+
             for (int i = 0; i < activeDeviceContexts.Count; i++) {
                 DeviceContext dc = activeDeviceContexts[i] as DeviceContext;
                 if (dc != null && (dc.ActiveFont == wf || dc.IsFontOnContextStack(wf))) {
@@ -87,6 +87,6 @@ namespace System.Experimental.Gdi
             return false;
         }
  #endif
- 
+
     }
 }

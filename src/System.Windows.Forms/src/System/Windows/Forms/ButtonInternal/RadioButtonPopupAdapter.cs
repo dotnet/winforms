@@ -26,9 +26,9 @@ namespace System.Windows.Forms.ButtonInternal {
                 LayoutData layout = Layout(e).Layout();
 
                 PaintButtonBackground(e, Control.ClientRectangle, null);
-                
+
                 PaintImage(e, layout);
-                
+
                 DrawCheckBackgroundFlat(e, layout.checkBounds, colors.buttonShadow, colors.options.highContrast ? colors.buttonFace : colors.highlight);
                 DrawCheckOnly(e, layout, colors.windowText, colors.highlight, true);
 
@@ -48,9 +48,9 @@ namespace System.Windows.Forms.ButtonInternal {
                 LayoutData layout = Layout(e).Layout();
 
                 PaintButtonBackground(e, Control.ClientRectangle, null);
-                
+
                 PaintImage(e, layout);
-                
+
                 Color checkBackgroundColor = colors.options.highContrast ? colors.buttonFace : colors.highlight;
                 DrawCheckBackground3DLite(e, layout.checkBounds, colors.windowText, checkBackgroundColor, colors, true);
                 DrawCheckOnly(e, layout, colors.windowText, colors.highlight, true);
@@ -71,9 +71,9 @@ namespace System.Windows.Forms.ButtonInternal {
                 LayoutData layout = Layout(e).Layout();
 
                 PaintButtonBackground(e, Control.ClientRectangle, null);
-                
+
                 PaintImage(e, layout);
-                
+
                 DrawCheckBackground3DLite(e, layout.checkBounds, colors.windowText, colors.highlight, colors, true);
                 DrawCheckOnly(e, layout, colors.buttonShadow, colors.highlight, true);
 
@@ -94,7 +94,7 @@ namespace System.Windows.Forms.ButtonInternal {
             if (!Control.MouseIsDown && !Control.MouseIsOver) {
                 layout.shadowedText = true;
             }
-            
+
             return layout;
         }
 

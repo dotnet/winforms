@@ -31,7 +31,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
                     if (NativeMethods.S_OK == catObj.MapPropertyToCategory(dispid, ref categoryID)) {
                         string categoryName = null;
-                        
+
                         switch (categoryID) {
                             case NativeMethods.ActiveX.PROPCAT_Nil:
                                 return "";
@@ -56,7 +56,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                             case NativeMethods.ActiveX.PROPCAT_DDE:
                                 return SR.PropertyCategoryDDE;
                         }
-                        
+
                         if (NativeMethods.S_OK == catObj.GetCategoryName(categoryID, CultureInfo.CurrentCulture.LCID, out categoryName)) {
                             return categoryName;
                         }

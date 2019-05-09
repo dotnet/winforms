@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Layout {
     using System.Drawing.Text;
     using System.Runtime.InteropServices;
     using System.Windows.Forms;
-    using System.Windows.Forms.ComponentModel;    
+    using System.Windows.Forms.ComponentModel;
     using System.Collections.Generic;
 
     // Utilities used by layout code.  If you use these outside of the layout
@@ -20,9 +20,9 @@ namespace System.Windows.Forms.Layout {
 
         public static readonly Size MaxSize = new Size(int.MaxValue, int.MaxValue);
         public static readonly Size InvalidSize = new Size(int.MinValue, int.MinValue);
-        
+
         public static readonly Rectangle MaxRectangle = new Rectangle(0, 0, int.MaxValue, int.MaxValue);
-        
+
         public const ContentAlignment AnyTop = ContentAlignment.TopLeft | ContentAlignment.TopCenter | ContentAlignment.TopRight;
         public const ContentAlignment AnyBottom = ContentAlignment.BottomLeft | ContentAlignment.BottomCenter | ContentAlignment.BottomRight;
         public const ContentAlignment AnyLeft = ContentAlignment.TopLeft | ContentAlignment.MiddleLeft | ContentAlignment.BottomLeft;
@@ -41,7 +41,7 @@ namespace System.Windows.Forms.Layout {
             /* Right  */ AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom,
             /* Fill   */ AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left
         };
-        
+
         // A good, short test string for measuring control height.
         public readonly static string TestString = "j^";
 
@@ -61,7 +61,7 @@ namespace System.Windows.Forms.Layout {
         }
 
 
-                
+
         /*
          *  We can cut ContentAlignment from a max index of 1024 (12b) down to 11 (4b) through
          *  bit twiddling.  The int result of this function maps to the ContentAlignment as indicated
@@ -159,7 +159,7 @@ namespace System.Windows.Forms.Layout {
             if (anchor == AnchorStyles.None){
                 return result;
             }
-            
+
             // iterate through T,B,L,R
             // bitwise or      B,T,R,L as appropriate
             for (int i = 1; i <= (int)AnchorStyles.Right; i=i <<1) {
@@ -241,7 +241,7 @@ namespace System.Windows.Forms.Layout {
             }
             return DefaultLayout.GetAnchor(element);
         }
-        
+
         public static Rectangle AlignAndStretch(Size fitThis, Rectangle withinThis, AnchorStyles anchorStyles) {
             return Align(Stretch(fitThis, withinThis.Size, anchorStyles), withinThis, anchorStyles);
         }
@@ -262,7 +262,7 @@ namespace System.Windows.Forms.Layout {
                 withinThis.X += (withinThis.Width - alignThis.Width) / 2;
             }
             withinThis.Width = alignThis.Width;
-        
+
             return withinThis;
         }
 
@@ -274,7 +274,7 @@ namespace System.Windows.Forms.Layout {
                 withinThis.X += (withinThis.Width - alignThis.Width) / 2;
             }
             withinThis.Width = alignThis.Width;
-        
+
             return withinThis;
         }
 
@@ -285,9 +285,9 @@ namespace System.Windows.Forms.Layout {
             else if (anchorStyles == AnchorStyles.None || (anchorStyles & VerticalAnchorStyles) == 0) {
                 withinThis.Y += (withinThis.Height - alignThis.Height) / 2;
             }
-        
+
             withinThis.Height = alignThis.Height;
-        
+
             return withinThis;
         }
 
@@ -298,9 +298,9 @@ namespace System.Windows.Forms.Layout {
             else if ((align & AnyMiddle) != 0) {
                 withinThis.Y += (withinThis.Height - alignThis.Height) / 2;
             }
-        
+
             withinThis.Height = alignThis.Height;
-        
+
             return withinThis;
         }
 
@@ -317,7 +317,7 @@ namespace System.Windows.Forms.Layout {
             }
             return stretchedSize;
         }
-     
+
         public static Rectangle InflateRect(Rectangle rect, Padding padding) {
             rect.X -= padding.Left;
             rect.Y -= padding.Top;
@@ -348,7 +348,7 @@ namespace System.Windows.Forms.Layout {
             }
             return currentSize;
         }
-        
+
         public static Padding FlipPadding(Padding padding) {
             // If Padding.All != -1, then TLRB are all the same and there is no work to be done.
             if(padding.All != -1) {
@@ -357,7 +357,7 @@ namespace System.Windows.Forms.Layout {
 
             // Padding is a stuct (passed by value, no need to make a copy)
             int temp;
-            
+
             temp = padding.Top;
             padding.Top = padding.Left;
             padding.Left = temp;
@@ -408,7 +408,7 @@ namespace System.Windows.Forms.Layout {
         public static bool IsHorizontalRelation(TextImageRelation relation) {
             return (relation & (TextImageRelation.TextBeforeImage | TextImageRelation.ImageBeforeText)) != 0;
         }
-        
+
         public static bool IsVerticalAlignment(ContentAlignment align) {
             Debug.Assert(align != ContentAlignment.MiddleCenter, "Result is ambiguous with an alignment of MiddleCenter.");
             return (align & (ContentAlignment.TopCenter | ContentAlignment.BottomCenter)) != 0;
@@ -430,7 +430,7 @@ namespace System.Windows.Forms.Layout {
         public static bool AreWidthAndHeightLarger(Size size1, Size size2){
             return ((size1.Width >= size2.Width) && (size1.Height >= size2.Height));
         }
-        
+
         public static void SplitRegion(Rectangle bounds, Size specifiedContent, AnchorStyles region1Align, out Rectangle region1, out Rectangle region2) {
             region1 = region2 = bounds;
             switch(region1Align) {
@@ -496,7 +496,7 @@ namespace System.Windows.Forms.Layout {
         public static Size SubAlignedRegion(Size currentSize, Size contentSize, TextImageRelation relation) {
             return SubAlignedRegionCore(currentSize, contentSize, IsVerticalRelation(relation));
         }
-        
+
         public static Size SubAlignedRegionCore(Size currentSize, Size contentSize, bool vertical) {
             if(vertical) {
                 currentSize.Height -= contentSize.Height;
@@ -504,7 +504,7 @@ namespace System.Windows.Forms.Layout {
                 currentSize.Width -= contentSize.Width;
             }
             return currentSize;
-        }        
+        }
 
         private static Rectangle SubstituteSpecifiedBounds(Rectangle originalBounds, Rectangle substitutionBounds, AnchorStyles specified) {
             int left = (specified & AnchorStyles.Left) != 0 ? substitutionBounds.Left : originalBounds.Left;
@@ -522,16 +522,16 @@ namespace System.Windows.Forms.Layout {
             return bounds;
         }
 
-        /// MeasureTextCache       
+        /// MeasureTextCache
         /// 3000 character strings take 9 seconds to load the form
         public sealed class MeasureTextCache {
               private Size unconstrainedPreferredSize = LayoutUtils.InvalidSize;
               private const int MaxCacheSize = 6;           // the number of preferred sizes to store
               private int nextCacheEntry = -1;              // the next place in the ring buffer to store a preferred size
-        
+
               private PreferredSizeCache[] sizeCacheList;   // MRU of size MaxCacheSize
 
-              
+
               /// InvalidateCache
               /// Clears out the cached values, should be called whenever Text, Font or a TextFormatFlag has changed
               public void InvalidateCache() {
@@ -543,27 +543,27 @@ namespace System.Windows.Forms.Layout {
               /// GetTextSize
               /// Given constraints, format flags a font and text, determine the size of the string
               /// employs an MRU of the last several constraints passed in via a ring-buffer of size MaxCacheSize.
-              /// Assumes Text and TextFormatFlags are the same, if either were to change, a call to 
+              /// Assumes Text and TextFormatFlags are the same, if either were to change, a call to
               /// InvalidateCache should be made
               public Size GetTextSize(string text, Font font, Size proposedConstraints, TextFormatFlags flags) {
 
-                  
+
                   if (!TextRequiresWordBreak(text, font, proposedConstraints, flags)) {
                       // Text fits within proposed width
-                      
+
                       // IF we're here, this means we've got text that can fit into the proposedConstraints
-                      // without wrapping.  We've determined this because our 
-                      
-                      // as a side effect of calling TextRequiresWordBreak, 
+                      // without wrapping.  We've determined this because our
+
+                      // as a side effect of calling TextRequiresWordBreak,
                       // unconstrainedPreferredSize is set.
                       return unconstrainedPreferredSize;
                   }
                   else {
                       // Text does NOT fit within proposed width - requires WordBreak
 
-                      // IF we're here, this means that the wrapping width is smaller 
+                      // IF we're here, this means that the wrapping width is smaller
                       // than our max width.  For example: we measure the text with infinite
-                      // bounding box and we determine the width to fit all the characters 
+                      // bounding box and we determine the width to fit all the characters
                       // to be 200 px wide.  We would come here only for proposed widths less
                       // than 200 px.
 
@@ -575,21 +575,21 @@ namespace System.Windows.Forms.Layout {
 
                       // check the existing constraints from previous calls
                       foreach (PreferredSizeCache sizeCache in sizeCacheList) {
-                        
+
                           if (sizeCache.ConstrainingSize == proposedConstraints) {
                               return sizeCache.PreferredSize;
                           }
-                          else if ((sizeCache.ConstrainingSize.Width == proposedConstraints.Width) 
+                          else if ((sizeCache.ConstrainingSize.Width == proposedConstraints.Width)
                                     && (sizeCache.PreferredSize.Height <= proposedConstraints.Height)) {
-                                
-                              // Caching a common case where the width matches perfectly, and the stored preferred height 
-                              // is smaller or equal to the constraining size.                             
+
+                              // Caching a common case where the width matches perfectly, and the stored preferred height
+                              // is smaller or equal to the constraining size.
                               //        prefSize = GetPreferredSize(w,Int32.MaxValue);
                               //        prefSize = GetPreferredSize(w,prefSize.Height);
 
                               return sizeCache.PreferredSize;
                           }
-                          // 
+                          //
                       }
 
                       // if we've gotten here, it means we dont have a cache entry, therefore
@@ -599,15 +599,15 @@ namespace System.Windows.Forms.Layout {
                       sizeCacheList[nextCacheEntry] = new PreferredSizeCache(proposedConstraints, prefSize);
 
                       return prefSize;
-                      
+
                   }
-        
+
               }
 
               /// GetUnconstrainedSize
               /// Gets the unconstrained (Int32.MaxValue, Int32.MaxValue) size for a piece of text
-              private Size GetUnconstrainedSize(string text, Font font, TextFormatFlags flags) {                
-              
+              private Size GetUnconstrainedSize(string text, Font font, TextFormatFlags flags) {
+
                   if (unconstrainedPreferredSize == LayoutUtils.InvalidSize) {
                       // we also investigated setting the SingleLine flag, however this did not yield as much benefit as the word break
                       // and had possibility of causing internationalization issues.
@@ -630,21 +630,21 @@ namespace System.Windows.Forms.Layout {
                   // we need the word break flag, otherwise we dont, its a perf hit to use it.
                   return GetUnconstrainedSize(text, font, flags).Width > size.Width;
               }
- 
+
               private struct PreferredSizeCache {
                   public PreferredSizeCache(Size constrainingSize, Size preferredSize) {
                      this.ConstrainingSize = constrainingSize;
                      this.PreferredSize = preferredSize;
                   }
                   public Size ConstrainingSize;
-                  public Size PreferredSize; 
+                  public Size PreferredSize;
                }
-        
+
           }
 
 
     }
-  
+
     // Frequently when you need to do a PreformLayout, you also need to invalidate the
     // PreferredSizeCache (you are laying out because you know that the action has changed
     // the PreferredSize of the control and/or its container).  LayoutTransaction wraps both
@@ -677,7 +677,7 @@ namespace System.Windows.Forms.Layout {
         public LayoutTransaction(Control controlToLayout, IArrangedElement controlCausingLayout, string property, bool resumeLayout) {
             CommonProperties.xClearPreferredSizeCache(controlCausingLayout);
             _controlToLayout = controlToLayout;
-            
+
             _resumeLayout = resumeLayout;
             if(_controlToLayout != null) {
 #if DEBUG
@@ -689,7 +689,7 @@ namespace System.Windows.Forms.Layout {
                 // Same effect as calling performLayout on Dispose but then we would have to keep
                 // controlCausingLayout and property around as state.
                 if (resumeLayout) {
-                    _controlToLayout.PerformLayout(new LayoutEventArgs(controlCausingLayout, property));    
+                    _controlToLayout.PerformLayout(new LayoutEventArgs(controlCausingLayout, property));
                 }
             }
         }
@@ -725,11 +725,11 @@ namespace System.Windows.Forms.Layout {
                 if(elementToLayout != null) {
                     CommonProperties.xClearPreferredSizeCache(elementToLayout);
                     elementToLayout.PerformLayout(elementCausingLayout, property);
-                   
+
                 }
             }
             Debug.Assert(elementCausingLayout != null, "LayoutTransaction.DoLayout - elementCausingLayout is null, no layout performed - did you mix up your parameters?");
-       
+
         }
 
 
@@ -746,7 +746,7 @@ namespace System.Windows.Forms.Layout {
                 LayoutTransaction.DoLayout(elementToLayout, elementCausingLayout, property);
             }
         }
-           
+
     }
     internal struct NullLayoutTransaction : IDisposable {
          public void Dispose() {

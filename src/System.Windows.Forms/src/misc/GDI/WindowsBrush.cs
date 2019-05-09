@@ -34,7 +34,7 @@ namespace System.Experimental.Gdi
     abstract class WindowsBrush : MarshalByRefObject, ICloneable, IDisposable
     {
         // Handle to the native Windows brush object.
-        // 
+        //
         private  DeviceContext dc;
         private IntPtr nativeHandle;        // Cannot be protected because the class is internal (C# doesn't allow it).
         private Color color = Color.White;  // GDI brushes have just one color as opposed to GDI+ that can have background color.
@@ -52,13 +52,13 @@ namespace System.Experimental.Gdi
         ///     Parameterless constructor to use default color.
         ///     Notice that the actual object construction is done in the derived classes.
         /// </devdoc>
-        
+
         public WindowsBrush(DeviceContext dc)
         {
             this.dc = dc;
         }
 
-        
+
         public WindowsBrush(DeviceContext dc, Color color)
         {
             this.dc = dc;
@@ -88,7 +88,7 @@ namespace System.Experimental.Gdi
                 DbgUtil.AssertFinalization(this, disposing);
 
                 dc.DeleteObject(this.nativeHandle, GdiObjectType.Brush);
-                
+
                 this.nativeHandle = IntPtr.Zero;
             }
 
@@ -112,7 +112,7 @@ namespace System.Experimental.Gdi
         protected IntPtr NativeHandle
         {
             get
-            { 
+            {
                 if( this.nativeHandle == IntPtr.Zero )
                 {
                     CreateBrush();
@@ -120,9 +120,9 @@ namespace System.Experimental.Gdi
 
                 return this.nativeHandle;
             }
-        
+
             set
-            { 
+            {
                 Debug.Assert(this.nativeHandle == IntPtr.Zero, "WindowsBrush object is immutable");
                 Debug.Assert(value != IntPtr.Zero, "WARNING: assigning IntPtr.Zero to the nativeHandle object.");
 
@@ -136,8 +136,8 @@ namespace System.Experimental.Gdi
         ///     Derived classes implement this method to get a native GDI brush wrapper with the same
         ///     properties as this object.
         /// </devdoc>
-        
-        
+
+
         public static WindowsBrush FromBrush(DeviceContext dc, Brush originalBrush)
         {
             if(originalBrush is SolidBrush) {
@@ -156,8 +156,8 @@ namespace System.Experimental.Gdi
         /// <devdoc>
         ///     Creates a WindowsBrush from the DC currently selected HBRUSH
         /// </devdoc>
-        
-        
+
+
         public static WindowsBrush FromDC(DeviceContext dc)
         {
             IntPtr hBrush = IntUnsafeNativeMethods.GetCurrentObject(new HandleRef(null, dc.Hdc), IntNativeMethods.OBJ_BRUSH);
@@ -172,8 +172,8 @@ namespace System.Experimental.Gdi
         /// <devdoc>
         ///     Creates a WindowsBrush from a LOGBRUSH.
         /// </devdoc>
-        
-        
+
+
         public static WindowsBrush FromLogBrush( DeviceContext dc, IntNativeMethods.LOGBRUSH logBrush )
         {
             Debug.Assert( logBrush != null, "logBrush is null" );
@@ -200,7 +200,7 @@ namespace System.Experimental.Gdi
         ///    </para>
         /// </devdoc>
         public IntPtr HBrush
-        { 
+        {
             get
             {
                 return this.NativeHandle;

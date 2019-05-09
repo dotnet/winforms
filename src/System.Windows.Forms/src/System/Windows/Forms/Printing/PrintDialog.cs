@@ -21,7 +21,7 @@ namespace System.Windows.Forms {
     [Designer("System.Windows.Forms.Design.PrintDialogDesigner, " + AssemblyRef.SystemDesign)]
     // The only event this dialog has is HelpRequested, which isn't very useful
     public sealed class PrintDialog : CommonDialog {
-        private const int printRangeMask = (int) (PrintRange.AllPages | PrintRange.SomePages 
+        private const int printRangeMask = (int) (PrintRange.AllPages | PrintRange.SomePages
                                                   | PrintRange.Selection | PrintRange.CurrentPage);
 
         // If PrintDocument != null, settings == printDocument.PrinterSettings
@@ -45,7 +45,7 @@ namespace System.Windows.Forms {
             Reset();
         }
 
-        
+
         /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the Current Page option button is enabled.
@@ -59,7 +59,7 @@ namespace System.Windows.Forms {
             get { return allowCurrentPage;}
             set { allowCurrentPage = value;}
         }
-        
+
 
         /// <devdoc>
         ///    <para>
@@ -67,7 +67,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         SRDescription(nameof(SR.PDallowPagesDescr))
         ]
@@ -80,7 +80,7 @@ namespace System.Windows.Forms {
         ///    <para>Gets or sets a value indicating whether the Print to file check box is enabled.</para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         SRDescription(nameof(SR.PDallowPrintToFileDescr))
         ]
@@ -95,7 +95,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         SRDescription(nameof(SR.PDallowSelectionDescr))
         ]
@@ -110,13 +110,13 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatData)), 
+        SRCategory(nameof(SR.CatData)),
         DefaultValue(null),
         SRDescription(nameof(SR.PDdocumentDescr))
         ]
         public PrintDocument Document {
             get { return printDocument;}
-            set { 
+            set {
                 printDocument = value;
                 if (printDocument == null)
                     settings = new PrinterSettings();
@@ -141,7 +141,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatData)), 
+        SRCategory(nameof(SR.CatData)),
         DefaultValue(null),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -149,7 +149,7 @@ namespace System.Windows.Forms {
         ]
         public PrinterSettings PrinterSettings {
             get {
-                
+
                 if (settings == null)
                 {
                     settings = new PrinterSettings();
@@ -169,7 +169,7 @@ namespace System.Windows.Forms {
         ///    <para>Gets or sets a value indicating whether the Print to file check box is checked.</para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         SRDescription(nameof(SR.PDprintToFileDescr))
         ]
@@ -184,7 +184,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         SRDescription(nameof(SR.PDshowHelpDescr))
         ]
@@ -199,7 +199,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         SRDescription(nameof(SR.PDshowNetworkDescr))
         ]
@@ -211,7 +211,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// UseEXDialog = true means to use the EX versions of the dialogs and to ignore the
-        /// ShowHelp & ShowNetwork properties. 
+        /// ShowHelp & ShowNetwork properties.
         /// UseEXDialog = false means to never use the EX versions of the dialog.
         /// ShowHelp & ShowNetwork will work in this case.
         /// </summary>
@@ -414,7 +414,7 @@ namespace System.Windows.Forms {
 
                 // When the flag PD_USEDEVMODECOPIESANDCOLLATE is not set,
                 // PRINTDLG.nCopies or PRINTDLG.nCopies indicates the number of copies the user wants
-                // to print, and the PD_COLLATE flag in the Flags member indicates 
+                // to print, and the PD_COLLATE flag in the Flags member indicates
                 // whether the user wants to print them collated.
                 if ((data.Flags & NativeMethods.PD_USEDEVMODECOPIESANDCOLLATE) == 0)
                 {
@@ -480,7 +480,7 @@ namespace System.Windows.Forms {
                 // The flags NativeMethods.PD_SHOWHELP and NativeMethods.PD_NONETWORKBUTTON don't work with
                 // PrintDlgEx. So we have to strip them out.
                 data.Flags &= ~(NativeMethods.PD_SHOWHELP | NativeMethods.PD_NONETWORKBUTTON);
- 
+
                 int hr = UnsafeNativeMethods.PrintDlgEx(data);
                 if (NativeMethods.Failed(hr) || data.dwResultAction == NativeMethods.PD_RESULT_CANCEL) {
                     return false;
@@ -501,7 +501,7 @@ namespace System.Windows.Forms {
 
                 // When the flag PD_USEDEVMODECOPIESANDCOLLATE is not set,
                 // PRINTDLG.nCopies or PRINTDLG.nCopies indicates the number of copies the user wants
-                // to print, and the PD_COLLATE flag in the Flags member indicates 
+                // to print, and the PD_COLLATE flag in the Flags member indicates
                 // whether the user wants to print them collated.
                 if ((data.Flags & NativeMethods.PD_USEDEVMODECOPIESANDCOLLATE) == 0)
                 {

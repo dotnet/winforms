@@ -425,8 +425,8 @@ namespace System.Windows.Forms
                 // If the control is being inherited, then get the properties for
                 // the control's type rather than for the control itself.  Getting
                 // properties for the control will merge the control's properties with
-                // those of its designer.  Normally we want that, but for 
-                // inherited controls we don't because an inherited control should 
+                // those of its designer.  Normally we want that, but for
+                // inherited controls we don't because an inherited control should
                 // "act" like a runtime control.
                 InheritanceAttribute attr = (InheritanceAttribute)TypeDescriptor.GetAttributes(_control)[typeof(InheritanceAttribute)];
                 if (attr != null && attr.InheritanceLevel != InheritanceLevel.NotInherited)
@@ -522,7 +522,7 @@ namespace System.Windows.Forms
             {
                 return DataSourceNullValue;
             }
-             
+
             return _propInfo.GetValue(_control) ?? DataSourceNullValue;
         }
 

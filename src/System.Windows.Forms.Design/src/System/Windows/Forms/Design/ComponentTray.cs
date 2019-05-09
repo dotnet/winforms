@@ -627,7 +627,7 @@ namespace System.Windows.Forms.Design
         }
 
         bool ISelectionUIHandler.QueryBeginDrag(object[] components, SelectionRules rules, int initialX, int initialY) => DragHandler.QueryBeginDrag(components, rules, initialX, initialY);
-        
+
         void ISelectionUIHandler.ShowContextMenu(IComponent component)
         {
             Point cur = Control.MousePosition;
@@ -658,7 +658,7 @@ namespace System.Windows.Forms.Design
         }
 
         void ISelectionUIHandler.OleDragEnter(DragEventArgs de) => GetOleDragHandler().DoOleDragEnter(de);
-        
+
         void ISelectionUIHandler.OleDragDrop(DragEventArgs de) => GetOleDragHandler().DoOleDragDrop(de);
 
         void ISelectionUIHandler.OleDragOver(DragEventArgs de) => GetOleDragHandler().DoOleDragOver(de);
@@ -1427,7 +1427,7 @@ namespace System.Windows.Forms.Design
             // Now, if we have a selection, paint it
             if (selectedObjects != null)
             {
-                bool first = true;//indicates the first iteration of our foreach loop  
+                bool first = true;//indicates the first iteration of our foreach loop
                 HatchBrush selectionBorderBrush;
                 if (SystemInformation.HighContrast)
                 {

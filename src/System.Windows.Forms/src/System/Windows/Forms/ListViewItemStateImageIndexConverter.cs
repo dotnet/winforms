@@ -22,7 +22,7 @@ namespace System.Windows.Forms {
             get {
                 return false;
             }
-        }                                
+        }
 
 
         /// <devdoc>
@@ -37,13 +37,13 @@ namespace System.Windows.Forms {
 
                 ImageList imageList = null;
 
-                PropertyDescriptorCollection listViewItemProps = TypeDescriptor.GetProperties(instance);  
+                PropertyDescriptorCollection listViewItemProps = TypeDescriptor.GetProperties(instance);
                 PropertyDescriptor listViewProp = listViewItemProps["ListView"];
 
                  if (listViewProp != null) {
                         // Grab the ListView property off of the TreeNode.
                         object listViewInstance = listViewProp.GetValue(instance);
-                        
+
                         if (listViewInstance != null) {
                             // Get the ImageList property from the ListView and set it to be the currentImageList.
                             PropertyDescriptorCollection listViewProps = TypeDescriptor.GetProperties(listViewInstance);
@@ -52,10 +52,10 @@ namespace System.Windows.Forms {
                                 imageList = (ImageList)listViewImageListProperty.GetValue(listViewInstance);
                             }
                         }
-                 }    
-                
+                 }
+
                 if (imageList != null) {
-                    
+
                     // Create array to contain standard values
                     //
                     object[] values;
@@ -67,17 +67,17 @@ namespace System.Windows.Forms {
                     else {
                         values = new object[nImages];
                     }
-                    
-                    
+
+
                     // Fill in the array
                     //
                     for (int i = 0; i < nImages; i++) {
                         values[i] = i;
                     }
-                    
+
                     return new StandardValuesCollection(values);
                 }
-        
+
             }
             if (IncludeNoneAsStandardValue) {
                 return new StandardValuesCollection(new object[] {-1});
@@ -85,9 +85,9 @@ namespace System.Windows.Forms {
             else {
                 return new StandardValuesCollection(new object[0]);
             }
-            
+
         }
 
-        
+
     }
 }

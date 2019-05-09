@@ -13,7 +13,7 @@ namespace System.Windows.Forms.ButtonInternal {
     using System.Windows.Forms;
     using System.Windows.Forms.Layout;
     using System.Diagnostics.CodeAnalysis;
-    
+
     internal class ButtonFlatAdapter : ButtonBaseAdapter {
 
         private const int BORDERSIZE = 1;
@@ -30,7 +30,7 @@ namespace System.Windows.Forms.ButtonInternal {
             bool hasCustomBorder = (Control.FlatAppearance.BorderSize != BORDERSIZE || !Control.FlatAppearance.BorderColor.IsEmpty);
 
             ColorData colors = PaintFlatRender(e.Graphics).Calculate();
-            LayoutData layout = PaintFlatLayout(e, 
+            LayoutData layout = PaintFlatLayout(e,
                 !Control.FlatAppearance.CheckedBackColor.IsEmpty || (SystemInformation.HighContrast ? state != CheckState.Indeterminate : state == CheckState.Unchecked),
                 !hasCustomBorder && SystemInformation.HighContrast && state == CheckState.Checked,
                 Control.FlatAppearance.BorderSize).Layout();
@@ -40,7 +40,7 @@ namespace System.Windows.Forms.ButtonInternal {
             if (!Control.FlatAppearance.BorderColor.IsEmpty) {
                 colors.windowFrame = Control.FlatAppearance.BorderColor;
             }
-            
+
             Graphics g = e.Graphics;
             //Region original = g.Clip;
 
@@ -90,7 +90,7 @@ namespace System.Windows.Forms.ButtonInternal {
             //Always check if the BorderSize is not the default.If not, we need to paint with the BorderSize set by the user.
             if (hasCustomBorder) {
                 if (Control.FlatAppearance.BorderSize != BORDERSIZE) {
-                    DrawFlatBorderWithSize(g, r, colors.windowFrame, Control.FlatAppearance.BorderSize); 
+                    DrawFlatBorderWithSize(g, r, colors.windowFrame, Control.FlatAppearance.BorderSize);
                 }
                 else {
                     DrawFlatBorder(g, r, colors.windowFrame);
@@ -112,7 +112,7 @@ namespace System.Windows.Forms.ButtonInternal {
             bool hasCustomBorder = (Control.FlatAppearance.BorderSize != BORDERSIZE || !Control.FlatAppearance.BorderColor.IsEmpty);
 
             ColorData colors = PaintFlatRender(e.Graphics).Calculate();
-            LayoutData layout = PaintFlatLayout(e, 
+            LayoutData layout = PaintFlatLayout(e,
                 !Control.FlatAppearance.CheckedBackColor.IsEmpty || (SystemInformation.HighContrast ? state != CheckState.Indeterminate : state == CheckState.Unchecked),
                 !hasCustomBorder && SystemInformation.HighContrast && state == CheckState.Checked,
                 Control.FlatAppearance.BorderSize).Layout();
@@ -121,7 +121,7 @@ namespace System.Windows.Forms.ButtonInternal {
             if (!Control.FlatAppearance.BorderColor.IsEmpty) {
                 colors.windowFrame = Control.FlatAppearance.BorderColor;
             }
-            
+
             Graphics g = e.Graphics;
             //Region original = g.Clip;
 
@@ -164,7 +164,7 @@ namespace System.Windows.Forms.ButtonInternal {
             //Always check if the BorderSize is not the default.If not, we need to paint with the BorderSize set by the user.
             if (hasCustomBorder) {
                 if (Control.FlatAppearance.BorderSize != BORDERSIZE) {
-                    DrawFlatBorderWithSize(g, r, colors.windowFrame, Control.FlatAppearance.BorderSize); 
+                    DrawFlatBorderWithSize(g, r, colors.windowFrame, Control.FlatAppearance.BorderSize);
                 }
                 else {
                     DrawFlatBorder(g, r, colors.windowFrame);
@@ -181,7 +181,7 @@ namespace System.Windows.Forms.ButtonInternal {
                 DrawFlatBorder(g, r, colors.windowFrame);
             }
         }
-        
+
         internal override void PaintOver(PaintEventArgs e, CheckState state) {
             if (SystemInformation.HighContrast) {
                 PaintUp(e, state);
@@ -200,7 +200,7 @@ namespace System.Windows.Forms.ButtonInternal {
                 if (!Control.FlatAppearance.BorderColor.IsEmpty) {
                     colors.windowFrame = Control.FlatAppearance.BorderColor;
                 }
-                
+
                 Graphics g = e.Graphics;
                 //Region original = g.Clip;
 
@@ -248,7 +248,7 @@ namespace System.Windows.Forms.ButtonInternal {
                 //Always check if the BorderSize is not the default.If not, we need to paint with the BorderSize set by the user.
                 if (hasCustomBorder) {
                     if (Control.FlatAppearance.BorderSize != BORDERSIZE) {
-                        DrawFlatBorderWithSize(g, r, colors.windowFrame, Control.FlatAppearance.BorderSize); 
+                        DrawFlatBorderWithSize(g, r, colors.windowFrame, Control.FlatAppearance.BorderSize);
                     }
                     else {
                         DrawFlatBorder(g, r, colors.windowFrame);
@@ -278,9 +278,9 @@ namespace System.Windows.Forms.ButtonInternal {
 #endif
             return layout;
         }
-        
 
-        // used by DataGridViewButtonCell        
+
+        // used by DataGridViewButtonCell
         [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]  // removed graphics, may have to put it back
         internal static LayoutOptions PaintFlatLayout(Graphics g, bool up, bool check, int borderSize, Rectangle clientRectangle, Padding padding,
                                                       bool isDefault, Font font, string text, bool enabled, ContentAlignment textAlign, RightToLeft rtl)

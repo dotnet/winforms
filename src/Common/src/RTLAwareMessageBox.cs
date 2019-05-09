@@ -17,7 +17,7 @@ namespace System.Windows.Forms {
         ///       Displays a message box with specified text, caption, and style.
         ///       Makes the dialog RTL if the resources for this dll have been localized to a RTL language.
         /// </summary>
-        public static DialogResult Show(IWin32Window owner, string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, 
+        public static DialogResult Show(IWin32Window owner, string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon,
                                         MessageBoxDefaultButton defaultButton, MessageBoxOptions options) {
             if (RTLAwareMessageBox.IsRTLResources) {
                 options |= (MessageBoxOptions.RightAlign | MessageBoxOptions.RtlReading);

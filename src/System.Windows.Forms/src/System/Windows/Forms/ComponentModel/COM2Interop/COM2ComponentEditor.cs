@@ -8,13 +8,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
-    using System;    
+    using System;
     using System.Collections;
     using Microsoft.Win32;
     using System.Windows.Forms.Design;
 
     internal class Com2ComponentEditor : WindowsFormsComponentEditor {
-    
+
         public static bool NeedsComponentEditor(object obj) {
             if (obj is NativeMethods.IPerPropertyBrowsing) {
                  // check for a property page
@@ -24,7 +24,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                      return true;
                  }
             }
-            
+
             if (obj is NativeMethods.ISpecifyPropertyPages) {
                  try {
                     NativeMethods.tagCAUUID uuids = new NativeMethods.tagCAUUID();
@@ -42,19 +42,19 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                  }
                  catch {
                  }
-                 
+
                  return false;
             }
             return false;
         }
-    
+
         [
             SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // This was shipped in Everett.
         ]
         public override bool EditComponent(ITypeDescriptorContext context, object obj, IWin32Window parent) {
-        
+
                 IntPtr handle = (parent == null ? IntPtr.Zero : parent.Handle);
-        
+
                 // try to get the page guid
                 if (obj is NativeMethods.IPerPropertyBrowsing) {
                     // check for a property page
@@ -67,8 +67,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                             return true;
                         }
                     }
-                } 
-                
+                }
+
                 if (obj is NativeMethods.ISpecifyPropertyPages) {
                     bool failed = false;
                     Exception failureException;
@@ -94,7 +94,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                                Marshal.FreeCoTaskMem(uuids.pElems);
                            }
                        }
-                  
+
                     }
                     catch (Exception ex1) {
                         failed = true;
@@ -105,7 +105,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     string errString = SR.ErrorPropertyPageFailed;
 
                         IUIService uiSvc = (context != null) ? ((IUIService) context.GetService(typeof(IUIService))) : null;
-                        
+
                         if (uiSvc == null) {
                             RTLAwareMessageBox.Show(null, errString, SR.PropertyGridTitle,
                                     MessageBoxButtons.OK, MessageBoxIcon.Error,

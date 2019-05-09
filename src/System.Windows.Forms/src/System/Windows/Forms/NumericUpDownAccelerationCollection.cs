@@ -9,7 +9,7 @@ namespace System.Windows.Forms
     using System.Collections;
     using System.Collections.Generic;
     using System.ComponentModel;
-    
+
     /// <devdoc>
     ///     Represents a SORTED collection of NumericUpDownAcceleration objects in the NumericUpDown Control.
     ///     The elements in the collection are sorted by the NumericUpDownAcceleration.Seconds property.
@@ -21,7 +21,7 @@ namespace System.Windows.Forms
 
 
         /// ICollection<NumericUpDownAcceleration> implementation.
-        
+
         /// <devdoc>
         ///     Adds an item (NumericUpDownAcceleration object) to the ICollection.
         ///     The item is added preserving the collection sorted.
@@ -70,7 +70,7 @@ namespace System.Windows.Forms
         {
             this.items.CopyTo(array, index);
         }
-        
+
         /// <devdoc>
         ///     Gets the number of elements contained in the ICollection.
         /// </devdoc>
@@ -95,10 +95,10 @@ namespace System.Windows.Forms
         {
             return this.items.Remove(acceleration);
         }
-        
+
         /// IEnumerable<NumericUpDownAcceleration> implementation.
-        
-        
+
+
         /// <devdoc>
         ///     Returns an enumerator that can iterate through the collection.
         /// </devdoc>
@@ -113,7 +113,7 @@ namespace System.Windows.Forms
         }
 
         /// NumericUpDownAccelerationCollection methods.
-        
+
         /// <devdoc>
         ///     Class constructor.
         /// </devdoc>
@@ -150,8 +150,8 @@ namespace System.Windows.Forms
         }
 
         /// <devdoc>
-        ///     Gets (ReadOnly) the element at the specified index. In C#, this property is the indexer for 
-        ///     the IList class. 
+        ///     Gets (ReadOnly) the element at the specified index. In C#, this property is the indexer for
+        ///     the IList class.
         /// </devdoc>
         public NumericUpDownAcceleration this[int index]
         {

@@ -51,8 +51,8 @@ namespace System.Windows.Forms
         /// <summary>
         /// Creates a new AccessibleObject for this ToolStripStatusLabel instance.
         /// The AccessibleObject instance returned by this method supports UIA Live Region feature.
-        /// However the new object is only available in applications that are recompiled to target 
-        /// .NET Framework 4.7.3 or opted into this feature using compatibility switches. 
+        /// However the new object is only available in applications that are recompiled to target
+        /// .NET Framework 4.7.3 or opted into this feature using compatibility switches.
         /// </summary>
         /// <returns>
         /// AccessibleObject for this ToolStripStatusLabel instance.
@@ -91,7 +91,7 @@ namespace System.Windows.Forms
                 return borderStyle;
             }
             set {
-                if (!ClientUtils.IsEnumValid_NotSequential(value, 
+                if (!ClientUtils.IsEnumValid_NotSequential(value,
                                              (int)value,
                                              (int)Border3DStyle.Adjust,
                                              (int)Border3DStyle.Bump,
@@ -106,7 +106,7 @@ namespace System.Windows.Forms
                                                 )) {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Border3DStyle));
                 }
-               
+
                 if (borderStyle != value) {
                     borderStyle = value;
                     Invalidate();
@@ -162,7 +162,7 @@ namespace System.Windows.Forms
                     if (ParentInternal != null) {
                        LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.Spring);
                     }
-                   
+
                 }
             }
         }
@@ -207,7 +207,7 @@ namespace System.Windows.Forms
         }
 
 
-        
+
         /// <devdoc>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
@@ -215,10 +215,10 @@ namespace System.Windows.Forms
 
             if (this.Owner != null) {
                 ToolStripRenderer renderer = this.Renderer;
-                  
+
                 renderer.DrawToolStripStatusLabelBackground(new ToolStripItemRenderEventArgs(e.Graphics, this));
 
-                if ((DisplayStyle & ToolStripItemDisplayStyle.Image) == ToolStripItemDisplayStyle.Image) { 
+                if ((DisplayStyle & ToolStripItemDisplayStyle.Image) == ToolStripItemDisplayStyle.Image) {
                     renderer.DrawItemImage(new ToolStripItemImageRenderEventArgs(e.Graphics, this, InternalLayout.ImageRectangle));
                 }
 
@@ -275,11 +275,11 @@ namespace System.Windows.Forms
                return layoutOptions;
             }
         }
-        
+
     }
 
 }
-    
+
 
 
 

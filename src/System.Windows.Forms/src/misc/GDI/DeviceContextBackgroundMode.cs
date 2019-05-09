@@ -19,7 +19,7 @@ namespace System.Experimental.Gdi
     internal
 #endif
     enum DeviceContextBackgroundMode
-    {   
+    {
         Transparent = 1,
         Opaque = 2
     }

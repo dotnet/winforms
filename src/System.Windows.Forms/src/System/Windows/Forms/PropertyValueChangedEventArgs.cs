@@ -19,7 +19,7 @@ namespace System.Windows.Forms
         }
 
         public GridItem ChangedItem { get; }
-        
+
         public object OldValue { get; }
     }
 }

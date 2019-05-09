@@ -19,13 +19,13 @@ namespace System.Windows.Forms {
     /// </devdoc>
     [Serializable]
     public sealed class ImageListStreamer : ISerializable, IDisposable {
-    
+
         // compressed magic header.  If we see this, the image stream is compressed.
         // (unicode for MSFT).
         //
         private static readonly byte[] HEADER_MAGIC = new byte[] {0x4D, 0x53, 0x46, 0X74};
         private static object internalSyncObject = new object();
-        
+
         private ImageList imageList;
         private ImageList.NativeImageList nativeImageList;
 
@@ -53,7 +53,7 @@ namespace System.Windows.Forms {
                     byte[] dat = (byte[])sie.Value;
                     if (dat != null)
                     {
-                        // We enclose this imagelist handle create in a theming scope.                        
+                        // We enclose this imagelist handle create in a theming scope.
                         IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
 
                         try
@@ -85,52 +85,52 @@ namespace System.Windows.Forms {
                 }
             }
         }
-             
+
         /// <devdoc>
         ///     Compresses the given input, returning a new array that represents
         ///     the compressed data.
         /// </devdoc>
         private byte[] Compress(byte[] input) {
-        
+
             int finalLength = 0;
             int idx = 0;
             int compressedIdx = 0;
-            
+
             while(idx < input.Length) {
-            
+
                 byte current = input[idx++];
                 byte runLength = 1;
-                
+
                 while(idx < input.Length && input[idx] == current && runLength < 0xFF) {
                     runLength++;
                     idx++;
                 }
-                
+
                 finalLength += 2;
             }
-            
+
             byte[] output = new byte[finalLength + HEADER_MAGIC.Length];
-            
+
             Buffer.BlockCopy(HEADER_MAGIC, 0, output, 0, HEADER_MAGIC.Length);
             int idxOffset = HEADER_MAGIC.Length;
             idx = 0;
-            
+
             while(idx < input.Length) {
-            
+
                 byte current = input[idx++];
                 byte runLength = 1;
-                
+
                 while(idx < input.Length && input[idx] == current && runLength < 0xFF) {
                     runLength++;
                     idx++;
                 }
-                
+
                 output[idxOffset + compressedIdx++] = runLength;
                 output[idxOffset + compressedIdx++] = current;
             }
-            
+
             Debug.Assert(idxOffset + compressedIdx == output.Length, "RLE Compression failure in ImageListStreamer -- didn't fill array");
-            
+
             // Validate that our compression routine works
             #if DEBUG
             byte[] debugCompare = Decompress(output);
@@ -143,20 +143,20 @@ namespace System.Windows.Forms {
                 }
             }
             #endif // DEBUG
-            
+
             return output;
         }
-        
+
         /// <devdoc>
         ///     Decompresses the given input, returning a new array that represents
         ///     the uncompressed data.
         /// </devdoc>
         private byte[] Decompress(byte[] input) {
-            
+
             int finalLength = 0;
             int idx = 0;
             int outputIdx = 0;
-            
+
             // Check for our header. If we don't have one,
             // we're not actually decompressed, so just return
             // the original.
@@ -164,37 +164,37 @@ namespace System.Windows.Forms {
             if (input.Length < HEADER_MAGIC.Length) {
                 return input;
             }
-            
+
             for(idx = 0; idx < HEADER_MAGIC.Length; idx++) {
-                if (input[idx] != HEADER_MAGIC[idx]) {  
+                if (input[idx] != HEADER_MAGIC[idx]) {
                     return input;
                 }
             }
-            
+
             // Ok, we passed the magic header test.
-            
+
             for (idx = HEADER_MAGIC.Length; idx < input.Length; idx += 2) {
                 finalLength += input[idx];
             }
-            
+
             byte[] output = new byte[finalLength];
-            
+
             idx = HEADER_MAGIC.Length;
-            
+
             while(idx < input.Length) {
                 byte runLength = input[idx++];
                 byte current = input[idx++];
-                
+
                 int startIdx = outputIdx;
                 int endIdx = outputIdx + runLength;
-                
+
                 while(startIdx < endIdx) {
                     output[startIdx++] = current;
                 }
-                
+
                 outputIdx += runLength;
             }
-            
+
             return output;
         }
 
@@ -220,8 +220,8 @@ namespace System.Windows.Forms {
         }
 
         private bool WriteImageList(IntPtr imagelistHandle, Stream stream) {
-            // What we need to do here is use WriteEx if comctl 6 or above, and Write otherwise. However, till we can fix 
-            // There isn't a reliable way to tell which version of comctl fusion is binding to. 
+            // What we need to do here is use WriteEx if comctl 6 or above, and Write otherwise. However, till we can fix
+            // There isn't a reliable way to tell which version of comctl fusion is binding to.
             // So for now, we try to bind to WriteEx, and if that entry point isn't found, we use Write.
 
             try {

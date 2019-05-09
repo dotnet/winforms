@@ -22,7 +22,7 @@ namespace System.Experimental.Gdi
     internal
 #endif
     enum DeviceContextLayout
-    {   
+    {
         /// <devdoc>
         ///     Right to left.
         /// </devdoc>
@@ -37,7 +37,7 @@ namespace System.Experimental.Gdi
         ///     Bottom to top. LAYOUT_BTT
         /// </devdoc>
         BottomToTop = 0x00000002,
-        
+
         /// <devdoc>
         ///     Vertical before horizontal. LAYOUT_VBH
         /// </devdoc>

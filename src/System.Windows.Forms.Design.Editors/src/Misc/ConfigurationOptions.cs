@@ -20,7 +20,7 @@ namespace System.Windows.Forms
         private static readonly Version featureSupportedMinimumFrameworkVersion = new Version(4, 7);
 
         // RS2 build number - we may need to change once we know RTM version. below is pre-RTM RS2 version.
-        internal static readonly Version RS2Version = new Version(10, 0, 14933, 0); 
+        internal static readonly Version RS2Version = new Version(10, 0, 14933, 0);
 
         static ConfigurationOptions()
         {
@@ -65,7 +65,7 @@ namespace System.Windows.Forms
                         }
                     }
                     catch (Exception e)
-                    {   
+                    {
                         Debug.WriteLine("Exception while reading Framework version : " + e.ToString());
                     }
                 }

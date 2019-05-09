@@ -27,13 +27,13 @@ namespace System.Windows.Forms {
 
             if(e.ToolStrip is MenuStrip) {
               return;
-            } 
+            }
             else if (e.ToolStrip is StatusStrip ) {
               return;
-            } 
+            }
             else if (e.ToolStrip is ToolStripDropDown) {
               base.OnRenderToolStripBorder(e);
-            } 
+            }
             else {
               RenderToolStripBorderInternal(e);
             }
@@ -44,7 +44,7 @@ namespace System.Windows.Forms {
             Rectangle bounds = new Rectangle(Point.Empty, e.ToolStrip.Size);
             Graphics g = e.Graphics;
 
-            // have to create a pen here because we're not allowed to modify the SystemPens. 
+            // have to create a pen here because we're not allowed to modify the SystemPens.
             using( Pen p = new Pen(SystemColors.ButtonShadow) ) {
                 p.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
 

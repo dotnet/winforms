@@ -47,7 +47,7 @@ namespace System.Windows.Forms.Design
             try
             {
                 Cursor.Current = Cursors.WaitCursor;
-                //Add a New ToolStripContainer to the RootComponent ... 
+                //Add a New ToolStripContainer to the RootComponent ...
                 Control root = _host.RootComponent as Control;
                 if (_host.GetDesigner(root) is ParentControlDesigner rootDesigner)
                 {
@@ -95,7 +95,7 @@ namespace System.Windows.Forms.Design
                                     changeSvc.OnComponentChanged(newParent, controlsProp, null, null);
                                 }
 
-                                //Set the Selection on the new Parent ... so that the selection is restored to the new item,                                     
+                                //Set the Selection on the new Parent ... so that the selection is restored to the new item,
                                 if (_provider.GetService(typeof(ISelectionService)) is ISelectionService selSvc)
                                 {
                                     selSvc.SetSelectedComponents(new IComponent[] { tsc });

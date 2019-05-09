@@ -222,7 +222,7 @@ namespace System.Windows.Forms.Tests
                 var formatter = new BinaryFormatter();
                 formatter.Serialize(stream, group);
                 stream.Seek(0, SeekOrigin.Begin);
-                
+
                 ListViewGroup result = Assert.IsType<ListViewGroup>(formatter.Deserialize(stream));
                 Assert.Equal(group.Header, result.Header);
                 Assert.Equal(group.HeaderAlignment, result.HeaderAlignment);

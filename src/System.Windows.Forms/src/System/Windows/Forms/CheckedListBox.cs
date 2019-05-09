@@ -26,7 +26,7 @@ namespace System.Windows.Forms {
     using System.Drawing.Design;
     using System.Globalization;
     using System.Drawing.Text;
-    
+
 
     /// <devdoc>
     ///    <para>
@@ -107,8 +107,8 @@ namespace System.Windows.Forms {
 
             // If a long item is drawn with ellipsis, we must redraw the ellipsed part
             // as well as the newly uncovered region.
-            SetStyle(ControlStyles.ResizeRedraw, true); 
-          
+            SetStyle(ControlStyles.ResizeRedraw, true);
+
         }
 
         /// <devdoc>
@@ -516,14 +516,14 @@ namespace System.Windows.Forms {
             base.OnClick(e);
         }
 
-        
+
         /// <devdoc>
         ///     When the handle is created we can dump any cached item-check pairs.
         /// </devdoc>
         protected override void OnHandleCreated(EventArgs e) {
             base.OnHandleCreated(e);
             SendMessage(NativeMethods.LB_SETITEMHEIGHT, 0, ItemHeight);
-            
+
         }
 
         /// <devdoc>
@@ -600,7 +600,7 @@ namespace System.Windows.Forms {
                     box.X = bounds.X + bounds.Width - idealCheckSize - scaledListItemStartPosition;
                 }
 
-                
+
 
                 // Draw the checkbox.
                 //
@@ -839,7 +839,7 @@ namespace System.Windows.Forms {
         }
 
 
-        
+
         /// <devdoc>
         /// Reparses the objects, getting new text strings for them.
         /// </devdoc>
@@ -849,7 +849,7 @@ namespace System.Windows.Forms {
             {
                 savedcheckedItems[i] = CheckedItems.GetCheckedState(i);
             }
-            
+
             //call the base
             base.RefreshItems();
             // restore the checkedItems...

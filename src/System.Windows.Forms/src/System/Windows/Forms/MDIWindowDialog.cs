@@ -93,29 +93,29 @@ namespace System.Windows.Forms {
             this.itemList.DoubleClick += new System.EventHandler(this.ItemList_doubleClick);
             this.itemList.SelectedIndexChanged += new EventHandler(this.ItemList_selectedIndexChanged);
             this.SuspendLayout();
-// 
+//
 // itemList
-// 
+//
             resources.ApplyResources(this.itemList, "itemList");
             this.itemList.FormattingEnabled = true;
             this.itemList.Name = "itemList";
-// 
+//
 // okButton
-// 
+//
             resources.ApplyResources(this.okButton, "okButton");
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.okButton.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.okButton.Name = "okButton";
-// 
+//
 // cancelButton
-// 
+//
             resources.ApplyResources(this.cancelButton, "cancelButton");
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancelButton.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.cancelButton.Name = "cancelButton";
-// 
+//
 // okCancelTableLayoutPanel
-// 
+//
             resources.ApplyResources(this.okCancelTableLayoutPanel, "okCancelTableLayoutPanel");
             this.okCancelTableLayoutPanel.ColumnCount = 2;
             this.okCancelTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -125,9 +125,9 @@ namespace System.Windows.Forms {
             this.okCancelTableLayoutPanel.Name = "okCancelTableLayoutPanel";
             this.okCancelTableLayoutPanel.RowCount = 1;
             this.okCancelTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-// 
+//
 // MdiWindowDialog
-// 
+//
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.okCancelTableLayoutPanel);

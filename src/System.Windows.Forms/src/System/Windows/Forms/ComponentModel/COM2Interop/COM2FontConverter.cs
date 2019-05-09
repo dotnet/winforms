@@ -7,7 +7,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.Runtime.InteropServices;
     using System.ComponentModel;
     using System.Diagnostics;
-    using System;    
+    using System;
     using System.Drawing;
     using System.Collections;
     using Microsoft.Win32;
@@ -57,25 +57,25 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
 
             lastHandle = fontHandle;
-            
+
             try {
-                // this wasn't working because it was converting everything to 
+                // this wasn't working because it was converting everything to
                 // world units.
                 //
                 Font font = Font.FromHfont(lastHandle);
                 try {
                     lastFont = ControlPaint.FontInPoints(font);
-                } 
+                }
                 finally {
                     font.Dispose();
                 }
             }
             catch(ArgumentException) {
-                // we will fail on non-truetype fonts, so 
+                // we will fail on non-truetype fonts, so
                 // just use the default font.
                 lastFont = Control.DefaultFont;
             }
-            
+
             return lastFont;
         }
 

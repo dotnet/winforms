@@ -24,7 +24,7 @@ namespace System.Windows.Forms.VisualStyles {
     /// <devdoc>
     ///    <para>
     ///       Encapsulates the class, part and state of the "element" you wish to draw using
-    ///       the VisualStyleRenderer. 
+    ///       the VisualStyleRenderer.
     ///       Usage pattern is something like this: new VisualStyleRenderer(VisualStyleElement.Window.Caption.Active);
     ///    </para>
     /// </devdoc>
@@ -33,17 +33,17 @@ namespace System.Windows.Forms.VisualStyles {
         private string className;
         private int part;
         private int state;
-        
+
         private VisualStyleElement(string className, int part, int state) {
             this.className = className;
             this.part = part;
             this.state = state;
         }
-        
+
         public static VisualStyleElement CreateElement(string className, int part, int state) {
             return new VisualStyleElement(className, part, state);
         }
-        
+
         public string ClassName {
             get {
                 return className;
@@ -70,13 +70,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -88,11 +88,11 @@ namespace System.Windows.Forms.VisualStyles {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
 
                 public static VisualStyleElement Pressed {
@@ -100,19 +100,19 @@ namespace System.Windows.Forms.VisualStyles {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
 
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -124,7 +124,7 @@ namespace System.Windows.Forms.VisualStyles {
                         if (_default == null) {
                             _default = new VisualStyleElement(className, part, 5);
                         }
-    
+
                         return _default;
                     }
                 }
@@ -136,13 +136,13 @@ namespace System.Windows.Forms.VisualStyles {
                 internal static readonly int HighContrastDisabledPart = 8;
 
                 private static VisualStyleElement uncheckednormal;
-    
+
                 public static VisualStyleElement UncheckedNormal {
                     get {
                         if (uncheckednormal == null) {
                             uncheckednormal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return uncheckednormal;
                     }
                 }
@@ -154,11 +154,11 @@ namespace System.Windows.Forms.VisualStyles {
                         if (uncheckedhot == null) {
                             uncheckedhot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return uncheckedhot;
                     }
                 }
-    
+
                 private static VisualStyleElement uncheckedpressed;
 
                 public static VisualStyleElement UncheckedPressed {
@@ -166,31 +166,31 @@ namespace System.Windows.Forms.VisualStyles {
                         if (uncheckedpressed == null) {
                             uncheckedpressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return uncheckedpressed;
                     }
                 }
 
                 private static VisualStyleElement uncheckeddisabled;
-    
+
                 public static VisualStyleElement UncheckedDisabled {
                     get {
                         if (uncheckeddisabled == null) {
                             uncheckeddisabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return uncheckeddisabled;
                     }
                 }
 
                 private static VisualStyleElement checkednormal;
-    
+
                 public static VisualStyleElement CheckedNormal {
                     get {
                         if (checkednormal == null) {
                             checkednormal = new VisualStyleElement(className, part, 5);
                         }
-    
+
                         return checkednormal;
                     }
                 }
@@ -202,11 +202,11 @@ namespace System.Windows.Forms.VisualStyles {
                         if (checkedhot == null) {
                             checkedhot = new VisualStyleElement(className, part, 6);
                         }
-    
+
                         return checkedhot;
                     }
                 }
-    
+
                 private static VisualStyleElement checkedpressed;
 
                 public static VisualStyleElement CheckedPressed {
@@ -214,19 +214,19 @@ namespace System.Windows.Forms.VisualStyles {
                         if (checkedpressed == null) {
                             checkedpressed = new VisualStyleElement(className, part, 7);
                         }
-    
+
                         return checkedpressed;
                     }
                 }
 
                 private static VisualStyleElement checkeddisabled;
-    
+
                 public static VisualStyleElement CheckedDisabled {
                     get {
                         if (checkeddisabled == null) {
                             checkeddisabled = new VisualStyleElement(className, part, 8);
                         }
-    
+
                         return checkeddisabled;
                     }
                 }
@@ -238,13 +238,13 @@ namespace System.Windows.Forms.VisualStyles {
                 internal static readonly int HighContrastDisabledPart = 9;
 
                 private static VisualStyleElement uncheckednormal;
-    
+
                 public static VisualStyleElement UncheckedNormal {
                     get {
                         if (uncheckednormal == null) {
                             uncheckednormal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return uncheckednormal;
                     }
                 }
@@ -256,11 +256,11 @@ namespace System.Windows.Forms.VisualStyles {
                         if (uncheckedhot == null) {
                             uncheckedhot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return uncheckedhot;
                     }
                 }
-    
+
                 private static VisualStyleElement uncheckedpressed;
 
                 public static VisualStyleElement UncheckedPressed {
@@ -268,31 +268,31 @@ namespace System.Windows.Forms.VisualStyles {
                         if (uncheckedpressed == null) {
                             uncheckedpressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return uncheckedpressed;
                     }
                 }
 
                 private static VisualStyleElement uncheckeddisabled;
-    
+
                 public static VisualStyleElement UncheckedDisabled {
                     get {
                         if (uncheckeddisabled == null) {
                             uncheckeddisabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return uncheckeddisabled;
                     }
                 }
 
                 private static VisualStyleElement checkednormal;
-    
+
                 public static VisualStyleElement CheckedNormal {
                     get {
                         if (checkednormal == null) {
                             checkednormal = new VisualStyleElement(className, part, 5);
                         }
-    
+
                         return checkednormal;
                     }
                 }
@@ -304,11 +304,11 @@ namespace System.Windows.Forms.VisualStyles {
                         if (checkedhot == null) {
                             checkedhot = new VisualStyleElement(className, part, 6);
                         }
-    
+
                         return checkedhot;
                     }
                 }
-    
+
                 private static VisualStyleElement checkedpressed;
 
                 public static VisualStyleElement CheckedPressed {
@@ -316,31 +316,31 @@ namespace System.Windows.Forms.VisualStyles {
                         if (checkedpressed == null) {
                             checkedpressed = new VisualStyleElement(className, part, 7);
                         }
-    
+
                         return checkedpressed;
                     }
                 }
 
                 private static VisualStyleElement checkeddisabled;
-    
+
                 public static VisualStyleElement CheckedDisabled {
                     get {
                         if (checkeddisabled == null) {
                             checkeddisabled = new VisualStyleElement(className, part, 8);
                         }
-    
+
                         return checkeddisabled;
                     }
                 }
 
                 private static VisualStyleElement mixednormal;
-    
+
                 public static VisualStyleElement MixedNormal {
                     get {
                         if (mixednormal == null) {
                             mixednormal = new VisualStyleElement(className, part, 9);
                         }
-    
+
                         return mixednormal;
                     }
                 }
@@ -352,11 +352,11 @@ namespace System.Windows.Forms.VisualStyles {
                         if (mixedhot == null) {
                             mixedhot = new VisualStyleElement(className, part, 10);
                         }
-    
+
                         return mixedhot;
                     }
                 }
-    
+
                 private static VisualStyleElement mixedpressed;
 
                 public static VisualStyleElement MixedPressed {
@@ -364,19 +364,19 @@ namespace System.Windows.Forms.VisualStyles {
                         if (mixedpressed == null) {
                             mixedpressed = new VisualStyleElement(className, part, 11);
                         }
-    
+
                         return mixedpressed;
                     }
                 }
 
                 private static VisualStyleElement mixeddisabled;
-    
+
                 public static VisualStyleElement MixedDisabled {
                     get {
                         if (mixeddisabled == null) {
                             mixeddisabled = new VisualStyleElement(className, part, 12);
                         }
-    
+
                         return mixeddisabled;
                     }
                 }
@@ -388,25 +388,25 @@ namespace System.Windows.Forms.VisualStyles {
                 internal static readonly int HighContrastDisabledPart = 10;
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
 
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -416,13 +416,13 @@ namespace System.Windows.Forms.VisualStyles {
                 private static readonly int part = 5;
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -437,49 +437,49 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -487,7 +487,7 @@ namespace System.Windows.Forms.VisualStyles {
 
             internal static class Border
             {
-                // Paints a rectangle with a 1 pixel edge + round corners, 
+                // Paints a rectangle with a 1 pixel edge + round corners,
                 // and fills it with a color
                 private const int part = 4;
 
@@ -539,7 +539,7 @@ namespace System.Windows.Forms.VisualStyles {
 
             internal static class DropDownButtonRight
             {
-                // Paints a dropdownbutton with right angles on the left side for 
+                // Paints a dropdownbutton with right angles on the left side for
                 // editable comboboxes (DropDownStyle=DropDown) for RTL=false case
                 private const int part = 6;
 
@@ -610,7 +610,7 @@ namespace System.Windows.Forms.VisualStyles {
 
             internal static class DropDownButtonLeft
             {
-                // Paints a dropdownbutton with right angles on the right side for 
+                // Paints a dropdownbutton with right angles on the right side for
                 // editable comboboxes (DropDownStyle=DropDown) for RTL=true case
                 private const int part = 7;
 
@@ -638,7 +638,7 @@ namespace System.Windows.Forms.VisualStyles {
             /* Unused for now
             internal static class CueBanner
             {
-                // Paints a rectangle with sharp edges and fills it. Default edge color is black, 
+                // Paints a rectangle with sharp edges and fills it. Default edge color is black,
                 // default fill color is white.
                 private const int part = 8;
 
@@ -673,43 +673,43 @@ namespace System.Windows.Forms.VisualStyles {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -726,43 +726,43 @@ namespace System.Windows.Forms.VisualStyles {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -779,43 +779,43 @@ namespace System.Windows.Forms.VisualStyles {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -832,43 +832,43 @@ namespace System.Windows.Forms.VisualStyles {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -889,43 +889,43 @@ namespace System.Windows.Forms.VisualStyles {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -942,43 +942,43 @@ namespace System.Windows.Forms.VisualStyles {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -995,43 +995,43 @@ namespace System.Windows.Forms.VisualStyles {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -1048,43 +1048,43 @@ namespace System.Windows.Forms.VisualStyles {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -1098,193 +1098,193 @@ namespace System.Windows.Forms.VisualStyles {
                 private static readonly int part = 1;
 
                 private static VisualStyleElement upnormal;
-    
+
                 public static VisualStyleElement UpNormal {
                     get {
                         if (upnormal == null) {
                             upnormal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return upnormal;
                     }
                 }
-    
+
                 private static VisualStyleElement uphot;
-    
+
                 public static VisualStyleElement UpHot {
                     get {
                         if (uphot == null) {
                             uphot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return uphot;
                     }
                 }
-    
+
                 private static VisualStyleElement uppressed;
-    
+
                 public static VisualStyleElement UpPressed {
                     get {
                         if (uppressed == null) {
                             uppressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return uppressed;
                     }
                 }
-    
+
                 private static VisualStyleElement updisabled;
-    
+
                 public static VisualStyleElement UpDisabled {
                     get {
                         if (updisabled == null) {
                             updisabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return updisabled;
                     }
                 }
 
                 private static VisualStyleElement downnormal;
-    
+
                 public static VisualStyleElement DownNormal {
                     get {
                         if (downnormal == null) {
                             downnormal = new VisualStyleElement(className, part, 5);
                         }
-    
+
                         return downnormal;
                     }
                 }
-    
+
                 private static VisualStyleElement downhot;
-    
+
                 public static VisualStyleElement DownHot {
                     get {
                         if (downhot == null) {
                             downhot = new VisualStyleElement(className, part, 6);
                         }
-    
+
                         return downhot;
                     }
                 }
-    
+
                 private static VisualStyleElement downpressed;
-    
+
                 public static VisualStyleElement DownPressed {
                     get {
                         if (downpressed == null) {
                             downpressed = new VisualStyleElement(className, part, 7);
                         }
-    
+
                         return downpressed;
                     }
                 }
-    
+
                 private static VisualStyleElement downdisabled;
-    
+
                 public static VisualStyleElement DownDisabled {
                     get {
                         if (downdisabled == null) {
                             downdisabled = new VisualStyleElement(className, part, 8);
                         }
-    
+
                         return downdisabled;
                     }
                 }
 
                 private static VisualStyleElement leftnormal;
-    
+
                 public static VisualStyleElement LeftNormal {
                     get {
                         if (leftnormal == null) {
                             leftnormal = new VisualStyleElement(className, part, 9);
                         }
-    
+
                         return leftnormal;
                     }
                 }
-    
+
                 private static VisualStyleElement lefthot;
-    
+
                 public static VisualStyleElement LeftHot {
                     get {
                         if (lefthot == null) {
                             lefthot = new VisualStyleElement(className, part, 10);
                         }
-    
+
                         return lefthot;
                     }
                 }
-    
+
                 private static VisualStyleElement leftpressed;
-    
+
                 public static VisualStyleElement LeftPressed {
                     get {
                         if (leftpressed == null) {
                             leftpressed = new VisualStyleElement(className, part, 11);
                         }
-    
+
                         return leftpressed;
                     }
                 }
-    
+
                 private static VisualStyleElement leftdisabled;
-    
+
                 public static VisualStyleElement LeftDisabled {
                     get {
                         if (leftdisabled == null) {
                             leftdisabled = new VisualStyleElement(className, part, 12);
                         }
-    
+
                         return leftdisabled;
                     }
                 }
 
                 private static VisualStyleElement rightnormal;
-    
+
                 public static VisualStyleElement RightNormal {
                     get {
                         if (rightnormal == null) {
                             rightnormal = new VisualStyleElement(className, part, 13);
                         }
-    
+
                         return rightnormal;
                     }
                 }
-    
+
                 private static VisualStyleElement righthot;
-    
+
                 public static VisualStyleElement RightHot {
                     get {
                         if (righthot == null) {
                             righthot = new VisualStyleElement(className, part, 14);
                         }
-    
+
                         return righthot;
                     }
                 }
-    
+
                 private static VisualStyleElement rightpressed;
-    
+
                 public static VisualStyleElement RightPressed {
                     get {
                         if (rightpressed == null) {
                             rightpressed = new VisualStyleElement(className, part, 15);
                         }
-    
+
                         return rightpressed;
                     }
                 }
-    
+
                 private static VisualStyleElement rightdisabled;
-    
+
                 public static VisualStyleElement RightDisabled {
                     get {
                         if (rightdisabled == null) {
                             rightdisabled = new VisualStyleElement(className, part, 16);
                         }
-    
+
                         return rightdisabled;
                     }
                 }
@@ -1293,7 +1293,7 @@ namespace System.Windows.Forms.VisualStyles {
             public static class ThumbButtonHorizontal {
                 private static readonly int part = 2;
 
-                
+
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal {
@@ -1301,43 +1301,43 @@ namespace System.Windows.Forms.VisualStyles {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -1346,7 +1346,7 @@ namespace System.Windows.Forms.VisualStyles {
             public static class ThumbButtonVertical {
                 private static readonly int part = 3;
 
-                
+
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal {
@@ -1354,43 +1354,43 @@ namespace System.Windows.Forms.VisualStyles {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -1399,7 +1399,7 @@ namespace System.Windows.Forms.VisualStyles {
             public static class RightTrackHorizontal {
                 private static readonly int part = 4;
 
-                
+
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal {
@@ -1407,43 +1407,43 @@ namespace System.Windows.Forms.VisualStyles {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -1452,7 +1452,7 @@ namespace System.Windows.Forms.VisualStyles {
             public static class LeftTrackHorizontal {
                 private static readonly int part = 5;
 
-                
+
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal {
@@ -1460,43 +1460,43 @@ namespace System.Windows.Forms.VisualStyles {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -1505,7 +1505,7 @@ namespace System.Windows.Forms.VisualStyles {
             public static class LowerTrackVertical {
                 private static readonly int part = 6;
 
-                
+
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal {
@@ -1513,43 +1513,43 @@ namespace System.Windows.Forms.VisualStyles {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -1566,43 +1566,43 @@ namespace System.Windows.Forms.VisualStyles {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -1611,7 +1611,7 @@ namespace System.Windows.Forms.VisualStyles {
             public static class GripperHorizontal {
                 private static readonly int part = 8;
 
-                
+
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal {
@@ -1619,7 +1619,7 @@ namespace System.Windows.Forms.VisualStyles {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -1636,7 +1636,7 @@ namespace System.Windows.Forms.VisualStyles {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -1647,25 +1647,25 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement rightalign;
-    
+
                 public static VisualStyleElement RightAlign {
                     get {
                         if (rightalign == null) {
                             rightalign = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return rightalign;
                     }
                 }
 
                 private static VisualStyleElement leftalign;
-    
+
                 public static VisualStyleElement LeftAlign {
                     get {
                         if (leftalign == null) {
                             leftalign = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return leftalign;
                     }
                 }
@@ -1680,49 +1680,49 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -1730,52 +1730,52 @@ namespace System.Windows.Forms.VisualStyles {
 
             public static class TabItemLeftEdge {
                 private static readonly int part = 2;
-                
+
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -1783,52 +1783,52 @@ namespace System.Windows.Forms.VisualStyles {
 
             public static class TabItemRightEdge {
                 private static readonly int part = 3;
-                
+
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -1836,16 +1836,16 @@ namespace System.Windows.Forms.VisualStyles {
 
             public static class TabItemBothEdges {
                 private static readonly int part = 4;
-               
+
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -1856,53 +1856,53 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
-                
+
             }
 
             public static class TopTabItemLeftEdge {
@@ -1910,49 +1910,49 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -1963,53 +1963,53 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
-                
+
             }
 
             public static class TopTabItemBothEdges {
@@ -2017,13 +2017,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -2034,17 +2034,17 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
-                
+
             }
 
             public static class Body {
@@ -2052,17 +2052,17 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
-                
+
             }
         } // END TAB
 
@@ -2074,17 +2074,17 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
-               
+
             }
 
             public static class HeaderClose {
@@ -2092,37 +2092,37 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
@@ -2133,73 +2133,73 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
 
                 private static VisualStyleElement selectednormal;
-    
+
                 public static VisualStyleElement SelectedNormal {
                     get {
                         if (selectednormal == null) {
                             selectednormal = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return selectednormal;
                     }
                 }
-    
+
                 private static VisualStyleElement selectedhot;
-    
+
                 public static VisualStyleElement SelectedHot {
                     get {
                         if (selectedhot == null) {
                             selectedhot = new VisualStyleElement(className, part, 5);
                         }
-    
+
                         return selectedhot;
                     }
                 }
-    
+
                 private static VisualStyleElement selectedpressed;
-    
+
                 public static VisualStyleElement SelectedPressed {
                     get {
                         if (selectedpressed == null) {
                             selectedpressed = new VisualStyleElement(className, part, 6);
                         }
-    
+
                         return selectedpressed;
                     }
                 }
@@ -2210,37 +2210,37 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
@@ -2251,239 +2251,239 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
-                
+
             }
-          
+
             public static class NormalGroupCollapse {
                 private static readonly int part = 6;
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
             }
-            
+
             public static class NormalGroupExpand {
                 private static readonly int part = 7;
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
             }
 
-            
+
             public static class NormalGroupHead {
                 private static readonly int part = 8;
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
             }
 
-            
+
             public static class SpecialGroupBackground {
                 private static readonly int part = 9;
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
-                
+
             }
 
-            
+
             public static class SpecialGroupCollapse {
                 private static readonly int part = 10;
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
             }
 
-            
+
             public static class SpecialGroupExpand {
                 private static readonly int part = 11;
 
-                
+
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
             }
 
-            
+
             public static class SpecialGroupHead {
                 private static readonly int part = 12;
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
-                
+
             }
         } // END EXPLORERBAR
 
@@ -2495,37 +2495,37 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
@@ -2536,37 +2536,37 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
@@ -2577,37 +2577,37 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
@@ -2618,26 +2618,26 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement sortedup;
-    
+
                 public static VisualStyleElement SortedUp {
                     get {
                         if (sortedup == null) {
                             sortedup = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return sortedup;
                     }
                 }
 
 
                 private static VisualStyleElement sorteddown;
-    
+
                 public static VisualStyleElement SortedDown {
                     get {
                         if (sorteddown == null) {
                             sorteddown = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return sorteddown;
                     }
                 }
@@ -2658,55 +2658,55 @@ namespace System.Windows.Forms.VisualStyles {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement selected;
-    
+
                 public static VisualStyleElement Selected {
                     get {
                         if (selected == null) {
                             selected = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return selected;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
 
                 private static VisualStyleElement selectednotfocus;
-    
+
                 public static VisualStyleElement SelectedNotFocus {
                     get {
                         if (selectednotfocus == null) {
                             selectednotfocus = new VisualStyleElement(className, part, 5);
                         }
-    
+
                         return selectednotfocus;
                     }
                 }
@@ -2717,13 +2717,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -2734,13 +2734,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                                     }
                 }
@@ -2751,13 +2751,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                                     }
                 }
@@ -2768,13 +2768,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                                     }
                 }
@@ -2790,91 +2790,91 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
 
                 private static VisualStyleElement _checked;
-    
+
                 public static VisualStyleElement Checked {
                     get {
                         if (_checked == null) {
                             _checked = new VisualStyleElement(className, part, 5);
                         }
-    
+
                         return _checked;
                     }
                 }
 
                 private static VisualStyleElement hotchecked;
-    
+
                 public static VisualStyleElement HotChecked {
                     get {
                         if (hotchecked == null) {
                             hotchecked = new VisualStyleElement(className, part, 6);
                         }
-    
+
                         return hotchecked;
                     }
                 }
             }
 
-           
+
             public static class Separator {
                 private static readonly int part = 2;
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -2895,31 +2895,31 @@ namespace System.Windows.Forms.VisualStyles {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
 
                 private static VisualStyleElement selected;
-    
+
                 public static VisualStyleElement Selected {
                     get {
                         if (selected == null) {
                             selected = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return selected;
                     }
                 }
-    
+
                 private static VisualStyleElement demoted;
-    
+
                 public static VisualStyleElement Demoted {
                     get {
                         if (demoted == null) {
                             demoted = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return demoted;
                     }
                 }
@@ -2930,13 +2930,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -2947,13 +2947,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -2964,13 +2964,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -2981,30 +2981,30 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
             }
-            
+
             public static class Separator {
                 private static readonly int part = 6;
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3019,13 +3019,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3036,13 +3036,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3053,13 +3053,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3070,13 +3070,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3088,16 +3088,16 @@ namespace System.Windows.Forms.VisualStyles {
 
             public static class Gripper {
                 private static readonly int part = 1;
-                
+
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3108,13 +3108,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3125,13 +3125,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3143,37 +3143,37 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
@@ -3184,37 +3184,37 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
@@ -3223,19 +3223,19 @@ namespace System.Windows.Forms.VisualStyles {
 
         public static class StartPanel {
             private static readonly string className = "STARTPANEL";
-            
+
             public static class UserPane {
                 private static readonly int part = 1;
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3246,13 +3246,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3263,37 +3263,37 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
@@ -3304,13 +3304,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3321,13 +3321,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3338,13 +3338,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3355,13 +3355,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3375,13 +3375,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3395,37 +3395,37 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
@@ -3436,13 +3436,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3453,13 +3453,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3471,13 +3471,13 @@ namespace System.Windows.Forms.VisualStyles {
 
             public static class Bar {
                 private static VisualStyleElement normal;
-            
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, 0, 0);
                         }
-            
+
                         return normal;
                     }
                 }
@@ -3488,13 +3488,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3505,13 +3505,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3522,13 +3522,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3543,13 +3543,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3560,13 +3560,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3577,13 +3577,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3598,13 +3598,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3619,13 +3619,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3636,13 +3636,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3653,13 +3653,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3670,13 +3670,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3687,13 +3687,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3704,13 +3704,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3721,13 +3721,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3738,13 +3738,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -3754,16 +3754,16 @@ namespace System.Windows.Forms.VisualStyles {
         public static class ToolBar {
             private static readonly string className = "TOOLBAR";
 
-            // 
+            //
             internal static class Bar {
                private static VisualStyleElement normal;
-           
+
                public static VisualStyleElement Normal {
                    get {
                        if (normal == null) {
                            normal = new VisualStyleElement(className, 0, 0);
                        }
-           
+
                        return normal;
                    }
                }
@@ -3774,73 +3774,73 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
 
                 private static VisualStyleElement _checked;
-    
+
                 public static VisualStyleElement Checked {
                     get {
                         if (_checked == null) {
                             _checked = new VisualStyleElement(className, part, 5);
                         }
-    
+
                         return _checked;
                     }
                 }
 
                 private static VisualStyleElement hotchecked;
-    
+
                 public static VisualStyleElement HotChecked {
                     get {
                         if (hotchecked == null) {
                             hotchecked = new VisualStyleElement(className, part, 6);
                         }
-    
+
                         return hotchecked;
                     }
                 }
@@ -3851,73 +3851,73 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
 
                 private static VisualStyleElement _checked;
-    
+
                 public static VisualStyleElement Checked {
                     get {
                         if (_checked == null) {
                             _checked = new VisualStyleElement(className, part, 5);
                         }
-    
+
                         return _checked;
                     }
                 }
 
                 private static VisualStyleElement hotchecked;
-    
+
                 public static VisualStyleElement HotChecked {
                     get {
                         if (hotchecked == null) {
                             hotchecked = new VisualStyleElement(className, part, 6);
                         }
-    
+
                         return hotchecked;
                     }
                 }
@@ -3928,73 +3928,73 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
 
                 private static VisualStyleElement _checked;
-    
+
                 public static VisualStyleElement Checked {
                     get {
                         if (_checked == null) {
                             _checked = new VisualStyleElement(className, part, 5);
                         }
-    
+
                         return _checked;
                     }
                 }
 
                 private static VisualStyleElement hotchecked;
-    
+
                 public static VisualStyleElement HotChecked {
                     get {
                         if (hotchecked == null) {
                             hotchecked = new VisualStyleElement(className, part, 6);
                         }
-    
+
                         return hotchecked;
                     }
                 }
@@ -4005,90 +4005,90 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
 
                 private static VisualStyleElement _checked;
-    
+
                 public static VisualStyleElement Checked {
                     get {
                         if (_checked == null) {
                             _checked = new VisualStyleElement(className, part, 5);
                         }
-    
+
                         return _checked;
                     }
                 }
 
                 private static VisualStyleElement hotchecked;
-    
+
                 public static VisualStyleElement HotChecked {
                     get {
                         if (hotchecked == null) {
                             hotchecked = new VisualStyleElement(className, part, 6);
                         }
-    
+
                         return hotchecked;
                     }
                 }
             }
-    
+
             public static class SeparatorHorizontal {
                 private static readonly int part = 5;
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -4099,18 +4099,18 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
             }
-    
+
         } // END TOOLBAR
 
         public static class ToolTip {
@@ -4121,25 +4121,25 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
 
                 private static VisualStyleElement link;
-    
+
                 public static VisualStyleElement Link {
                     get {
                         if (link == null) {
                             link = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return link;
                     }
                 }
@@ -4150,13 +4150,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -4167,25 +4167,25 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
 
                 private static VisualStyleElement link;
-    
+
                 public static VisualStyleElement Link {
                     get {
                         if (link == null) {
                             link = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return link;
                     }
                 }
@@ -4196,13 +4196,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -4213,37 +4213,37 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
@@ -4258,13 +4258,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -4275,13 +4275,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -4292,61 +4292,61 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-                
+
                 private static VisualStyleElement focused;
-    
+
                 public static VisualStyleElement Focused {
                     get {
                         if (focused == null) {
                             focused = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return focused;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 5);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -4357,61 +4357,61 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-                
+
                 private static VisualStyleElement focused;
-    
+
                 public static VisualStyleElement Focused {
                     get {
                         if (focused == null) {
                             focused = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return focused;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 5);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -4422,61 +4422,61 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-                
+
                 private static VisualStyleElement focused;
-    
+
                 public static VisualStyleElement Focused {
                     get {
                         if (focused == null) {
                             focused = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return focused;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 5);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -4487,61 +4487,61 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-                
+
                 private static VisualStyleElement focused;
-    
+
                 public static VisualStyleElement Focused {
                     get {
                         if (focused == null) {
                             focused = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return focused;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 5);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -4552,61 +4552,61 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-                
+
                 private static VisualStyleElement focused;
-    
+
                 public static VisualStyleElement Focused {
                     get {
                         if (focused == null) {
                             focused = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return focused;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 5);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -4617,61 +4617,61 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-                
+
                 private static VisualStyleElement focused;
-    
+
                 public static VisualStyleElement Focused {
                     get {
                         if (focused == null) {
                             focused = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return focused;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 5);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -4682,13 +4682,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -4699,13 +4699,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -4727,55 +4727,55 @@ namespace System.Windows.Forms.VisualStyles {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement selected;
-    
+
                 public static VisualStyleElement Selected {
                     get {
                         if (selected == null) {
                             selected = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return selected;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
 
                 private static VisualStyleElement selectednotfocus;
-    
+
                 public static VisualStyleElement SelectedNotFocus {
                     get {
                         if (selectednotfocus == null) {
                             selectednotfocus = new VisualStyleElement(className, part, 5);
                         }
-    
+
                         return selectednotfocus;
                     }
                 }
@@ -4785,25 +4785,25 @@ namespace System.Windows.Forms.VisualStyles {
                 private static readonly int part = 2;
 
                 private static VisualStyleElement closed;
-    
+
                 public static VisualStyleElement Closed {
                     get {
                         if (closed == null) {
                             closed = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return closed;
                     }
                 }
 
                 private static VisualStyleElement opened;
-    
+
                 public static VisualStyleElement Opened {
                     get {
                         if (opened == null) {
                             opened = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return opened;
                     }
                 }
@@ -4820,7 +4820,7 @@ namespace System.Windows.Forms.VisualStyles {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -4868,85 +4868,85 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
 
                 private static VisualStyleElement selected;
-    
+
                 public static VisualStyleElement Selected {
                     get {
                         if (selected == null) {
                             selected = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return selected;
                     }
                 }
 
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
-    
+
                 private static VisualStyleElement focused;
-    
+
                 public static VisualStyleElement Focused {
                     get {
                         if (focused == null) {
                             focused = new VisualStyleElement(className, part, 5);
                         }
-    
+
                         return focused;
                     }
                 }
 
                 private static VisualStyleElement _readonly;
-    
+
                 public static VisualStyleElement ReadOnly {
                     get {
                         if (_readonly == null) {
                             _readonly = new VisualStyleElement(className, part, 6);
                         }
-    
+
                         return _readonly;
                     }
                 }
 
                 private static VisualStyleElement assist;
-    
+
                 public static VisualStyleElement Assist {
                     get {
                         if (assist == null) {
                             assist = new VisualStyleElement(className, part, 7);
                         }
-    
+
                         return assist;
                     }
                 }
@@ -4963,7 +4963,7 @@ namespace System.Windows.Forms.VisualStyles {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -4984,7 +4984,7 @@ namespace System.Windows.Forms.VisualStyles {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -5001,7 +5001,7 @@ namespace System.Windows.Forms.VisualStyles {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -5016,37 +5016,37 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement active;
-    
+
                 public static VisualStyleElement Active {
                     get {
                         if (active == null) {
                             active = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return active;
                     }
                 }
 
                 private static VisualStyleElement inactive;
-    
+
                 public static VisualStyleElement Inactive {
                     get {
                         if (inactive == null) {
                             inactive = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return inactive;
                     }
                 }
 
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -5057,37 +5057,37 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement active;
-    
+
                 public static VisualStyleElement Active {
                     get {
                         if (active == null) {
                             active = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return active;
                     }
                 }
 
                 private static VisualStyleElement inactive;
-    
+
                 public static VisualStyleElement Inactive {
                     get {
                         if (inactive == null) {
                             inactive = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return inactive;
                     }
                 }
 
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -5098,37 +5098,37 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement active;
-    
+
                 public static VisualStyleElement Active {
                     get {
                         if (active == null) {
                             active = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return active;
                     }
                 }
 
                 private static VisualStyleElement inactive;
-    
+
                 public static VisualStyleElement Inactive {
                     get {
                         if (inactive == null) {
                             inactive = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return inactive;
                     }
                 }
 
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -5139,37 +5139,37 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement active;
-    
+
                 public static VisualStyleElement Active {
                     get {
                         if (active == null) {
                             active = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return active;
                     }
                 }
 
                 private static VisualStyleElement inactive;
-    
+
                 public static VisualStyleElement Inactive {
                     get {
                         if (inactive == null) {
                             inactive = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return inactive;
                     }
                 }
 
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -5180,37 +5180,37 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement active;
-    
+
                 public static VisualStyleElement Active {
                     get {
                         if (active == null) {
                             active = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return active;
                     }
                 }
 
                 private static VisualStyleElement inactive;
-    
+
                 public static VisualStyleElement Inactive {
                     get {
                         if (inactive == null) {
                             inactive = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return inactive;
                     }
                 }
 
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -5221,37 +5221,37 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement active;
-    
+
                 public static VisualStyleElement Active {
                     get {
                         if (active == null) {
                             active = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return active;
                     }
                 }
 
                 private static VisualStyleElement inactive;
-    
+
                 public static VisualStyleElement Inactive {
                     get {
                         if (inactive == null) {
                             inactive = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return inactive;
                     }
                 }
 
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -5262,25 +5262,25 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement active;
-    
+
                 public static VisualStyleElement Active {
                     get {
                         if (active == null) {
                             active = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return active;
                     }
                 }
 
                 private static VisualStyleElement inactive;
-    
+
                 public static VisualStyleElement Inactive {
                     get {
                         if (inactive == null) {
                             inactive = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return inactive;
                     }
                 }
@@ -5291,25 +5291,25 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement active;
-    
+
                 public static VisualStyleElement Active {
                     get {
                         if (active == null) {
                             active = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return active;
                     }
                 }
 
                 private static VisualStyleElement inactive;
-    
+
                 public static VisualStyleElement Inactive {
                     get {
                         if (inactive == null) {
                             inactive = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return inactive;
                     }
                 }
@@ -5320,25 +5320,25 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement active;
-    
+
                 public static VisualStyleElement Active {
                     get {
                         if (active == null) {
                             active = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return active;
                     }
                 }
 
                 private static VisualStyleElement inactive;
-    
+
                 public static VisualStyleElement Inactive {
                     get {
                         if (inactive == null) {
                             inactive = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return inactive;
                     }
                 }
@@ -5349,25 +5349,25 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement active;
-    
+
                 public static VisualStyleElement Active {
                     get {
                         if (active == null) {
                             active = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return active;
                     }
                 }
 
                 private static VisualStyleElement inactive;
-    
+
                 public static VisualStyleElement Inactive {
                     get {
                         if (inactive == null) {
                             inactive = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return inactive;
                     }
                 }
@@ -5378,25 +5378,25 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement active;
-    
+
                 public static VisualStyleElement Active {
                     get {
                         if (active == null) {
                             active = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return active;
                     }
                 }
 
                 private static VisualStyleElement inactive;
-    
+
                 public static VisualStyleElement Inactive {
                     get {
                         if (inactive == null) {
                             inactive = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return inactive;
                     }
                 }
@@ -5407,25 +5407,25 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement active;
-    
+
                 public static VisualStyleElement Active {
                     get {
                         if (active == null) {
                             active = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return active;
                     }
                 }
 
                 private static VisualStyleElement inactive;
-    
+
                 public static VisualStyleElement Inactive {
                     get {
                         if (inactive == null) {
                             inactive = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return inactive;
                     }
                 }
@@ -5436,49 +5436,49 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -5489,49 +5489,49 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -5542,49 +5542,49 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -5595,49 +5595,49 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -5648,49 +5648,49 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -5701,49 +5701,49 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -5754,49 +5754,49 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -5807,49 +5807,49 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -5860,49 +5860,49 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -5913,49 +5913,49 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -5966,49 +5966,49 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -6019,49 +6019,49 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -6072,49 +6072,49 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -6125,49 +6125,49 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -6178,49 +6178,49 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -6231,49 +6231,49 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 1);
                         }
-    
+
                         return normal;
                     }
                 }
-    
+
                 private static VisualStyleElement hot;
-    
+
                 public static VisualStyleElement Hot {
                     get {
                         if (hot == null) {
                             hot = new VisualStyleElement(className, part, 2);
                         }
-    
+
                         return hot;
                     }
                 }
-    
+
                 private static VisualStyleElement pressed;
-    
+
                 public static VisualStyleElement Pressed {
                     get {
                         if (pressed == null) {
                             pressed = new VisualStyleElement(className, part, 3);
                         }
-    
+
                         return pressed;
                     }
                 }
-    
+
                 private static VisualStyleElement disabled;
-    
+
                 public static VisualStyleElement Disabled {
                     get {
                         if (disabled == null) {
                             disabled = new VisualStyleElement(className, part, 4);
                         }
-    
+
                         return disabled;
                     }
                 }
@@ -6284,13 +6284,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -6301,13 +6301,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -6318,13 +6318,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -6335,13 +6335,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -6352,13 +6352,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -6372,13 +6372,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -6392,13 +6392,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -6409,13 +6409,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }
@@ -6426,13 +6426,13 @@ namespace System.Windows.Forms.VisualStyles {
 
 
                 private static VisualStyleElement normal;
-    
+
                 public static VisualStyleElement Normal {
                     get {
                         if (normal == null) {
                             normal = new VisualStyleElement(className, part, 0);
                         }
-    
+
                         return normal;
                     }
                 }

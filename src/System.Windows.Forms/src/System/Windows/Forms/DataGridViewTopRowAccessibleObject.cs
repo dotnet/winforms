@@ -121,7 +121,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(string.Format(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet));
                 }
-                
+
                 if (index < 0)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index));

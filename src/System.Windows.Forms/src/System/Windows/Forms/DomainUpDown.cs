@@ -7,7 +7,7 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
 
     using System;
-    
+
     using System.Runtime.InteropServices;
     using System.ComponentModel;
     using System.Drawing;
@@ -59,12 +59,12 @@ namespace System.Windows.Forms {
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.DomainUpDown'/> class.
         ///    </para>
         /// </devdoc>
-        public DomainUpDown() : base() {   
+        public DomainUpDown() : base() {
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
-            SetState2(STATE2_USEPREFERREDSIZECACHE, true);  
+            SetState2(STATE2_USEPREFERREDSIZECACHE, true);
             Text = string.Empty;
-        }                
-                
+        }
+
         // Properties
 
         /// <devdoc>
@@ -105,7 +105,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add => base.PaddingChanged += value; 
+            add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value; }
 
         /// <devdoc>
@@ -134,8 +134,8 @@ namespace System.Windows.Forms {
                 if (value < -1 || value >= Items.Count) {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SelectedIndex), value));
                 }
-                
-                if (value != SelectedIndex) {    
+
+                if (value != SelectedIndex) {
                     SelectIndex(value);
                 }
             }
@@ -241,7 +241,7 @@ namespace System.Windows.Forms {
             add => onSelectedItemChanged += value;
             remove => onSelectedItemChanged -= value;
         }
-        
+
         /// <devdoc>
         ///    Constructs the new instance of the accessibility object for this control. Subclasses
         ///    should not call base.CreateAccessibilityObject.
@@ -249,7 +249,7 @@ namespace System.Windows.Forms {
         protected override AccessibleObject CreateAccessibilityInstance() {
             return new DomainUpDownAccessibleObject(this);
         }
-        
+
         /// <devdoc>
         ///    <para>
         ///       Displays the next item in the object collection.
@@ -267,7 +267,7 @@ namespace System.Windows.Forms {
             }
 
             // If the user has entered text, attempt to match it to the domain list
-            //            
+            //
             int matchIndex = -1;
             if (UserEdit) {
                 matchIndex = MatchIndex(Text, false, domainIndex);
@@ -286,7 +286,7 @@ namespace System.Windows.Forms {
                     SelectIndex(0);
                 }
             }
-                        
+
         }
 
         /// <devdoc>
@@ -368,7 +368,7 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         /// <para>Handles the <see cref='System.Windows.Forms.Control.KeyPress'/>
-        /// event, using the input character to find the next matching item in our 
+        /// event, using the input character to find the next matching item in our
         /// item collection.</para>
         /// </devdoc>
         protected override void OnTextBoxKeyPress(object source, KeyPressEventArgs e) {
@@ -425,7 +425,7 @@ namespace System.Windows.Forms {
                 index = -1;
                 return;
             }
-            
+
             // If the selected index has changed, update the text
             //
             domainIndex = index;
@@ -437,7 +437,7 @@ namespace System.Windows.Forms {
             else {
                 UserEdit = true;
             }
-            
+
             Debug.Assert(domainIndex >=0 || UserEdit == true, "UserEdit should be true when domainIndex < 0 " + UserEdit);
         }
 
@@ -447,7 +447,7 @@ namespace System.Windows.Forms {
         private void SortDomainItems() {
             if (inSort)
                 return;
-            
+
             inSort = true;
             try {
                 // Sanity check
@@ -523,7 +523,7 @@ namespace System.Windows.Forms {
                 }
                 SelectIndex(matchIndex);
             } else {
-                // Otherwise, get the previous string in the domain list            
+                // Otherwise, get the previous string in the domain list
                 if (domainIndex > 0) {
                     SelectIndex(domainIndex - 1);
                 } else if (Wrap) {
@@ -531,7 +531,7 @@ namespace System.Windows.Forms {
                 }
             }
         }
-       
+
         /// <devdoc>
         ///    <para>
         ///       Updates the text in the up-down control to display the selected item.
@@ -552,7 +552,7 @@ namespace System.Windows.Forms {
         internal override Size GetPreferredSizeCore(Size proposedConstraints) {
             int height = PreferredHeight;
             int width = LayoutUtils.OldGetLargestStringSizeInCollection(Font, Items).Width;
-            
+
             // AdjuctWindowRect with our border, since textbox is borderless.
             width = SizeFromClientSize(width, height).Width + upDownButtons.Width;
             return new Size(width, height) + Padding.Size;
@@ -609,15 +609,15 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public override void Remove(object item) {
                 int index = IndexOf(item);
-                
+
                 if (index == -1) {
                     throw new ArgumentOutOfRangeException(nameof(item), item, string.Format(SR.InvalidArgument, nameof(item), item));
                 }
                 else {
-                    RemoveAt(index);    
+                    RemoveAt(index);
                 }
             }
-            
+
             /// <devdoc>
             /// </devdoc>
             public override void RemoveAt(int item) {
@@ -661,11 +661,11 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         /// </devdoc>
-        [System.Runtime.InteropServices.ComVisible(true)]        
+        [System.Runtime.InteropServices.ComVisible(true)]
         public class DomainUpDownAccessibleObject : ControlAccessibleObject {
 
             private DomainItemListAccessibleObject itemList;
-            
+
             /// <devdoc>
             /// </devdoc>
             public DomainUpDownAccessibleObject(Control owner) : base(owner) {
@@ -683,7 +683,7 @@ namespace System.Windows.Forms {
                     base.Name = value;
                 }
             }
-            
+
             private DomainItemListAccessibleObject ItemList {
                 get {
                     if (itemList == null) {
@@ -692,7 +692,7 @@ namespace System.Windows.Forms {
                     return itemList;
                 }
             }
-            
+
             public override AccessibleRole Role {
                 get {
                     AccessibleRole role = Owner.AccessibleRole;
@@ -713,16 +713,16 @@ namespace System.Windows.Forms {
                     //
                     case 0:
                         return ((UpDownBase)Owner).TextBox.AccessibilityObject.Parent;
-                    
+
                     // Up/down buttons
                     //
                     case 1:
                         return ((UpDownBase)Owner).UpDownButtonsInternal.AccessibilityObject.Parent;
-            
-                    case 2:                           
+
+                    case 2:
                         return ItemList;
                 }
-                
+
                 return null;
             }
 
@@ -732,15 +732,15 @@ namespace System.Windows.Forms {
                 return 3;
             }
         }
-        
+
         internal class DomainItemListAccessibleObject : AccessibleObject {
-        
+
             private DomainUpDownAccessibleObject parent;
-        
+
             public DomainItemListAccessibleObject(DomainUpDownAccessibleObject parent) : base() {
                 this.parent = parent;
             }
-            
+
             public override string Name {
                 get {
                     string baseName = base.Name;
@@ -753,7 +753,7 @@ namespace System.Windows.Forms {
                     base.Name = value;
                 }
             }
-            
+
             public override AccessibleObject Parent {
                 get {
                     return parent;
@@ -771,13 +771,13 @@ namespace System.Windows.Forms {
                     return AccessibleStates.Invisible | AccessibleStates.Offscreen;
                 }
             }
-            
+
             public override AccessibleObject GetChild(int index) {
-                
+
                 if (index >=0 && index < GetChildCount()) {
                     return new DomainItemAccessibleObject(((DomainUpDown)parent.Owner).Items[index].ToString(), this);
                 }
-                
+
                 return null;
             }
 
@@ -789,7 +789,7 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         /// </devdoc>
-        [System.Runtime.InteropServices.ComVisible(true)]        
+        [System.Runtime.InteropServices.ComVisible(true)]
         public class DomainItemAccessibleObject : AccessibleObject {
 
             private string name;

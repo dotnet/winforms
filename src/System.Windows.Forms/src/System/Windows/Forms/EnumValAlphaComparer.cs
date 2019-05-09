@@ -6,15 +6,15 @@ namespace System.Windows.Forms {
     using System;
     using System.Collections;
     using System.Globalization;
- 
+
     internal class EnumValAlphaComparer : IComparer {
         private CompareInfo m_compareInfo;
         internal static readonly EnumValAlphaComparer Default = new EnumValAlphaComparer();
-        
+
         internal EnumValAlphaComparer() {
             m_compareInfo = CultureInfo.InvariantCulture.CompareInfo;
         }
-  
+
         public int Compare(object a, object b) {
             return m_compareInfo.Compare(a.ToString(), b.ToString());
         }

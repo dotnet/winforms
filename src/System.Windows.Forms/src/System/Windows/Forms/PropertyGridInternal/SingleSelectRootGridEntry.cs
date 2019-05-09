@@ -10,7 +10,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
     using System.Diagnostics.CodeAnalysis;
     using System;
     using System.Collections;
-    using System.Reflection;    
+    using System.Reflection;
     using System.ComponentModel.Design;
     using System.Windows.Forms;
     using System.Windows.Forms.Design;
@@ -29,7 +29,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         protected AttributeCollection  browsableAttributes = null;
         private   IComponentChangeService changeService;
         protected bool forceReadOnlyChecked;
-        
+
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // GridEntry classes are internal so we have complete
                                                                                                     // control over who does what in the constructor.
@@ -55,7 +55,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                                                                                                     // control over who does what in the constructor.
         ]
         internal SingleSelectRootGridEntry(PropertyGridView view, object value, IServiceProvider baseProvider, IDesignerHost host, PropertyTab tab, PropertySort sortType) : this(view, value,null, baseProvider, host, tab, sortType) {
-        }   
+        }
 
         /// <devdoc>
         /// The set of attributes that will be used for browse filtering
@@ -81,7 +81,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
                     browsableAttributes.CopyTo(attr1, 0);
                     value.CopyTo(attr2, 0);
-                    
+
                     Array.Sort(attr1, GridEntry.AttributeTypeSorter);
                     Array.Sort(attr2, GridEntry.AttributeTypeSorter);
                     for (int i = 0; i < attr1.Length; i++) {
@@ -102,7 +102,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
             }
         }
-        
+
         protected override IComponentChangeService ComponentChangeService {
             get {
                if (changeService == null) {
@@ -111,7 +111,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                return changeService;
             }
         }
-        
+
         internal override bool AlwaysAllowExpand {
             get {
                return true;
@@ -159,19 +159,19 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
         internal override PropertyGridView GridEntryHost {
-            get {       
+            get {
                 return this.gridEntryHost;
             }
             set {
                 this.gridEntryHost = value;
             }
         }
-        
+
         public override GridItemType GridItemType {
             get {
                 return GridItemType.Root;
             }
-        } 
+        }
 
         /// <devdoc>
         ///     Retrieves the keyword that the VS help dynamic help window will
@@ -179,7 +179,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// </devdoc>
         public override string HelpKeyword {
             get {
-                
+
                HelpKeywordAttribute helpAttribute = (HelpKeywordAttribute)TypeDescriptor.GetAttributes(objValue)[typeof(HelpKeywordAttribute)];
 
                if (helpAttribute != null && !helpAttribute.IsDefaultAttribute()) {
@@ -207,9 +207,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return null;
             }
         }
-          
+
         /// <devdoc>
-        /// Gets or sets the value for the property that is represented 
+        /// Gets or sets the value for the property that is represented
         /// by this GridEntry.
         /// </devdoc>
         public override object PropertyValue{
@@ -229,7 +229,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             CategorizePropEntries();
             return fReturn;
         }
-        
+
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 host = null;
@@ -246,7 +246,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         public override object GetService(Type serviceType) {
             object service = null;
-            
+
             if (host != null) {
                 service = host.GetService(serviceType);
             }
@@ -269,15 +269,15 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// </devdoc>
         public virtual void ShowCategories(bool fCategories) {
             if (((this.PropertySort &= PropertySort.Categorized) !=0) != fCategories) {
-                
-                if (fCategories) { 
+
+                if (fCategories) {
                   this.PropertySort |= PropertySort.Categorized;
                 }
                 else {
                   this.PropertySort &= ~PropertySort.Categorized;
                 }
-                
-                
+
+
                 // recreate the children
                 if (this.Expandable && this.ChildCollection != null) {
                     CreateChildren();
@@ -287,14 +287,14 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         internal void CategorizePropEntries() {
             if (Children.Count > 0) {
-                
+
                 GridEntry[] childEntries = new GridEntry[this.Children.Count];
                 this.Children.CopyTo(childEntries, 0);
-                
+
                 if ((this.PropertySort & PropertySort.Categorized) != 0) {
 
 
-                    // first, walk through all the entires and 
+                    // first, walk through all the entires and
                     // group them by their category by adding
                     // them to a hashtable of arraylists.
                     //
@@ -339,7 +339,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     childEntries = new GridEntry[propList.Count];
                     propList.CopyTo(childEntries, 0);
                     StringSorter.Sort(childEntries);
-                    
+
                     ChildCollection.Clear();
                     ChildCollection.AddRange(childEntries);
               }

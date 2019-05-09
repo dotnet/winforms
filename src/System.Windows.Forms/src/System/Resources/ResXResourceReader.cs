@@ -21,7 +21,7 @@ namespace System.Resources {
     using System.Xml;
     using System.ComponentModel.Design;
     using System.Globalization;
-    
+
     /// <devdoc>
     ///     ResX resource reader.
     /// </devdoc>
@@ -76,7 +76,7 @@ namespace System.Resources {
             this.typeResolver = typeResolver;
             this.aliasResolver = aliasResolver ?? new ReaderAliasResolver();
         }
-        
+
 
         public ResXResourceReader(Stream stream) : this(stream, (ITypeResolutionService)null, (IAliasResolver)null) {
         }
@@ -112,7 +112,7 @@ namespace System.Resources {
             this.aliasResolver = aliasResolver ?? new ReaderAliasResolver();
         }
 
-        
+
 
         ~ResXResourceReader() {
             Dispose(false);
@@ -234,7 +234,7 @@ namespace System.Resources {
                     }
                 }
             }
-        }                                
+        }
 
 
 
@@ -307,7 +307,7 @@ namespace System.Resources {
                     while (reader.Read()) {
                         if (reader.NodeType == XmlNodeType.Element) {
                             string s = reader.LocalName;
-                            
+
                             if (reader.LocalName.Equals(ResXResourceWriter.AssemblyStr)) {
                                 ParseAssemblyNode(reader);
                             }
@@ -377,9 +377,9 @@ namespace System.Resources {
                     writerTypeName = writerTypeName.Split(',')[0].Trim();
                 }
 
-                if (readerTypeName != null && 
-                    writerTypeName != null && 
-                    readerTypeName.Equals(readerType.FullName) && 
+                if (readerTypeName != null &&
+                    writerTypeName != null &&
+                    readerTypeName.Equals(readerType.FullName) &&
                     writerTypeName.Equals(writerType.FullName)) {
                     validFile = true;
                 }
@@ -399,7 +399,7 @@ namespace System.Resources {
 
                 // The "1.1" schema requires the correct casing of the strings
                 // in the resheader, however the "1.0" schema had a different
-                // casing. By checking the Equals first, we should 
+                // casing. By checking the Equals first, we should
                 // see significant performance improvements.
                 //
 
@@ -480,13 +480,13 @@ namespace System.Resources {
             string typeName = reader[ResXResourceWriter.NameStr];
 
             AssemblyName assemblyName = new AssemblyName(typeName);
-            
+
             if (string.IsNullOrEmpty(alias)) {
                 alias = assemblyName.Name;
             }
             aliasResolver.PushAlias(alias, assemblyName);
         }
-        
+
 
         private void ParseDataNode(XmlTextReader reader, bool isMetaData) {
             DataNodeInfo nodeInfo = new DataNodeInfo
@@ -498,7 +498,7 @@ namespace System.Resources {
 
             string alias = null;
             AssemblyName assemblyName = null;
-            
+
             if (!string.IsNullOrEmpty(typeName)) {
                 alias  = GetAliasFromTypeName(typeName);
             }
@@ -512,7 +512,7 @@ namespace System.Resources {
             else {
                 nodeInfo.TypeName = reader[ResXResourceWriter.TypeStr];
             }
-            
+
             nodeInfo.MimeType = reader[ResXResourceWriter.MimeTypeStr];
 
             bool finishedReadingDataNode = false;
@@ -527,10 +527,10 @@ namespace System.Resources {
                         if (reader.Name.Equals(ResXResourceWriter.ValueStr)) {
                             WhitespaceHandling oldValue = reader.WhitespaceHandling;
                             try {
-                                // based on the documentation at http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfsystemxmlxmltextreaderclasswhitespacehandlingtopic.asp 
+                                // based on the documentation at http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfsystemxmlxmltextreaderclasswhitespacehandlingtopic.asp
                                 // this is ok because:
                                 // "Because the XmlTextReader does not have DTD information available to it,
-                                // SignificantWhitepsace nodes are only returned within the an xml:space='preserve' scope." 
+                                // SignificantWhitepsace nodes are only returned within the an xml:space='preserve' scope."
                                 // the xml:space would not be present for anything else than string and char (see ResXResourceWriter)
                                 // so this would not cause any breaking change while reading data from Everett (we never outputed
                                 // xml:space then) or from whidbey that is not specifically either a string or a char.
@@ -549,7 +549,7 @@ namespace System.Resources {
                         nodeInfo.ValueData = reader.Value.Trim();
                     }
                 }
-            }            
+            }
 
             if (nodeInfo.Name == null) {
                 throw new ArgumentException(string.Format(SR.InvalidResXResourceNoName, nodeInfo.ValueData));
@@ -570,17 +570,17 @@ namespace System.Resources {
         }
 
         private string GetAliasFromTypeName(string typeName) {
-             
+
              int indexStart = typeName.IndexOf(',');
-             return typeName.Substring(indexStart + 2); 
-        
+             return typeName.Substring(indexStart + 2);
+
         }
 
         private string GetTypeFromTypeName(string typeName) {
-             
+
              int indexStart = typeName.IndexOf(',');
-             return typeName.Substring(0, indexStart); 
-        
+             return typeName.Substring(0, indexStart);
+
         }
 
 
@@ -596,7 +596,7 @@ namespace System.Resources {
                 AssemblyName result = null;
                 if(cachedAliases != null) {
                     result = (AssemblyName)cachedAliases[alias];
-                } 
+                }
                 return result;
             }
 
@@ -605,7 +605,7 @@ namespace System.Resources {
                     cachedAliases[alias] = name;
                 }
             }
-            
+
         }
     }
 }

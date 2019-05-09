@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms { 
+namespace System.Windows.Forms {
 
 using System;
 using System.Drawing;
@@ -32,7 +32,7 @@ using Microsoft.Win32;
 
        /// <devdoc>
        ///    <para>
-       ///      If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to 
+       ///      If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to
        /// determine how to render.
        ///      If this property is false, the renderer will always render with visualstyles.
        ///    </para>
@@ -60,7 +60,7 @@ using Microsoft.Win32;
        public static bool IsBackgroundPartiallyTransparent(CheckBoxState state) {
            if (RenderWithVisualStyles) {
                InitializeRenderer((int)state);
-    
+
                return visualStyleRenderer.IsBackgroundPartiallyTransparent();
            }
            else {
@@ -80,7 +80,7 @@ using Microsoft.Win32;
        public static void DrawParentBackground(Graphics g, Rectangle bounds, Control childControl) {
            if (RenderWithVisualStyles) {
                InitializeRenderer(0);
-    
+
                visualStyleRenderer.DrawParentBackground(g, bounds, childControl);
            }
        }
@@ -99,7 +99,7 @@ using Microsoft.Win32;
 
            if (RenderWithVisualStyles) {
                InitializeRenderer((int)state);
-               
+
                visualStyleRenderer.DrawBackground(g, glyphBounds, hWnd);
            }
            else {
@@ -110,7 +110,7 @@ using Microsoft.Win32;
                    ControlPaint.DrawCheckBox(g, glyphBounds, ConvertToButtonState(state));
                }
            }
-           
+
        }
 
        /// <devdoc>
@@ -120,7 +120,7 @@ using Microsoft.Win32;
        /// </devdoc>
        public static void DrawCheckBox(Graphics g, Point glyphLocation, Rectangle textBounds, string checkBoxText, Font font, bool focused, CheckBoxState state) {
            DrawCheckBox(g, glyphLocation, textBounds, checkBoxText, font,
-                      TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine, 
+                      TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
                       focused, state);
        }
 
@@ -136,10 +136,10 @@ using Microsoft.Win32;
         internal static void DrawCheckBox(Graphics g, Point glyphLocation, Rectangle textBounds, string checkBoxText, Font font, TextFormatFlags flags, bool focused, CheckBoxState state, IntPtr hWnd) {
            Rectangle glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(g, state, hWnd));
            Color textColor;
-    
+
            if (RenderWithVisualStyles) {
                InitializeRenderer((int)state);
-    
+
                visualStyleRenderer.DrawBackground(g, glyphBounds);
                textColor = visualStyleRenderer.GetColor(ColorProperty.TextColor);
            }
@@ -168,7 +168,7 @@ using Microsoft.Win32;
        /// </devdoc>
        public static void DrawCheckBox(Graphics g, Point glyphLocation, Rectangle textBounds, string checkBoxText, Font font, Image image, Rectangle imageBounds, bool focused, CheckBoxState state) {
            DrawCheckBox(g, glyphLocation, textBounds, checkBoxText, font,
-                      TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine, 
+                      TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
                       image, imageBounds, focused, state);
        }
 
@@ -183,7 +183,7 @@ using Microsoft.Win32;
 
            if (RenderWithVisualStyles) {
                InitializeRenderer((int)state);
-    
+
                //Keep this drawing order! It matches default drawing order.
                visualStyleRenderer.DrawImage(g, imageBounds, image);
                visualStyleRenderer.DrawBackground(g, glyphBounds);
@@ -200,7 +200,7 @@ using Microsoft.Win32;
 
                textColor = SystemColors.ControlText;
            }
-           
+
            TextRenderer.DrawText(g, checkBoxText, font, textBounds, textColor, flags);
 
            if (focused) {
@@ -223,7 +223,7 @@ using Microsoft.Win32;
         internal static Size GetGlyphSize(Graphics g, CheckBoxState state, IntPtr hWnd) {
            if (RenderWithVisualStyles) {
                InitializeRenderer((int)state);
-    
+
                return visualStyleRenderer.GetPartSize(g, ThemeSizeType.Draw, hWnd);
            }
 
@@ -232,7 +232,7 @@ using Microsoft.Win32;
 
        internal static ButtonState ConvertToButtonState(CheckBoxState state) {
            switch (state) {
-           
+
            case CheckBoxState.CheckedNormal:
            case CheckBoxState.CheckedHot:
                return ButtonState.Checked;
@@ -304,7 +304,7 @@ using Microsoft.Win32;
 
        private static bool IsMixed(CheckBoxState state) {
            switch (state) {
-           
+
            case CheckBoxState.MixedNormal:
            case CheckBoxState.MixedHot:
            case CheckBoxState.MixedPressed:

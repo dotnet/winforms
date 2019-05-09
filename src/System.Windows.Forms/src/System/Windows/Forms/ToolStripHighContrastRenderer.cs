@@ -31,7 +31,7 @@ namespace System.Windows.Forms {
 		public ToolStripHighContrastRenderer(bool systemRenderMode) {
 			options[optionsDottedBorder | optionsDottedGrip | optionsFillWhenSelected] = !systemRenderMode;
 		}
-		
+
 		public bool DottedBorder {
 			get { return options[optionsDottedBorder]; }
 		}
@@ -46,7 +46,7 @@ namespace System.Windows.Forms {
         internal override ToolStripRenderer RendererOverride {
             get { return null; }
         }
-        
+
         protected override void OnRenderArrow(ToolStripArrowRenderEventArgs e) {
             base.OnRenderArrow(e);
         }
@@ -87,9 +87,9 @@ namespace System.Windows.Forms {
 			}
 		}
 
-	
+
 		protected override void OnRenderDropDownButtonBackground(ToolStripItemRenderEventArgs e) {
-			
+
 			if (FillWhenSelected) {
 				RenderItemInternalFilled(e, false);
 			}
@@ -99,7 +99,7 @@ namespace System.Windows.Forms {
 					e.Graphics.DrawRectangle(SystemPens.ButtonHighlight, new Rectangle(0, 0, e.Item.Width - 1, e.Item.Height - 1));
 				}
 			}
-			
+
 		}
 
 		protected override void OnRenderItemCheck(ToolStripItemImageRenderEventArgs e) {
@@ -126,9 +126,9 @@ namespace System.Windows.Forms {
 
             base.OnRenderItemCheck(e);
 		}
-	
+
 		protected override void OnRenderImageMargin(ToolStripRenderEventArgs e) {
-			// do nothing 
+			// do nothing
 		}
 		protected override void OnRenderItemBackground(ToolStripItemRenderEventArgs e) {
 			base.OnRenderItemBackground(e);
@@ -144,7 +144,7 @@ namespace System.Windows.Forms {
 
 				if (item.Pressed) {
 					g.DrawRectangle(SystemPens.ButtonHighlight, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
-					
+
 				}
 				else if (item.Selected) {
 					g.FillRectangle(SystemBrushes.Highlight, bounds);
@@ -156,7 +156,7 @@ namespace System.Windows.Forms {
 				DrawArrow(new ToolStripArrowRenderEventArgs(g, item, dropDownRect, arrowColor, ArrowDirection.Down));
 			}
 		}
-        
+
 		protected override void OnRenderStatusStripSizingGrip(ToolStripRenderEventArgs e) {
 			base.OnRenderStatusStripSizingGrip(e);
 		}
@@ -170,7 +170,7 @@ namespace System.Windows.Forms {
 			}
 		}
 		protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e) {
-		
+
 			base.OnRenderMenuItemBackground(e);
 			if (!e.Item.IsOnDropDown && e.Item.Pressed) {
 				e.Graphics.DrawRectangle(SystemPens.ButtonHighlight, 0, 0, e.Item.Width - 1, e.Item.Height - 1);
@@ -184,11 +184,11 @@ namespace System.Windows.Forms {
 				Graphics g = e.Graphics;
 				Color arrowColor = item.Enabled ? SystemColors.ControlText : SystemColors.ControlDark;
 				DrawArrow(new ToolStripArrowRenderEventArgs(g, item, new Rectangle(Point.Empty, item.Size), arrowColor, ArrowDirection.Down));
-			
-		
+
+
 			}
 			else {
-				base.OnRenderOverflowButtonBackground(e);		
+				base.OnRenderOverflowButtonBackground(e);
 			}
 		}
 
@@ -215,7 +215,7 @@ namespace System.Windows.Forms {
                 ((ToolStripButton)e.Item).Checked) {
                 e.TextColor = SystemColors.HighlightText;
             }
-                
+
             base.OnRenderItemText(e);
         }
 
@@ -235,7 +235,7 @@ namespace System.Windows.Forms {
 				if (!(e.ToolStrip is ToolStripOverflow)) {
 					// make the neck connected.
 					g.FillRectangle(SystemBrushes.Control, e.ConnectedArea);
-				
+
 				}
 			}
 			else if (e.ToolStrip is MenuStrip) {
@@ -303,7 +303,7 @@ namespace System.Windows.Forms {
 					bounds.Height -= 1;
 					g.DrawRectangle(SystemPens.ButtonShadow, bounds);
 				}
-			
+
 		}
 		protected override void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e) {
 
@@ -311,7 +311,7 @@ namespace System.Windows.Forms {
 
 			Graphics g = e.Graphics;
 			Rectangle bounds = new Rectangle(Point.Empty, e.Item.Size);
-			
+
 
 			if (e.Vertical) {
 				if (bounds.Height >= 8) {
@@ -321,7 +321,7 @@ namespace System.Windows.Forms {
 				int startX = bounds.Width / 2;
 
 				g.DrawLine(foreColorPen, startX, bounds.Top, startX, bounds.Bottom - 1);
-		
+
 			}
 			else {
 				//
@@ -336,7 +336,7 @@ namespace System.Windows.Forms {
 				g.DrawLine(foreColorPen, bounds.Left, startY, bounds.Right - 1, startY);
 
 			}
-			
+
 		}
 
 		// Indicates whether system is currently set to high contrast 'white on black' mode
@@ -355,7 +355,7 @@ namespace System.Windows.Forms {
                     return;
                 }
 				Graphics g = e.Graphics;
-			
+
 				ToolStripItem item = e.Item;
 				Rectangle imageRect = e.ImageRectangle;
 				using (ImageAttributes attrs = new ImageAttributes()) {
@@ -418,7 +418,7 @@ namespace System.Windows.Forms {
 		private void RenderItemInternalFilled(ToolStripItemRenderEventArgs e, bool pressFill) {
 			Graphics g = e.Graphics;
 			Rectangle bounds = new Rectangle(Point.Empty, e.Item.Size);
-            
+
 			if (e.Item.Pressed) {
 				if (pressFill) {
 					g.FillRectangle(SystemBrushes.Highlight, bounds);
@@ -431,8 +431,8 @@ namespace System.Windows.Forms {
 				g.FillRectangle(SystemBrushes.Highlight, bounds);
 				g.DrawRectangle(SystemPens.ControlLight, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
 			}
-         
-                   
+
+
 		}
 
 	}

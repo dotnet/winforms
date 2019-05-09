@@ -11,19 +11,19 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Drawing;
-    using System.Drawing.Design;    
+    using System.Drawing.Design;
     using System.Globalization;
     using System.Windows.Forms.Layout;
     using System.Reflection;
     using System.Runtime.Serialization;
-    
+
     /// <devdoc>this is a wrapper class to expose interesting properties of TableLayout</devdoc>
     [
      TypeConverter(typeof(TableLayoutSettingsTypeConverter)),
      Serializable
     ]
     public sealed class TableLayoutSettings : LayoutSettings, ISerializable {
-        
+
 
         static private int[] borderStyleToOffset = {
             /*None = */ 0,
@@ -36,7 +36,7 @@ namespace System.Windows.Forms {
         };
         private TableLayoutPanelCellBorderStyle _borderStyle;
         private TableLayoutSettingsStub _stub;
-        
+
         // used by TableLayoutSettingsTypeConverter
         internal TableLayoutSettings() : base(null){
             _stub = new TableLayoutSettingsStub();
@@ -56,7 +56,7 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
+
         public override LayoutEngine LayoutEngine {
             get { return TableLayout.Instance; }
         }
@@ -64,18 +64,18 @@ namespace System.Windows.Forms {
         private TableLayout TableLayout {
             get { return (TableLayout) this.LayoutEngine; }
         }
-        
+
 
         /// <devdoc> internal as this is a TableLayoutPanel feature only </devdoc>
         [DefaultValue(TableLayoutPanelCellBorderStyle.None), SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.TableLayoutPanelCellBorderStyleDescr))]
         internal TableLayoutPanelCellBorderStyle CellBorderStyle {
             get { return _borderStyle; }
-            set { 
+            set {
                 //valid values are 0x0 to 0x6
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)TableLayoutPanelCellBorderStyle.None, (int)TableLayoutPanelCellBorderStyle.OutsetPartial)){
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(CellBorderStyle), value));
                 }
-                _borderStyle = value;   
+                _borderStyle = value;
                 //set the CellBorderWidth according to the current CellBorderStyle.
                 TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
                 containerInfo.CellBorderWidth = borderStyleToOffset[(int)value];
@@ -88,7 +88,7 @@ namespace System.Windows.Forms {
         internal int CellBorderWidth {
             get { return TableLayout.GetContainerInfo(Owner).CellBorderWidth; }
         }
-        
+
         /// <devdoc>
         /// This sets the maximum number of columns allowed on this table instead of allocating
         /// actual spaces for these columns. So it is OK to set ColumnCount to Int32.MaxValue without
@@ -98,21 +98,21 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(0)]
         public int ColumnCount {
-            get { 
+            get {
                 TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
                 return containerInfo.MaxColumns;
             }
-            set { 
+            set {
                 if (value < 0)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ColumnCount), value, 0));
                 }
 
-                TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);         
+                TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
                 containerInfo.MaxColumns = value;
                 LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.Columns);
                 Debug.Assert(ColumnCount == value, "the max columns should equal to the value we set it to");
-                
+
             }
         }
 
@@ -125,11 +125,11 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(0)]
         public int RowCount {
-            get { 
+            get {
                 TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
                 return containerInfo.MaxRows;
             }
-            set { 
+            set {
                 if (value < 0)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(RowCount), value, 0));
@@ -139,7 +139,7 @@ namespace System.Windows.Forms {
                 containerInfo.MaxRows = value;
                 LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.Rows);
                 Debug.Assert(RowCount == value, "the max rows should equal to the value we set it to");
-                
+
             }
         }
 
@@ -147,7 +147,7 @@ namespace System.Windows.Forms {
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [SRCategory(nameof(SR.CatLayout))]
         public TableLayoutRowStyleCollection RowStyles {
-            get { 
+            get {
                 if (IsStub) {
                     return _stub.RowStyles;
                 }
@@ -162,7 +162,7 @@ namespace System.Windows.Forms {
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [SRCategory(nameof(SR.CatLayout))]
         public TableLayoutColumnStyleCollection ColumnStyles {
-            get { 
+            get {
                 if (IsStub) {
                     return _stub.ColumnStyles;
                 }
@@ -184,14 +184,14 @@ namespace System.Windows.Forms {
         public TableLayoutPanelGrowStyle GrowStyle {
             get {
                 return TableLayout.GetContainerInfo(Owner).GrowStyle;
-            }   
-            
-            set { 
+            }
+
+            set {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)TableLayoutPanelGrowStyle.FixedSize, (int)TableLayoutPanelGrowStyle.AddColumns)){
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(GrowStyle), value));
-                }            
-               
+                }
+
                 TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
                 if (containerInfo.GrowStyle != value) {
                     containerInfo.GrowStyle = value;
@@ -220,10 +220,10 @@ namespace System.Windows.Forms {
                    _stub = settings._stub;
                 }
             }
-           
+
         }
 
-        #region Extended Properties   
+        #region Extended Properties
 
         public int GetColumnSpan(object control)
         {
@@ -260,7 +260,7 @@ namespace System.Windows.Forms {
             }
             else
             {
-                IArrangedElement element = LayoutEngine.CastToArrangedElement(control);	
+                IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
                 if (element.Container != null)
                 {
                     TableLayout.ClearCachedAssignments(TableLayout.GetContainerInfo(element.Container));
@@ -269,7 +269,7 @@ namespace System.Windows.Forms {
                 LayoutTransaction.DoLayout(element.Container, element, PropertyNames.ColumnSpan);
                 Debug.Assert(GetColumnSpan(element) == value, "column span should equal to the value we set");
             }
-            
+
         }
 
         public int GetRowSpan(object control)
@@ -289,7 +289,7 @@ namespace System.Windows.Forms {
                 return TableLayout.GetLayoutInfo(element).RowSpan;
             }
         }
-        
+
         public void SetRowSpan(object control, int value)
         {
             if (control == null)
@@ -339,13 +339,13 @@ namespace System.Windows.Forms {
             {
                 IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
                 TableLayout.LayoutInfo layoutInfo = TableLayout.GetLayoutInfo(element);
-                return layoutInfo.RowPosition; 
+                return layoutInfo.RowPosition;
             }
         }
 
         /// <devdoc>
         /// Set the row position of the element
-        /// If we set the row position to -1, it will automatically switch the control from 
+        /// If we set the row position to -1, it will automatically switch the control from
         /// absolutely positioned to non-absolutely positioned
         /// </devdoc>
         public void SetRow(object control, int row)
@@ -415,13 +415,13 @@ namespace System.Windows.Forms {
             {
                 IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
                 TableLayout.LayoutInfo layoutInfo = TableLayout.GetLayoutInfo(element);
-                return layoutInfo.ColumnPosition; 
+                return layoutInfo.ColumnPosition;
            }
         }
-        
+
         /// <devdoc>
         /// Set the column position of the element
-        /// If we set the column position to -1, it will automatically switch the control from 
+        /// If we set the column position to -1, it will automatically switch the control from
         /// absolutely positioned to non-absolutely positioned
         /// </devdoc>
         public void SetColumn(object control, int column)
@@ -479,7 +479,7 @@ namespace System.Windows.Forms {
                 Debug.Assert(!rowSpecified || GetRow(element) == row, "row position shoule equal to what we set");
             }
         }
-        
+
         ///<devdoc>
         /// Get the element which covers the specified row and column. return null if we can't find one
         ///</devdoc>
@@ -492,13 +492,13 @@ namespace System.Windows.Forms {
         {
             return TableLayout.GetPositionFromControl(Owner, element);
         }
-        
+
         #endregion
-        
+
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) {
             TypeConverter converter = TypeDescriptor.GetConverter(this);
             string stringVal = converter.ConvertToInvariantString(this);
-            
+
             if (!string.IsNullOrEmpty(stringVal)) {
                 si.AddValue("SerializedString", stringVal);
             }
@@ -515,7 +515,7 @@ namespace System.Windows.Forms {
                     Control c = element as Control;
                     if (c != null) {
                         ControlInformation controlInfo = new ControlInformation();
-                        
+
                         // We need to go through the PropertyDescriptor for the Name property
                         // since it is shadowed.
                         PropertyDescriptor prop = TypeDescriptor.GetProperties(c)["Name"];
@@ -527,9 +527,9 @@ namespace System.Windows.Forms {
                         controlInfo.RowSpan = GetRowSpan(c);
                         controlInfo.Column = GetColumn(c);
                         controlInfo.ColumnSpan = GetColumnSpan(c);
-                        controlsInfo.Add(controlInfo);               
+                        controlsInfo.Add(controlInfo);
                     }
-    
+
                 }
                 return controlsInfo;
            }
@@ -542,7 +542,7 @@ namespace System.Windows.Forms {
             internal int Column;
             internal int RowSpan;
             internal int ColumnSpan;
-            
+
             internal ControlInformation(object name, int row, int column, int rowSpan, int columnSpan)  {
                 Name = name;
                 Row = row;
@@ -551,13 +551,13 @@ namespace System.Windows.Forms {
                 ColumnSpan = columnSpan;
             }
         }
-    
-        /// <devdoc> TableLayoutSettingsStub 
-        ///               contains information about 
+
+        /// <devdoc> TableLayoutSettingsStub
+        ///               contains information about
         /// </devdoc>
         private class TableLayoutSettingsStub {
-       
-            private static ControlInformation DefaultControlInfo = new ControlInformation(null, -1, -1, 1, 1); 
+
+            private static ControlInformation DefaultControlInfo = new ControlInformation(null, -1, -1, 1, 1);
             private TableLayoutColumnStyleCollection columnStyles;
             private TableLayoutRowStyleCollection rowStyles;
             private Dictionary<object, ControlInformation> controlsInfo;
@@ -581,7 +581,7 @@ namespace System.Windows.Forms {
                 Control appliedControl = containerInfo.Container as Control;
                 if (appliedControl != null && controlsInfo != null) {
 
-                    // we store the control names, look up the controls 
+                    // we store the control names, look up the controls
                     // in the appliedControl's control collection and apply the row,column settings.
                     foreach (object controlName in controlsInfo.Keys){
                         ControlInformation controlInfo = controlsInfo[controlName];
@@ -611,7 +611,7 @@ namespace System.Windows.Forms {
 
                 //
                 // assign over the row and column styles
-                // 
+                //
                 containerInfo.RowStyles = rowStyles;
                 containerInfo.ColumnStyles = columnStyles;
 
@@ -621,10 +621,10 @@ namespace System.Windows.Forms {
 
                 // set a flag for assertion detection.
                 isValid = false;
-                
+
             }
-         
-            
+
+
 
             public TableLayoutColumnStyleCollection ColumnStyles {
                 get {
@@ -638,7 +638,7 @@ namespace System.Windows.Forms {
             public bool IsValid {
                 get { return isValid; }
             }
-      
+
             public TableLayoutRowStyleCollection RowStyles {
                 get {
                     if (rowStyles == null) {
@@ -649,7 +649,7 @@ namespace System.Windows.Forms {
             }
 
             internal List<ControlInformation> GetControlsInformation() {
-                
+
                 if (controlsInfo == null) {
                     return new List<ControlInformation>();
                 }
@@ -672,7 +672,7 @@ namespace System.Windows.Forms {
                     return DefaultControlInfo;
                 }
                 return controlsInfo[controlName];
-            
+
             }
 
             public int GetColumn(object controlName) {
@@ -701,7 +701,7 @@ namespace System.Windows.Forms {
                     info.Column = column;
                     SetControlInformation(controlName, info);
                }
-               
+
             }
             public void SetColumnSpan(object controlName, int value) {
                 if (GetColumnSpan(controlName) != value) {
@@ -715,35 +715,35 @@ namespace System.Windows.Forms {
                     ControlInformation info = GetControlInformation(controlName);
                     info.Row = row;
                     SetControlInformation(controlName, info);
-               }     
+               }
             }
             public void SetRowSpan(object controlName, int value) {
                 if (GetRowSpan(controlName) != value) {
                      ControlInformation info = GetControlInformation(controlName);
                      info.RowSpan = value;
                      SetControlInformation(controlName, info);
-                }     
+                }
             }
 
-        
+
         } // end of System.Windows.Forms.TableLayoutSettings
 
-        internal class StyleConverter : TypeConverter {    
+        internal class StyleConverter : TypeConverter {
             public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType) {
                 if (destinationType == typeof(InstanceDescriptor)) {
                     return true;
                 }
                 return base.CanConvertTo(context, destinationType);
             }
-            
+
             public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
                 if (destinationType == null) {
                     throw new ArgumentNullException(nameof(destinationType));
                 }
-        
+
                 if (destinationType == typeof(InstanceDescriptor) && value is TableLayoutStyle) {
                     TableLayoutStyle style = (TableLayoutStyle) value;
-        
+
                     switch(style.SizeType) {
                         case SizeType.AutoSize:
                             return new InstanceDescriptor(
@@ -760,7 +760,7 @@ namespace System.Windows.Forms {
                 }
                 return base.ConvertTo(context, culture, value, destinationType);
             }
-        }    
+        }
     }
 
     public class ColumnStyle : TableLayoutStyle {
@@ -778,7 +778,7 @@ namespace System.Windows.Forms {
             this.SizeType = sizeType;
             this.Width = width;
         }
-        
+
 
         public float Width {
             get { return base.Size; }
@@ -791,21 +791,21 @@ namespace System.Windows.Forms {
 
 
         public RowStyle() {}
-        
+
         public RowStyle(SizeType sizeType) {
             this.SizeType = sizeType;
         }
-        
-    
+
+
         public RowStyle(SizeType sizeType, float height) {
             this.SizeType = sizeType;
             this.Height = height;
         }
 
- 
+
         public float Height {
             get { return base.Size; }
             set { base.Size = value; }
         }
-    } 
+    }
 }

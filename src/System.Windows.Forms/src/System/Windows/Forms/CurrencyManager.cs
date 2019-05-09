@@ -6,7 +6,7 @@ namespace System.Windows.Forms {
 
     using System;
     using Microsoft.Win32;
-    using System.Diagnostics;    
+    using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.ComponentModel;
     using System.Collections;
@@ -21,10 +21,10 @@ namespace System.Windows.Forms {
 
         private object dataSource;
         private IList list;
-        
+
         private bool bound = false;
         private bool shouldBind = true;
-        
+
         /// <devdoc>
         /// </devdoc>
         [
@@ -91,7 +91,7 @@ namespace System.Windows.Forms {
                 return !list.IsReadOnly && !list.IsFixedSize;
             }
         }
-        
+
         /// <devdoc>
         ///    <para>Gets a value
         ///       indicating whether edits to the list are allowed.</para>
@@ -106,7 +106,7 @@ namespace System.Windows.Forms {
                 return !list.IsReadOnly;
             }
         }
-        
+
         /// <devdoc>
         ///    <para>Gets a value indicating whether items can be removed from the list.</para>
         /// </devdoc>
@@ -120,7 +120,7 @@ namespace System.Windows.Forms {
                 return !list.IsReadOnly && !list.IsFixedSize;
             }
         }
-        
+
         /// <devdoc>
         ///    <para>Gets the number of items in the list.</para>
         /// </devdoc>
@@ -132,7 +132,7 @@ namespace System.Windows.Forms {
                     return list.Count;
             }
         }
-        
+
         /// <devdoc>
         ///    <para>Gets the current item in the list.</para>
         /// </devdoc>
@@ -147,7 +147,7 @@ namespace System.Windows.Forms {
                 return ListBindingHelper.GetListItemType(this.List);
             }
         }
-        
+
         /// <devdoc>
         ///    <para>Gets the data source of the list.</para>
         /// </devdoc>
@@ -169,11 +169,11 @@ namespace System.Windows.Forms {
                     finalType = tempList.GetType();
                     tempList = (Array)tempList;
                 }
-                
+
                 if (tempList is IListSource) {
-                    tempList = ((IListSource)tempList).GetList();                    
+                    tempList = ((IListSource)tempList).GetList();
                 }
-            
+
                 if (tempList is IList) {
                     if (finalType == null) {
                         finalType = tempList.GetType();
@@ -220,7 +220,7 @@ namespace System.Windows.Forms {
         public IList List {
             get {
                 // NOTE: do not change this to throw an exception if the list is not IBindingList.
-                // doing this will cause a major performance hit when wiring the 
+                // doing this will cause a major performance hit when wiring the
                 // dataGrid to listen for MetaDataChanged events from the IBindingList
                 // (basically we would have to wrap all calls to CurrencyManager::List with
                 // a try/catch block.)
@@ -269,7 +269,7 @@ namespace System.Windows.Forms {
                 list[index] = value;
             }
         }
-        
+
         public override void AddNew() {
             IBindingList ibl = list as IBindingList;
             if (ibl != null) {
@@ -318,7 +318,7 @@ namespace System.Windows.Forms {
                 }
                 return;
             }
-            
+
             if ((newPosition < 0 || newPosition >= Count) && this.IsBinding) {
                 throw new IndexOutOfRangeException(SR.ListManagerBadPosition);
             }
@@ -339,7 +339,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            // we pull the data from the controls only when the ListManager changes the list. when the backEnd changes the list we do not 
+            // we pull the data from the controls only when the ListManager changes the list. when the backEnd changes the list we do not
             // pull the data from the controls
             if (validating && pullData) {
                 CurrencyManager_PullData();
@@ -351,11 +351,11 @@ namespace System.Windows.Forms {
             if (validating) {
                 OnCurrentChanged(EventArgs.Empty);
             }
-                
+
             bool positionChanging = (oldPosition != listposition);
             if (positionChanging && firePositionChange) {
                 OnPositionChanged(EventArgs.Empty);
-            }                
+            }
         }
 
         /// <devdoc>
@@ -470,7 +470,7 @@ namespace System.Windows.Forms {
                 ((IBindingList)list).ApplySort(property, sortDirection);
             }
         }
-        
+
         /// <devdoc>
         /// <para>Gets a <see cref='System.ComponentModel.PropertyDescriptor'/> for a CurrencyManager.</para>
         /// </devdoc>
@@ -490,7 +490,7 @@ namespace System.Windows.Forms {
             }
             return ListSortDirection.Ascending;
         }
-                
+
         /// <devdoc>
         ///    <para>Find the position of a desired list item.</para>
         /// </devdoc>
@@ -535,9 +535,9 @@ namespace System.Windows.Forms {
                 listAccessors.CopyTo(properties, 0);
                 return ((ITypedList)list).GetListName(properties);
             }
-            return "";            
+            return "";
         }
-        
+
         /// <devdoc>
         /// </devdoc>
         internal override PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors) {
@@ -556,11 +556,11 @@ namespace System.Windows.Forms {
         /// <para>Gets the <see cref='T:System.ComponentModel.PropertyDescriptorCollection'/> for the specified list.</para>
         /// </devdoc>
         private void List_ListChanged(object sender, System.ComponentModel.ListChangedEventArgs e) {
-            // If you change the assert below, better change the 
+            // If you change the assert below, better change the
             // code in the OnCurrentChanged that deals w/ firing the OnCurrentChanged event
             Debug.Assert(lastGoodKnownRow == -1 || lastGoodKnownRow == listposition, "if we have a valid lastGoodKnownRow, then it should equal the position in the list");
 
-            // 
+            //
 
 
 
@@ -606,13 +606,13 @@ namespace System.Windows.Forms {
                     e.ListChangedType == System.ComponentModel.ListChangedType.PropertyDescriptorChanged)
                     OnMetaDataChanged(EventArgs.Empty);
 
-                // 
+                //
 
 
                 OnListChanged(dbe);
                 return;
             }
-            
+
             suspendPushDataInCurrentChanged = true;
             try {
                 switch (dbe.ListChangedType) {
@@ -620,7 +620,7 @@ namespace System.Windows.Forms {
                         Debug.WriteLineIf(CompModSwitches.DataCursor.TraceVerbose, "System.ComponentModel.ListChangedType.Reset Position: " + Position + " Count: " + list.Count);
                         if (listposition == -1 && list.Count > 0)
                             ChangeRecordState(0, true, false, true, false);     // last false: we don't pull the data from the control when DM changes
-                        else 
+                        else
                             ChangeRecordState(Math.Min(listposition,list.Count - 1), true, false, true, false);
                         UpdateIsBinding(/*raiseItemChangedEvent:*/ false);
                         OnItemChanged(resetEvent);
@@ -654,7 +654,7 @@ namespace System.Windows.Forms {
                         UpdateIsBinding();
                         // put the call to OnItemChanged after setting the position, so the
                         // controls would use the actual position.
-                        // if we have a control bound to a dataView, and then we add a row to a the dataView, 
+                        // if we have a control bound to a dataView, and then we add a row to a the dataView,
                         // then the control will use the old listposition to get the data. and this is bad.
                         //
                         OnItemChanged(resetEvent);
@@ -669,7 +669,7 @@ namespace System.Windows.Forms {
                             // in the currencyManager, so controls will use the actual position
                             OnItemChanged(resetEvent);
                             break;
-                           
+
                         }
                         if (dbe.NewIndex < listposition) {
                             // this means the current row just moved up by one.
@@ -721,7 +721,7 @@ namespace System.Windows.Forms {
                         break;
                 }
                 // send the ListChanged notification after the position changed in the list
-                // 
+                //
 
 
                 OnListChanged(dbe);
@@ -769,7 +769,7 @@ namespace System.Windows.Forms {
                 }
                 catch (Exception ex) {
                     OnDataError(ex);
-                }                    
+                }
             }
         }
 
@@ -778,7 +778,7 @@ namespace System.Windows.Forms {
         protected internal override void OnCurrentItemChanged(EventArgs e) {
             _onCurrentItemChangedHandler?.Invoke(this, e);
         }
-        
+
         /// <devdoc>
         /// </devdoc>
         protected virtual void OnItemChanged(ItemChangedEventArgs e) {
@@ -836,7 +836,7 @@ namespace System.Windows.Forms {
         ///       Forces a repopulation of the CurrencyManager
         ///    </para>
         /// </devdoc>
-        public void Refresh() { 
+        public void Refresh() {
             if (list.Count > 0 ) {
                 if (listposition >= list.Count) {
                     lastGoodKnownRow = -1;
@@ -892,7 +892,7 @@ namespace System.Windows.Forms {
                 */
             }
         }
-        
+
         protected override void UpdateIsBinding() {
             UpdateIsBinding(true);
         }

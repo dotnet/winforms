@@ -13,7 +13,7 @@ namespace System.Windows.Forms {
     using System.Diagnostics.CodeAnalysis;
 
     using System;
-    using System.Drawing.Design;    
+    using System.Drawing.Design;
     using System.Collections;
     using System.Globalization;
     using System.Windows.Forms;
@@ -21,7 +21,7 @@ namespace System.Windows.Forms {
     using System.IO;
     using System.Drawing;
     using Microsoft.Win32;
-    
+
 
     /// <devdoc>
     ///    <para>
@@ -31,7 +31,7 @@ namespace System.Windows.Forms {
     /// </devdoc>
     [
     TypeConverterAttribute(typeof(TreeNodeConverter)), Serializable,
-    DefaultProperty(nameof(Text)),    
+    DefaultProperty(nameof(Text)),
     SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly")
     ]
     public class TreeNode : MarshalByRefObject, ICloneable, ISerializable {
@@ -39,7 +39,7 @@ namespace System.Windows.Forms {
         private const int CHECKED = 2 << SHIFTVAL;
         private const int UNCHECKED = 1 << SHIFTVAL;
         private const int ALLOWEDIMAGES = 14;
-        
+
         //the threshold value used to optimize AddRange and Clear operations for a big number of nodes
         internal const int MAX_TREENODES_OPS = 200;
 
@@ -49,7 +49,7 @@ namespace System.Windows.Forms {
         internal OwnerDrawPropertyBag propBag = null;
         internal IntPtr handle;
         internal string text;
-        internal string name; 
+        internal string name;
 
         // note: as the checked state of a node is user controlled, and this variable is simply for
         // state caching when a node hasn't yet been realized, you should use the Checked property to
@@ -72,7 +72,7 @@ namespace System.Windows.Forms {
         // list for indexing purposes.
         internal class TreeNodeImageIndexer : ImageList.Indexer {
            private TreeNode owner;
-           
+
             public enum ImageListType
             {
                Default,
@@ -101,23 +101,23 @@ namespace System.Windows.Forms {
                 }
                 set { Debug.Assert(false, "We should never set the image list"); }
             }
-           
+
         }
 
 
 
         internal TreeNodeImageIndexer ImageIndexer {
-            get { 
+            get {
                 //Demand create the imageIndexer
                 if (imageIndexer == null) {
                       imageIndexer = new TreeNodeImageIndexer(this, TreeNodeImageIndexer.ImageListType.Default);
                 }
-                return imageIndexer; 
+                return imageIndexer;
             }
-        }  
+        }
 
         internal TreeNodeImageIndexer SelectedImageIndexer {
-            get { 
+            get {
                 //Demand create the imageIndexer
                 if (selectedImageIndexer == null) {
                       selectedImageIndexer = new TreeNodeImageIndexer(this, TreeNodeImageIndexer.ImageListType.Default);
@@ -129,15 +129,15 @@ namespace System.Windows.Forms {
         }
 
         internal TreeNodeImageIndexer StateImageIndexer {
-            get { 
+            get {
                 //Demand create the imageIndexer
                 if (stateImageIndexer == null) {
                       stateImageIndexer = new TreeNodeImageIndexer(this, TreeNodeImageIndexer.ImageListType.State);
                 }
-                return stateImageIndexer; 
+                return stateImageIndexer;
             }
         }
-        
+
 
         internal int index;                  // our index into our parents child array
         internal int childCount;
@@ -148,8 +148,8 @@ namespace System.Windows.Forms {
         private bool collapseOnRealization = false;
         private TreeNodeCollection nodes = null;
         object userData;
-        
-        private readonly static int insertMask = 
+
+        private readonly static int insertMask =
                                NativeMethods.TVIF_TEXT
                              | NativeMethods.TVIF_IMAGE
                              | NativeMethods.TVIF_SELECTEDIMAGE;
@@ -301,7 +301,7 @@ namespace System.Windows.Forms {
                 treeNodeState[TREENODESTATE_isChecked] = value;
             }
         }
-        
+
         // Checked does sanity checking and fires Before/AfterCheck events, then forwards to this
         // property to get/set the actual checked value.
         internal bool CheckedInternal {
@@ -323,12 +323,12 @@ namespace System.Windows.Forms {
                 item.stateMask = NativeMethods.TVIS_STATEIMAGEMASK;
                 item.state |= value ? CHECKED : UNCHECKED;
                 UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_SETITEM, 0, ref item);
-                
-                
+
+
             }
         }
 
-        /// <devdoc>	
+        /// <devdoc>
         ///     Indicates whether the node's checkbox is checked.
         /// </devdoc>
         [
@@ -342,7 +342,7 @@ namespace System.Windows.Forms {
                 if(handle != IntPtr.Zero) {
                     NativeMethods.TV_ITEM item = new NativeMethods.TV_ITEM();
                     item.mask = NativeMethods.TVIF_HANDLE | NativeMethods.TVIF_STATE;
-                    item.hItem = handle;                         
+                    item.hItem = handle;
                     item.stateMask = NativeMethods.TVIS_STATEIMAGEMASK;
                     UnsafeNativeMethods.SendMessage(new HandleRef(null, TreeView.Handle), NativeMethods.TVM_GETITEM, 0, ref item);
                     Debug.Assert(!TreeView.CheckBoxes || ((item.state >> SHIFTVAL) > 1) == CheckedInternal,
@@ -365,7 +365,7 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
+
         /// <devdoc>
         ///     The contextMenu associated with this tree node. The contextMenu
         ///     will be shown when the user right clicks the mouse on the control.
@@ -399,7 +399,7 @@ namespace System.Windows.Forms {
                 contextMenuStrip = value;
             }
         }
-        
+
         /// <devdoc>
         ///     The first child node of this node.
         /// </devdoc>
@@ -410,7 +410,7 @@ namespace System.Windows.Forms {
                 return children[0];
             }
         }
-        
+
         private TreeNode FirstVisibleParent {
             get {
                 TreeNode node = this;
@@ -470,7 +470,7 @@ namespace System.Windows.Forms {
                     GetFullPath(path, tv.PathSeparator);
                     return path.ToString();
                 }
-                else 
+                else
                     throw new InvalidOperationException(SR.TreeNodeNoParent);
             }
         }
@@ -573,7 +573,7 @@ namespace System.Windows.Forms {
                 return(State & NativeMethods.TVIS_EXPANDED) != 0;
             }
         }
-        
+
         /// <devdoc>
         ///     Specifies whether this node is in the selected state.
         /// </devdoc>
@@ -669,7 +669,7 @@ namespace System.Windows.Forms {
                 }
 
                 TreeNode node = FirstVisibleParent;
-                
+
                 if (node != null) {
                     IntPtr next = UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle),
                                                NativeMethods.TVM_GETNEXTITEM, NativeMethods.TVGN_NEXTVISIBLE, node.Handle);
@@ -677,7 +677,7 @@ namespace System.Windows.Forms {
                         return tv.NodeFromHandle(next);
                     }
                 }
-                
+
                 return null;
             }
         }
@@ -722,7 +722,7 @@ namespace System.Windows.Forms {
         }
 
         [
-        ListBindable(false), 
+        ListBindable(false),
         Browsable(false)
         ]
         public TreeNodeCollection Nodes {
@@ -760,15 +760,15 @@ namespace System.Windows.Forms {
                 //fixedIndex is used for perf. optimization in case of adding big ranges of nodes
                 int currentInd = index;
                 int fixedInd = parent.Nodes.FixedIndex;
-                
+
                 if (fixedInd > 0) {
 	                currentInd = fixedInd;
                 }
-	
+
                 if (currentInd > 0 && currentInd <= parent.Nodes.Count) {
 	                return parent.Nodes[currentInd-1];
                 }
-                else {  
+                else {
 	                return null;
                 }
             }
@@ -786,7 +786,7 @@ namespace System.Windows.Forms {
                 //
                 TreeNode node = FirstVisibleParent;
                 TreeView tv = this.TreeView;
-                
+
                 if (node != null) {
                     if (tv == null || tv.IsDisposed) {
                         return null;
@@ -798,7 +798,7 @@ namespace System.Windows.Forms {
                         return tv.NodeFromHandle(prev);
                     }
                 }
-                
+
                 return null;
             }
         }
@@ -842,8 +842,8 @@ namespace System.Windows.Forms {
         RelatedImageList("TreeView.ImageList")
         ]
         public string SelectedImageKey {
-            get { 
-                return SelectedImageIndexer.Key; 
+            get {
+                return SelectedImageIndexer.Key;
             }
             set {
                 SelectedImageIndexer.Key = value;
@@ -888,7 +888,7 @@ namespace System.Windows.Forms {
         RelatedImageList("TreeView.StateImageList")
         ]
         public string StateImageKey {
-            get { 
+            get {
                 return StateImageIndexer.Key; }
             set {
                 if (StateImageIndexer.Key != value) {
@@ -998,7 +998,7 @@ namespace System.Windows.Forms {
         }
 
 
-        
+
 
         /// <devdoc>
         ///     Return the TreeView control this node belongs to.
@@ -1020,7 +1020,7 @@ namespace System.Windows.Forms {
             int iMin, iLim, iT;
             string nodeText = node.Text;
             TreeView parentTreeView = TreeView;
-            
+
             if (childCount > 0) {
                 if (parentTreeView.TreeViewNodeSorter == null)
                 {
@@ -1041,7 +1041,7 @@ namespace System.Windows.Forms {
                         index = iMin;
                     }
                 }
-                else 
+                else
                 {
                     IComparer sorter = parentTreeView.TreeViewNodeSorter;
                     // Insert at appropriate sorted spot
@@ -1055,10 +1055,10 @@ namespace System.Windows.Forms {
                     index = iMin;
                 }
             }
-           
+
             node.SortChildren(parentTreeView);
             InsertNodeAt(index, node);
-            
+
             return index;
         }
 
@@ -1070,7 +1070,7 @@ namespace System.Windows.Forms {
         }
 
         private void SortChildren(TreeView parentTreeView) {
-            // 
+            //
             if (childCount > 0) {
                 TreeNode[] newOrder = new TreeNode[childCount];
                 if (parentTreeView == null || parentTreeView.TreeViewNodeSorter == null)
@@ -1088,7 +1088,7 @@ namespace System.Windows.Forms {
                             if (compare.Compare(children[j].Text, children[min].Text) <= 0)
                                 min = j;
                         }
-                    
+
                         Debug.Assert(min != -1, "Bad sorting");
                         newOrder[i] = children[min];
                         children[min] = null;
@@ -1097,7 +1097,7 @@ namespace System.Windows.Forms {
                     }
                     children = newOrder;
                 }
-                else 
+                else
                 {
                     IComparer sorter = parentTreeView.TreeViewNodeSorter;
                     for (int i = 0; i < childCount; i++) {
@@ -1112,7 +1112,7 @@ namespace System.Windows.Forms {
                             if (sorter.Compare(children[j] /*previous*/, children[min] /*current*/) <= 0)
                                 min = j;
                         }
-                    
+
                         Debug.Assert(min != -1, "Bad sorting");
                         newOrder[i] = children[min];
                         children[min] = null;
@@ -1120,7 +1120,7 @@ namespace System.Windows.Forms {
                         newOrder[i].SortChildren(parentTreeView);
                     }
                     children = newOrder;
-                    
+
                 }
             }
         }
@@ -1140,14 +1140,14 @@ namespace System.Windows.Forms {
                 UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_EDITLABEL, 0, handle);
             }
         }
-        
+
         /// <devdoc>
         ///     Called by the tree node collection to clear all nodes.  We optimize here if
         ///     this is the root node.
         /// </devdoc>
         internal void Clear() {
-            
-            
+
+
             // This is a node that is a child of some other node.  We have
             // to selectively remove children here.
             //
@@ -1155,13 +1155,13 @@ namespace System.Windows.Forms {
             TreeView tv = TreeView;
 
 
-            
-            try                     
-            {  
+
+            try
+            {
 
                 if (tv != null) {
                     tv.nodesCollectionClear = true;
-                    
+
                     if (tv != null && childCount > MAX_TREENODES_OPS) {
                         isBulkOperation = true;
                         tv.BeginUpdate();
@@ -1175,7 +1175,7 @@ namespace System.Windows.Forms {
 
 
                 if (tv != null && isBulkOperation) {
-                    tv.EndUpdate();                        
+                    tv.EndUpdate();
                 }
             }
             finally
@@ -1194,18 +1194,18 @@ namespace System.Windows.Forms {
             Type clonedType = this.GetType();
             TreeNode node = null;
 
-            if (clonedType == typeof(TreeNode)){ 
+            if (clonedType == typeof(TreeNode)){
                 node = new TreeNode(text, ImageIndexer.Index, SelectedImageIndexer.Index);
             }
             else {
                 node = (TreeNode)Activator.CreateInstance(clonedType);
             }
-            
+
             node.Text = text;
             node.Name = name;
             node.ImageIndexer.Index = ImageIndexer.Index;
             node.SelectedImageIndexer.Index = SelectedImageIndexer.Index;
-            
+
             node.StateImageIndexer.Index = StateImageIndexer.Index;
             node.ToolTipText = toolTipText;
             node.ContextMenu = contextMenu;
@@ -1225,21 +1225,21 @@ namespace System.Windows.Forms {
             if (!(string.IsNullOrEmpty(StateImageIndexer.Key))) {
                 node.StateImageIndexer.Key = StateImageIndexer.Key;
             }
-            
+
             if (childCount > 0) {
                 node.children = new TreeNode[childCount];
                 for (int i = 0; i < childCount; i++)
                     node.Nodes.Add((TreeNode)children[i].Clone());
             }
-            
+
             // Clone properties
             //
-            if (propBag != null) {                 
+            if (propBag != null) {
                 node.propBag = OwnerDrawPropertyBag.Copy(propBag);
             }
             node.Checked = this.Checked;
             node.Tag = this.Tag;
-            
+
             return node;
         }
 
@@ -1279,7 +1279,7 @@ namespace System.Windows.Forms {
                 tv.SelectedNode = this;
             tv.Invalidate();
             collapseOnRealization = false;
-            
+
         }
 
         /// <devdoc>
@@ -1294,7 +1294,7 @@ namespace System.Windows.Forms {
         ///     Collapse the node.
         /// </devdoc>
         public void Collapse() {
-            CollapseInternal(false);    
+            CollapseInternal(false);
         }
 
         /// <devdoc>
@@ -1322,7 +1322,7 @@ namespace System.Windows.Forms {
 
             int stateImageIndex = -1;
             string stateImageKey = null;
-            
+
             foreach (SerializationEntry entry in serializationInfo) {
                 switch (entry.Name) {
                     case "PropBag":
@@ -1352,10 +1352,10 @@ namespace System.Windows.Forms {
                         break;
                     case "SelectedImageKey":
                         selectedImageKey= serializationInfo.GetString(entry.Name);
-                        break;                    
+                        break;
                     case "StateImageKey":
                         stateImageKey = serializationInfo.GetString(entry.Name);
-                        break;                    
+                        break;
                     case "StateImageIndex":
                         stateImageIndex = serializationInfo.GetInt32(entry.Name);
                         break;
@@ -1370,24 +1370,24 @@ namespace System.Windows.Forms {
 
             // let imagekey take precidence
             if (imageKey != null) {
-                ImageKey = imageKey;    
-            } 
+                ImageKey = imageKey;
+            }
             else if (imageIndex != -1) {
                 ImageIndex = imageIndex;
             }
 
             // let selectedimagekey take precidence
             if (selectedImageKey != null) {
-                SelectedImageKey = selectedImageKey;    
-            } 
+                SelectedImageKey = selectedImageKey;
+            }
             else if (selectedImageIndex != -1) {
                 SelectedImageIndex = selectedImageIndex;
             }
 
             // let stateimagekey take precidence
             if (stateImageKey != null) {
-                StateImageKey = stateImageKey;    
-            } 
+                StateImageKey = stateImageKey;
+            }
             else if (stateImageIndex != -1) {
                 StateImageIndex = stateImageIndex;
             }
@@ -1495,7 +1495,7 @@ namespace System.Windows.Forms {
             for (int i = 0; i < childCount; i++) {
                  children[i].ExpandAll();
             }
-            
+
         }
         /// <devdoc>
         ///     Locate this tree node's containing tree view control by scanning
@@ -1654,7 +1654,7 @@ namespace System.Windows.Forms {
 
                 if (parent.nodesCleared && (insertFirst || prev == null) && !tv.Scrollable) {
                     // We need to Redraw the TreeView ...
-                    // If and only If we are not scrollable ... 
+                    // If and only If we are not scrollable ...
                     // and this is the FIRST NODE to get added..
                     // This is Comctl quirk where it just doesn't draw
                     // the first node after a Clear( ) if Scrollable == false.
@@ -1694,7 +1694,7 @@ namespace System.Windows.Forms {
             bool expanded = IsExpanded;
 
             // unlink our children
-            // 
+            //
 
             for (int i = 0; i < childCount; i++)
                 children[i].Remove(false);
@@ -1759,7 +1759,7 @@ namespace System.Windows.Forms {
         ///     Saves this TreeNode object to the given data stream.
         /// </devdoc>
         /// Review: Changing this would break VB users. so suppresing this message.
-        /// 
+        ///
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         protected virtual void Serialize(SerializationInfo si, StreamingContext context) {
             if (propBag != null) {
@@ -1784,13 +1784,13 @@ namespace System.Windows.Forms {
             }
 
             si.AddValue("ChildCount",  childCount);
-            
+
             if (childCount > 0) {
                 for (int i = 0; i < childCount; i++) {
                     si.AddValue("children" + i, children[i], typeof(TreeNode));
                 }
             }
-            
+
             if (userData != null && userData.GetType().IsSerializable) {
                 si.AddValue("UserData", userData, userData.GetType());
             }
@@ -1812,7 +1812,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        
+
         /// <devdoc>
         ///     Returns the label text for the tree node
         /// </devdoc>
@@ -1847,7 +1847,7 @@ namespace System.Windows.Forms {
                 // to use no state image for this node.
             }
             if ((mask & NativeMethods.TVIF_PARAM) != 0) {
-                item.lParam = handle; 
+                item.lParam = handle;
             }
 
             UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_SETITEM, 0, ref item);

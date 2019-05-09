@@ -149,7 +149,7 @@ namespace System.Windows.Forms
                     break;
 
                 case Keys.Down:
-                    // If the end of the selection is on the last line of the text then 
+                    // If the end of the selection is on the last line of the text then
                     // send this character to the dataGridView, else process the key event
                     int end = this.SelectionStart + this.SelectionLength;
                     if (this.Text.IndexOf("\r\n", end) != -1)
@@ -159,7 +159,7 @@ namespace System.Windows.Forms
                     break;
 
                 case Keys.Up:
-                    // If the end of the selection is on the first line of the text then 
+                    // If the end of the selection is on the first line of the text then
                     // send this character to the dataGridView, else process the key event
                     if (!(this.Text.IndexOf("\r\n") < 0 || this.SelectionStart + this.SelectionLength < this.Text.IndexOf("\r\n")))
                     {
@@ -282,7 +282,7 @@ namespace System.Windows.Forms
             return base.ProcessKeyEventArgs(ref m);
         }
 
-        private static HorizontalAlignment TranslateAlignment(DataGridViewContentAlignment align) 
+        private static HorizontalAlignment TranslateAlignment(DataGridViewContentAlignment align)
         {
             if ((align & anyRight) != 0)
             {

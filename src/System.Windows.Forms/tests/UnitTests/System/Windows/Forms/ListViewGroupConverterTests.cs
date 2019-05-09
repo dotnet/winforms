@@ -32,7 +32,7 @@ namespace System.Windows.Forms.Tests
             yield return new object [] { null, false };
             yield return new object [] { new object(), false };
             yield return new object [] { new ListViewItem(), true };
-            
+
             var listView = new ListView();
             var item1 = new ListViewItem();
             listView.Items.Add(item1);
@@ -145,7 +145,7 @@ namespace System.Windows.Forms.Tests
             yield return new object [] { null, true };
             yield return new object [] { new object(), true };
             yield return new object [] { new ListViewItem(), true };
-            
+
             var listView = new ListView();
             var item1 = new ListViewItem();
             listView.Items.Add(item1);
@@ -261,7 +261,7 @@ namespace System.Windows.Forms.Tests
             yield return new object [] { null, null };
             yield return new object [] { new object(), null };
             yield return new object [] { new ListViewItem(), null };
-            
+
             var listView = new ListView();
             var item1 = new ListViewItem();
             listView.Items.Add(item1);

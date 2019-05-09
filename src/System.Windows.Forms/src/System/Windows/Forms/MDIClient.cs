@@ -16,9 +16,9 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Threading;
     using System.Windows.Forms;
-    
+
     /// <devdoc>
-    ///    <para> 
+    ///    <para>
     ///       Summary to
     ///       Come</para>
     /// </devdoc>
@@ -58,7 +58,7 @@ namespace System.Windows.Forms {
                     result = ParentInternal.BackgroundImage;
                 return result;
             }
-            
+
             set {
                 base.BackgroundImage = value;
             }
@@ -92,10 +92,10 @@ namespace System.Windows.Forms {
 
                 cp.ClassName = "MDICLIENT";
 
-                // Note: Don't set the MDIS_ALLCHILDSTYLES CreatParams.Style bit, it prevents an MDI child form from getting activated 
+                // Note: Don't set the MDIS_ALLCHILDSTYLES CreatParams.Style bit, it prevents an MDI child form from getting activated
                 // when made visible (no WM_MDIACTIVATE sent to it), and forcing activation on it changes the activation event sequence
                 // (MdiChildActivate/Enter/Focus/Activate/etc.).
-                // Comment for removed code: 
+                // Comment for removed code:
                 // Add the style MDIS_ALLCHILDSTYLES
                 // so that MDI Client windows can have the WS_VISIBLE style removed from the window style
                 // to make them not visible but still present.
@@ -107,7 +107,7 @@ namespace System.Windows.Forms {
                       cp.Style |= NativeMethods.WS_DISABLED;
                       SetState(STATE_ENABLED, false);
                 }
-                
+
                 if (this.RightToLeft == RightToLeft.Yes && this.ParentInternal != null && this.ParentInternal.IsMirrored) {
                     //We want to turn on mirroring for MdiClient explicitly.
                     cp.ExStyle |= NativeMethods.WS_EX_LAYOUTRTL | NativeMethods.WS_EX_NOINHERITLAYOUT;
@@ -160,7 +160,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        
+
         /// <devdoc>
         /// </devdoc>
         protected override void OnResize(EventArgs e) {
@@ -171,7 +171,7 @@ namespace System.Windows.Forms {
             base.OnResize(e);
         }
 
-        
+
         /// <devdoc>
         ///     Performs the work of scaling the entire control and any child controls.
         /// </devdoc>
@@ -252,7 +252,7 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         /// This code is required to set the correct window region during the resize of the Form at design time.
-        /// There is case when the form contains a MainMenu and also has IsMdiContainer property set, in which, the MdiClient fails to 
+        /// There is case when the form contains a MainMenu and also has IsMdiContainer property set, in which, the MdiClient fails to
         /// resize and hence draw the correct backcolor.
         /// </devdoc>
         private void SetWindowRgn() {
@@ -291,7 +291,7 @@ namespace System.Windows.Forms {
             }
             finally {
                 if (rgn1 != IntPtr.Zero) {
-                    SafeNativeMethods.DeleteObject(new HandleRef(null, rgn1)); 
+                    SafeNativeMethods.DeleteObject(new HandleRef(null, rgn1));
                 }
             }
         }
@@ -308,13 +308,13 @@ namespace System.Windows.Forms {
         internal override bool ShouldSerializeSize() {
             return false;
         }
-        
+
 
         /// <devdoc>
         /// </devdoc>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                
+
                 case Interop.WindowMessages.WM_CREATE:
                     if (ParentInternal != null && ParentInternal.Site != null && ParentInternal.Site.DesignMode && Handle != IntPtr.Zero) {
                         SetWindowRgn();
@@ -335,7 +335,7 @@ namespace System.Windows.Forms {
                     }
 
                     // Do not use control's implementation of WmSetFocus
-                    // as it will improperly activate this control. 
+                    // as it will improperly activate this control.
                     WmImeSetFocus();
                     DefWndProc(ref m);
                     InvokeGotFocus(this, EventArgs.Empty);

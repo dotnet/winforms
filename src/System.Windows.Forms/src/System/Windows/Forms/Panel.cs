@@ -39,7 +39,7 @@ namespace System.Windows.Forms {
         public Panel()
         : base() {
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
-            SetState2(STATE2_USEPREFERREDSIZECACHE, true);  
+            SetState2(STATE2_USEPREFERREDSIZECACHE, true);
             TabStop = false;
             SetStyle(ControlStyles.Selectable |
                      ControlStyles.AllPaintingInWmPaint, false);
@@ -76,7 +76,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [
         SRDescription(nameof(SR.ControlAutoSizeModeDescr)),
-        SRCategory(nameof(SR.CatLayout)),        
+        SRCategory(nameof(SR.CatLayout)),
         Browsable(true),
         DefaultValue(AutoSizeMode.GrowOnly),
         Localizable(true)
@@ -241,7 +241,7 @@ namespace System.Windows.Forms {
             }
             base.OnResize(eventargs);
         }
-    
+
 
         internal override void PrintToMetaFileRecursive(HandleRef hDC, IntPtr lParam, Rectangle bounds) {
             base.PrintToMetaFileRecursive(hDC, lParam, bounds);
@@ -255,7 +255,7 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         /// </devdoc>
-        private static string StringFromBorderStyle(BorderStyle value) {      
+        private static string StringFromBorderStyle(BorderStyle value) {
             Type borderStyleType = typeof(BorderStyle);
             return (ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D)) ? (borderStyleType.ToString() + "." + value.ToString()) : "[Invalid BorderStyle]";
         }

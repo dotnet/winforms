@@ -63,7 +63,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         SRDescription(nameof(SR.FnDallowSimulationsDescr))
         ]
@@ -83,7 +83,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         SRDescription(nameof(SR.FnDallowVectorFontsDescr))
         ]
@@ -105,7 +105,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         SRDescription(nameof(SR.FnDallowVerticalFontsDescr))
         ]
@@ -128,7 +128,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         SRDescription(nameof(SR.FnDallowScriptChangeDescr))
         ]
@@ -148,7 +148,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatData)), 
+        SRCategory(nameof(SR.CatData)),
         SRDescription(nameof(SR.FnDcolorDescr)),
         DefaultValue(typeof(Color), "Black")
         ]
@@ -180,7 +180,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         SRDescription(nameof(SR.FnDfixedPitchOnlyDescr))
         ]
@@ -200,12 +200,12 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatData)), 
+        SRCategory(nameof(SR.CatData)),
         SRDescription(nameof(SR.FnDfontDescr))
         ]
         public Font Font {
-            
-            
+
+
             get {
                 Font result = font;
                 if (result == null)
@@ -231,7 +231,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         SRDescription(nameof(SR.FnDfontMustExistDescr))
         ]
@@ -252,7 +252,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatData)), 
+        SRCategory(nameof(SR.CatData)),
         DefaultValue(defaultMaxSize),
         SRDescription(nameof(SR.FnDmaxSizeDescr))
         ]
@@ -278,7 +278,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatData)), 
+        SRCategory(nameof(SR.CatData)),
         DefaultValue(defaultMinSize),
         SRDescription(nameof(SR.FnDminSizeDescr))
         ]
@@ -317,7 +317,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         SRDescription(nameof(SR.FnDscriptsOnlyDescr))
         ]
@@ -336,7 +336,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         SRDescription(nameof(SR.FnDshowApplyDescr))
         ]
@@ -355,7 +355,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         SRDescription(nameof(SR.FnDshowColorDescr))
         ]
@@ -375,7 +375,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         SRDescription(nameof(SR.FnDshowEffectsDescr))
         ]
@@ -394,7 +394,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         SRDescription(nameof(SR.FnDshowHelpDescr))
         ]
@@ -433,7 +433,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected override IntPtr HookProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam) {
-            
+
             switch (msg) {
                 case Interop.WindowMessages.WM_COMMAND:
                     if ((int)wparam == 0x402) {
@@ -469,7 +469,7 @@ namespace System.Windows.Forms {
                     }
                     break;
             }
-            
+
             return base.HookProc(hWnd, msg, wparam, lparam);
         }
 
@@ -492,7 +492,7 @@ namespace System.Windows.Forms {
             options = NativeMethods.CF_SCREENFONTS | NativeMethods.CF_EFFECTS;
             font = null;
             color = SystemColors.ControlText;
-            usingDefaultIndirectColor = true; 
+            usingDefaultIndirectColor = true;
             showColor = false;
             minSize = defaultMinSize;
             maxSize = defaultMaxSize;
@@ -508,7 +508,7 @@ namespace System.Windows.Forms {
         ///       The actual implementation of running the dialog. Inheriting classes
         ///       should override this if they want to add more functionality, and call
         ///       base.runDialog() if necessary
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         protected override bool RunDialog(IntPtr hWndOwner) {
@@ -607,7 +607,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Retrieves a string that includes the name of the current font selected in
         ///       the dialog box.
-        ///       
+        ///
         ///    </para>
         /// </devdoc>
         public override string ToString() {
@@ -620,7 +620,7 @@ namespace System.Windows.Forms {
         private void UpdateColor(int rgb) {
             if (ColorTranslator.ToWin32(color) != rgb) {
                 color = ColorTranslator.FromOle(rgb);
-                usingDefaultIndirectColor = false; 
+                usingDefaultIndirectColor = false;
             }
         }
 

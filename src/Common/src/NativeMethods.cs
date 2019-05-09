@@ -55,9 +55,9 @@ namespace System.Windows.Forms
         public static IntPtr InvalidIntPtr = (IntPtr)(-1);
         public static IntPtr LPSTR_TEXTCALLBACK = (IntPtr)(-1);
         public static HandleRef NullHandleRef = new HandleRef(null, IntPtr.Zero);
-        
+
         public const int BITMAPINFO_MAX_COLORSIZE = 256;
-        public const int BI_BITFIELDS = 3;  
+        public const int BI_BITFIELDS = 3;
 
         public enum RegionFlags {
             ERROR = 0,
@@ -99,7 +99,7 @@ namespace System.Windows.Forms
         // brush
         BS_SOLID = 0,
         HOLLOW_BRUSH = 5,
-        
+
         // Binary raster operations.
         R2_BLACK            = 1,  /*  0       */
         R2_NOTMERGEPEN      = 2,  /* DPon     */
@@ -124,7 +124,7 @@ namespace System.Windows.Forms
         GM_ADVANCED         = 2,
         MWT_IDENTITY        = 1;
 
-        public const int 
+        public const int
         PAGE_READONLY = 0x02,
         PAGE_READWRITE = 0x04,
         PAGE_WRITECOPY = 0x08,
@@ -152,7 +152,7 @@ namespace System.Windows.Forms
         SHGFI_OVERLAYINDEX      = 0x000000040;     // Get the index of the overlay
 
         public const int DM_DISPLAYORIENTATION = 0x00000080;
-        
+
         public const int AUTOSUGGEST = 0x10000000,
         AUTOSUGGEST_OFF = 0x20000000,
         AUTOAPPEND =  0x40000000,
@@ -171,7 +171,7 @@ namespace System.Windows.Forms
         ACM_OPENW = (0x0400+103),
         ADVF_NODATA = 1,
         ADVF_ONLYONCE = 4,
-        ADVF_PRIMEFIRST = 2; 
+        ADVF_PRIMEFIRST = 2;
         // Note: ADVF_ONLYONCE and ADVF_PRIMEFIRST values now conform with objidl.dll but are backwards from
         // Platform SDK documentation as of 07/21/2003.
         // http://msdn.microsoft.com/library/default.asp?url=/library/en-us/com/htm/oen_a2z_8jxi.asp.
@@ -516,7 +516,7 @@ namespace System.Windows.Forms
         GDTR_MIN = 0x0001,
         GDTR_MAX = 0x0002,
         GDT_VALID = 0,
-        GDT_NONE = 1, 
+        GDT_NONE = 1,
         GA_PARENT = 1,
         GA_ROOT   = 2;
 
@@ -541,7 +541,7 @@ namespace System.Windows.Forms
         CPS_COMPLETE = 0x01,
         CPS_CANCEL   = 0x04;
 
-        public const int 
+        public const int
         HC_ACTION = 0,
         HC_GETNEXT = 1,
         HC_SKIP = 2,
@@ -578,16 +578,16 @@ namespace System.Windows.Forms
         public const int HDS_FULLDRAG = 0x0080;
 
         // Corresponds to bitmaps in MENUITEMINFO
-        public const int HBMMENU_CALLBACK = -1, 
-        HBMMENU_SYSTEM = 1, 
-        HBMMENU_MBAR_RESTORE = 2, 
-        HBMMENU_MBAR_MINIMIZE = 3, 
-        HBMMENU_MBAR_CLOSE = 5, 
-        HBMMENU_MBAR_CLOSE_D = 6, 
-        HBMMENU_MBAR_MINIMIZE_D = 7, 
-        HBMMENU_POPUP_CLOSE = 8, 
-        HBMMENU_POPUP_RESTORE = 9, 
-        HBMMENU_POPUP_MAXIMIZE = 10, 
+        public const int HBMMENU_CALLBACK = -1,
+        HBMMENU_SYSTEM = 1,
+        HBMMENU_MBAR_RESTORE = 2,
+        HBMMENU_MBAR_MINIMIZE = 3,
+        HBMMENU_MBAR_CLOSE = 5,
+        HBMMENU_MBAR_CLOSE_D = 6,
+        HBMMENU_MBAR_MINIMIZE_D = 7,
+        HBMMENU_POPUP_CLOSE = 8,
+        HBMMENU_POPUP_RESTORE = 9,
+        HBMMENU_POPUP_MAXIMIZE = 10,
         HBMMENU_POPUP_MINIMIZE = 11;
 
 
@@ -642,7 +642,7 @@ namespace System.Windows.Forms
         ILD_MASK = 0x0010,
         ILD_ROP = 0x0040,
 
-        // ImageList 
+        // ImageList
         //
         ILP_NORMAL = 0,
         ILP_DOWNLEVEL = 1,
@@ -651,7 +651,7 @@ namespace System.Windows.Forms
         ILS_SHADOW = 0x2,
         ILS_SATURATE = 0x4,
         ILS_ALPHA = 0x8;
-        
+
         public const int IDM_PRINT = 27,
         IDM_PAGESETUP = 2004,
         IDM_PRINTPREVIEW = 2003,
@@ -678,7 +678,7 @@ namespace System.Windows.Forms
         public const int STG_E_LOCKVIOLATION = unchecked((int)0x80030021);
 
         public const int INPUT_KEYBOARD = 1;
-        
+
         public const int KEYEVENTF_EXTENDEDKEY = 0x0001;
         public const int KEYEVENTF_KEYUP = 0x0002;
         public const int KEYEVENTF_UNICODE = 0x0004;
@@ -917,7 +917,7 @@ namespace System.Windows.Forms
         LVN_SETDISPINFO = ((0-100)-78),
         LVN_GETINFOTIP  = ((0-100)- 58),
         LVN_KEYDOWN = ((0-100)-55),
-        
+
         LWA_COLORKEY            = 0x00000001,
         LWA_ALPHA               = 0x00000002;
 
@@ -938,7 +938,7 @@ namespace System.Windows.Forms
         public static int MAKELANGID(int primary, int sub) {
             return ((((ushort)(sub)) << 10) | (ushort)(primary));
         }
-        
+
         /// <devdoc>
         ///     Creates an LCID from a LangId
         /// </devdoc>
@@ -1210,13 +1210,13 @@ namespace System.Windows.Forms
         QS_ALLINPUT = QS_INPUT | QS_POSTMESSAGE | QS_TIMER | QS_PAINT | QS_HOTKEY | QS_SENDMESSAGE;
 
     public const int MWMO_INPUTAVAILABLE = 0x0004;  // don't use MWMO_WAITALL, see ddb#176342
-        
+
     //public const int RECO_PASTE = 0x00000000;   // paste from clipboard
     public const int RECO_DROP  = 0x00000001;    // drop
     //public const int RECO_COPY  = 0x00000002;    // copy to the clipboard
     //public const int RECO_CUT   = 0x00000003; // cut to the clipboard
     //public const int RECO_DRAG  = 0x00000004;    // drag
-        
+
     public const int RPC_E_CHANGED_MODE = unchecked((int)0x80010106),
         RPC_E_CANTCALLOUT_ININPUTSYNCCALL = unchecked((int)0x8001010D),
         RGN_AND = 1,
@@ -1226,11 +1226,11 @@ namespace System.Windows.Forms
         RDW_ERASE = 0x0004,
         RDW_ALLCHILDREN = 0x0080,
         RDW_ERASENOW = 0x0200,
-        RDW_UPDATENOW = 0x0100,         
+        RDW_UPDATENOW = 0x0100,
         RDW_FRAME = 0x0400,
         RB_INSERTBANDA = (0x0400+1),
         RB_INSERTBANDW = (0x0400+10);
-        
+
         public const int stc4 = 0x0443,
         SHGFP_TYPE_CURRENT = 0,
         STGM_READ = 0x00000000,
@@ -1238,9 +1238,9 @@ namespace System.Windows.Forms
         STGM_READWRITE = 0x00000002,
         STGM_SHARE_EXCLUSIVE = 0x00000010,
         STGM_CREATE = 0x00001000,
-        STGM_TRANSACTED = 0x00010000, 
-        STGM_CONVERT = 0x00020000, 
-        STGM_DELETEONRELEASE    = 0x04000000, 
+        STGM_TRANSACTED = 0x00010000,
+        STGM_CONVERT = 0x00020000,
+        STGM_DELETEONRELEASE    = 0x04000000,
         STARTF_USESHOWWINDOW = 0x00000001,
         SB_HORZ = 0,
         SB_VERT = 1,
@@ -1753,7 +1753,7 @@ namespace System.Windows.Forms
         VK_CONTROL = 0x11,
         VK_MENU = 0x12,
         VK_CAPITAL = 0x14,
-        VK_KANA = 0x15, 
+        VK_KANA = 0x15,
         VK_ESCAPE = 0x1B,
         VK_END = 0x23,
         VK_HOME = 0x24,
@@ -1902,17 +1902,17 @@ namespace System.Windows.Forms
         [ComVisible(true)]
         [ComImport]
         [Guid("B722BCCB-4E68-101B-A2BC-00AA00404770")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]        
-        public interface IOleCommandTarget 
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface IOleCommandTarget
         {
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
             int QueryStatus(
                 ref Guid pguidCmdGroup,
                 int cCmds,
-                [In, Out] 
+                [In, Out]
                 OLECMD prgCmds,
-                [In, Out] 
+                [In, Out]
                 IntPtr pCmdText);
 
             [return: MarshalAs(UnmanagedType.I4)]
@@ -2035,7 +2035,7 @@ namespace System.Windows.Forms
             internal POINT     pt;
             internal int       clrForeground = -1;
             internal int       clrBackground = -1;
-            internal RECT      rcMargins = RECT.FromXYWH(-1, -1, -1, -1);     // amount of space between edges of window and text, -1 for each member to ignore            
+            internal RECT      rcMargins = RECT.FromXYWH(-1, -1, -1, -1);     // amount of space between edges of window and text, -1 for each member to ignore
             internal string    pszFont = null;
         }
 
@@ -2147,7 +2147,7 @@ namespace System.Windows.Forms
             /// Returning a non-S_OK return code or false for pfDisplay will suppress this feature
             /// </devdoc>
             [PreserveSig]
-            int DisplayChildProperties(int dispid, 
+            int DisplayChildProperties(int dispid,
                                        ref bool pfDisplay);
 
             /// <devdoc>
@@ -2155,9 +2155,9 @@ namespace System.Windows.Forms
             /// returning a non-S_OK return code will display the default values
             /// </devdoc>
             [PreserveSig]
-            int GetLocalizedPropertyInfo(int dispid, int localeID, 
+            int GetLocalizedPropertyInfo(int dispid, int localeID,
                                          [Out, MarshalAs(UnmanagedType.LPArray)]
-                                         string[] pbstrLocalizedName, 
+                                         string[] pbstrLocalizedName,
                                          [Out, MarshalAs(UnmanagedType.LPArray)]
                                          string[] pbstrLocalizeDescription);
 
@@ -2173,7 +2173,7 @@ namespace System.Windows.Forms
             /// Determines if a property should be made read only.  This only applies to properties that are writeable,
             /// </devdoc>
             [PreserveSig]
-            int IsPropertyReadOnly(int dispid, 
+            int IsPropertyReadOnly(int dispid,
                                    ref bool fReadOnly);
 
             /// <devdoc>
@@ -2186,7 +2186,7 @@ namespace System.Windows.Forms
 
             /// <devdoc>
             /// Checks whether the given property can be reset to some default value.
-            /// If return value is non-S_OK or *pfCanReset is 
+            /// If return value is non-S_OK or *pfCanReset is
             /// </devdoc>
             [PreserveSig]
             int CanResetPropertyValue(int dispid, [In, Out]ref bool pfCanReset);
@@ -2205,7 +2205,7 @@ namespace System.Windows.Forms
         public interface IManagedPerPropertyBrowsing
         {
             [PreserveSig]
-            int GetPropertyAttributes(int dispid, 
+            int GetPropertyAttributes(int dispid,
                                       ref int  pcAttributes,
                                       ref IntPtr pbstrAttrNames,
                                       ref IntPtr pvariantInitValues);
@@ -2233,7 +2233,7 @@ namespace System.Windows.Forms
                 string bstrGuidBldr,
                 [In, MarshalAs(UnmanagedType.Interface)]
                 object pdispApp,
-                
+
                 HandleRef hwndBldrOwner,
                 [Out, In, MarshalAs(UnmanagedType.Struct)]
                 ref object pvarValue,
@@ -2296,7 +2296,7 @@ namespace System.Windows.Forms
 
             public POINT() {
             }
-            
+
             public POINT(int x, int y) {
                 this.x = x;
                 this.y = y;
@@ -2317,7 +2317,7 @@ namespace System.Windows.Forms
             public int y;
             public POINTSTRUCT(int x, int y) {
               this.x = x;
-              this.y = y;    
+              this.y = y;
             }
         }
 
@@ -2384,25 +2384,25 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public class NONCLIENTMETRICS {
             public int      cbSize = Marshal.SizeOf<NONCLIENTMETRICS>();
-            public int      iBorderWidth = 0; 
-            public int      iScrollWidth = 0; 
-            public int      iScrollHeight = 0; 
-            public int      iCaptionWidth = 0; 
-            public int      iCaptionHeight = 0; 
+            public int      iBorderWidth = 0;
+            public int      iScrollWidth = 0;
+            public int      iScrollHeight = 0;
+            public int      iCaptionWidth = 0;
+            public int      iCaptionHeight = 0;
             [MarshalAs(UnmanagedType.Struct)]
-            public LOGFONT  lfCaptionFont = null; 
-            public int      iSmCaptionWidth = 0; 
-            public int      iSmCaptionHeight = 0; 
+            public LOGFONT  lfCaptionFont = null;
+            public int      iSmCaptionWidth = 0;
+            public int      iSmCaptionHeight = 0;
             [MarshalAs(UnmanagedType.Struct)]
-            public LOGFONT  lfSmCaptionFont = null; 
-            public int      iMenuWidth = 0; 
-            public int      iMenuHeight = 0; 
+            public LOGFONT  lfSmCaptionFont = null;
+            public int      iMenuWidth = 0;
+            public int      iMenuHeight = 0;
             [MarshalAs(UnmanagedType.Struct)]
-            public LOGFONT  lfMenuFont = null; 
+            public LOGFONT  lfMenuFont = null;
             [MarshalAs(UnmanagedType.Struct)]
-            public LOGFONT  lfStatusFont = null; 
+            public LOGFONT  lfStatusFont = null;
             [MarshalAs(UnmanagedType.Struct)]
-            public LOGFONT  lfMessageFont = null; 
+            public LOGFONT  lfMessageFont = null;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -2417,7 +2417,7 @@ namespace System.Windows.Forms
             public int      pt_x;
             public int      pt_y;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public struct PAINTSTRUCT {
             public IntPtr   hdc;
@@ -2438,7 +2438,7 @@ namespace System.Windows.Forms
             public int      reserved7;
             public int      reserved8;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public class SCROLLINFO {
             public int cbSize = Marshal.SizeOf<SCROLLINFO>();
@@ -2467,7 +2467,7 @@ namespace System.Windows.Forms
         public class SIZE {
             public int cx;
             public int cy;
-            
+
             public SIZE() {
             }
 
@@ -2476,7 +2476,7 @@ namespace System.Windows.Forms
                 this.cy = cy;
             }
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public struct WINDOWPLACEMENT {
             public int  length;
@@ -2519,34 +2519,34 @@ namespace System.Windows.Forms
 
         [StructLayout(LayoutKind.Sequential)]
         public class PAGESETUPDLG {
-            public int      lStructSize; 
-            public IntPtr   hwndOwner; 
-            public IntPtr   hDevMode; 
-            public IntPtr   hDevNames; 
-            public int      Flags; 
+            public int      lStructSize;
+            public IntPtr   hwndOwner;
+            public IntPtr   hDevMode;
+            public IntPtr   hDevNames;
+            public int      Flags;
 
-            //POINT           ptPaperSize; 
+            //POINT           ptPaperSize;
             public int      paperSizeX = 0;
             public int      paperSizeY = 0;
 
-            // RECT            rtMinMargin; 
+            // RECT            rtMinMargin;
             public int      minMarginLeft;
             public int      minMarginTop;
             public int      minMarginRight;
             public int      minMarginBottom;
 
-            // RECT            rtMargin; 
+            // RECT            rtMargin;
             public int      marginLeft;
             public int      marginTop;
             public int      marginRight;
             public int      marginBottom;
 
-            public IntPtr   hInstance = IntPtr.Zero; 
-            public IntPtr   lCustData = IntPtr.Zero; 
-            public WndProc  lpfnPageSetupHook = null; 
-            public WndProc  lpfnPagePaintHook = null; 
-            public string   lpPageSetupTemplateName = null; 
-            public IntPtr   hPageSetupTemplate = IntPtr.Zero; 
+            public IntPtr   hInstance = IntPtr.Zero;
+            public IntPtr   lCustData = IntPtr.Zero;
+            public WndProc  lpfnPageSetupHook = null;
+            public WndProc  lpfnPagePaintHook = null;
+            public string   lpPageSetupTemplateName = null;
+            public IntPtr   hPageSetupTemplate = IntPtr.Zero;
         }
 
         // Any change in PRINTDLG, should also be in PRINTDLG_32 and PRINTDLG_64
@@ -2715,7 +2715,7 @@ namespace System.Windows.Forms
             public   int        nPageRanges;
             public   int        nMaxPageRanges;
 
-            public   IntPtr     pageRanges; 
+            public   IntPtr     pageRanges;
 
             public   int        nMinPage;
             public   int        nMaxPage;
@@ -2733,7 +2733,7 @@ namespace System.Windows.Forms
 
             public   int        nStartPage;
             public   int        dwResultAction;
-            
+
         }
 
         // x86 requires EXPLICIT packing of 1.
@@ -2773,28 +2773,28 @@ namespace System.Windows.Forms
 
         [StructLayout(LayoutKind.Sequential)]
         public  sealed class tagFONTDESC {
-             public int cbSizeofstruct = Marshal.SizeOf<tagFONTDESC>(); 
-             
+             public int cbSizeofstruct = Marshal.SizeOf<tagFONTDESC>();
+
              [MarshalAs(UnmanagedType.LPWStr)]
-             public string lpstrName; 
-             
-             [MarshalAs(UnmanagedType.U8)] 
-             public long cySize; 
-             
-             [MarshalAs(UnmanagedType.U2)] 
-             public short sWeight; 
-             
-             [MarshalAs(UnmanagedType.U2)] 
+             public string lpstrName;
+
+             [MarshalAs(UnmanagedType.U8)]
+             public long cySize;
+
+             [MarshalAs(UnmanagedType.U2)]
+             public short sWeight;
+
+             [MarshalAs(UnmanagedType.U2)]
              public short sCharset;
-             
-             [MarshalAs(UnmanagedType.Bool)] 
-             public bool  fItalic; 
-             
-             [MarshalAs(UnmanagedType.Bool)] 
-             public bool  fUnderline; 
-             
-             [MarshalAs(UnmanagedType.Bool)] 
-             public bool fStrikethrough; 
+
+             [MarshalAs(UnmanagedType.Bool)]
+             public bool  fItalic;
+
+             [MarshalAs(UnmanagedType.Bool)]
+             public bool  fUnderline;
+
+             [MarshalAs(UnmanagedType.Bool)]
+             public bool fStrikethrough;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
@@ -2814,7 +2814,7 @@ namespace System.Windows.Forms
 
         [StructLayout(LayoutKind.Sequential)]
         // This is not our convention for managed resources.
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]        
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
         public class BITMAP {
             public int bmType = 0;
@@ -2859,7 +2859,7 @@ namespace System.Windows.Forms
             public LOGFONT( LOGFONT lf )
             {
                 Debug.Assert( lf != null, "lf is null" );
-                
+
                 this.lfHeight           = lf.lfHeight;
                 this.lfWidth            = lf.lfWidth;
                 this.lfEscapement       = lf.lfEscapement;
@@ -2954,7 +2954,7 @@ namespace System.Windows.Forms
         }
 
         // This version allows you to read the string that's stuffed
-        // in the native menu item.  You have to do the marshaling on 
+        // in the native menu item.  You have to do the marshaling on
         // your own though.
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class MENUITEMINFO_T_RW
@@ -2979,7 +2979,7 @@ namespace System.Windows.Forms
             public int dwMSAASignature;
             public int cchWText;
             public string pszWText;
-            
+
             public MSAAMENUINFO(string text) {
                 dwMSAASignature = unchecked((int) MSAA_MENU_SIG);
                 cchWText = text.Length;
@@ -3095,7 +3095,7 @@ namespace System.Windows.Forms
 
             [MarshalAs(UnmanagedType.LPWStr)]
             public   string pwcsName = null;
-            
+
             public   int type;
             [MarshalAs(UnmanagedType.I8)]
             public   long cbSize;
@@ -3109,7 +3109,7 @@ namespace System.Windows.Forms
             public   int grfMode = 0;
             [MarshalAs(UnmanagedType.I4)]
             public   int grfLocksSupported;
-            
+
             public   int clsid_data1 = 0;
             [MarshalAs(UnmanagedType.I2)]
             public   short clsid_data2 = 0;
@@ -3136,7 +3136,7 @@ namespace System.Windows.Forms
             [MarshalAs(UnmanagedType.I4)]
             public   int reserved = 0;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public class FILETIME {
             public uint dwLowDateTime = 0;
@@ -3155,8 +3155,8 @@ namespace System.Windows.Forms
             public short wMilliseconds;
 
             public override string ToString() {
-                return "[SYSTEMTIME: " 
-                + wDay.ToString(CultureInfo.InvariantCulture) +"/" + wMonth.ToString(CultureInfo.InvariantCulture) + "/" + wYear.ToString(CultureInfo.InvariantCulture) 
+                return "[SYSTEMTIME: "
+                + wDay.ToString(CultureInfo.InvariantCulture) +"/" + wMonth.ToString(CultureInfo.InvariantCulture) + "/" + wYear.ToString(CultureInfo.InvariantCulture)
                 + " " + wHour.ToString(CultureInfo.InvariantCulture) + ":" + wMinute.ToString(CultureInfo.InvariantCulture) + ":" + wSecond.ToString(CultureInfo.InvariantCulture)
                 + "]";
             }
@@ -3182,7 +3182,7 @@ namespace System.Windows.Forms
             public int top;
             public int right;
             public int bottom;
-            
+
             public COMRECT() {
             }
 
@@ -3226,7 +3226,7 @@ namespace System.Windows.Forms
             public int grfcrf;              // bit flags taken from olecrf values (above)
             public int grfcadvf;            // bit flags taken from olecadvf values (above)
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public struct NMLISTVIEW
         {
@@ -3238,7 +3238,7 @@ namespace System.Windows.Forms
             public int   uChanged;
             public IntPtr lParam;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
         public sealed class tagPOINTF
         {
@@ -3255,7 +3255,7 @@ namespace System.Windows.Forms
         {
           [MarshalAs(UnmanagedType.U4)/*leftover(offset=0, cb)*/]
           public int cb;
-          
+
           public bool fMDIApp;
           public IntPtr hwndFrame;
           public IntPtr hAccel;
@@ -3353,13 +3353,13 @@ namespace System.Windows.Forms
         public sealed class tagOLEVERB
         {
             public int lVerb;
-            
+
             [MarshalAs(UnmanagedType.LPWStr)/*leftover(offset=4, customMarshal="UniStringMarshaller", lpszVerbName)*/]
             public string lpszVerbName;
-            
+
             [MarshalAs(UnmanagedType.U4)/*leftover(offset=8, fuFlags)*/]
             public int fuFlags;
-            
+
             [MarshalAs(UnmanagedType.U4)/*leftover(offset=12, grfAttribs)*/]
             public int grfAttribs;
         }
@@ -3369,7 +3369,7 @@ namespace System.Windows.Forms
         {
             [MarshalAs(UnmanagedType.U2)/*leftover(offset=0, palVersion)*/]
             public short palVersion = 0;
-            
+
             [MarshalAs(UnmanagedType.U2)/*leftover(offset=2, palNumEntries)*/]
             public short palNumEntries = 0;
         }
@@ -3379,23 +3379,23 @@ namespace System.Windows.Forms
         {
             [MarshalAs(UnmanagedType.U4)/*leftover(offset=0, cb)*/]
             public int cb = Marshal.SizeOf<tagCONTROLINFO>();
-            
+
             public IntPtr hAccel;
-            
+
             [MarshalAs(UnmanagedType.U2)/*leftover(offset=8, cAccel)*/]
             public short cAccel;
-            
+
             [MarshalAs(UnmanagedType.U4)/*leftover(offset=10, dwFlags)*/]
             public int dwFlags;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
         public sealed class CA_STRUCT
         {
             public int cElems = 0;
             public IntPtr pElems = IntPtr.Zero;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public sealed class VARIANT {
             [MarshalAs(UnmanagedType.I2)]
@@ -3435,11 +3435,11 @@ namespace System.Windows.Forms
             }
 
             [DllImport(ExternDll.Oleaut32,CharSet=CharSet.Auto)]
-            
+
             private static extern IntPtr SysAllocString([In, MarshalAs(UnmanagedType.LPWStr)]string s);
 
             [DllImport(ExternDll.Oleaut32,CharSet=CharSet.Auto)]
-            
+
             private static extern void SysFreeString(IntPtr pbstr);
 
             public void SetLong(long lVal) {
@@ -3604,7 +3604,7 @@ namespace System.Windows.Forms
         {
           [MarshalAs(UnmanagedType.U4)/*leftover(offset=0, cb)*/]
           public int cbLicInfo = Marshal.SizeOf<tagLICINFO>();
-          
+
           public int fRuntimeAvailable = 0;
           public int fLicVerified = 0;
         }
@@ -3687,27 +3687,27 @@ namespace System.Windows.Forms
             public const int msocrfExclusiveActivation = 128;
             public const int msocrfNeedAllMacEvents = 256;
             public const int msocrfMaster           = 512;
-    
+
             // MSO Component registration advise flags (see msocstate enumeration)
             public const int msocadvfModal              = 1;
             public const int msocadvfRedrawOff          = 2;
             public const int msocadvfWarningsOff        = 4;
             public const int msocadvfRecording          = 8;
-    
+
             // MSO Component Host flags
             public const int msochostfExclusiveBorderSpace = 1;
-    
-            // MSO idle flags, passed to IMsoComponent::FDoIdle and 
+
+            // MSO idle flags, passed to IMsoComponent::FDoIdle and
             // IMsoStdComponentMgr::FDoIdle.
             public const int msoidlefPeriodic    = 1;
             public const int msoidlefNonPeriodic = 2;
             public const int msoidlefPriority    = 4;
             public const int msoidlefAll         = -1;
-    
-            // MSO Reasons for pushing a message loop, passed to 
-            // IMsoComponentManager::FPushMessageLoop and 
+
+            // MSO Reasons for pushing a message loop, passed to
+            // IMsoComponentManager::FPushMessageLoop and
             // IMsoComponentHost::FPushMessageLoop.  The host should remain in message
-            // loop until IMsoComponent::FContinueMessageLoop 
+            // loop until IMsoComponent::FContinueMessageLoop
             public const int msoloopDoEventsModal  = -2; // Note this is not an official MSO loop -- it just must be distinct.
             public const int msoloopMain           = -1; // Note this is not an official MSO loop -- it just must be distinct.
             public const int msoloopFocusWait      =  1;
@@ -3715,22 +3715,22 @@ namespace System.Windows.Forms
             public const int msoloopDebug          =  3;
             public const int msoloopModalForm      =  4;
             public const int msoloopModalAlert     =  5;
-    
-    
-            /* msocstate values: state IDs passed to 
-                IMsoComponent::OnEnterState, 
+
+
+            /* msocstate values: state IDs passed to
+                IMsoComponent::OnEnterState,
                 IMsoComponentManager::OnComponentEnterState/FOnComponentExitState/FInState,
                 IMsoComponentHost::OnComponentEnterState,
                 IMsoStdComponentMgr::OnHostEnterState/FOnHostExitState/FInState.
-                When the host or a component is notified through one of these methods that 
-                another entity (component or host) is entering or exiting a state 
+                When the host or a component is notified through one of these methods that
+                another entity (component or host) is entering or exiting a state
                 identified by one of these state IDs, the host/component should take
                 appropriate action:
                     msocstateModal (modal state):
                         If app is entering modal state, host/component should disable
                         its toplevel windows, and reenable them when app exits this
                         state.  Also, when this state is entered or exited, host/component
-                        should notify approprate inplace objects via 
+                        should notify approprate inplace objects via
                         IOleInPlaceActiveObject::EnableModeless.
                     msocstateRedrawOff (redrawOff state):
                         If app is entering redrawOff state, host/component should disable
@@ -3746,12 +3746,12 @@ namespace System.Windows.Forms
             public const int msocstateRedrawOff   = 2;
             public const int msocstateWarningsOff = 3;
             public const int msocstateRecording   = 4;
-    
-    
+
+
             /*             ** Comments on State Contexts **
-            IMsoComponentManager::FCreateSubComponentManager allows one to create a 
-            hierarchical tree of component managers.  This tree is used to maintain 
-            multiple contexts with regard to msocstateXXX states.  These contexts are 
+            IMsoComponentManager::FCreateSubComponentManager allows one to create a
+            hierarchical tree of component managers.  This tree is used to maintain
+            multiple contexts with regard to msocstateXXX states.  These contexts are
             referred to as 'state contexts'.
             Each component manager in the tree defines a state context.  The
             components registered with a particular component manager or any of its
@@ -3761,34 +3761,34 @@ namespace System.Windows.Forms
             manager's state context, or only those components that are outside of the
             component manager's state context.  IMsoComponentManager::FInState is used
             to query the state of the component manager's state context at its root.
-        
-            msoccontext values: context indicators passed to 
+
+            msoccontext values: context indicators passed to
             IMsoComponentManager::OnComponentEnterState/FOnComponentExitState.
             These values indicate the state context that is to be affected by the
-            state change. 
+            state change.
             In IMsoComponentManager::OnComponentEnterState/FOnComponentExitState,
             the comp mgr informs only those components/host that are within the
             specified state context. */
             public const int msoccontextAll    = 0;
             public const int msoccontextMine   = 1;
-            public const int msoccontextOthers = 2; 
-    
+            public const int msoccontextOthers = 2;
+
             /*     ** WM_MOUSEACTIVATE Note (for top level compoenents and host) **
             If the active (or tracking) comp's reg info indicates that it
-            wants mouse messages, then no MA_xxxANDEAT value should be returned 
+            wants mouse messages, then no MA_xxxANDEAT value should be returned
             from WM_MOUSEACTIVATE, so that the active (or tracking) comp will be able
             to process the resulting mouse message.  If one does not want to examine
-            the reg info, no MA_xxxANDEAT value should be returned from 
+            the reg info, no MA_xxxANDEAT value should be returned from
             WM_MOUSEACTIVATE if any comp is active (or tracking).
             One can query the reg info of the active (or tracking) component at any
             time via IMsoComponentManager::FGetActiveComponent. */
-    
-            /* msogac values: values passed to 
+
+            /* msogac values: values passed to
             IMsoComponentManager::FGetActiveComponent. */
             public const int msogacActive    = 0;
             public const int msogacTracking   = 1;
-            public const int msogacTrackingOrActive = 2; 
-    
+            public const int msogacTrackingOrActive = 2;
+
             /* msocWindow values: values passed to IMsoComponent::HwndGetWindow. */
             public const int msocWindowFrameToplevel = 0;
             public const int msocWindowFrameOwner = 1;
@@ -3866,7 +3866,7 @@ namespace System.Windows.Forms
             public IntPtr   item_lParam;
             public int      item_iIntegral;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public struct NMTREEVIEW
         {
@@ -3875,7 +3875,7 @@ namespace System.Windows.Forms
             public TV_ITEM  itemOld;
             public TV_ITEM  itemNew;
             public int      ptDrag_X; // This should be declared as POINT
-            public int      ptDrag_Y; // we use unsafe blocks to manipulate 
+            public int      ptDrag_Y; // we use unsafe blocks to manipulate
                                       // NMTREEVIEW quickly, and POINT is declared
                                       // as a class.  Too much churn to change POINT
                                       // now.
@@ -3887,7 +3887,7 @@ namespace System.Windows.Forms
             public NMHDR    nmhdr;
             public string   pszText;
             public int      cchTextMax;
-            public IntPtr   item; 
+            public IntPtr   item;
             public IntPtr   lParam;
 
         }
@@ -3965,14 +3965,14 @@ namespace System.Windows.Forms
             public string bstrHelpFile = null;
             [MarshalAs(UnmanagedType.U4)]
             public int dwHelpContext = 0;
-            
+
             public IntPtr pvReserved = IntPtr.Zero;
-            
+
             public IntPtr pfnDeferredFillIn = IntPtr.Zero;
             [MarshalAs(UnmanagedType.U4)]
             public int scode = 0;
         }
-        
+
         public enum  tagDESCKIND {
             DESCKIND_NONE = 0,
             DESCKIND_FUNCDESC = 1,
@@ -3985,7 +3985,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public struct tagFUNCDESC {
             public   int memid;
-            
+
             public IntPtr lprgscode;
 
             // This is marked as NATIVE_TYPE_PTR,
@@ -3993,15 +3993,15 @@ namespace System.Windows.Forms
             // a ELEMENT_TYPE_VALUECLASS and fails because it
             // isn't a NATIVE_TYPE_NESTEDSTRUCT
             /*[MarshalAs(UnmanagedType.PTR)]*/
-            
+
             public    /*NativeMethods.tagELEMDESC*/ IntPtr lprgelemdescParam;
 
             // cpb, Microsoft, the EE chokes on Enums in structs
-            
+
             public    /*NativeMethods.tagFUNCKIND*/ int funckind;
-            
+
             public    /*NativeMethods.tagINVOKEKIND*/ int invkind;
-            
+
             public    /*NativeMethods.tagCALLCONV*/ int callconv;
             [MarshalAs(UnmanagedType.I2)]
             public   short cParams;
@@ -4015,7 +4015,7 @@ namespace System.Windows.Forms
             [MarshalAs(UnmanagedType.U2)]
             public   short wFuncFlags;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public struct tagVARDESC {
             public   int memid;
@@ -4099,7 +4099,7 @@ namespace System.Windows.Forms
         public interface ISpecifyPropertyPages
         {
              void GetPages(
-                [Out] 
+                [Out]
                 NativeMethods.tagCAUUID pPages);
         }
 
@@ -4110,7 +4110,7 @@ namespace System.Windows.Forms
             public int cElems = 0;
             public IntPtr pElems = IntPtr.Zero;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public struct NMTOOLBAR
         {
@@ -4120,7 +4120,7 @@ namespace System.Windows.Forms
             public int      cchText;
             public IntPtr   pszText;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public struct TBBUTTON {
             public int      iBitmap;
@@ -4132,16 +4132,16 @@ namespace System.Windows.Forms
             public IntPtr   dwData;
             public IntPtr   iString;
         }
-        
+
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class TOOLTIPTEXT
         {
             public NMHDR  hdr;
             public string lpszText;
-            
+
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst=80)]
             public string szText = null;
-            
+
             public IntPtr hinst;
             public int    uFlags;
         }
@@ -4186,7 +4186,7 @@ namespace System.Windows.Forms
     }
 
     [StructLayout(LayoutKind.Sequential,CharSet=CharSet.Auto)]
-    public struct TBBUTTONINFO    
+    public struct TBBUTTONINFO
     {
         public int      cbSize;
         public int      dwMask;
@@ -4199,7 +4199,7 @@ namespace System.Windows.Forms
         public IntPtr   pszText;
         public int      cchTest;
     }
-        
+
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class TV_HITTESTINFO {
             public int      pt_x;
@@ -4207,7 +4207,7 @@ namespace System.Windows.Forms
             public int      flags = 0;
             public IntPtr   hItem = IntPtr.Zero;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public class NMTVCUSTOMDRAW
         {
@@ -4216,7 +4216,7 @@ namespace System.Windows.Forms
             public int clrTextBk;
             public int iLevel = 0;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public struct NMCUSTOMDRAW {
             public NMHDR    nmcd;
@@ -4229,7 +4229,7 @@ namespace System.Windows.Forms
         }
 
 
-        
+
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class MCHITTESTINFO {
             public int   cbSize = Marshal.SizeOf<MCHITTESTINFO>();
@@ -4245,7 +4245,7 @@ namespace System.Windows.Forms
             public short st_wSecond = 0;
             public short st_wMilliseconds = 0;
         }
-        
+
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class NMSELCHANGE
         {
@@ -4253,7 +4253,7 @@ namespace System.Windows.Forms
             public SYSTEMTIME   stSelStart = null;
             public SYSTEMTIME   stSelEnd = null;
         }
-        
+
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class NMDAYSTATE
         {
@@ -4279,7 +4279,7 @@ namespace System.Windows.Forms
             public int clrTextBk;
             public int iSubItem;
             public int dwItemType;
-            // Item Custom Draw    
+            // Item Custom Draw
             public int clrFace;
             public int iIconEffect;
             public int iIconPhase;
@@ -4301,7 +4301,7 @@ namespace System.Windows.Forms
             public int      subItem = 0;
             public IntPtr   lParam = IntPtr.Zero;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public class NMLVKEYDOWN
         {
@@ -4309,7 +4309,7 @@ namespace System.Windows.Forms
             public short wVKey = 0;
             public uint flags = 0;
         }
-        
+
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class LVHITTESTINFO {
             public int      pt_x;
@@ -4318,7 +4318,7 @@ namespace System.Windows.Forms
             public int      iItem = 0;
             public int      iSubItem = 0;
         }
-        
+
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class LVBKIMAGE
         {
@@ -4342,7 +4342,7 @@ namespace System.Windows.Forms
             public int      iImage = 0;
             public int      iOrder = 0;
         }
-        
+
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public struct LVFINDINFO {
             public int      flags;
@@ -4352,7 +4352,7 @@ namespace System.Windows.Forms
             public int      ptY;
             public int      vkDirection;
         }
-        
+
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public struct LVITEM {
             public int      mask;
@@ -4387,14 +4387,14 @@ namespace System.Windows.Forms
 
             public override string ToString() {
                 return "LVITEM: pszText = " + pszText
-                     + ", iItem = " + iItem.ToString(CultureInfo.InvariantCulture) 
+                     + ", iItem = " + iItem.ToString(CultureInfo.InvariantCulture)
                      + ", iSubItem = " + iSubItem.ToString(CultureInfo.InvariantCulture)
                      + ", state = " + state.ToString(CultureInfo.InvariantCulture)
                      + ", iGroupId = " + iGroupId.ToString(CultureInfo.InvariantCulture)
                      + ", cColumns = " + cColumns.ToString(CultureInfo.InvariantCulture);
             }
         }
-        
+
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public struct LVITEM_NOTEXT {
             public int      mask;
@@ -4408,7 +4408,7 @@ namespace System.Windows.Forms
             public IntPtr   lParam;
             public int      iIndent;
         }
-        
+
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class LVCOLUMN {
             public int      mask;
@@ -4432,7 +4432,7 @@ namespace System.Windows.Forms
             public int iGroupId;
             public uint stateMask = 0;
             public uint state = 0;
-            public uint uAlign;   
+            public uint uAlign;
 
             public override string ToString() {
                 return "LVGROUP: header = " + pszHeader.ToString() + ", iGroupId = " + iGroupId.ToString(CultureInfo.InvariantCulture);
@@ -4456,7 +4456,7 @@ namespace System.Windows.Forms
             public int cLines;
             public RECT rcLabelMargin;
         }
-    
+
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class NMLVCACHEHINT {
             public NMHDR hdr;
@@ -4486,18 +4486,18 @@ namespace System.Windows.Forms
             public int      uNewState = 0;
             public int      uOldState = 0;
         }
-    
+
         [StructLayout(LayoutKind.Sequential)]
         public class CLIENTCREATESTRUCT {
             public IntPtr hWindowMenu;
             public int idFirstChild;
-        
+
             public CLIENTCREATESTRUCT(IntPtr hmenu, int idFirst) {
                 hWindowMenu = hmenu;
                 idFirstChild = idFirst;
             }
         }
-    
+
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class NMDATETIMECHANGE
         {
@@ -4506,7 +4506,7 @@ namespace System.Windows.Forms
             public SYSTEMTIME   st = null;
         }
 
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public class COPYDATASTRUCT {
             public int dwData = 0;
@@ -4592,7 +4592,7 @@ namespace System.Windows.Forms
             public int  cpMin;
             public int  cpMax;
         }
-        
+
         [StructLayout(LayoutKind.Sequential, Pack=4)]
         public class CHARFORMATW
         {
@@ -4607,7 +4607,7 @@ namespace System.Windows.Forms
             [MarshalAs(UnmanagedType.ByValArray, SizeConst=64)]
             public byte[]   szFaceName = new byte[64];
         }
-        
+
         [StructLayout(LayoutKind.Sequential, Pack=4)]
         public class CHARFORMATA
         {
@@ -4622,7 +4622,7 @@ namespace System.Windows.Forms
             [MarshalAs(UnmanagedType.ByValArray, SizeConst=32)]
             public byte[]   szFaceName = new byte[32];
         }
-        
+
         [StructLayout(LayoutKind.Sequential, Pack=4)]
         public class CHARFORMAT2A
         {
@@ -4647,7 +4647,7 @@ namespace System.Windows.Forms
             public byte     bAnimation = 0;
             public byte     bRevAuthor = 0;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public class TEXTRANGE
         {
@@ -4658,17 +4658,17 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public class GETTEXTLENGTHEX
         {                               // Taken from richedit.h:
-            public uint flags;          // Flags (see GTL_XXX defines)              
-            public uint codepage;       // Code page for translation (CP_ACP for default, 1200 for Unicode)                         
+            public uint flags;          // Flags (see GTL_XXX defines)
+            public uint codepage;       // Code page for translation (CP_ACP for default, 1200 for Unicode)
         }
-        
+
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi, Pack=4)]
         public class SELCHANGE {
             public NMHDR nmhdr;
             public CHARRANGE chrg = null;
             public int seltyp = 0;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public class PARAFORMAT
         {
@@ -4681,18 +4681,18 @@ namespace System.Windows.Forms
             public int      dxOffset;
             public short    wAlignment;
             public short    cTabCount;
-    
+
             [MarshalAs(UnmanagedType.ByValArray, SizeConst=32)]
             public int[]    rgxTabs;
         }
-    
+
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class FINDTEXT
         {
             public CHARRANGE    chrg;
             public string       lpstrText;
         }
-        
+
         [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
         [StructLayout(LayoutKind.Sequential)]
         public class ENLINK
@@ -4813,14 +4813,14 @@ namespace System.Windows.Forms
             public int      cp = 0;
             public bool     fProtected = false;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public class REQRESIZE
         {
             public NMHDR    nmhdr;
             public RECT     rc;
         }
-        
+
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class ENPROTECTED
         {
@@ -4832,7 +4832,7 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public class ENPROTECTED64 
+        public class ENPROTECTED64
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst=56)]
             public byte[] contents = new byte[56];
@@ -4977,55 +4977,55 @@ namespace System.Windows.Forms
             public const   int ALIGN_MAX = 0x4;
             public const   int OLEVERBATTRIB_NEVERDIRTIES = 0x1;
             public const   int OLEVERBATTRIB_ONCONTAINERMENU = 0x2;
-    
+
             public static Guid IID_IUnknown = new Guid("{00000000-0000-0000-C000-000000000046}");
 
             private ActiveX()
             {
             }
         }
-    
+
         public static class Util {
             public static int MAKELONG(int low, int high) {
                 return (high << 16) | (low & 0xffff);
             }
-    
+
             public static IntPtr MAKELPARAM(int low, int high) {
                 return (IntPtr) ((high << 16) | (low & 0xffff));
             }
-    
+
             public static int HIWORD(int n) {
                 return (n >> 16) & 0xffff;
             }
-    
+
             public static int HIWORD(IntPtr n) {
                 return HIWORD( unchecked((int)(long)n) );
             }
-    
+
             public static int LOWORD(int n) {
                 return n & 0xffff;
             }
-    
+
             public static int LOWORD(IntPtr n) {
                 return LOWORD( unchecked((int)(long)n) );
             }
-    
+
             public static int SignedHIWORD(IntPtr n) {
                 return SignedHIWORD( unchecked((int)(long)n) );
             }
             public static int SignedLOWORD(IntPtr n) {
                 return SignedLOWORD( unchecked((int)(long)n) );
             }
-            
+
             public static int SignedHIWORD(int n) {
                 int i = (int)(short)((n >> 16) & 0xffff);
-    
+
                 return i;
             }
-    
+
             public static int SignedLOWORD(int n) {
                 int i = (int)(short)(n & 0xFFFF);
-                
+
                 return i;
             }
 
@@ -5040,12 +5040,12 @@ namespace System.Windows.Forms
                     return s.Length;
                 }
             }
-    
+
             [DllImport(ExternDll.Kernel32, CharSet=CharSet.Auto)]
-            
+
             private static extern int lstrlen(string s);
         }
-    
+
         public enum  tagTYPEKIND {
             TKIND_ENUM = 0,
             TKIND_RECORD = 1,
@@ -5063,23 +5063,23 @@ namespace System.Windows.Forms
             public   IntPtr unionMember;
             public   short vt;
         }
-    
+
         [StructLayout(LayoutKind.Sequential)]
         public struct  tagPARAMDESC {
             public   IntPtr pparamdescex;
-            
+
             [MarshalAs(UnmanagedType.U2)]
             public   short wParamFlags;
         }
 
-    
+
         public enum  tagSYSKIND {
             SYS_WIN16 = 0,
             SYS_MAC = 2
         }
-    
+
         public delegate bool MonitorEnumProc(IntPtr monitor, IntPtr hdc, IntPtr lprcMonitor, IntPtr lParam);
-    
+
         [ComImport]
         [Guid("A7ABA9C1-8983-11cf-8F20-00805F2CD064")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -5089,24 +5089,24 @@ namespace System.Windows.Forms
             // these are from IProvideClassInfo & IProvideClassInfo2
             [PreserveSig]
             UnsafeNativeMethods.ITypeInfo GetClassInfo();
-             
+
             [PreserveSig]
             int GetGUID(int dwGuidKind, [In, Out] ref Guid pGuid);
-         
+
             [PreserveSig]
             int GetMultiTypeInfoCount([In, Out] ref int pcti);
-         
+
             // we use arrays for most of these since we never use them anyway.
             [PreserveSig]
-            int GetInfoOfIndex(int iti, int dwFlags, 
+            int GetInfoOfIndex(int iti, int dwFlags,
                                 [In, Out]
-                                ref UnsafeNativeMethods.ITypeInfo pTypeInfo, 
+                                ref UnsafeNativeMethods.ITypeInfo pTypeInfo,
                                 int pTIFlags,
                                 int pcdispidReserved,
                                 IntPtr piidPrimary,
                                 IntPtr piidSource);
         }
-   
+
         [StructLayout(LayoutKind.Sequential)]
             public class EVENTMSG {
             public int message;
@@ -5115,7 +5115,7 @@ namespace System.Windows.Forms
             public int time;
             public IntPtr hwnd;
         }
-    
+
         [ComImport]
         [Guid("B196B283-BAB4-101A-B69C-00AA00341D07")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -5124,7 +5124,7 @@ namespace System.Windows.Forms
             [return: MarshalAs(UnmanagedType.Interface)]
             UnsafeNativeMethods.ITypeInfo GetClassInfo();
         }
-    
+
         [StructLayout(LayoutKind.Sequential)]
         public  struct  tagTYPEATTR {
             public Guid guid;
@@ -5154,38 +5154,38 @@ namespace System.Windows.Forms
             public   short wMajorVerNum;
             [MarshalAs(UnmanagedType.U2)]
             public   short wMinorVerNum;
-            
+
             //these are inline too
             //public    NativeMethods.tagTYPEDESC tdescAlias;
             [MarshalAs(UnmanagedType.U4)]
             public   int tdescAlias_unionMember;
-            
+
             [MarshalAs(UnmanagedType.U2)]
             public   short tdescAlias_vt;
-            
+
             //public    NativeMethods.tagIDLDESC idldescType;
             [MarshalAs(UnmanagedType.U4)]
             public   int idldescType_dwReserved;
-            
+
             [MarshalAs(UnmanagedType.U2)]
             public   short idldescType_wIDLFlags;
-            
-            
+
+
             public tagTYPEDESC Get_tdescAlias(){
                 tagTYPEDESC td;
                 td.unionMember = (IntPtr)this.tdescAlias_unionMember;
                 td.vt = this.tdescAlias_vt;
                 return td;
             }
-            
+
             public tagIDLDESC Get_idldescType(){
                 tagIDLDESC id = new tagIDLDESC();
                 id.dwReserved = this.idldescType_dwReserved;
                 id.wIDLFlags = this.idldescType_wIDLFlags;
                 return id;
-            } 
+            }
         }
-            
+
         public enum tagVARFLAGS {
              VARFLAG_FREADONLY         =    1,
              VARFLAG_FSOURCE           =    0x2,
@@ -5200,20 +5200,20 @@ namespace System.Windows.Forms
              VARFLAG_FREPLACEABLE      =    0x800,
              VARFLAG_FIMMEDIATEBIND    =    0x1000
        }
-   
+
         [StructLayout(LayoutKind.Sequential)]
         public unsafe struct tagELEMDESC {
             public    NativeMethods.tagTYPEDESC* tdesc;
             public    NativeMethods.tagPARAMDESC paramdesc;
         }
-        
+
         public enum  tagVARKIND {
             VAR_PERINSTANCE = 0,
             VAR_STATIC = 1,
             VAR_CONST = 2,
             VAR_DISPATCH = 3
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public struct  tagIDLDESC {
             [MarshalAs(UnmanagedType.U4)]
@@ -5278,7 +5278,7 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        internal class DLLVERSIONINFO 
+        internal class DLLVERSIONINFO
         {
            internal uint cbSize = 0;
            internal uint dwMajorVersion = 0;
@@ -5287,17 +5287,17 @@ namespace System.Windows.Forms
            internal uint dwPlatformID = 0;
         }
 
-        public enum OLERENDER 
-        { 
+        public enum OLERENDER
+        {
             OLERENDER_NONE = 0,
             OLERENDER_DRAW = 1,
             OLERENDER_FORMAT = 2,
-            OLERENDER_ASIS = 3 
+            OLERENDER_ASIS = 3
         }
 
         public enum PROCESS_DPI_AWARENESS
         {
-            PROCESS_DPI_UNINITIALIZED = -1, 
+            PROCESS_DPI_UNINITIALIZED = -1,
             PROCESS_DPI_UNAWARE = 0,
             PROCESS_SYSTEM_DPI_AWARE = 1,
             PROCESS_PER_MONITOR_DPI_AWARE = 2
@@ -5640,7 +5640,7 @@ namespace System.Windows.Forms
         internal const int UIA_SemanticZoomControlTypeId = 50039;
         internal const int UIA_AppBarControlTypeId = 50040;
 
-        // If this value is used, %windows%\system32 is searched for the DLL 
+        // If this value is used, %windows%\system32 is searched for the DLL
         // and its dependencies. Directories in the standard search path are not searched.
         // Windows 7: this value requires KB2533623 to be installed.
         internal const int LOAD_LIBRARY_SEARCH_SYSTEM32 = 0x00000800;

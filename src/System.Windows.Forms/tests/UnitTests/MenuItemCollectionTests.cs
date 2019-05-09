@@ -152,7 +152,7 @@ namespace System.Windows.Forms.Tests
             var collection = new Menu.MenuItemCollection(parent);
             collection.Add(menuItem1);
             collection.Add(menuItem2);
-            
+
             Assert.Equal(0, collection.Add(0, menuItem2));
             Assert.Equal(2, collection.Count);
             Assert.Same(menuItem2, collection[0]);
@@ -467,7 +467,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new MenuItem[] { new MenuItem { Name = "name" } }, "noSuchName", false, new MenuItem[0] };
             yield return new object[] { new MenuItem[] { new MenuItem("text", new MenuItem[] { new MenuItem { Name = "name2" } }) { Name = "name" }, }, "noSuchName", true, new MenuItem[0] };
             yield return new object[] { new MenuItem[] { new MenuItem("text", new MenuItem[] { new MenuItem { Name = "name2" } }) { Name = "name" }, }, "noSuchName", false, new MenuItem[0] };
-        
+
             var menuItemChild = new MenuItem { Name = "name" };
             yield return new object[] { new MenuItem[] { new MenuItem("text", new MenuItem[] { menuItemChild }) }, "name", true, new MenuItem[] { menuItemChild } };
             yield return new object[] { new MenuItem[] { new MenuItem("text", new MenuItem[] { new MenuItem { Name = "name" } }) }, "name", false, new MenuItem[0] };
@@ -703,7 +703,7 @@ namespace System.Windows.Forms.Tests
             var menu = new SubMenu(new MenuItem[] { menuItem });
             var collection = new Menu.MenuItemCollection(menu);
             collection.RemoveAt(0);
-            
+
             Assert.Empty(collection);
             Assert.Null(menuItem.Parent);
             Assert.Equal(-1, menuItem.Index);

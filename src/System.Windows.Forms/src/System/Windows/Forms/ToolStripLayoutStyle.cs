@@ -10,6 +10,6 @@ namespace System.Windows.Forms
         HorizontalStackWithOverflow = 0x1,
         VerticalStackWithOverflow =  0x2,
         Flow = 0x3,
-        Table = 0x4    
+        Table = 0x4
     }
 }

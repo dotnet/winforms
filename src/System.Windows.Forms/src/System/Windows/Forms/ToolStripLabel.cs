@@ -10,7 +10,7 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Windows.Forms.ButtonInternal;
-    using System.Windows.Forms.Design;    
+    using System.Windows.Forms.Design;
 
     /// <devdoc>
     /// A non selectable ToolStrip item
@@ -20,15 +20,15 @@ namespace System.Windows.Forms {
 
         private LinkBehavior linkBehavior = LinkBehavior.SystemDefault;
         private bool isLink = false, linkVisited = false;
-   
+
         private Color linkColor = Color.Empty;
         private Color activeLinkColor = Color.Empty;
         private Color visitedLinkColor = Color.Empty;
         private Font hoverLinkFont, linkFont;
         private Cursor lastCursor;
-        
-                     
-              
+
+
+
 
         /// <devdoc>
         /// A non selectable ToolStrip item
@@ -44,7 +44,7 @@ namespace System.Windows.Forms {
         public ToolStripLabel(string text, Image image, bool isLink):this(text,image,isLink, null) {
         }
         [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ToolStripLabel(string text, Image image, bool isLink, EventHandler onClick):this(text,image,isLink,onClick,null) {         
+        public ToolStripLabel(string text, Image image, bool isLink, EventHandler onClick):this(text,image,isLink,onClick,null) {
         }
         [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ToolStripLabel(string text, Image image, bool isLink, EventHandler onClick, string name) : base(text,image,onClick,name) {
@@ -71,7 +71,7 @@ namespace System.Windows.Forms {
               }
           }
         }
-        
+
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.ToolStripLabelActiveLinkColorDescr))
@@ -190,31 +190,31 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
+
         /// <devdoc>
         ///     Invalidates the current set of fonts we use when painting
         ///     links.  The fonts will be recreated when needed.
         /// </devdoc>
         private void InvalidateLinkFonts() {
-  
+
             if (linkFont != null) {
                 linkFont.Dispose();
             }
-  
+
             if (hoverLinkFont != null && hoverLinkFont != linkFont) {
                 hoverLinkFont.Dispose();
             }
-  
+
             linkFont = null;
             hoverLinkFont = null;
         }
-  
+
         protected override void OnFontChanged(EventArgs e) {
            InvalidateLinkFonts();
            base.OnFontChanged(e);
         }
 
-    
+
         protected override void OnMouseEnter(EventArgs e) {
             if (IsLink) {
                 ToolStrip parent = this.Parent;
@@ -224,9 +224,9 @@ namespace System.Windows.Forms {
                 }
             }
             base.OnMouseEnter(e);
-  
+
         }
-  
+
         protected override void OnMouseLeave(EventArgs e) {
             if (IsLink) {
                 ToolStrip parent = this.Parent;
@@ -235,7 +235,7 @@ namespace System.Windows.Forms {
                 }
             }
             base.OnMouseLeave(e);
-  
+
         }
 
        private void ResetActiveLinkColor()
@@ -252,12 +252,12 @@ namespace System.Windows.Forms {
        {
             VisitedLinkColor = IEVisitedLinkColor;
        }
-  
+
        [EditorBrowsable(EditorBrowsableState.Never)]
        private bool ShouldSerializeActiveLinkColor() {
            return !activeLinkColor.IsEmpty;
        }
-       
+
        [EditorBrowsable(EditorBrowsableState.Never)]
        private bool ShouldSerializeLinkColor() {
            return !linkColor.IsEmpty;
@@ -268,7 +268,7 @@ namespace System.Windows.Forms {
            return !visitedLinkColor.IsEmpty;
        }
 
-       
+
 
         /// <devdoc>
         /// Creates an instance of the object that defines how image and text
@@ -290,10 +290,10 @@ namespace System.Windows.Forms {
 
             if (this.Owner != null) {
                 ToolStripRenderer renderer = this.Renderer;
-                  
+
                 renderer.DrawLabelBackground(new ToolStripItemRenderEventArgs(e.Graphics, this));
 
-                if ((DisplayStyle & ToolStripItemDisplayStyle.Image) == ToolStripItemDisplayStyle.Image) { 
+                if ((DisplayStyle & ToolStripItemDisplayStyle.Image) == ToolStripItemDisplayStyle.Image) {
                     renderer.DrawItemImage(new ToolStripItemImageRenderEventArgs(e.Graphics, this, InternalLayout.ImageRectangle));
                 }
                 PaintText(e.Graphics);
@@ -302,13 +302,13 @@ namespace System.Windows.Forms {
 
         internal void PaintText(Graphics g) {
             ToolStripRenderer renderer = this.Renderer;
-              
-            if ((DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text) { 
+
+            if ((DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text) {
                  Font font = this.Font;
                  Color textColor = this.ForeColor;
                  if (IsLink) {
                       LinkUtilities.EnsureLinkFonts(font, this.LinkBehavior, ref this.linkFont, ref this.hoverLinkFont);
-        
+
                       if (this.Pressed) {
                           font = hoverLinkFont;
                           textColor = this.ActiveLinkColor;
@@ -326,7 +326,7 @@ namespace System.Windows.Forms {
                   renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, this.Text, textRect, textColor, font, InternalLayout.TextFormat));
              }
         }
-        
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters")] // 'charCode' matches control.cs
         protected internal override bool ProcessMnemonic(char charCode) {
             // checking IsMnemonic is not necessary - toolstrip does this for us.
@@ -339,13 +339,13 @@ namespace System.Windows.Forms {
                     FireEvent(ToolStripItemEventType.Click);
                 }
                 return true;
-           
+
             }
             return false;
         }
 
-        
-        [System.Runtime.InteropServices.ComVisible(true)]        
+
+        [System.Runtime.InteropServices.ComVisible(true)]
         [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
         internal class ToolStripLabelAccessibleObject : ToolStripItemAccessibleObject {
             private ToolStripLabel ownerItem = null;
@@ -417,10 +417,10 @@ namespace System.Windows.Forms {
                return layoutOptions;
             }
         }
-        
+
     }
 
 }
-    
+
 
 

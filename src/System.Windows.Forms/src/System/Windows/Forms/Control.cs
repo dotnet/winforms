@@ -181,7 +181,7 @@ namespace System.Windows.Forms {
         internal const int STATE_MOUSEPRESSED           = 0x08000000;
         internal const int STATE_VALIDATIONCANCELLED    = 0x10000000;
         internal const int STATE_PARENTRECREATING       = 0x20000000;
-        internal const int STATE_MIRRORED               = 0x40000000;        
+        internal const int STATE_MIRRORED               = 0x40000000;
 
         // When we change RightToLeft, we need to change the scrollbar thumb.
         // We can't do that until after the control has been created, and all the items added
@@ -189,7 +189,7 @@ namespace System.Windows.Forms {
         // bar until the items are added. So in RightToLeftChanged, we set a flag that indicates
         // that we want to set the scroll position. In OnHandleCreated we check this flag,
         // and if set, we BeginInvoke. We have to BeginInvoke since we have to wait until the items
-        // are added. We only want to do this when RightToLeft changes thus the flags 
+        // are added. We only want to do this when RightToLeft changes thus the flags
         // STATE2_HAVEINVOKED and STATE2_SETSCROLLPOS. Otherwise we would do this on each HandleCreated.
         private  const int STATE2_HAVEINVOKED                       = 0x00000001;
         private  const int STATE2_SETSCROLLPOS                      = 0x00000002;
@@ -393,7 +393,7 @@ namespace System.Windows.Forms {
         private Control                       parent;
         private Control                       reflectParent;
         private CreateParams                  createParams;
-        private int                           x;                      // 
+        private int                           x;                      //
         private int                           y;
         private int                           width;
         private int                           height;
@@ -419,7 +419,7 @@ namespace System.Windows.Forms {
         //
         private int uiCuesState;
 
-        private const int UISTATE_FOCUS_CUES_MASK               = 0x000F;                 
+        private const int UISTATE_FOCUS_CUES_MASK               = 0x000F;
         private const int UISTATE_FOCUS_CUES_HIDDEN             = 0x0001;
         private const int UISTATE_FOCUS_CUES_SHOW               = 0x0002;
         private const int UISTATE_KEYBOARD_CUES_MASK            = 0x00F0;
@@ -806,7 +806,7 @@ example usage
                     }
 
                     activeXImpl = new ActiveXImpl(this);
-                    
+
                     // PERF: IsActiveX is called quite a bit - checked everywhere from sizing to event raising.  Using a state
                     // bit to track PropActiveXImpl instead of fetching from the property store.
                     SetState2(STATE2_ISACTIVEX, true);
@@ -1130,12 +1130,12 @@ example usage
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ImageLayout));
                     }
                     // Check if the value is either center, strech or zoom;
-                    if (value == ImageLayout.Center || value == ImageLayout.Zoom || value == ImageLayout.Stretch) {                    
+                    if (value == ImageLayout.Center || value == ImageLayout.Zoom || value == ImageLayout.Stretch) {
                         SetStyle(ControlStyles.ResizeRedraw, true);
                         // Only for images that support transparency.
                         if (ControlPaint.IsImageTransparent(BackgroundImage))
                         {
-                            DoubleBuffered = true;    
+                            DoubleBuffered = true;
                         }
                     }
                     Properties.SetObject(PropBackgroundImageLayout, value);
@@ -1160,7 +1160,7 @@ example usage
             set
             {
                 if (value != this.BecomingActiveControl)
-                {                    
+                {
                     Application.ThreadContext.FromCurrent().ActivatingControl = (value) ? this : null;
                     SetState2(STATE2_BECOMINGACTIVECONTROL, value);
                 }
@@ -1359,7 +1359,7 @@ example usage
                 CaptureInternal = value;
             }
         }
-                
+
         internal bool CaptureInternal {
             get {
                 return IsHandleCreated && UnsafeNativeMethods.GetCapture() == Handle;
@@ -1432,14 +1432,14 @@ example usage
                 // otherwise, get the state and update the cache if necessary.
                 //
                 bool found;
-                int cacheTextCounter = Properties.GetInteger(PropCacheTextCount, out found);                
-                
+                int cacheTextCounter = Properties.GetInteger(PropCacheTextCount, out found);
+
                 if (value) {
                     if (cacheTextCounter == 0) {
                         Properties.SetObject(PropCacheTextField, text);
                         if (text == null)  {
                             text = WindowText;
-                        }                        
+                        }
                     }
                     cacheTextCounter++;
                 }
@@ -1448,12 +1448,12 @@ example usage
                     if (cacheTextCounter == 0) {
                         text = (string)Properties.GetObject(PropCacheTextField, out found);
                     }
-                }                
+                }
                 Properties.SetInteger(PropCacheTextCount, cacheTextCounter);
-            }                
+            }
         }
 
-        [ 
+        [
             Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
             SRDescription(nameof(SR.ControlCheckForIllegalCrossThreadCalls)),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -1515,8 +1515,8 @@ example usage
             DescriptionAttribute(nameof(SR.ControlCompanyNameDescr))
         ]
         public string CompanyName {
-            
-            
+
+
             get {
                 return VersionInfo.CompanyName;
             }
@@ -1541,7 +1541,7 @@ example usage
 
                 if (focusHwnd == IntPtr.Zero) {
                     return false;
-                }       
+                }
 
                 if (focusHwnd == this.Handle) {
                     return true;
@@ -1638,7 +1638,7 @@ example usage
              }
 
         }
-        
+
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlContextMenuStripChangedDescr))]
         public event EventHandler ContextMenuStripChanged {
             add => Events.AddHandler(EventContextMenuStrip, value);
@@ -2211,8 +2211,8 @@ example usage
         }
 
         private bool DoubleBufferingEnabled {
-            get {                                
-#pragma warning disable 618            
+            get {
+#pragma warning disable 618
                 return GetStyle(ControlStyles.DoubleBuffer | ControlStyles.UserPaint);
 #pragma warning restore 618
             }
@@ -2560,26 +2560,26 @@ example usage
                     Size cachedSize = CommonProperties.xGetPreferredSizeCache(this);
 
                     // If the "default" preferred size is being requested, and we have a cached value for it, return it.
-                    // 
+                    //
                     if(!cachedSize.IsEmpty && (proposedSize == LayoutUtils.MaxSize)) {
-       
+
 #if DEBUG
 #if DEBUG_PREFERREDSIZE
                             Size newPreferredSize = ApplySizeConstraints(GetPreferredSizeCore(proposedSize));
                             bool cacheHitCorrect = (cachedSize == newPreferredSize);
                             if (!cacheHitCorrect && !GetAnyDisposingInHierarchy()) {
                                 Debug.Fail(
-                                      "Cached PreferredSize " + cachedSize.ToString() 
-                                      + " did not match computed: " +newPreferredSize.ToString() 
+                                      "Cached PreferredSize " + cachedSize.ToString()
+                                      + " did not match computed: " +newPreferredSize.ToString()
                                       +". Did we forget to invalidate the cache?\r\n\r\nControl Information: " + WindowsFormsUtils.AssertControlInformation(cacheHitCorrect, this)
-                                      + "\r\nChanged Properties\r\n " + CommonProperties.Debug_GetChangedProperties(this));                        
+                                      + "\r\nChanged Properties\r\n " + CommonProperties.Debug_GetChangedProperties(this));
                             }
-#endif                      
+#endif
 #endif
                             return cachedSize;
                     }
                 }
-            
+
                 CacheTextInternal = true;
                 try {
                     prefSize = GetPreferredSizeCore(proposedSize);
@@ -2587,13 +2587,13 @@ example usage
                 finally {
                     CacheTextInternal = false;
                 }
-              
+
                 // There is no guarantee that GetPreferredSizeCore() return something within
                 // proposedSize, so we apply the element's constraints again.
                 prefSize = ApplySizeConstraints(prefSize);
 
                 // If the "default" preferred size was requested, cache the computed value.
-                // 
+                //
                 if(GetState2(STATE2_USEPREFERREDSIZECACHE) && proposedSize == LayoutUtils.MaxSize) {
                     CommonProperties.xSetPreferredSizeCache(this, prefSize);
                 }
@@ -2892,10 +2892,10 @@ example usage
             }
         }
 
-        // If the control on which GetContainerControl( ) is called is a ContainerControl, then we dont return the parent 
+        // If the control on which GetContainerControl( ) is called is a ContainerControl, then we dont return the parent
         // but return the same control. This is Everett behavior so we cannot change this since this would be a breaking change.
-        // Hence we have a new internal property IsContainerControl which returns false for all Everett control, but 
-        // this property is overidden in SplitContainer to return true so that we skip the SplitContainer 
+        // Hence we have a new internal property IsContainerControl which returns false for all Everett control, but
+        // this property is overidden in SplitContainer to return true so that we skip the SplitContainer
         // and the correct Parent ContainerControl is returned by GetContainerControl().
         internal virtual bool IsContainerControl
         {
@@ -2920,11 +2920,11 @@ example usage
         ///     since we might call CreateParams here - you dig!
         /// </devdoc>
         [
-            SRCategory(nameof(SR.CatLayout)),        
+            SRCategory(nameof(SR.CatLayout)),
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRDescription(nameof(SR.IsMirroredDescr))        
+            SRDescription(nameof(SR.IsMirroredDescr))
         ]
         public bool IsMirrored {
             get {
@@ -2946,7 +2946,7 @@ example usage
                 return false;
             }
         }
-        
+
         /// <devdoc>
         ///     Used to tell if this BackColor is Supported
         /// </devdoc>
@@ -3186,8 +3186,8 @@ example usage
             SRDescription(nameof(SR.ControlProductNameDescr))
         ]
         public string ProductName {
-            
-            
+
+
             get {
                 return VersionInfo.ProductName;
             }
@@ -3202,8 +3202,8 @@ example usage
         SRDescription(nameof(SR.ControlProductVersionDescr))
         ]
         public string ProductVersion {
-            
-            
+
+
             get {
                 return VersionInfo.ProductVersion;
             }
@@ -3728,7 +3728,7 @@ example usage
                         }
                     }
                 }
-               
+
             }
         }
 
@@ -3818,28 +3818,28 @@ example usage
                 }
 
                 // How this all works
-                
+
                 // uiCuesState contains this control's cached state of whether or not it thinks
                 // accelerators/focus cues are turned on. the first 16 bits represent focus cues
-                // the second represent keyboard cues.  "F" is the UISTATE_FOCUS_CUES_MASK, 
+                // the second represent keyboard cues.  "F" is the UISTATE_FOCUS_CUES_MASK,
                 // "F0" is the UISTATE_KEYBOARD_CUES_MASK
 
                 // We check here if we have cached state.  If we dont, we need to initialize ourself.
                 // We do this by checking "MenuAccessKeysUnderlined" - we show if this returns true.
 
-                // If MenuAccessKeysUnderlined returns false, we have to manually call CHANGEUISTATE on the topmost control 
-                // Why? Well the way the API seems to work is that it stores in a bit flag for the the hidden 
+                // If MenuAccessKeysUnderlined returns false, we have to manually call CHANGEUISTATE on the topmost control
+                // Why? Well the way the API seems to work is that it stores in a bit flag for the the hidden
                 // state.
 
                 // Details from the Menu keydown to changed value of uiCuesState...
-                
+
                 // When someone does press the ALT (Menu)/F10 key we will
                 //   Call ProcessUICues on the control that had focus at the time
-                //          ProcessUICues will check the current state of the control using WM_QUERYUISTATE               
-                //          If WM_QUERYUISTATE indicates that the accelerators are hidden we will 
+                //          ProcessUICues will check the current state of the control using WM_QUERYUISTATE
+                //          If WM_QUERYUISTATE indicates that the accelerators are hidden we will
                 //                  either call WM_UPDATEUISTATE or WM_CHANGEUISTATE depending on whether we're hosted or not.
                 //          All controls in the heirarchy will be individually called back on WM_UPDATEUISTATE, which will go into WmUpdateUIState.
-                //   In WmUpdateUIState, we will update our uiCuesState cached value, which 
+                //   In WmUpdateUIState, we will update our uiCuesState cached value, which
                 //   changes the public value of what we return here for ShowKeyboardCues/ShowFocusCues.
 
                 if ((uiCuesState & UISTATE_KEYBOARD_CUES_MASK) == 0) {
@@ -3860,7 +3860,7 @@ example usage
                                     IntPtr.Zero);
                         }
                  }
-                 return (uiCuesState & UISTATE_KEYBOARD_CUES_MASK) == UISTATE_KEYBOARD_CUES_SHOW;                
+                 return (uiCuesState & UISTATE_KEYBOARD_CUES_MASK) == UISTATE_KEYBOARD_CUES_SHOW;
             }
         }
 
@@ -3974,7 +3974,7 @@ example usage
 
         /// <devdoc>
         ///     Determines whether the control supports rendering text using GDI+ and GDI.
-        ///     This is provided for container controls (PropertyGrid) to iterate through its children to set 
+        ///     This is provided for container controls (PropertyGrid) to iterate through its children to set
         ///     UseCompatibleTextRendering to the same value if the child control supports it.
         /// </devdoc>
         internal virtual bool SupportsUseCompatibleTextRendering {
@@ -4042,7 +4042,7 @@ example usage
                 }
                 //If we didn't find the thread, or if GetExitCodeThread failed, we don't know the thread's state:
                 //if we don't know, we shouldn't throw.
-                if ((returnValue && exitCode != NativeMethods.STILL_ACTIVE) || 
+                if ((returnValue && exitCode != NativeMethods.STILL_ACTIVE) ||
                     (!returnValue && Marshal.GetLastWin32Error() == NativeMethods.ERROR_INVALID_HANDLE) ||
                     AppDomain.CurrentDomain.IsFinalizingForUnload()) {
                     if (waitHandle.WaitOne(1, false)) {
@@ -4491,7 +4491,7 @@ example usage
         }
 
         /// <devdoc>
-        ///    <para> Occurs when the DPI resolution of the screen this control is displayed on changes, 
+        ///    <para> Occurs when the DPI resolution of the screen this control is displayed on changes,
         ///    either when the top level window is moved between monitors or when the OS settings are changed.
         ///    This event is raised before the top level parent window recieves WM_DPICHANGED message.
         ///    </para>
@@ -4503,7 +4503,7 @@ example usage
         }
 
         /// <devdoc>
-        ///    <para> Occurs when the DPI resolution of the screen this control is displayed on changes, 
+        ///    <para> Occurs when the DPI resolution of the screen this control is displayed on changes,
         ///    either when the top level window is moved between monitors or when the OS settings are changed.
         ///    This message is received after the top levet parent window recieves WM_DPICHANGED message.
         ///    </para>
@@ -4636,8 +4636,8 @@ example usage
         ///     Helper method for retrieving an ActiveX property.  We abstract these
         ///     to another method so we do not force JIT the ActiveX codebase.
         /// </devdoc>
-        
-        
+
+
         private IntPtr ActiveXMergeRegion(IntPtr region) {
             return ActiveXInstance.MergeRegion(region);
         }
@@ -4819,11 +4819,11 @@ example usage
                 // Update the parent
                 //
                 parent = value;
-                OnParentChanged(EventArgs.Empty);                
+                OnParentChanged(EventArgs.Empty);
 
                 if (GetAnyDisposingInHierarchy()) {
                     return;
-                }                
+                }
 
                 // Compare property values with new parent to old values
                 //
@@ -4834,7 +4834,7 @@ example usage
                 // When a control seems to be going from invisible -> visible,
                 // yet its parent is being set to null and it's not top level, do not raise OnVisibleChanged.
                 bool newVisible = Visible;
-                
+
                 if (oldVisible != newVisible && !(!oldVisible && newVisible && parent == null && !GetTopLevel())) {
                     OnVisibleChanged(EventArgs.Empty);
                 }
@@ -4912,7 +4912,7 @@ example usage
         /// For all other method calls, you should use one of the invoke methods to marshal
         /// the call to the control's thread.
         /// </devdoc>
-        [EditorBrowsable(EditorBrowsableState.Advanced)]        
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public IAsyncResult BeginInvoke(Delegate method, params object[] args) {
             using (new MultithreadSafeCallScope()) {
                 Control marshaler = FindMarshalingControl();
@@ -5062,18 +5062,18 @@ example usage
         ///     method when it is no longer needed.  The Graphics Object is only valid for
         ///     the duration of the current window's message.
         /// </devdoc>
-        
-        
+
+
         public System.Drawing.Graphics CreateGraphics() {
             using (new MultithreadSafeCallScope())
             {
                 return CreateGraphicsInternal();
             }
         }
-       
 
-        
-        
+
+
+
         internal System.Drawing.Graphics CreateGraphicsInternal() {
             return Graphics.FromHwndInternal(this.Handle);
         }
@@ -5267,7 +5267,7 @@ example usage
             // If we are recreating the handle, then we're fine because recreation will re-post
             // the thread callback message to the new handle for us.
             //
-            if (!RecreatingHandle) {                
+            if (!RecreatingHandle) {
                 if (threadCallbackList != null) {
                     lock (threadCallbackList) {
                         Exception ex = new System.ObjectDisposedException(GetType().Name);
@@ -5403,7 +5403,7 @@ example usage
         ///     that implements System.Runtime.Serialization.ISerializable. data can also be any Object that
         ///     implements System.Windows.Forms.IDataObject.
         /// </devdoc>
-        public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects) {            
+        public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects) {
             int[] finalEffect = new int[] {(int)DragDropEffects.None};
             UnsafeNativeMethods.IOleDropSource dropSource = new DropSource( this );
             IComDataObject dataObject = null;
@@ -5572,7 +5572,7 @@ example usage
         ///     Failing that, we just return ouselves.
         /// </devdoc>
         private Control FindMarshalingControl() {
-            // 
+            //
             lock(this) {
                 Control c = this;
 
@@ -5725,16 +5725,16 @@ example usage
         internal virtual Rectangle ApplyBoundsConstraints(int suggestedX, int suggestedY, int proposedWidth, int proposedHeight) {
 
             // COMPAT: in Everett we would allow you to set negative values in pre-handle mode
-            // in Whidbey, if you've set Min/Max size we will constrain you to 0,0.  Everett apps didnt 
+            // in Whidbey, if you've set Min/Max size we will constrain you to 0,0.  Everett apps didnt
             // have min/max size on control, which is why this works.
             if (MaximumSize != Size.Empty || MinimumSize != Size.Empty) {
                 Size maximumSize = LayoutUtils.ConvertZeroToUnbounded(MaximumSize);
                 Rectangle newBounds = new Rectangle(suggestedX, suggestedY, 0,0);
-      
+
                 // Clip the size to maximum and inflate it to minimum as necessary.
                 newBounds.Size = LayoutUtils.IntersectSizes(new Size(proposedWidth,proposedHeight), maximumSize);
                 newBounds.Size = LayoutUtils.UnionSizes(newBounds.Size, MinimumSize);
-      
+
                 return newBounds;
             }
 
@@ -5774,9 +5774,9 @@ example usage
         public IContainerControl GetContainerControl()
         {
             Control c = this;
-            
-            // Refer to IsContainerControl property for more details.            
-            if (c != null && IsContainerControl) 
+
+            // Refer to IsContainerControl property for more details.
+            if (c != null && IsContainerControl)
             {
                 c = c.ParentInternal;
             }
@@ -6079,12 +6079,12 @@ example usage
         }
 
         internal virtual Control GetFirstChildControlInTabOrder(bool forward) {
-         
+
             ControlCollection ctlControls = (ControlCollection)this.Properties.GetObject(PropControlsCollection);
- 
+
             Control found = null;
             if (ctlControls != null) {
-                 if (forward) { 
+                 if (forward) {
                     for (int c = 0; c < ctlControls.Count; c++) {
                         if (found == null || found.tabIndex > ctlControls[c].tabIndex) {
                             found = ctlControls[c];
@@ -6092,7 +6092,7 @@ example usage
                     }
                  }
                  else {
-                    
+
                     // Cycle through the controls in reverse z-order looking for the one with the highest
                     // tab index.
                     //
@@ -6471,7 +6471,7 @@ example usage
                 using (Graphics graphics = CreateGraphicsInternal()) {
                     bounds = Rectangle.Ceiling(region.GetBounds(graphics));
                 }
-                
+
                 OnInvalidated(new InvalidateEventArgs(bounds));
             }
         }
@@ -7020,7 +7020,7 @@ example usage
             if (syncSameThread) {
                 InvokeMarshaledCallbacks();
             }  else {
-                // 
+                //
 
                 UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), threadCallbackMessage, IntPtr.Zero, IntPtr.Zero);
             }
@@ -7370,7 +7370,7 @@ example usage
                 }
             }
 
-            LayoutTransaction.DoLayout(this,this,PropertyNames.Font);            
+            LayoutTransaction.DoLayout(this,this,PropertyNames.Font);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -7404,7 +7404,7 @@ example usage
             if (GetAnyDisposingInHierarchy()) {
                 return;
             }
-            
+
             // update the scroll position when the handle has been created
             // MUST SET THIS BEFORE CALLING RecreateHandle!!!
             SetState2(STATE2_SETSCROLLPOS, true);
@@ -7564,7 +7564,7 @@ example usage
                 }
             }
         }
-        
+
         /// <devdoc>
         ///     Inheriting classes should override this method to handle this event.
         /// </devdoc>
@@ -7769,7 +7769,7 @@ example usage
         protected virtual void OnHandleCreated(EventArgs e) {
             Contract.Requires(e != null);
             if (this.IsHandleCreated) {
-                
+
                 // Setting fonts is for some reason incredibly expensive.
                 // (Even if you exclude font handle creation)
                 if (!GetStyle(ControlStyles.UserPaint)){
@@ -7816,7 +7816,7 @@ example usage
 
                 // Cache Handle in a local before asserting so we minimize code running under the Assert.
                 IntPtr handle = Handle;
-                               
+
                 if (accObj != null) {
                     accObj.Handle = handle;
                 }
@@ -7856,12 +7856,12 @@ example usage
                 }
             }
         }
-        
+
         private void OnSetScrollPosition(object sender, EventArgs e) {
             SetState2(STATE2_HAVEINVOKED, false);
             OnInvokedSetScrollPosition(sender, e);
         }
-        
+
         internal virtual void OnInvokedSetScrollPosition(object sender, EventArgs e) {
             if (!(this is ScrollableControl) && !IsMirrored) {
                 NativeMethods.SCROLLINFO si = new NativeMethods.SCROLLINFO();
@@ -7870,8 +7870,8 @@ example usage
                 if (UnsafeNativeMethods.GetScrollInfo(new HandleRef(this, Handle), NativeMethods.SB_HORZ,si) != false) {
                     si.nPos = (RightToLeft == RightToLeft.Yes) ? si.nMax : si.nMin;
                     SendMessage(Interop.WindowMessages.WM_HSCROLL, NativeMethods.Util.MAKELPARAM(NativeMethods.SB_THUMBPOSITION, si.nPos), 0);
-                }                
-            } 
+                }
+            }
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -8035,7 +8035,7 @@ example usage
             if (IsActiveX) {
                 ActiveXOnFocus(true);
             }
-            
+
             if (parent != null) {
                 parent.ChildGotFocus(this);
             }
@@ -8080,7 +8080,7 @@ example usage
             if (IsActiveX) {
                 ActiveXViewChanged();
             }
-            
+
             // Transparent control support
             ControlCollection controls = (ControlCollection)Properties.GetObject(PropControlsCollection);
             if (controls != null) {
@@ -8165,7 +8165,7 @@ example usage
                 ParentInternal.OnChildLayoutResuming(this, performLayout);
             }
         }
-        
+
         internal virtual void OnLayoutSuspended() {
         }
 
@@ -8276,7 +8276,7 @@ example usage
         /// </para>
         /// </devdoc>
         [
-            Browsable(true), 
+            Browsable(true),
             EditorBrowsable(EditorBrowsableState.Always)
         ]
         protected virtual void OnDpiChangedBeforeParent(EventArgs e) {
@@ -8293,7 +8293,7 @@ example usage
         /// </para>
         /// </devdoc>
         [
-            Browsable(true), 
+            Browsable(true),
             EditorBrowsable(EditorBrowsableState.Always)
         ]
         protected virtual void OnDpiChangedAfterParent(EventArgs e) {
@@ -8383,10 +8383,10 @@ example usage
         protected virtual void OnPaintBackground(PaintEventArgs pevent) {
             Contract.Requires(pevent != null);
             // We need the true client rectangle as clip rectangle causes
-            // problems on "Windows Classic" theme.  
+            // problems on "Windows Classic" theme.
             NativeMethods.RECT rect = new NativeMethods.RECT();
             UnsafeNativeMethods.GetClientRect(new HandleRef(window, InternalHandle), ref rect);
-            
+
             PaintBackground(pevent, new Rectangle(rect.left, rect.top, rect.right, rect.bottom));
         }
 
@@ -8461,7 +8461,7 @@ example usage
                 handler(this, e);
             }
         }
-       
+
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnSizeChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8544,7 +8544,7 @@ example usage
         /// The derived class can choose to not call the base class implementation.
         /// </devdoc>
         [
-            Browsable(true), 
+            Browsable(true),
             EditorBrowsable(EditorBrowsableState.Advanced)
         ]
         protected virtual void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) {
@@ -8606,7 +8606,7 @@ example usage
             // Note: PaintEvent.HDC == 0 if GDI+ has used the HDC -- it wouldn't be safe for us
             // to use it without enough bookkeeping to negate any performance gain of using GDI.
             if (color.A == 255) {
-                using (WindowsGraphics wg = (e.HDC != IntPtr.Zero && DisplayInformation.BitsPerPixel > 8) ? 
+                using (WindowsGraphics wg = (e.HDC != IntPtr.Zero && DisplayInformation.BitsPerPixel > 8) ?
                                 WindowsGraphics.FromHdc(e.HDC) : WindowsGraphics.FromGraphics(e.Graphics)) {
                     color = wg.GetNearestColor(color);
 
@@ -8704,7 +8704,7 @@ example usage
                 rectangle.Y++;
                 rectangle.Width--;
                 rectangle.Height--;
-    
+
                 e.Graphics.DrawRectangle(pen, rectangle.X, rectangle.Y, rectangle.Width - 1, rectangle.Height - 1);
                 rectangle.Inflate(-1, -1);
                 e.Graphics.FillRectangle(Brushes.White, rectangle);
@@ -8724,7 +8724,7 @@ example usage
         //
         // This method is the hardest part of implementing transparent controls;
         // call this in your OnPaintBackground method, and away you go.
-        // 
+        //
         // If you only want a region of the control to be transparent, pass in a region into the
         // last parameter.  A null region implies that you want the entire rectangle to be transparent.
         internal void PaintTransparentBackground(PaintEventArgs e, Rectangle rectangle, Region transparentRegion) {
@@ -8740,7 +8740,7 @@ example usage
                     // that UxTheme provides to render the parent's background. This function is control agnostic, so
                     // we use the wrapper in ButtonRenderer - this should do the right thing for all controls,
                     // not just Buttons.
-             
+
                     GraphicsState graphicsState = null;
                     if (transparentRegion != null) {
                         graphicsState = g.Save();
@@ -8753,9 +8753,9 @@ example usage
                     }
                     finally {
                         if (graphicsState != null) {
-                            g.Restore(graphicsState);   
+                            g.Restore(graphicsState);
                         }
-                    }                    
+                    }
                 }
                 else {
                     // how to move the rendering area and setup it's size
@@ -8764,12 +8764,12 @@ example usage
 
                     // moving the clipping rectangle to the parent coordinate system
                     Rectangle newClipRect = new Rectangle(rectangle.Left + this.Left, rectangle.Top + this.Top, rectangle.Width, rectangle.Height);
-                             
+
                     using (WindowsGraphics wg = WindowsGraphics.FromGraphics(g)) {
                         wg.DeviceContext.TranslateTransform(-this.Left, -this.Top);
                         using (PaintEventArgs np = new PaintEventArgs(wg.GetHdc(), newClipRect)) {
                             if (transparentRegion != null) {
-                                np.Graphics.Clip = transparentRegion; 
+                                np.Graphics.Clip = transparentRegion;
                                 np.Graphics.TranslateClip(-shift.X, -shift.Y);
                             }
                             try {
@@ -8784,7 +8784,7 @@ example usage
                             }
                         }
                     }
-                }                        
+                }
             }
             else {
                 // For whatever reason, our parent can't paint our background, but we need some kind of background
@@ -8796,7 +8796,7 @@ example usage
         // Exceptions during painting are nasty, because paint events happen so often.
         // So if user painting code has an issue, we make sure never to call it again,
         // so as not to spam the end-user with exception dialogs.
-        // 
+        //
         private void PaintWithErrorHandling(PaintEventArgs e, short layer) {
             try {
                 CacheTextInternal = true;
@@ -8890,9 +8890,9 @@ example usage
                     SetState2(STATE2_CLEARLAYOUTARGS, false);
                    }
                 }
-                
+
                 LayoutEngine.ProcessSuspendedLayoutEventArgs(this, args);
-                
+
                 return;
             }
 
@@ -8915,7 +8915,7 @@ example usage
 
                     if (args.AffectedControl != null && args.AffectedControl != this && args.AffectedControl.GetState2(STATE2_USEPREFERREDSIZECACHE)) {
                         args.AffectedControl.PreferredSize.ToString();
-                    }                        
+                    }
                 }
 #endif
 #endif
@@ -9130,7 +9130,7 @@ example usage
         ///                            needs no further processing
         ///
         ///         MessageNeeded    - PreProcessMessage() returns false, but IsInputKey/Char
-        ///                            return true.  This means the message wasn't processed, 
+        ///                            return true.  This means the message wasn't processed,
         ///                            but the control is interested in it.
         ///
         ///         MessageNotNeeded - PreProcessMessage() returns false, and IsInputKey/Char
@@ -9146,7 +9146,7 @@ example usage
                 return PreProcessControlState.MessageNotNeeded;
             }
 
-            // reset state that is used to make sure IsInputChar, IsInputKey and 
+            // reset state that is used to make sure IsInputChar, IsInputKey and
             // ProcessUICues are not called multiple times.
             // ISSUE: Which control should these state bits be set on? probably the target.
             target.SetState2(STATE2_INPUTKEY,  false);
@@ -9154,26 +9154,26 @@ example usage
             target.SetState2(STATE2_UICUES,    true);
 
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.PreProcessControlMessageInternal " + msg.ToString());
-            
+
             try {
                 Keys keyData = (Keys)(unchecked((int)(long)msg.WParam) | (int)ModifierKeys);
 
                 // Allow control to preview key down message.
                 if (msg.Msg == Interop.WindowMessages.WM_KEYDOWN || msg.Msg == Interop.WindowMessages.WM_SYSKEYDOWN) {
-                    target.ProcessUICues(ref msg);                    
+                    target.ProcessUICues(ref msg);
 
                     PreviewKeyDownEventArgs args = new PreviewKeyDownEventArgs(keyData);
                     target.OnPreviewKeyDown(args);
-                    
+
                     if (args.IsInputKey) {
                         Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "PreviewKeyDown indicated this is an input key.");
                         // Control wants this message - indicate it should be dispatched.
                         return PreProcessControlState.MessageNeeded;
-                    }                    
+                    }
                 }
 
                 PreProcessControlState state = PreProcessControlState.MessageNotNeeded;
-                
+
                 if (!target.PreProcessMessage(ref msg)) {
                     if (msg.Msg == Interop.WindowMessages.WM_KEYDOWN || msg.Msg == Interop.WindowMessages.WM_SYSKEYDOWN) {
 
@@ -9192,7 +9192,7 @@ example usage
                             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control didn't preprocess this message but it needs to be dispatched");
                             state = PreProcessControlState.MessageNeeded;
                         }
-                    }                  
+                    }
                 }
                 else {
                     state = PreProcessControlState.MessageProcessed;
@@ -9559,11 +9559,11 @@ example usage
          /// </devdoc>
          internal void ProcessUICues(ref Message msg) {
              Keys keyCode = (Keys)((int)msg.WParam) & Keys.KeyCode;
-             
+
              if (keyCode != Keys.F10 && keyCode != Keys.Menu && keyCode != Keys.Tab) {
                  return;  // PERF: dont WM_QUERYUISTATE if we dont have to.
              }
-             
+
              Control topMostParent = null;
              int current = unchecked( (int) (long)SendMessage(Interop.WindowMessages.WM_QUERYUISTATE, 0, 0));
 
@@ -9577,17 +9577,17 @@ example usage
 
             // if we are here, a key or tab has been pressed on this control.
             // now that we know the state of accelerators, check to see if we need
-            // to show them.  NOTE: due to the strangeness of the API we OR in 
+            // to show them.  NOTE: due to the strangeness of the API we OR in
             // the opposite of what we want to do.  So if we want to show accelerators,
             // we OR in UISF_HIDEACCEL, then call UIS_CLEAR to clear the "hidden" state.
-      
+
              if (keyCode == Keys.F10 || keyCode == Keys.Menu) {
                  if ((current & NativeMethods.UISF_HIDEACCEL) != 0) {
                      // Keyboard accelerators are hidden, they need to be shown
                      toClear |= NativeMethods.UISF_HIDEACCEL;
                  }
              }
-      
+
              if (keyCode == Keys.Tab) {
                  if ((current & NativeMethods.UISF_HIDEFOCUS) != 0) {
                      // Focus indicators are hidden, they need to be shown
@@ -9596,9 +9596,9 @@ example usage
              }
 
              if (toClear != 0) {
-                 // We've detected some state we need to unset, usually clearing the hidden state of 
-                 // the accelerators.  We need to get the topmost parent and call CHANGEUISTATE so 
-                 // that the entire tree of controls is 
+                 // We've detected some state we need to unset, usually clearing the hidden state of
+                 // the accelerators.  We need to get the topmost parent and call CHANGEUISTATE so
+                 // that the entire tree of controls is
                  if (topMostParent == null) {
                      topMostParent = this.TopMostParent;
                  }
@@ -9618,7 +9618,7 @@ example usage
                      IntPtr.Zero);
              }
          }
-      
+
         /// <devdoc>
         ///     Raises the event associated with key with the event data of
         ///     e and a sender of this control.
@@ -9722,7 +9722,7 @@ example usage
         }
 
         internal virtual void RecreateHandleCore() {
-            // 
+            //
             lock(this) {
                 if (IsHandleCreated) {
 
@@ -9810,7 +9810,7 @@ example usage
                             UnsafeNativeMethods.SetParent(new HandleRef(this, this.Handle), parentHandle);
                         }
                     }
-                    
+
                     // Restore control focus
                     if (focused) {
                         Focus();
@@ -9869,9 +9869,9 @@ example usage
         /// </summary>
         /// <param name="handle">The window handle.</param>
         internal virtual void ReleaseUiaProvider(IntPtr handle) {
-            // When a window that previously returned providers has been destroyed, 
-            // you should notify UI Automation by calling the UiaReturnRawElementProvider 
-            // as follows: UiaReturnRawElementProvider(hwnd, 0, 0, NULL). This call tells 
+            // When a window that previously returned providers has been destroyed,
+            // you should notify UI Automation by calling the UiaReturnRawElementProvider
+            // as follows: UiaReturnRawElementProvider(hwnd, 0, 0, NULL). This call tells
             // UI Automation that it can safely remove all map entries that refer to the specified window.
             UnsafeNativeMethods.UiaReturnRawElementProvider(new HandleRef(this, handle), new IntPtr(0), new IntPtr(0), null);
         }
@@ -9911,11 +9911,11 @@ example usage
         ///     this will force a layout immediately if there are any pending layout requests.
         /// </devdoc>
         public void ResumeLayout(bool performLayout) {
-#if DEBUG        
+#if DEBUG
             if (CompModSwitches.LayoutSuspendResume.TraceInfo) {
                 Debug.WriteLine(GetType().Name + "::ResumeLayout( preformLayout = " + performLayout + ", newCount = " + Math.Max(0, layoutSuspendCount - 1) + ")");
             }
-#endif             
+#endif
             Debug.Assert(layoutSuspendCount > 0, "Unbalanance suspend/resume layout.");
 
             bool performedLayout = false;
@@ -9943,7 +9943,7 @@ example usage
             if (!performedLayout) {
                 SetState2(STATE2_CLEARLAYOUTARGS, true);
             }
-                
+
             /*
 
             We've had this since Everett,but it seems wrong, redundant and a performance hit.  The
@@ -9954,7 +9954,7 @@ example usage
 
             */
             if (!performLayout) {
-                
+
                 CommonProperties.xClearPreferredSizeCache(this);
                 ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
 
@@ -10043,7 +10043,7 @@ example usage
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public void Scale(SizeF factor) {
             // manually call ScaleControl recursively instead of the internal scale method
-            // when someone calls this method, they really do want to do some sort of 
+            // when someone calls this method, they really do want to do some sort of
             // zooming feature, as opposed to AutoScale.
             using (new LayoutTransaction(this, this, PropertyNames.Bounds, false)) {
                 ScaleControl(factor, factor, this);
@@ -10059,9 +10059,9 @@ example usage
                         }
                     }
                 }
-            }       
-            
-            LayoutTransaction.DoLayout(this, this, PropertyNames.Bounds);        
+            }
+
+            LayoutTransaction.DoLayout(this, this, PropertyNames.Bounds);
 
         }
 
@@ -10217,11 +10217,11 @@ example usage
             AdjustWindowRectEx(ref adornments, cp.Style, HasMenu, cp.ExStyle);
             Size minSize = MinimumSize;
             Size maxSize = MaximumSize;
-     
+
             // clear out min and max size, otherwise this could affect the scaling logic.
             MinimumSize = Size.Empty;
             MaximumSize = Size.Empty;
-     
+
             // this is raw because Min/Max size have been cleared at this point.
             Rectangle rawScaledBounds = GetScaledBounds(Bounds, factor, specified);
 
@@ -10259,25 +10259,25 @@ example usage
             //
             // Scale Min/Max size
             //
-            
+
             // make sure we consider the andornments as fixed.  rather than scaling the entire size,
             // we should pull out the fixed things such as the border, scale the rest, then apply the fixed
             // adornment size.
             Size adornmentSize = adornments.Size;
             if (!minSize.IsEmpty) {
-                minSize -= adornmentSize;                
+                minSize -= adornmentSize;
                 minSize = ScaleSize(LayoutUtils.UnionSizes(Size.Empty, minSize), // make sure we dont go below 0.
-                                        factor.Width, 
+                                        factor.Width,
                                         factor.Height) + adornmentSize;
             }
             if (!maxSize.IsEmpty) {
                 maxSize -= adornmentSize;
                 maxSize = ScaleSize(LayoutUtils.UnionSizes(Size.Empty, maxSize), // make sure we dont go below 0.
-                                        factor.Width, 
+                                        factor.Width,
                                         factor.Height) + adornmentSize;
             }
 
-        
+
             // Apply the min/max size constraints - dont call ApplySizeConstraints
             // as MinimumSize/MaximumSize are currently cleared out.
             Size maximumSize = LayoutUtils.ConvertZeroToUnbounded(maxSize);
@@ -10291,7 +10291,7 @@ example usage
 
             // Set in the scaled bounds as constrained by the newly scaled min/max size.
             SetBoundsCore(rawScaledBounds.X, rawScaledBounds.Y, scaledSize.Width, scaledSize.Height, BoundsSpecified.All);
-            
+
             MaximumSize = maxSize;
             MinimumSize = minSize;
         }
@@ -10328,7 +10328,7 @@ example usage
                     // forces the creation of an array subset enum each time we
                     // enumerate
                     for (int i = 0; i < controlsCollection.Count; i++) {
-#pragma warning disable 618            
+#pragma warning disable 618
                         controlsCollection[i].Scale(dx, dy);
 #pragma warning restore 618
                     }
@@ -10340,7 +10340,7 @@ example usage
                 AssertLayoutSuspendCount(dbgLayoutCheck);
 #endif
             }
-        }        
+        }
 
         /// <devdoc>
         ///     Scales a given size with the provided values.
@@ -10448,7 +10448,7 @@ example usage
             Debug.Assert(IsHandleCreated, "Performance alert!  Calling Control::SendMessage and forcing handle creation.  Re-work control so handle creation is not required to set properties.  If there is no work around, wrap the call in an IsHandleCreated check.");
             return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, ref wparam, ref lparam);
         }
-        
+
         internal IntPtr SendMessage(int msg, int wparam, IntPtr lparam) {
             Debug.Assert(IsHandleCreated, "Performance alert!  Calling Control::SendMessage and forcing handle creation.  Re-work control so handle creation is not required to set properties.  If there is no work around, wrap the call in an IsHandleCreated check.");
             return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, (IntPtr)wparam, lparam);
@@ -10489,7 +10489,7 @@ example usage
             Debug.Assert(IsHandleCreated, "Performance alert!  Calling Control::SendMessage and forcing handle creation.  Re-work control so handle creation is not required to set properties.  If there is no work around, wrap the call in an IsHandleCreated check.");
             return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, wparam, lparam);
         }
-        
+
         /// <devdoc>
         ///     sends this control to the back of the z-order
         /// </devdoc>
@@ -10552,7 +10552,7 @@ example usage
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
-#if DEBUG        
+#if DEBUG
             if (CompModSwitches.SetBounds.TraceInfo) {
                 Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "{0}::SetBoundsCore(x={1} y={2} width={3} height={4} specified={5}", Name, x, y, width, height, specified));
             }
@@ -10673,13 +10673,13 @@ example usage
                 bool topLevel = GetTopLevel();
                 if (parentHandle != value || (parentHandle == IntPtr.Zero && !topLevel)) {
                     Debug.Assert(Handle != value, "Cycle created in SetParentHandle");
-                    
+
                     bool recreate = (parentHandle == IntPtr.Zero && !topLevel)
                         || (value == IntPtr.Zero && topLevel);
 
                     if (recreate) {
                         // We will recreate later, when the MdiChild's visibility
-                        // is set to true (see 
+                        // is set to true (see
                         Form f = this as Form;
                         if (f != null) {
                             if (!f.CanRecreateHandle()) {
@@ -10709,8 +10709,8 @@ example usage
                     }
                 }
                 else if (value == IntPtr.Zero && parentHandle == IntPtr.Zero && topLevel) {
-                    // The handle was previously parented to the parking window. Its TopLevel property was 
-                    // then changed to true so the above call to GetParent returns null even though the parent of the control is 
+                    // The handle was previously parented to the parking window. Its TopLevel property was
+                    // then changed to true so the above call to GetParent returns null even though the parent of the control is
                     // not null. We need to explicitly set the parent to null.
                     UnsafeNativeMethods.SetParent(new HandleRef(window, Handle), new HandleRef(null, IntPtr.Zero));
                     Application.UnparkHandle(new HandleRef(window, Handle), window.DpiAwarenessContext);
@@ -10851,14 +10851,14 @@ example usage
 
                     if (!GetState(STATE_VISIBLE) && !value && IsHandleCreated) {
                         // PERF - setting Visible=false twice can get us into this else block
-                        // which makes us process WM_WINDOWPOS* messages - make sure we've already 
+                        // which makes us process WM_WINDOWPOS* messages - make sure we've already
                         // visible=false - if not, make it so.
                          if (!SafeNativeMethods.IsWindowVisible(new HandleRef(this,this.Handle))) {
                             // we're already invisible - bail.
                             return;
                          }
                     }
-                    
+
                     SetState(STATE_VISIBLE, value);
 
                     // If the handle is already created, we need to update the window style.
@@ -10866,7 +10866,7 @@ example usage
                     // but the child control has already been created.
                     //
                     if (IsHandleCreated) {
-                       
+
                         SafeNativeMethods.SetWindowPos(
                                                           new HandleRef(window, Handle), NativeMethods.NullHandleRef, 0, 0, 0, 0, NativeMethods.SWP_NOSIZE |
                                                           NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE |
@@ -11026,7 +11026,7 @@ example usage
                         case ContentAlignment.TopLeft:
                             return ContentAlignment.TopRight;
                         case ContentAlignment.TopRight:
-                            return ContentAlignment.TopLeft;                                                           
+                            return ContentAlignment.TopLeft;
                     }
                 }
                 if ((align & WindowsFormsUtils.AnyMiddleAlign) != 0 ) {
@@ -11034,7 +11034,7 @@ example usage
                         case ContentAlignment.MiddleLeft:
                             return ContentAlignment.MiddleRight;
                         case ContentAlignment.MiddleRight:
-                            return ContentAlignment.MiddleLeft;                                                           
+                            return ContentAlignment.MiddleLeft;
                     }
                 }
 
@@ -11043,9 +11043,9 @@ example usage
                         case ContentAlignment.BottomLeft:
                             return ContentAlignment.BottomRight;
                         case ContentAlignment.BottomRight:
-                            return ContentAlignment.BottomLeft;                                                           
+                            return ContentAlignment.BottomLeft;
                     }
-                }          
+                }
             }
             return align;
         }
@@ -11088,11 +11088,11 @@ example usage
 
         /// <devdoc>
         /// <para>Determines if the <see cref='System.Windows.Forms.Control.Size'/> property needs to be persisted.</para>
-        /// </devdoc>        
+        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeSize() {
             // In Whidbey the ControlDesigner class will always serialize size as it replaces the Size
-            // property descriptor with its own.  This is here for compat.                    
+            // property descriptor with its own.  This is here for compat.
             Size s = DefaultSize;
             return width != s.Width || height != s.Height;
         }
@@ -11114,12 +11114,12 @@ example usage
                 OnLayoutSuspended();
             }
 
-#if DEBUG          
+#if DEBUG
             Debug.Assert(layoutSuspendCount > 0, "SuspendLayout: layoutSuspendCount overflowed.");
-            if (CompModSwitches.LayoutSuspendResume.TraceInfo) {   
+            if (CompModSwitches.LayoutSuspendResume.TraceInfo) {
                 Debug.WriteLine(GetType().Name + "::SuspendLayout( newCount = " + layoutSuspendCount + ")");
             }
-#endif            
+#endif
         }
 
         /// <devdoc>
@@ -11206,18 +11206,18 @@ example usage
             if (newLocation) {
 #if DEBUG
                 Rectangle originalBounds = this.Bounds;
-#endif 
+#endif
                 OnLocationChanged(EventArgs.Empty);
 #if DEBUG
                 if (this.Bounds != originalBounds && CompModSwitches.SetBounds.TraceWarning) {
                     Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "WARNING: Bounds changed during OnLocationChanged()\r\nbefore={0} after={1}", originalBounds, this.Bounds));
                 }
-#endif 
+#endif
             }
             if (newSize) {
 #if DEBUG
                 Rectangle originalBounds = this.Bounds;
-#endif 
+#endif
                 OnSizeChanged(EventArgs.Empty);
                 OnClientSizeChanged(EventArgs.Empty);
 
@@ -11229,16 +11229,16 @@ example usage
                 if (this.Bounds != originalBounds && CompModSwitches.SetBounds.TraceWarning) {
                     Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "WARNING: Bounds changed during OnSizeChanged()\r\nbefore={0} after={1}", originalBounds, this.Bounds));
                 }
-#endif 
+#endif
             }
 
-           
+
 #if DEBUG
             if (CompModSwitches.SetBounds.TraceVerbose) {
                 Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "newBounds={{x={0} y={1} width={2} height={3} clientWidth={4} clientHeight={5}}}",x, y, width, height, clientWidth, clientHeight));
                 Debug.Unindent();
             }
-#endif 
+#endif
         }
 
         /// <devdoc>
@@ -11285,13 +11285,13 @@ example usage
         }
 
 
-        // whenever we create our handle, we need to get ahold of the HWND of our parent, 
+        // whenever we create our handle, we need to get ahold of the HWND of our parent,
         // and track if that thing is destroyed, because any messages sent to our parent (e.g. WM_NOTIFY, WM_DRAWITEM, etc)
         // will continue to be sent to that window even after we do a SetParent call until the handle is recreated.
         // So here we keep track of that, and if that window ever gets destroyed, we'll recreate our handle.
         //
         //
-        // Scenario is when you've got a control in one parent, you move it to another, then destroy the first parent.  It'll stop 
+        // Scenario is when you've got a control in one parent, you move it to another, then destroy the first parent.  It'll stop
         // getting any reflected messages because Windows will send them to the original parent.
         //
         private void UpdateReflectParent(bool findNewParent) {
@@ -11385,7 +11385,7 @@ example usage
                 Invalidate(true);
             }
         }
-        
+
         private void UserPreferenceChanged(object sender, UserPreferenceChangedEventArgs pref) {
             if (pref.Category == UserPreferenceCategory.Color) {
                 defaultFont = null;
@@ -11412,7 +11412,7 @@ example usage
         }
 
         private void WmClose(ref Message m) {
-            
+
             if (ParentInternal != null) {
                 IntPtr parentHandle = Handle;
                 IntPtr lastParentHandle = parentHandle;
@@ -11445,7 +11445,7 @@ example usage
             DefWndProc(ref m);
 
         }
-        
+
         /// <devdoc>
         ///     Handles the WM_COMMAND message
         /// </devdoc>
@@ -11466,7 +11466,7 @@ example usage
         internal virtual void WmContextMenu(ref Message m) {
             WmContextMenu(ref m, this);
         }
-        
+
         /// <devdoc>
         ///     Handles the WM_CONTEXTMENU message
         /// </devdoc>
@@ -11524,7 +11524,7 @@ example usage
                 if (m.Result != IntPtr.Zero) {
                     return;
                 }
-            }  
+            }
 
             DefWndProc(ref m);
         }
@@ -11644,7 +11644,7 @@ example usage
             InternalAccessibleObject intAccessibleObject = null;
 
             if (m.Msg == Interop.WindowMessages.WM_GETOBJECT && m.LParam == (IntPtr)NativeMethods.UiaRootObjectId && this.SupportsUiaProviders) {
-                // If the requested object identifier is UiaRootObjectId, 
+                // If the requested object identifier is UiaRootObjectId,
                 // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
                 intAccessibleObject = new InternalAccessibleObject(this.AccessibilityObject);
                 m.Result = UnsafeNativeMethods.UiaReturnRawElementProvider(
@@ -11941,7 +11941,7 @@ example usage
                 // we might had re-entered the message loop and processed a WM_CLOSE message
                 if (IsDisposed) {
                      return;
-                }  
+                }
             }
             else {
                 // DefWndProc would normally set the focus to this control, but
@@ -11998,7 +11998,7 @@ example usage
                 int deviceDpiOld = deviceDpi;
                 deviceDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
 
-                // Controls are by default font scaled. 
+                // Controls are by default font scaled.
                 // Dpi change requires font to be recalculated inorder to get controls scaled with right dpi.
                 if (deviceDpiOld != deviceDpi) {
                     // Checking if font was inherited from parent. Font inherited from parent will receive OnParentFontChanged() events to scale those controls.
@@ -12155,7 +12155,7 @@ example usage
                 if(nmhdr->code == NativeMethods.TTN_POP) {
                     UnsafeNativeMethods.SendMessage(new HandleRef(null, nmhdr->hwndFrom), Interop.WindowMessages.WM_REFLECT + m.Msg, m.WParam, m.LParam);
                 }
-                
+
                 DefWndProc(ref m);
             }
         }
@@ -12172,7 +12172,7 @@ example usage
         /// <devdoc>
         ///     Handles the WM_DRAWITEM\WM_MEASUREITEM messages for controls other than menus
         /// </devdoc>
-        private void WmOwnerDraw(ref Message m) {          
+        private void WmOwnerDraw(ref Message m) {
             bool reflectCalled = false;
 
             int ctrlId = unchecked((int)(long)m.WParam);
@@ -12270,9 +12270,9 @@ example usage
                             }
                             catch (Exception ex) {
                                 // BufferContext.Allocate will throw out of memory exceptions
-                                // when it fails to create a device dependent bitmap while trying to 
+                                // when it fails to create a device dependent bitmap while trying to
                                 // get information about the device we are painting on.
-                                // That is not the same as a system running out of memory and there is a 
+                                // That is not the same as a system running out of memory and there is a
                                 // very good chance that we can continue to paint successfully. We cannot
                                 // check whether double buffering is supported in this case, and we will disable it.
                                 // We could set a specific string when throwing the exception and check for it here
@@ -12303,8 +12303,8 @@ example usage
                             try {
                                 if ((m.WParam == IntPtr.Zero) && GetStyle(ControlStyles.AllPaintingInWmPaint) || doubleBuffered) {
                                     PaintWithErrorHandling(pevent, PaintLayerBackground);
-                                    // Consider: This condition could be elimiated, 
-                                    //           do we have to save/restore the state of the buffered graphics? 
+                                    // Consider: This condition could be elimiated,
+                                    //           do we have to save/restore the state of the buffered graphics?
 
                                 }
                             }
@@ -12342,7 +12342,7 @@ example usage
         }
 
         /// <devdoc>
-        ///     Handles the WM_PRINTCLIENT messages.  
+        ///     Handles the WM_PRINTCLIENT messages.
         /// </devdoc>
         private void WmPrintClient(ref Message m) {
             using (PaintEventArgs e = new PrintPaintEventArgs(m, m.WParam, ClientRectangle)) {
@@ -12541,20 +12541,20 @@ example usage
 
             if (focusInitialized) {
                 focus = ShowFocusCues;
-            }            
+            }
 
             DefWndProc(ref m);
 
             int cmd = NativeMethods.Util.LOWORD(m.WParam);
 
             // if we're initializing, dont bother updating the uiCuesState/Firing the event.
-            
+
             if (cmd == NativeMethods.UIS_INITIALIZE) {
                 return;
             }
 
             // Set in the cached value for uiCuesState...
-            
+
             // Windows stores the opposite of what you would think, it has bit
             // flags for the "Hidden" state, the presence of this flag means its
             // hidden, the absence thereof means it's shown.
@@ -12570,17 +12570,17 @@ example usage
 
                 if (showKeyboard != keyboard || !keyboardInitialized ) {
 
-                    UIcues |= UICues.ChangeKeyboard;                    
+                    UIcues |= UICues.ChangeKeyboard;
 
                     // clear the old state.
                     //
-                    uiCuesState &= ~UISTATE_KEYBOARD_CUES_MASK;                    
+                    uiCuesState &= ~UISTATE_KEYBOARD_CUES_MASK;
                     uiCuesState |= (showKeyboard ? UISTATE_KEYBOARD_CUES_SHOW : UISTATE_KEYBOARD_CUES_HIDDEN) ;
                 }
 
                 if (showKeyboard) {
-                    UIcues |= UICues.ShowKeyboard;                    
-                }      
+                    UIcues |= UICues.ShowKeyboard;
+                }
             }
 
             // Same deal for the Focus cues as the keyboard cues.
@@ -12591,16 +12591,16 @@ example usage
                 bool showFocus = (cmd == NativeMethods.UIS_CLEAR);
 
                 if (showFocus != focus || !focusInitialized) {
-                    UIcues |= UICues.ChangeFocus;                    
+                    UIcues |= UICues.ChangeFocus;
 
                     // clear the old state.
                     //
-                    uiCuesState &= ~UISTATE_FOCUS_CUES_MASK;                    
+                    uiCuesState &= ~UISTATE_FOCUS_CUES_MASK;
                     uiCuesState |= (showFocus ? UISTATE_FOCUS_CUES_SHOW : UISTATE_FOCUS_CUES_HIDDEN) ;
                 }
 
                 if (showFocus) {
-                    UIcues |= UICues.ShowFocus;                    
+                    UIcues |= UICues.ShowFocus;
                 }
             }
 
@@ -12672,23 +12672,23 @@ example usage
                 case Interop.WindowMessages.WM_COMMAND:
                     WmCommand(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_CLOSE:
                     WmClose(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_CONTEXTMENU:
                     WmContextMenu(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_DISPLAYCHANGE:
                     WmDisplayChange(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_DRAWITEM:
                     WmDrawItem(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_ERASEBKGND:
                     WmEraseBkgnd(ref m);
                     break;
@@ -12727,7 +12727,7 @@ example usage
                     if ((unchecked((int)(long)m.WParam) & 0xFFF0) == NativeMethods.SC_KEYMENU) {
                         Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.WndProc processing " + m.ToString());
 
-                        if (ToolStripManager.ProcessMenuKey(ref m)) {                            
+                        if (ToolStripManager.ProcessMenuKey(ref m)) {
                             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.WndProc ToolStripManager.ProcessMenuKey returned true" + m.ToString());
                             m.Result = IntPtr.Zero;
                             return;
@@ -12735,7 +12735,7 @@ example usage
                     }
                     DefWndProc(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_INPUTLANGCHANGE:
                     WmInputLangChange(ref m);
                     break;
@@ -12747,7 +12747,7 @@ example usage
                 case Interop.WindowMessages.WM_MEASUREITEM:
                     WmMeasureItem(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_MENUCHAR:
                     WmMenuChar(ref m);
                     break;
@@ -12771,11 +12771,11 @@ example usage
                 case Interop.WindowMessages.WM_SYSKEYUP:
                     WmKeyChar(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_CREATE:
                     WmCreate(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_DESTROY:
                     WmDestroy(ref m);
                     break;
@@ -12791,7 +12791,7 @@ example usage
 
                 // this is for the trinity guys.  The case is if you've got a windows
                 // forms edit or something hosted as an AX control somewhere, there isn't anyone to reflect
-                // these back.  If they went ahead and just sent them back, some controls don't like that 
+                // these back.  If they went ahead and just sent them back, some controls don't like that
                 // and end up recursing.  Our code handles it fine because we just pick the HWND out of the LPARAM.
                 //
                 case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLOR:
@@ -12801,10 +12801,10 @@ example usage
                 case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLORSCROLLBAR:
                 case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLOREDIT:
                 case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLORLISTBOX:
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLORSTATIC:                    
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLORSTATIC:
                     WmCtlColorControl(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_HSCROLL:
                 case Interop.WindowMessages.WM_VSCROLL:
                 case Interop.WindowMessages.WM_DELETEITEM:
@@ -12815,153 +12815,153 @@ example usage
                         DefWndProc(ref m);
                     }
                     break;
-                    
+
                 case Interop.WindowMessages.WM_IME_CHAR:
                     WmImeChar(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_IME_STARTCOMPOSITION:
                     WmImeStartComposition(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_IME_ENDCOMPOSITION:
                     WmImeEndComposition(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_IME_NOTIFY:
                     WmImeNotify(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_KILLFOCUS:
                     WmKillFocus(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_LBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Left, 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick)) {
                         SetState(STATE_DOUBLECLICKFIRED, true);
                     }
                     break;
-                    
+
                 case Interop.WindowMessages.WM_LBUTTONDOWN:
                     WmMouseDown(ref m, MouseButtons.Left, 1);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_LBUTTONUP:
                     WmMouseUp(ref m, MouseButtons.Left, 1);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_MBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Middle, 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick)) {
                         SetState(STATE_DOUBLECLICKFIRED, true);
                     }
                     break;
-                    
+
                 case Interop.WindowMessages.WM_MBUTTONDOWN:
                     WmMouseDown(ref m, MouseButtons.Middle, 1);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_MBUTTONUP:
                     WmMouseUp(ref m, MouseButtons.Middle, 1);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_XBUTTONDOWN:
                     WmMouseDown(ref m, GetXButton(NativeMethods.Util.HIWORD(m.WParam)), 1);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_XBUTTONUP:
                     WmMouseUp(ref m, GetXButton(NativeMethods.Util.HIWORD(m.WParam)), 1);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_XBUTTONDBLCLK:
                     WmMouseDown(ref m, GetXButton(NativeMethods.Util.HIWORD(m.WParam)), 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick)) {
                         SetState(STATE_DOUBLECLICKFIRED, true);
                     }
                     break;
-                    
+
                 case Interop.WindowMessages.WM_MOUSELEAVE:
                     WmMouseLeave(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_DPICHANGED_BEFOREPARENT:
                     WmDpiChangedBeforeParent(ref m);
                     m.Result = IntPtr.Zero;
                     break;
-                    
+
                 case Interop.WindowMessages.WM_DPICHANGED_AFTERPARENT:
                     WmDpiChangedAfterParent(ref m);
                     m.Result = IntPtr.Zero;
                     break;
-                    
+
                 case Interop.WindowMessages.WM_MOUSEMOVE:
                     WmMouseMove(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_MOUSEWHEEL:
                     WmMouseWheel(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_MOVE:
                     WmMove(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_NOTIFY:
                     WmNotify(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_NOTIFYFORMAT:
                     WmNotifyFormat(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFYFORMAT:
                     m.Result = (IntPtr)(NativeMethods.NFR_UNICODE);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_SHOWWINDOW:
                     WmShowWindow(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_RBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Right, 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick)) {
                         SetState(STATE_DOUBLECLICKFIRED, true);
                     }
                     break;
-                    
+
                 case Interop.WindowMessages.WM_RBUTTONDOWN:
                     WmMouseDown(ref m, MouseButtons.Right, 1);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_RBUTTONUP:
                     WmMouseUp(ref m, MouseButtons.Right, 1);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_SETFOCUS:
                     WmSetFocus(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_MOUSEHOVER:
                     WmMouseHover(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
                     WmWindowPosChanged(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_QUERYNEWPALETTE:
                     WmQueryNewPalette(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_UPDATEUISTATE:
                     WmUpdateUIState(ref m);
                     break;
-                    
+
                 case Interop.WindowMessages.WM_PARENTNOTIFY:
                     WmParentNotify(ref m);
                     break;
-                    
+
                 default:
                     // If we received a thread execute message, then execute it.
                     //
@@ -13089,7 +13089,7 @@ example usage
                     }
                     catch (InvalidOperationException) {
                         // The component change events can throw InvalidOperationException if a change is
-                        // currently not allowed (typically because the doc data in VS is locked). 
+                        // currently not allowed (typically because the doc data in VS is locked).
                         // When this happens, we just eat the exception and proceed with the change.
                     }
                 }
@@ -13104,7 +13104,7 @@ example usage
                 }
                 catch (InvalidOperationException) {
                         // The component change events can throw InvalidOperationException if a change is
-                        // currently not allowed (typically because the doc data in VS is locked). 
+                        // currently not allowed (typically because the doc data in VS is locked).
                         // When this happens, we just eat the exception and proceed with the change.
                 }
             }
@@ -13119,7 +13119,7 @@ example usage
                 return false;
             }
         }
-        
+
         /// <devdoc>
         /// </devdoc>
         internal sealed class ControlNativeWindow : NativeWindow, IWindowTarget {
@@ -13134,8 +13134,8 @@ example usage
 
             internal Control GetControl() {
                 return control;
-            }            
-           
+            }
+
             protected override void OnHandleChange() {
                 target.OnHandleChange(this.Handle);
             }
@@ -13216,7 +13216,7 @@ example usage
                         // correctly...
                         //
                         control.ResetMouseEventArgs();
-                        break;                   
+                        break;
                 }
 
                 target.OnMessage(ref m);
@@ -13229,15 +13229,15 @@ example usage
         void IDropTarget.OnDragEnter(DragEventArgs drgEvent) {
                 OnDragEnter(drgEvent);
         }
-        
+
         void IDropTarget.OnDragOver(DragEventArgs drgEvent) {
                 OnDragOver(drgEvent);
         }
-        
+
         void IDropTarget.OnDragLeave(EventArgs e) {
                 OnDragLeave(e);
         }
-        
+
         void IDropTarget.OnDragDrop(DragEventArgs drgEvent) {
                 OnDragDrop(drgEvent);
         }
@@ -13248,7 +13248,7 @@ example usage
         void ISupportOleDropSource.OnGiveFeedback(GiveFeedbackEventArgs giveFeedbackEventArgs)  {
                 OnGiveFeedback(giveFeedbackEventArgs);
         }
-        
+
         void ISupportOleDropSource.OnQueryContinueDrag(QueryContinueDragEventArgs queryContinueDragEventArgs) {
                 OnQueryContinueDrag(queryContinueDragEventArgs);
         }
@@ -13361,7 +13361,7 @@ example usage
 #if DEBUG
                     owner.AssertLayoutSuspendCount(dbgLayoutCheck);
 #endif
-                    
+
                 }
 
                 // Not putting in the finally block, as it would eat the original
@@ -13482,9 +13482,9 @@ example usage
                 }
                 return foundControls;
             }
-          
-            public override IEnumerator GetEnumerator() { 
-                return new ControlCollectionEnumerator(this); 
+
+            public override IEnumerator GetEnumerator() {
+                return new ControlCollectionEnumerator(this);
             }
 
             public int IndexOf(Control control) {
@@ -13633,7 +13633,7 @@ example usage
                 int layoutSuspendCount = owner.LayoutSuspendCount;
 #endif
                 owner.SuspendLayout();
-                // clear all preferred size caches in the tree - 
+                // clear all preferred size caches in the tree -
                 // inherited fonts could go away, etc.
                 CommonProperties.xClearAllPreferredSizeCaches(owner);
 
@@ -13711,27 +13711,27 @@ example usage
                 SetChildIndexInternal(child, newIndex);
             }
 
-            // This is the same as WinformsUtils.ArraySubsetEnumerator 
-            // however since we're no longer an array, we've gotta employ a 
+            // This is the same as WinformsUtils.ArraySubsetEnumerator
+            // however since we're no longer an array, we've gotta employ a
             // special version of this.
             private class ControlCollectionEnumerator : IEnumerator {
-                private ControlCollection controls; 
+                private ControlCollection controls;
                 private int current;
                 private int originalCount;
-    
+
                 public ControlCollectionEnumerator(ControlCollection controls) {
                     this.controls = controls;
                     this.originalCount = controls.Count;
                     current = -1;
                 }
-    
+
                 public bool MoveNext() {
-                    // We have to use Controls.Count here because someone could have deleted 
-                    // an item from the array. 
+                    // We have to use Controls.Count here because someone could have deleted
+                    // an item from the array.
                     //
                     // this can happen if someone does:
                     //     foreach (Control c in Controls) { c.Dispose(); }
-                    // 
+                    //
                     // We also dont want to iterate past the original size of the collection
                     //
                     // this can happen if someone does
@@ -13745,7 +13745,7 @@ example usage
                         return false;
                     }
                 }
-    
+
                 public void Reset() {
                     current = -1;
                 }
@@ -14546,7 +14546,7 @@ example usage
 
         internal virtual bool AllowsKeyboardToolTip() {
             // This internal method enables keyboard ToolTips for all controls including the foreign descendants of Control unless this method is overridden in a child class belonging to this assembly.
-            // ElementHost is one such control which is located in a different assembly. 
+            // ElementHost is one such control which is located in a different assembly.
             // This control doesn't show a mouse ToolTip when hovered and thus should not have a keyboard ToolTip as well.
             // We are not going to fix it now since it seems unlikely that someone would set ToolTip on such special container control as ElementHost.
             return true;
@@ -14705,7 +14705,7 @@ example usage
             ///      Retrieves the ambient font for the control.
             /// </devdoc>
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-            internal Font AmbientFont {                               
+            internal Font AmbientFont {
                 get {
                     AmbientProperty prop = LookupAmbient(NativeMethods.ActiveX.DISPID_AMBIENT_FONT);
 
@@ -15251,7 +15251,7 @@ example usage
 	                        UnsafeNativeMethods.DestroyAcceleratorTable(new HandleRef(this, accelTable));
 				   accelTable = IntPtr.Zero;
 	                    	}
-                            
+
                             accelTable = UnsafeNativeMethods.CreateAcceleratorTable(new HandleRef(null, accelBlob), accelCount);
                         }
                         finally {
@@ -15927,7 +15927,7 @@ example usage
                 if (pQaContainer.pAdviseSink != null) {
                     SetAdvise(NativeMethods.DVASPECT_CONTENT, 0, (IAdviseSink)pQaContainer.pAdviseSink);
                 }
-                
+
                 ((UnsafeNativeMethods.IOleObject)control).GetMiscStatus(NativeMethods.DVASPECT_CONTENT, out status);
                 pQaControl.dwMiscStatus = status;
 
@@ -15941,7 +15941,7 @@ example usage
                 // the events on the CLR-supplied CCW (COM-callable Wrapper.
 
                 if ((pQaContainer.pUnkEventSink != null) && (control is UserControl)) {
-                    // Check if this control exposes events to COM. 
+                    // Check if this control exposes events to COM.
                     Type eventInterface = GetDefaultEventsInterface(control.GetType());
 
                     if (eventInterface != null) {
@@ -15969,8 +15969,8 @@ example usage
             }
 
             /// <devdoc>
-            ///     Helper class. Calls IConnectionPoint.Advise to hook up a native COM event sink 
-            ///     to a manage .NET event interface. 
+            ///     Helper class. Calls IConnectionPoint.Advise to hook up a native COM event sink
+            ///     to a manage .NET event interface.
             ///     The events are exposed to COM by the CLR-supplied COM-callable Wrapper (CCW).
             /// </devdoc>
             internal static class AdviseHelper {
@@ -15978,13 +15978,13 @@ example usage
                 ///     Get the COM connection point container from the CLR's CCW and advise for the given event id.
                 /// </devdoc>
                 public static bool AdviseConnectionPoint(object connectionPoint, object sink, Type eventInterface, out int cookie) {
-                    
-                    // Note that we cannot simply cast the connectionPoint object to 
+
+                    // Note that we cannot simply cast the connectionPoint object to
                     // System.Runtime.InteropServices.ComTypes.IConnectionPointContainer because the .NET
-                    // object doesn't implement it directly. When the object is exposed to COM, the CLR 
+                    // object doesn't implement it directly. When the object is exposed to COM, the CLR
                     // implements IConnectionPointContainer on the proxy object called the CCW or COM-callable wrapper.
                     // We use the helper class ComConnectionPointContainer to get to the CCW directly
-                    // to to call the interface. 
+                    // to to call the interface.
                     // It is critical to call Dispose to ensure that the IUnknown is released.
 
                     using (ComConnectionPointContainer cpc = new ComConnectionPointContainer(connectionPoint, true)) {
@@ -15997,12 +15997,12 @@ example usage
                 /// </devdoc>
                 [SuppressMessage("Microsoft.Reliability", "CA2001:AvoidCallingProblematicMethods", MessageId = "System.Runtime.InteropServices.SafeHandle.DangerousGetHandle")]
                 internal static bool AdviseConnectionPoint(ComConnectionPointContainer cpc, object sink, Type eventInterface, out int cookie) {
-                    
-                    // Note that we cannot simply cast the returned IConnectionPoint to 
+
+                    // Note that we cannot simply cast the returned IConnectionPoint to
                     // System.Runtime.InteropServices.ComTypes.IConnectionPoint because the .NET
-                    // object doesn't implement it directly. When the object is exposed to COM, the CLR 
+                    // object doesn't implement it directly. When the object is exposed to COM, the CLR
                     // implements IConnectionPoint for the proxy object via the CCW or COM-callable wrapper.
-                    // We use the helper class ComConnectionPoint to get to the CCW directly to to call the interface. 
+                    // We use the helper class ComConnectionPoint to get to the CCW directly to to call the interface.
                     // It is critical to call Dispose to ensure that the IUnknown is released.
                     using (ComConnectionPoint cp = cpc.FindConnectionPoint(eventInterface)) {
                         using (SafeIUnknown punkEventsSink = new SafeIUnknown(sink, true)) {
@@ -16014,7 +16014,7 @@ example usage
                 }
 
                 /// <devdoc>
-                ///     Wraps a native IUnknown in a SafeHandle. 
+                ///     Wraps a native IUnknown in a SafeHandle.
                 ///     See similar implementaton in the <see cref='System.Transactions.SafeIUnknown'/> class.
                 /// </devdoc>
                 internal class SafeIUnknown : SafeHandle {
@@ -16041,15 +16041,15 @@ example usage
                             // This ensures that the finalizer will clean up the COM reference.
                         }
                         finally {
-                            
-                            // Get a raw IUnknown for this object. 
+
+                            // Get a raw IUnknown for this object.
                             // We are responsible for releasing the IUnknown ourselves.
                             IntPtr unknown;
-                            
+
                             if (obj is IntPtr) {
                                 unknown = (IntPtr)obj;
 
-                                // The incoming IntPtr may already be reference counted or not, depending on 
+                                // The incoming IntPtr may already be reference counted or not, depending on
                                 // where it came from. The caller needs to tell us whether to add-ref or not.
                                 if (addRefIntPtr) {
                                     Marshal.AddRef(unknown);
@@ -16059,7 +16059,7 @@ example usage
                                 // GetIUnknownForObject will return a reference-counted object
                                 unknown = Marshal.GetIUnknownForObject(obj);
                             }
-                            
+
                             // Attempt QueryInterface if an iid is specified.
                             if (iid != Guid.Empty) {
                                 IntPtr oldUnknown = unknown;
@@ -16067,7 +16067,7 @@ example usage
                                     unknown = InternalQueryInterface(unknown, ref iid);
                                 }
                                 finally {
-                                    // It is critical to release the original unknown if 
+                                    // It is critical to release the original unknown if
                                     // InternalQueryInterface throws out so we don't leak ref counts.
                                     Marshal.Release(oldUnknown);
                                 }
@@ -16124,10 +16124,10 @@ example usage
                 }
 
                 /// <devdoc>
-                ///     Helper class to access IConnectionPointContainer from a .NET COM-callable wrapper. 
+                ///     Helper class to access IConnectionPointContainer from a .NET COM-callable wrapper.
                 ///     The IConnectionPointContainer COM pointer is wrapped in a SafeHandle.
                 /// </devdoc>
-                internal sealed class ComConnectionPointContainer 
+                internal sealed class ComConnectionPointContainer
                     : SafeIUnknown {
 
                     public ComConnectionPointContainer(object obj, bool addRefIntPtr)
@@ -16168,10 +16168,10 @@ example usage
                 }
 
                 /// <devdoc>
-                ///     Helper class to access IConnectionPoint from a .NET COM-callable wrapper. 
+                ///     Helper class to access IConnectionPoint from a .NET COM-callable wrapper.
                 ///     The IConnectionPoint COM pointer is wrapped in a SafeHandle.
                 /// </devdoc>
-                internal sealed class ComConnectionPoint 
+                internal sealed class ComConnectionPoint
                     : SafeIUnknown {
 
                     public ComConnectionPoint(object obj, bool addRefIntPtr)
@@ -16213,11 +16213,11 @@ example usage
 
             /// <devdoc>
             ///     Return the default COM events interface declared on a .NET class.
-            ///     This looks for the ComSourceInterfacesAttribute and returns the .NET 
+            ///     This looks for the ComSourceInterfacesAttribute and returns the .NET
             ///     interface type of the first interface declared.
             /// </devdoc>
             private static Type GetDefaultEventsInterface(Type controlType) {
-                
+
                 Type eventInterface = null;
                 object[] custom = controlType.GetCustomAttributes(typeof(ComSourceInterfacesAttribute), false);
 
@@ -16429,7 +16429,7 @@ example usage
                         // restart system events if we previously shut it down.
                         // This is to prevent a crash.
                         //
-                        // 
+                        //
 
                         MethodInfo method = typeof(SystemEvents).GetMethod("Startup",
                                                                             BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod,
@@ -16691,7 +16691,7 @@ example usage
             ///     Handles IOleControl::TranslateAccelerator
             /// </devdoc>
             internal int TranslateAccelerator(ref NativeMethods.MSG lpmsg) {
-               
+
 #if DEBUG
                 if (CompModSwitches.ActiveX.TraceInfo) {
                     if (!control.IsHandleCreated) {
@@ -16732,7 +16732,7 @@ example usage
                             case PreProcessControlState.MessageNeeded:
                                 // Here we need to dispatch the message ourselves
                                 // otherwise the host may never send the key to our wndproc.
-                                
+
                                 // Someone returned true from IsInputKey or IsInputChar
                                 UnsafeNativeMethods.TranslateMessage(ref lpmsg);
                                 if (SafeNativeMethods.IsWindowUnicode(new HandleRef(null, lpmsg.hwnd))) {
@@ -16750,22 +16750,22 @@ example usage
                 }
 
                 // SITE processing.  We're not interested in the message, but the site may be.
-                
+
                 int hr = NativeMethods.S_FALSE;
 
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource: Control did not process accelerator, handing to site");
-    
+
                 UnsafeNativeMethods.IOleControlSite ioleClientSite = clientSite as UnsafeNativeMethods.IOleControlSite;
                 if (ioleClientSite != null) {
                     int keyState = 0;
-    
+
                     if (UnsafeNativeMethods.GetKeyState(NativeMethods.VK_SHIFT) < 0)     keyState |= 1;
                     if (UnsafeNativeMethods.GetKeyState(NativeMethods.VK_CONTROL) < 0)   keyState |= 2;
                     if (UnsafeNativeMethods.GetKeyState(NativeMethods.VK_MENU) < 0)      keyState |= 4;
 
                     hr = ioleClientSite.TranslateAccelerator(ref lpmsg, keyState);
                 }
-                
+
                 return hr;
             }
 
@@ -17401,7 +17401,7 @@ example usage
                     Debug.Assert(success, "DeleteObject() failed.");
                     success = UnsafeNativeMethods.DeleteCompatibleDC(hBitmapDC);
                     Debug.Assert(success, "DeleteObject() failed.");
-                } 
+                }
                 finally {
 
                     // Dispose is done. Set all the handles to IntPtr.Zero so this way the Dispose method executes only once.
@@ -17620,7 +17620,7 @@ example usage
                 accessibleObject = null;
 
                 // Get the owning control's parent, if it has one
-                Control parentControl = ownerControl.ParentInternal;                
+                Control parentControl = ownerControl.ParentInternal;
 
                 // ctrls[index] will indicate the control at the destination of this navigation operation
                 int index = -1;
@@ -17849,7 +17849,7 @@ example usage
             internal Label PreviousLabel {
                 get {
                     // Try to get to the parent of this control.
-                    Control parent = Owner.ParentInternal;                    
+                    Control parent = Owner.ParentInternal;
 
                     if (parent == null) {
                         return null;
@@ -17931,8 +17931,8 @@ example usage
             public void NotifyClients(AccessibleEvents accEvent, int childID) {
 
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "Control.NotifyClients: this = " +
-                                  this.ToString() + 
-                                  ", accEvent = " + accEvent.ToString() + 
+                                  this.ToString() +
+                                  ", accEvent = " + accEvent.ToString() +
                                   ", childID = " + childID.ToString(CultureInfo.InvariantCulture));
 
                 UnsafeNativeMethods.NotifyWinEvent((int)accEvent, new HandleRef(this, Handle), NativeMethods.OBJID_CLIENT, childID + 1);
@@ -17941,8 +17941,8 @@ example usage
             public void NotifyClients(AccessibleEvents accEvent, int objectID, int childID) {
 
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "Control.NotifyClients: this = " +
-                                  this.ToString() + 
-                                  ", accEvent = " + accEvent.ToString() + 
+                                  this.ToString() +
+                                  ", accEvent = " + accEvent.ToString() +
                                   ", childID = " + childID.ToString(CultureInfo.InvariantCulture));
 
                 UnsafeNativeMethods.NotifyWinEvent((int)accEvent, new HandleRef(this, Handle), objectID, childID + 1);
@@ -18013,7 +18013,7 @@ example usage
 
 
         // Fonts can be a pain to track, so we wrap Hfonts in this class to get a Finalize method.
-        // 
+        //
         internal sealed class FontHandleWrapper : MarshalByRefObject, IDisposable {
 #if DEBUG
             private string stackOnCreate = null;

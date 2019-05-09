@@ -12,15 +12,15 @@ namespace System.Windows.Forms
     public sealed class HtmlElementEventArgs : EventArgs
     {
         private HtmlShimManager _shimManager;
-        
+
         internal HtmlElementEventArgs(HtmlShimManager shimManager, UnsafeNativeMethods.IHTMLEventObj eventObj)
         {
             NativeHTMLEventObj = eventObj;
             Debug.Assert(NativeHTMLEventObj != null, "The event object should implement IHTMLEventObj");
-            
+
             _shimManager = shimManager;
         }
-        
+
         private UnsafeNativeMethods.IHTMLEventObj NativeHTMLEventObj { get; }
 
         public MouseButtons MouseButtonsPressed
@@ -65,19 +65,19 @@ namespace System.Windows.Forms
         public int KeyPressedCode => NativeHTMLEventObj.GetKeyCode();
 
         /// <devdoc>
-        /// Indicates whether the Alt key was pressed, if this information is 
+        /// Indicates whether the Alt key was pressed, if this information is
         /// provided to the IHtmlEventObj
         /// </devdoc>
         public bool AltKeyPressed => NativeHTMLEventObj.GetAltKey();
 
         /// <devdoc>
-        /// Indicates whether the Ctrl key was pressed, if this information is 
+        /// Indicates whether the Ctrl key was pressed, if this information is
         /// provided to the IHtmlEventObj
         /// </devdoc>
         public bool CtrlKeyPressed => NativeHTMLEventObj.GetCtrlKey();
 
         /// <devdoc>
-        /// Indicates whether the Shift key was pressed, if this information is 
+        /// Indicates whether the Shift key was pressed, if this information is
         /// provided to the IHtmlEventObj
         /// </devdoc>
         public bool ShiftKeyPressed => NativeHTMLEventObj.GetShiftKey();

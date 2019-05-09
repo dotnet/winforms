@@ -625,7 +625,7 @@ namespace System.ComponentModel.Design
             }
         }
 
-        /// <summary> 
+        /// <summary>
         /// shadowing the SettingsKey so we can default it to be RootComponent.Name + "." + Control.Name
         /// </summary>
         private string SettingsKey
@@ -676,7 +676,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Called when the designer has been associated with a control that is not in it's default state, such as one that has been pasted or drag-dropped onto the designer. 
+        /// Called when the designer has been associated with a control that is not in it's default state, such as one that has been pasted or drag-dropped onto the designer.
         /// This is an opportunity to fixup any shadowed properties in a different way than for default components.
         /// This is called after the other initialize functions.
         /// </summary>
@@ -847,7 +847,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Notifies the <see cref='System.ComponentModel.Design.IComponentChangeService' /> that this component has been changed. 
+        /// Notifies the <see cref='System.ComponentModel.Design.IComponentChangeService' /> that this component has been changed.
         /// You only need to call this when you are affecting component properties directly and not through the MemberDescriptor's accessors.
         /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")]
@@ -861,7 +861,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Notifies the <see cref='System.ComponentModel.Design.IComponentChangeService' /> that this component is about to be changed. 
+        /// Notifies the <see cref='System.ComponentModel.Design.IComponentChangeService' /> that this component is about to be changed.
         /// You only need to call this when you are affecting component properties directly and not through the MemberDescriptor's accessors.
         /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")]

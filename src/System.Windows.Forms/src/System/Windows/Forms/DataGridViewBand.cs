@@ -411,7 +411,7 @@ namespace System.Windows.Forms
                             throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.DataGridViewBand_MinimumWidthSmallerThanOne, DataGridViewBand.MinBandThickness));
                         }
                     }
-    
+
                     if (Thickness < value)
                     {
                         // Force the new minimum width on potential auto fill column.
@@ -422,7 +422,7 @@ namespace System.Windows.Forms
 
                         Thickness = value;
                     }
-    
+
                     _minimumThickness = value;
                     DataGridView?.OnBandMinimumThicknessChanged(this);
                 }
@@ -459,7 +459,7 @@ namespace System.Windows.Forms
                         {
                             throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertySetOnSharedRow, nameof(ReadOnly)));
                         }
-    
+
                         OnStateChanging(DataGridViewElementStates.ReadOnly);
                         DataGridView.SetReadOnlyRowCore(_bandIndex, value);
                     }
@@ -750,7 +750,7 @@ namespace System.Windows.Forms
                         // the 'new' row cannot be made invisble.
                         throw new InvalidOperationException(SR.DataGridViewBand_NewRowCannotBeInvisible);
                     }
-        
+
                     OnStateChanging(DataGridViewElementStates.Visible);
                     if (value)
                     {

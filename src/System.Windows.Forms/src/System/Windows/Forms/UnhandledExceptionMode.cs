@@ -7,7 +7,7 @@ namespace System.Windows.Forms
     /// <devdoc>
     /// Determines the exception mode of NativeWindow's WndProc method. Pass
     /// a value of this enum into SetUnhandledExceptionMode to control how
-    /// new NativeWindow objects handle exceptions.  
+    /// new NativeWindow objects handle exceptions.
     /// </devdoc>
     public enum UnhandledExceptionMode
     {

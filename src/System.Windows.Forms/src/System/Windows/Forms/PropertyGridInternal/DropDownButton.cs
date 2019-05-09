@@ -72,14 +72,14 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 base.OnMouseDown(e);
             }
         }
-        
+
 
         protected override void OnPaint(PaintEventArgs pevent) {
             base.OnPaint(pevent);
-            
+
             if (Application.RenderWithVisualStyles & useComboBoxTheme) {
                 ComboBoxState cbState = ComboBoxState.Normal;
-        
+
                 if (base.MouseIsDown) {
                     cbState = ComboBoxState.Pressed;
                 }
@@ -133,7 +133,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         internal override ButtonBaseAdapter CreateStandardAdapter() {
             return new DropDownButtonAdapter(this);
-        }        
+        }
     }
 
     internal class DropDownButtonAdapter : ButtonStandardAdapter {
@@ -179,7 +179,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
             }
         }
-        
+
         internal override void PaintUp(PaintEventArgs pevent, CheckState state) {
             base.PaintUp(pevent, state);
             if (!Application.RenderWithVisualStyles) {
@@ -199,7 +199,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         internal override void DrawImageCore(Graphics graphics, Image image, Rectangle imageBounds, Point imageStart, ButtonBaseAdapter.LayoutData layout) {
              ControlPaint.DrawImageReplaceColor(graphics, image, imageBounds, Color.Black, this.IsHighContrastHighlighted() && !this.Control.MouseIsDown ? SystemColors.HighlightText : Control.ForeColor);
-        } 
+        }
     }
 
     /// <summary>

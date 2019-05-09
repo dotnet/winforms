@@ -8,7 +8,7 @@ namespace System.Windows.Forms
 {
     public partial class DataGridView
     {
-        public sealed class HitTestInfo 
+        public sealed class HitTestInfo
         {
             internal DataGridViewHitTestType type = DataGridViewHitTestType.None;
             //internal DataGridViewHitTestTypeCloseEdge edge = DataGridViewHitTestTypeCloseEdge.None;
@@ -22,7 +22,7 @@ namespace System.Windows.Forms
             internal int colStart;
 
             /// <devdoc>
-            /// <para>Allows the <see cref='System.Windows.Forms.DataGridView.HitTestInfo'/> object to inform you the 
+            /// <para>Allows the <see cref='System.Windows.Forms.DataGridView.HitTestInfo'/> object to inform you the
             ///    extent of the grid.</para>
             /// </devdoc>
             public static readonly HitTestInfo Nowhere = new HitTestInfo();
@@ -42,7 +42,7 @@ namespace System.Windows.Forms
             /// </devdoc>
             public int ColumnIndex
             {
-                get 
+                get
                 {
                     return this.col;
                 }
@@ -54,7 +54,7 @@ namespace System.Windows.Forms
             /// </devdoc>
             public int RowIndex
             {
-                get 
+                get
                 {
                     return this.row;
                 }
@@ -65,7 +65,7 @@ namespace System.Windows.Forms
             /// </devdoc>
             public int ColumnX
             {
-                get 
+                get
                 {
                     return this.colStart;
                 }
@@ -76,19 +76,19 @@ namespace System.Windows.Forms
             /// </devdoc>
             public int RowY
             {
-                get 
+                get
                 {
                     return this.rowStart;
                 }
             }
 
             /// <devdoc>
-            /// <para>Gets the part of the <see cref='System.Windows.Forms.DataGridView'/> control, other than the row or column, that was 
+            /// <para>Gets the part of the <see cref='System.Windows.Forms.DataGridView'/> control, other than the row or column, that was
             ///    clicked.</para>
             /// </devdoc>
             public DataGridViewHitTestType Type
             {
-                get 
+                get
                 {
                     return this.type;
                 }
@@ -97,10 +97,10 @@ namespace System.Windows.Forms
             /// <devdoc>
             ///    <para>Indicates whether two objects are identical.</para>
             /// </devdoc>
-            public override bool Equals(object value) 
+            public override bool Equals(object value)
             {
                 HitTestInfo hti = value as HitTestInfo;
-                if (hti != null) 
+                if (hti != null)
                 {
                     return (this.type == hti.type &&
                             this.row  == hti.row &&
@@ -117,7 +117,7 @@ namespace System.Windows.Forms
             /// <devdoc>
             ///    <para>Gets the type, column number and row number.</para>
             /// </devdoc>
-            public override string ToString() 
+            public override string ToString()
             {
                 return "{ Type:" + type.ToString() + ", Column:" + col.ToString(CultureInfo.CurrentCulture) + ", Row:" + row.ToString(CultureInfo.CurrentCulture) + " }";
             }

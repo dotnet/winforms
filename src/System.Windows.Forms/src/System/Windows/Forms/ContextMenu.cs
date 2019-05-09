@@ -24,9 +24,9 @@ namespace System.Windows.Forms {
         private EventHandler onPopup;
         private EventHandler onCollapse;
         internal Control sourceControl;
-        
+
         private RightToLeft rightToLeft = System.Windows.Forms.RightToLeft.Inherit;
-    
+
         /// <devdoc>
         ///     Creates a new ContextMenu object with no items in it by default.
         /// </devdoc>
@@ -61,7 +61,7 @@ namespace System.Windows.Forms {
             add => onPopup += value;
             remove => onPopup -= value;
         }
-        
+
         /// <devdoc>
         ///    Fires when the context menu collapses.
         /// </devdoc>
@@ -70,7 +70,7 @@ namespace System.Windows.Forms {
             add => onCollapse += value;
             remove => onCollapse -= value;
         }
-        
+
         /// <devdoc>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
@@ -98,7 +98,7 @@ namespace System.Windows.Forms {
                 }
             }
             set {
-            
+
                 //valid values are 0x0 to 0x2.
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)RightToLeft.No, (int)RightToLeft.Inherit)){
                     throw new InvalidEnumArgumentException(nameof(RightToLeft), (int)value, typeof(RightToLeft));
@@ -109,7 +109,7 @@ namespace System.Windows.Forms {
                 }
 
             }
-        } 
+        }
 
         internal override bool RenderIsRightToLeft {
             get {
@@ -142,9 +142,9 @@ namespace System.Windows.Forms {
         }
 
         private void ResetRightToLeft() {
-        	RightToLeft = RightToLeft.No;	
+        	RightToLeft = RightToLeft.No;
         }
-        
+
         /// <devdoc>
         ///     Returns true if the RightToLeft should be persisted in code gen.
         /// </devdoc>
@@ -169,9 +169,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void Show(Control control, Point pos, LeftRightAlignment alignment)  {
 
-            // This code below looks wrong but it's correct. 
+            // This code below looks wrong but it's correct.
             // WinForms Left alignment means we want the menu to show up left of the point it is invoked from.
-            // We specify TPM_RIGHTALIGN which tells win32 to align the right side of this 
+            // We specify TPM_RIGHTALIGN which tells win32 to align the right side of this
             // menu with the point (which aligns it Left visually)
             if (alignment == LeftRightAlignment.Left) {
                 Show(control, pos, NativeMethods.TPM_VERTICAL | NativeMethods.TPM_RIGHTBUTTON | NativeMethods.TPM_RIGHTALIGN);
@@ -199,6 +199,6 @@ namespace System.Windows.Forms {
                 new HandleRef(control, control.Handle),
                 null);
         }
-            
+
     }
 }

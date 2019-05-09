@@ -803,7 +803,7 @@ namespace System.Windows.Forms.Design
                     FireComponentChanging(dropDownItem);
                     parent.Items.Remove(ToolStripItem);
                     host.DestroyComponent(ToolStripItem);
-                    //Create our new Item                                   
+                    //Create our new Item
                     ToolStripItem component = (ToolStripItem)host.CreateComponent(t, name);
                     //Since destroying the original item took away its DropDownItems. We need to Deserialize the items again...
                     if (component is ToolStripDropDownItem)

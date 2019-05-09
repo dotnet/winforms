@@ -181,7 +181,7 @@ namespace System.Windows.Forms
 
         public Uri Url
         {
-            get 
+            get
             {
                 UnsafeNativeMethods.IHTMLLocation iHtmlLocation = this.NativeHtmlWindow.GetLocation();
                 string stringLocation = (iHtmlLocation == null) ? "" : iHtmlLocation.GetHref();
@@ -249,9 +249,9 @@ namespace System.Windows.Forms
             this.NativeHtmlWindow.Navigate(url.ToString());
         }
 
-        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have 
-        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified 
-        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to 
+        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
+        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified
+        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to
         /// break.
         [SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads")]
         public void Navigate(string urlString)
@@ -259,9 +259,9 @@ namespace System.Windows.Forms
             this.NativeHtmlWindow.Navigate(urlString);
         }
 
-        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have 
-        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified 
-        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to 
+        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
+        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified
+        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to
         /// break.
         [SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads")]
         public HtmlWindow Open(string urlString, string target, string windowOptions, bool replaceEntry)
@@ -276,9 +276,9 @@ namespace System.Windows.Forms
             return Open(url.ToString(), target, windowOptions, replaceEntry);
         }
 
-        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have 
-        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified 
-        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to 
+        /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
+        /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified
+        /// (things like "www.microsoft.com") that the underlying objects support and we don't want to
         /// break.
         [SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads")]
         public HtmlWindow OpenNew(string urlString, string windowOptions)
@@ -447,7 +447,7 @@ namespace System.Windows.Forms
                 FireEvent(HtmlWindow.EventScroll, e);
             }
 
-            public void onresize(UnsafeNativeMethods.IHTMLEventObj evtObj) 
+            public void onresize(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 FireEvent(HtmlWindow.EventResize, e);
@@ -460,9 +460,9 @@ namespace System.Windows.Forms
             }
 
             public void onbeforeunload(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void onbeforeprint(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void onafterprint(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
         }
 
@@ -470,14 +470,14 @@ namespace System.Windows.Forms
 
         ///<devdoc>
         /// HtmlWindowShim - this is the glue between the DOM eventing mechanisms
-        ///                  and our CLR callbacks.  
-        ///             
+        ///                  and our CLR callbacks.
+        ///
         ///  There are two kinds of events: HTMLWindowEvents2 and IHtmlWindow3.AttachHandler style
         ///     HTMLWindowEvents2: we create an IConnectionPoint (via ConnectionPointCookie) between us and MSHTML and it calls back
         ///                        on an instance of HTMLWindowEvents2.  The HTMLWindowEvents2 class then fires the event.
         ///
         ///     IHTMLWindow3.AttachHandler: MSHML calls back on an HtmlToClrEventProxy that we've created, looking
-        ///                                 for a method named DISPID=0.  For each event that's subscribed, we create 
+        ///                                 for a method named DISPID=0.  For each event that's subscribed, we create
         ///                                 a new HtmlToClrEventProxy, detect the callback and fire the corresponding
         ///                                 CLR event.
         ///</devdoc>
@@ -505,8 +505,8 @@ namespace System.Windows.Forms
             public override void AttachEventHandler(string eventName, System.EventHandler eventHandler)
             {
 
-                // IE likes to call back on an IDispatch of DISPID=0 when it has an event, 
-                // the HtmlToClrEventProxy helps us fake out the CLR so that we can call back on 
+                // IE likes to call back on an IDispatch of DISPID=0 when it has an event,
+                // the HtmlToClrEventProxy helps us fake out the CLR so that we can call back on
                 // our EventHandler properly.
 
                 HtmlToClrEventProxy proxy = AddEventProxy(eventName, eventHandler);
@@ -523,7 +523,7 @@ namespace System.Windows.Forms
                                                                               new HTMLWindowEvents2(htmlWindow),
                                                                               typeof(UnsafeNativeMethods.DHTMLWindowEvents2),
                                                                               /*throwException*/ false);
-                    if (!cookie.Connected) 
+                    if (!cookie.Connected)
                     {
                         cookie = null;
                     }

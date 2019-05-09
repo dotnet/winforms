@@ -156,9 +156,9 @@ namespace System.Windows.Forms {
                      ControlStyles.StandardClick, false);
 
             requestedHeight = DefaultSimpleStyleHeight;
-            
+
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
-            SetState2(STATE2_USEPREFERREDSIZECACHE, true);  
+            SetState2(STATE2_USEPREFERREDSIZECACHE, true);
         }
 
         /// <devdoc>
@@ -669,7 +669,7 @@ namespace System.Windows.Forms {
                         return itemHeight;
                     }
                     else {
-                        return FontHeight + 2;   // 
+                        return FontHeight + 2;   //
                     }
                 }
 
@@ -826,9 +826,9 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add => base.PaddingChanged += value; 
+            add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value; }
-            
+
 
         /// <devdoc>
         ///     ApplySizeConstraints calls into this method when DropDownStyles is DropDown and DropDownList.
@@ -897,7 +897,7 @@ namespace System.Windows.Forms {
         private int GetComboHeight() {
 
             int cyCombo = 0;
-            // Add on CYEDGE just for some extra space in the edit field/static item.       
+            // Add on CYEDGE just for some extra space in the edit field/static item.
             // It's really only for static text items, but we want static & editable
             // controls to be the same height.
             Size textExtent = Size.Empty;
@@ -916,7 +916,7 @@ namespace System.Windows.Forms {
             }
 
             // Set the initial width to be the combo box rect.  Later we will shorten it
-            // if there is a dropdown button.           
+            // if there is a dropdown button.
             Size fixedFrameBoderSize = SystemInformation.FixedFrameBorderSize;
             cyCombo = 2 * fixedFrameBoderSize.Height + dyEdit;
             return cyCombo;
@@ -931,7 +931,7 @@ namespace System.Windows.Forms {
                     strings[i] = AutoCompleteCustomSource[i];
                 }
                 return strings;
-                
+
             }
             else if (collection is ObjectCollection)
             {
@@ -940,7 +940,7 @@ namespace System.Windows.Forms {
                     strings[i] = GetItemText(itemsCollection[i]);
                 }
                 return strings;
-                
+
             }
             return new string[0];
         }
@@ -1505,7 +1505,7 @@ namespace System.Windows.Forms {
                             this.DroppedDown = false;
                         }
                     }
-                    
+
                     if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == childListBox.Handle) {
                         DefChildWndProc(ref m);
                     }
@@ -1520,7 +1520,7 @@ namespace System.Windows.Forms {
                     break;
 
                 case Interop.WindowMessages.WM_INPUTLANGCHANGE:
-                    DefChildWndProc( ref m ); 
+                    DefChildWndProc( ref m );
                     break;
 
                 case Interop.WindowMessages.WM_KEYUP:
@@ -1542,7 +1542,7 @@ namespace System.Windows.Forms {
 
                     break;
                 case Interop.WindowMessages.WM_KILLFOCUS:
-                    // Consider - If we dont' have a childwndproc, then we don't get here, so we don't 
+                    // Consider - If we dont' have a childwndproc, then we don't get here, so we don't
                     // update the cache. Do we need to? This happens when we have a DropDownList.
                     if (!DesignMode) {
                         OnImeContextStatusChanged( m.HWnd );
@@ -1562,7 +1562,7 @@ namespace System.Windows.Forms {
                     break;
                 case Interop.WindowMessages.WM_SETFOCUS:
 
-                    // Consider - If we dont' have a childwndproc, then we don't get here, so we don't 
+                    // Consider - If we dont' have a childwndproc, then we don't get here, so we don't
                     // set the status. Do we need to? This happens when we have a DropDownList.
                     if (!DesignMode) {
                         ImeContext.SetImeStatus(CachedImeMode, m.HWnd);
@@ -1717,7 +1717,7 @@ namespace System.Windows.Forms {
                     mouseEvents = true;
 
                     //set the mouse capture .. this is the Child Wndproc..
-                    // 
+                    //
 
 
 
@@ -1900,7 +1900,7 @@ namespace System.Windows.Forms {
         /// Finds the first item in the combo box that matches the given string.
         /// The strings must match exactly, except for differences in casing.
         /// </devdoc>
-        public int FindStringExact(string s) 
+        public int FindStringExact(string s)
         {
             return FindStringExact(s, startIndex: -1, ignoreCase: true);
         }
@@ -1937,7 +1937,7 @@ namespace System.Windows.Forms {
 
     [SuppressMessage("Microsoft.Portability", "CA1902:AvoidTestingForFloatingPointEquality")]
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified) {
-            
+
             if (factor.Width != 1F && factor.Height != 1F) {
                 // we get called on scale before we get a notification that our font has changed.
                 // in this case, we need to reset our height cache.
@@ -2181,7 +2181,7 @@ namespace System.Windows.Forms {
         }
 
         internal override void RecreateHandleCore() {
-            
+
             string oldText = WindowText;
             base.RecreateHandleCore();
             if (!string.IsNullOrEmpty(oldText) && string.IsNullOrEmpty(WindowText)) {
@@ -2225,7 +2225,7 @@ namespace System.Windows.Forms {
                 if (hwnd != IntPtr.Zero) {
 
                     // if it's a simple dropdown list, the first HWND is the list box.
-                    //                    
+                    //
                     if (DropDownStyle == ComboBoxStyle.Simple) {
                         childListBox = new ComboBoxChildNativeWindow(this, ChildWindowType.ListBox);
                         childListBox.AssignHandle(hwnd);
@@ -2553,7 +2553,7 @@ namespace System.Windows.Forms {
 
         private void OnAutoCompleteCustomSourceChanged(object sender, CollectionChangeEventArgs e) {
             if (AutoCompleteSource == AutoCompleteSource.CustomSource)
-            {           
+            {
                 if (AutoCompleteCustomSource.Count == 0)
                 {
                     SetAutoComplete(true, true /*recreate handle*/);
@@ -2562,7 +2562,7 @@ namespace System.Windows.Forms {
                 {
                     SetAutoComplete(true, false);
                 }
-                    
+
             }
         }
 
@@ -2692,7 +2692,7 @@ namespace System.Windows.Forms {
         protected override void OnDisplayMemberChanged(EventArgs e) {
             base.OnDisplayMemberChanged(e);
 
-            // 
+            //
 
 
             RefreshItems();
@@ -2888,7 +2888,7 @@ namespace System.Windows.Forms {
                     RecreateHandle();
                     autoCompleteMode = backUpMode;
                 }
-                
+
                 if (AutoCompleteSource == AutoCompleteSource.CustomSource) {
                     if (AutoCompleteCustomSource != null) {
                         if (AutoCompleteCustomSource.Count == 0) {
@@ -2908,7 +2908,7 @@ namespace System.Windows.Forms {
                             {
                                 stringSource.RefreshList(GetStringsForAutoComplete(AutoCompleteCustomSource));
                             }
-                            
+
                         }
                     }
                 }
@@ -2932,7 +2932,7 @@ namespace System.Windows.Forms {
                                 {
                                     stringSource.RefreshList(GetStringsForAutoComplete(Items));
                                 }
-                                
+
                             }
                         }
                     }
@@ -3125,7 +3125,7 @@ namespace System.Windows.Forms {
             //           to do this asynchronously because the actual edit text
             //           isn't updated until a bit later
             //
-            
+
             // v1.0 - ComboBox::set_Text compared items w/ "value" and set the SelectedIndex accordingly
             // v1.0 - null values can't correspond to String.Empty
             // v1.0 - SelectedIndex == -1 corresponds to Text == String.Emtpy
@@ -3273,7 +3273,7 @@ namespace System.Windows.Forms {
                     OnTextUpdate(EventArgs.Empty);
                     break;
                 case NativeMethods.CBN_CLOSEUP:
-                    
+
                     OnDropDownClosed(EventArgs.Empty);
                     if (FormattingEnabled && Text != currentText && dropDown) {
                         OnTextChanged(EventArgs.Empty);
@@ -3285,7 +3285,7 @@ namespace System.Windows.Forms {
                     dropDown = true;
                     OnDropDown(EventArgs.Empty);
                     UpdateDropDownHeight();
-                    
+
                     break;
                 case NativeMethods.CBN_EDITCHANGE:
                     OnTextChanged(EventArgs.Empty);
@@ -3359,7 +3359,7 @@ namespace System.Windows.Forms {
                         fireSetFocus = false;
                         base.WndProc(ref m);
                     }
-                        
+
                     finally {
                         fireSetFocus = true;
                     }
@@ -3370,17 +3370,17 @@ namespace System.Windows.Forms {
                         base.WndProc(ref m);
                         // Nothing to see here... Just keep on walking...
                         // Turns out that with Theming off, we don't get quite the same messages as with theming on.
-                        
+
                         // With theming on we get a WM_MOUSELEAVE after a WM_KILLFOCUS even if you use the Tab key
                         // to move focus. Our response to WM_MOUSELEAVE causes us to repaint everything correctly.
 
                         // With theming off, we do not get a WM_MOUSELEAVE after a WM_KILLFOCUS, and since we don't have a childwndproc
-                        // when we are a Flat DropDownList, we need to force a repaint. The easiest way to do this is to send a 
+                        // when we are a Flat DropDownList, we need to force a repaint. The easiest way to do this is to send a
                         // WM_MOUSELEAVE to ourselves, since that also sets up the right state. Or... at least the state is the same
                         // as with Theming on.
-                        
+
                         if (!Application.RenderWithVisualStyles && GetStyle(ControlStyles.UserPaint) == false && this.DropDownStyle == ComboBoxStyle.DropDownList && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup)) {
-                            UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_MOUSELEAVE, 0, 0);                            
+                            UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_MOUSELEAVE, 0, 0);
                         }
                     }
 
@@ -3497,15 +3497,15 @@ namespace System.Windows.Forms {
                             return;
                         }
                     }
-                    
+
                     base.WndProc(ref m);
                     break;
-                case Interop.WindowMessages.WM_PRINTCLIENT: 
+                case Interop.WindowMessages.WM_PRINTCLIENT:
                     // all the fancy stuff we do in OnPaint has to happen again in OnPrint.
                     if (GetStyle(ControlStyles.UserPaint) == false && FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup) {
                         DefWndProc(ref m);
-                        
-                        if ((unchecked( (int) (long)m.LParam) & NativeMethods.PRF_CLIENT) == NativeMethods.PRF_CLIENT) { 
+
+                        if ((unchecked( (int) (long)m.LParam) & NativeMethods.PRF_CLIENT) == NativeMethods.PRF_CLIENT) {
                             if (GetStyle(ControlStyles.UserPaint) == false && FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup) {
                                 using (Graphics g = Graphics.FromHdcInternal(m.WParam)) {
                                     FlatComboBoxAdapter.DrawFlatCombo(this,g);
@@ -3515,7 +3515,7 @@ namespace System.Windows.Forms {
                         }
                     }
                     base.WndProc(ref m);
-                    return;                    
+                    return;
                 case Interop.WindowMessages.WM_SETCURSOR:
                     base.WndProc(ref m);
                     break;
@@ -3540,7 +3540,7 @@ namespace System.Windows.Forms {
                     base.WndProc(ref m);
                     ReleaseChildWindow();
                     break;
-                    
+
                 default:
                     if (m.Msg == NativeMethods.WM_MOUSEENTER) {
                         DefWndProc(ref m);
@@ -3617,7 +3617,7 @@ namespace System.Windows.Forms {
                     (_childWindowType == ChildWindowType.ListBox || _childWindowType == ChildWindowType.DropDownList)) {
                     AccessibleObject uiaProvider = GetChildAccessibleObject(_childWindowType);
 
-                    // If the requested object identifier is UiaRootObjectId, 
+                    // If the requested object identifier is UiaRootObjectId,
                     // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
                     InternalAccessibleObject internalAccessibleObject = new InternalAccessibleObject(uiaProvider);
                     m.Result = UnsafeNativeMethods.UiaReturnRawElementProvider(
@@ -3780,9 +3780,9 @@ namespace System.Windows.Forms {
                 return index;
             }
 
-            
+
             private int AddInternal(object item) {
-                
+
                 if (item == null) {
                     throw new ArgumentNullException(nameof(item));
                 }
@@ -3843,7 +3843,7 @@ namespace System.Windows.Forms {
                     owner.EndUpdate();
                 }
             }
-           
+
             internal void AddRangeInternal(IList items) {
 
                 if (items == null)
@@ -4154,7 +4154,7 @@ namespace System.Windows.Forms {
                                 return comboBoxChildListUiaProvider.GetChildFragment(previousItemIndex);
                             }
                         }
-                        
+
                         break;
                 }
 
@@ -4170,7 +4170,7 @@ namespace System.Windows.Forms {
             private int GetCurrentIndex() {
                 return _owningComboBox.Items.IndexOf(_owningItem);
             }
-            
+
             internal override int GetChildId() {
                 return GetCurrentIndex() + 1; // Index is zero-based, Child ID is 1-based.
             }
@@ -4238,7 +4238,7 @@ namespace System.Windows.Forms {
 
                 return base.IsPatternSupported(patternId);
             }
-            
+
             /// <summary>
             /// Gets or sets the accessible name.
             /// </summary>
@@ -4264,7 +4264,7 @@ namespace System.Windows.Forms {
                     return (AccessibleRole)_systemIAccessible.get_accRole(GetChildId());
                 }
             }
-            
+
             /// <summary>
             /// Gets the runtime ID.
             /// </summary>
@@ -4781,7 +4781,7 @@ namespace System.Windows.Forms {
             private IntPtr _childListControlhandle;
 
             /// <summary>
-            /// Initializes new instance of ComboBoxChildListUiaProvider. 
+            /// Initializes new instance of ComboBoxChildListUiaProvider.
             /// </summary>
             /// <param name="childListControlhandle"></param>
             /// <param name="owner"></param>
@@ -4928,7 +4928,7 @@ namespace System.Windows.Forms {
                     return false;
                 }
             }
-            
+
             internal override bool IsSelectionRequired {
                 get {
                     return true;
@@ -5486,10 +5486,10 @@ namespace System.Windows.Forms {
                 return sb.ToString();
             }
         }
-        
+
 
         private FlatComboAdapter FlatComboBoxAdapter {
-             get { 
+             get {
                  FlatComboAdapter comboAdapter = Properties.GetObject(PropFlatComboAdapter) as FlatComboAdapter;
                  if (comboAdapter == null || !comboAdapter.IsValid(this)) {
                     comboAdapter = CreateFlatComboAdapterInstance();
@@ -5502,9 +5502,9 @@ namespace System.Windows.Forms {
             return new FlatComboAdapter(this,/*smallButton=*/false);
         }
 
-        
+
         internal class FlatComboAdapter {
-             Rectangle outerBorder;        
+             Rectangle outerBorder;
              Rectangle innerBorder;
              Rectangle innerInnerBorder;
              internal Rectangle dropDownRect;
@@ -5519,7 +5519,7 @@ namespace System.Windows.Forms {
              protected static int Offset2Pixels = OFFSET_2PIXELS;
 
             public FlatComboAdapter(ComboBox comboBox, bool smallButton) {
-                // adapter is re-created when combobox is resized, see IsValid method, thus we don't need to handle DPI changed explicitly 
+                // adapter is re-created when combobox is resized, see IsValid method, thus we don't need to handle DPI changed explicitly
                 Offset2Pixels = comboBox.LogicalToDeviceUnits(OFFSET_2PIXELS);
 
                 clientRect = comboBox.ClientRectangle;
@@ -5549,9 +5549,9 @@ namespace System.Windows.Forms {
                 }
 
             }
- 
+
              public bool IsValid(ComboBox combo) {
-                return (combo.ClientRectangle == clientRect && combo.RightToLeft == origRightToLeft);                       
+                return (combo.ClientRectangle == clientRect && combo.RightToLeft == origRightToLeft);
              }
 
              /// <devdoc>
@@ -5561,14 +5561,14 @@ namespace System.Windows.Forms {
                  if (comboBox.DropDownStyle == ComboBoxStyle.Simple){
                      return;
                  }
-             
+
                  Color outerBorderColor = GetOuterBorderColor(comboBox);
                  Color innerBorderColor = GetInnerBorderColor(comboBox);
                  bool rightToLeft = comboBox.RightToLeft == RightToLeft.Yes;
-             
+
                  // draw the drop down
                  DrawFlatComboDropDown(comboBox, g, dropDownRect);
-             
+
                  // when we are disabled there is one line of color that seems to eek through if backcolor is set
                  // so lets erase it.
                  if (!LayoutUtils.IsZeroWidthOrHeight(whiteFillRect)) {
@@ -5577,8 +5577,8 @@ namespace System.Windows.Forms {
                          g.FillRectangle(b, whiteFillRect);
                     }
                  }
-                 
-                 
+
+
 
                  // Draw the outer border
                  if (outerBorderColor.IsSystemColor) {
@@ -5589,7 +5589,7 @@ namespace System.Windows.Forms {
                      }
                      else {
                          g.DrawRectangle(outerBorderPen, new Rectangle(dropDownRect.X, outerBorder.Y, outerBorder.Right - dropDownRect.X, outerBorder.Height));
-                     }             
+                     }
                  }
                  else {
                      using (Pen outerBorderPen = new Pen(outerBorderColor)) {
@@ -5602,7 +5602,7 @@ namespace System.Windows.Forms {
                          }
                      }
                  }
-             
+
                  // Draw the inner border
                  if (innerBorderColor.IsSystemColor) {
                      Pen innerBorderPen = SystemPens.FromSystemColor(innerBorderColor);
@@ -5615,18 +5615,18 @@ namespace System.Windows.Forms {
                          g.DrawRectangle(innerBorderPen, innerInnerBorder);
                      }
                  }
-             
-             
-                   
+
+
+
                  // Draw a dark border around everything if we're in popup mode
                  if ((!comboBox.Enabled)  ||(comboBox.FlatStyle == FlatStyle.Popup)) {
                      bool focused = comboBox.ContainsFocus || comboBox.MouseIsOver;
                      Color borderPenColor = GetPopupOuterBorderColor(comboBox, focused);
-                   
+
                      using (Pen borderPen = new Pen(borderPenColor)) {
-                 
+
                          Pen innerPen = (comboBox.Enabled) ? borderPen : SystemPens.Control;
-                         
+
                          // around the dropdown
                          if (rightToLeft) {
                              g.DrawRectangle(innerPen, new Rectangle(outerBorder.X, outerBorder.Y, dropDownRect.Width + 1, outerBorder.Height));
@@ -5634,25 +5634,25 @@ namespace System.Windows.Forms {
                          else {
                              g.DrawRectangle(innerPen, new Rectangle(dropDownRect.X, outerBorder.Y, outerBorder.Right - dropDownRect.X, outerBorder.Height));
                          }
-                         
+
                          // around the whole combobox.
                          g.DrawRectangle(borderPen, outerBorder);
-                     
+
                      }
                  }
-           
+
              }
-             
+
              /// <devdoc>
              ///     Paints over the edges of the combo box to make it appear flat.
              /// </devdoc>
-             
+
              protected virtual void DrawFlatComboDropDown(ComboBox comboBox, Graphics g, Rectangle dropDownRect) {
-             
+
                 g.FillRectangle(SystemBrushes.Control, dropDownRect);
 
                 Brush brush = (comboBox.Enabled) ? SystemBrushes.ControlText : SystemBrushes.ControlDark;
-             
+
                  Point middle = new Point(dropDownRect.Left + dropDownRect.Width / 2, dropDownRect.Top + dropDownRect.Height / 2);
                  if (origRightToLeft == RightToLeft.Yes) {
                      // if the width is odd - favor pushing it over one pixel left.
@@ -5662,14 +5662,14 @@ namespace System.Windows.Forms {
                      // if the width is odd - favor pushing it over one pixel right.
                      middle.X += (dropDownRect.Width % 2);
                  }
-             
+
                  g.FillPolygon(brush, new Point[] {
                      new Point(middle.X - Offset2Pixels, middle.Y - 1),
                      new Point(middle.X + Offset2Pixels + 1, middle.Y - 1),
                      new Point(middle.X, middle.Y + Offset2Pixels)
                  });
              }
-             
+
              protected virtual Color GetOuterBorderColor(ComboBox comboBox) {
                 return (comboBox.Enabled) ? SystemColors.Window : SystemColors.ControlDark;
              }
@@ -5680,12 +5680,12 @@ namespace System.Windows.Forms {
                 }
                 return (focused) ? SystemColors.ControlDark : SystemColors.Window;
              }
-             
+
              protected virtual Color GetInnerBorderColor(ComboBox comboBox) {
                 return (comboBox.Enabled) ? comboBox.BackColor : SystemColors.Control;
              }
-             
-             // this eliminates flicker by removing the pieces we're going to paint ourselves from 
+
+             // this eliminates flicker by removing the pieces we're going to paint ourselves from
              // the update region.  Note the UpdateRegionBox is the bounding box of the actual update region.
              // this is just here so we can quickly eliminate rectangles that arent in the update region.
              public void ValidateOwnerDrawRegions(ComboBox comboBox, Rectangle updateRegionBox) {
@@ -5695,27 +5695,27 @@ namespace System.Windows.Forms {
                  Rectangle bottomOwnerDrawArea = new Rectangle(0,innerBorder.Bottom,comboBox.Width, comboBox.Height-innerBorder.Bottom);
                  Rectangle leftOwnerDrawArea = new Rectangle(0,0,innerBorder.Left, comboBox.Height);
                  Rectangle rightOwnerDrawArea = new Rectangle(innerBorder.Right,0,comboBox.Width - innerBorder.Right,comboBox.Height);
- 
-                 if (topOwnerDrawArea.IntersectsWith(updateRegionBox)) {                            
+
+                 if (topOwnerDrawArea.IntersectsWith(updateRegionBox)) {
                      validRect =  new NativeMethods.RECT(topOwnerDrawArea);
                      SafeNativeMethods.ValidateRect(new HandleRef(comboBox, comboBox.Handle), ref validRect);
                  }
- 
-                 if (bottomOwnerDrawArea.IntersectsWith(updateRegionBox)) {                            
+
+                 if (bottomOwnerDrawArea.IntersectsWith(updateRegionBox)) {
                      validRect =  new NativeMethods.RECT(bottomOwnerDrawArea);
                      SafeNativeMethods.ValidateRect(new HandleRef(comboBox, comboBox.Handle), ref validRect);
                  }
- 
-                 if (leftOwnerDrawArea.IntersectsWith(updateRegionBox)) {                            
+
+                 if (leftOwnerDrawArea.IntersectsWith(updateRegionBox)) {
                      validRect =  new NativeMethods.RECT(leftOwnerDrawArea);
                      SafeNativeMethods.ValidateRect(new HandleRef(comboBox, comboBox.Handle), ref validRect);
                  }
- 
-                 if (rightOwnerDrawArea.IntersectsWith(updateRegionBox)) {                            
+
+                 if (rightOwnerDrawArea.IntersectsWith(updateRegionBox)) {
                      validRect =  new NativeMethods.RECT(rightOwnerDrawArea);
                      SafeNativeMethods.ValidateRect(new HandleRef(comboBox, comboBox.Handle), ref validRect);
                  }
-             
+
              }
         }
 

@@ -42,13 +42,13 @@ namespace System.Resources {
             this.typeName = typeName ?? throw new ArgumentNullException(nameof(typeName));
         }
 
-        [OnDeserializing]      
+        [OnDeserializing]
         private void OnDeserializing(StreamingContext ctx) {
             textFileEncoding = null;
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMethodsAsStatic")]
-        [OnDeserialized]      
+        [OnDeserialized]
         private void OnDeserialized(StreamingContext ctx) {
         }
 
@@ -60,7 +60,7 @@ namespace System.Resources {
         public ResXFileRef(string fileName, string typeName, Encoding textFileEncoding) : this(fileName, typeName)  {
             this.textFileEncoding = textFileEncoding;
         }
-        
+
         internal ResXFileRef Clone() {
             return new ResXFileRef(fileName, typeName, textFileEncoding);
         }
@@ -122,7 +122,7 @@ namespace System.Resources {
         }
 
         internal void MakeFilePathRelative(string basePath) {
-            
+
             if(string.IsNullOrEmpty(basePath)) {
                 return;
             }
@@ -131,7 +131,7 @@ namespace System.Resources {
 
         public override string ToString() {
             string result = string.Empty;
-            
+
             if(fileName.IndexOf(';') != -1 || fileName.IndexOf('\"') != -1) {
                 result += ("\""+ fileName + "\";");
             } else {
@@ -153,15 +153,15 @@ namespace System.Resources {
                 return false;
             }
 
-            public override bool CanConvertTo(ITypeDescriptorContext context, 
+            public override bool CanConvertTo(ITypeDescriptorContext context,
                                               Type destinationType)
             {
                 return destinationType == typeof(string);
             }
 
-            public override object ConvertTo(ITypeDescriptorContext context, 
+            public override object ConvertTo(ITypeDescriptorContext context,
                                              CultureInfo culture,
-                                             object value, 
+                                             object value,
                                              Type destinationType) {
                 object created = null;
                 if (destinationType == typeof(string)) {
@@ -182,7 +182,7 @@ namespace System.Resources {
                         int lastIndexOfQuote = stringValue.LastIndexOf('\"');
                         if (lastIndexOfQuote - 1 < 0)
                             throw new ArgumentException(nameof(stringValue));
-                        fileName = stringValue.Substring(1, lastIndexOfQuote - 1); // remove the quotes in" ..... " 
+                        fileName = stringValue.Substring(1, lastIndexOfQuote - 1); // remove the quotes in" ..... "
                         if(lastIndexOfQuote + 2 > stringValue.Length)
                             throw new ArgumentException(nameof(stringValue));
                         remainingString = stringValue.Substring(lastIndexOfQuote + 2);
@@ -204,10 +204,10 @@ namespace System.Resources {
                         result = new string[] { fileName };
                     }
                 }
-                return result;  
+                return result;
             }
 
-            public override object ConvertFrom(ITypeDescriptorContext context, 
+            public override object ConvertFrom(ITypeDescriptorContext context,
                                                CultureInfo culture,
                                                object value) {
                 if (value is string stringValue) {
@@ -218,15 +218,15 @@ namespace System.Resources {
                     // special case string and byte[]
                     if(toCreate == typeof(string)) {
                         // we have a string, now we need to check the encoding
-                        Encoding textFileEncoding = 
+                        Encoding textFileEncoding =
                             parts.Length > 2
-                                ? Encoding.GetEncoding(parts[2]) 
+                                ? Encoding.GetEncoding(parts[2])
                                 : Encoding.Default;
                         using (StreamReader sr = new StreamReader(fileName, textFileEncoding)) {
                             return sr.ReadToEnd();
                         }
                     }
-                    
+
                     // this is a regular file, we call it's constructor with a stream as a parameter
                     // or if it's a byte array we just return that
                     byte[] temp = null;
@@ -240,7 +240,7 @@ namespace System.Resources {
                     if(toCreate == typeof(byte[])) {
                         return temp;
                     }
-                    
+
                     MemoryStream memStream = new MemoryStream(temp);
                     if(toCreate == typeof(MemoryStream)) {
                         return memStream;
@@ -251,8 +251,8 @@ namespace System.Resources {
                         Icon ico = new Icon(memStream);
                         return ico.ToBitmap();
                     }
-                    
-                    return Activator.CreateInstance(toCreate, BindingFlags.Instance | BindingFlags.Public | BindingFlags.CreateInstance, null, new object[] {memStream}, null);               
+
+                    return Activator.CreateInstance(toCreate, BindingFlags.Instance | BindingFlags.Public | BindingFlags.CreateInstance, null, new object[] {memStream}, null);
                 }
                 return null;
             }

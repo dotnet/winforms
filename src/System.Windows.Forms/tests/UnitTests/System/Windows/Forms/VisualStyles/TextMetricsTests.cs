@@ -43,7 +43,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
                 Ascent = value
             };
             Assert.Equal(value, metric.Ascent);
-            
+
             // Set same.
             metric.Ascent = value;
             Assert.Equal(value, metric.Ascent);
@@ -58,7 +58,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
                 AverageCharWidth = value
             };
             Assert.Equal(value, metric.AverageCharWidth);
-            
+
             // Set same.
             metric.AverageCharWidth = value;
             Assert.Equal(value, metric.AverageCharWidth);
@@ -73,7 +73,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
                 BreakChar = value
             };
             Assert.Equal(value, metric.BreakChar);
-            
+
             // Set same.
             metric.BreakChar = value;
             Assert.Equal(value, metric.BreakChar);
@@ -89,7 +89,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
                 CharSet = value
             };
             Assert.Equal(value, metric.CharSet);
-            
+
             // Set same.
             metric.CharSet = value;
             Assert.Equal(value, metric.CharSet);
@@ -104,7 +104,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
                 DefaultChar = value
             };
             Assert.Equal(value, metric.DefaultChar);
-            
+
             // Set same.
             metric.DefaultChar = value;
             Assert.Equal(value, metric.DefaultChar);
@@ -119,7 +119,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
                 Descent = value
             };
             Assert.Equal(value, metric.Descent);
-            
+
             // Set same.
             metric.Descent = value;
             Assert.Equal(value, metric.Descent);
@@ -134,7 +134,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
                 DigitizedAspectX = value
             };
             Assert.Equal(value, metric.DigitizedAspectX);
-            
+
             // Set same.
             metric.DigitizedAspectX = value;
             Assert.Equal(value, metric.DigitizedAspectX);
@@ -149,7 +149,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
                 DigitizedAspectY = value
             };
             Assert.Equal(value, metric.DigitizedAspectY);
-            
+
             // Set same.
             metric.DigitizedAspectY = value;
             Assert.Equal(value, metric.DigitizedAspectY);
@@ -164,7 +164,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
                 ExternalLeading = value
             };
             Assert.Equal(value, metric.ExternalLeading);
-            
+
             // Set same.
             metric.ExternalLeading = value;
             Assert.Equal(value, metric.ExternalLeading);
@@ -179,7 +179,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
                 FirstChar = value
             };
             Assert.Equal(value, metric.FirstChar);
-            
+
             // Set same.
             metric.FirstChar = value;
             Assert.Equal(value, metric.FirstChar);
@@ -194,7 +194,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
                 Height = value
             };
             Assert.Equal(value, metric.Height);
-            
+
             // Set same.
             metric.Height = value;
             Assert.Equal(value, metric.Height);
@@ -209,7 +209,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
                 InternalLeading = value
             };
             Assert.Equal(value, metric.InternalLeading);
-            
+
             // Set same.
             metric.InternalLeading = value;
             Assert.Equal(value, metric.InternalLeading);
@@ -224,7 +224,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
                 Italic = value
             };
             Assert.Equal(value, metric.Italic);
-            
+
             // Set same.
             metric.Italic = value;
             Assert.Equal(value, metric.Italic);
@@ -239,7 +239,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
                 LastChar = value
             };
             Assert.Equal(value, metric.LastChar);
-            
+
             // Set same.
             metric.LastChar = value;
             Assert.Equal(value, metric.LastChar);
@@ -254,7 +254,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
                 MaxCharWidth = value
             };
             Assert.Equal(value, metric.MaxCharWidth);
-            
+
             // Set same.
             metric.MaxCharWidth = value;
             Assert.Equal(value, metric.MaxCharWidth);
@@ -269,7 +269,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
                 Overhang = value
             };
             Assert.Equal(value, metric.Overhang);
-            
+
             // Set same.
             metric.Overhang = value;
             Assert.Equal(value, metric.Overhang);
@@ -285,7 +285,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
                 PitchAndFamily = value
             };
             Assert.Equal(value, metric.PitchAndFamily);
-            
+
             // Set same.
             metric.PitchAndFamily = value;
             Assert.Equal(value, metric.PitchAndFamily);
@@ -300,7 +300,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
                 StruckOut = value
             };
             Assert.Equal(value, metric.StruckOut);
-            
+
             // Set same.
             metric.StruckOut = value;
             Assert.Equal(value, metric.StruckOut);
@@ -315,7 +315,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
                 Underlined = value
             };
             Assert.Equal(value, metric.Underlined);
-            
+
             // Set same.
             metric.Underlined = value;
             Assert.Equal(value, metric.Underlined);
@@ -330,7 +330,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
                 Weight = value
             };
             Assert.Equal(value, metric.Weight);
-            
+
             // Set same.
             metric.Weight = value;
             Assert.Equal(value, metric.Weight);

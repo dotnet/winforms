@@ -6,7 +6,7 @@ namespace System.Windows.Forms {
     using System;
     using System.ComponentModel;
     using System.Collections;
-    
+
     internal class TextBoxAutoCompleteSourceConverter : EnumConverter {
         public TextBoxAutoCompleteSourceConverter(Type type) : base(type) {
         }
@@ -28,7 +28,7 @@ namespace System.Windows.Forms {
               }
             }
             return new StandardValuesCollection(list);
-            
+
         }
     }
 }

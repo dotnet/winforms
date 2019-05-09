@@ -33,7 +33,7 @@ namespace System.Windows.Forms {
         private int                                 hcSizeRatio = -1;
         private HotCommands                         hotcommands;
         private ToolStrip                           toolStrip;
-        
+
         private bool                                helpVisible = true;
         private bool                                toolbarVisible = true;
 
@@ -53,11 +53,11 @@ namespace System.Windows.Forms {
         private ToolStripButton[]                   viewTabButtons;
         // the index of the currently selected tab view
         private int                                 selectedViewTab;
-        
-        
+
+
         // our view type buttons (Alpha vs. categorized)
-        private ToolStripButton[]                   viewSortButtons; 
-        private int                                 selectedViewSort;   
+        private ToolStripButton[]                   viewSortButtons;
+        private int                                 selectedViewSort;
         private PropertySort                        propertySortValue;
 
         // this guy's kind of an odd one...he gets special treatment
@@ -69,17 +69,17 @@ namespace System.Windows.Forms {
         // our main baby
         private PropertyGridView                    gridView;
 
-        
+
         private IDesignerHost                       designerHost;
         private IDesignerEventService               designerEventService;
-        
+
         private Hashtable                           designerSelections;
 
         private GridEntry peDefault;
         private GridEntry peMain;
         private GridEntryCollection currentPropEntries;
         private object[]   currentObjects;
-        
+
         private int                                 paintFrozen;
         private Color                               lineColor = SystemInformation.HighContrast ? SystemColors.ControlDarkDark : SystemColors.InactiveBorder;
         internal bool                               developerOverride = false;
@@ -149,7 +149,7 @@ namespace System.Windows.Forms {
         private readonly ComponentEventHandler                  onComponentAdd;
         private readonly ComponentEventHandler                  onComponentRemove;
         private readonly ComponentChangedEventHandler           onComponentChanged;
-        
+
         // the cookies for our connection points on objects that support IPropertyNotifySink
         //
         private AxHost.ConnectionPointCookie[] connectionPointCookies = null;
@@ -160,7 +160,7 @@ namespace System.Windows.Forms {
         private static object          EventSelectedGridItemChanged = new object();
         private static object          EventPropertySortChanged = new object();
         private static object          EventSelectedObjectsChanged = new object();
-        
+
         [
             SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // the "PropertyGridToolBar" caption is for testing.
                                                                                                         // So we don't have to localize it.
@@ -174,7 +174,7 @@ namespace System.Windows.Forms {
             SuspendLayout();
             AutoScaleMode = AutoScaleMode.None;
 
-            // static variables are problem in a child level mixed mode scenario. Changing static variables cause compatibility issue. 
+            // static variables are problem in a child level mixed mode scenario. Changing static variables cause compatibility issue.
             // So, recalculate static variables everytime property grid initialized.
             if (DpiHelper.IsPerMonitorV2Awareness) {
                 RescaleConstants();
@@ -217,7 +217,7 @@ namespace System.Windows.Forms {
                 toolStrip.TabIndex = 1;
                 toolStrip.ImageScalingSize = normalButtonSize;
 
-                // parity with the old... 
+                // parity with the old...
                 toolStrip.CanOverflow = false;
 
 
@@ -251,7 +251,7 @@ namespace System.Windows.Forms {
                 hotcommands.Visible = false;
                 hotcommands.MouseMove += new MouseEventHandler(this.OnChildMouseMove);
                 hotcommands.MouseDown += new MouseEventHandler(this.OnChildMouseDown);
-              
+
                 Controls.AddRange(new Control[] { doccomment, hotcommands, gridView, toolStrip });
 
                 SetActiveControl(gridView);
@@ -293,12 +293,12 @@ namespace System.Windows.Forms {
                             cs.ComponentRemoved -= onComponentRemove;
                             cs.ComponentChanged -= onComponentChanged;
                         }
-                        
+
                         IPropertyValueUIService pvSvc = (IPropertyValueUIService)designerHost.GetService(typeof(IPropertyValueUIService));
                         if (pvSvc != null) {
                             pvSvc.PropertyUIValueItemsChanged -= new EventHandler(this.OnNotifyPropertyValueUIItemsChanged);
                         }
-                        
+
                         designerHost.TransactionOpened -= new EventHandler(this.OnTransactionOpened);
                         designerHost.TransactionClosed -= new DesignerTransactionCloseEventHandler(this.OnTransactionClosed);
                         SetFlag(BatchMode, false);
@@ -306,7 +306,7 @@ namespace System.Windows.Forms {
                         this.designerHost = null;
                     }
 
-                    
+
 
                     if (value != null) {
                         IComponentChangeService cs = (IComponentChangeService)value.GetService(typeof(IComponentChangeService));
@@ -319,13 +319,13 @@ namespace System.Windows.Forms {
                         value.TransactionOpened += new EventHandler(this.OnTransactionOpened);
                         value.TransactionClosed += new DesignerTransactionCloseEventHandler(this.OnTransactionClosed);
                         SetFlag(BatchMode, false);
-                        
+
                         IPropertyValueUIService pvSvc = (IPropertyValueUIService)value.GetService(typeof(IPropertyValueUIService));
                         if (pvSvc != null) {
                             pvSvc.PropertyUIValueItemsChanged += new EventHandler(this.OnNotifyPropertyValueUIItemsChanged);
                         }
                     }
-                    
+
                     designerHost = value;
                     if (peMain != null) {
                         peMain.DesignerHost = value;
@@ -365,7 +365,7 @@ namespace System.Windows.Forms {
                 base.BackgroundImage = value;
             }
         }
-        
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
             add => base.BackgroundImageChanged += value;
@@ -381,7 +381,7 @@ namespace System.Windows.Forms {
                 base.BackgroundImageLayout = value;
             }
         }
-        
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
             add => base.BackgroundImageLayoutChanged += value;
@@ -389,9 +389,9 @@ namespace System.Windows.Forms {
         }
 
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), 
+        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ] 
+        ]
         public AttributeCollection BrowsableAttributes {
             set {
                 if (value == null || value == AttributeCollection.Empty) {
@@ -416,25 +416,25 @@ namespace System.Windows.Forms {
                 return browsableAttributes;
             }
         }
-        
+
         private bool CanCopy {
             get {
                 return gridView.CanCopy;
             }
         }
-        
+
         private bool CanCut {
             get {
                 return gridView.CanCut;
             }
         }
-        
+
         private bool CanPaste {
             get {
                 return gridView.CanPaste;
             }
         }
-        
+
         private bool CanUndo {
             get {
                 return gridView.CanUndo;
@@ -622,12 +622,12 @@ namespace System.Windows.Forms {
                 return GetPropertyGridView().ContextMenuDefaultLocation;
             }
         }
-        
+
          /// <devdoc>
         ///     Collection of child controls.
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never), 
+        Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new ControlCollection Controls {
@@ -636,7 +636,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        
+
         protected override Size DefaultSize {
             get {
                 return new Size(130, 130);
@@ -652,7 +652,7 @@ namespace System.Windows.Forms {
                return typeof(PropertiesTab);
             }
         }
-        
+
         protected bool DrawFlatToolbar {
             get {
                 return drawFlatToolBar;
@@ -676,7 +676,7 @@ namespace System.Windows.Forms {
                 base.ForeColor = value;
             }
         }
-        
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
             add => base.ForeColorChanged += value;
@@ -688,7 +688,7 @@ namespace System.Windows.Forms {
                return paintFrozen > 0;
             }
             set {
-               
+
                if (value && IsHandleCreated && this.Visible) {
                   if (0 == paintFrozen++) {
                      SendMessage(Interop.WindowMessages.WM_SETREDRAW, 0, 0);
@@ -698,12 +698,12 @@ namespace System.Windows.Forms {
                   if (paintFrozen == 0) {
                      return;
                   }
-               
+
                   if (0 == --paintFrozen) {
                      SendMessage(Interop.WindowMessages.WM_SETREDRAW, 1, 0);
                      Invalidate(true);
                   }
-                  
+
                }
             }
         }
@@ -716,7 +716,7 @@ namespace System.Windows.Forms {
                 return doccomment.AccessibilityObject;
             }
         }
-        
+
         /// <devdoc>
         /// The background color for the help region.
         /// </devdoc>
@@ -923,7 +923,7 @@ namespace System.Windows.Forms {
                 return GetPropertyGridView().GetInPropertySet();
             }
         }
-        
+
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridLineColorDesc)),
@@ -961,7 +961,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add => base.PaddingChanged += value; 
+            add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value; }
 
         /// <devdoc>
@@ -983,7 +983,7 @@ namespace System.Windows.Forms {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(PropertySort));
                 }
                 ToolStripButton newButton;
-                
+
                 if ((value & PropertySort.Categorized) != 0) {
                     newButton = viewSortButtons[CATEGORIES];
                 }
@@ -993,14 +993,14 @@ namespace System.Windows.Forms {
                 else {
                     newButton = viewSortButtons[NO_SORT];
                 }
-                
+
                 GridItem selectedGridItem = SelectedGridItem;
-               
-               
+
+
                 OnViewSortButtonClick(newButton, EventArgs.Empty);
-            
+
                 this.propertySortValue = value;
-                
+
                 if (selectedGridItem != null) {
                     try {
                         SelectedGridItem = selectedGridItem;
@@ -1012,10 +1012,10 @@ namespace System.Windows.Forms {
                         // the grid with no selected row.
                     }
                 }
-                
+
             }
         }
-        
+
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -1053,13 +1053,13 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
+
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public object[] SelectedObjects {
-            set {   
+            set {
                 try {
                     this.FreezePainting = true;
 
@@ -1067,13 +1067,13 @@ namespace System.Windows.Forms {
                     if (GetFlag(BatchMode)) {
                        SetFlag(BatchModeChange, false);
                     }
-                    
+
                     gridView.EnsurePendingChangesCommitted();
-                                        
+
                     bool isSame = false;
                     bool classesSame = false;
                     bool showEvents = true;
-                    
+
                     // validate the array coming in
                     if (value != null && value.Length > 0) {
                        for (int count = 0; count < value.Length; count++) {
@@ -1088,7 +1088,7 @@ namespace System.Windows.Forms {
                     else {
                         showEvents = false;
                     }
-   
+
                     // make sure we actually changed something before we inspect tabs
                     if (currentObjects != null && value != null &&
                         currentObjects.Length == value.Length) {
@@ -1098,38 +1098,38 @@ namespace System.Windows.Forms {
                             if (isSame && currentObjects[i] != value[i]) {
                                 isSame = false;
                             }
-       
+
                             Type oldType = GetUnwrappedObject(i).GetType();
 
                             object objTemp = value[i];
-       
+
                             if (objTemp is ICustomTypeDescriptor) {
                                 objTemp = ((ICustomTypeDescriptor)objTemp).GetPropertyOwner(null);
                             }
-                            Type newType = objTemp.GetType();        
-       
-                            // check if the types are the same.  If they are, and they 
+                            Type newType = objTemp.GetType();
+
+                            // check if the types are the same.  If they are, and they
                             // are COM objects, check their GUID's.  If they are different
                             // or Guid.Emtpy, assume the classes are different.
                             //
-                            if (classesSame && 
+                            if (classesSame &&
                                 (oldType != newType || oldType.IsCOMObject && newType.IsCOMObject)) {
                                 classesSame = false;
                             }
                         }
                     }
-       
+
                     if (!isSame) {
 
                         EnsureDesignerEventService();
 
                         showEvents = showEvents && GetFlag(GotDesignerEventService);
-                   
+
                         SetStatusBox("", "");
-                       
+
                         ClearCachedProps();
 
-                        // The default selected entry might still reference the previous selected 
+                        // The default selected entry might still reference the previous selected
                         // objects. Set it to null to avoid leaks.
                         peDefault = null;
 
@@ -1139,7 +1139,7 @@ namespace System.Windows.Forms {
                         else {
                             currentObjects = (object[])value.Clone();
                         }
-                       
+
                         SinkPropertyNotifyEvents();
                         SetFlag(PropertiesChanged, true);
 
@@ -1155,14 +1155,14 @@ namespace System.Windows.Forms {
                             }
                             catch (COMException) {}
                         }
-                                               
+
                         if (peMain != null) {
                             peMain.Dispose();
                         }
-   
+
                         // throw away any extra component only tabs
                         if (!classesSame && !GetFlag(TabsChanging) && selectedViewTab < viewTabButtons.Length) {
-    
+
                             Type tabType = selectedViewTab == -1 ? null : viewTabs[selectedViewTab].GetType();
                             ToolStripButton viewTabButton = null;
                             RefreshTabs(PropertyTabScope.Component);
@@ -1177,7 +1177,7 @@ namespace System.Windows.Forms {
                             }
                             SelectViewTabButtonDefault(viewTabButton);
                         }
-                   
+
                         // make sure we've also got events on all the objects
                         if (showEvents && viewTabs != null && viewTabs.Length > EVENTS && (viewTabs[EVENTS] is EventsTab)) {
                             showEvents = viewTabButtons[EVENTS].Visible;
@@ -1185,33 +1185,33 @@ namespace System.Windows.Forms {
                             PropertyDescriptorCollection events;
                             Attribute[] attrs = new Attribute[BrowsableAttributes.Count];
                             BrowsableAttributes.CopyTo(attrs, 0);
-                            
+
                             Hashtable eventTypes = null;
-                            
+
                             if (currentObjects.Length > 10) {
                                eventTypes = new Hashtable();
                             }
-                            
+
                             for (int i = 0; i < currentObjects.Length && showEvents; i++) {
                                tempObj = currentObjects[i];
-                               
+
                                if (tempObj is ICustomTypeDescriptor) {
                                    tempObj = ((ICustomTypeDescriptor)tempObj).GetPropertyOwner(null);
                                }
-                            
+
                                Type objType = tempObj.GetType();
-                            
+
                                if (eventTypes != null && eventTypes.Contains(objType)) {
                                    continue;
                                }
-                               
+
                                // make sure these things are sited components as well
                                showEvents = showEvents && (tempObj is IComponent && ((IComponent)tempObj).Site != null);
-                            
+
                                // make sure we've also got events on all the objects
                                events =  ((EventsTab)viewTabs[EVENTS]).GetProperties(tempObj, attrs);
                                showEvents = showEvents && events != null && events.Count > 0;
-                            
+
                                if (showEvents && eventTypes != null) {
                                    eventTypes[objType] = objType;
                                }
@@ -1219,7 +1219,7 @@ namespace System.Windows.Forms {
                         }
                         ShowEventsButton(showEvents && currentObjects.Length > 0);
                         DisplayHotCommands();
-   
+
                         if (currentObjects.Length == 1) {
                             EnablePropPageButton(currentObjects[0]);
                         }
@@ -1228,13 +1228,13 @@ namespace System.Windows.Forms {
                         }
                         OnSelectedObjectsChanged(EventArgs.Empty);
                     }
-   
-   
+
+
                     /*
-       
+
                     Microsoft, hopefully this won't be a big perf problem, but it looks like we
                            need to refresh even if we didn't change the selected objects.
-       
+
                     if (propertiesChanged) {*/
                     if (!GetFlag(TabsChanging)) {
 
@@ -1267,7 +1267,7 @@ namespace System.Windows.Forms {
                         else {
                             Refresh(true);
                         }
-    
+
                         if (currentObjects.Length > 0) {
                             SaveTabSelection();
                         }
@@ -1282,7 +1282,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            get 
+            get
             {
                 if (currentObjects == null) {
                     return new object[0];
@@ -1290,7 +1290,7 @@ namespace System.Windows.Forms {
                 return (object[])currentObjects.Clone();
             }
         }
-        
+
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -1320,7 +1320,7 @@ namespace System.Windows.Forms {
                 gridView.SelectedGridEntry = (GridEntry)value;
             }
         }
-       
+
         protected internal override bool ShowFocusCues {
             get {
                 return true;
@@ -1332,10 +1332,10 @@ namespace System.Windows.Forms {
                 return base.Site;
             }
             set {
-               
+
                 // Perf - the base class is possibly going to change the font via ambient properties service
                 SuspendAllLayout(this);
-               
+
                 base.Site = value;
                 gridView.ServiceProvider = value;
 
@@ -1345,7 +1345,7 @@ namespace System.Windows.Forms {
                 else {
                     this.ActiveDesigner = (IDesignerHost)value.GetService(typeof(IDesignerHost));
                 }
-                
+
                 ResumeAllLayout(this,true);
 
             }
@@ -1360,7 +1360,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        [Browsable(false), 
+        [Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override string Text {
             get {
@@ -1404,7 +1404,7 @@ namespace System.Windows.Forms {
                         toolStrip.ImageScalingSize = this.imageList[NORMAL_BUTTONS].ImageSize;
                     }
                 }
-                
+
                 toolStrip.ImageList = imageList[this.buttonType];
                 OnLayoutInternal(false);
                 Invalidate();
@@ -1453,15 +1453,15 @@ namespace System.Windows.Forms {
                 if (toolStrip != null) {
                     return toolStrip.Renderer;
                 }
-                return null;     
+                return null;
             }
             set {
                 if (toolStrip != null) {
-                   toolStrip.Renderer = value;               
+                   toolStrip.Renderer = value;
                 }
             }
         }
-        
+
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridViewBackColorDesc)),
@@ -1476,7 +1476,7 @@ namespace System.Windows.Forms {
                 gridView.Invalidate();
             }
         }
-        
+
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridViewForeColorDesc)),
@@ -1489,10 +1489,10 @@ namespace System.Windows.Forms {
             set {
                 gridView.ForeColor = value;
                 gridView.Invalidate();
-            
+
             }
         }
-  
+
         /// <devdoc>
         ///    <para>Border color for the property grid view.</para>
         /// </devdoc>
@@ -1595,40 +1595,40 @@ namespace System.Windows.Forms {
             add => Events.AddHandler(EventComComponentNameChanged, value);
             remove => Events.RemoveHandler(EventComComponentNameChanged, value);
         }
-        
+
         /// <devdoc> Event that is fired when the current view tab is changed, such as changing from Properties to Events</devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridPropertyTabchangedDescr))]
         public event PropertyTabChangedEventHandler PropertyTabChanged {
             add => Events.AddHandler(EventPropertyTabChanged, value);
             remove => Events.RemoveHandler(EventPropertyTabChanged, value);
         }
-        
+
         /// <devdoc> Event that is fired when the sort mode is changed.</devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridPropertySortChangedDescr))]
         public event EventHandler PropertySortChanged {
             add => Events.AddHandler(EventPropertySortChanged, value);
             remove => Events.RemoveHandler(EventPropertySortChanged, value);
         }
-        
+
         /// <devdoc> Event that is fired when the selected GridItem is changed</devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridSelectedGridItemChangedDescr))]
         public event SelectedGridItemChangedEventHandler SelectedGridItemChanged {
             add => Events.AddHandler(EventSelectedGridItemChanged, value);
   remove => Events.RemoveHandler(EventSelectedGridItemChanged, value);
         }
-        
+
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridSelectedObjectsChangedDescr))]
         public event EventHandler SelectedObjectsChanged {
             add => Events.AddHandler(EventSelectedObjectsChanged, value);
             remove => Events.RemoveHandler(EventSelectedObjectsChanged, value);
         }
-        
-        
+
+
         internal void AddTab(Type tabType, PropertyTabScope scope) {
             AddRefTab(tabType, null, scope, true);
         }
 
- 
+
         internal void AddRefTab(Type tabType, object component, PropertyTabScope type, bool setupToolbar) {
             PropertyTab tab = null;
             int tabIndex = -1;
@@ -1733,19 +1733,19 @@ namespace System.Windows.Forms {
                 SetupToolbar();
                 ShowEventsButton(false);
             }
-        }        
-        
+        }
+
         /// <devdoc> Collapses all the nodes in the PropertyGrid</devdoc>
         public void CollapseAllGridItems() {
             gridView.RecursivelyExpand(peMain, false, false, -1);
         }
-          
+
         private void ClearCachedProps() {
             if (viewTabProps != null) {
-               viewTabProps.Clear();                       
+               viewTabProps.Clear();
             }
-        }  
-        
+        }
+
         internal void ClearValueCaches() {
             if (peMain != null) {
                peMain.ClearCachedValues();
@@ -1786,7 +1786,7 @@ namespace System.Windows.Forms {
             }
             finally {
                     inGridViewCreate = false;
-            }   
+            }
 #endif
         }
 
@@ -1796,7 +1796,7 @@ namespace System.Windows.Forms {
         }
 
         protected virtual PropertyTab CreatePropertyTab(Type tabType) {
-            return null; 
+            return null;
         }
 
         private PropertyTab CreateTab(Type tabType, IDesignerHost host) {
@@ -1806,10 +1806,10 @@ namespace System.Windows.Forms {
                 ConstructorInfo constructor = tabType.GetConstructor(new Type[] {typeof(IServiceProvider)});
                 object param = null;
                 if (constructor == null) {
-    
+
                     // try a IDesignerHost ctor
                     constructor = tabType.GetConstructor(new Type[] {typeof(IDesignerHost)});
-    
+
                     if (constructor != null) {
                         param = host;
                     }
@@ -1817,14 +1817,14 @@ namespace System.Windows.Forms {
                 else {
                     param = this.Site;
                 }
-    
-    
+
+
                 if (param != null && constructor != null) {
                     tab = (PropertyTab) constructor.Invoke(new object[] {param});
                 }
                 else {
                     // just call the default ctor
-                    // 
+                    //
                     tab = (PropertyTab)Activator.CreateInstance(tabType);
                 }
             }
@@ -1834,7 +1834,7 @@ namespace System.Windows.Forms {
             if (tab != null) {
                 // ensure it's a valid tab
                 Bitmap bitmap = tab.Bitmap;
-                
+
                 if (bitmap == null)
                     throw new ArgumentException(string.Format(SR.PropertyGridNoBitmap, tab.GetType().FullName));
 
@@ -1883,7 +1883,7 @@ namespace System.Windows.Forms {
 
             return button;
         }
-        
+
         internal void DumpPropsToConsole() {
             gridView.DumpPropsToConsole(peMain, "");
         }
@@ -1943,9 +1943,9 @@ namespace System.Windows.Forms {
                 }
             }
 
-            // don't show verbs if a prop grid is on the form at design time.            
+            // don't show verbs if a prop grid is on the form at design time.
             if (!DesignMode) {
-            
+
 
                 if (verbs != null && verbs.Length > 0) {
                     hotcommands.SetVerbs(component, verbs);
@@ -1953,23 +1953,23 @@ namespace System.Windows.Forms {
                 else {
                     hotcommands.SetVerbs(null, null);
                 }
-    
+
                 if (hotCommandsDisplayed != hotcommands.Visible) {
                     OnLayoutInternal(false);
                 }
             }
         }
-        
+
         protected override void Dispose(bool disposing) {
 
             if (disposing) {
                 // Unhook IDesignerEventService.ActiveDesignerChanged event
                 //
-                if (GetFlag(GotDesignerEventService)) {                
+                if (GetFlag(GotDesignerEventService)) {
                     Debug.Assert(designerEventService != null, "GetFlag(GotDesignerEventService) inconsistent with designerEventService == null");
                     if (designerEventService != null) {
                         designerEventService.ActiveDesignerChanged -= new ActiveDesignerEventHandler(this.OnActiveDesignerChanged);
-                    }                
+                    }
                     designerEventService = null;
                     SetFlag(GotDesignerEventService, false);
                 }
@@ -1995,17 +1995,17 @@ namespace System.Windows.Forms {
                     bmpAlpha.Dispose();
                     bmpAlpha = null;
                 }
-                
+
                 if (bmpCategory != null) {
                     bmpCategory.Dispose();
                     bmpCategory = null;
                 }
-                
+
                 if (bmpPropPage != null) {
                     bmpPropPage.Dispose();
                     bmpPropPage = null;
                 }
-           
+
                 if (lineBrush != null) {
                     lineBrush.Dispose();
                     lineBrush = null;
@@ -2022,7 +2022,7 @@ namespace System.Windows.Forms {
                 }
 
                 ClearCachedProps();
-                currentPropEntries = null;            
+                currentPropEntries = null;
             }
 
             base.Dispose(disposing);
@@ -2102,7 +2102,7 @@ namespace System.Windows.Forms {
             // just return what we got here
             return(cyNew);
         }
-       
+
         private static void DrawXorBar(Control ctlDrawTo, Rectangle rcFrame) {
             Rectangle rc = ctlDrawTo.RectangleToScreen(rcFrame);
 
@@ -2121,7 +2121,7 @@ namespace System.Windows.Forms {
         void IComPropertyBrowser.DropDownDone() {
             GetPropertyGridView().DropDownDone();
         }
-        
+
         private bool EnablePropPageButton(object obj) {
             if (obj == null) {
                 btnViewPropertyPages.Enabled = false;
@@ -2256,7 +2256,7 @@ namespace System.Windows.Forms {
                     designerHost.TransactionOpened -= new EventHandler(this.OnTransactionOpened);
                     designerHost.TransactionClosed -= new DesignerTransactionCloseEventHandler(this.OnTransactionClosed);
                 }
-            
+
                 return GetPropertyGridView().EnsurePendingChangesCommitted();
             }
             finally {
@@ -2266,7 +2266,7 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
+
         public void ExpandAllGridItems() {
             gridView.RecursivelyExpand(peMain, false, true, PropertyGridView.MaxRecurseExpand);
         }
@@ -2404,14 +2404,14 @@ namespace System.Windows.Forms {
         private PropertyGridView GetPropertyGridView() {
             return gridView;
         }
-        
- 
+
+
         void IComPropertyBrowser.HandleF4() {
-            
+
             if (gridView.ContainsFocus) {
                 return;
             }
-        
+
             if (this.ActiveControl != gridView) {
                 this.SetActiveControl(gridView);
             }
@@ -2470,7 +2470,7 @@ namespace System.Windows.Forms {
                 //
                 this.PropertySort = PropertySort.Categorized | PropertySort.Alphabetical;
                 this.HelpVisible = true;
-                this.CommandsVisibleIfAvailable = false;                
+                this.CommandsVisibleIfAvailable = false;
             }
         }
 
@@ -2550,7 +2550,7 @@ namespace System.Windows.Forms {
                 return;
             }
         }
-        
+
         private void OnComponentAdd(object sender, ComponentEventArgs e) {
 
             PropertyTabAttribute attribute = (PropertyTabAttribute) TypeDescriptor.GetAttributes(e.Component.GetType())[typeof(PropertyTabAttribute)];
@@ -2571,7 +2571,7 @@ namespace System.Windows.Forms {
             bool batchMode = GetFlag(BatchMode);
             if (batchMode || GetFlag(InternalChange) || gridView.GetInPropertySet() ||
                (currentObjects == null) || (currentObjects.Length == 0)) {
-    
+
                 if (batchMode && !gridView.GetInPropertySet()) {
                     SetFlag(BatchModeChange, true);
                 }
@@ -2601,14 +2601,14 @@ namespace System.Windows.Forms {
                     ReleaseTab(attribute.TabClasses[i], e.Component);
                 }
             }
-            
+
             for (int i = 0; i < currentObjects.Length; i++) {
                 if (e.Component == currentObjects[i]) {
-                    
+
                         object[] newObjects = new object[currentObjects.Length - 1];
                         Array.Copy(currentObjects, 0, newObjects, 0, i);
                         if (i < newObjects.Length) {
-                            // Dev10 
+                            // Dev10
 
                             Array.Copy(currentObjects, i + 1, newObjects, i, newObjects.Length - i);
                         }
@@ -2627,18 +2627,18 @@ namespace System.Windows.Forms {
             }
 
             SetupToolbar();
-            
+
         }
 
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected override void OnEnabledChanged(EventArgs e) {
             base.OnEnabledChanged(e);
             Refresh();
         }
 
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected override void OnFontChanged(EventArgs e) {
             base.OnFontChanged(e);
             Refresh();
@@ -2651,7 +2651,7 @@ namespace System.Windows.Forms {
         }
 
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected override void OnHandleCreated(EventArgs e) {
             base.OnHandleCreated(e);
             OnLayoutInternal(false);
@@ -2662,19 +2662,19 @@ namespace System.Windows.Forms {
         }
 
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected override void OnHandleDestroyed(EventArgs e) {
             TypeDescriptor.Refreshed -= new RefreshEventHandler(this.OnTypeDescriptorRefreshed);
             base.OnHandleDestroyed(e);
         }
 
-        
+
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected override void OnGotFocus(EventArgs e) {
-        
+
             base.OnGotFocus(e);
-            
+
             if (this.ActiveControl == null) {
                 this.SetActiveControl(gridView);
             }
@@ -2699,7 +2699,7 @@ namespace System.Windows.Forms {
         }
 
         private void OnLayoutInternal(bool dividerOnly) {
-        
+
             if (!IsHandleCreated || !this.Visible) {
                 return;
             }
@@ -2720,10 +2720,10 @@ namespace System.Windows.Forms {
                     if (toolStrip.Visible) {
 
                         int toolStripWidth = this.Width;
-                        int toolStripHeight = ((LargeButtons) ? largeButtonSize : normalButtonSize).Height + toolStripButtonPaddingY; 
-                        Rectangle toolStripBounds = new Rectangle(0,1,toolStripWidth, toolStripHeight); 
+                        int toolStripHeight = ((LargeButtons) ? largeButtonSize : normalButtonSize).Height + toolStripButtonPaddingY;
+                        Rectangle toolStripBounds = new Rectangle(0,1,toolStripWidth, toolStripHeight);
                         toolStrip.Bounds = toolStripBounds;
-                                               
+
                         int oldY = gridView.Location.Y;
                         gridView.Location = new Point(0, toolStrip.Height + toolStrip.Top);
                         /*if (oldY < gridView.Location.Y) {
@@ -2860,10 +2860,10 @@ namespace System.Windows.Forms {
                 this.FreezePainting = false;
             }
         }
-        
-        
+
+
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected override void OnMouseDown(MouseEventArgs me) {
             SnappableControl target = DividerInside(me.X,me.Y);
             if (target != null && me.Button == MouseButtons.Left) {
@@ -2876,9 +2876,9 @@ namespace System.Windows.Forms {
             base.OnMouseDown(me);
         }
 
-        
+
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected override void OnMouseMove(MouseEventArgs me) {
 
             if (dividerMoveY == -1) {
@@ -2901,9 +2901,9 @@ namespace System.Windows.Forms {
             base.OnMouseMove(me);
         }
 
-        
+
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected override void OnMouseUp(MouseEventArgs me) {
             if (dividerMoveY == -1)
                 return;
@@ -2946,9 +2946,9 @@ namespace System.Windows.Forms {
             return NativeMethods.S_OK;
         }
 
-        
+
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected override void OnResize(EventArgs e) {
             if (IsHandleCreated && this.Visible) {
                 OnLayoutInternal(false);
@@ -2966,29 +2966,29 @@ namespace System.Windows.Forms {
         }
 
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected void OnComComponentNameChanged(ComponentRenameEventArgs e) {
             ComponentRenameEventHandler handler = (ComponentRenameEventHandler)Events[EventComComponentNameChanged];
             if (handler != null) handler(this,e);
         }
-        
-        
+
+
         // Seems safe - doesn't do anything interesting
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected void OnNotifyPropertyValueUIItemsChanged(object sender, EventArgs e) {
             gridView.LabelPaintMargin = 0;
             gridView.Invalidate(true);
         }
-  
+
         // Seems safe - doesn't do anything interesting
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected override void OnPaint(PaintEventArgs pevent) {
-            
+
             // just erase the stuff above and below the properties window
             // so we don't flicker.
             Point psheetLoc = gridView.Location;
             int width = Size.Width;
-            
+
             Brush background;
             if (BackColor.IsSystemColor) {
                 background = SystemBrushes.FromSystemColor(BackColor);
@@ -3014,7 +3014,7 @@ namespace System.Windows.Forms {
 
             // anything that might be left
             pevent.Graphics.FillRectangle(background, new Rectangle(0, yLast, width, Size.Height - yLast));
-            
+
             if (!BackColor.IsSystemColor) {
                 background.Dispose();
             }
@@ -3039,7 +3039,7 @@ namespace System.Windows.Forms {
             PropertyTabChangedEventHandler handler = (PropertyTabChangedEventHandler)Events[EventPropertyTabChanged];
             if (handler != null) handler(this,e);
         }
-        
+
         // Seems safe - just fires an event
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnPropertyValueChanged(PropertyValueChangedEventArgs e) {
@@ -3071,25 +3071,25 @@ namespace System.Windows.Forms {
                     string.Format(SR.PropertyGridPropertyValueSelectedFormat, changedItem.Value));
             }
         }
-        
+
         internal void OnSelectedGridItemChanged(GridEntry oldEntry, GridEntry newEntry) {
             OnSelectedGridItemChanged(new SelectedGridItemChangedEventArgs(oldEntry, newEntry));
         }
-        
-        
+
+
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected virtual void OnSelectedGridItemChanged(SelectedGridItemChangedEventArgs e) {
             SelectedGridItemChangedEventHandler handler = (SelectedGridItemChangedEventHandler)Events[EventSelectedGridItemChanged];
-            
+
             if (handler != null) {
                 handler(this, e);
             }
         }
-        
-        
+
+
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected virtual void OnSelectedObjectsChanged(EventArgs e) {
             EventHandler handler = (EventHandler)Events[EventSelectedObjectsChanged];
             if (handler != null) {
@@ -3121,7 +3121,7 @@ namespace System.Windows.Forms {
                 SetFlag(BatchModeChange, false);
             }
         }
-        
+
         private void OnTransactionOpened(object sender, EventArgs e) {
             SetFlag(BatchMode, true);
         }
@@ -3137,7 +3137,7 @@ namespace System.Windows.Forms {
 
         private void OnTypeDescriptorRefreshedInvoke(RefreshEventArgs e) {
             if (currentObjects != null) {
-                for (int i = 0; i < currentObjects.Length; i++) {  
+                for (int i = 0; i < currentObjects.Length; i++) {
                     Type typeChanged = e.TypeChanged;
                     if (currentObjects[i] == e.ComponentChanged || typeChanged != null && typeChanged.IsAssignableFrom(currentObjects[i].GetType())) {
                         // clear our property hashes
@@ -3148,21 +3148,21 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
+
         private void OnViewSortButtonClick(object sender, EventArgs e) {
             try {
-            
+
                this.FreezePainting = true;
-        
+
                // is this tab selected? If so, do nothing.
                if (sender == viewSortButtons[selectedViewSort]) {
                    viewSortButtons[selectedViewSort].Checked = true;
                    return;
                }
-   
+
                // check new button and uncheck old button.
                viewSortButtons[selectedViewSort].Checked = false;
-   
+
                // find the new button in the list
                int index = 0;
                for (index = 0; index < viewSortButtons.Length; index++) {
@@ -3170,10 +3170,10 @@ namespace System.Windows.Forms {
                        break;
                    }
                }
-               
+
                selectedViewSort = index;
                viewSortButtons[selectedViewSort].Checked = true;
-               
+
                switch (selectedViewSort) {
                   case ALPHA:
                      propertySortValue = PropertySort.Alphabetical;
@@ -3187,7 +3187,7 @@ namespace System.Windows.Forms {
                }
 
                OnPropertySortChanged(EventArgs.Empty);
-               
+
                Refresh(false);
                OnLayoutInternal(false);
             }
@@ -3195,12 +3195,12 @@ namespace System.Windows.Forms {
                this.FreezePainting = false;
             }
             OnButtonClick(sender, e);
-            
+
         }
 
         private void OnViewTabButtonClick(object sender, EventArgs e) {
             try {
-            
+
                this.FreezePainting = true;
                SelectViewTabButton((ToolStripButton)sender, true);
                OnLayoutInternal(false);
@@ -3210,7 +3210,7 @@ namespace System.Windows.Forms {
                this.FreezePainting = false;
             }
             OnButtonClick(sender, e);
-         
+
         }
 
         private void OnViewButtonClickPP(object sender, EventArgs e) {
@@ -3298,10 +3298,10 @@ namespace System.Windows.Forms {
             }
             OnButtonClick(sender, e);
         }
-        
-        
+
+
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected override void OnVisibleChanged(EventArgs e) {
             base.OnVisibleChanged(e);
             if (Visible && IsHandleCreated) {
@@ -3311,7 +3311,7 @@ namespace System.Windows.Forms {
         }
 
         /*
-            
+
         /// <summary>
         /// Returns the first child control that can take focus
         /// </summary>
@@ -3336,7 +3336,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        
+
         private Control LastFocusableChild {
             get {
                 if (doccomment.Visible) {
@@ -3355,7 +3355,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        // 
+        //
 
 
 
@@ -3404,7 +3404,7 @@ namespace System.Windows.Forms {
 
 
 */
-        
+
         /// <devdoc>
         /// Returns the last child control that can take focus
         /// </devdoc>
@@ -3412,11 +3412,11 @@ namespace System.Windows.Forms {
         {
             switch (keyData & Keys.KeyCode) {
                 case Keys.Tab:
-                     if (((keyData & Keys.Control) != 0) || 
+                     if (((keyData & Keys.Control) != 0) ||
                          ((keyData & Keys.Alt) != 0)) {
                         break;
                      }
-                  
+
                     // are we going forward?
                     if ((keyData & Keys.Shift) != 0) {
                         // this is backward
@@ -3544,14 +3544,14 @@ namespace System.Windows.Forms {
             Refresh(true);
             base.Refresh();
         }
-        
-        
+
+
         private void Refresh(bool clearCached) {
 
             if (Disposing) {
                 return;
             }
-        
+
             if (GetFlag(RefreshingProperties)) {
                 return;
             }
@@ -3559,7 +3559,7 @@ namespace System.Windows.Forms {
             try {
                this.FreezePainting = true;
                SetFlag(RefreshingProperties, true);
-               
+
                if (clearCached) {
                   ClearCachedProps();
                }
@@ -3574,16 +3574,16 @@ namespace System.Windows.Forms {
         }
 
         internal void RefreshProperties(bool clearCached) {
-            
+
             // Clear our current cache so we can do a full refresh.
             if (clearCached && selectedViewTab != -1 && viewTabs != null) {
-               PropertyTab tab = viewTabs[selectedViewTab]; 
+               PropertyTab tab = viewTabs[selectedViewTab];
                if (tab != null && viewTabProps != null) {
                    string tabName = tab.TabName + propertySortValue.ToString();
                    viewTabProps.Remove(tabName);
                }
             }
-         
+
             SetFlag(PropertiesChanged, true);
             UpdateSelection();
         }
@@ -3594,7 +3594,7 @@ namespace System.Windows.Forms {
         /// for them.
         /// </devdoc>
         public void RefreshTabs(PropertyTabScope tabScope) {
-            
+
             if (tabScope < PropertyTabScope.Document) {
                 throw new ArgumentException(SR.PropertyGridTabScope);
             }
@@ -3696,7 +3696,7 @@ namespace System.Windows.Forms {
             if (classification == PropertyTabScope.Static) {
                 throw new ArgumentException(SR.PropertyGridRemoveStaticTabs);
             }
-            
+
             // in case we've been disposed
             if (viewTabButtons == null || viewTabs == null || viewTabScopes == null) {
                 return;
@@ -3714,7 +3714,7 @@ namespace System.Windows.Forms {
                     else if (selectedViewTab > i) {
                         selectedViewTab--;
                     }
-                    
+
                     PropertyTab[] newTabs = new PropertyTab[viewTabs.Length - 1];
                     Array.Copy(viewTabs, 0, newTabs, 0, i);
                     Array.Copy(viewTabs, i + 1, newTabs, i, viewTabs.Length - i - 1);
@@ -3759,7 +3759,7 @@ namespace System.Windows.Forms {
             if (selectedViewTab == tabIndex) {
                 selectedViewTab = PROPERTIES;
             }
-            
+
             // Remove this tab from our "last selected" group
             //
             if (!GetFlag(ReInitTab) && ActiveDesigner != null) {
@@ -3815,7 +3815,7 @@ namespace System.Windows.Forms {
             Array.Copy(viewTabScopes, 0, newTabScopes, 0, tabIndex);
             Array.Copy(viewTabScopes, tabIndex + 1, newTabScopes, tabIndex, viewTabScopes.Length - tabIndex - 1);
             viewTabScopes = newTabScopes;
-            
+
             viewTabsDirty = true;
             SetupToolbar();
         }
@@ -3876,20 +3876,20 @@ namespace System.Windows.Forms {
                designerSelections[designerHost.GetHashCode()] = selectedViewTab;
             }
         }
-        
+
         void IComPropertyBrowser.SaveState(RegistryKey optRoot) {
 
             if (optRoot == null) {
                 return;
             }
-            
+
             optRoot.SetValue("PbrsAlpha", (this.PropertySort == PropertySort.Alphabetical ? "1" : "0"));
             optRoot.SetValue("PbrsShowDesc", (this.HelpVisible ? "1" : "0"));
             optRoot.SetValue("PbrsShowCommands", (this.CommandsVisibleIfAvailable ? "1" : "0"));
             optRoot.SetValue("PbrsDescHeightRatio", dcSizeRatio.ToString(CultureInfo.InvariantCulture));
             optRoot.SetValue("PbrsHotCommandHeightRatio", hcSizeRatio.ToString(CultureInfo.InvariantCulture));
        }
-       
+
         void SetHotCommandColors(bool vscompat) {
             if (vscompat) {
                 hotcommands.SetColors(SystemColors.Control, SystemColors.ControlText, SystemColors.ActiveCaption, SystemColors.ActiveCaption, SystemColors.ActiveCaption, SystemColors.ControlDark);
@@ -3904,15 +3904,15 @@ namespace System.Windows.Forms {
         }
 
         private void SelectViewTabButton(ToolStripButton button, bool updateSelection) {
-            
+
                 Debug.Assert(viewTabButtons != null, "No view tab buttons to select!");
-    
+
                 int oldTab = selectedViewTab;
-    
+
                 if (!SelectViewTabButtonDefault(button)) {
                     Debug.Fail("Failed to find the tab!");
                 }
-                
+
                 if (updateSelection) {
                     Refresh(false);
                 }
@@ -3923,22 +3923,22 @@ namespace System.Windows.Forms {
                 if (selectedViewTab >= 0 && selectedViewTab >= viewTabButtons.Length) {
                     selectedViewTab = -1;
                 }
-    
+
                 // is this tab button checked? If so, do nothing.
                 if (selectedViewTab >=0 && selectedViewTab < viewTabButtons.Length &&
                     button == viewTabButtons[selectedViewTab]) {
                     viewTabButtons[selectedViewTab].Checked = true;
                     return true;
                 }
-                
+
                 PropertyTab oldTab = null;
-    
+
                 // unselect what's selected
                 if (selectedViewTab != -1) {
                     viewTabButtons[selectedViewTab].Checked = false;
                     oldTab = viewTabs[selectedViewTab];
                 }
-    
+
                 // get the new index of the button
                 for (int i = 0; i < viewTabButtons.Length; i++) {
                     if (viewTabButtons[i] == button) {
@@ -3954,7 +3954,7 @@ namespace System.Windows.Forms {
                         return true;
                     }
                 }
-    
+
                 // select the first tab if we didn't find that one.
                 selectedViewTab = PROPERTIES;
                 Debug.Assert(viewTabs[PROPERTIES].GetType() == DefaultTabType, "First item is not property tab!");
@@ -3963,10 +3963,10 @@ namespace System.Windows.Forms {
         }
 
 
- 
+
         private void SetSelectState(int state) {
-            
-        
+
+
             if (state >= (viewTabs.Length * viewSortButtons.Length)) {
                 state = 0;
             }
@@ -3985,14 +3985,14 @@ namespace System.Windows.Forms {
             // state -> view = state % views
 
             int viewTypes = viewSortButtons.Length;
-            
+
             if (viewTypes > 0) {
-            
+
                 int tab = state / viewTypes;
                 int view = state % viewTypes;
-    
+
                 Debug.Assert(view < viewSortButtons.Length, "Can't select view type > 1");
-    
+
                 OnViewTabButtonClick(viewTabButtons[tab], EventArgs.Empty);
                 OnViewSortButtonClick(viewSortButtons[view], EventArgs.Empty);
             }
@@ -4000,7 +4000,7 @@ namespace System.Windows.Forms {
 
         private void SetToolStripRenderer() {
             if (DrawFlatToolbar || SystemInformation.HighContrast) {
-                // use an office look and feel with system colors 
+                // use an office look and feel with system colors
                 ProfessionalColorTable colorTable = new ProfessionalColorTable();
                 colorTable.UseSystemColors = true;
                 ToolStripRenderer = new ToolStripProfessionalRenderer(colorTable);
@@ -4009,9 +4009,9 @@ namespace System.Windows.Forms {
                 ToolStripRenderer = new ToolStripSystemRenderer();
             }
         }
-        
 
-        
+
+
         private void SetupToolbar() {
             SetupToolbar(false);
         }
@@ -4024,41 +4024,41 @@ namespace System.Windows.Forms {
             if (!viewTabsDirty && !fullRebuild) {
                 return;
             }
-            
+
             try {
                this.FreezePainting = true;
-   
-   
+
+
                if (imageList[NORMAL_BUTTONS] == null || fullRebuild) {
                    imageList[NORMAL_BUTTONS] = new ImageList();
                    if (DpiHelper.IsScalingRequired) {
                        imageList[NORMAL_BUTTONS].ImageSize = normalButtonSize;
                    }
                }
-               
+
                // setup our event handlers
                EventHandler ehViewTab = new EventHandler(this.OnViewTabButtonClick);
                EventHandler ehViewType = new EventHandler(this.OnViewSortButtonClick);
                EventHandler ehPP = new EventHandler(this.OnViewButtonClickPP);
-   
+
                Bitmap b;
                int i;
-   
-   
+
+
                // we manange the buttons as a seperate list so the toobar doesn't flash
-               ArrayList buttonList; 
-               
+               ArrayList buttonList;
+
                if (fullRebuild) {
                   buttonList = new ArrayList();
                }
                else {
                   buttonList = new ArrayList(toolStrip.Items);
                }
-   
+
                // setup the view type buttons.  We only need to do this once
                if (viewSortButtons == null || fullRebuild) {
                    viewSortButtons = new ToolStripButton[3];
-   
+
                    int alphaIndex = -1;
                    int categoryIndex = -1;
 
@@ -4070,7 +4070,7 @@ namespace System.Windows.Forms {
                    }
                    catch (Exception) {
                    }
-   
+
                    try {
                        if (bmpCategory == null) {
                            bmpCategory = SortByCategoryImage;
@@ -4079,14 +4079,14 @@ namespace System.Windows.Forms {
                    }
                    catch (Exception) {
                    }
-   
+
                    viewSortButtons[ALPHA] = CreatePushButton(SR.PBRSToolTipAlphabetic, alphaIndex, ehViewType, true);
                    viewSortButtons[CATEGORIES] = CreatePushButton(SR.PBRSToolTipCategorized, categoryIndex, ehViewType, true);
-                   
+
                    // we create a dummy hidden button for view sort
                    viewSortButtons[NO_SORT] = CreatePushButton("", 0, ehViewType, true);
                    viewSortButtons[NO_SORT].Visible = false;
-   
+
                    // add the viewType buttons and a separator
                    for (i = 0; i < viewSortButtons.Length; i++) {
                        buttonList.Add(viewSortButtons[i]);
@@ -4094,25 +4094,25 @@ namespace System.Windows.Forms {
                }
                else {
                    // clear all the items from the toolStrip and image list after the first two
-                   int items = buttonList.Count; 
-   
+                   int items = buttonList.Count;
+
                    for (i = items-1; i >= 2; i--) {
                        buttonList.RemoveAt(i);
                    }
-   
+
                    items = imageList[NORMAL_BUTTONS].Images.Count;
-   
+
                    for (i = items-1; i >= 2; i--) {
                        RemoveImage(i);
                    }
                }
-   
+
                buttonList.Add(separator1);
-   
+
                // here's our buttons array
                viewTabButtons = new ToolStripButton[viewTabs.Length];
                bool doAdd = viewTabs.Length > 1;
-   
+
                // if we've only got the properties tab, don't add
                // the button (or we'll just have a properties button that you can't do anything with)
                // setup the view tab buttons
@@ -4128,12 +4128,12 @@ namespace System.Windows.Forms {
                        Debug.Fail(ex.ToString());
                    }
                }
-   
+
                // if we didn't add anything, we don't need another separator either.
                if (doAdd) {
                    buttonList.Add(separator2);
                }
-   
+
                // add the design page button
                int designpg = 0;
 
@@ -4145,23 +4145,23 @@ namespace System.Windows.Forms {
                }
                catch (Exception) {
                }
-   
+
                // we recreate this every time to ensure it's at the end
                //
                btnViewPropertyPages = CreatePushButton(SR.PBRSToolTipPropertyPages, designpg, ehPP, false);
                btnViewPropertyPages.Enabled = false;
                buttonList.Add(btnViewPropertyPages);
-   
+
                // Dispose this so it will get recreated for any new buttons.
                if (imageList[LARGE_BUTTONS] != null) {
                    imageList[LARGE_BUTTONS].Dispose();
                    imageList[LARGE_BUTTONS] = null;
                }
-   
+
                if (buttonType != NORMAL_BUTTONS) {
                    EnsureLargeButtons();
                }
-   
+
                toolStrip.ImageList = imageList[this.buttonType];
 
                toolStrip.SuspendLayout();
@@ -4170,14 +4170,14 @@ namespace System.Windows.Forms {
                     toolStrip.Items.Add(buttonList[j] as ToolStripItem);
                }
                toolStrip.ResumeLayout();
-               
+
                if (viewTabsDirty) {
                   // if we're redoing our tabs make sure
                   // we setup the toolbar area correctly.
                   //
                   OnLayoutInternal(false);
                }
-               
+
                viewTabsDirty = false;
            }
            finally {
@@ -4187,7 +4187,7 @@ namespace System.Windows.Forms {
 
         protected void ShowEventsButton(bool value) {
             if (viewTabs != null && viewTabs.Length > EVENTS && (viewTabs[EVENTS] is EventsTab)) {
-               
+
                 Debug.Assert(viewTabButtons != null && viewTabButtons.Length > EVENTS && viewTabButtons[EVENTS] != null, "Events button is not at EVENTS position");
                 viewTabButtons[EVENTS].Visible = value;
                 if (!value && selectedViewTab == EVENTS) {
@@ -4195,14 +4195,14 @@ namespace System.Windows.Forms {
                 }
             }
 
-            UpdatePropertiesViewTabVisibility();            
+            UpdatePropertiesViewTabVisibility();
         }
 
         /// <devdoc>
         /// This 16x16 Bitmap is applied to the button which orders properties alphabetically.
-        /// </devdoc>      
+        /// </devdoc>
         [
-        Browsable(false), 
+        Browsable(false),
         EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
@@ -4216,7 +4216,7 @@ namespace System.Windows.Forms {
         /// This 16x16 Bitmap is applied to the button which displays properties under the assigned categories.
         /// </devdoc>
         [
-        Browsable(false), 
+        Browsable(false),
         EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
@@ -4230,7 +4230,7 @@ namespace System.Windows.Forms {
         /// This 16x16 Bitmap is applied to the button which displays property page in the designer pane.
         /// </devdoc>
         [
-        Browsable(false), 
+        Browsable(false),
         EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
@@ -4284,7 +4284,7 @@ namespace System.Windows.Forms {
             if (connectionPointCookies == null || (currentObjects.Length > connectionPointCookies.Length)) {
                 connectionPointCookies = new AxHost.ConnectionPointCookie[currentObjects.Length];
             }
-            
+
             for (int i = 0; i < currentObjects.Length; i++) {
                 try {
                     object obj = GetUnwrappedObject(i);
@@ -4346,11 +4346,11 @@ namespace System.Windows.Forms {
             if (!GetFlag(PropertiesChanged)) {
                 return;
             }
-            
+
             if (viewTabs == null) {
                 return;
             }
-            
+
             string tabName = viewTabs[selectedViewTab].TabName + propertySortValue.ToString();
 
             if (viewTabProps != null && viewTabProps.ContainsKey(tabName)) {
@@ -4366,13 +4366,13 @@ namespace System.Windows.Forms {
                else {
                    peMain = null;
                }
-   
+
                if (peMain == null) {
                    currentPropEntries = new GridEntryCollection(null, new GridEntry[0]);
                    gridView.ClearProps();
                    return;
                }
-   
+
                if (BrowsableAttributes != null) {
                    peMain.BrowsableAttributes = BrowsableAttributes;
                }
@@ -4380,7 +4380,7 @@ namespace System.Windows.Forms {
                if (viewTabProps == null) {
                     viewTabProps = new Hashtable();
                }
-               
+
                viewTabProps[tabName] = peMain;
             }
 
@@ -4452,14 +4452,14 @@ namespace System.Windows.Forms {
                 dwMsg = cds.dwData;
             }
         }
-        
-        
+
+
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        // 
+        //
         protected override void OnSystemColorsChanged(EventArgs e) {
             // refresh the toolbar buttons
             SetupToolbar(true);
-            
+
             // this doesn't stick the first time we do it...
             // either probably a toolbar issue, maybe GDI+, so we call it again
             // fortunately this doesn't happen very often.
@@ -4478,7 +4478,7 @@ namespace System.Windows.Forms {
             normalButtonSize = LogicalToDeviceUnits(DEFAULT_NORMAL_BUTTON_SIZE);
             largeButtonSize = LogicalToDeviceUnits(DEFAULT_LARGE_BUTTON_SIZE);
             cyDivider = LogicalToDeviceUnits(CYDIVIDER);
-            toolStripButtonPaddingY = LogicalToDeviceUnits(TOOLSTRIP_BUTTON_PADDING_Y); 
+            toolStripButtonPaddingY = LogicalToDeviceUnits(TOOLSTRIP_BUTTON_PADDING_Y);
         }
 
         /// <summary>
@@ -4529,7 +4529,7 @@ namespace System.Windows.Forms {
                         m.Result = CanPaste ? (IntPtr)1 : (IntPtr)0;
                     }
                     return;
-                
+
                 case Interop.WindowMessages.WM_COPYDATA:
                     GetDataFromCopyData(m.LParam);
                     m.Result = (IntPtr)1;
@@ -4603,14 +4603,14 @@ namespace System.Windows.Forms {
                         return;
                     }
                     break;
-                    
+
                 case AutomationMessages.PGM_GETTESTINGINFO: {
                     // Get "testing info" string for Nth grid entry (or active entry if N < 0)
                     string testingInfo = gridView.GetTestingInfo(unchecked((int) (long) m.WParam));
                     m.Result = AutomationMessages.WriteAutomationText(testingInfo);
                     return;
                     }
-                    
+
                 case AutomationMessages.PGM_GETROWCOORDS:
                     if (m.Msg == this.dwMsg) {
                         m.Result = (IntPtr) gridView.GetPropertyLocation(propName, m.LParam == IntPtr.Zero, m.WParam == IntPtr.Zero);
@@ -4647,7 +4647,7 @@ namespace System.Windows.Forms {
 
             public abstract int GetOptimalHeight(int width);
             public abstract int SnapHeightRequest(int request);
-            
+
             public SnappableControl(PropertyGrid ownerGrid) {
                 this.ownerGrid = ownerGrid;
                 SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
@@ -4666,7 +4666,7 @@ namespace System.Windows.Forms {
             protected override void OnControlAdded(ControlEventArgs ce) {
                 //ce.Control.MouseEnter += new EventHandler(this.OnChildMouseEnter);
             }
-            
+
             /*
             private void OnChildMouseEnter(object sender, EventArgs e) {
                 if (sender is Control) {
@@ -4696,15 +4696,15 @@ namespace System.Windows.Forms {
         }
 
         public class PropertyTabCollection : ICollection {
-        
+
             internal static PropertyTabCollection Empty = new PropertyTabCollection(null);
-            
+
             private  PropertyGrid   owner;
-    
+
             internal PropertyTabCollection(PropertyGrid owner) {
                 this.owner = owner;
             }
-            
+
             /// <devdoc>
             ///     Retrieves the number of member attributes.
             /// </devdoc>
@@ -4716,19 +4716,19 @@ namespace System.Windows.Forms {
                     return owner.viewTabs.Length;
                 }
             }
-    
+
             object ICollection.SyncRoot {
                 get {
                     return this;
                 }
             }
-    
+
             bool ICollection.IsSynchronized {
                 get {
                     return false;
                 }
             }
-    
+
             /// <devdoc>
             ///     Retrieves the member attribute with the specified index.
             /// </devdoc>
@@ -4740,21 +4740,21 @@ namespace System.Windows.Forms {
                     return owner.viewTabs[index];
                 }
             }
-            
+
             public void AddTabType(Type propertyTabType) {
                 if (owner == null) {
                     throw new InvalidOperationException(SR.PropertyGridPropertyTabCollectionReadOnly);
                 }
                 owner.AddTab(propertyTabType, PropertyTabScope.Global);
             }
-            
+
             public void AddTabType(Type propertyTabType, PropertyTabScope tabScope) {
                 if (owner == null) {
                     throw new InvalidOperationException(SR.PropertyGridPropertyTabCollectionReadOnly);
                 }
                 owner.AddTab(propertyTabType, tabScope);
             }
-            
+
             /// <devdoc>
             /// Clears the tabs of the given scope or smaller.
             /// tabScope must be PropertyTabScope.Component or PropertyTabScope.Document.
@@ -4765,8 +4765,8 @@ namespace System.Windows.Forms {
                 }
                 owner.ClearTabs(tabScope);
             }
-            
-            
+
+
             void ICollection.CopyTo(Array dest, int index) {
                 if (owner == null) {
                     return;
@@ -4782,17 +4782,17 @@ namespace System.Windows.Forms {
                 if (owner == null) {
                     return new PropertyTab[0].GetEnumerator();
                 }
-                
+
                 return owner.viewTabs.GetEnumerator();
             }
-            
+
             public void RemoveTabType(Type propertyTabType) {
                 if (owner == null) {
                     throw new InvalidOperationException(SR.PropertyGridPropertyTabCollectionReadOnly);
                 }
                 owner.RemoveTab(propertyTabType);
             }
-    
+
         }
 
         /// <devdoc>
@@ -4821,14 +4821,14 @@ namespace System.Windows.Forms {
 
         private class PropertyGridServiceProvider : IServiceProvider {
             PropertyGrid owner;
-            
+
             public PropertyGridServiceProvider(PropertyGrid owner) {
                 this.owner = owner;
             }
 
             public object GetService(Type serviceType) {
                object s = null;
-               
+
                if (owner.ActiveDesigner != null) {
                    s = owner.ActiveDesigner.GetService(serviceType);
                }
@@ -4843,7 +4843,7 @@ namespace System.Windows.Forms {
                return s;
             }
         }
-    
+
         /// <devdoc>
         ///     Helper class to support rendering text using either GDI or GDI+.
         /// </devdoc>
@@ -4874,12 +4874,12 @@ namespace System.Windows.Forms {
                     bindingSize = g.MeasureString(text, font, size );
                 }
                 else{
-                    TextFormatFlags flags = 
+                    TextFormatFlags flags =
                         GetTextRendererFlags()                |
                         TextFormatFlags.LeftAndRightPadding   |
                         TextFormatFlags.WordBreak             |
                         TextFormatFlags.NoFullWidthCharacterBreak;
-                    
+
                     bindingSize = (SizeF) TextRenderer.MeasureText(g, text, font, Size.Ceiling(size), flags );
                 }
 
@@ -4887,10 +4887,10 @@ namespace System.Windows.Forms {
             }
 
             public static TextFormatFlags GetTextRendererFlags(){
-                return  TextFormatFlags.PreserveGraphicsClipping | 
+                return  TextFormatFlags.PreserveGraphicsClipping |
                         TextFormatFlags.PreserveGraphicsTranslateTransform;
             }
-        }    
+        }
     }
 
     internal static class AutomationMessages {
@@ -4906,9 +4906,9 @@ namespace System.Windows.Forms {
         internal const int PGM_GETTESTINGINFO = Interop.WindowMessages.WM_USER + 0x59;
 
         /// <summary>
-        ///     Writes the specified text into a temporary file of the form %TEMP%\"Maui.[file id].log", where 
+        ///     Writes the specified text into a temporary file of the form %TEMP%\"Maui.[file id].log", where
         ///     'file id' is a unique id that is return by this method.
-        ///     This is to support MAUI interaction with the PropertyGrid control and MAUI should remove the 
+        ///     This is to support MAUI interaction with the PropertyGrid control and MAUI should remove the
         ///     file after used.
         /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
@@ -5109,7 +5109,7 @@ namespace System.Windows.Forms {
             if (index < 0) {
                 return null;
             }
-            
+
             if (_owningPropertyGrid.ToolbarVisible) {
                 if (index == 0) {
                     return _owningPropertyGrid.ToolbarAccessibleObject;
@@ -5125,7 +5125,7 @@ namespace System.Windows.Forms {
 
                 index--;
             }
-            
+
             if (_owningPropertyGrid.CommandsVisible) {
                 if (index == 0) {
                     return _owningPropertyGrid.HotCommandsAccessibleObject;
@@ -5133,7 +5133,7 @@ namespace System.Windows.Forms {
 
                 index--;
             }
-            
+
             if (_owningPropertyGrid.HelpVisible) {
                 if (index == 0) {
                     return _owningPropertyGrid.HelpAccessibleObject;

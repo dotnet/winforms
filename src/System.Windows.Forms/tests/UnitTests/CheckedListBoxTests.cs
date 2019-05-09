@@ -15,7 +15,7 @@ namespace System.Windows.Forms.Tests
         {
             var box = new CheckedListBox();
 
-            Assert.NotNull(box);   
+            Assert.NotNull(box);
         }
 
         /// <summary>

@@ -10,7 +10,7 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Runtime.InteropServices;
     using System.Globalization;
-    
+
     /// <devdoc> this is the menu that merges into the MdiWindowListItem
     ///          in an MDI parent when an MDI child is maximized.
     /// </devdoc>
@@ -19,7 +19,7 @@ namespace System.Windows.Forms {
         private Form mdiParent = null;
         private ToolStripMenuItem mergeItem;
         private MenuStrip mergedMenu;
-        
+
         public MdiWindowListStrip() {
         }
 
@@ -53,11 +53,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc> Given a form, the items on this toolstrip populate with the mdi children 
+        /// <devdoc> Given a form, the items on this toolstrip populate with the mdi children
         ///     with mnemonics 1-9 and More Windows menu item.
         ///     These items can then be merged into a menustrip.
         ///
-        ///     Based on similar code in MenuItem.cs::PopulateMdiList(), which is unfortunately just different 
+        ///     Based on similar code in MenuItem.cs::PopulateMdiList(), which is unfortunately just different
         ///     enough in its working environment that we can't readily combine the two.
         ///     But if you're fixing something here, chances are that the same issue will need scrutiny over there.
         ///</devdoc>
@@ -79,9 +79,9 @@ namespace System.Windows.Forms {
                         separator.MergeIndex = -1;
                         mergeItem.DropDownItems.Add(separator);
                     }
-                    
+
                     Form activeMdiChild = mdiParent.ActiveMdiChild;
-                    
+
                     const int maxMenuForms = 9;  // max number of Window menu items for forms
                     int visibleChildren = 0;     // number of visible child forms (so we know if we need to show More Windows...
                     int accel = 1;               // prefix the form name with this digit, underlined, as an accelerator
@@ -137,7 +137,7 @@ namespace System.Windows.Forms {
         private void OnMoreWindowsMenuItemClick(object sender, EventArgs e) {
 
              Form[] forms = mdiParent.MdiChildren;
-             
+
              if (forms != null) {
                 using (MdiWindowDialog dialog = new MdiWindowDialog()) {
                     dialog.SetItems(mdiParent.ActiveMdiChild, forms);
@@ -161,12 +161,12 @@ namespace System.Windows.Forms {
 
             if (windowListItem != null) {
                 Form boundForm = windowListItem.MdiForm;
-            
+
                 if (boundForm != null) {
                     boundForm.Activate();
                     if (boundForm.ActiveControl != null && !boundForm.ActiveControl.Focused) {
                         boundForm.ActiveControl.Focus();
-                    }                       
+                    }
                 }
             }
         }

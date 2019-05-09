@@ -45,7 +45,7 @@ namespace System.Windows.Forms {
         private static PowerStatus powerStatus = null;
 
         private const int  DefaultMouseWheelScrollLines = 3;
-        
+
         ////////////////////////////////////////////////////////////////////////////
         // SystemParametersInfo
         //
@@ -62,7 +62,7 @@ namespace System.Windows.Forms {
                 return data != 0;
             }
         }
-        
+
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether the user has selected to run in high contrast
@@ -77,9 +77,9 @@ namespace System.Windows.Forms {
                     data.cbSize = Marshal.SizeOf(data);
                     data.dwFlags = 0;
                     data.lpszDefaultScheme = IntPtr.Zero;
-                    
+
                     bool b = UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETHIGHCONTRAST, data.cbSize, ref data, 0);
-    
+
                     // NT4 does not support this parameter, so we always force
                     // it to false if we fail to get the parameter.
                     //
@@ -91,11 +91,11 @@ namespace System.Windows.Forms {
                     }
                     systemEventsDirty = false;
                 }
-                
+
                 return highContrast;
             }
         }
-        
+
         /// <devdoc>
         ///    <para>
         ///       Gets the number of lines to scroll when the mouse wheel is rotated.
@@ -123,9 +123,9 @@ namespace System.Windows.Forms {
                         //
                         int message = SafeNativeMethods.RegisterWindowMessage(NativeMethods.MSH_SCROLL_LINES);
 
-                        
+
                         int lines = (int)UnsafeNativeMethods.SendMessage(new HandleRef(null, hWndMouseWheel), message, 0, 0);
-                        
+
                         // this fails under terminal server, so we default to 3, which is the windows
                         // default.  Nobody seems to pay attention to this value anyways...
                         if (lines != 0) {
@@ -137,7 +137,7 @@ namespace System.Windows.Forms {
                 return DefaultMouseWheelScrollLines;
             }
         }
-        
+
         ////////////////////////////////////////////////////////////////////////////
         // SystemMetrics
         //
@@ -305,8 +305,8 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         public static Font MenuFont {
-            
-            
+
+
             get {
                 return GetMenuFontHelper(0, false);
             }
@@ -358,10 +358,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        
+
         /// <devdoc>
         ///    <para>
-        ///       Returns the current system power status.        
+        ///       Returns the current system power status.
         ///    </para>
         /// </devdoc>
         public static PowerStatus PowerStatus
@@ -374,8 +374,8 @@ namespace System.Windows.Forms {
                 return powerStatus;
             }
         }
-        
-        
+
+
         /// <devdoc>
         ///    <para>
         ///       Gets the size of the working area in pixels.
@@ -860,7 +860,7 @@ namespace System.Windows.Forms {
                 return multiMonitorSupport;
             }
         }
-        
+
         /// <devdoc>
         ///    <para>
         ///       Gets a value indicating whether the system natively supports the mouse wheel
@@ -995,7 +995,7 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        /// Gets a value indicating whether the current process is running in user 
+        /// Gets a value indicating whether the current process is running in user
         /// interactive mode.
         /// </devdoc>
         public static bool UserInteractive
@@ -1040,14 +1040,14 @@ namespace System.Windows.Forms {
                 return sb.ToString();
             }
         }
-        
+
         private static void EnsureSystemEvents() {
             if (!systemEventsAttached) {
                 SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(SystemInformation.OnUserPreferenceChanged);
                 systemEventsAttached = true;
             }
         }
-        
+
         private static void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs pref) {
             systemEventsDirty = true;
         }
@@ -1082,7 +1082,7 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         ///    <para>
-        ///       Gets a value indicating whether the Font Smoothing OSFeature.Feature is enabled. 
+        ///       Gets a value indicating whether the Font Smoothing OSFeature.Feature is enabled.
         ///    </para>
         /// </devdoc>
         public static bool IsFontSmoothingEnabled {
@@ -1173,8 +1173,8 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         ///    <para>
-        ///       Retrieves the Keyboard repeat delay setting, which is a value in the 
-        ///       range from 0 through 3. The Actual Delay Associated with each value may vary depending on the 
+        ///       Retrieves the Keyboard repeat delay setting, which is a value in the
+        ///       range from 0 through 3. The Actual Delay Associated with each value may vary depending on the
         ///       hardware.
         ///    </para>
         /// </devdoc>
@@ -1188,7 +1188,7 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         ///    <para>
-        ///      Gets a value indicating whether the user relies on Keyboard instead of mouse and wants 
+        ///      Gets a value indicating whether the user relies on Keyboard instead of mouse and wants
         ///      applications to display keyboard interfaces that would be otherwise hidden.
         ///    </para>
         /// </devdoc>
@@ -1202,8 +1202,8 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         ///    <para>
-        ///       Retrieves the Keyboard repeat speed setting, which is a value in the 
-        ///       range from 0 through 31. The actual rate may vary depending on the 
+        ///       Retrieves the Keyboard repeat speed setting, which is a value in the
+        ///       range from 0 through 31. The actual rate may vary depending on the
         ///       hardware.
         ///    </para>
         /// </devdoc>
@@ -1582,7 +1582,7 @@ namespace System.Windows.Forms {
                 return so;
             }
         }
-        
+
         /// <devdoc>
         ///    <para>
         ///      Specifies the thikness, in pixels, of the Sizing Border.
@@ -1602,7 +1602,7 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
+
         /// <devdoc>
         ///    <para>
         ///      Specified the Size, in pixels, of the small caption buttons.
@@ -1610,7 +1610,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static Size SmallCaptionButtonSize {
             get {
-                
+
                 //we can get the system's menu font through the NONCLIENTMETRICS structure via SystemParametersInfo
                 //
                 NativeMethods.NONCLIENTMETRICS data = new NativeMethods.NONCLIENTMETRICS();
@@ -1621,7 +1621,7 @@ namespace System.Windows.Forms {
                 else {
                     return Size.Empty;
                 }
-                
+
 
             }
         }
@@ -1633,7 +1633,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static Size MenuBarButtonSize {
             get {
-                
+
                 //we can get the system's menu font through the NONCLIENTMETRICS structure via SystemParametersInfo
                 //
                 NativeMethods.NONCLIENTMETRICS data = new NativeMethods.NONCLIENTMETRICS();
@@ -1644,7 +1644,7 @@ namespace System.Windows.Forms {
                 else {
                     return Size.Empty;
                 }
-                
+
 
             }
         }
@@ -1670,7 +1670,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (hDsk != IntPtr.Zero) {
-                    SafeNativeMethods.CloseDesktop(hDsk);                
+                    SafeNativeMethods.CloseDesktop(hDsk);
                 }
             }
 

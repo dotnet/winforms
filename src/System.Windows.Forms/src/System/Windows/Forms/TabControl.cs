@@ -76,7 +76,7 @@ namespace System.Windows.Forms {
         private const int   TABCONTROLSTATE_selectFirstControl              = 0x00000040;
         private const int   TABCONTROLSTATE_insertingItem                   = 0x00000080;
         private const int   TABCONTROLSTATE_autoSize                        = 0x00000100;
-        
+
 
         // PERF: take all the bools and put them into a state variable
         private System.Collections.Specialized.BitVector32  tabControlState; // see TABCONTROLSTATE_ consts above
@@ -183,7 +183,7 @@ namespace System.Windows.Forms {
                 }
             }
         }
-       
+
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color BackColor {
@@ -346,7 +346,7 @@ namespace System.Windows.Forms {
         public override Rectangle DisplayRectangle {
             get {
 
-                
+
                 // Null out cachedDisplayRect whenever we do anything to change it...
                 //
                 if (!cachedDisplayRect.IsEmpty)
@@ -355,8 +355,8 @@ namespace System.Windows.Forms {
                 Rectangle bounds = Bounds;
                 NativeMethods.RECT rect = NativeMethods.RECT.FromXYWH(bounds.X, bounds.Y, bounds.Width, bounds.Height);
 
-                
-                
+
+
                 // We force a handle creation here, because otherwise the DisplayRectangle will be wildly inaccurate
                 //
                 if (!IsDisposed)
@@ -1319,8 +1319,8 @@ namespace System.Windows.Forms {
 
         internal override void OnParentHandleRecreated()
         {
-            // Avoid temporarily resizing the TabControl while the parent 
-            // recreates its handle to avoid 
+            // Avoid temporarily resizing the TabControl while the parent
+            // recreates its handle to avoid
             this.skipUpdateSize = true;
             try {
                 base.OnParentHandleRecreated();
@@ -1456,7 +1456,7 @@ namespace System.Windows.Forms {
         }
 
         internal override void RecreateHandleCore() {
-            // 
+            //
             TabPage[] tabPages = GetTabPages();
 
             int index = ((tabPages.Length > 0) && (SelectedIndex == -1)) ? 0: SelectedIndex;
@@ -1600,7 +1600,7 @@ namespace System.Windows.Forms {
             // WmSelChanging actually changes focus to cause validations.
             // So cache in the Focused value so that we can reuse it later
             bool focused = Focused;
-            
+
             // Fire Deselecting .. Deselected on currently selected TabPage...
             if (WmSelChanging()) {
                 tabControlState[TABCONTROLSTATE_UISelection] = false;
@@ -1619,7 +1619,7 @@ namespace System.Windows.Forms {
                         sel = (sel + 1) % count;
                     else
                         sel = (sel + count - 1) % count;
-                    
+
 
                     // this is special casing..
                     // this function is called from OnKeyDown( ) which selects the NEXT TABPAGE
@@ -1636,7 +1636,7 @@ namespace System.Windows.Forms {
                         tabControlState[TABCONTROLSTATE_selectFirstControl] = !focused;
                         // Fire Selecting .. Selected on newly selected TabPage...
                         WmSelChange();
-                        
+
                     }
                     finally
                     {
@@ -1784,7 +1784,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         private void WmNeedText(ref Message m) {
-           
+
             NativeMethods.TOOLTIPTEXT ttt = (NativeMethods.TOOLTIPTEXT) m.GetLParam(typeof(NativeMethods.TOOLTIPTEXT));
 
             int commandID = (int)ttt.hdr.idFrom;
@@ -1804,7 +1804,7 @@ namespace System.Windows.Forms {
             }
 
             Marshal.StructureToPtr(ttt, m.LParam, false);
-           
+
         }
 
         /// <devdoc>
@@ -1984,7 +1984,7 @@ namespace System.Windows.Forms {
             object IList.this[int index] {
                 get {
                     return this[index];
-                }                
+                }
                 [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
                 [
                     SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // value is the name of the param passed in.
@@ -2053,7 +2053,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            
+
             [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
             public void Add(TabPage value) {
 
@@ -2068,7 +2068,7 @@ namespace System.Windows.Forms {
                 SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // value is the name of the param passed in.
                                                                                                             // So we don't have to localize it.
             ]
-            
+
             [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
             int IList.Add(object value) {
                 if (value is TabPage) {
@@ -2299,7 +2299,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            
+
             [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
             public void Remove(TabPage value) {
 

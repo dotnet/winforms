@@ -54,7 +54,7 @@ namespace System.Windows.Forms {
             else {
                 return new Cursor(handle);
             }
-            
+
             // if (handle == Cursors.AppStarting.Handle)   return Cursors.AppStarting;
             // if (handle == Cursors.Arrow.Handle)         return Cursors.Arrow;
             // if (handle == Cursors.IBeam.Handle)         return Cursors.IBeam;
@@ -71,7 +71,7 @@ namespace System.Windows.Forms {
             // if (handle == Cursors.WaitCursor.Handle)    return Cursors.WaitCursor;
             // if (handle == Cursors.Help.Handle)          return Cursors.Help;
             // if (handle == IntPtr.Zero)     return null;
-            
+
             //         appStarting = new Cursor(NativeMethods.IDC_APPSTARTING,0);
             //         arrow = new Cursor(NativeMethods.IDC_ARROW,0);
             //         cross = new Cursor(NativeMethods.IDC_CROSS,0);
@@ -87,7 +87,7 @@ namespace System.Windows.Forms {
             //         wait        = new Cursor(NativeMethods.IDC_WAIT,0);
             //         help        = new Cursor(NativeMethods.IDC_HELP,0);
         }
-        
+
         public static Cursor AppStarting {
             get {
                 if (appStarting == null)

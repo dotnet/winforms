@@ -7,7 +7,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.ComponentModel;
     using System.Diagnostics;
     using System;
-    
+
 
     /// <devdoc>
     ///   This class performs marshaling on a CADWORD struct given

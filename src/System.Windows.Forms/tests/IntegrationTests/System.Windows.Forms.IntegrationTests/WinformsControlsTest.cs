@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Func.Tests
 
         public string GetPathToTestFromBin()
         {
-            string buildType = "Release"; 
+            string buildType = "Release";
 
             #if DEBUG
                 buildType = "Debug";
@@ -227,7 +227,7 @@ namespace System.Windows.Forms.Func.Tests
             TestHelpers.PressEnterOnProcess(process);
 
             TestHelpers.PressTabOnProcess(process);
-            TestHelpers.PressRightOnProcess(process); // once   
+            TestHelpers.PressRightOnProcess(process); // once
             TestHelpers.PressRightOnProcess(process); // twice
             TestHelpers.PressTabsOnProcess(process, 2);
             TestHelpers.PressEnterOnProcess(process);

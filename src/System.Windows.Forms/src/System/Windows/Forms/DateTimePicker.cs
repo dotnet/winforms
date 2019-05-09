@@ -116,8 +116,8 @@ namespace System.Windows.Forms {
         public DateTimePicker()
         : base() {
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
-            SetState2(STATE2_USEPREFERREDSIZECACHE, true);  
-           
+            SetState2(STATE2_USEPREFERREDSIZECACHE, true);
+
             SetStyle(ControlStyles.FixedHeight, true);
 
             // Since DateTimePicker does its own mouse capturing, we do not want
@@ -396,7 +396,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         new public event EventHandler Click {
-            add => base.Click += value; 
+            add => base.Click += value;
             remove => base.Click -= value; }
 
         /// <devdoc>
@@ -493,7 +493,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         new public event EventHandler DoubleClick {
-            add => base.DoubleClick += value; 
+            add => base.DoubleClick += value;
             remove => base.DoubleClick -= value; }
 
         /// <devdoc>
@@ -592,7 +592,7 @@ namespace System.Windows.Forms {
         }
 
         //Make sure the passed in minDate respects the current culture: this
-        //is especially important if the culture changes from a Gregorian or 
+        //is especially important if the culture changes from a Gregorian or
         //other calendar with a lowish minDate (see comment on MinimumDateTime)
         //to a calendar, which has a minimum date of 1/1/1912.
         static internal DateTime EffectiveMinDate(DateTime minDate)
@@ -606,7 +606,7 @@ namespace System.Windows.Forms {
         }
 
         //Similarly, make sure the maxDate respects the current culture.  No
-        //problems are anticipated here: I don't believe there are calendars 
+        //problems are anticipated here: I don't believe there are calendars
         //around that have max dates on them.  But if there are, we'll deal with
         //them correctly.
         static internal DateTime EffectiveMaxDate(DateTime maxDate)
@@ -731,7 +731,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         new public event MouseEventHandler MouseClick {
-            add => base.MouseClick += value; 
+            add => base.MouseClick += value;
             remove => base.MouseClick -= value; }
 
         [
@@ -739,7 +739,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         new public event MouseEventHandler MouseDoubleClick {
-            add => base.MouseDoubleClick += value; 
+            add => base.MouseDoubleClick += value;
             remove => base.MouseDoubleClick -= value; }
 
         [
@@ -757,7 +757,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add => base.PaddingChanged += value; 
+            add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value; }
 
         /// <devdoc>
@@ -968,7 +968,7 @@ namespace System.Windows.Forms {
             add => onDropDown += value;
             remove => onDropDown -= value;
         }
-     
+
         /// <summary>
         /// <para>
         /// Constructs the new instance of the accessibility object for this control. Subclasses
@@ -985,7 +985,7 @@ namespace System.Windows.Forms {
         protected override void CreateHandle() {
             if (!RecreatingHandle) {
                 IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
-                        
+
                 try {
                     NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX();
                     icc.dwICC = NativeMethods.ICC_DATE_CLASSES;
@@ -1576,7 +1576,7 @@ namespace System.Windows.Forms {
 
             public override string KeyboardShortcut {
                 get {
-                    // APP COMPAT. When computing DateTimePickerAccessibleObject::get_KeyboardShorcut the previous label 
+                    // APP COMPAT. When computing DateTimePickerAccessibleObject::get_KeyboardShorcut the previous label
                     // takes precedence over DTP::Text.
                     // This code was copied from the Everett sources.
                     Label previousLabel = this.PreviousLabel;
@@ -1589,14 +1589,14 @@ namespace System.Windows.Forms {
                     }
 
                     string baseShortcut = base.KeyboardShortcut;
-                    
+
                     if ((baseShortcut == null || baseShortcut.Length == 0)) {
                         char ownerTextMnemonic = WindowsFormsUtils.GetMnemonic(this.Owner.Text, false /*convertToUpperCase*/);
                         if (ownerTextMnemonic != (char) 0) {
                             return "Alt+" + ownerTextMnemonic;
                         }
                     }
-                        
+
                     return baseShortcut;
                 }
             }
@@ -1660,8 +1660,8 @@ namespace System.Windows.Forms {
 
             internal override UnsafeNativeMethods.ToggleState ToggleState {
                 get {
-                    return ((DateTimePicker)Owner).Checked ? 
-                        UnsafeNativeMethods.ToggleState.ToggleState_On : 
+                    return ((DateTimePicker)Owner).Checked ?
+                        UnsafeNativeMethods.ToggleState.ToggleState_On :
                         UnsafeNativeMethods.ToggleState.ToggleState_Off;
                 }
             }

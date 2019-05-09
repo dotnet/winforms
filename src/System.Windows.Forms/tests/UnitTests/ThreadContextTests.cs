@@ -66,7 +66,7 @@ namespace System.Windows.Forms.Tests
       public void ThreadContext_MultipleProcessFiltersProcesses() {
         // Test that multiple filters work
         Application.ThreadContext threadContext = new Application.ThreadContext();
-        
+
         int filterId2 = TestMessageId2;
         var mockContext2 = new Mock<IMessageFilter>(MockBehavior.Strict);
         mockContext2.Setup(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny))

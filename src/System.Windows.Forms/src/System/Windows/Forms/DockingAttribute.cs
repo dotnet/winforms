@@ -21,7 +21,7 @@ namespace System.Windows.Forms {
         public DockingAttribute() {
             this.dockingBehavior = DockingBehavior.Never;
         }
-        
+
         /// <devdoc>
         ///    <para>
         ///       Constructor.

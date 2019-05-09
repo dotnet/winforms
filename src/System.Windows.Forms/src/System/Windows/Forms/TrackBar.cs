@@ -17,7 +17,7 @@ namespace System.Windows.Forms {
     using System.ComponentModel.Design;
     using System.Windows.Forms.Layout;
     using System.Globalization;
-    
+
     /// <devdoc>
     ///     The TrackBar is a scrollable control similar to the ScrollBar, but
     ///     has a different UI.  You can configure ranges through which it should
@@ -38,7 +38,7 @@ namespace System.Windows.Forms {
 
         private static readonly object EVENT_SCROLL = new object();
         private static readonly object EVENT_VALUECHANGED = new object();
-        private static readonly object EVENT_RIGHTTOLEFTLAYOUTCHANGED = new object();        
+        private static readonly object EVENT_RIGHTTOLEFTLAYOUTCHANGED = new object();
 
         private bool autoSize = true;
         private int largeChange = 5;
@@ -58,7 +58,7 @@ namespace System.Windows.Forms {
         // Disable value range checking while initializing the control
         private bool initializing = false;
 
-        private bool rightToLeftLayout = false;        
+        private bool rightToLeftLayout = false;
 
         /// <devdoc>
         ///     Creates a new TrackBar control with a default range of 0..10 and
@@ -70,7 +70,7 @@ namespace System.Windows.Forms {
             SetStyle(ControlStyles.UseTextForAccessibility, false);
             requestedDim = PreferredDimension;
         }
-        
+
         /// <devdoc>
         ///     Indicates if the control is being auto-sized.  If true, the
         ///     TrackBar will adjust either its height or width [depending on
@@ -94,7 +94,7 @@ namespace System.Windows.Forms {
                 // Note that we intentionally do not call base.  Labels size themselves by
                 // overriding SetBoundsCore (old RTM code).  We let CommonProperties.GetAutoSize
                 // continue to return false to keep our LayoutEngines from messing with TextBoxes.
-                // This is done for backwards compatibility since the new AutoSize behavior differs.                
+                // This is done for backwards compatibility since the new AutoSize behavior differs.
                 if (autoSize != value) {
                     autoSize = value;
                     if (orientation == Orientation.Horizontal) {
@@ -191,7 +191,7 @@ namespace System.Windows.Forms {
                 return cp;
             }
         }
-        
+
         protected override ImeMode DefaultImeMode {
             get {
                 return ImeMode.Disable;
@@ -250,7 +250,7 @@ namespace System.Windows.Forms {
             set {
             }
         }
-        
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
             add => base.ForeColorChanged += value;
@@ -410,7 +410,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add => base.PaddingChanged += value; 
+            add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value; }
 
         /// <devdoc>
@@ -433,7 +433,7 @@ namespace System.Windows.Forms {
         {
             if (IsHandleCreated)
             {
-                //The '1' in the call to SendMessage below indicates that the 
+                //The '1' in the call to SendMessage below indicates that the
                 //trackbar should be redrawn (see TBM_SETRANGEMAX in MSDN)
                 SendMessage(NativeMethods.TBM_SETRANGEMAX, 1, maximum);
                 Invalidate();
@@ -494,8 +494,8 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]        
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
         public override string Text {
             get {
                 return base.Text;
@@ -510,7 +510,7 @@ namespace System.Windows.Forms {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
         }
-        
+
         /// <devdoc>
         ///     Indicates how the TrackBar control will draw itself.  This affects
         ///     both where the ticks will be drawn in relation to the moveable thumb,
@@ -595,7 +595,7 @@ namespace System.Windows.Forms {
                     OnValueChanged(EventArgs.Empty);
                 }
             }
-        }    
+        }
 
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -714,7 +714,7 @@ namespace System.Windows.Forms {
             }
             base.CreateHandle();
         }
-        
+
         /// <devdoc>
         ///      Called when initialization of the control is complete.
         /// </devdoc>
@@ -728,22 +728,22 @@ namespace System.Windows.Forms {
         private void GetTrackBarValue() {
             if (IsHandleCreated) {
                 value = unchecked( (int) (long)SendMessage(NativeMethods.TBM_GETPOS, 0, 0));
-                
+
                 // See SetTrackBarValue() for a description of why we sometimes reflect the trackbar value
-                //                   
-                   
+                //
+
                 if (orientation == Orientation.Vertical) {
                     // Reflect value
                     value = Minimum + Maximum - value;
                 }
-                
+
                 // Reflect for a RightToLeft horizontal trackbar
                 //
                 if (orientation == Orientation.Horizontal && RightToLeft == RightToLeft.Yes && !IsMirrored) {
                     value = Minimum + Maximum - value;
                 }
             }
-        }                                               
+        }
 
         /// <devdoc>
         ///      Handling special input keys, such as pgup, pgdown, home, end, etc...
@@ -759,7 +759,7 @@ namespace System.Windows.Forms {
             }
             return base.IsInputKey(keyData);
         }
-        
+
         /// <devdoc>
         /// </devdoc>
         protected override void OnHandleCreated(EventArgs e) {
@@ -885,7 +885,7 @@ namespace System.Windows.Forms {
         ///     Overrides Control.setBoundsCore to enforce autoSize.
         /// </devdoc>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
-            //SetBoundsCore .. sets the height for a control in designer .. we should obey the requested 
+            //SetBoundsCore .. sets the height for a control in designer .. we should obey the requested
             //height is Autosize is false..
             //if (IsHandleCreated) {
             requestedDim = (orientation == Orientation.Horizontal)
@@ -913,7 +913,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void SetRange(int minValue, int maxValue) {
             if (minimum != minValue || maximum != maxValue) {
-            
+
                 // The Minimum and Maximum properties contain the logic for
                 // ensuring that minValue <= maxValue. It is possible, however,
                 // that this function will be called somewhere other than from
@@ -937,8 +937,8 @@ namespace System.Windows.Forms {
 
                     Invalidate();
                 }
-                
-                // When we change the range, the comctl32 trackbar's internal position can change 
+
+                // When we change the range, the comctl32 trackbar's internal position can change
                 // (because of the reflection that occurs with vertical trackbars)
                 // so we make sure to explicitly set the trackbar position.
                 //
@@ -951,10 +951,10 @@ namespace System.Windows.Forms {
                 SetTrackBarPosition();
             }
         }
-        
+
         private void SetTrackBarPosition() {
             if (IsHandleCreated) {
-            
+
                 // There are two situations where we want to reflect the track bar position:
                 //
                 // 1. For a vertical trackbar, it seems to make more sense for the trackbar to increase in value
@@ -963,19 +963,19 @@ namespace System.Windows.Forms {
                 // 2. For a RightToLeft horizontal trackbar, we want to reflect the position.
                 //
                 int reflectedValue = value;
-                
+
                 // 1. Reflect for a vertical trackbar
                 //
                 if (orientation == Orientation.Vertical) {
                     reflectedValue = Minimum + Maximum - value;
                 }
-                
+
                 // 2. Reflect for a RightToLeft horizontal trackbar
                 //
                 if (orientation == Orientation.Horizontal && RightToLeft == RightToLeft.Yes && !IsMirrored) {
                     reflectedValue = Minimum + Maximum - value;
                 }
-                
+
                 SendMessage(NativeMethods.TBM_SETPOS, 1, reflectedValue);
             }
         }

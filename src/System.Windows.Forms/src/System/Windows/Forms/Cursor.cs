@@ -24,7 +24,7 @@ namespace System.Windows.Forms {
     ///       have.
     ///    </para>
     /// </devdoc>
-    // 
+    //
     [
     TypeConverterAttribute(typeof(CursorConverter)),
     Serializable,
@@ -66,7 +66,7 @@ namespace System.Windows.Forms {
         ///     Private constructor. If you want a standard system cursor, use one of the
         ///     definitions in the Cursors class.
         /// </devdoc>
-        // 
+        //
         internal Cursor(int nResourceId, int dummy) {
             LoadFromResourceId(nResourceId);
         }
@@ -141,7 +141,7 @@ namespace System.Windows.Forms {
             LoadPicture(new UnsafeNativeMethods.ComStreamFromDataStream(new MemoryStream(cursorData)));
         }
 
-        
+
         /// <devdoc>
         ///    <para>
         ///       Gets or
@@ -244,8 +244,8 @@ namespace System.Windows.Forms {
                 }
                 finally {
                     // GetIconInfo creates bitmaps for the hbmMask and hbmColor members of ICONINFO.
-                    // The calling application must manage these bitmaps and delete them when they are no longer necessary. 
-   
+                    // The calling application must manage these bitmaps and delete them when they are no longer necessary.
+
                     if (info.hbmMask  != IntPtr.Zero) {
                       // ExternalDelete to prevent Handle underflow
                       SafeNativeMethods.ExternalDeleteObject(new HandleRef(null, info.hbmMask));
@@ -326,7 +326,7 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         ///    Destroys the Win32 handle of this <see cref='System.Windows.Forms.Cursor'/>, if the
-        /// <see cref='System.Windows.Forms.Cursor'/> 
+        /// <see cref='System.Windows.Forms.Cursor'/>
         /// owns the handle
         /// </devdoc>
         private void DestroyHandle() {
@@ -534,7 +534,7 @@ namespace System.Windows.Forms {
         }
 
         // this code is adapted from Icon.GetIconSize please take this into account when changing this
-        private Size GetIconSize(IntPtr iconHandle) { 
+        private Size GetIconSize(IntPtr iconHandle) {
             Size iconSize = Size;
 
             NativeMethods.ICONINFO info = new NativeMethods.ICONINFO();
@@ -550,11 +550,11 @@ namespace System.Windows.Forms {
                 UnsafeNativeMethods.GetObject(new HandleRef(null, info.hbmMask), Marshal.SizeOf<NativeMethods.BITMAP>(), bmp);
                 iconSize = new Size(bmp.bmWidth, bmp.bmHeight / 2);
             }
-            
+
             if (info.hbmMask != IntPtr.Zero) {
                 SafeNativeMethods.IntDeleteObject(new HandleRef(null, info.hbmMask));
             }
-            return iconSize;            
+            return iconSize;
         }
 
 
@@ -570,12 +570,12 @@ namespace System.Windows.Forms {
             try {
                 Guid g = typeof(UnsafeNativeMethods.IPicture).GUID;
                 UnsafeNativeMethods.IPicture picture = null;
-               
+
                 try {
                     picture = UnsafeNativeMethods.OleCreateIPictureIndirect(null, ref g, true);
                     UnsafeNativeMethods.IPersistStream ipictureAsIPersist = (UnsafeNativeMethods.IPersistStream)picture;
                     ipictureAsIPersist.Load(stream);
-                    
+
                     if (picture != null && picture.GetPictureType() == NativeMethods.Ole.PICTYPE_ICON) {
                         IntPtr cursorHandle = picture.GetHandle();
                         Size picSize = GetIconSize(cursorHandle);
@@ -648,20 +648,20 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public override string ToString() {
             string s = null;
-            
+
             if (!this.ownHandle)
                 s = TypeDescriptor.GetConverter(typeof(Cursor)).ConvertToString(this);
             else
                 s = base.ToString();
-            
+
             return "[Cursor: " + s + "]";
         }
-        
+
         public static bool operator ==(Cursor left, Cursor right) {
             if (object.ReferenceEquals(left, null) != object.ReferenceEquals(right, null)) {
                 return false;
             }
-            
+
             if (!object.ReferenceEquals(left, null)) {
                 return (left.handle == right.handle);
             }
@@ -669,16 +669,16 @@ namespace System.Windows.Forms {
                 return true;
             }
         }
-        
+
         public static bool operator !=(Cursor left, Cursor right) {
             return !(left == right);
         }
-        
+
         public override int GetHashCode() {
             // Handle is a 64-bit value in 64-bit machines, uncheck here to avoid overflow exceptions.
             return unchecked((int)handle);
         }
-        
+
         public override bool Equals(object obj) {
             if (!(obj is Cursor)) {
                 return false;

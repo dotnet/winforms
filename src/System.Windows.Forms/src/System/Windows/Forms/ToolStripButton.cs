@@ -8,8 +8,8 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;
     using System.Drawing.Imaging;
     using System.ComponentModel;
-    using System.Windows.Forms.Design; 
-    	
+    using System.Windows.Forms.Design;
+
     /// <devdoc/>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip)]
     public class ToolStripButton : ToolStripItem {
@@ -38,16 +38,16 @@ namespace System.Windows.Forms {
             Initialize();
         }
         public ToolStripButton(string text, Image image, EventHandler onClick):base(text,image,onClick) {
-            Initialize();            
+            Initialize();
         }
         public ToolStripButton(string text, Image image, EventHandler onClick, string name):base(text,image,onClick,name) {
             Initialize();
         }
 
-        
+
         [DefaultValue(true)]
         public new bool AutoToolTip {
-            get { 
+            get {
                 return base.AutoToolTip;
             }
             set {
@@ -55,13 +55,13 @@ namespace System.Windows.Forms {
             }
         }
 
-       
+
         /// <devdoc>
         /// Summary of CanSelect.
         /// </devdoc>
         public override bool CanSelect {
-            get { 
-                return true; 
+            get {
+                return true;
             }
         }
 
@@ -98,7 +98,7 @@ namespace System.Windows.Forms {
                 if (value != Checked) {
                     CheckState = value ? CheckState.Checked : CheckState.Unchecked;
                     InvokePaint();
-   
+
                 }
             }
         }
@@ -123,16 +123,16 @@ namespace System.Windows.Forms {
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(CheckState));
                 }
-                  
+
                 if (value != checkState) {
                     checkState = value;
                     Invalidate();
                     OnCheckedChanged(EventArgs.Empty);
-                    OnCheckStateChanged(EventArgs.Empty);               
+                    OnCheckStateChanged(EventArgs.Empty);
                 }
             }
         }
-        
+
         /// <devdoc>
         /// <para>Occurs when the
         /// value of the <see cref='System.Windows.Forms.CheckBox.Checked'/>
@@ -142,7 +142,7 @@ namespace System.Windows.Forms {
         public event EventHandler CheckedChanged {
             add => Events.AddHandler(EventCheckedChanged, value);
             remove => Events.RemoveHandler(EventCheckedChanged, value);
-        }   
+        }
         /// <devdoc>
         /// <para>Occurs when the
         /// value of the <see cref='System.Windows.Forms.CheckBox.CheckState'/>
@@ -156,8 +156,8 @@ namespace System.Windows.Forms {
 
 
         protected override bool DefaultAutoToolTip {
-            get { 
-                return true; 
+            get {
+                return true;
             }
         }
 
@@ -203,7 +203,7 @@ namespace System.Windows.Forms {
             EventHandler handler = (EventHandler)Events[EventCheckStateChanged];
             if (handler != null) handler(this,e);
         }
-        
+
         /// <devdoc>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
@@ -211,16 +211,16 @@ namespace System.Windows.Forms {
 
             if (this.Owner != null) {
                 ToolStripRenderer renderer = this.Renderer;
-                  
+
                 renderer.DrawButtonBackground(new ToolStripItemRenderEventArgs(e.Graphics, this));
 
-                if ((DisplayStyle & ToolStripItemDisplayStyle.Image) == ToolStripItemDisplayStyle.Image) { 
+                if ((DisplayStyle & ToolStripItemDisplayStyle.Image) == ToolStripItemDisplayStyle.Image) {
                     ToolStripItemImageRenderEventArgs rea = new ToolStripItemImageRenderEventArgs(e.Graphics, this, InternalLayout.ImageRectangle);
                     rea.ShiftOnPress = true;
                     renderer.DrawItemImage(rea);
                 }
 
-                if ((DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text) { 
+                if ((DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text) {
                      renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(e.Graphics, this, this.Text, InternalLayout.TextRectangle, this.ForeColor, this.Font, InternalLayout.TextFormat));
                 }
             }
@@ -234,12 +234,12 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        /// An implementation of AccessibleChild for use with ToolStripItems        
+        /// An implementation of AccessibleChild for use with ToolStripItems
         /// </devdoc>
-        [System.Runtime.InteropServices.ComVisible(true)]        
+        [System.Runtime.InteropServices.ComVisible(true)]
         internal class ToolStripButtonAccessibleObject : ToolStripItemAccessibleObject {
             private ToolStripButton ownerItem = null;
-        
+
             public ToolStripButtonAccessibleObject(ToolStripButton ownerItem): base(ownerItem) {
                 this.ownerItem = ownerItem;
             }
@@ -278,7 +278,7 @@ namespace System.Windows.Forms {
                     return base.State;
                }
             }
-            
+
         }
     }
 }

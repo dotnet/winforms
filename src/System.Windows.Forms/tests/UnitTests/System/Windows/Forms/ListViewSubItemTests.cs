@@ -110,7 +110,7 @@ namespace System.Windows.Forms.Tests
                 BackColor = value
             };
             Assert.Equal(expected, subItem.BackColor);
-            
+
             // Set again to test caching behaviour.
             subItem.BackColor = value;
             Assert.Equal(expected, subItem.BackColor);
@@ -157,7 +157,7 @@ namespace System.Windows.Forms.Tests
                 Font = value
             };
             Assert.Equal(value ?? Control.DefaultFont, subItem.Font);
-            
+
             // Set again to test caching behaviour.
             subItem.Font = value;
             Assert.Equal(value ?? Control.DefaultFont, subItem.Font);
@@ -192,7 +192,7 @@ namespace System.Windows.Forms.Tests
                 ForeColor = value
             };
             Assert.Equal(expected, subItem.ForeColor);
-            
+
             // Set again to test caching behaviour.
             subItem.ForeColor = value;
             Assert.Equal(expected, subItem.ForeColor);
@@ -302,7 +302,7 @@ namespace System.Windows.Forms.Tests
         public void ListViewSubItem_ResetStyle_HasStyleWithOwner_Success(ListViewItem owner)
         {
             var subItem = new ListViewItem.ListViewSubItem(owner, "text", Color.Red, Color.Blue, SystemFonts.MenuFont);
-            
+
             subItem.ResetStyle();
             Assert.Equal(SystemColors.Window, subItem.BackColor);
             Assert.Equal(Control.DefaultFont, subItem.Font);
@@ -329,7 +329,7 @@ namespace System.Windows.Forms.Tests
                 var formatter = new BinaryFormatter();
                 formatter.Serialize(stream, subItem);
                 stream.Seek(0, SeekOrigin.Begin);
-                
+
                 ListViewItem.ListViewSubItem result = Assert.IsType<ListViewItem.ListViewSubItem>(formatter.Deserialize(stream));
                 Assert.Equal(subItem.BackColor, result.BackColor);
                 Assert.Equal(subItem.Font, result.Font);

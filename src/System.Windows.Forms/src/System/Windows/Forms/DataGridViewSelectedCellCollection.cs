@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     using System.Diagnostics.CodeAnalysis;
 
     /// <devdoc>
-    /// <para>Represents a collection of selected <see cref='System.Windows.Forms.DataGridViewCell'/> objects in the <see cref='System.Windows.Forms.DataGridView'/> 
+    /// <para>Represents a collection of selected <see cref='System.Windows.Forms.DataGridViewCell'/> objects in the <see cref='System.Windows.Forms.DataGridView'/>
     /// control.</para>
     /// </devdoc>
     [
@@ -111,7 +111,7 @@ namespace System.Windows.Forms
                 return this.items;
             }
         }
-        
+
         public DataGridViewCell this[int index]
         {
             get
@@ -128,12 +128,12 @@ namespace System.Windows.Forms
             Debug.Assert(!Contains(dataGridViewCell));
             return this.items.Add(dataGridViewCell);
         }
-        
+
         /* Not used for now
         internal void AddRange(DataGridViewCell[] dataGridViewCells)
         {
             Debug.Assert(dataGridViewCells != null);
-            foreach(DataGridViewCell dataGridViewCell in dataGridViewCells) 
+            foreach(DataGridViewCell dataGridViewCell in dataGridViewCells)
             {
                 Debug.Assert(!Contains(dataGridViewCell));
                 this.items.Add(dataGridViewCell);
@@ -143,7 +143,7 @@ namespace System.Windows.Forms
         internal void AddCellCollection(DataGridViewSelectedCellCollection dataGridViewCells)
         {
             Debug.Assert(dataGridViewCells != null);
-            foreach(DataGridViewCell dataGridViewCell in dataGridViewCells) 
+            foreach(DataGridViewCell dataGridViewCell in dataGridViewCells)
             {
                 Debug.Assert(!Contains(dataGridViewCell));
                 this.items.Add(dataGridViewCell);

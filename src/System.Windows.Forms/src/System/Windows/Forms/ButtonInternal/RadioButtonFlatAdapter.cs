@@ -12,9 +12,9 @@ namespace System.Windows.Forms.ButtonInternal {
     using System.Windows.Forms;
 
     internal class RadioButtonFlatAdapter : RadioButtonBaseAdapter {
-        
+
         protected const int flatCheckSize = 12;
-        
+
         internal RadioButtonFlatAdapter(ButtonBase control) : base(control) {}
 
         internal override void PaintDown(PaintEventArgs e, CheckState state) {
@@ -31,7 +31,7 @@ namespace System.Windows.Forms.ButtonInternal {
             else {
                 PaintFlatWorker(e, colors.buttonShadow, colors.buttonFace, colors.buttonShadow, colors);
             }
-        } 
+        }
 
         internal override void PaintOver(PaintEventArgs e, CheckState state) {
             if (Control.Appearance == Appearance.Button) {

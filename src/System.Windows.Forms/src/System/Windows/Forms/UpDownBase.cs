@@ -173,7 +173,7 @@ namespace System.Windows.Forms {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
         }
-        
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the background color for the
@@ -625,7 +625,7 @@ namespace System.Windows.Forms {
         // Methods
         //
         ////////////////////////////////////////////////////////////////////////
-       
+
 
         /// <devdoc>
         ///    <para>
@@ -657,8 +657,8 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///       When overridden in a derived class, handles rescaling of any magic numbers used in control painting.
         ///       For UpDown controls, scale the width of the up/down buttons.
-        ///       Must call the base class method to get the current DPI values. This method is invoked only when 
-        ///       Application opts-in into the Per-monitor V2 support, targets .NETFX 4.7 and has 
+        ///       Must call the base class method to get the current DPI values. This method is invoked only when
+        ///       Application opts-in into the Per-monitor V2 support, targets .NETFX 4.7 and has
         ///       EnableDpiChangedMessageHandling config switch turned on.
         /// </devdoc>
         protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) {
@@ -703,7 +703,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected override void OnPaint(PaintEventArgs e) {
             base.OnPaint(e);
-            
+
             Rectangle editBounds = upDownEdit.Bounds;
             if (Application.RenderWithVisualStyles) {
                 if (borderStyle != BorderStyle.None) {
@@ -1073,7 +1073,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected abstract void UpdateEditText();
-        
+
         private void UserPreferenceChanged(object sender, UserPreferenceChangedEventArgs pref) {
             if (pref.Category == UserPreferenceCategory.Locale) {
                 UpdateEditText();
@@ -1160,7 +1160,7 @@ namespace System.Windows.Forms {
                 }
                 set {
                     bool valueChanged = (value != base.Text);
-                    base.Text = value;      
+                    base.Text = value;
                     if (valueChanged) {
                         AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
                     }
@@ -1279,7 +1279,7 @@ namespace System.Windows.Forms {
         ///     or when the acceleration determines that another event should be generated.
         /// </devdoc>
         internal class UpDownButtons : Control {
-            // 
+            //
 
             /////////////////////////////////////////////////////////////////////
             // Member variables
@@ -1658,8 +1658,8 @@ namespace System.Windows.Forms {
                     return;
                 }
 
-                // onUpDown method calls customer's ValueCHanged event handler which might enter the message loop and 
-                // process the mouse button up event, which results in timer being disposed 
+                // onUpDown method calls customer's ValueCHanged event handler which might enter the message loop and
+                // process the mouse button up event, which results in timer being disposed
                 OnUpDown(new UpDownEventArgs((int)pushed));
 
                 if (timer != null) {
@@ -1672,7 +1672,7 @@ namespace System.Windows.Forms {
                     }
 
                     timer.Interval = this.timerInterval;
-                } 
+                }
             }
 
             internal class UpDownButtonsAccessibleObject : ControlAccessibleObject {

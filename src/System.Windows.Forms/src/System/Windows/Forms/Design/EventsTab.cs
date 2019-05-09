@@ -46,7 +46,7 @@ namespace System.Windows.Forms.Design {
                 return "Events"; // do not localize.
             }
         }
-        
+
              // override this to reject components you don't want to support.
         /// <devdoc>
         ///    <para>Gets a value indicating whether the specified object can be extended.</para>

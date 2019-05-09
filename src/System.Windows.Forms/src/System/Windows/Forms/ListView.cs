@@ -114,7 +114,7 @@ namespace System.Windows.Forms {
 
 
         // Ownerdraw data caches...  Only valid inside WM_PAINT.
-        // 
+        //
 
         private Color odCacheForeColor = SystemColors.WindowText;
         private Color odCacheBackColor = SystemColors.Window;
@@ -129,7 +129,7 @@ namespace System.Windows.Forms {
         private MouseButtons downButton;
         private int itemCount;
         private int columnIndex = 0;
-        private int topIndex;          
+        private int topIndex;
         private bool hoveredAlready  = false;
 
         private bool             rightToLeftLayout = false;
@@ -198,7 +198,7 @@ namespace System.Windows.Forms {
         // background image until it gets the first WM_PAINT message -  I use words like *seems* because nothing is guaranteed
         // when it comes to win32 listView.
         // so our wrapper has to hang on to the previousBackgroundImageFileNames and destroy them after it gets the first WM_PAINT message
-        
+
         int bkImgFileNamesCount = -1;
         string[] bkImgFileNames = null;
         private const int BKIMGARRAYSIZE = 8;
@@ -463,7 +463,7 @@ namespace System.Windows.Forms {
             set {
                 if (this.UseCompatibleStateImageBehavior) {
                     if (CheckBoxes != value) {
-                        
+
                         if (value && this.View == View.Tile) {
                             throw new NotSupportedException(SR.ListViewCheckBoxesNotSupportedInTileView);
                         }
@@ -478,10 +478,10 @@ namespace System.Windows.Forms {
                                 savedCheckedItems.Add(items[i]);
                             }
                         }
-                    
+
                         listViewState[LISTVIEWSTATE_checkBoxes] = value;
                         UpdateExtendedStyles();
-                        
+
                         if (CheckBoxes && savedCheckedItems != null) {
                             // Check the saved checked items.
                             //
@@ -491,8 +491,8 @@ namespace System.Windows.Forms {
                                 }
                             }
                             savedCheckedItems = null;
-                        }                                       
-                                           
+                        }
+
                         // Comctl should handle auto-arrange for us, but doesn't
                         if (AutoArrange)
                             ArrangeIcons(Alignment);
@@ -526,7 +526,7 @@ namespace System.Windows.Forms {
 
                             /**
                             ***  there are a LOT of issues with setting CheckBoxes to TRUE when in View.List, View.SmallIcon or View.LargeIcon:
-                            ***  
+                            ***
                             ***
                             ***  these are caused by the fact that the win32 ListView control does not resize its column width
                             ***  when CheckBoxes changes from FALSE to TRUE.
@@ -1437,7 +1437,7 @@ namespace System.Windows.Forms {
             set {
                 if (this.UseCompatibleStateImageBehavior) {
                     if (imageListState != value) {
-                        
+
                         EventHandler recreateHandler = new EventHandler(StateImageListRecreateHandle);
                         EventHandler disposedHandler = new EventHandler(DetachImageList);
 
@@ -1450,7 +1450,7 @@ namespace System.Windows.Forms {
                             value.RecreateHandle += recreateHandler;
                             value.Disposed += disposedHandler;
                         }
-                        
+
                         if (IsHandleCreated)
                             SendMessage(NativeMethods.LVM_SETIMAGELIST, NativeMethods.LVSIL_STATE, value == null ? IntPtr.Zero: value.Handle);
                     }
@@ -1466,7 +1466,7 @@ namespace System.Windows.Forms {
                         }
 
                         if (this.IsHandleCreated && imageListState != null && this.CheckBoxes) {
-                            // 
+                            //
                             // If CheckBoxes are set to true, then we will have to recreate the handle.
                             // For some reason, if CheckBoxes are set to true and the list view has a state imageList, then the native listView destroys
                             // the state imageList.
@@ -1605,16 +1605,16 @@ namespace System.Windows.Forms {
                 EnsureVisible(value.Index);
                 ListViewItem topItem = TopItem;
 
-                if ((topItem == null) && (topIndex == Items.Count)) // 
-                {                                                   // There's a 
-                    topItem = value;                                // a single item.  Result of the 
+                if ((topItem == null) && (topIndex == Items.Count)) //
+                {                                                   // There's a
+                    topItem = value;                                // a single item.  Result of the
                     if (Scrollable)                                 // message is the number of items in the list rather than an index of an item in the list.
                     {                                               // This causes TopItem to return null.  A side issue is that EnsureVisible doesn't do too well
                         EnsureVisible(0);                           // here either, because it causes the listview to go blank rather than displaying anything useful.
                         Scroll(0, value.Index);                     // To work around this, we force the listbox to display the first item, then scroll down to the item
                     }                                               // user is setting as the top item.
                     return;                                         //
-                }                                                   // 
+                }                                                   //
 
                 if (value.Index == topItem.Index)
                     return;
@@ -1888,7 +1888,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add => base.PaddingChanged += value; 
+            add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value; }
 
         /// <devdoc>
@@ -2055,7 +2055,7 @@ namespace System.Windows.Forms {
             for (int i = 0; i <= this.bkImgFileNamesCount; i ++) {
                 fi = new System.IO.FileInfo(this.bkImgFileNames[i]);
                 if (fi.Exists) {
-                    // 
+                    //
                     // ComCtl ListView uses COM objects to manipulate the bitmap we send it to them.
                     // I could not find any resources which explain in detail when the IImgCtx objects
                     // release the temporary file. So if we get a FileIO when we delete the temporary file
@@ -2156,7 +2156,7 @@ namespace System.Windows.Forms {
         protected override void CreateHandle() {
             if (!RecreatingHandle) {
                 IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
-                        
+
                 try {
                     NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX();
                     icc.dwICC = NativeMethods.ICC_LISTVIEW_CLASSES;
@@ -2579,10 +2579,10 @@ namespace System.Windows.Forms {
 
         private void DeleteFileName(string fileName) {
             if (!string.IsNullOrEmpty(fileName)) {
-                
+
                 System.IO.FileInfo fi = new System.IO.FileInfo(fileName);
                 if (fi.Exists) {
-                    // 
+                    //
                     // ComCtl ListView uses COM objects to manipulate the bitmap we send it to them.
                     // I could not find any resources which explain in detail when the IImgCtx objects
                     // release the temporary file. So if we get a FileIO when we delete the temporary file
@@ -2626,7 +2626,7 @@ namespace System.Windows.Forms {
 
             UpdateListViewItemsLocations();
 
-            
+
         }
 
         /// <devdoc>
@@ -2674,7 +2674,7 @@ namespace System.Windows.Forms {
                     if (!string.IsNullOrEmpty(this.backgroundImageFileName)) {
                         fi = new System.IO.FileInfo(this.backgroundImageFileName);
                         Debug.Assert(fi.Exists, "who deleted our temp file?");
-                        // 
+                        //
                         // ComCtl ListView uses COM objects to manipulate the bitmap we send it to them.
                         // I could not find any resources which explain in detail when the IImgCtx objects
                         // release the temporary file. So if we get a FileIO when we delete the temporary file
@@ -2687,7 +2687,7 @@ namespace System.Windows.Forms {
                     for (int i = 0; i <= this.bkImgFileNamesCount; i++) {
                         fi = new System.IO.FileInfo(this.bkImgFileNames[i]);
                         Debug.Assert(fi.Exists, "who deleted our temp file?");
-                        // 
+                        //
                         // ComCtl ListView uses COM objects to manipulate the bitmap we send it to them.
                         // I could not find any resources which explain in detail when the IImgCtx objects
                         // release the temporary file. So if we get a FileIO when we delete the temporary file
@@ -2789,7 +2789,7 @@ namespace System.Windows.Forms {
             // the win32 ListView::FindNearestItem does some pretty weird things to determine the nearest item.
             // simply passing the (x,y) coordinates will cause problems when we call FindNearestItem for a point inside an item.
             // so we have to do some special processing when (x,y) falls inside an item;
-            // 
+            //
             ListViewItem lvi = this.GetItemAt(x,y);
 
             if (lvi != null) {
@@ -3240,7 +3240,7 @@ namespace System.Windows.Forms {
 
         private void InvalidateColumnHeaders() {
             if (viewStyle == View.Details && IsHandleCreated) {
-                // 
+                //
 
                 IntPtr hwndHdr = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_GETHEADER, 0, 0);
                 if (hwndHdr != IntPtr.Zero)
@@ -3318,7 +3318,7 @@ namespace System.Windows.Forms {
             }
 
             SetDisplayIndices( indices );
-             
+
 #if DEBUG
             CheckDisplayIndices();
 #endif
@@ -3883,7 +3883,7 @@ namespace System.Windows.Forms {
             this.FlipViewToLargeIconAndSmallIcon = false;
 
             base.OnHandleCreated(e);
-            
+
 
 
 
@@ -4414,7 +4414,7 @@ namespace System.Windows.Forms {
 
             // we need to cause a paint message on the win32 list view. This way the win 32 list view gives up
             // its reference to the previous image file it was holding on to.
-            // 
+            //
 
             // 8 strings should be good enough for us
             if (this.bkImgFileNames == null) {
@@ -4689,7 +4689,7 @@ namespace System.Windows.Forms {
 
             Debug.Assert(IsHandleCreated, "SetItemText with no handle");
 
-            // 
+            //
 
             if (this.View == View.List && subItemIndex == 0) {
                 int colWidth = unchecked( (int) (long)UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.LVM_GETCOLUMNWIDTH, 0, 0));
@@ -5063,7 +5063,7 @@ namespace System.Windows.Forms {
                                 }
                                 else
                                 {
-                                
+
                                     m.Result = (IntPtr)(NativeMethods.CDRF_SKIPDEFAULT);
                                     return true; // we are done - don't do default handling
                                 }
@@ -5109,7 +5109,7 @@ namespace System.Windows.Forms {
 
                 if (columnHeaders != null && nmheader.iItem < columnHeaders.Length &&
                     (this.listViewState[LISTVIEWSTATE_headerControlTracking] || this.listViewState[LISTVIEWSTATE_headerDividerDblClick])) {
-                    // 
+                    //
 
 
 
@@ -5346,7 +5346,7 @@ namespace System.Windows.Forms {
         }
 
         internal void RecreateHandleInternal() {
-            // 
+            //
             // For some reason, if CheckBoxes are set to true and the list view has a state imageList, then the native listView destroys
             // the state imageList.
             // (Yes, it does exactly that even though our wrapper sets LVS_SHAREIMAGELISTS on the native listView.)
@@ -5406,7 +5406,7 @@ namespace System.Windows.Forms {
                     // the items collection was modified while dragging
                     // that means that we can't reliably give the user the item on which the dragging started
                     // so don't tell the user about this operation...
-                    // 
+                    //
                     if (!this.ItemCollectionChangedInMouseDown) {
                         NativeMethods.NMLISTVIEW nmlv = (NativeMethods.NMLISTVIEW)m.GetLParam(typeof(NativeMethods.NMLISTVIEW));
                         LvnBeginDrag(MouseButtons.Left, nmlv);
@@ -5419,7 +5419,7 @@ namespace System.Windows.Forms {
                     // the items collection was modified while dragging
                     // that means that we can't reliably give the user the item on which the dragging started
                     // so don't tell the user about this operation...
-                    // 
+                    //
                     if (!this.ItemCollectionChangedInMouseDown) {
                         NativeMethods.NMLISTVIEW nmlv = (NativeMethods.NMLISTVIEW)m.GetLParam(typeof(NativeMethods.NMLISTVIEW));
                         LvnBeginDrag(MouseButtons.Right, nmlv);
@@ -5457,7 +5457,7 @@ namespace System.Windows.Forms {
                             if (newValue != oldValue) {
                                 ItemCheckedEventArgs e = new ItemCheckedEventArgs(Items[nmlv->iItem]);
                                 OnItemChecked(e);
-                                
+
                                 AccessibilityNotifyClients(AccessibleEvents.StateChange, nmlv->iItem);
                                 AccessibilityNotifyClients(AccessibleEvents.NameChange, nmlv->iItem);
                             }
@@ -5636,8 +5636,8 @@ namespace System.Windows.Forms {
                             bool selectedChanged = (odStateChange.uNewState & NativeMethods.LVIS_SELECTED) != (odStateChange.uOldState & NativeMethods.LVIS_SELECTED);
                             if (selectedChanged) {
                                 // we have to substract 1 from iTo
-                                // 
-                                // 
+                                //
+                                //
                                 int iTo = odStateChange.iTo;
                                 ListViewVirtualItemsSelectionRangeChangedEventArgs lvvisrce = new ListViewVirtualItemsSelectionRangeChangedEventArgs(odStateChange.iFrom, iTo, (odStateChange.uNewState & NativeMethods.LVIS_SELECTED) != 0);
                                 OnVirtualItemsSelectionRangeChanged(lvvisrce);
@@ -5654,7 +5654,7 @@ namespace System.Windows.Forms {
                                 // Setting the max width has the added benefit of enabling multiline
                                 // tool tips!
                                 //
-                                
+
                                 UnsafeNativeMethods.SendMessage(new HandleRef(this, nmhdr->hwndFrom), NativeMethods.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
 
                                 // UNICODE. Use char.
@@ -5747,7 +5747,7 @@ namespace System.Windows.Forms {
                 case Interop.WindowMessages.WM_LBUTTONDBLCLK:
 
                     // Ensure that the itemCollectionChangedInMouseDown is not set
-                    // before processing the mousedown event.  
+                    // before processing the mousedown event.
                     this.ItemCollectionChangedInMouseDown = false;
                     CaptureInternal = true;
                     WmMouseDown(ref m, MouseButtons.Left, 2);
@@ -5756,7 +5756,7 @@ namespace System.Windows.Forms {
                 case Interop.WindowMessages.WM_LBUTTONDOWN:
 
                     // Ensure that the itemCollectionChangedInMouseDown is not set
-                    // before processing the mousedown event.  
+                    // before processing the mousedown event.
                     this.ItemCollectionChangedInMouseDown = false;
                     WmMouseDown(ref m, MouseButtons.Left, 1);
                     downButton = MouseButtons.Left;
@@ -5852,7 +5852,7 @@ namespace System.Windows.Forms {
                 case Interop.WindowMessages.WM_PAINT:
                     base.WndProc(ref m);
 
-                    // win32 ListView 
+                    // win32 ListView
                     BeginInvoke(new MethodInvoker(this.CleanPreviousBackgroundImageFiles));
                     break;
                 case Interop.WindowMessages.WM_PRINT:
@@ -7713,7 +7713,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             private ArrayList FindInternal(string key, bool searchAllSubItems, ListViewItemCollection listViewItems, ArrayList foundItems) {
                if ((listViewItems == null) || (foundItems == null)) {
-                   return null;  // 
+                   return null;  //
                }
 
                 for (int i = 0; i < listViewItems.Count; i++) {
@@ -7998,7 +7998,7 @@ namespace System.Windows.Forms {
                 Debug.Assert(!this.owner.FlipViewToLargeIconAndSmallIcon || this.Count == 0, "the FlipView... bit is turned off after adding 1 item.");
 
                 bool[] checkedValues = null;
-                
+
                 if (owner.IsHandleCreated && !owner.CheckBoxes) {
                     // PERF.
                     // Cache the Checked bit before adding the item to the list view.
@@ -8021,7 +8021,7 @@ namespace System.Windows.Forms {
                             }
                         }
                     }
-                    
+
                 }
                 finally {
                     owner.listItemSorter = comparer;
@@ -8195,7 +8195,7 @@ namespace System.Windows.Forms {
                 if (owner.VirtualMode) {
                     throw new InvalidOperationException(SR.ListViewCantRemoveItemsFromAVirtualListView);
                 }
-            
+
                 if (index != -1) {
                     RemoveAt(index);
                 }
@@ -8210,7 +8210,7 @@ namespace System.Windows.Forms {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
 
                 Debug.Assert(!this.owner.FlipViewToLargeIconAndSmallIcon || this.Count == 0, "the FlipView... bit is turned off after adding 1 item.");
-                
+
                 if (owner.IsHandleCreated && !owner.CheckBoxes && this[index].Checked) {
                     owner.UpdateSavedCheckedItems(this[index], false /*addItem*/);
                 }

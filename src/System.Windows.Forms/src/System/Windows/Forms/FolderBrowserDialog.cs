@@ -4,7 +4,7 @@
 
 using System.Security;
 
-namespace System.Windows.Forms 
+namespace System.Windows.Forms
 {
     using System;
     using System.IO;
@@ -20,24 +20,24 @@ namespace System.Windows.Forms
 
     /// <devdoc>
     ///    <para>
-    ///       Represents a common dialog box that allows the user to specify options for 
+    ///       Represents a common dialog box that allows the user to specify options for
     ///       selecting a folder. This class cannot be inherited.
     ///    </para>
     /// </devdoc>
     [
     DefaultEvent(nameof(HelpRequest)),
     DefaultProperty(nameof(SelectedPath)),
-    Designer("System.Windows.Forms.Design.FolderBrowserDialogDesigner, " + AssemblyRef.SystemDesign),    
+    Designer("System.Windows.Forms.Design.FolderBrowserDialogDesigner, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionFolderBrowserDialog))
     ]
     public sealed class FolderBrowserDialog : CommonDialog
     {
         // Root node of the tree view.
         private Environment.SpecialFolder rootFolder;
-    
+
         // Description text to show.
         private string descriptionText;
-    
+
         // Folder picked by the user.
         private string selectedPath;
 
@@ -49,7 +49,7 @@ namespace System.Windows.Forms
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.FolderBrowserDialog'/> class.
         ///    </para>
         /// </devdoc>
-        public FolderBrowserDialog() 
+        public FolderBrowserDialog()
         {
             Reset();
         }
@@ -64,7 +64,7 @@ namespace System.Windows.Forms
         public bool AutoUpgradeEnabled { get; set; } = true;
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler HelpRequest 
+        public new event EventHandler HelpRequest
         {
             add => base.HelpRequest += value;
             remove => base.HelpRequest -= value;
@@ -133,20 +133,20 @@ namespace System.Windows.Forms
             get
             {
                 return rootFolder;
-            }            
-            [SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible")]            
+            }
+            [SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible")]
             set
             {
                 // FXCop:
                 // leaving in Enum.IsDefined because this Enum is likely to grow and we dont own it.
-                if (!Enum.IsDefined(typeof(System.Environment.SpecialFolder), value)) 
+                if (!Enum.IsDefined(typeof(System.Environment.SpecialFolder), value))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(System.Environment.SpecialFolder));
                 }
                 rootFolder = value;
             }
         }
-    
+
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a description to show above the folders. Here you can provide instructions for
@@ -193,7 +193,7 @@ namespace System.Windows.Forms
             {
                 if (AutoUpgradeEnabled)
                 {
-                    return SystemInformation.BootMode == BootMode.Normal; 
+                    return SystemInformation.BootMode == BootMode.Normal;
                 }
 
                 return false;
@@ -205,7 +205,7 @@ namespace System.Windows.Forms
         ///       Resets all properties to their default values.
         ///    </para>
         /// </devdoc>
-        public override void Reset() 
+        public override void Reset()
         {
             rootFolder = System.Environment.SpecialFolder.Desktop;
             descriptionText = string.Empty;
@@ -216,7 +216,7 @@ namespace System.Windows.Forms
         /// <devdoc>
         ///    Implements running of a folder browser dialog.
         /// </devdoc>
-        protected override bool RunDialog(IntPtr hWndOwner) 
+        protected override bool RunDialog(IntPtr hWndOwner)
         {
             return UseVistaDialogInternal ? RunDialogVista(hWndOwner) : RunDialogOld(hWndOwner);
         }
@@ -340,7 +340,7 @@ namespace System.Windows.Forms
                             {
                                 return false;
                             }
-                
+
                             // Retrieve the path from the IDList.
                             Interop.Shell32.SHGetPathFromIDListLongPath(browseHandle.DangerousGetHandle(), out selectedPath);
                             GC.KeepAlive(callback);
@@ -360,22 +360,22 @@ namespace System.Windows.Forms
         ///    and select the initial folder.
         /// </devdoc>
         private int FolderBrowserDialog_BrowseCallbackProc(IntPtr hwnd,
-                                                           int msg, 
-                                                           IntPtr lParam, 
+                                                           int msg,
+                                                           IntPtr lParam,
                                                            IntPtr lpData)
         {
             switch (msg)
             {
-                case NativeMethods.BFFM_INITIALIZED: 
-                    // Indicates the browse dialog box has finished initializing. The lpData value is zero. 
-                    if (selectedPath.Length != 0) 
+                case NativeMethods.BFFM_INITIALIZED:
+                    // Indicates the browse dialog box has finished initializing. The lpData value is zero.
+                    if (selectedPath.Length != 0)
                     {
                         // Try to select the folder specified by selectedPath
                         UnsafeNativeMethods.SendMessage(new HandleRef(null, hwnd), (int) NativeMethods.BFFM_SETSELECTION, 1, selectedPath);
                     }
                     break;
-                case NativeMethods.BFFM_SELCHANGED: 
-                    // Indicates the selection has changed. The lpData parameter points to the item identifier list for the newly selected item. 
+                case NativeMethods.BFFM_SELCHANGED:
+                    // Indicates the selection has changed. The lpData parameter points to the item identifier list for the newly selected item.
                     IntPtr selectedPidl = lParam;
                     if (selectedPidl != IntPtr.Zero)
                     {

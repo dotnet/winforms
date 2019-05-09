@@ -9,7 +9,7 @@ namespace System.Windows.Forms
     /// </devdoc>
     public enum ToolStripItemDisplayStyle
     {
-       None = 0x0000,       
+       None = 0x0000,
        Text = 0x0001,
        Image = 0x0002,
        ImageAndText = 0x0003,

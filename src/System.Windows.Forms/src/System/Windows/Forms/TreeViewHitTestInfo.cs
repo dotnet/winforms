@@ -6,7 +6,7 @@ namespace System.Windows.Forms {
 
     using System.Diagnostics;
     using System;
-    
+
     /// <devdoc>
     ///    <para>
     ///       Specifies the return value for HITTEST on treeview.
@@ -24,7 +24,7 @@ namespace System.Windows.Forms {
             this.node = hitNode;
             this.loc = hitLocation;
         }
-        
+
 
         /// <devdoc>
         ///     This gives the exact location returned by hit test on treeview.
@@ -34,7 +34,7 @@ namespace System.Windows.Forms {
                 return loc;
             }
         }
-        
+
         /// <devdoc>
         ///     This gives the node returned by hit test on treeview.
         /// </devdoc>

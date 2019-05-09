@@ -10,7 +10,7 @@ namespace System.Windows.Forms
     using System.Windows.Forms.Internal;
     using System.Drawing.Imaging;
     using System.Windows.Forms.VisualStyles;
-    
+
     /// <devdoc>
     ///    <para></para>
     /// </devdoc>
@@ -55,8 +55,8 @@ namespace System.Windows.Forms
             }
         }
 
-        internal static TextFormatFlags ComputeTextFormatFlagsForCellStyleAlignment(bool rightToLeft, 
-                                                                                    DataGridViewContentAlignment alignment, 
+        internal static TextFormatFlags ComputeTextFormatFlagsForCellStyleAlignment(bool rightToLeft,
+                                                                                    DataGridViewContentAlignment alignment,
                                                                                     DataGridViewTriState wrapMode)
         {
             TextFormatFlags tff;
@@ -160,9 +160,9 @@ namespace System.Windows.Forms
         }
 
 
-        internal static Size GetPreferredRowHeaderSize(Graphics graphics, 
-                                                       string val, 
-                                                       DataGridViewCellStyle cellStyle, 
+        internal static Size GetPreferredRowHeaderSize(Graphics graphics,
+                                                       string val,
+                                                       DataGridViewCellStyle cellStyle,
                                                        int borderAndPaddingWidths,
                                                        int borderAndPaddingHeights,
                                                        bool showRowErrors,
@@ -229,13 +229,13 @@ namespace System.Windows.Forms
                             // There is enough room for both the status and error icons
                             allowedWidth -= 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth + DATAGRIDVIEWROWHEADERCELL_iconsWidth;
                         }
-                        if (allowedWidth > 2 * DATAGRIDVIEWROWHEADERCELL_contentMarginWidth + 
-                                           DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginLeft + 
+                        if (allowedWidth > 2 * DATAGRIDVIEWROWHEADERCELL_contentMarginWidth +
+                                           DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginLeft +
                                            DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginRight)
                         {
                             // There is enough room for text
-                            allowedWidth -= 2 * DATAGRIDVIEWROWHEADERCELL_contentMarginWidth + 
-                                            DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginLeft + 
+                            allowedWidth -= 2 * DATAGRIDVIEWROWHEADERCELL_contentMarginWidth +
+                                            DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginLeft +
                                             DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginRight;
                             if (cellStyle.WrapMode == DataGridViewTriState.True)
                             {
@@ -269,8 +269,8 @@ namespace System.Windows.Forms
                         {
                             preferredSize = DataGridViewCell.MeasureTextSize(graphics, val, cellStyle.Font, flags);
                         }
-                        preferredSize.Width += 2 * DATAGRIDVIEWROWHEADERCELL_contentMarginWidth + 
-                                               DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginLeft + 
+                        preferredSize.Width += 2 * DATAGRIDVIEWROWHEADERCELL_contentMarginWidth +
+                                               DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginLeft +
                                                DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginRight;
                         preferredSize.Height += 2*DATAGRIDVIEWROWHEADERCELL_verticalTextMargin;
                     }
@@ -433,30 +433,30 @@ namespace System.Windows.Forms
 
         internal static bool ValidTextFormatFlags(TextFormatFlags flags)
         {
-            return (flags & ~(TextFormatFlags.Bottom | 
-                              TextFormatFlags.Default | 
-                              TextFormatFlags.EndEllipsis | 
-                              TextFormatFlags.ExpandTabs | 
-                              TextFormatFlags.ExternalLeading | 
-                              TextFormatFlags.HidePrefix | 
-                              TextFormatFlags.HorizontalCenter | 
-                              TextFormatFlags.Internal | 
-                              TextFormatFlags.Left | 
-                              TextFormatFlags.ModifyString | 
-                              TextFormatFlags.NoClipping | 
-                              TextFormatFlags.NoFullWidthCharacterBreak | 
-                              TextFormatFlags.NoPrefix | 
-                              TextFormatFlags.PathEllipsis | 
-                              TextFormatFlags.PrefixOnly | 
-                              TextFormatFlags.PreserveGraphicsClipping | 
-                              TextFormatFlags.PreserveGraphicsTranslateTransform | 
-                              TextFormatFlags.Right | 
-                              TextFormatFlags.RightToLeft | 
-                              TextFormatFlags.SingleLine | 
-                              TextFormatFlags.TextBoxControl | 
-                              TextFormatFlags.Top | 
-                              TextFormatFlags.VerticalCenter | 
-                              TextFormatFlags.WordBreak | 
+            return (flags & ~(TextFormatFlags.Bottom |
+                              TextFormatFlags.Default |
+                              TextFormatFlags.EndEllipsis |
+                              TextFormatFlags.ExpandTabs |
+                              TextFormatFlags.ExternalLeading |
+                              TextFormatFlags.HidePrefix |
+                              TextFormatFlags.HorizontalCenter |
+                              TextFormatFlags.Internal |
+                              TextFormatFlags.Left |
+                              TextFormatFlags.ModifyString |
+                              TextFormatFlags.NoClipping |
+                              TextFormatFlags.NoFullWidthCharacterBreak |
+                              TextFormatFlags.NoPrefix |
+                              TextFormatFlags.PathEllipsis |
+                              TextFormatFlags.PrefixOnly |
+                              TextFormatFlags.PreserveGraphicsClipping |
+                              TextFormatFlags.PreserveGraphicsTranslateTransform |
+                              TextFormatFlags.Right |
+                              TextFormatFlags.RightToLeft |
+                              TextFormatFlags.SingleLine |
+                              TextFormatFlags.TextBoxControl |
+                              TextFormatFlags.Top |
+                              TextFormatFlags.VerticalCenter |
+                              TextFormatFlags.WordBreak |
                               TextFormatFlags.WordEllipsis)) == 0;
         }
     }

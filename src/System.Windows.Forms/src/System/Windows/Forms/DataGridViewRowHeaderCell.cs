@@ -143,7 +143,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                // 
+                //
 
                 dataGridViewCell = (DataGridViewRowHeaderCell)System.Activator.CreateInstance(thisType);
             }
@@ -714,7 +714,7 @@ namespace System.Windows.Forms
         // 1. DataGridViewCell::Paint method
         // 2. DataGridViewCell::GetContentBounds
         // 3. DataGridViewCell::GetErrorIconBounds
-        // 
+        //
         // if computeContentBounds is true then PaintPrivate returns the contentBounds
         // else if computeErrorIconBounds is true then PaintPrivate returns the errorIconBounds
         // else it returns Rectangle.Empty;
@@ -1189,7 +1189,7 @@ namespace System.Windows.Forms
                     {
                         cellRect.X = rowRect.Right - cellRect.Width;
                     }
-                    
+
                     return cellRect;
                 }
             }

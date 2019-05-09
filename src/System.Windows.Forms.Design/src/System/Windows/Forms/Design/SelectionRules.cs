@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Design
     /// <summary>
     /// Specifies a set of selection rule identifiers that can be used to indicate attributes for a selected component.
     /// </summary>
-    // We need to combine the SelectionRules.    
+    // We need to combine the SelectionRules.
     [SuppressMessage("Microsoft.Usage", "CA2217:DoNotMarkEnumsWithFlags")]
     [Flags]
     public enum SelectionRules

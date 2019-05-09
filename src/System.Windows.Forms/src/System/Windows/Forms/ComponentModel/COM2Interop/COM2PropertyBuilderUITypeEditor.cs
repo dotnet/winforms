@@ -47,20 +47,20 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     parentHandle = parent.Handle;
                 }
             }
-            
+
             bool useValue = false;
             //VARIANT pValue = null;
             object pValue = value;
 
             try{
                object obj = propDesc.TargetObject;
-                
-              
+
+
                if (obj is ICustomTypeDescriptor) {
                   obj = ((ICustomTypeDescriptor)obj).GetPropertyOwner(propDesc);
                }
 
-                
+
                 Debug.Assert(obj is NativeMethods.IProvidePropertyBuilder, "object is not IProvidePropertyBuilder");
                 NativeMethods.IProvidePropertyBuilder propBuilder = (NativeMethods.IProvidePropertyBuilder)obj;
 
@@ -77,7 +77,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
 
             if (useValue && (bldrType & _CTLBLDTYPE.CTLBLDTYPE_FEDITSOBJDIRECTLY) == 0){
-               
+
                return pValue;//pValue.ToVariant();
             }
             return value;

@@ -23,7 +23,7 @@ namespace System.Windows.Forms {
         public FlowLayoutPanel() {
             _flowLayoutSettings = FlowLayout.CreateSettings(this);
         }
-        
+
         public override LayoutEngine LayoutEngine {
             get { return FlowLayout.Instance; }
         }
@@ -34,8 +34,8 @@ namespace System.Windows.Forms {
         [Localizable(true)]
         public FlowDirection FlowDirection {
             get { return _flowLayoutSettings.FlowDirection; }
-            set { 
-                _flowLayoutSettings.FlowDirection = value; 
+            set {
+                _flowLayoutSettings.FlowDirection = value;
                 Debug.Assert(FlowDirection == value, "FlowDirection should be the same as we set it");
             }
         }
@@ -46,7 +46,7 @@ namespace System.Windows.Forms {
         [Localizable(true)]
         public bool WrapContents {
             get { return _flowLayoutSettings.WrapContents; }
-            set { 
+            set {
                 _flowLayoutSettings.WrapContents = value;
                 Debug.Assert(WrapContents == value, "WrapContents should be the same as we set it");
             }
@@ -68,7 +68,7 @@ namespace System.Windows.Forms {
         public void SetFlowBreak(Control control, bool value) {
             _flowLayoutSettings.SetFlowBreak(control, value);
         }
-		
+
         #endregion
     }
 }

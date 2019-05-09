@@ -33,7 +33,7 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         /// Disposes all resources and unhooks all events.
-        /// </summary>        
+        /// </summary>
         [SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
         public void Dispose()
         {
