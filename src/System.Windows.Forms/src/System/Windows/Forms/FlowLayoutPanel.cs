@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
     using System.Runtime.InteropServices;
 
-    /// <include file='doc\FlowPanel.uex' path='docs/doc[@for="FlowPanel"]/*' />
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [ProvideProperty("FlowBreak", typeof(Control))]
@@ -21,17 +20,14 @@ namespace System.Windows.Forms {
     public class FlowLayoutPanel : Panel, IExtenderProvider {
         private FlowLayoutSettings _flowLayoutSettings;
 
-        /// <include file='doc\FlowLayoutPanel.uex' path='docs/doc[@for="FlowLayoutPanel.FlowLayoutPanel"]/*' />
         public FlowLayoutPanel() {
             _flowLayoutSettings = FlowLayout.CreateSettings(this);
         }
         
-        /// <include file='doc\FlowPanel.uex' path='docs/doc[@for="FlowPanel.LayoutEngine"]/*' />
         public override LayoutEngine LayoutEngine {
             get { return FlowLayout.Instance; }
         }
 
-        /// <include file='doc\FlowPanel.uex' path='docs/doc[@for="FlowPanel.FlowDirection"]/*' />
         [SRDescription(nameof(SR.FlowPanelFlowDirectionDescr))]
         [DefaultValue(FlowDirection.LeftToRight)]
         [SRCategory(nameof(SR.CatLayout))]
@@ -44,7 +40,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FlowPanel.uex' path='docs/doc[@for="FlowPanel.WrapContents"]/*' />
         [SRDescription(nameof(SR.FlowPanelWrapContentsDescr))]
         [DefaultValue(true)]
         [SRCategory(nameof(SR.CatLayout))]
@@ -58,7 +53,6 @@ namespace System.Windows.Forms {
         }
 
         #region Provided properties
-        /// <include file='doc\FlowPanel.uex' path='docs/doc[@for="FlowPanel.IExtenderProvider.CanExtend"]/*' />
         bool IExtenderProvider.CanExtend(object obj) {
             Control control = obj as Control;
             return control != null && control.Parent == this;

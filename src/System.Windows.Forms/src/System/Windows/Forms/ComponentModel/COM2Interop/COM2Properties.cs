@@ -12,7 +12,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\COM2Properties.uex' path='docs/doc[@for="Com2Properties"]/*' />
     /// <devdoc>
     /// This class is responsible for managing a set or properties for a native object.  It determines
     /// when the properties need to be refreshed, and owns the extended handlers for those properties.
@@ -23,7 +22,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         
         
         
-        /// <include file='doc\COM2Properties.uex' path='docs/doc[@for="Com2Properties.AGE_THRESHHOLD"]/*' />
         /// <devdoc>
         /// This is the interval that we'll hold props for.  If someone doesn't touch an object
         /// for this amount of time, we'll dump the properties from our cache.
@@ -33,26 +31,22 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         private static long AGE_THRESHHOLD = (long)(10000000L * 60L * 5L);
 
         
-        /// <include file='doc\COM2Properties.uex' path='docs/doc[@for="Com2Properties.weakObjRef"]/*' />
         /// <devdoc>
         /// This is the object that gave us the properties.  We hold a WeakRef so we don't addref the object.
         /// </devdoc>
         internal WeakReference weakObjRef;
         
-        /// <include file='doc\COM2Properties.uex' path='docs/doc[@for="Com2Properties.props"]/*' />
         /// <devdoc>
         /// This is our list of properties.
         /// </devdoc>
         private Com2PropertyDescriptor[] props;
         
-        /// <include file='doc\COM2Properties.uex' path='docs/doc[@for="Com2Properties.defaultIndex"]/*' />
         /// <devdoc>
         /// The index of the default property
         /// </devdoc>
         private int           defaultIndex = -1;
         
         
-        /// <include file='doc\COM2Properties.uex' path='docs/doc[@for="Com2Properties.touchedTime"]/*' />
         /// <devdoc>
         /// The timestamp of the last operation on this property manager, usually
         /// when the property list was fetched.
@@ -73,7 +67,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         private int          alwaysValid = 0;
 
-        /// <include file='doc\COM2Properties.uex' path='docs/doc[@for="Com2Properties.extendedInterfaces"]/*' />
         /// <devdoc>
         /// These are the interfaces we recognize for extended browsing.
         /// </devdoc>
@@ -84,7 +77,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                                                         typeof(NativeMethods.IVsPerPropertyBrowsing),
                                                         typeof(NativeMethods.IManagedPerPropertyBrowsing)};
 
-        /// <include file='doc\COM2Properties.uex' path='docs/doc[@for="Com2Properties.extendedInterfaceHandlerTypes"]/*' />
         /// <devdoc>
         /// These are the classes of handlers corresponding to the extended
         /// interfaces above.
@@ -101,7 +93,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         public event EventHandler Disposed;
 
 
-        /// <include file='doc\COM2Properties.uex' path='docs/doc[@for="Com2Properties.Com2Properties"]/*' />
         /// <devdoc>
         /// Default ctor.
         /// </devdoc>
@@ -150,7 +141,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2Properties.uex' path='docs/doc[@for="Com2Properties.DefaultProperty"]/*' />
         /// <devdoc>
         /// Retrieve the default property.
         /// </devdoc>
@@ -172,7 +162,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2Properties.uex' path='docs/doc[@for="Com2Properties.TargetObject"]/*' />
         /// <devdoc>
         /// The object that created the list of properties.  This will
         /// return null if the timeout has passed or the ref has died.
@@ -189,7 +178,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2Properties.uex' path='docs/doc[@for="Com2Properties.TicksSinceTouched"]/*' />
         /// <devdoc>
         /// How long since these props have been queried.
         /// </devdoc>
@@ -202,7 +190,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2Properties.uex' path='docs/doc[@for="Com2Properties.Properties"]/*' />
         /// <devdoc>
         /// Returns the list of properties
         /// </devdoc>
@@ -226,7 +213,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2Properties.uex' path='docs/doc[@for="Com2Properties.TooOld"]/*' />
         /// <devdoc>
         /// Should this guy be refreshed because of old age?
         /// </devdoc>
@@ -241,7 +227,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2Properties.uex' path='docs/doc[@for="Com2Properties.AddExtendedBrowsingHandlers"]/*' />
         /// <devdoc>
         /// Checks the source object for eache extended browsing inteface
         /// listed in extendedInterfaces and creates a handler from extendedInterfaceHandlerTypes
@@ -313,7 +298,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return CheckValid(false);
         }
 
-        /// <include file='doc\COM2Properties.uex' path='docs/doc[@for="Com2Properties.CheckValid"]/*' />
         /// <devdoc>
         /// Make sure this property list is still valid.
         ///
@@ -505,7 +489,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return valid;
         }
 
-        /// <include file='doc\COM2Properties.uex' path='docs/doc[@for="Com2Properties.SetProps"]/*' />
         /// <devdoc>
         /// Set the props for this object, and notify each property
         /// that we are now it's manager

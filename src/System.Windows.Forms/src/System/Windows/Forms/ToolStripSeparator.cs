@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator"]/*' />
     /// <devdoc>
     ///    <para>
     ///      Called when the background of the ToolStrip is being rendered
@@ -26,7 +25,6 @@ namespace System.Windows.Forms {
                 this.ForeColor = SystemColors.ControlDark;
             }
 
-            /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.AutoToolTip"]/*' />
             [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -42,7 +40,6 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Image"]/*' />
             [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -58,7 +55,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.BackgroundImageLayout"]/*' />
             [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -73,7 +69,6 @@ namespace System.Windows.Forms {
               }
             }
             
-            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.CanSelect"]/*' />
             public override bool CanSelect { 
                 get  { 
                     return DesignMode; 
@@ -81,7 +76,6 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.DefaultSize"]/*' />
             /// <devdoc>
             ///     Deriving classes can override this to configure a default size for their control.
             ///     This is more efficient than setting the size in the control's constructor.
@@ -93,7 +87,6 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.DefaultMargin"]/*' />
             protected internal override Padding DefaultMargin {
                get {
                    return Padding.Empty;
@@ -115,7 +108,6 @@ namespace System.Windows.Forms {
                }
            }
 
-            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.Enabled"]/*' />
             [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -131,14 +123,12 @@ namespace System.Windows.Forms {
 
             }
 
-            /// <include file='doc\TabPage.uex' path='docs/doc[@for="ToolStripSeparator.EnabledChanged"]/*' />
             [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
             new public event EventHandler EnabledChanged {
                 add => base.EnabledChanged += value;
                 remove => base.EnabledChanged -= value;
             }
 
-            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.DisplayStyle"]/*' />
             [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -153,14 +143,12 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\TabPage.uex' path='docs/doc[@for="ToolStripSeparator.DisplayStyleChanged"]/*' />
             [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
             new public event EventHandler DisplayStyleChanged {
                 add => base.DisplayStyleChanged += value;
                 remove => base.DisplayStyleChanged -= value;
             }
 
-            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.Font"]/*' />
             [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -189,7 +177,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.Image"]/*' />
             [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -206,7 +193,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.ImageIndex"]/*' />
             [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -222,7 +208,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.ImageKey"]/*' />
             [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -290,7 +275,6 @@ namespace System.Windows.Forms {
             }
             
 
-            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.Text"]/*' />
             [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -305,14 +289,12 @@ namespace System.Windows.Forms {
               }
             }
 
-             /// <include file='doc\TabPage.uex' path='docs/doc[@for="ToolStripSeparator.TextChanged"]/*' />
             [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
             new public event EventHandler TextChanged {
                 add => base.TextChanged += value;
                 remove => base.TextChanged -= value;
             }
 
-            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.TextAlign"]/*' />
             [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -338,7 +320,6 @@ namespace System.Windows.Forms {
                  }
             }
 
-            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.TextImageRelation"]/*' />
             [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -387,7 +368,6 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.GetPreferredSize"]/*' />
             public override Size GetPreferredSize(Size constrainingSize) {
                 ToolStrip parent = this.ParentInternal;
 
@@ -419,7 +399,6 @@ namespace System.Windows.Forms {
             }
 
             
-            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.OnPaint"]/*' />
             protected override void OnPaint(System.Windows.Forms.PaintEventArgs e) {
                 if (this.Owner != null && this.ParentInternal != null) {
                     this.Renderer.DrawSeparator(new ToolStripSeparatorRenderEventArgs(e.Graphics, this, IsVertical));

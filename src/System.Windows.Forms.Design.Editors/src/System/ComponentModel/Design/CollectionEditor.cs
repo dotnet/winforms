@@ -915,7 +915,7 @@ namespace System.ComponentModel.Design
 
             private int CalcItemWidth(Graphics g, ListItem item)
             {
-                int c = Math.Min(2, _listbox.Items.Count);
+                int c = Math.Max(2, _listbox.Items.Count);
                 SizeF sizeW = g.MeasureString(c.ToString(CultureInfo.CurrentCulture), _listbox.Font);
 
                 int charactersInNumber = ((int)(Math.Log((double)(c - 1)) / s_log10) + 1);

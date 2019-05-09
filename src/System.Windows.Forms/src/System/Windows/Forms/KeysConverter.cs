@@ -16,7 +16,6 @@ namespace System.Windows.Forms {
     using System.Reflection;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <include file='doc\KeysConverter.uex' path='docs/doc[@for="KeysConverter"]/*' />
     /// <devdoc>
     /// <para>Provides a type converter to convert <see cref='System.Windows.Forms.Keys'/> objects to and from various 
     ///    other representations.</para>
@@ -81,7 +80,6 @@ namespace System.Windows.Forms {
             AddKey("9", Keys.D9);
         }
 
-        /// <include file='doc\KeysConverter.uex' path='docs/doc[@for="KeysConverter.KeyNames"]/*' />
         /// <devdoc>
         ///  Access to a lookup table of name/value pairs for keys.  These are localized
         ///  names.
@@ -106,7 +104,6 @@ namespace System.Windows.Forms {
             }
         }
     
-        /// <include file='doc\KeysConverter.uex' path='docs/doc[@for="KeysConverter.CanConvertFrom"]/*' />
         /// <devdoc>
         ///    Determines if this converter can convert an object in the given source
         ///    type to the native type of the converter.
@@ -118,7 +115,6 @@ namespace System.Windows.Forms {
             return base.CanConvertFrom(context, sourceType);
         }
         
-        /// <include file='doc\EnumConverter.uex' path='docs/doc[@for="EnumConverter.CanConvertTo"]/*' />
         /// <devdoc>
         ///    <para>Gets a value indicating whether this converter can
         ///       convert an object to the given destination type using the context.</para>
@@ -130,7 +126,6 @@ namespace System.Windows.Forms {
             return base.CanConvertTo(context, destinationType);
         }
 
-        /// <include file='doc\KeysConverter.uex' path='docs/doc[@for="KeysConverter.Compare"]/*' />
         /// <devdoc>
         ///    <para>Compares two key values for equivalence.</para>
         /// </devdoc>
@@ -138,7 +133,6 @@ namespace System.Windows.Forms {
             return string.Compare(ConvertToString(a), ConvertToString(b), false, CultureInfo.InvariantCulture);
         }
 
-        /// <include file='doc\KeysConverter.uex' path='docs/doc[@for="KeysConverter.ConvertFrom"]/*' />
         /// <devdoc>
         ///    Converts the given object to the converter's native type.
         /// </devdoc>
@@ -219,7 +213,6 @@ namespace System.Windows.Forms {
             return base.ConvertFrom(context, culture, value);
         }
 
-        /// <include file='doc\KeysConverter.uex' path='docs/doc[@for="KeysConverter.ConvertTo"]/*' />
         /// <devdoc>
         ///    Converts the given object to another type.  The most common types to convert
         ///    are to and from a string object.  The default implementation will make a call
@@ -322,7 +315,6 @@ namespace System.Windows.Forms {
             return base.ConvertTo(context, culture, value, destinationType);
         }
         
-        /// <include file='doc\KeysConverter.uex' path='docs/doc[@for="KeysConverter.GetStandardValues"]/*' />
         /// <devdoc>
         ///    Retrieves a collection containing a set of standard values
         ///    for the data type this validator is designed for.  This
@@ -346,7 +338,6 @@ namespace System.Windows.Forms {
             return values;
         }
     
-        /// <include file='doc\KeysConverter.uex' path='docs/doc[@for="KeysConverter.GetStandardValuesExclusive"]/*' />
         /// <devdoc>
         ///    Determines if the list of standard values returned from
         ///    GetStandardValues is an exclusive list.  If the list
@@ -359,7 +350,6 @@ namespace System.Windows.Forms {
             return false;
         }
         
-        /// <include file='doc\KeysConverter.uex' path='docs/doc[@for="KeysConverter.GetStandardValuesSupported"]/*' />
         /// <devdoc>
         ///    Determines if this object supports a standard set of values
         ///    that can be picked from a list.

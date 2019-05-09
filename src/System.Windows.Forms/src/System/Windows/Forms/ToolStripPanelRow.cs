@@ -15,7 +15,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
 
-    /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow"]/*' />
     [ToolboxItem(false)]
     public class ToolStripPanelRow : Component, IArrangedElement {
         private Rectangle bounds = Rectangle.Empty;
@@ -54,7 +53,6 @@ namespace System.Windows.Forms {
 #endif
 
 
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.ToolStripPanelRow"]/*' />
         public ToolStripPanelRow(ToolStripPanel parent) : this(parent, true){
         }
 
@@ -81,7 +79,6 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.Bounds"]/*' />
         public Rectangle Bounds {
             get {
                 return bounds;
@@ -98,7 +95,6 @@ namespace System.Windows.Forms {
         }
 
             
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.Controls"]/*' />
         /// <devdoc>
         /// Collection of child controls.
         /// </devdoc>
@@ -145,7 +141,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.DefaultMargin"]/*' />
         protected virtual Padding DefaultMargin {
             get { 
                 ToolStripPanelCell cell = RowManager.GetNextVisibleCell(0, /*forward*/true);
@@ -169,33 +164,28 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.DefaultPadding"]/*' />
         protected virtual Padding DefaultPadding {
             get { return Padding.Empty; }
         }
 
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.DisplayRectangle"]/*' />
         public Rectangle DisplayRectangle {
             get {
                 return RowManager.DisplayRectangle;
             }
         }
 
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.LayoutEngine"]/*' />
         public LayoutEngine LayoutEngine {
             get {
                 return FlowLayout.Instance;
             }
         }
 
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.Locked"]/*' />
         internal bool Locked {
             get {
                 return state[stateLocked];
             }           
         }
 
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.Initialized "]/*' />
         private bool Initialized {
             get {
                 return state[stateInitialized];
@@ -205,13 +195,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.Margin"]/*' />
         public Padding Margin {
             get { return CommonProperties.GetMargin(this); }
             set { if (Margin != value ) CommonProperties.SetMargin(this, value); }
         }
 
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.Padding"]/*' />
         public virtual Padding Padding {
             get { return CommonProperties.GetPadding(this, DefaultPadding); }
             set {
@@ -236,7 +224,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.ToolStripPanel"]/*' />
         public ToolStripPanel ToolStripPanel {
             get {
                 return parent;
@@ -249,7 +236,6 @@ namespace System.Windows.Forms {
                 }       
         }
 
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.Orientation"]/*' />
         public Orientation Orientation {
             get {
                 return ToolStripPanel.Orientation;
@@ -262,7 +248,6 @@ namespace System.Windows.Forms {
         }
 #endif
 
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.CanMove"]/*' />
         /// <devdoc>
         /// returns true if there is enough space to "raft" the control
         /// ow returns false
@@ -271,12 +256,10 @@ namespace System.Windows.Forms {
             return !ToolStripPanel.Locked && !Locked && RowManager.CanMove(toolStripToDrag);
         }
 
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.CreateControlsInstance"]/*' />
         private ToolStripPanelRowControlCollection CreateControlsInstance() {
             return new ToolStripPanelRowControlCollection(this);
         }
 
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.Dispose"]/*' />
         protected override void Dispose(bool disposing) {
             try {
                 if (disposing) {
@@ -292,7 +275,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.OnControlAdded"]/*' />
         protected internal virtual void OnControlAdded(Control control, int index) {
 
         
@@ -305,19 +287,16 @@ namespace System.Windows.Forms {
             RowManager.OnControlAdded(control, index);
         }
 
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.OnOrientationChanged"]/*' />
         protected internal virtual void OnOrientationChanged() {
             this.rowManager = null;
         }
 
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.OnBoundsChanged"]/*' />
         protected void OnBoundsChanged(Rectangle oldBounds, Rectangle newBounds) {
             ((IArrangedElement)this).PerformLayout((IArrangedElement)this, PropertyNames.Size);
 
             RowManager.OnBoundsChanged(oldBounds,newBounds);
         }
 
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.OnControlRemoved"]/*' />
         protected internal virtual void OnControlRemoved(Control control, int index) {
             if (!state[stateDisposing]) {
                 this.SuspendLayout();
@@ -358,7 +337,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.OnLayout"]/*' />
         protected virtual void OnLayout(LayoutEventArgs e) {
             if (Initialized && !state[stateInLayout]) {
              state[stateInLayout] = true;
@@ -609,7 +587,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.IArrangedElement.Children"]/*' />
         /// <devdoc>
         /// </devdoc>
         ArrangedElementCollection IArrangedElement.Children {
@@ -618,7 +595,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.IArrangedElement.Container"]/*' />
         /// <devdoc>
         /// Should not be exposed as this returns an unexposed type.
         /// </devdoc>
@@ -628,7 +604,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.IArrangedElement.DisplayRectangle"]/*' />
 
         Rectangle IArrangedElement.DisplayRectangle {
             get {
@@ -638,7 +613,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.IArrangedElement.ParticipatesInLayout"]/*' />
 
         bool IArrangedElement.ParticipatesInLayout {
             get {
@@ -646,14 +620,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.IArrangedElement.Properties"]/*' />
         PropertyStore IArrangedElement.Properties {
             get {
                 return this.Properties;
             }
         }
 
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.IArrangedElement.GetPreferredSize"]/*' />
         Size IArrangedElement.GetPreferredSize(Size constrainingSize) {
             Size preferredSize = LayoutEngine.GetPreferredSize(this, constrainingSize - Padding.Size) + Padding.Size;
 
@@ -668,7 +640,6 @@ namespace System.Windows.Forms {
         }
 
         // Sets the bounds for an element.
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.IArrangedElement.SetBounds"]/*' />
         void IArrangedElement.SetBounds(Rectangle bounds, BoundsSpecified specified) {
             // in this case the parent is telling us to refresh our bounds - dont 
             // call PerformLayout
@@ -676,7 +647,6 @@ namespace System.Windows.Forms {
         }
 
        
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.IArrangedElement.PerformLayout"]/*' />
 
         void IArrangedElement.PerformLayout(IArrangedElement container, string propertyName) {
             if (suspendCount <= 0) {
@@ -699,7 +669,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.MoveControl"]/*' />
         internal void MoveControl(ToolStrip movingControl, Point startClientLocation, Point endClientLocation) {
             RowManager.MoveControl(movingControl, startClientLocation, endClientLocation);
         }
@@ -1978,24 +1947,20 @@ namespace System.Windows.Forms {
         /// is responsible for parenting and unparenting the controls (ToolStripPanelRows do NOT derive from 
         /// Control and thus are NOT hwnd backed).
         /// </devdoc>
-        /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRowControlCollection"]/*' />
         internal class ToolStripPanelRowControlCollection : ArrangedElementCollection, IList, IEnumerable {
             private ToolStripPanelRow owner;
             private ArrangedElementCollection cellCollection;
             
-            /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRowControlCollection.ToolStripPanelRowControlCollection"]/*' />
             public ToolStripPanelRowControlCollection(ToolStripPanelRow owner) {
                 this.owner = owner;
             }
 
 
-            /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRowControlCollection.ToolStripPanelRowControlCollection1"]/*' />
             public ToolStripPanelRowControlCollection(ToolStripPanelRow owner, Control[] value) {
                 this.owner = owner;
                 AddRange(value);
             }
 
-            /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRowControlCollection.this"]/*' />
             public new virtual Control this[int index] {
                 get {
                     return GetControl(index);
@@ -2012,14 +1977,12 @@ namespace System.Windows.Forms {
             }
     
 
-            /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRowControlCollection.ToolStripPanel"]/*' />
             public ToolStripPanel ToolStripPanel {
                 get {
                     return owner.ToolStripPanel;
                 }
             }
 
-            /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRowControlCollection.Add"]/*' />
             [EditorBrowsable(EditorBrowsableState.Never)]
             public int Add(Control value) {
                 ISupportToolStripPanel control = value as ISupportToolStripPanel;
@@ -2037,7 +2000,6 @@ namespace System.Windows.Forms {
                 return index;
             }
 
-            /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRowControlCollection.AddRange"]/*' />
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             [EditorBrowsable(EditorBrowsableState.Never)]
             public void AddRange(Control[] value) {
@@ -2063,7 +2025,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRowControlCollection.Contains"]/*' />
             public bool Contains(Control value) {
                 for (int i = 0; i < Count; i++) {
                     if (GetControl(i) == value) {
@@ -2073,7 +2034,6 @@ namespace System.Windows.Forms {
                 return false;
             }
 
-            /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRowControlCollection.Clear"]/*' />
             public virtual void Clear() {
                 if (owner != null) {
                     ToolStripPanel.SuspendLayout();
@@ -2136,7 +2096,6 @@ namespace System.Windows.Forms {
 
             void IList.Insert(int index, object value) { Insert(index, value as Control); }
 
-            /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRowControlCollection.IndexOf"]/*' />
             public int IndexOf(Control value) {
                 for (int i = 0; i < Count; i++) {
                     if (GetControl(i) == value) {
@@ -2146,7 +2105,6 @@ namespace System.Windows.Forms {
                 return -1;
             }
 
-            /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRowControlCollection.Insert"]/*' />
             [EditorBrowsable(EditorBrowsableState.Never)]
             public void Insert(int index, Control value) {
                 if (value == null) {
@@ -2207,7 +2165,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRowControlCollection.Remove"]/*' />
             
             [EditorBrowsable(EditorBrowsableState.Never)]
             public void Remove(Control value) {
@@ -2215,7 +2172,6 @@ namespace System.Windows.Forms {
                 RemoveAt(index);
             }
 
-            /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRowControlCollection.RemoveAt"]/*' />
             [EditorBrowsable(EditorBrowsableState.Never)]
             public void RemoveAt(int index) {
                 if (index >= 0 && index < Count) {
@@ -2226,7 +2182,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRowControlCollection.CopyTo"]/*' />
             [EditorBrowsable(EditorBrowsableState.Never)]
             public void CopyTo(Control[] array, int index) {
                 if (array == null) {

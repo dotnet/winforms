@@ -55,7 +55,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return null;
         }
 
-        /// <include file='doc\COM2IPerPropertyBrowsingHandler.uex' path='docs/doc[@for="Com2IPerPropertyBrowsingHandler.OnGetAttributes"]/*' />
         /// <devdoc>
         /// Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing.   HideProperty
         /// such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
@@ -215,7 +214,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 this.arraysFetched = false;
              }
 
-             /// <include file='doc\COM2IPerPropertyBrowsingHandler.uex' path='docs/doc[@for="Com2IPerPropertyBrowsingHandler.Com2IPerPropertyBrowsingEnum.Values"]/*' />
              /// <devdoc>
              /// Retrieve a copy of the value array
              /// </devdoc>
@@ -226,7 +224,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 }
              }
     
-             /// <include file='doc\COM2IPerPropertyBrowsingHandler.uex' path='docs/doc[@for="Com2IPerPropertyBrowsingHandler.Com2IPerPropertyBrowsingEnum.Names"]/*' />
              /// <devdoc>
              /// Retrieve a copy of the nme array.
              /// </devdoc>

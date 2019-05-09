@@ -15,7 +15,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
     using System.Runtime.Versioning;
     
-    /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton"]/*' />
     /// <devdoc/>
     [
     ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip | ToolStripItemDesignerAvailability.StatusStrip),
@@ -44,7 +43,6 @@ namespace System.Windows.Forms {
         private static bool isScalingInitialized = false;
         private static int scaledDropDownButtonWidth = DEFAULT_DROPDOWN_WIDTH;
        
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.ToolStripSplitButton"]/*' />
         /// <devdoc>
         /// Summary of ToolStripSplitButton.
         /// </devdoc>
@@ -81,7 +79,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.ButtonBounds"]/*' />
         /// <devdoc>
         /// Summary of ToolStripSplitButton.
         /// </devdoc>
@@ -94,7 +91,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.ButtonPressed"]/*' />
         /// <devdoc>
         /// Summary of ButtonPressed.
         /// </devdoc>
@@ -106,7 +102,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.ButtonSelected"]/*' />
         /// <devdoc>
         /// Summary of ButtonPressed.
         /// </devdoc>
@@ -117,7 +112,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.ButtonClick"]/*' />
         /// <devdoc>
         /// <para>Occurs when the button portion of a split button is clicked.</para>
         /// </devdoc>
@@ -129,7 +123,6 @@ namespace System.Windows.Forms {
             add => Events.AddHandler(EventButtonClick, value); 
             remove => Events.RemoveHandler(EventButtonClick, value);
         }
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.ButtonDoubleClick"]/*' />
         /// <devdoc>
         /// <para>Occurs when the utton portion of a split button  is double clicked.</para>
         /// </devdoc>
@@ -149,7 +142,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.DefaultItem"]/*' />
         /// <devdoc>
         /// Summary of DefaultItem.
         /// </devdoc>
@@ -167,7 +159,6 @@ namespace System.Windows.Forms {
         }
      
 
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.DefaultItemChanged"]/*' />
         /// <devdoc>
         /// <para>Occurs when the default item has changed</para>
         /// </devdoc>
@@ -180,7 +171,6 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EventDefaultItemChanged, value);
         }
 	
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.DismissWhenClicked"]/*' />
         /// <devdoc>
         /// specifies the default behavior of these items on ToolStripDropDowns when clicked.
         /// </devdoc>
@@ -195,7 +185,6 @@ namespace System.Windows.Forms {
                get { return this.DropDownButtonBounds; }
         }
 
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.DropDownButtonBounds"]/*' />
         /// <devdoc>
         /// The bounds of the DropDown in ToolStrip coordinates.
         /// </devdoc>
@@ -206,7 +195,6 @@ namespace System.Windows.Forms {
             }
 
         }
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.DropDownButtonPressed"]/*' />
         /// <devdoc>
         /// Summary of DropDownButtonBounds.
         /// </devdoc>
@@ -217,7 +205,6 @@ namespace System.Windows.Forms {
                 return DropDown.Visible; 
             }
         }
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.DropDownButtonSelected"]/*' />
         /// <devdoc>
         /// Summary of DropDownButtonSelected.
         /// </devdoc>
@@ -227,7 +214,6 @@ namespace System.Windows.Forms {
                 return this.Selected; 
             }
         }
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.DropDownButtonWidth"]/*' />
         /// <devdoc>
         /// Summary of DropDownButtonWidth.
         /// </devdoc>
@@ -307,7 +293,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.SplitterWidth"]/*' />
         /// <devdoc>
         /// the width of the separator between the default and drop down button
         /// </devdoc>
@@ -331,7 +316,6 @@ namespace System.Windows.Forms {
                 InvalidateSplitButtonLayout();
             }
         }
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.SplitterBounds"]/*' />
         /// <devdoc>
         /// the boundaries of the separator between the default and drop down button, exposed for custom
         /// painting purposes.
@@ -397,7 +381,6 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.GetPreferredSize"]/*' />
         public override Size GetPreferredSize(Size constrainingSize) {
             Size preferredSize = SplitButtonButtonLayout.GetPreferredSize(constrainingSize);
             preferredSize.Width += DropDownButtonWidth + SplitterWidth + Padding.Horizontal;
@@ -432,7 +415,6 @@ namespace System.Windows.Forms {
            return true;
         }
 
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.OnButtonClick"]/*' />
         /// <devdoc>
         /// called when the button portion of a split button is clicked
         /// if there is a default item, this will route the click to the default item
@@ -448,7 +430,6 @@ namespace System.Windows.Forms {
  
         }
         
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.OnButtonDoubleClick"]/*' />
         /// <devdoc>
         /// called when the button portion of a split button is double clicked
         /// if there is a default item, this will route the double click to the default item
@@ -463,7 +444,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.OnDefaultItemChanged"]/*' />
         /// <devdoc>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
@@ -478,7 +458,6 @@ namespace System.Windows.Forms {
 
         }        
 
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.OnMouseDown"]/*' />
         /// <devdoc>
         /// Summary of OnMouseDown.
         /// </devdoc>
@@ -501,7 +480,6 @@ namespace System.Windows.Forms {
         }
         
             
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.OnMouseUp"]/*' />
         /// <devdoc>
         /// Summary of OnMouseUp.
         /// </devdoc>
@@ -552,14 +530,12 @@ namespace System.Windows.Forms {
             }
 
         }
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.OnMouseLeave"]/*' />
         protected override void OnMouseLeave(EventArgs e) {
             openMouseId = 0;  // reset the mouse id, we should never get this value from toolstrip.
             SplitButtonButton.Push(false);
             base.OnMouseLeave(e);
         }
       	
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.OnRightToLeftChanged"]/*' />
         /// <devdoc>
         /// Summary of OnRightToLeftChanged.
         /// </devdoc>
@@ -567,7 +543,6 @@ namespace System.Windows.Forms {
             base.OnRightToLeftChanged(e);
             InvalidateSplitButtonLayout();			
         }
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.OnPaint"]/*' />
         /// <devdoc>
         /// Summary of OnPaint.
         /// </devdoc>
@@ -598,7 +573,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.ResetDropDownButtonWidth"]/*' />
         /// <devdoc>
         /// Resets the RightToLeft to be the default.
         /// </devdoc>
@@ -756,7 +730,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItemAccessibleObject"]/*' />        
         [SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]
         public class ToolStripSplitButtonAccessibleObject : ToolStripItem.ToolStripItemAccessibleObject {
             private ToolStripSplitButton owner;
@@ -765,13 +738,11 @@ namespace System.Windows.Forms {
                 owner = item;
             }
 
-            /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.DoDefaultAction"]/*' />
             public override void DoDefaultAction() {
                 owner.PerformButtonClick();
             }
         }
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripSplitButtonExAccessibleObject"]/*' /> 
         internal class ToolStripSplitButtonExAccessibleObject: ToolStripSplitButtonAccessibleObject {
 
             private ToolStripSplitButton ownerItem;

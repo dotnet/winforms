@@ -28,7 +28,6 @@ namespace System.Windows.Forms {
     using System.Drawing.Text;
     
 
-    /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox"]/*' />
     /// <devdoc>
     ///    <para>
     ///
@@ -54,20 +53,17 @@ namespace System.Windows.Forms {
         private const int BORDER_SIZE = 1;
 
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.killnextselect"]/*' />
         /// <devdoc>
         ///     Decides whether or not to ignore the next LBN_SELCHANGE
         ///     message - used to prevent cursor keys from toggling checkboxes
         /// </devdoc>
         private bool killnextselect = false;
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.onItemCheck"]/*' />
         /// <devdoc>
         ///     Current listener of the onItemCheck event.
         /// </devdoc>
         private ItemCheckEventHandler onItemCheck;
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.checkOnClick"]/*' />
         /// <devdoc>
         ///     Indicates whether or not we should toggle check state on the first
         ///     click on an item, or whether we should wait for the user to click
@@ -75,13 +71,11 @@ namespace System.Windows.Forms {
         /// </devdoc>
         private bool checkOnClick = false;
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.flat"]/*' />
         /// <devdoc>
         ///     Should we use 3d checkboxes or flat ones?
         /// </devdoc>
         private bool flat = true;
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.lastSelected"]/*' />
         /// <devdoc>
         ///     Indicates which item was last selected.  We want to keep track
         ///     of this so we can be a little less aggressive about checking/
@@ -89,7 +83,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         private int lastSelected = -1;
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.checkedItemCollection"]/*' />
         /// <devdoc>
         ///     The collection of checked items in the CheckedListBox.
         /// </devdoc>
@@ -104,7 +97,6 @@ namespace System.Windows.Forms {
             LBC_SETCHECKSTATE = SafeNativeMethods.RegisterWindowMessage("LBC_SETCHECKSTATE");
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedListBox"]/*' />
         /// <devdoc>
         ///     Creates a new CheckedListBox for the user.
         /// </devdoc>
@@ -119,7 +111,6 @@ namespace System.Windows.Forms {
           
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckOnClick"]/*' />
         /// <devdoc>
         ///     Indicates whether or not the checkbox should be toggled whenever an
         ///     item is selected.  The default behaviour is to just change the
@@ -141,7 +132,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedIndices"]/*' />
         /// <devdoc>
         ///     Collection of checked indices in this CheckedListBox.
         /// </devdoc>
@@ -158,7 +148,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedItems"]/*' />
         /// <devdoc>
         ///     Collection of checked items in this CheckedListBox.
         /// </devdoc>
@@ -175,7 +164,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CreateParams"]/*' />
         /// <devdoc>
         ///     This is called when creating a window.  Inheriting classes can ovveride
         ///     this to add extra functionality, but should not forget to first call
@@ -191,7 +179,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.DataSource"]/*' />
         /// <devdoc>
         ///     CheckedListBox DataSource.
         /// </devdoc>
@@ -206,7 +193,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.DisplayMember"]/*' />
         /// <devdoc>
         ///     CheckedListBox DisplayMember.
         /// </devdoc>
@@ -221,7 +207,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.DrawMode"]/*' />
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -234,7 +219,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.ItemHeight"]/*' />
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -248,7 +232,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.Items"]/*' />
         /// <devdoc>
         ///     Collection of items in this listbox.
         /// </devdoc>
@@ -276,7 +259,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.SelectionMode"]/*' />
         /// <devdoc>
         ///     For CheckedListBoxes, multi-selection is not supported.  You can set
         ///     selection to be able to select one item or no items.
@@ -302,7 +284,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.ThreeDCheckBoxes"]/*' />
         /// <devdoc>
         ///     Indicates if the CheckBoxes should show up as flat or 3D in appearance.
         /// </devdoc>
@@ -358,7 +339,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.ValueMember"]/*' />
         /// <devdoc>
         ///     CheckedListBox ValueMember.
         /// </devdoc>
@@ -374,28 +354,24 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="ComboBox.DataSourceChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DataSourceChanged {
             add => base.DataSourceChanged += value;
             remove => base.DataSourceChanged -= value;
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="ComboBox.DisplayMemberChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DisplayMemberChanged {
             add => base.DisplayMemberChanged += value;
             remove => base.DisplayMemberChanged -= value;
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.ItemCheck"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.CheckedListBoxItemCheckDescr))]
         public event ItemCheckEventHandler ItemCheck {
             add => onItemCheck += value;
             remove => onItemCheck -= value;
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.Click"]/*' />
         /// <hideinheritance/>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public new event EventHandler Click {
@@ -403,7 +379,6 @@ namespace System.Windows.Forms {
             remove => base.Click -= value;
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.MouseClick"]/*' />
         /// <hideinheritance/>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public new event MouseEventHandler MouseClick {
@@ -411,7 +386,6 @@ namespace System.Windows.Forms {
             remove => base.MouseClick -= value;
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.DrawItem"]/*' />
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event DrawItemEventHandler DrawItem {
@@ -419,7 +393,6 @@ namespace System.Windows.Forms {
             remove => base.DrawItem -= value;
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.MeasureItem"]/*' />
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MeasureItemEventHandler MeasureItem {
@@ -427,7 +400,6 @@ namespace System.Windows.Forms {
             remove => base.MeasureItem -= value;
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.Padding"]/*' />
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -438,14 +410,12 @@ namespace System.Windows.Forms {
             set { base.Padding = value;}
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="ComboBox.ValueMemberChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ValueMemberChanged {
             add => base.ValueMemberChanged += value;
             remove => base.ValueMemberChanged -= value;
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CreateAccessibilityInstance"]/*' />
         /// <devdoc>
         ///    Constructs the new instance of the accessibility object for this control. Subclasses
         ///    should not call base.CreateAccessibilityObject.
@@ -454,12 +424,10 @@ namespace System.Windows.Forms {
             return new CheckedListBoxAccessibleObject(this);
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CreateItemCollection"]/*' />
         protected override ListBox.ObjectCollection CreateItemCollection() {
             return new ObjectCollection(this);
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.GetItemCheckState"]/*' />
         /// <devdoc>
         ///     Gets the check value of the current item.  This value will be from the
         ///     System.Windows.Forms.CheckState enumeration.
@@ -471,7 +439,6 @@ namespace System.Windows.Forms {
             return CheckedItems.GetCheckedState(index);
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.GetItemChecked"]/*' />
         /// <devdoc>
         ///     Indicates if the given item is, in any way, shape, or form, checked.
         ///     This will return true if the item is fully or indeterminately checked.
@@ -480,7 +447,6 @@ namespace System.Windows.Forms {
             return(GetItemCheckState(index) != CheckState.Unchecked);
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.InvalidateItem"]/*' />
         /// <devdoc>
         ///     Invalidates the given item in the listbox
         /// </devdoc>
@@ -492,7 +458,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.LbnSelChange"]/*' />
         /// <devdoc>
         ///     A redirected LBN_SELCHANGE message notification.
         /// </devdoc>
@@ -543,7 +508,6 @@ namespace System.Windows.Forms {
             InvalidateItem(index);
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.OnClick"]/*' />
         /// <devdoc>
         ///     Ensures that mouse clicks can toggle...
         /// </devdoc>
@@ -553,7 +517,6 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.OnHandleCreated"]/*' />
         /// <devdoc>
         ///     When the handle is created we can dump any cached item-check pairs.
         /// </devdoc>
@@ -563,7 +526,6 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.OnDrawItem"]/*' />
         /// <devdoc>
         ///     Actually goes and fires the drawItem event.  Inheriting controls
         ///     should use this to know when the event is fired [this is preferable to
@@ -804,7 +766,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.OnBackColorChanged"]/*' />
         protected override void OnBackColorChanged(EventArgs e) {
             base.OnBackColorChanged(e);
 
@@ -813,7 +774,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.OnFontChanged"]/*' />
         protected override void OnFontChanged(EventArgs e) {
 
             // Update the item height
@@ -827,7 +787,6 @@ namespace System.Windows.Forms {
             base.OnFontChanged(e);
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.OnKeyPress"]/*' />
         /// <devdoc>
         ///     This is the code that actually fires the "keyPress" event.  The Checked
         ///     ListBox overrides this to look for space characters, since we
@@ -845,7 +804,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.OnItemCheck"]/*' />
         /// <devdoc>
         ///     This is the code that actually fires the itemCheck event.  Don't
         ///     forget to call base.onItemCheck() to ensure that itemCheck vents
@@ -855,7 +813,6 @@ namespace System.Windows.Forms {
             if (onItemCheck != null) onItemCheck(this, ice);
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.OnMeasureItem"]/*' />
         protected override void OnMeasureItem(MeasureItemEventArgs e) {
             base.OnMeasureItem(e);
 
@@ -867,7 +824,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.OnSelectedIndexChanged"]/*' />
         /// <devdoc>
         ///     Actually goes and fires the selectedIndexChanged event.  Inheriting controls
         ///     should use this to know when the event is fired [this is preferable to
@@ -884,7 +840,6 @@ namespace System.Windows.Forms {
 
 
         
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.RefreshItems"]/*' />
         /// <devdoc>
         /// Reparses the objects, getting new text strings for them.
         /// </devdoc>
@@ -905,7 +860,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.SetItemCheckState"]/*' />
         /// <devdoc>
         ///     Sets the checked value of the given item.  This value should be from
         ///     the System.Windows.Forms.CheckState enumeration.
@@ -931,7 +885,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.SetItemChecked"]/*' />
         /// <devdoc>
         ///     Sets the checked value of the given item.  This value should be a
         ///     boolean.
@@ -940,7 +893,6 @@ namespace System.Windows.Forms {
             SetItemCheckState(index, value ? CheckState.Checked : CheckState.Unchecked);
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.WmReflectCommand"]/*' />
         /// <devdoc>
         ///     We need to get LBN_SELCHANGE notifications
         /// </devdoc>
@@ -965,7 +917,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.WmReflectVKeyToItem"]/*' />
         /// <devdoc>
         ///     Handle keyboard input to prevent arrow keys from toggling
         ///     checkboxes in CheckOnClick mode.
@@ -990,7 +941,6 @@ namespace System.Windows.Forms {
             m.Result = NativeMethods.InvalidIntPtr;
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.WndProc"]/*' />
         /// <devdoc>
         ///     The listbox's window procedure.  Inheriting classes can override this
         ///     to add extra functionality, but should not forget to call
@@ -1033,17 +983,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.ObjectCollection"]/*' />
         new public class ObjectCollection : ListBox.ObjectCollection {
             private CheckedListBox owner;
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.ObjectCollection.ObjectCollection"]/*' />
             public ObjectCollection(CheckedListBox owner)
             : base(owner) {
                 this.owner = owner;
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.ObjectCollection.Add"]/*' />
             /// <devdoc>
             ///     Lets the user add an item to the listbox with the given initial value
             ///     for the Checked portion of the item.
@@ -1052,7 +999,6 @@ namespace System.Windows.Forms {
                 return Add(item, isChecked ? CheckState.Checked : CheckState.Unchecked);
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.ObjectCollection.Add1"]/*' />
             /// <devdoc>
             ///     Lets the user add an item to the listbox with the given initial value
             ///     for the Checked portion of the item.
@@ -1073,7 +1019,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedIndexCollection"]/*' />
         public class CheckedIndexCollection : IList {
             private CheckedListBox owner;
 
@@ -1081,7 +1026,6 @@ namespace System.Windows.Forms {
                 this.owner = owner;
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedIndexCollection.Count"]/*' />
             /// <devdoc>
             ///     Number of current checked items.
             /// </devdoc>
@@ -1091,35 +1035,30 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.ICollection.SyncRoot"]/*' />
             object ICollection.SyncRoot {
                 get {
                     return this;
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.ICollection.IsSynchronized"]/*' />
             bool ICollection.IsSynchronized {
                 get {
                     return false;
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.IsFixedSize"]/*' />
             bool IList.IsFixedSize {
                 get {
                     return true;
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedIndexCollection.IsReadOnly"]/*' />
             public bool IsReadOnly {
                 get {
                     return true;
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedIndexCollection.this"]/*' />
             /// <devdoc>
             ///     Retrieves the specified checked item.
             /// </devdoc>
@@ -1131,7 +1070,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.this"]/*' />
             object IList.this[int index] {
                 get {
                     return this[index];
@@ -1141,37 +1079,30 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.Add"]/*' />
             int IList.Add(object value) {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.Clear"]/*' />
             void IList.Clear() {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.Insert"]/*' />
             void IList.Insert(int index, object value) {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.Remove"]/*' />
             void IList.Remove(object value) {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.RemoveAt"]/*' />
             void IList.RemoveAt(int index) {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedIndexCollection.Contains"]/*' />
             public bool Contains(int index) {
                  return (IndexOf(index) != -1);
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.Contains"]/*' />
             bool IList.Contains(object index) {
                 if (index is int) {
                     return Contains((int)index);
@@ -1181,7 +1112,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedIndexCollection.CopyTo"]/*' />
             public void CopyTo(Array dest, int index) {
                 int cnt = owner.CheckedItems.Count;
                 for (int i = 0; i < cnt; i++) {
@@ -1199,14 +1129,12 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedIndexCollection.GetEnumerator"]/*' />
             public IEnumerator GetEnumerator() {
                 int[] indices = new int[this.Count];
                 CopyTo(indices, 0);
                 return indices.GetEnumerator();
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedIndexCollection.IndexOf"]/*' />
             public int IndexOf(int index) {
                 if (index >= 0 && index < owner.Items.Count) {
                     object value = InnerArray.GetEntryObject(index, 0);
@@ -1215,7 +1143,6 @@ namespace System.Windows.Forms {
                 return -1;
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.IndexOf"]/*' />
             int IList.IndexOf(object index) {
                 if (index is int) {
                     return IndexOf((int)index);
@@ -1227,7 +1154,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedItemCollection"]/*' />
         public class CheckedItemCollection : IList {
 
             internal static int CheckedItemMask = ItemArray.CreateMask();
@@ -1240,7 +1166,6 @@ namespace System.Windows.Forms {
                 this.owner = owner;
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedItemCollection.Count"]/*' />
             /// <devdoc>
             ///     Number of current checked items.
             /// </devdoc>
@@ -1260,7 +1185,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedItemCollection.this"]/*' />
             /// <devdoc>
             ///     Retrieves the specified checked item.
             /// </devdoc>
@@ -1274,40 +1198,34 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.ICollection.SyncRoot"]/*' />
             object ICollection.SyncRoot {
                 get {
                     return this;
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.ICollection.IsSynchronized"]/*' />
             bool ICollection.IsSynchronized {
                 get {
                     return false;
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.IList.IsFixedSize"]/*' />
             bool IList.IsFixedSize {
                 get {
                     return true;
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedItemCollection.IsReadOnly"]/*' />
             public bool IsReadOnly {
                 get {
                     return true;
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedItemCollection.Contains"]/*' />
             public bool Contains(object item) {
                 return IndexOf(item) != -1;
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedItemCollection.IndexOf"]/*' />
             public int IndexOf(object item) {
                 return InnerArray.IndexOf(item, AnyMask);
             }
@@ -1316,32 +1234,26 @@ namespace System.Windows.Forms {
                 return InnerArray.IndexOfIdentifier(item, AnyMask);
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.IList.Add"]/*' />
             int IList.Add(object value) {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.IList.Clear"]/*' />
             void IList.Clear() {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.IList.Insert"]/*' />
             void IList.Insert(int index, object value) {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.IList.Remove"]/*' />
             void IList.Remove(object value) {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.IList.RemoveAt"]/*' />
             void IList.RemoveAt(int index) {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedItemCollection.CopyTo"]/*' />
             public void CopyTo(Array dest, int index) {
                 int cnt = InnerArray.GetCount(AnyMask);
                 for (int i = 0; i < cnt; i++) {
@@ -1367,7 +1279,6 @@ namespace System.Windows.Forms {
                 return CheckState.Unchecked;
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedItemCollection.GetEnumerator"]/*' />
             public IEnumerator GetEnumerator() {
                 return InnerArray.GetEnumerator(AnyMask, true);
             }
@@ -1409,13 +1320,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedListBoxAccessibleObject"]/*' />
         /// <devdoc>
         /// </devdoc>
         [System.Runtime.InteropServices.ComVisible(true)]
         internal class CheckedListBoxAccessibleObject : ControlAccessibleObject {
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedListBoxAccessibleObject.CheckedListBoxAccessibleObject"]/*' />
             /// <devdoc>
             /// </devdoc>
             public CheckedListBoxAccessibleObject(CheckedListBox owner) : base(owner) {
@@ -1427,7 +1336,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedListBoxAccessibleObject.GetChild"]/*' />
             /// <devdoc>
             /// </devdoc>
             public override AccessibleObject GetChild(int index) {
@@ -1439,7 +1347,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedListBoxAccessibleObject.GetChildCount"]/*' />
             /// <devdoc>
             /// </devdoc>
             public override int GetChildCount() {
@@ -1498,7 +1405,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedListBoxItemAccessibleObject"]/*' />
         /// <devdoc>
         /// </devdoc>
         [System.Runtime.InteropServices.ComVisible(true)]

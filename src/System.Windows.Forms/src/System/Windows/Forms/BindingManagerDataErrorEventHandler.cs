@@ -6,7 +6,6 @@ namespace System.Windows.Forms {
 
     using System;
 
-    /// <include file='doc\BindingManagerDataErrorEventHandler.uex' path='docs/doc[@for="BindingManagerDataErrorEventHandler"]/*' />
     /// <devdoc>
     /// </devdoc>
     public delegate void BindingManagerDataErrorEventHandler(object sender, BindingManagerDataErrorEventArgs e);

@@ -288,7 +288,6 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.DrawMode"]/*' />
         [
         SRDescription(nameof(SR.ToolStripRenderModeDescr)),
         SRCategory(nameof(SR.CatAppearance)),
@@ -340,7 +339,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnDefaultRendererChanged"]/*' />
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         protected virtual void OnRendererChanged(EventArgs e) {
 

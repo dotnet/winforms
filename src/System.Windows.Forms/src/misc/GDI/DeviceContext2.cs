@@ -14,7 +14,6 @@ namespace System.Drawing.Internal
 namespace System.Experimental.Gdi
 #endif
 {
-    /// <include file='doc\IDeviceContext.uex' path='docs/doc[@for="DeviceContext"]/*' />
     /// <devdoc>
     ///     Represents a Win32 device context.  Provides operations for setting some of the properties
     ///     of a device context.  It's the managed wrapper for an HDC.

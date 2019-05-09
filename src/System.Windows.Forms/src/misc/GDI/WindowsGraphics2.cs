@@ -21,7 +21,6 @@ namespace System.Experimental.Gdi
     using System.Drawing.Drawing2D;
     using System.Windows.Forms;
 
-    /// <include file='doc\WindowsGraphics.uex' path='docs/doc[@for="WindowsGraphics"]/*' />
     /// <devdoc>
     ///     See notes on WindowsGraphics.cs file.
     ///</devdoc>
@@ -571,13 +570,11 @@ namespace System.Experimental.Gdi
 
         // DrawRectangle overloads
 
-        /// <include file='doc\WindowsGraphics.uex' path='docs/doc[@for="WindowsGraphics.DrawRectangle"]/*' />
         public void DrawRectangle(WindowsPen pen, Rectangle rect) 
         { 
             DrawRectangle(pen, rect.X, rect.Y, rect.Width, rect.Height);
         }
 
-        /// <include file='doc\WindowsGraphics.uex' path='docs/doc[@for="WindowsGraphics.DrawRectangle3"]/*' />
         public void DrawRectangle(WindowsPen pen, int x, int y, int width, int height) 
         { 
             Debug.Assert( pen != null, "pen == null" );
@@ -608,13 +605,11 @@ namespace System.Experimental.Gdi
 
         // FillRectangle overloads
 
-        /// <include file='doc\WindowsGraphics.uex' path='docs/doc[@for="WindowsGraphics.FillRectangle"]/*' />
         public void FillRectangle(WindowsBrush brush, Rectangle rect)
         {
             FillRectangle(brush, rect.X, rect.Y, rect.Width, rect.Height);
         }
 
-        /// <include file='doc\WindowsGraphics.uex' path='docs/doc[@for="WindowsGraphics.FillRectangle3"]/*' />
         public void FillRectangle(WindowsBrush brush, int x, int y, int width, int height)
         {
             Debug.Assert( brush != null, "brush == null" );
@@ -637,7 +632,6 @@ namespace System.Experimental.Gdi
 
         // DrawLine overloads
 
-        /// <include file='doc\WindowsGraphics.uex' path='docs/doc[@for="WindowsGraphics.DrawLine"]/*' />
         /// <devdoc>
         ///     Draws a line starting from p1 (included) to p2 (excluded).  LineTo doesn't paint the last 
         ///     pixel because if it did the intersection points of connected lines would be drawn multiple 
@@ -648,7 +642,6 @@ namespace System.Experimental.Gdi
             DrawLine(pen, p1.X, p1.Y, p2.X, p2.Y);
         }
 
-        /// <include file='doc\WindowsGraphics.uex' path='docs/doc[@for="WindowsGraphics.DrawLine3"]/*' />
         public void DrawLine(WindowsPen pen, int x1, int y1, int x2, int y2)
         {
             HandleRef hdc  = new HandleRef(this.dc, this.dc.Hdc);
