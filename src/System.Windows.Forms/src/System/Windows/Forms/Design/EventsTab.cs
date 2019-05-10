@@ -39,11 +39,11 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Gets a value indicating whether the specified object can be extended.
         /// </summary>
-        public override bool CanExtend(object extendee) => !Marshal.IsComObject(extendee);
+        public override bool CanExtend(object extendee) => extendee == null || !Marshal.IsComObject(extendee);
 
         private void OnActiveDesignerChanged(object sender, ActiveDesignerEventArgs adevent)
         {
-            _currentHost = adevent.NewDesigner;
+            _currentHost = adevent?.NewDesigner;
         }
 
         /// <summary>
@@ -71,34 +71,41 @@ namespace System.Windows.Forms.Design
 
         private IEventBindingService GetEventPropertyService(object obj, ITypeDescriptorContext context)
         {
-            IEventBindingService eventPropertySvc = null;
             if (!_sunkEvent)
             {
-                IDesignerEventService des = (IDesignerEventService)_sp.GetService(typeof(IDesignerEventService));
-                if (des != null)
+                if (_sp?.GetService(typeof(IDesignerEventService)) is IDesignerEventService des)
                 {
-                    des.ActiveDesignerChanged += new ActiveDesignerEventHandler(this.OnActiveDesignerChanged);
+                    des.ActiveDesignerChanged += new ActiveDesignerEventHandler(OnActiveDesignerChanged);
                 }
 
                 _sunkEvent = true;
             }
 
-            if (eventPropertySvc == null && _currentHost != null)
+            if (_currentHost != null)
             {
-                eventPropertySvc = (IEventBindingService)_currentHost.GetService(typeof(IEventBindingService));
+                if (_currentHost.GetService(typeof(IEventBindingService)) is IEventBindingService service)
+                {
+                    return service;
+                }
             }
 
-            if (eventPropertySvc == null && obj is IComponent component)
+            if (obj is IComponent component)
             {
-                eventPropertySvc = (IEventBindingService)component.Site?.GetService(typeof(IEventBindingService));
+                if (component.Site?.GetService(typeof(IEventBindingService)) is IEventBindingService service)
+                {
+                    return service;
+                }
             }
 
-            if (eventPropertySvc == null && context != null)
+            if (context != null)
             {
-                eventPropertySvc = (IEventBindingService)context.GetService(typeof(IEventBindingService));
+                if (context.GetService(typeof(IEventBindingService)) is IEventBindingService service)
+                {
+                    return service;
+                }
             }
 
-            return eventPropertySvc;
+            return null;
         }
 
         /// <summary>
