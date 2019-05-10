@@ -570,9 +570,6 @@ namespace System.Windows.Forms {
         public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter,
                                        int x, int y, int cx, int cy, int flags);
 
-        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
-        
-        public static extern int GetWindowTextLength(HandleRef hWnd);
         // this is a wrapper that comctl exposes for the NT function since it doesn't exist natively on 95.
         [DllImport(ExternDll.Comctl32, ExactSpelling=true)]
         

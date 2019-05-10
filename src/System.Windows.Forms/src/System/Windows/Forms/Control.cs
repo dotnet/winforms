@@ -4146,28 +4146,16 @@ example usage
                     }
                 }
 
-                using (new MultithreadSafeCallScope()) {
-
-                    // it's okay to call GetWindowText cross-thread.
-                    //
-
-                    int textLen = SafeNativeMethods.GetWindowTextLength(new HandleRef(window, Handle));
-
-                    // Check to see if the system supports DBCS character
-                    // if so, double the length of the buffer.
-                    if (SystemInformation.DbcsEnabled) {
-                        textLen = (textLen * 2) + 1;
-                    }
-                    StringBuilder sb = new StringBuilder(textLen + 1);
-                    UnsafeNativeMethods.GetWindowText(new HandleRef(window, Handle), sb, sb.Capacity);
-                    return sb.ToString();
+                using (new MultithreadSafeCallScope())
+                {
+                    return Interop.User32.GetWindowText(new HandleRef(window, Handle));
                 }
             }
             set {
                 if (value == null) value = string.Empty;
                 if (!WindowText.Equals(value)) {
                     if (IsHandleCreated) {
-                        UnsafeNativeMethods.SetWindowText(new HandleRef(window, Handle), value);
+                        Interop.User32.SetWindowTextW(new HandleRef(window, Handle), value);
                     }
                     else {
                         if (value.Length == 0) {
@@ -7826,7 +7814,7 @@ example usage
 
                 // Set the window text from the Text property.
                 if (text != null && text.Length != 0) {
-                    UnsafeNativeMethods.SetWindowText(new HandleRef(this, Handle), text);
+                    Interop.User32.SetWindowTextW(new HandleRef(this, Handle), text);
                 }
 
                 if (!(this is ScrollableControl) && !IsMirrored && GetState2(STATE2_SETSCROLLPOS) && !GetState2(STATE2_HAVEINVOKED)) {

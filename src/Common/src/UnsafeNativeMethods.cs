@@ -629,18 +629,11 @@ namespace System.Windows.Forms {
             }
             return retval;
         }
-        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
-        
-        public static extern int GetWindowText(HandleRef hWnd, StringBuilder lpString, int nMaxCount);
-        
+
         [DllImport(ExternDll.Kernel32, CharSet=CharSet.Auto)]            
         
         [SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable")]
         public static extern void GetTempFileName(string tempDirName, string prefixName, int unique, StringBuilder sb);
-        
-        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
-        
-        public static extern bool SetWindowText(HandleRef hWnd, string text);
 
         [DllImport(ExternDll.Kernel32, ExactSpelling=true, CharSet=CharSet.Auto)]
         

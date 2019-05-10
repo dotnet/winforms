@@ -1372,55 +1372,79 @@ namespace System.Windows.Forms.Tests
 
         #region Name and Text
 
-        /// <summary>
-        /// Data for the WindowTextGetSet test
-        /// </summary>
-        public static TheoryData<string> WindowTextGetSetData =>
-            CommonTestHelper.GetStringTheoryData();
-
         [Theory]
-        [MemberData(nameof(WindowTextGetSetData))]
-        public void Control_WindowTextGetSet(string expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        public void Control_WindowText_Set_GetReturnsExpected(string value)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                WindowText = value
+            };
+            Assert.Equal(value ?? string.Empty, control.WindowText);
 
-            cont.WindowText = expected;
-
-            Assert.Equal(expected, cont.WindowText);
+            // Set same.
+            control.WindowText = value; 
+            Assert.Equal(value ?? string.Empty, control.WindowText);
         }
 
-        /// <summary>
-        /// Data for the NameGetSet test
-        /// </summary>
-        public static TheoryData<string> NameGetSetData =>
-            CommonTestHelper.GetStringTheoryData();
-
         [Theory]
-        [MemberData(nameof(NameGetSetData))]
-        public void Control_NameGetSet(string expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        public void Control_WindowText_SetWithHandle_GetReturnsExpected(string value)
         {
-            var cont = new Control();
+            var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            
+            control.WindowText = value;
+            Assert.Equal(value ?? string.Empty, control.WindowText);
 
-            cont.Name = expected;
-
-            Assert.Equal(expected, cont.Name);
+            // Set same.
+            control.WindowText = value; 
+            Assert.Equal(value ?? string.Empty, control.WindowText);
         }
 
-        /// <summary>
-        /// Data for the TextGetSet test
-        /// </summary>
-        public static TheoryData<string> TextGetSetData =>
-            CommonTestHelper.GetStringTheoryData();
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        public void Control_Name_Set_GetReturnsExpected(string value)
+        {
+            var control = new Control
+            {
+                Name = value
+            };
+            Assert.Equal(value ?? string.Empty, control.Name);
+
+            // Set same.
+            control.Name = value; 
+            Assert.Equal(value ?? string.Empty, control.Name);
+        }
 
         [Theory]
-        [MemberData(nameof(TextGetSetData))]
-        public void Control_TextGetSet(string expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        public void Control_Text_Set_GetReturnsExpected(string value)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                Text = value
+            };
+            Assert.Equal(value ?? string.Empty, control.Text);
 
-            cont.Text = expected;
+            // Set same.
+            control.Text = value; 
+            Assert.Equal(value ?? string.Empty, control.Text);
+        }
 
-            Assert.Equal(expected, cont.Text);
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        public void Control_Text_SetWithHandle_GetReturnsExpected(string value)
+        {
+            var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            control.Text = value;
+            Assert.Equal(value ?? string.Empty, control.Text);
+
+            // Set same.
+            control.Text = value; 
+            Assert.Equal(value ?? string.Empty, control.Text);
         }
 
         #endregion
