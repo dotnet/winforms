@@ -228,33 +228,33 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void ListViewSubItemCollection_Add_String_Success(string text)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ListViewSubItemCollection_Add_String_Success(string text, string expectedText)
         {
             var item = new ListViewItem();
             var collection = new ListViewItem.ListViewSubItemCollection(item);
             collection.Add(text);
             ListViewItem.ListViewSubItem subItem = Assert.Single(collection.Cast<ListViewItem.ListViewSubItem>());
-            Assert.Equal(text ?? string.Empty, subItem.Text);
+            Assert.Equal(expectedText, subItem.Text);
             Assert.Equal(item, subItem.owner);
         }
 
         public static IEnumerable<object[]> Add_String_Color_Color_Font_TestData()
         {
-            yield return new object[] { null, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window };
-            yield return new object[] {  "", Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue };
-            yield return new object[] { "reasonable", Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue };
+            yield return new object[] { null, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, string.Empty };
+            yield return new object[] { string.Empty, Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue, string.Empty };
+            yield return new object[] { "reasonable", Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue, "reasonable" };
         }
 
         [Theory]
         [MemberData(nameof(Add_String_Color_Color_Font_TestData))]
-        public void ListViewSubItemCollection_Add_String_Color_Color_Font_Success(string text, Color foreColor, Color backColor, Font font, Color expectedForeColor, Color expectedBackColor)
+        public void ListViewSubItemCollection_Add_String_Color_Color_Font_Success(string text, Color foreColor, Color backColor, Font font, Color expectedForeColor, Color expectedBackColor, string expectedText)
         {
             var item = new ListViewItem();
             var collection = new ListViewItem.ListViewSubItemCollection(item);
             collection.Add(text, foreColor, backColor, font);
             ListViewItem.ListViewSubItem subItem = Assert.Single(collection.Cast<ListViewItem.ListViewSubItem>());
-            Assert.Equal(text ?? string.Empty, subItem.Text);
+            Assert.Same(expectedText, subItem.Text);
             Assert.Equal(expectedForeColor, subItem.ForeColor);
             Assert.Equal(expectedBackColor, subItem.BackColor);
             Assert.Equal(font ?? Control.DefaultFont, subItem.Font);

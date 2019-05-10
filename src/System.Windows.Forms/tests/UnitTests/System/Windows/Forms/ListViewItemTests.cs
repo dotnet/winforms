@@ -49,15 +49,15 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Ctor_StringArray_String_Color_Color_Font_ListViewGroup_TestData()
         {
-            yield return new object[] { null, null, Color.Empty, Color.Empty, null, null, SystemColors.WindowText, SystemColors.Window, "" };
-            yield return new object[] { new string[0], null, Color.Empty, Color.Empty, null, null, SystemColors.WindowText, SystemColors.Window, "" };
-            yield return new object[] { new string[] { null }, "", Color.Empty, Color.Empty, null, new ListViewGroup(), SystemColors.WindowText, SystemColors.Window, "" };
-            yield return new object[] { new string[] { "text" }, "imageKey", Color.Blue, Color.Red, SystemFonts.MenuFont, new ListViewGroup(), Color.Blue, Color.Red, "text" };
+            yield return new object[] { null, null, Color.Empty, Color.Empty, null, null, string.Empty, SystemColors.WindowText, SystemColors.Window, string.Empty };
+            yield return new object[] { new string[0], null, Color.Empty, Color.Empty, null, null, string.Empty, SystemColors.WindowText, SystemColors.Window, string.Empty };
+            yield return new object[] { new string[] { null }, string.Empty, Color.Empty, Color.Empty, null, new ListViewGroup(), string.Empty, SystemColors.WindowText, SystemColors.Window, string.Empty };
+            yield return new object[] { new string[] { "text" }, "imageKey", Color.Blue, Color.Red, SystemFonts.MenuFont, new ListViewGroup(), "imageKey", Color.Blue, Color.Red, "text" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_StringArray_String_Color_Color_Font_ListViewGroup_TestData))]
-        public void ListViewItem_Ctor_StringArray_String_Color_Color_Font_ListViewGroup(string[] subItems, string imageKey, Color foreColor, Color backColor, Font font, ListViewGroup group, Color expectedForeColor, Color expectedBackColor, string expectedText)
+        public void ListViewItem_Ctor_StringArray_String_Color_Color_Font_ListViewGroup(string[] subItems, string imageKey, Color foreColor, Color backColor, Font font, ListViewGroup group, string expectedImageKey, Color expectedForeColor, Color expectedBackColor, string expectedText)
         {
             var item = new ListViewItem(subItems, imageKey, foreColor, backColor, font, group);
             Assert.Equal(expectedBackColor, item.BackColor);
@@ -68,7 +68,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedForeColor, item.ForeColor);
             Assert.Equal(group, item.Group);
             Assert.Equal(-1, item.ImageIndex);
-            Assert.Equal(imageKey ?? string.Empty, item.ImageKey);
+            Assert.Same(expectedImageKey, item.ImageKey);
             Assert.Null(item.ImageList);
             Assert.Equal(0, item.IndentCount);
             Assert.Equal(-1, item.Index);
@@ -80,16 +80,16 @@ namespace System.Windows.Forms.Tests
             AssertEqualListViewSubItem(subItems, item.SubItems.Cast<ListViewItem.ListViewSubItem>().ToArray());
             Assert.Same(item.SubItems, item.SubItems);
             Assert.Null(item.Tag);
-            Assert.Equal(expectedText, item.Text);
+            Assert.Same(expectedText, item.Text);
             Assert.Empty(item.ToolTipText);
             Assert.True(item.UseItemStyleForSubItems);
         }
 
         public static IEnumerable<object[]> Ctor_StringArray_Int_Color_Color_Font_ListViewGroup_TestData()
         {
-            yield return new object[] { null, -1, Color.Empty, Color.Empty, null, null, SystemColors.WindowText, SystemColors.Window, "" };
-            yield return new object[] { new string[0], 0, Color.Empty, Color.Empty, null, null, SystemColors.WindowText, SystemColors.Window, "" };
-            yield return new object[] { new string[] { null }, 1, Color.Empty, Color.Empty, null, new ListViewGroup(), SystemColors.WindowText, SystemColors.Window, "" };
+            yield return new object[] { null, -1, Color.Empty, Color.Empty, null, null, SystemColors.WindowText, SystemColors.Window, string.Empty };
+            yield return new object[] { new string[0], 0, Color.Empty, Color.Empty, null, null, SystemColors.WindowText, SystemColors.Window, string.Empty };
+            yield return new object[] { new string[] { null }, 1, Color.Empty, Color.Empty, null, new ListViewGroup(), SystemColors.WindowText, SystemColors.Window, string.Empty };
             yield return new object[] { new string[] { "text" }, 2, Color.Blue, Color.Red, SystemFonts.MenuFont, new ListViewGroup(), Color.Blue, Color.Red, "text" };
         }
 
@@ -118,22 +118,22 @@ namespace System.Windows.Forms.Tests
             AssertEqualListViewSubItem(subItems, item.SubItems.Cast<ListViewItem.ListViewSubItem>().ToArray());
             Assert.Same(item.SubItems, item.SubItems);
             Assert.Null(item.Tag);
-            Assert.Equal(expectedText, item.Text);
+            Assert.Same(expectedText, item.Text);
             Assert.Empty(item.ToolTipText);
             Assert.True(item.UseItemStyleForSubItems);
         }
 
         public static IEnumerable<object[]> Ctor_StringArray_String_Color_Color_Font_TestData()
         {
-            yield return new object[] { null, null, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, "" };
-            yield return new object[] { new string[0], null, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, "" };
-            yield return new object[] { new string[] { null }, "", Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, "" };
-            yield return new object[] { new string[] { "text" }, "imageKey", Color.Blue, Color.Red, SystemFonts.MenuFont, Color.Blue, Color.Red, "text" };
+            yield return new object[] { null, null, Color.Empty, Color.Empty, null, string.Empty, SystemColors.WindowText, SystemColors.Window, string.Empty };
+            yield return new object[] { new string[0], null, Color.Empty, Color.Empty, null, string.Empty, SystemColors.WindowText, SystemColors.Window, string.Empty };
+            yield return new object[] { new string[] { null }, string.Empty, Color.Empty, Color.Empty, null, string.Empty, SystemColors.WindowText, SystemColors.Window, string.Empty };
+            yield return new object[] { new string[] { "text" }, "imageKey", Color.Blue, Color.Red, SystemFonts.MenuFont, "imageKey", Color.Blue, Color.Red, "text" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_StringArray_String_Color_Color_Font_TestData))]
-        public void ListViewItem_Ctor_StringArray_String_Color_Color_Font(string[] subItems, string imageKey, Color foreColor, Color backColor, Font font, Color expectedForeColor, Color expectedBackColor, string expectedText)
+        public void ListViewItem_Ctor_StringArray_String_Color_Color_Font(string[] subItems, string imageKey, Color foreColor, Color backColor, Font font, string expectedImageKey, Color expectedForeColor, Color expectedBackColor, string expectedText)
         {
             var item = new ListViewItem(subItems, imageKey, foreColor, backColor, font);
             Assert.Equal(expectedBackColor, item.BackColor);
@@ -144,7 +144,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedForeColor, item.ForeColor);
             Assert.Null(item.Group);
             Assert.Equal(-1, item.ImageIndex);
-            Assert.Equal(imageKey ?? string.Empty, item.ImageKey);
+            Assert.Same(expectedImageKey, item.ImageKey);
             Assert.Null(item.ImageList);
             Assert.Equal(0, item.IndentCount);
             Assert.Equal(-1, item.Index);
@@ -156,16 +156,16 @@ namespace System.Windows.Forms.Tests
             AssertEqualListViewSubItem(subItems, item.SubItems.Cast<ListViewItem.ListViewSubItem>().ToArray());
             Assert.Same(item.SubItems, item.SubItems);
             Assert.Null(item.Tag);
-            Assert.Equal(expectedText, item.Text);
+            Assert.Same(expectedText, item.Text);
             Assert.Empty(item.ToolTipText);
             Assert.True(item.UseItemStyleForSubItems);
         }
 
         public static IEnumerable<object[]> Ctor_StringArray_Int_Color_Color_Font_TestData()
         {
-            yield return new object[] { null, -1, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, "" };
-            yield return new object[] { new string[0], 0, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, "" };
-            yield return new object[] { new string[] { null }, 1, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, "" };
+            yield return new object[] { null, -1, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, string.Empty };
+            yield return new object[] { new string[0], 0, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, string.Empty };
+            yield return new object[] { new string[] { null }, 1, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, string.Empty };
             yield return new object[] { new string[] { "text" }, 2, Color.Blue, Color.Red, SystemFonts.MenuFont, Color.Blue, Color.Red, "text" };
         }
 
@@ -194,21 +194,21 @@ namespace System.Windows.Forms.Tests
             AssertEqualListViewSubItem(subItems, item.SubItems.Cast<ListViewItem.ListViewSubItem>().ToArray());
             Assert.Same(item.SubItems, item.SubItems);
             Assert.Null(item.Tag);
-            Assert.Equal(expectedText, item.Text);
+            Assert.Same(expectedText, item.Text);
             Assert.Empty(item.ToolTipText);
             Assert.True(item.UseItemStyleForSubItems);
         }
 
         public static IEnumerable<object[]> Ctor_ListViewSubItemArray_String_ListViewGroup_TestData()
         {
-            yield return new object[] { new ListViewItem.ListViewSubItem[0], null, null, string.Empty };
-            yield return new object[] { new ListViewItem.ListViewSubItem[] { new ListViewItem.ListViewSubItem(null, "text") }, "", null, "text" };
-            yield return new object[] { new ListViewItem.ListViewSubItem[] { new ListViewItem.ListViewSubItem(null, "text") }, "imageKey", new ListViewGroup(), "text" };
+            yield return new object[] { new ListViewItem.ListViewSubItem[0], null, null, string.Empty, string.Empty };
+            yield return new object[] { new ListViewItem.ListViewSubItem[] { new ListViewItem.ListViewSubItem(null, "text") }, string.Empty, null, string.Empty, "text" };
+            yield return new object[] { new ListViewItem.ListViewSubItem[] { new ListViewItem.ListViewSubItem(null, "text") }, "imageKey", new ListViewGroup(), "imageKey", "text" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_ListViewSubItemArray_String_ListViewGroup_TestData))]
-        public void ListViewItem_Ctor_ListViewSubItemArray_String_ListViewGroup(ListViewItem.ListViewSubItem[] subItems, string imageKey, ListViewGroup group, string expectedText)
+        public void ListViewItem_Ctor_ListViewSubItemArray_String_ListViewGroup(ListViewItem.ListViewSubItem[] subItems, string imageKey, ListViewGroup group, string expectedImageKey, string expectedText)
         {
             var item = new ListViewItem(subItems, imageKey, group);
             Assert.Equal(SystemColors.Window, item.BackColor);
@@ -219,7 +219,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(SystemColors.WindowText, item.ForeColor);
             Assert.Equal(group, item.Group);
             Assert.Equal(-1, item.ImageIndex);
-            Assert.Equal(imageKey ?? string.Empty, item.ImageKey);
+            Assert.Same(expectedImageKey, item.ImageKey);
             Assert.Null(item.ImageList);
             Assert.Equal(0, item.IndentCount);
             Assert.Equal(-1, item.Index);
@@ -231,7 +231,7 @@ namespace System.Windows.Forms.Tests
             AssertEqualListViewSubItem(subItems, item.SubItems.Cast<ListViewItem.ListViewSubItem>().ToArray());
             Assert.Same(item.SubItems, item.SubItems);
             Assert.Null(item.Tag);
-            Assert.Equal(expectedText, item.Text);
+            Assert.Same(expectedText, item.Text);
             Assert.Empty(item.ToolTipText);
             Assert.True(item.UseItemStyleForSubItems);
         }
@@ -268,22 +268,22 @@ namespace System.Windows.Forms.Tests
             AssertEqualListViewSubItem(subItems, item.SubItems.Cast<ListViewItem.ListViewSubItem>().ToArray());
             Assert.Same(item.SubItems, item.SubItems);
             Assert.Null(item.Tag);
-            Assert.Equal(expectedText, item.Text);
+            Assert.Same(expectedText, item.Text);
             Assert.Empty(item.ToolTipText);
             Assert.True(item.UseItemStyleForSubItems);
         }
 
         public static IEnumerable<object[]> Ctor_StringArray_String_ListViewGroup_TestData()
         {
-            yield return new object[] { null, null, null, "" };
-            yield return new object[] { new string[0], null, null, "" };
-            yield return new object[] { new string[] { null }, "", new ListViewGroup(), "" };
-            yield return new object[] { new string[] { "text" }, "imageKey", new ListViewGroup(), "text" };
+            yield return new object[] { null, null, null, string.Empty, string.Empty };
+            yield return new object[] { new string[0], null, null, string.Empty, string.Empty };
+            yield return new object[] { new string[] { null }, string.Empty, new ListViewGroup(), string.Empty, string.Empty };
+            yield return new object[] { new string[] { "text" }, "imageKey", new ListViewGroup(), "imageKey", "text" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_StringArray_String_ListViewGroup_TestData))]
-        public void ListViewItem_Ctor_StringArray_String_ListViewGroup(string[] subItems, string imageKey, ListViewGroup group, string expectedText)
+        public void ListViewItem_Ctor_StringArray_String_ListViewGroup(string[] subItems, string imageKey, ListViewGroup group, string expectedImageKey, string expectedText)
         {
             var item = new ListViewItem(subItems, imageKey, group);
             Assert.Equal(SystemColors.Window, item.BackColor);
@@ -294,7 +294,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(SystemColors.WindowText, item.ForeColor);
             Assert.Equal(group, item.Group);
             Assert.Equal(-1, item.ImageIndex);
-            Assert.Equal(imageKey ?? string.Empty, item.ImageKey);
+            Assert.Same(expectedImageKey, item.ImageKey);
             Assert.Null(item.ImageList);
             Assert.Equal(0, item.IndentCount);
             Assert.Equal(-1, item.Index);
@@ -306,16 +306,16 @@ namespace System.Windows.Forms.Tests
             AssertEqualListViewSubItem(subItems, item.SubItems.Cast<ListViewItem.ListViewSubItem>().ToArray());
             Assert.Same(item.SubItems, item.SubItems);
             Assert.Null(item.Tag);
-            Assert.Equal(expectedText, item.Text);
+            Assert.Same(expectedText, item.Text);
             Assert.Empty(item.ToolTipText);
             Assert.True(item.UseItemStyleForSubItems);
         }
 
         public static IEnumerable<object[]> Ctor_StringArray_Int_ListViewGroup_TestData()
         {
-            yield return new object[] { null, -1, null, "" };
-            yield return new object[] { new string[0], 0, null, "" };
-            yield return new object[] { new string[] { null }, 1, new ListViewGroup(), "" };
+            yield return new object[] { null, -1, null, string.Empty };
+            yield return new object[] { new string[0], 0, null, string.Empty };
+            yield return new object[] { new string[] { null }, 1, new ListViewGroup(), string.Empty };
             yield return new object[] { new string[] { "text" }, 2, new ListViewGroup(), "text" };
         }
 
@@ -344,21 +344,21 @@ namespace System.Windows.Forms.Tests
             AssertEqualListViewSubItem(subItems, item.SubItems.Cast<ListViewItem.ListViewSubItem>().ToArray());
             Assert.Same(item.SubItems, item.SubItems);
             Assert.Null(item.Tag);
-            Assert.Equal(expectedText, item.Text);
+            Assert.Same(expectedText, item.Text);
             Assert.Empty(item.ToolTipText);
             Assert.True(item.UseItemStyleForSubItems);
         }
 
         public static IEnumerable<object[]> Ctor_String_String_ListViewGroup_TestData()
         {
-            yield return new object[] { null, null, null };
-            yield return new object[] { "", "", new ListViewGroup() };
-            yield return new object[] { "text", "imageKey", new ListViewGroup() };
+            yield return new object[] { null, null, null, string.Empty, string.Empty };
+            yield return new object[] { string.Empty, string.Empty, new ListViewGroup(), string.Empty, string.Empty };
+            yield return new object[] { "text", "imageKey", new ListViewGroup(), "text", "imageKey" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_String_String_ListViewGroup_TestData))]
-        public void ListViewItem_Ctor_String_String_ListViewGroup(string text, string imageKey, ListViewGroup group)
+        public void ListViewItem_Ctor_String_String_ListViewGroup(string text, string imageKey, ListViewGroup group, string expectedText, string expectedImageKey)
         {
             var item = new ListViewItem(text, imageKey, group);
             Assert.Equal(SystemColors.Window, item.BackColor);
@@ -369,7 +369,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(SystemColors.WindowText, item.ForeColor);
             Assert.Equal(group, item.Group);
             Assert.Equal(-1, item.ImageIndex);
-            Assert.Equal(imageKey ?? string.Empty, item.ImageKey);
+            Assert.Same(expectedImageKey, item.ImageKey);
             Assert.Null(item.ImageList);
             Assert.Equal(0, item.IndentCount);
             Assert.Equal(-1, item.Index);
@@ -379,24 +379,24 @@ namespace System.Windows.Forms.Tests
             Assert.False(item.Selected);
             Assert.Equal(-1, item.StateImageIndex);
             ListViewItem.ListViewSubItem subItem = Assert.Single(item.SubItems.Cast<ListViewItem.ListViewSubItem>());
-            Assert.Equal(text ?? string.Empty, subItem.Text);
+            Assert.Same(expectedText, subItem.Text);
             Assert.Same(item.SubItems, item.SubItems);
             Assert.Null(item.Tag);
-            Assert.Equal(text ?? string.Empty, item.Text);
+            Assert.Same(expectedText, item.Text);
             Assert.Empty(item.ToolTipText);
             Assert.True(item.UseItemStyleForSubItems);
         }
 
         public static IEnumerable<object[]> Ctor_String_Int_ListViewGroup_TestData()
         {
-            yield return new object[] { null, -1, null };
-            yield return new object[] { "", 0, new ListViewGroup() };
-            yield return new object[] { "text", 1, new ListViewGroup() };
+            yield return new object[] { null, -1, null, string.Empty };
+            yield return new object[] { string.Empty, 0, new ListViewGroup(), string.Empty };
+            yield return new object[] { "text", 1, new ListViewGroup(), "text" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_String_Int_ListViewGroup_TestData))]
-        public void ListViewItem_Ctor_String_Int_ListViewGroup(string text, int imageIndex, ListViewGroup group)
+        public void ListViewItem_Ctor_String_Int_ListViewGroup(string text, int imageIndex, ListViewGroup group, string expectedText)
         {
             var item = new ListViewItem(text, imageIndex, group);
             Assert.Equal(SystemColors.Window, item.BackColor);
@@ -417,24 +417,24 @@ namespace System.Windows.Forms.Tests
             Assert.False(item.Selected);
             Assert.Equal(-1, item.StateImageIndex);
             ListViewItem.ListViewSubItem subItem = Assert.Single(item.SubItems.Cast<ListViewItem.ListViewSubItem>());
-            Assert.Equal(text ?? string.Empty, subItem.Text);
+            Assert.Same(expectedText, subItem.Text);
             Assert.Same(item.SubItems, item.SubItems);
             Assert.Null(item.Tag);
-            Assert.Equal(text ?? string.Empty, item.Text);
+            Assert.Same(expectedText, item.Text);
             Assert.Empty(item.ToolTipText);
             Assert.True(item.UseItemStyleForSubItems);
         }
 
         public static IEnumerable<object[]> Ctor_ListViewSubItemArray_String_TestData()
         {
-            yield return new object[] { new ListViewItem.ListViewSubItem[0], null, string.Empty };
-            yield return new object[] { new ListViewItem.ListViewSubItem[] { new ListViewItem.ListViewSubItem(null, "text") }, "", "text" };
-            yield return new object[] { new ListViewItem.ListViewSubItem[] { new ListViewItem.ListViewSubItem(null, "text") }, "imageKey", "text" };
+            yield return new object[] { new ListViewItem.ListViewSubItem[0], null, string.Empty, string.Empty };
+            yield return new object[] { new ListViewItem.ListViewSubItem[] { new ListViewItem.ListViewSubItem(null, "text") }, string.Empty, string.Empty, "text" };
+            yield return new object[] { new ListViewItem.ListViewSubItem[] { new ListViewItem.ListViewSubItem(null, "text") }, "imageKey", "imageKey", "text" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_ListViewSubItemArray_String_TestData))]
-        public void ListViewItem_Ctor_ListViewSubItemArray_String(ListViewItem.ListViewSubItem[] subItems, string imageKey, string expectedText)
+        public void ListViewItem_Ctor_ListViewSubItemArray_String(ListViewItem.ListViewSubItem[] subItems, string imageKey, string expectedImageKey, string expectedText)
         {
             var item = new ListViewItem(subItems, imageKey);
             Assert.Equal(SystemColors.Window, item.BackColor);
@@ -445,7 +445,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(SystemColors.WindowText, item.ForeColor);
             Assert.Null(item.Group);
             Assert.Equal(-1, item.ImageIndex);
-            Assert.Equal(imageKey ?? string.Empty, item.ImageKey);
+            Assert.Same(expectedImageKey, item.ImageKey);
             Assert.Null(item.ImageList);
             Assert.Equal(0, item.IndentCount);
             Assert.Equal(-1, item.Index);
@@ -457,7 +457,7 @@ namespace System.Windows.Forms.Tests
             AssertEqualListViewSubItem(subItems, item.SubItems.Cast<ListViewItem.ListViewSubItem>().ToArray());
             Assert.Same(item.SubItems, item.SubItems);
             Assert.Null(item.Tag);
-            Assert.Equal(expectedText, item.Text);
+            Assert.Same(expectedText, item.Text);
             Assert.Empty(item.ToolTipText);
             Assert.True(item.UseItemStyleForSubItems);
         }
@@ -494,16 +494,16 @@ namespace System.Windows.Forms.Tests
             AssertEqualListViewSubItem(subItems, item.SubItems.Cast<ListViewItem.ListViewSubItem>().ToArray());
             Assert.Same(item.SubItems, item.SubItems);
             Assert.Null(item.Tag);
-            Assert.Equal(expectedText, item.Text);
+            Assert.Same(expectedText, item.Text);
             Assert.Empty(item.ToolTipText);
             Assert.True(item.UseItemStyleForSubItems);
         }
 
         public static IEnumerable<object[]> Ctor_StringArray_ListViewGroup_TestData()
         {
-            yield return new object[] { null, null, "" };
-            yield return new object[] { new string[0], null, "" };
-            yield return new object[] { new string[] { null }, new ListViewGroup(), "" };
+            yield return new object[] { null, null, string.Empty };
+            yield return new object[] { new string[0], null, string.Empty };
+            yield return new object[] { new string[] { null }, new ListViewGroup(), string.Empty };
             yield return new object[] { new string[] { "text" }, new ListViewGroup(), "text" };
         }
 
@@ -532,22 +532,22 @@ namespace System.Windows.Forms.Tests
             AssertEqualListViewSubItem(subItems, item.SubItems.Cast<ListViewItem.ListViewSubItem>().ToArray());
             Assert.Same(item.SubItems, item.SubItems);
             Assert.Null(item.Tag);
-            Assert.Equal(expectedText, item.Text);
+            Assert.Same(expectedText, item.Text);
             Assert.Empty(item.ToolTipText);
             Assert.True(item.UseItemStyleForSubItems);
         }
 
         public static IEnumerable<object[]> Ctor_StringArray_String_TestData()
         {
-            yield return new object[] { null, null, "" };
-            yield return new object[] { new string[0], null, "" };
-            yield return new object[] { new string[] { null }, "", "" };
-            yield return new object[] { new string[] { "text" }, "imageKey",  "text" };
+            yield return new object[] { null, null, string.Empty, string.Empty };
+            yield return new object[] { new string[0], null, string.Empty, string.Empty };
+            yield return new object[] { new string[] { null }, string.Empty, string.Empty, string.Empty };
+            yield return new object[] { new string[] { "text" }, "imageKey", "imageKey", "text" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_StringArray_String_TestData))]
-        public void ListViewItem_Ctor_StringArray_String(string[] subItems, string imageKey, string expectedText)
+        public void ListViewItem_Ctor_StringArray_String(string[] subItems, string imageKey, string expectedImageKey, string expectedText)
         {
             var item = new ListViewItem(subItems, imageKey);
             Assert.Equal(SystemColors.Window, item.BackColor);
@@ -558,7 +558,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(SystemColors.WindowText, item.ForeColor);
             Assert.Null(item.Group);
             Assert.Equal(-1, item.ImageIndex);
-            Assert.Equal(imageKey ?? string.Empty, item.ImageKey);
+            Assert.Same(expectedImageKey, item.ImageKey);
             Assert.Null(item.ImageList);
             Assert.Equal(0, item.IndentCount);
             Assert.Equal(-1, item.Index);
@@ -570,16 +570,16 @@ namespace System.Windows.Forms.Tests
             AssertEqualListViewSubItem(subItems, item.SubItems.Cast<ListViewItem.ListViewSubItem>().ToArray());
             Assert.Same(item.SubItems, item.SubItems);
             Assert.Null(item.Tag);
-            Assert.Equal(expectedText, item.Text);
+            Assert.Same(expectedText, item.Text);
             Assert.Empty(item.ToolTipText);
             Assert.True(item.UseItemStyleForSubItems);
         }
 
         public static IEnumerable<object[]> Ctor_StringArray_Int_TestData()
         {
-            yield return new object[] { null, -1, "" };
-            yield return new object[] { new string[0], 0, "" };
-            yield return new object[] { new string[] { null }, 1, "" };
+            yield return new object[] { null, -1, string.Empty };
+            yield return new object[] { new string[0], 0, string.Empty };
+            yield return new object[] { new string[] { null }, 1, string.Empty };
             yield return new object[] { new string[] { "text" }, 2,  "text" };
         }
 
@@ -608,21 +608,21 @@ namespace System.Windows.Forms.Tests
             AssertEqualListViewSubItem(subItems, item.SubItems.Cast<ListViewItem.ListViewSubItem>().ToArray());
             Assert.Same(item.SubItems, item.SubItems);
             Assert.Null(item.Tag);
-            Assert.Equal(expectedText, item.Text);
+            Assert.Same(expectedText, item.Text);
             Assert.Empty(item.ToolTipText);
             Assert.True(item.UseItemStyleForSubItems);
         }
 
         public static IEnumerable<object[]> Ctor_String_ListViewGroup_TestData()
         {
-            yield return new object[] { null, null };
-            yield return new object[] { "", null };
-            yield return new object[] { "text", new ListViewGroup() };
+            yield return new object[] { null, null, string.Empty };
+            yield return new object[] { string.Empty, null, string.Empty };
+            yield return new object[] { "text", new ListViewGroup(), "text" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_String_ListViewGroup_TestData))]
-        public void ListViewItem_Ctor_String_ListViewGroup(string text, ListViewGroup group)
+        public void ListViewItem_Ctor_String_ListViewGroup(string text, ListViewGroup group, string expectedText)
         {
             var item = new ListViewItem(text, group);
             Assert.Equal(SystemColors.Window, item.BackColor);
@@ -643,24 +643,24 @@ namespace System.Windows.Forms.Tests
             Assert.False(item.Selected);
             Assert.Equal(-1, item.StateImageIndex);
             ListViewItem.ListViewSubItem subItem = Assert.Single(item.SubItems.Cast<ListViewItem.ListViewSubItem>());
-            Assert.Equal(text ?? string.Empty, subItem.Text);
+            Assert.Same(expectedText, subItem.Text);
             Assert.Same(item.SubItems, item.SubItems);
             Assert.Null(item.Tag);
-            Assert.Equal(text ?? string.Empty, item.Text);
+            Assert.Same(expectedText, item.Text);
             Assert.Empty(item.ToolTipText);
             Assert.True(item.UseItemStyleForSubItems);
         }
 
         public static IEnumerable<object[]> Ctor_String_String_TestData()
         {
-            yield return new object[] { null, null };
-            yield return new object[] { "", "" };
-            yield return new object[] { "text", "imageKey" };
+            yield return new object[] { null, null, string.Empty, string.Empty };
+            yield return new object[] { string.Empty, string.Empty, string.Empty, string.Empty };
+            yield return new object[] { "text", "imageKey", "text", "imageKey" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_String_String_TestData))]
-        public void ListViewItem_Ctor_String_String(string text, string imageKey)
+        public void ListViewItem_Ctor_String_String(string text, string imageKey, string expectedText, string expectedImageKey)
         {
             var item = new ListViewItem(text, imageKey);
             Assert.Equal(SystemColors.Window, item.BackColor);
@@ -671,7 +671,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(SystemColors.WindowText, item.ForeColor);
             Assert.Null(item.Group);
             Assert.Equal(-1, item.ImageIndex);
-            Assert.Equal(imageKey ?? string.Empty, item.ImageKey);
+            Assert.Same(expectedImageKey, item.ImageKey);
             Assert.Null(item.ImageList);
             Assert.Equal(0, item.IndentCount);
             Assert.Equal(-1, item.Index);
@@ -681,24 +681,24 @@ namespace System.Windows.Forms.Tests
             Assert.False(item.Selected);
             Assert.Equal(-1, item.StateImageIndex);
             ListViewItem.ListViewSubItem subItem = Assert.Single(item.SubItems.Cast<ListViewItem.ListViewSubItem>());
-            Assert.Equal(text ?? string.Empty, subItem.Text);
+            Assert.Same(expectedText, subItem.Text);
             Assert.Same(item.SubItems, item.SubItems);
             Assert.Null(item.Tag);
-            Assert.Equal(text ?? string.Empty, item.Text);
+            Assert.Same(expectedText, item.Text);
             Assert.Empty(item.ToolTipText);
             Assert.True(item.UseItemStyleForSubItems);
         }
 
         public static IEnumerable<object[]> Ctor_String_Int_TestData()
         {
-            yield return new object[] { null, -1 };
-            yield return new object[] { "", 0 };
-            yield return new object[] { "text", 1 };
+            yield return new object[] { null, -1, string.Empty };
+            yield return new object[] { string.Empty, 0, string.Empty };
+            yield return new object[] { "text", 1, "text" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_String_Int_TestData))]
-        public void ListViewItem_Ctor_String_Int(string text, int imageIndex)
+        public void ListViewItem_Ctor_String_Int(string text, int imageIndex, string expectedText)
         {
             var item = new ListViewItem(text, imageIndex);
             Assert.Equal(SystemColors.Window, item.BackColor);
@@ -719,10 +719,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(item.Selected);
             Assert.Equal(-1, item.StateImageIndex);
             ListViewItem.ListViewSubItem subItem = Assert.Single(item.SubItems.Cast<ListViewItem.ListViewSubItem>());
-            Assert.Equal(text ?? string.Empty, subItem.Text);
+            Assert.Same(expectedText, subItem.Text);
             Assert.Same(item.SubItems, item.SubItems);
             Assert.Null(item.Tag);
-            Assert.Equal(text ?? string.Empty, item.Text);
+            Assert.Same(expectedText, item.Text);
             Assert.Empty(item.ToolTipText);
             Assert.True(item.UseItemStyleForSubItems);
         }
@@ -766,9 +766,9 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Ctor_StringArray_TestData()
         {
-            yield return new object[] { null, "" };
-            yield return new object[] { new string[0], "" };
-            yield return new object[] { new string[] { null }, "" };
+            yield return new object[] { null, string.Empty };
+            yield return new object[] { new string[0], string.Empty };
+            yield return new object[] { new string[] { null }, string.Empty };
             yield return new object[] { new string[] { "text" }, "text" };
         }
 
@@ -797,14 +797,14 @@ namespace System.Windows.Forms.Tests
             AssertEqualListViewSubItem(subItems, item.SubItems.Cast<ListViewItem.ListViewSubItem>().ToArray());
             Assert.Same(item.SubItems, item.SubItems);
             Assert.Null(item.Tag);
-            Assert.Equal(expectedText, item.Text);
+            Assert.Same(expectedText, item.Text);
             Assert.Empty(item.ToolTipText);
             Assert.True(item.UseItemStyleForSubItems);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void ListViewItem_Ctor_String(string text)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ListViewItem_Ctor_String(string text, string expectedText)
         {
             var item = new ListViewItem(text);
             Assert.Equal(SystemColors.Window, item.BackColor);
@@ -825,10 +825,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(item.Selected);
             Assert.Equal(-1, item.StateImageIndex);
             ListViewItem.ListViewSubItem subItem = Assert.Single(item.SubItems.Cast<ListViewItem.ListViewSubItem>());
-            Assert.Equal(text ?? string.Empty, subItem.Text);
+            Assert.Same(expectedText, subItem.Text);
             Assert.Same(item.SubItems, item.SubItems);
             Assert.Null(item.Tag);
-            Assert.Equal(text ?? string.Empty, item.Text);
+            Assert.Same(expectedText, item.Text);
             Assert.Empty(item.ToolTipText);
             Assert.True(item.UseItemStyleForSubItems);
         }

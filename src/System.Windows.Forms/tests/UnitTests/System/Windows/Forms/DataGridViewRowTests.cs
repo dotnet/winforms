@@ -271,7 +271,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, row.DefaultCellStyle);
             Assert.True(row.HasDefaultCellStyle);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.DefaultCellStyle = value;
             Assert.Equal(expected, row.DefaultCellStyle);
             Assert.True(row.HasDefaultCellStyle);
@@ -286,7 +286,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, row.DefaultCellStyle);
             Assert.True(row.HasDefaultCellStyle);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.DefaultCellStyle = value;
             Assert.Equal(expected, row.DefaultCellStyle);
             Assert.True(row.HasDefaultCellStyle);
@@ -387,7 +387,7 @@ namespace System.Windows.Forms.Tests
             row.DefaultHeaderCellType = value;
             Assert.Equal(expected, row.DefaultHeaderCellType);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.DefaultHeaderCellType = value;
             Assert.Equal(expected, row.DefaultHeaderCellType);
         }
@@ -405,7 +405,7 @@ namespace System.Windows.Forms.Tests
             row.DefaultHeaderCellType = value;
             Assert.Equal(value, row.DefaultHeaderCellType);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.DefaultHeaderCellType = value;
             Assert.Equal(value, row.DefaultHeaderCellType);
         }
@@ -489,7 +489,7 @@ namespace System.Windows.Forms.Tests
             row.DividerHeight = value;
             Assert.Equal(value, row.DividerHeight);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.DividerHeight = value;
             Assert.Equal(value, row.DividerHeight);
         }
@@ -612,37 +612,37 @@ namespace System.Windows.Forms.Tests
         {
             foreach (string value in new string[] { null, string.Empty, "reasonable" })
             {
-                yield return new object[] { new DataGridViewRow(), value };
+                yield return new object[] { new DataGridViewRow(), value, value ?? string.Empty };
 
                 var dataGridView = new DataGridView { ColumnCount = 1 };
                 dataGridView.Rows.Add(new DataGridViewRow());
-                yield return new object[] { dataGridView.Rows[0], value };
+                yield return new object[] { dataGridView.Rows[0], value, value ?? string.Empty };
             }
         }
 
         [Theory]
         [MemberData(nameof(ErrorText_Set_TestData))]
-        public void DataGridViewRow_ErrorText_Set_GetReturnsExpected(DataGridViewRow row, string value)
+        public void DataGridViewRow_ErrorText_Set_GetReturnsExpected(DataGridViewRow row, string value, string expected)
         {
             row.ErrorText = value;
-            Assert.Equal(value ?? string.Empty, row.ErrorText);
+            Assert.Same(expected, row.ErrorText);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.ErrorText = value;
-            Assert.Equal(value ?? string.Empty, row.ErrorText);
+            Assert.Same(expected, row.ErrorText);
         }
 
         [Theory]
         [MemberData(nameof(ErrorText_Set_TestData))]
-        public void DataGridViewRow_ErrorText_SetWithNonNullOldValue_GetReturnsExpected(DataGridViewRow row, string value)
+        public void DataGridViewRow_ErrorText_SetWithNonNullOldValue_GetReturnsExpected(DataGridViewRow row, string value, string expected)
         {
             row.ErrorText = "value";
             row.ErrorText = value;
-            Assert.Equal(value ?? string.Empty, row.ErrorText);
+            Assert.Same(expected, row.ErrorText);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.ErrorText = value;
-            Assert.Equal(value ?? string.Empty, row.ErrorText);
+            Assert.Same(expected, row.ErrorText);
         }
 
         [Fact]
@@ -735,7 +735,7 @@ namespace System.Windows.Forms.Tests
             row.Frozen = true;
             Assert.True(row.Frozen);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.Frozen = true;
             Assert.True(row.Frozen);
 
@@ -836,7 +836,7 @@ namespace System.Windows.Forms.Tests
             }
             Assert.Equal(row, row.HeaderCell.OwningRow);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.HeaderCell = value;
             if (value != null)
             {
@@ -864,7 +864,7 @@ namespace System.Windows.Forms.Tests
                 Assert.NotNull(row.HeaderCell);
             }
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.HeaderCell = value;
             if (value != null)
             {
@@ -1014,7 +1014,7 @@ namespace System.Windows.Forms.Tests
             row.Height = value;
             Assert.Equal(expected, row.Height);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.Height = value;
             Assert.Equal(expected, row.Height);
         }
@@ -1318,7 +1318,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, row.MinimumHeight);
             Assert.Equal(expectedHeight, row.Height);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.MinimumHeight = value;
             Assert.Equal(value, row.MinimumHeight);
             Assert.Equal(expectedHeight, row.Height);
@@ -1430,7 +1430,7 @@ namespace System.Windows.Forms.Tests
             row.ReadOnly = true;
             Assert.True(row.ReadOnly);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.ReadOnly = true;
             Assert.True(row.ReadOnly);
 
@@ -1540,7 +1540,7 @@ namespace System.Windows.Forms.Tests
             row.Resizable = value;
             Assert.Equal(expected, row.Resizable);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.Resizable = value;
             Assert.Equal(expected, row.Resizable);
         }
@@ -1656,7 +1656,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(selected, (dataGridView.SelectedRows).Contains(row));
             Assert.Equal(selected, row.Selected);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.Selected = true;
             Assert.Equal(selected, (dataGridView.SelectedRows).Contains(row));
             Assert.Equal(selected, row.Selected);
@@ -1800,7 +1800,7 @@ namespace System.Windows.Forms.Tests
             row.Tag = value;
             Assert.Equal(value, row.Tag);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.Tag = value;
             Assert.Equal(value, row.Tag);
         }
@@ -1813,7 +1813,7 @@ namespace System.Windows.Forms.Tests
             row.Tag = value;
             Assert.Equal(value, row.Tag);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.Tag = value;
             Assert.Equal(value, row.Tag);
         }
@@ -1858,7 +1858,7 @@ namespace System.Windows.Forms.Tests
             row.Visible = false;
             Assert.False(row.Visible);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.Visible = false;
             Assert.False(row.Visible);
 

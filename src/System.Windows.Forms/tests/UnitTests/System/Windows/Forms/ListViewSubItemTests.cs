@@ -29,20 +29,20 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Ctor_ListViewItem_String_TestData()
         {
-            yield return new object[] { null, null };
-            yield return new object[] { new ListViewItem(), "" };
-            yield return new object[] { new ListViewItem(), "reasonable" };
-            yield return new object[] { new ListViewItem() { BackColor = Color.Yellow, ForeColor = Color.Yellow, Font = SystemFonts.StatusFont }, "reasonable" };
+            yield return new object[] { null, null, string.Empty };
+            yield return new object[] { new ListViewItem(), string.Empty, string.Empty };
+            yield return new object[] { new ListViewItem(), "reasonable", "reasonable" };
+            yield return new object[] { new ListViewItem() { BackColor = Color.Yellow, ForeColor = Color.Yellow, Font = SystemFonts.StatusFont }, "reasonable", "reasonable" };
 
             var listView = new ListView();
             var item = new ListViewItem();
             Assert.Null(item.ListView);
-            yield return new object[] { item, "reasonable" };
+            yield return new object[] { item, "reasonable", "reasonable" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_ListViewItem_String_TestData))]
-        public void ListViewSubItem_Ctor_ListViewItem_String(ListViewItem owner, string text)
+        public void ListViewSubItem_Ctor_ListViewItem_String(ListViewItem owner, string text, string expectedText)
         {
             var subItem = new ListViewItem.ListViewSubItem(owner, text);
             Assert.Equal(SystemColors.Window, subItem.BackColor);
@@ -51,25 +51,25 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(SystemColors.WindowText, subItem.ForeColor);
             Assert.Empty(subItem.Name);
             Assert.Null(subItem.Tag);
-            Assert.Equal(text ?? string.Empty, subItem.Text);
+            Assert.Equal(expectedText, subItem.Text);
         }
 
         public static IEnumerable<object[]> Ctor_ListViewItem_String_Color_Color_Font_TestData()
         {
-            yield return new object[] { null, null, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window };
-            yield return new object[] { new ListViewItem(), "", Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue };
-            yield return new object[] { new ListViewItem(), "reasonable", Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue };
-            yield return new object[] { new ListViewItem() { BackColor = Color.Yellow, ForeColor = Color.Yellow, Font = SystemFonts.StatusFont }, "", Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue };
+            yield return new object[] { null, null, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, string.Empty };
+            yield return new object[] { new ListViewItem(), string.Empty, Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue, string.Empty };
+            yield return new object[] { new ListViewItem(), "reasonable", Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue, "reasonable" };
+            yield return new object[] { new ListViewItem() { BackColor = Color.Yellow, ForeColor = Color.Yellow, Font = SystemFonts.StatusFont }, string.Empty, Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue, string.Empty };
 
             var listView = new ListView();
             var item = new ListViewItem();
             Assert.Null(item.ListView);
-            yield return new object[] { item, "reasonable", Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue };
+            yield return new object[] { item, "reasonable", Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue, "reasonable" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_ListViewItem_String_Color_Color_Font_TestData))]
-        public void ListViewSubItem_Ctor_ListViewItem_String_Color_Color_Font(ListViewItem owner, string text, Color foreColor, Color backColor, Font font, Color expectedForeColor, Color expectedBackColor)
+        public void ListViewSubItem_Ctor_ListViewItem_String_Color_Color_Font(ListViewItem owner, string text, Color foreColor, Color backColor, Font font, Color expectedForeColor, Color expectedBackColor, string expectedText)
         {
             var subItem = new ListViewItem.ListViewSubItem(owner, text, foreColor, backColor, font);
             Assert.Equal(expectedBackColor, subItem.BackColor);
@@ -78,7 +78,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedForeColor, subItem.ForeColor);
             Assert.Empty(subItem.Name);
             Assert.Null(subItem.Tag);
-            Assert.Equal(text ?? string.Empty, subItem.Text);
+            Assert.Equal(expectedText, subItem.Text);
         }
 
         [Fact]
@@ -110,8 +110,8 @@ namespace System.Windows.Forms.Tests
                 BackColor = value
             };
             Assert.Equal(expected, subItem.BackColor);
-
-            // Set again to test caching behaviour.
+            
+            // Set same.
             subItem.BackColor = value;
             Assert.Equal(expected, subItem.BackColor);
         }
@@ -157,8 +157,8 @@ namespace System.Windows.Forms.Tests
                 Font = value
             };
             Assert.Equal(value ?? Control.DefaultFont, subItem.Font);
-
-            // Set again to test caching behaviour.
+            
+            // Set same.
             subItem.Font = value;
             Assert.Equal(value ?? Control.DefaultFont, subItem.Font);
         }
@@ -192,41 +192,41 @@ namespace System.Windows.Forms.Tests
                 ForeColor = value
             };
             Assert.Equal(expected, subItem.ForeColor);
-
-            // Set again to test caching behaviour.
+            
+            // Set same.
             subItem.ForeColor = value;
             Assert.Equal(expected, subItem.ForeColor);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void ListViewSubItem_Name_SetWithOwner_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ListViewSubItem_Name_SetWithOwner_GetReturnsExpected(string value, string expected)
         {
             var item = new ListViewItem();
             var subItem = new ListViewItem.ListViewSubItem(item, "text")
             {
                 Name = value
             };
-            Assert.Equal(value ?? string.Empty, subItem.Name);
+            Assert.Same(expected, subItem.Name);
 
-            // Set again to test caching behaviour.
+            // Set same.
             subItem.Name = value;
-            Assert.Equal(value ?? string.Empty, subItem.Name);
+            Assert.Same(expected, subItem.Name);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void ListViewSubItem_Name_SetWithoutOwner_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ListViewSubItem_Name_SetWithoutOwner_GetReturnsExpected(string value, string expected)
         {
             var subItem = new ListViewItem.ListViewSubItem
             {
                 Name = value
             };
-            Assert.Equal(value ?? string.Empty, subItem.Name);
+            Assert.Same(expected, subItem.Name);
 
-            // Set again to test caching behaviour.
+            // Set same.
             subItem.Name = value;
-            Assert.Equal(value ?? string.Empty, subItem.Name);
+            Assert.Same(expected, subItem.Name);
         }
 
         [Theory]
@@ -237,42 +237,42 @@ namespace System.Windows.Forms.Tests
             {
                 Tag = value
             };
-            Assert.Equal(value, subItem.Tag);
+            Assert.Same(value, subItem.Tag);
 
-            // Set again to test caching behaviour.
+            // Set same.
             subItem.Tag = value;
-            Assert.Equal(value, subItem.Tag);
+            Assert.Same(value, subItem.Tag);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void ListViewSubItem_Text_SetWithOwner_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ListViewSubItem_Text_SetWithOwner_GetReturnsExpected(string value, string expected)
         {
             var item = new ListViewItem();
             var subItem = new ListViewItem.ListViewSubItem(item, "text")
             {
                 Text = value
             };
-            Assert.Equal(value ?? string.Empty, subItem.Text);
+            Assert.Same(expected, subItem.Text);
 
-            // Set again to test caching behaviour.
+            // Set same.
             subItem.Text = value;
-            Assert.Equal(value ?? string.Empty, subItem.Text);
+            Assert.Same(expected, subItem.Text);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void ListViewSubItem_Text_SetWithoutOwner_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ListViewSubItem_Text_SetWithoutOwner_GetReturnsExpected(string value, string expected)
         {
             var subItem = new ListViewItem.ListViewSubItem
             {
                 Text = value
             };
-            Assert.Equal(value ?? string.Empty, subItem.Text);
+            Assert.Same(expected, subItem.Text);
 
-            // Set again to test caching behaviour.
+            // Set same.
             subItem.Text = value;
-            Assert.Equal(value ?? string.Empty, subItem.Text);
+            Assert.Same(expected, subItem.Text);
         }
 
         public static IEnumerable<object[]> ResetStyle_Owner_TestData()

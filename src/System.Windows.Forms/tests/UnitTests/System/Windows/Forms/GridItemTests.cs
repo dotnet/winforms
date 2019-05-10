@@ -42,6 +42,10 @@ namespace System.Windows.Forms.Tests
                 Tag = value
             };
             Assert.Same(value, item.Tag);
+
+            // Set same.
+            item.Tag = value;
+            Assert.Same(value, item.Tag);
         }
 
         private class SubGridItem : GridItem

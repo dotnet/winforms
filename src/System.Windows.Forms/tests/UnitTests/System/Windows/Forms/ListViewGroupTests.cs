@@ -29,11 +29,11 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void ListViewGroup_Ctor_String(string header)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ListViewGroup_Ctor_String(string header, string expectedHeader)
         {
             var group = new ListViewGroup(header);
-            Assert.Equal(header ?? string.Empty, group.Header);
+            Assert.Equal(expectedHeader, group.Header);
             Assert.Equal(HorizontalAlignment.Left, group.HeaderAlignment);
             Assert.Empty(group.Items);
             Assert.Same(group.Items, group.Items);
@@ -44,19 +44,19 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Ctor_String_HorizontalAlignment_TestData()
         {
-            yield return new object[] { null, HorizontalAlignment.Left };
-            yield return new object[] { "", HorizontalAlignment.Right };
-            yield return new object[] { "reasonable", HorizontalAlignment.Center };
-            yield return new object[] { "reasonable", (HorizontalAlignment)(HorizontalAlignment.Left - 1) };
-            yield return new object[] { "reasonable", (HorizontalAlignment)(HorizontalAlignment.Center + 1) };
+            yield return new object[] { null, HorizontalAlignment.Left, string.Empty };
+            yield return new object[] { string.Empty, HorizontalAlignment.Right, string.Empty };
+            yield return new object[] { "reasonable", HorizontalAlignment.Center, "reasonable" };
+            yield return new object[] { "reasonable", (HorizontalAlignment)(HorizontalAlignment.Left - 1), "reasonable" };
+            yield return new object[] { "reasonable", (HorizontalAlignment)(HorizontalAlignment.Center + 1), "reasonable" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_String_HorizontalAlignment_TestData))]
-        public void ListViewGroup_Ctor_String_HorizontalAlignment(string header, HorizontalAlignment headerAlignment)
+        public void ListViewGroup_Ctor_String_HorizontalAlignment(string header, HorizontalAlignment headerAlignment, string expectedHeader)
         {
             var group = new ListViewGroup(header, headerAlignment);
-            Assert.Equal(header ?? string.Empty, group.Header);
+            Assert.Same(expectedHeader, group.Header);
             Assert.Equal(headerAlignment, group.HeaderAlignment);
             Assert.Empty(group.Items);
             Assert.Same(group.Items, group.Items);
@@ -67,17 +67,17 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Ctor_String_String_TestData()
         {
-            yield return new object[] { null, null };
-            yield return new object[] { "", "" };
-            yield return new object[] { "reasonable", "other" };
+            yield return new object[] { null, null, string.Empty };
+            yield return new object[] { string.Empty, string.Empty, string.Empty };
+            yield return new object[] { "key", "header", "header" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_String_String_TestData))]
-        public void ListViewGroup_Ctor_String_String(string key, string header)
+        public void ListViewGroup_Ctor_String_String(string key, string header, string expectedHeader)
         {
             var group = new ListViewGroup(key, header);
-            Assert.Equal(header ?? string.Empty, group.Header);
+            Assert.Equal(expectedHeader, group.Header);
             Assert.Equal(HorizontalAlignment.Left, group.HeaderAlignment);
             Assert.Empty(group.Items);
             Assert.Same(group.Items, group.Items);
@@ -87,34 +87,34 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void ListViewGroup_Header_SetWithListView_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ListViewGroup_Header_SetWithListView_GetReturnsExpected(string value, string expected)
         {
             var listView = new ListView();
             var group = new ListViewGroup();
             listView.Groups.Add(group);
 
             group.Header = value;
-            Assert.Equal(value ?? string.Empty, group.Header);
+            Assert.Same(expected, group.Header);
 
-            // Set again to test caching behaviour.
+            // Set same.
             group.Header = value;
-            Assert.Equal(value ?? string.Empty, group.Header);
+            Assert.Same(expected, group.Header);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void ListViewGroup_Header_SetWithoutListView_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ListViewGroup_Header_SetWithoutListView_GetReturnsExpected(string value, string expected)
         {
             var group = new ListViewGroup
             {
                 Header = value
             };
-            Assert.Equal(value ?? string.Empty, group.Header);
+            Assert.Same(expected, group.Header);
 
-            // Set again to test caching behaviour.
+            // Set same.
             group.Header = value;
-            Assert.Equal(value ?? string.Empty, group.Header);
+            Assert.Same(expected, group.Header);
         }
 
         [Theory]
@@ -128,7 +128,7 @@ namespace System.Windows.Forms.Tests
             group.HeaderAlignment = value;
             Assert.Equal(value, group.HeaderAlignment);
 
-            // Set again to test caching behaviour.
+            // Set same.
             group.HeaderAlignment = value;
             Assert.Equal(value, group.HeaderAlignment);
         }
@@ -145,7 +145,7 @@ namespace System.Windows.Forms.Tests
             group.HeaderAlignment = value;
             Assert.Equal(value, group.HeaderAlignment);
 
-            // Set again to test caching behaviour.
+            // Set same.
             group.HeaderAlignment = value;
             Assert.Equal(value, group.HeaderAlignment);
         }
@@ -160,7 +160,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, group.HeaderAlignment);
 
-            // Set again to test caching behaviour.
+            // Set same.
             group.HeaderAlignment = value;
             Assert.Equal(value, group.HeaderAlignment);
         }
@@ -181,11 +181,11 @@ namespace System.Windows.Forms.Tests
             {
                 Name = value
             };
-            Assert.Equal(value, group.Name);
+            Assert.Same(value, group.Name);
 
-            // Set again to test caching behaviour.
+            // Set same.
             group.Name = value;
-            Assert.Equal(value, group.Name);
+            Assert.Same(value, group.Name);
         }
 
         [Theory]
@@ -196,11 +196,11 @@ namespace System.Windows.Forms.Tests
             {
                 Tag = value
             };
-            Assert.Equal(value, group.Tag);
+            Assert.Same(value, group.Tag);
 
-            // Set again to test caching behaviour.
+            // Set same.
             group.Tag = value;
-            Assert.Equal(value, group.Tag);
+            Assert.Same(value, group.Tag);
         }
 
         public static IEnumerable<object[]> Serialize_Deserialize_TestData()
@@ -233,11 +233,11 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void ListViewGroup_ToString_Invoke_ReturnsExpected(string header)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ListViewGroup_ToString_Invoke_ReturnsExpected(string header, string expected)
         {
             var group = new ListViewGroup(header);
-            Assert.Equal(header ?? string.Empty, group.ToString());
+            Assert.Same(expected, group.ToString());
         }
     }
 }

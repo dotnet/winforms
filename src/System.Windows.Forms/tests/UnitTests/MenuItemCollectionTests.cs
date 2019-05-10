@@ -33,14 +33,14 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData), MemberType = typeof(CommonTestHelper))]
-        public void MenuItemCollection_Add_String_Success(string caption)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void MenuItemCollection_Add_String_Success(string caption, string expectedText)
         {
             var menu = new SubMenu(new MenuItem[0]);
             var collection = new Menu.MenuItemCollection(menu);
             MenuItem menuItem = collection.Add(caption);
             Assert.Same(menuItem, Assert.Single(collection));
-            Assert.Equal(caption ?? string.Empty, menuItem.Text);
+            Assert.Same(expectedText, menuItem.Text);
             Assert.Empty(menuItem.MenuItems);
             Assert.Equal(menu, menuItem.Parent);
             Assert.Equal(0, menuItem.Index);
@@ -49,20 +49,20 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> Add_StringEventHandler_TestData()
         {
             EventHandler onClick = (sender, e) => {};
-            yield return new object[] { null, null };
-            yield return new object[] { string.Empty, onClick };
-            yield return new object[] { "caption", onClick };
+            yield return new object[] { null, null, string.Empty };
+            yield return new object[] { string.Empty, onClick, string.Empty };
+            yield return new object[] { "caption", onClick, "caption" };
         }
 
         [Theory]
         [MemberData(nameof(Add_StringEventHandler_TestData))]
-        public void MenuItemCollection_Add_StringEventHandler_Success(string caption, EventHandler onClick)
+        public void MenuItemCollection_Add_StringEventHandler_Success(string caption, EventHandler onClick, string expectedText)
         {
             var menu = new SubMenu(new MenuItem[0]);
             var collection = new Menu.MenuItemCollection(menu);
             MenuItem menuItem = collection.Add(caption, onClick);
             Assert.Same(menuItem, Assert.Single(collection));
-            Assert.Equal(caption ?? string.Empty, menuItem.Text);
+            Assert.Same(expectedText, menuItem.Text);
             Assert.Empty(menuItem.MenuItems);
             Assert.Equal(menu, menuItem.Parent);
             Assert.Equal(0, menuItem.Index);
@@ -70,20 +70,20 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Add_StringMenuItemArray_TestData()
         {
-            yield return new object[] { null, null };
-            yield return new object[] { string.Empty, new MenuItem[0] };
-            yield return new object[] { "caption", new MenuItem[] { new MenuItem() } };
+            yield return new object[] { null, null, string.Empty };
+            yield return new object[] { string.Empty, new MenuItem[0], string.Empty };
+            yield return new object[] { "caption", new MenuItem[] { new MenuItem() }, "caption" };
         }
 
         [Theory]
         [MemberData(nameof(Add_StringMenuItemArray_TestData))]
-        public void MenuItemCollection_Add_StringMenuItemArray_Success(string caption, MenuItem[] items)
+        public void MenuItemCollection_Add_StringMenuItemArray_Success(string caption, MenuItem[] items, string expectedText)
         {
             var menu = new SubMenu(new MenuItem[0]);
             var collection = new Menu.MenuItemCollection(menu);
             MenuItem menuItem = collection.Add(caption, items);
             Assert.Same(menuItem, Assert.Single(collection));
-            Assert.Equal(caption ?? string.Empty, menuItem.Text);
+            Assert.Same(expectedText, menuItem.Text);
             Assert.Equal(items ?? new MenuItem[0], menuItem.MenuItems.Cast<MenuItem>());
             Assert.Equal(menu, menuItem.Parent);
             Assert.Equal(0, menuItem.Index);

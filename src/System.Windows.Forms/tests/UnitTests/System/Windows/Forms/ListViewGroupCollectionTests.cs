@@ -481,10 +481,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [InlineData(null, null)]
-        [InlineData("", "")]
-        [InlineData("key", "headerText")]
-        public void ListViewGroupCollection_Add_StringString_Success(string key, string headerText)
+        [InlineData(null, null, "")]
+        [InlineData("", "", "")]
+        [InlineData("key", "headerText", "headerText")]
+        public void ListViewGroupCollection_Add_StringString_Success(string key, string headerText, string expectedHeaderText)
         {
             var listView = new ListView();
             ListViewGroupCollection collection = listView.Groups;
@@ -492,7 +492,7 @@ namespace System.Windows.Forms.Tests
 
             ListViewGroup group = Assert.Single(collection.Cast<ListViewGroup>());
             Assert.Equal(key, group.Name);
-            Assert.Equal(headerText ?? string.Empty, group.Header);
+            Assert.Equal(expectedHeaderText, group.Header);
         }
 
         [Fact]

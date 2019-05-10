@@ -119,7 +119,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, style.Alignment);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.Alignment = value;
             Assert.Equal(value, style.Alignment);
         }
@@ -142,7 +142,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, style.BackColor);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.BackColor = value;
             Assert.Equal(value, style.BackColor);
         }
@@ -178,7 +178,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, style.DataSourceNullValue);
             Assert.Equal(expectedIsDataSourceNullValueDefault, style.IsDataSourceNullValueDefault);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.DataSourceNullValue = value;
             Assert.Equal(value, style.DataSourceNullValue);
             Assert.Equal(expectedIsDataSourceNullValueDefault, style.IsDataSourceNullValueDefault);
@@ -196,7 +196,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, style.DataSourceNullValue);
             Assert.Equal(expectedIsDataSourceNullValueDefault, style.IsDataSourceNullValueDefault);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.DataSourceNullValue = value;
             Assert.Equal(value, style.DataSourceNullValue);
             Assert.Equal(expectedIsDataSourceNullValueDefault, style.IsDataSourceNullValueDefault);
@@ -214,7 +214,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, style.DataSourceNullValue);
             Assert.Equal(expectedIsDataSourceNullValueDefault, style.IsDataSourceNullValueDefault);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.DataSourceNullValue = value;
             Assert.Equal(value, style.DataSourceNullValue);
             Assert.Equal(expectedIsDataSourceNullValueDefault, style.IsDataSourceNullValueDefault);
@@ -274,7 +274,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, style.Font);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.Font = value;
             Assert.Equal(value, style.Font);
         }
@@ -300,7 +300,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, style.ForeColor);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.ForeColor = value;
             Assert.Equal(value, style.ForeColor);
         }
@@ -317,30 +317,30 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void DataGridViewCellStyle_Format_Set_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void DataGridViewCellStyle_Format_Set_GetReturnsExpected(string value, string expected)
         {
             var style = new DataGridViewCellStyle
             {
                 Format = value
             };
-            Assert.Equal(value ?? string.Empty, style.Format);
+            Assert.Same(expected, style.Format);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.Format = value;
-            Assert.Equal(value ?? string.Empty, style.Format);
+            Assert.Same(expected, style.Format);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void DataGridViewCellStyle_Format_SetWithNonNullOldValue_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void DataGridViewCellStyle_Format_SetWithNonNullOldValue_GetReturnsExpected(string value, string expected)
         {
             var style = new DataGridViewCellStyle
             {
                 Format = "value"
             };
             style.Format = value;
-            Assert.Equal(value ?? string.Empty, style.Format);
+            Assert.Same(expected, style.Format);
         }
 
         public static IEnumerable<object[]> FormatProvider_TestData()
@@ -362,7 +362,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, style.FormatProvider);
             Assert.Equal(expectedIsFormatProviderDefault, style.IsFormatProviderDefault);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.FormatProvider = value;
             Assert.Equal(expected, style.FormatProvider);
             Assert.Equal(expectedIsFormatProviderDefault, style.IsFormatProviderDefault);
@@ -400,7 +400,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, style.NullValue);
             Assert.Equal(expectedIsNullValueDefault, style.IsNullValueDefault);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.NullValue = value;
             Assert.Equal(value, style.NullValue);
             Assert.Equal(expectedIsNullValueDefault, style.IsNullValueDefault);
@@ -418,7 +418,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, style.NullValue);
             Assert.Equal(expectedIsNullValueDefault, style.IsNullValueDefault);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.NullValue = value;
             Assert.Equal(value, style.NullValue);
             Assert.Equal(expectedIsNullValueDefault, style.IsNullValueDefault);
@@ -436,7 +436,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, style.NullValue);
             Assert.Equal(expectedIsNullValueDefault, style.IsNullValueDefault);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.NullValue = value;
             Assert.Equal(value, style.NullValue);
             Assert.Equal(expectedIsNullValueDefault, style.IsNullValueDefault);
@@ -503,7 +503,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(expected, style.Padding);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.Padding = value;
             Assert.Equal(expected, style.Padding);
         }
@@ -518,7 +518,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, style.SelectionBackColor);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.SelectionBackColor = value;
             Assert.Equal(value, style.SelectionBackColor);
         }
@@ -544,7 +544,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, style.SelectionForeColor);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.SelectionForeColor = value;
             Assert.Equal(value, style.SelectionForeColor);
         }
@@ -568,11 +568,11 @@ namespace System.Windows.Forms.Tests
             {
                 Tag = value
             };
-            Assert.Equal(value, style.Tag);
+            Assert.Same(value, style.Tag);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.Tag = value;
-            Assert.Equal(value, style.Tag);
+            Assert.Same(value, style.Tag);
         }
 
         [Theory]
@@ -586,7 +586,7 @@ namespace System.Windows.Forms.Tests
             style.Tag = value;
             Assert.Equal(value, style.Tag);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.Tag = value;
             Assert.Equal(value, style.Tag);
         }
@@ -601,7 +601,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, style.WrapMode);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.WrapMode = value;
             Assert.Equal(value, style.WrapMode);
         }
