@@ -1857,8 +1857,7 @@ namespace System.ComponentModel.Design
 
                         if (validateName)
                         {
-                            INameCreationService nameService = (INameCreationService)((IServiceProvider)this).GetService(typeof(INameCreationService));
-                            if (nameService != null)
+                            if (((IServiceProvider)this).GetService(typeof(INameCreationService)) is INameCreationService nameService)
                             {
                                 nameService.ValidateName(value);
                             }
