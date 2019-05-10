@@ -12,7 +12,6 @@ namespace System.Windows.Forms
     using System.Globalization;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <include file='doc\DataGridViewButtonColumn.uex' path='docs/doc[@for="DataGridViewButtonColumn"]/*' />
     [ToolboxBitmapAttribute(typeof(DataGridViewButtonColumn), "DataGridViewButtonColumn")]
     public class DataGridViewButtonColumn : DataGridViewColumn
     {
@@ -20,7 +19,6 @@ namespace System.Windows.Forms
 
         private string text;
 
-        /// <include file='doc\DataGridViewButtonColumn.uex' path='docs/doc[@for="DataGridViewButtonColumn.DataGridViewButtonColumn"]/*' />
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors") // Can't think of a workaround.
         ]
@@ -32,7 +30,6 @@ namespace System.Windows.Forms
             this.DefaultCellStyle = defaultCellStyle;
         }
 
-        /// <include file='doc\DataGridViewButtonColumn.uex' path='docs/doc[@for="DataGridViewButtonColumn.CellTemplate"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -53,7 +50,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewButtonColumn.uex' path='docs/doc[@for="DataGridViewButtonColumn.DefaultCellStyle"]/*' />
         [
             Browsable(true),
             SRCategory(nameof(SR.CatAppearance)),
@@ -71,7 +67,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewButtonColumn.uex' path='docs/doc[@for="DataGridViewButtonColumn.FlatStyle"]/*' />
         [
             DefaultValue(FlatStyle.Standard),
             SRCategory(nameof(SR.CatAppearance)),
@@ -111,7 +106,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewButtonColumn.uex' path='docs/doc[@for="DataGridViewButtonColumn.Text"]/*' />
         [
             DefaultValue(null),
             SRCategory(nameof(SR.CatAppearance)),
@@ -155,7 +149,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewButtonColumn.uex' path='docs/doc[@for="DataGridViewButtonColumn.UseColumnTextForButtonValue"]/*' />
         [
             DefaultValue(false),
             SRCategory(nameof(SR.CatAppearance)),
@@ -195,7 +188,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewButtonColumn.uex' path='docs/doc[@for="DataGridViewButtonColumn.Clone"]/*' />
         public override object Clone()
         {
             DataGridViewButtonColumn dataGridViewColumn;
@@ -241,7 +233,6 @@ namespace System.Windows.Forms
                     !defaultCellStyle.Padding.Equals(Padding.Empty));
         }
 
-        /// <include file='doc\DataGridViewButtonColumn.uex' path='docs/doc[@for="DataGridViewButtonColumn.ToString"]/*' />
         public override string ToString() 
         {
             StringBuilder sb = new StringBuilder(64);

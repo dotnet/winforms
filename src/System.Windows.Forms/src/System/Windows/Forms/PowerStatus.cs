@@ -11,7 +11,6 @@ namespace System.Windows.Forms
         internal PowerStatus() {
         }
         
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerStatus.ACLineStatus"]/*' />
         public PowerLineStatus PowerLineStatus
         {
             get
@@ -21,7 +20,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerStatus.BatteryChargeStatus"]/*' />
         public BatteryChargeStatus BatteryChargeStatus
         {
             get
@@ -31,7 +29,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerStatus.BatteryFullLifetime"]/*' />
         public int BatteryFullLifetime
         {
             get
@@ -41,7 +38,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerStatus.BatteryLifePercent"]/*' />
         public float BatteryLifePercent
         {
             get
@@ -52,7 +48,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerStatus.BatteryLifeRemaining"]/*' />
         public int BatteryLifeRemaining
         {
             get

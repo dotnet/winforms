@@ -14,7 +14,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.ComponentModel.Design;
     using Microsoft.Win32;
 
-    /// <include file='doc\ComNativeDescriptor.uex' path='docs/doc[@for="ComNativeDescriptor"]/*' />
     /// <devdoc>
     ///     Top level mapping layer between COM Object and TypeDescriptor.
     ///
@@ -25,19 +24,16 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         private AttributeCollection staticAttrs = new AttributeCollection(new Attribute[]{BrowsableAttribute.Yes, DesignTimeVisibleAttribute.No});
 
-        /// <include file='doc\ComNativeDescriptor.uex' path='docs/doc[@for="ComNativeDescriptor.nativeProps"]/*' />
         /// <devdoc>
         /// Our collection of Object managers (Com2Properties) for native properties
         /// </devdoc>
         private WeakHashtable  nativeProps = new WeakHashtable();
         
-        /// <include file='doc\ComNativeDescriptor.uex' path='docs/doc[@for="ComNativeDescriptor.extendedBrowsingHandlers"]/*' />
         /// <devdoc>
         /// Our collection of browsing handlers, which are stateless and shared across objects.
         /// </devdoc>
         private Hashtable         extendedBrowsingHandlers = new Hashtable();
         
-        /// <include file='doc\ComNativeDescriptor.uex' path='docs/doc[@for="ComNativeDescriptor.clearCount"]/*' />
         /// <devdoc>
         /// We increment this every time we look at an Object, at specified
         /// intervals, we run through the properies list to see if we should
@@ -227,7 +223,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return NativeMethods.E_FAIL;
         }
 
-        /// <include file='doc\ComNativeDescriptor.uex' path='docs/doc[@for="ComNativeDescriptor.IsNameDispId"]/*' />
         /// <devdoc>
         /// Checks if the given dispid matches the dispid that the Object would like to specify
         /// as its identification proeprty (Name, ID, etc).
@@ -239,7 +234,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return dispid == Com2TypeInfoProcessor.GetNameDispId((UnsafeNativeMethods.IDispatch)obj);
         }
 
-        /// <include file='doc\ComNativeDescriptor.uex' path='docs/doc[@for="ComNativeDescriptor.CheckClear"]/*' />
         /// <devdoc>
         /// Checks all our property manages to see if any have become invalid.
         /// </devdoc>
@@ -289,7 +283,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\ComNativeDescriptor.uex' path='docs/doc[@for="ComNativeDescriptor.GetPropsInfo"]/*' />
         /// <devdoc>
         /// Gets the properties manager for an Object.
         /// </devdoc>
@@ -315,7 +308,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return propsInfo;
         }
 
-        /// <include file='doc\ComNativeDescriptor.uex' path='docs/doc[@for="ComNativeDescriptor.GetAttributes"]/*' />
         /// <devdoc>
         /// Got attributes?
         /// </devdoc>
@@ -345,7 +337,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\ComNativeDescriptor.uex' path='docs/doc[@for="ComNativeDescriptor.GetDefaultProperty"]/*' />
         /// <devdoc>
         /// Default Property, please
         /// </devdoc>
@@ -435,7 +426,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\ComNativeDescriptor.uex' path='docs/doc[@for="ComNativeDescriptor.ResolveVariantTypeConverterAndTypeEditor"]/*' />
         /// <devdoc>
         /// Looks at at value's type and creates an editor based on that.  We use this to decide which editor to use
         /// for a generic variant.

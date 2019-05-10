@@ -27,7 +27,6 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.this]/*' />
         public HtmlWindow this[int index] {
             get {
                 if (index < 0 || index >= Count) {
@@ -41,7 +40,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.this1]/*' />
         public HtmlWindow this[string windowId] {
             get {
                 object oWindowId = (object)windowId;
@@ -57,7 +55,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.Count"]/*' />
         /// <devdoc>
         ///     Returns the total number of elements in the collection.
         /// </devdoc>
@@ -67,21 +64,18 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.ICollection.IsSynchronized"]/*' />
         bool ICollection.IsSynchronized {
             get {
                 return false;
             }
         }
         
-        /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.ICollection.SyncRoot"]/*' />
         object ICollection.SyncRoot {
             get {
                 return this;
             }
         }
 
-        /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.ICollection.CopyTo"]/*' />
         void ICollection.CopyTo(Array dest, int index) {
             int count = this.Count;
             for (int i = 0; i < count; i++) {
@@ -89,7 +83,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.GetEnumerator"]/*' />
         public IEnumerator GetEnumerator() {
             HtmlWindow[] htmlWindows = new HtmlWindow[this.Count];
             ((ICollection)this).CopyTo(htmlWindows, 0);

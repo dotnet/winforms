@@ -15,7 +15,6 @@ namespace System.Windows.Forms
         /// </devdoc>
         None = 0,
 
-        /// <include file='doc\AccessibleSelection.uex' path='docs/doc[@for="AccessibleSelection.TakeFocus"]/*' />
         /// <devdoc>
         ///    <para>
         /// Assigns focus to an object and makes it the anchor, which is the

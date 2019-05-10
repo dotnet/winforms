@@ -24,7 +24,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
     using System.Drawing.Drawing2D;
     using Microsoft.Win32;
 
-    /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry"]/*' />
     /// <devdoc>
     ///     Base Entry for properties to be displayed in properties window.
     /// </devdoc>
@@ -189,7 +188,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return new GridEntryAccessibleObject(this);
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.AllowMerge"]/*' />
         /// <devdoc>
         /// specify that this grid entry should be allowed to be merged for.
         /// multi-select.
@@ -212,7 +210,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.BackgroundBrush"]/*' />
         /// <devdoc>
         /// Gets the value of the background brush to use.  Override
         /// this member to cause the entry to paint it's background in a different color.
@@ -222,7 +219,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return GridEntryHost.GetBackgroundBrush(g);
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.LabelTextColor"]/*' />
         /// <devdoc>
         /// </devdoc>
         protected virtual Color LabelTextColor {
@@ -236,7 +232,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.BrowsableAttributes"]/*' />
         /// <devdoc>
         /// The set of attributes that will be used for browse filtering
         /// </devdoc>
@@ -252,7 +247,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.Component"]/*' />
         /// <devdoc>
         ///      Retrieves the component that is invoking the
         ///      method on the formatter object.  This may
@@ -279,7 +273,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.Container"]/*' />
         /// <devdoc>
         ///      Retrieves the container that contains the
         ///      set of objects this formatter may work
@@ -351,7 +344,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.DefaultChild"]/*' />
         /// <devdoc>
         /// Returns the default child GridEntry of this item.  Usually the default property
         /// of the target object.
@@ -549,7 +541,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.Focus"]/*' />
         /// <devdoc>
         /// Checks if the entry is currently expanded
         /// </devdoc>
@@ -590,7 +581,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.FullLabel"]/*' />
         /// <devdoc>
         /// Returns the label including the object name, and properties.  For example, the value
         /// of the Font size property on a Button called Button1 would be "Button1.Font.Size"
@@ -646,7 +636,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.HasValue"]/*' />
         /// <devdoc>
         /// Returns true if this GridEntry has a value field in the right hand column.
         /// </devdoc>
@@ -656,7 +645,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.HelpKeyword"]/*' />
         /// <devdoc>
         ///     Retrieves the keyword that the VS help dynamic help window will
         ///     use when this IPE is selected.
@@ -732,7 +720,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.Instance"]/*' />
         /// <devdoc>
         ///      Retrieves the component that is invoking the
         ///      method on the formatter object.  This may
@@ -756,7 +743,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
         
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.PropertyDescriptor"]/*' />
         /// <devdoc>
         ///      Retrieves the PropertyDescriptor that is surfacing the given object/
         /// </devdoc>
@@ -768,7 +754,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.PropertyLabelIndent"]/*' />
         /// <devdoc>
         /// Returns the pixel indent of the current GridEntry's label.
         /// </devdoc>
@@ -807,7 +792,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.OutlineRect"]/*' />
         /// <devdoc>
         /// Returns rect that the outline icon (+ or - or arrow) will be drawn into, relative
         /// to the upper left corner of the GridEntry.
@@ -871,7 +855,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.PropertyCategory"]/*' />
         /// <devdoc>
         /// Returns category name of the current property
         /// </devdoc>
@@ -881,7 +864,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.PropertyDepth"]/*' />
         /// <devdoc>
         /// Returns "depth" of this property.  That is, how many parent's between
         /// this property and the root property.  The root property has a depth of -1.
@@ -893,7 +875,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.PropertyDescription"]/*' />
         /// <devdoc>
         /// Returns the description helpstring for this GridEntry.
         /// </devdoc>
@@ -903,7 +884,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.PropertyLabel"]/*' />
         /// <devdoc>
         /// Returns the label of this property.  Usually
         /// this is the property name.
@@ -914,7 +894,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.PropertyName"]/*' />
         /// <devdoc>
         /// Returns non-localized name of this property.
         /// </devdoc>
@@ -924,7 +903,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.PropertyType"]/*' />
         /// <devdoc>
         /// Returns the Type of the value of this GridEntry, or null if the value is null.
         /// </devdoc>
@@ -940,7 +918,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.PropertyValue"]/*' />
         /// <devdoc>
         /// Gets or sets the value for the property that is represented
         /// by this GridEntry.
@@ -968,7 +945,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.TypeConverter"]/*' />
         /// <devdoc>
         /// Returns the type converter for this entry.
         /// </devdoc>
@@ -987,7 +963,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.UITypeEditor"]/*' />
         /// <devdoc>
         /// Returns the type editor for this entry.  This may return null if there
         /// is no type editor.
@@ -1033,7 +1008,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.AddOnLabelClick"]/*' />
         /// <devdoc>
         /// Add an event handler to be invoked when the label portion of
         /// the prop entry is clicked
@@ -1042,7 +1016,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             AddEventHandler(EVENT_LABEL_CLICK, h);
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.AddOnLabelDoubleClick"]/*' />
         /// <devdoc>
         /// Add an event handler to be invoked when the label portion of
         /// the prop entry is double
@@ -1051,7 +1024,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             AddEventHandler(EVENT_LABEL_DBLCLICK, h);
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.AddOnValueClick"]/*' />
         /// <devdoc>
         /// Add an event handler to be invoked when the value portion of
         /// the prop entry is clicked
@@ -1061,7 +1033,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.AddOnValueDoubleClick"]/*' />
         /// <devdoc>
         /// Add an event handler to be invoked when the value portion of
         /// the prop entry is double-clicked
@@ -1070,7 +1041,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             AddEventHandler(EVENT_VALUE_DBLCLICK, h);
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.AddOnOutlineClick"]/*' />
         /// <devdoc>
         /// Add an event handler to be invoked when the outline icone portion of
         /// the prop entry is clicked
@@ -1079,7 +1049,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             AddEventHandler(EVENT_OUTLINE_CLICK, h);
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.AddOnOutlineDoubleClick"]/*' />
         /// <devdoc>
         /// Add an event handler to be invoked when the outline icone portion of
         /// the prop entry is double clicked
@@ -1088,7 +1057,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             AddEventHandler(EVENT_OUTLINE_DBLCLICK, h);
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.AddOnRecreateChildren"]/*' />
         /// <devdoc>
         /// Add an event handler to be invoked when the children grid entries are re-created.
         /// </devdoc>
@@ -1113,7 +1081,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                }
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.ConvertTextToValue"]/*' />
         /// <devdoc>
         /// Converts the given string of text to a value.
         /// </devdoc>
@@ -1124,7 +1091,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return text;
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.Create"]/*' />
         /// <devdoc>
         /// Create the base prop entries given an object or set of objects
         /// </devdoc>
@@ -1155,7 +1121,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return pe;
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.CreateChildren"]/*' />
         /// <devdoc>
         /// Populates the children of this grid entry
         /// </devdoc>
@@ -1163,7 +1128,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return CreateChildren(false);
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.CreateChildren1"]/*' />
         /// <devdoc>
         /// Populates the children of this grid entry
         /// </devdoc>
@@ -1263,7 +1227,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.DisposeChildren"]/*' />
         /// <devdoc>
         /// Disposes the array of children
         /// </devdoc>
@@ -1280,7 +1243,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.EditPropertyValue"]/*' />
         /// <devdoc>
         /// Invokes the type editor for editing this item.
         /// </devdoc>
@@ -1334,7 +1296,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.Equals"]/*' />
         /// <devdoc>
         /// Tests two GridEntries for equality
         /// </devdoc>
@@ -1346,7 +1307,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return false;
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.FindPropertyValue"]/*' />
         /// <devdoc>
         /// Searches for a value of a given property for a value editor user
         /// </devdoc>
@@ -1363,7 +1323,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return null;
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.GetChildIndex"]/*' />
         /// <devdoc>
         /// Returns the index of a child GridEntry
         /// </devdoc>
@@ -1371,7 +1330,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return this.Children.GetEntry(pe);
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.GetComponents"]/*' />
         /// <devdoc>
         /// Gets the components that own the current value.  This is usually the value of the
         /// root entry, which is the object being browsed.  Walks up the GridEntry tree
@@ -1428,7 +1386,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             else 
                 return false;
         }
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.GetValueOwner"]/*' />
         /// <devdoc>
         /// Gets the owner of the current value.  This is usually the value of the
         /// root entry, which is the object being browsed
@@ -1441,7 +1398,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return parentPE.GetChildValueOwner(this);
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.GetValueOwners"]/*' />
         /// <devdoc>
         /// Gets the owners of the current value.  This is usually the value of the
         /// root entry, which is the objects being browsed for a multiselect item
@@ -1454,7 +1410,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return null;
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.GetChildValueOwner"]/*' />
         /// <devdoc>
         /// Gets the owner of the current value.  This is usually the value of the
         /// root entry, which is the object being browsed
@@ -1474,7 +1429,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return this.PropertyValue;
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.GetTestingInfo"]/*' />
         /// <devdoc>
         /// Returns a string with info about the currently selected GridEntry
         /// </devdoc>
@@ -1497,7 +1451,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return str;
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.GetValueType"]/*' />
         /// <devdoc>
         /// Retrieves the type of the value for this GridEntry
         /// </devdoc>
@@ -1505,7 +1458,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return this.PropertyType;
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.GetPropEntries"]/*' />
         /// <devdoc>
         /// Returns the child GridEntries for this item.
         /// </devdoc>
@@ -1683,7 +1635,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return entries;
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.ResetPropertyValue"]/*' />
         /// <devdoc>
         /// Resets the current item
         /// </devdoc>
@@ -1719,7 +1670,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
         */
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.CanResetPropertyValue"]/*' />
         /// <devdoc>
         /// Returns if the property can be reset
         /// </devdoc>
@@ -1727,7 +1677,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return NotifyValue(NOTIFY_CAN_RESET);
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.DoubleClickPropertyValue"]/*' />
         /// <devdoc>
         /// Called when the item is double clicked.
         /// </devdoc>
@@ -1736,7 +1685,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.GetPropertyTextValue"]/*' />
         /// <devdoc>
         /// Returns the text value of this property.
         /// </devdoc>
@@ -1744,7 +1692,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return GetPropertyTextValue(this.PropertyValue);
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.GetPropertyTextValue1"]/*' />
         /// <devdoc>
         /// Returns the text value of this property.
         /// </devdoc>
@@ -1767,7 +1714,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return str;
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.GetPropertyValueList"]/*' />
         /// <devdoc>
         /// Returns the text values of this property.
         /// </devdoc>
@@ -1792,7 +1738,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return(int)(h1 ^ ((h2 << 13) | (h2 >> 19)) ^ ((h3 << 26) | (h3 >> 6)));
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.GetFlagSet"]/*' />
         /// <devdoc>
         /// Checks if a given flag is set
         /// </devdoc>
@@ -1814,7 +1759,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return GridEntryHost.GetBaseHfont();
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.GetService"]/*' />
         /// <devdoc>
         ///      Retrieves the requested service.  This may
         ///      return null if the requested service is not
@@ -1843,7 +1787,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.PaintLabel"]/*' />
         /// <devdoc>
         /// Paints the label portion of this GridEntry into the given Graphics object.  This
         /// is called by the GridEntry host (the PropertyGridView) when this GridEntry is
@@ -1953,7 +1896,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             PaintOutline(g, rect);
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.PaintOutline"]/*' />
         /// <devdoc>
         /// Paints the outline portion of this GridEntry into the given Graphics object.  This
         /// is called by the GridEntry host (the PropertyGridView) when this GridEntry is
@@ -2069,7 +2011,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.PaintValue"]/*' />
         /// <devdoc>
         /// Paints the value portion of this GridEntry into the given Graphics object.  This
         /// is called by the GridEntry host (the PropertyGridView) when this GridEntry is
@@ -2261,7 +2202,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.OnLabelClick"]/*' />
         /// <devdoc>
         /// Called when the label portion of this GridEntry is clicked.
         /// Default implmentation fired the event to any listeners, so be sure
@@ -2271,7 +2211,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             RaiseEvent(EVENT_LABEL_CLICK, e);
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.OnLabelDoubleClick"]/*' />
         /// <devdoc>
         /// Called when the label portion of this GridEntry is double-clicked.
         /// Default implmentation fired the event to any listeners, so be sure
@@ -2281,7 +2220,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             RaiseEvent(EVENT_LABEL_DBLCLICK, e);
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.OnMouseClick"]/*' />
         /// <devdoc>
         /// Called when the GridEntry is clicked.
         /// </devdoc>
@@ -2338,7 +2276,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return false;
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.OnOutlineClick"]/*' />
         /// <devdoc>
         /// Called when the outline icon portion of this GridEntry is clicked.
         /// Default implmentation fired the event to any listeners, so be sure
@@ -2348,7 +2285,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             RaiseEvent(EVENT_OUTLINE_CLICK, e);
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.OnOutlineDoubleClick"]/*' />
         /// <devdoc>
         /// Called when the outline icon portion of this GridEntry is double-clicked.
         /// Default implmentation fired the event to any listeners, so be sure
@@ -2358,7 +2294,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             RaiseEvent(EVENT_OUTLINE_DBLCLICK, e);
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.OnRecreateChildren"]/*' />
         /// <devdoc>
         /// Called when RecreateChildren is called.
         /// Default implmentation fired the event to any listeners, so be sure
@@ -2369,7 +2304,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             if (handler != null) ((GridEntryRecreateChildrenEventHandler)handler)(this, e);
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.OnValueClick"]/*' />
         /// <devdoc>
         /// Called when the value portion of this GridEntry is clicked.
         /// Default implmentation fired the event to any listeners, so be sure
@@ -2379,7 +2313,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             RaiseEvent(EVENT_VALUE_CLICK, e);
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.OnValueDoubleClick"]/*' />
         /// <devdoc>
         /// Called when the value portion of this GridEntry is clicked.
         /// Default implmentation fired the event to any listeners, so be sure
@@ -2395,7 +2328,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return NotifyValue(NOTIFY_RETURN);
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.SetFlag"]/*' />
         /// <devdoc>
         /// Sets the specified flag
         /// </devdoc>
@@ -2403,7 +2335,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             SetFlag(flag, (fVal ? flag : 0));
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.SetFlag1"]/*' />
         /// <devdoc>
         /// Sets the default child of this entry, given a valid value mask.
         /// </devdoc>
@@ -2412,7 +2343,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     flag_valid | (fVal ? flag : 0));
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.SetFlag2"]/*' />
         /// <devdoc>
         /// Sets the value of a flag
         /// </devdoc>
@@ -2434,7 +2364,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return false;
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.ShouldSerializePropertyValue"]/*' />
         /// <devdoc>
         /// Checks if this value should be persisited.
         /// </devdoc>
@@ -2487,7 +2416,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return props;
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.NotifyValueGivenParent"]/*' />
         /// <devdoc>
         /// Sends a notify message to this GridEntry, and returns the success result
         /// </devdoc>
@@ -2495,7 +2423,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return false;
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.NotifyChildValue"]/*' />
         /// <devdoc>
         /// Sends a notify message to the child GridEntry, and returns the success result
         /// </devdoc>
@@ -2540,7 +2467,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             OnRecreateChildren(new GridEntryRecreateChildrenEventArgs(oldCount, VisibleChildCount));
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.Refresh"]/*' />
         /// <devdoc>
         /// Refresh the current GridEntry's value and it's children
         /// </devdoc>
@@ -2618,7 +2544,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             ClearCachedValues();
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.SetPropertyTextValue"]/*' />
         /// <devdoc>
         /// Sets the value of this GridEntry from text
         /// </devdoc>
@@ -2693,7 +2618,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             eventList = null;
         }
 
-        /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.EventEntry"]/*' />
         /// <devdoc>
         /// </devdoc>
         private sealed class EventEntry {
@@ -2983,7 +2907,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }                
             }
 
-            /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.GridEntryAccessibleObject.GetFocused"]/*' />
             /// <devdoc>
             ///      Returns the currently focused child, if any.
             ///      Returns this if the object itself is focused.
@@ -2999,7 +2922,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
 
 
-            /// <include file='doc\GridEntry.uex' path='docs/doc[@for="GridEntry.GridEntryAccessibleObject.Navigate"]/*' />
             /// <devdoc>
             ///      Navigate to the next or previous grid entry.
             /// </devdoc>

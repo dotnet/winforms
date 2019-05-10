@@ -639,7 +639,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// We'll use CreateHandle as our notification for creating our mouse hooker.
+            /// We'll use CreateHandle as our notification for creating our mouse attacher.
             /// </summary>
             protected override void OnHandleCreated(EventArgs e)
             {

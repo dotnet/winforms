@@ -203,7 +203,7 @@ namespace System.ComponentModel.Design
                     //either comp is a control or we failed to find a traycontrol (which could be the case for toolstripitem components) - in this case just create a standard glyoh.
                     if (dag == null)
                     {
-                        //if the related comp is a control, then this shortcut will just hang off its bounds
+                        //if the related comp is a control, then this shortcut will be off its bounds
                         dag = new DesignerActionGlyph(dab, _designerActionAdorner);
                     }
 

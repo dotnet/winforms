@@ -177,7 +177,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// The AdornerWindow is a transparent window that resides ontop of the Designer's Frame.  This window is used by the ToolStripAdornerWindowService to  parent the MenuItem DropDowns.
+        /// The AdornerWindow is a transparent window that resides ontop of the Designer's Frame.  This window is used by the ToolStripAdornerWindowService to parent the MenuItem DropDowns.
         /// </summary>
         private class ToolStripAdornerWindow : Control
         {
@@ -208,7 +208,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// We'll use CreateHandle as our notification for creating our mouse hooker.
+            /// We'll use CreateHandle as our notification for creating our mouse attacher.
             /// </summary>
             protected override void OnHandleCreated(EventArgs e)
             {

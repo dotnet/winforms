@@ -324,46 +324,46 @@ namespace System.Windows.Forms.Tests
         {
             foreach (string errorText in new string[] { null, "", "reasonable" })
             {
-                yield return new object[] { new SubDataGridViewCell(), errorText };
+                yield return new object[] { new SubDataGridViewCell(), errorText, errorText ?? string.Empty };
         
                 var row = new DataGridViewRow();
                 row.Cells.Add(new SubDataGridViewCell());
-                yield return new object[] { row.Cells[0], errorText };
+                yield return new object[] { row.Cells[0], errorText, errorText ?? string.Empty };
 
                 var column = new DataGridViewColumn();
-                yield return new object[] { column.HeaderCell, errorText };
+                yield return new object[] { column.HeaderCell, errorText, errorText ?? string.Empty };
 
                 var dataGridView = new DataGridView { ColumnCount = 1 };
                 dataGridView.Rows.Add(new DataGridViewRow());
-                yield return new object[] { dataGridView.Rows[0].Cells[0], errorText };
-                yield return new object[] { dataGridView.Rows.SharedRow(1).Cells[0], errorText };
-                yield return new object[] { dataGridView.Columns[0].HeaderCell, errorText };
+                yield return new object[] { dataGridView.Rows[0].Cells[0], errorText, errorText ?? string.Empty };
+                yield return new object[] { dataGridView.Rows.SharedRow(1).Cells[0], errorText, errorText ?? string.Empty };
+                yield return new object[] { dataGridView.Columns[0].HeaderCell, errorText, errorText ?? string.Empty };
             }
         }
 
         [Theory]
         [MemberData(nameof(ErrorText_Set_TestData))]
-        public void DataGridViewCell_ErrorText_Set_GetReturnsExpected(DataGridViewCell cell, string value)
+        public void DataGridViewCell_ErrorText_Set_GetReturnsExpected(DataGridViewCell cell, string value, string expected)
         {
             cell.ErrorText = value;
-            Assert.Equal(value ?? string.Empty, cell.ErrorText);
+            Assert.Same(expected, cell.ErrorText);
 
-            // Set again to test caching behaviour.
+            // Set same.
             cell.ErrorText = value;
-            Assert.Equal(value ?? string.Empty, cell.ErrorText);
+            Assert.Same(expected, cell.ErrorText);
         }
 
         [Theory]
         [MemberData(nameof(ErrorText_Set_TestData))]
-        public void DataGridViewCell_ErrorText_SetWithNonNullOldValue_GetReturnsExpected(DataGridViewCell cell, string value)
+        public void DataGridViewCell_ErrorText_SetWithNonNullOldValue_GetReturnsExpected(DataGridViewCell cell, string value, string expected)
         {
             cell.ErrorText = "value";
             cell.ErrorText = value;
-            Assert.Equal(value ?? string.Empty, cell.ErrorText);
+            Assert.Same(expected, cell.ErrorText);
 
-            // Set again to test caching behaviour.
+            // Set same.
             cell.ErrorText = value;
-            Assert.Equal(value ?? string.Empty, cell.ErrorText);
+            Assert.Same(expected, cell.ErrorText);
         }
 
         [Fact]
@@ -735,7 +735,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, cell.Style);
             Assert.True(cell.HasStyle);
 
-            // Set again to test caching behaviour.
+            // Set same.
             cell.Style = value;
             Assert.Equal(expected, cell.Style);
             Assert.True(cell.HasStyle);
@@ -753,7 +753,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, cell.Style);
             Assert.True(cell.HasStyle);
 
-            // Set again to test caching behaviour.
+            // Set same.
             cell.Style = value;
             Assert.Equal(expected, cell.Style);
             Assert.True(cell.HasStyle);
@@ -767,11 +767,11 @@ namespace System.Windows.Forms.Tests
             {
                 Tag = value
             };
-            Assert.Equal(value, cell.Tag);
+            Assert.Same(value, cell.Tag);
 
-            // Set again to test caching behaviour.
+            // Set same.
             cell.Tag = value;
-            Assert.Equal(value, cell.Tag);
+            Assert.Same(value, cell.Tag);
         }
 
         [Theory]
@@ -783,42 +783,42 @@ namespace System.Windows.Forms.Tests
                 Tag = "tag"
             };
             cell.Tag = value;
-            Assert.Equal(value, cell.Tag);
+            Assert.Same(value, cell.Tag);
 
-            // Set again to test caching behaviour.
+            // Set same.
             cell.Tag = value;
-            Assert.Equal(value, cell.Tag);
+            Assert.Same(value, cell.Tag);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void DataGridViewCell_ToolTipText_Set_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void DataGridViewCell_ToolTipText_Set_GetReturnsExpected(string value, string expected)
         {
             var cell = new SubDataGridViewCell
             {
                 ToolTipText = value
             };
-            Assert.Equal(value ?? string.Empty, cell.ToolTipText);
+            Assert.Same(expected, cell.ToolTipText);
 
-            // Set again to test caching behaviour.
+            // Set same.
             cell.ToolTipText = value;
-            Assert.Equal(value ?? string.Empty, cell.ToolTipText);
+            Assert.Same(expected, cell.ToolTipText);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void DataGridViewCell_ToolTipText_SetWithNonNullOldValue_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void DataGridViewCell_ToolTipText_SetWithNonNullOldValue_GetReturnsExpected(string value, string expected)
         {
             var cell = new SubDataGridViewCell
             {
                 ToolTipText = "ToolTipText"
             };
             cell.ToolTipText = value;
-            Assert.Equal(value ?? string.Empty, cell.ToolTipText);
+            Assert.Same(expected, cell.ToolTipText);
 
-            // Set again to test caching behaviour.
+            // Set same.
             cell.ToolTipText = value;
-            Assert.Equal(value ?? string.Empty, cell.ToolTipText);
+            Assert.Same(expected, cell.ToolTipText);
         }
 
         public static IEnumerable<object[]> Value_TestData()
@@ -836,7 +836,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(cell.ValueType);
             Assert.Null(cell.FormattedValueType);
 
-            // Set again to test caching behaviour.
+            // Set same.
             cell.Value = value;
             Assert.Equal(value, cell.Value);
             Assert.Null(cell.ValueType);
@@ -854,7 +854,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(cell.ValueType);
             Assert.Null(cell.FormattedValueType);
 
-            // Set again to test caching behaviour.
+            // Set same.
             cell.Value = value;
             Assert.Equal(value, cell.Value);
             Assert.Null(cell.ValueType);
@@ -872,7 +872,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, cell.ValueType);
             Assert.Equal(value, cell.FormattedValueType);
 
-            // Set again to test caching behaviour.
+            // Set same.
             cell.ValueType = value;
             Assert.Equal(value, cell.ValueType);
             Assert.Equal(value, cell.FormattedValueType);
@@ -890,7 +890,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, cell.ValueType);
             Assert.Equal(value, cell.FormattedValueType);
 
-            // Set again to test caching behaviour.
+            // Set same.
             cell.ValueType = value;
             Assert.Equal(value, cell.ValueType);
             Assert.Equal(value, cell.FormattedValueType);
@@ -2134,7 +2134,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(expected, cell.ParseFormattedValue(formattedValue, cellStyle, formattedValueTypeConverter, valueTypeConverter));
 
-            // Call again to test caching behaviour.
+            // Call same.
             Assert.Equal(expected, cell.ParseFormattedValue(formattedValue, cellStyle, formattedValueTypeConverter, valueTypeConverter));
         }
 
@@ -2235,7 +2235,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(cell.SetValue(rowIndex, value));
             Assert.Equal(value, cell.GetValue(rowIndex));
 
-            // Set again to test caching behaviour.
+            // Set same.
             Assert.True(cell.SetValue(rowIndex, value));
             Assert.Equal(value, cell.GetValue(rowIndex));
         }

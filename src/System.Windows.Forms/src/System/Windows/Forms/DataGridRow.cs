@@ -15,7 +15,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Collections;
 
-    /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow"]/*' />
     /// <devdoc>
     ///    <para>Encapsulates the painting logic for a new row added to a 
     ///    <see cref='System.Windows.Forms.DataGrid'/> 
@@ -53,7 +52,6 @@ namespace System.Windows.Forms {
         protected const int xOffset = 3;
         protected const int yOffset = 2;
 
-        /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.DataGridRow"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of a <see cref='System.Windows.Forms.DataGridRow'/> . </para>
         /// </devdoc>
@@ -117,7 +115,6 @@ namespace System.Windows.Forms {
         // =        Properties
         // =------------------------------------------------------------------
 
-        /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.DataGrid"]/*' />
         /// <devdoc>
         /// <para>Gets the <see cref='System.Windows.Forms.DataGrid'/> control the row belongs to.</para>
         /// </devdoc>
@@ -152,7 +149,6 @@ namespace System.Windows.Forms {
         }
         */
 
-        /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.Height"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the height of the row.</para>
         /// </devdoc>
@@ -173,7 +169,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.RowNumber"]/*' />
         /// <devdoc>
         ///    <para>Gets the row's number.</para>
         /// </devdoc>
@@ -183,7 +178,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.Selected"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets a value indicating whether the row is selected.</para>
         /// </devdoc>
@@ -201,7 +195,6 @@ namespace System.Windows.Forms {
         // =        Methods
         // =------------------------------------------------------------------
 
-        /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.GetBitmap"]/*' />
         /// <devdoc>
         ///    <para>Gets the bitmap associated with the row.</para>
         /// </devdoc>
@@ -215,7 +208,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.GetCellBounds"]/*' />
         /// <devdoc>
         /// <para>When overridden in a derived class, gets the <see cref='System.Drawing.Rectangle'/> 
         /// where a cell's contents gets painted.</para>
@@ -239,7 +231,6 @@ namespace System.Windows.Forms {
             return cellBounds;
         }
 
-        /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.GetNonScrollableArea"]/*' />
         /// <devdoc>
         /// <para>When overridden in a derived class, gets the <see cref='System.Drawing.Rectangle'/> of the non-scrollable area of 
         ///    the row.</para>
@@ -248,7 +239,6 @@ namespace System.Windows.Forms {
             return Rectangle.Empty;
         }
 
-        /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.GetStarBitmap"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the bitmap displayed in the row header of a new row.</para>
         /// </devdoc>
@@ -258,7 +248,6 @@ namespace System.Windows.Forms {
             return starBmp;
         }
 
-        /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.GetPencilBitmap"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the bitmap displayed in the row header that indicates a row can 
         ///       be edited.</para>
@@ -269,7 +258,6 @@ namespace System.Windows.Forms {
             return pencilBmp;
         }
 
-        /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.GetErrorBitmap"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the bitmap displayed on a row with an error.</para>
         /// </devdoc>
@@ -299,7 +287,6 @@ namespace System.Windows.Forms {
             this.dgTable.DataGrid.InvalidateRowRect(number, r);
         }
 
-        /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.OnEdit"]/*' />
         /// <devdoc>
         ///    <para>When overridden in a derived class, notifies the grid that an edit will 
         ///       occur.</para>
@@ -307,7 +294,6 @@ namespace System.Windows.Forms {
         public virtual void OnEdit() {
         }
 
-        /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.OnKeyPress"]/*' />
         /// <devdoc>
         /// <para>When overridden in a derived class, called by the <see cref='System.Windows.Forms.DataGrid'/> control when a key press occurs on a row with focus.</para>
         /// </devdoc>
@@ -323,7 +309,6 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.OnMouseDown"]/*' />
         /// <devdoc>
         /// <para> Called by the <see cref='System.Windows.Forms.DataGrid'/> when a click occurs in the row's client area 
         ///    specifed by the x and y coordinates and the specified <see cref='System.Drawing.Rectangle'/>
@@ -334,7 +319,6 @@ namespace System.Windows.Forms {
             return OnMouseDown(x,y,rowHeaders, false);
         }
 
-        /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.OnMouseDown1"]/*' />
         /// <devdoc>
         /// <para>When overridden in a derived class, is called by the <see cref='System.Windows.Forms.DataGrid'/> when a click occurs 
         ///    in the row's
@@ -350,14 +334,12 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.OnMouseMove"]/*' />
         /// <devdoc>
         /// </devdoc>
         public virtual bool OnMouseMove(int x, int y, Rectangle rowHeaders) {
             return false;
         }
         
-        /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.OnMouseMove1"]/*' />
         /// <devdoc>
         /// <para>When overridden in a derived class, is called by the <see cref='System.Windows.Forms.DataGrid'/> when 
         ///    the mouse moves within the row's client area.</para>
@@ -366,7 +348,6 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.OnMouseLeft"]/*' />
         /// <devdoc>
         /// </devdoc>
         public virtual void OnMouseLeft(Rectangle rowHeaders, bool alignToRight) {
@@ -375,7 +356,6 @@ namespace System.Windows.Forms {
         public virtual void OnMouseLeft() {
         }
 
-        /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.OnRowEnter"]/*' />
         /// <devdoc>
         ///    <para>When overridden in a derived class, causes the RowEnter event to occur.</para>
         /// </devdoc>
@@ -389,7 +369,6 @@ namespace System.Windows.Forms {
         // tells the dataGridRow that it lost the focus
         internal abstract void LoseChildFocus(Rectangle rowHeaders, bool alignToRight);
 
-        /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.Paint"]/*' />
         /// <devdoc>
         ///      Paints the row.
         /// </devdoc>
@@ -406,7 +385,6 @@ namespace System.Windows.Forms {
                                   int numVisibleColumns,
                                   bool alignToRight);
 
-        /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.PaintBottomBorder"]/*' />
         /// <devdoc>
         ///      Draws a border on the bottom DataGrid.GridLineWidth pixels
         ///      of the bounding rectangle passed in.
@@ -435,7 +413,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.PaintData"]/*' />
         /// <devdoc>
         ///      Paints the row.
         /// </devdoc>
@@ -634,7 +611,6 @@ namespace System.Windows.Forms {
             return br;
         }
 
-        /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.BackBrushForDataPaint"]/*' />
         /// <devdoc>
         ///      Returns the BackColor and TextColor  that the Graphics object should use
         ///      for the appropriate values for a given row and column when painting the data.
@@ -810,7 +786,6 @@ namespace System.Windows.Forms {
                 return cells.Count;
             }
 
-            /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.DataGridRowAccessibleObject.GetFocused"]/*' />
             /// <devdoc>
             ///      Returns the currently focused child, if any.
             ///      Returns this if the object itself is focused.
@@ -826,7 +801,6 @@ namespace System.Windows.Forms {
                 return null;
             }
 
-            /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.DataGridRowAccessibleObject.Navigate"]/*' />
             /// <devdoc>
             ///      Navigate to the next or previous grid entry.entry.
             /// </devdoc>
@@ -962,7 +936,6 @@ namespace System.Windows.Forms {
                 Select(AccessibleSelection.TakeFocus | AccessibleSelection.TakeSelection);
             }
 
-            /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.DataGridCellAccessibleObject.GetFocused"]/*' />
             /// <devdoc>
             ///      Returns the currently focused child, if any.
             ///      Returns this if the object itself is focused.
@@ -974,7 +947,6 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.DataGridCellAccessibleObject.Navigate"]/*' />
             /// <devdoc>
             ///      Navigate to the next or previous grid entry.
             /// </devdoc>

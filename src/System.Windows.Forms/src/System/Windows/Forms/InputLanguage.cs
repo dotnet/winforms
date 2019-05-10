@@ -70,7 +70,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\InputLanguage.uex' path='docs/doc[@for="InputLanguage.Handle"]/*' />
         /// <devdoc>
         /// Returns the handle for the input language.
         /// </devdoc>

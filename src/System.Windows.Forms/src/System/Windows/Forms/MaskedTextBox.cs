@@ -1928,7 +1928,6 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\MaskedTextBox.uex' path='docs/doc[@for="MaskedTextBox.OnBackColorChanged"]/*' />
         protected override void OnBackColorChanged(EventArgs e)
         {
             base.OnBackColorChanged(e);

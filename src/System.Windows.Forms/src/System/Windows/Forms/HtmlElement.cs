@@ -43,7 +43,6 @@ namespace System.Windows.Forms
 
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.All"]/*' />
         public HtmlElementCollection All
         {
             get
@@ -53,7 +52,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Children"]/*' />
         public HtmlElementCollection Children
         {
             get
@@ -63,7 +61,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.CanHaveChildren"]/*' />
         public bool CanHaveChildren
         {
             get
@@ -72,7 +69,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.ClientRectangle"]/*' />
         public Rectangle ClientRectangle
         {
             get
@@ -84,7 +80,6 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Document"]/*' />
         public HtmlDocument Document
         {
             get
@@ -94,7 +89,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Enabled"]/*' />
         public bool Enabled
         {
             get
@@ -125,7 +119,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.FirstChild"]/*' />
         public HtmlElement FirstChild
         {
             get
@@ -141,7 +134,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Id"]/*' />
         public string Id
         {
             [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
@@ -156,7 +148,6 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.InnerHtml"]/*' />
         public string InnerHtml
         {
             get
@@ -180,7 +171,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.InnerText"]/*' />
         public string InnerText
         {
             get
@@ -204,7 +194,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Name"]/*' />
         public string Name
         {
             get
@@ -226,7 +215,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.NextSibling"]/*' />
         public HtmlElement NextSibling
         {
             get
@@ -243,7 +231,6 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.OffsetRectangle"]/*' />
         public Rectangle OffsetRectangle
         {
             get
@@ -253,7 +240,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.OffsetParent"]/*' />
         public HtmlElement OffsetParent
         {
             get
@@ -263,7 +249,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.OuterHtml"]/*' />
         public string OuterHtml
         {
             get
@@ -287,7 +272,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.OuterText"]/*' />
         public string OuterText
         {
             get
@@ -311,7 +295,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Parent"]/*' />
         public HtmlElement Parent
         {
             get
@@ -323,7 +306,6 @@ namespace System.Windows.Forms
 
 
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.ScrollRectangle"]/*' />
         public Rectangle ScrollRectangle
         {
             get
@@ -334,7 +316,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.ScrollLeft"]/*' />
         public int ScrollLeft
         {
             get
@@ -347,7 +328,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.ScrollTop"]/*' />
         public int ScrollTop
         {
             get
@@ -368,7 +348,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Style"]/*' />
         public string Style
         {
             get
@@ -381,7 +360,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.TagName"]/*' />
         public string TagName
         {
             get
@@ -390,7 +368,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.TabIndex"]/*' />
         public short TabIndex
         {
             get
@@ -404,7 +381,6 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.DomElement"]/*' />
         public object DomElement
         {
             get
@@ -414,26 +390,22 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.AppendChild"]/*' />
         public HtmlElement AppendChild(HtmlElement newElement)
         {
             return this.InsertAdjacentElement(HtmlElementInsertionOrientation.BeforeEnd, newElement);
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.AttachEventHandler"]/*' />
         public void AttachEventHandler(string eventName, EventHandler eventHandler)
         {
             ElementShim.AttachEventHandler(eventName, eventHandler);
         }
 
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.DetachEventHandler"]/*' />
         public void DetachEventHandler(string eventName, EventHandler eventHandler)
         {
             ElementShim.DetachEventHandler(eventName, eventHandler);
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Focus"]/*' />
         public void Focus()
         {
             try
@@ -450,7 +422,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.GetAttribute"]/*' />
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         public string GetAttribute(string attributeName)
         {
@@ -458,13 +429,11 @@ namespace System.Windows.Forms
             return oAttributeValue == null ? "" : oAttributeValue.ToString();
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.GetElementsByTagName"]/*' />
         public HtmlElementCollection GetElementsByTagName(string tagName)
         {
             UnsafeNativeMethods.IHTMLElementCollection iHTMLElementCollection = ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).GetElementsByTagName(tagName);
             return iHTMLElementCollection != null ? new HtmlElementCollection(shimManager, iHTMLElementCollection) : new HtmlElementCollection(shimManager);
         }
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.InsertAdjacentElement"]/*' />
         public HtmlElement InsertAdjacentElement(HtmlElementInsertionOrientation orient, HtmlElement newElement)
         {
             UnsafeNativeMethods.IHTMLElement iHtmlElement = ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).InsertAdjacentElement(orient.ToString(),
@@ -472,13 +441,11 @@ namespace System.Windows.Forms
             return iHtmlElement != null ? new HtmlElement(shimManager, iHtmlElement) : null;
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.InvokeMember"]/*' />
         public object InvokeMember(string methodName)
         {
             return InvokeMember(methodName, null);
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.InvokeMember"]/*' />
         public object InvokeMember(string methodName, params object[] parameter)
         {
             object retVal = null;
@@ -537,13 +504,11 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.RemoveFocus"]/*' />
         public void RemoveFocus()
         {
             ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).Blur();
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.RaiseEvent"]/*' />
         // PM review done
         [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")]
         public void RaiseEvent(string eventName)
@@ -552,13 +517,11 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.ScrollIntoView"]/*' />
         public void ScrollIntoView(bool alignWithTop)
         {
             this.NativeHtmlElement.ScrollIntoView((object)alignWithTop);
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.SetAttribute"]/*' />
         public void SetAttribute(string attributeName, string value)
         {
             try
@@ -579,7 +542,6 @@ namespace System.Windows.Forms
         //
         // Events:
         //
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Click"]/*' />
         public event HtmlElementEventHandler Click
         {
             add => ElementShim.AddHandler(EventClick, value);
@@ -588,14 +550,12 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.DoubleClick"]/*' />
         public event HtmlElementEventHandler DoubleClick
         {
             add => ElementShim.AddHandler(EventDoubleClick, value);
             remove => ElementShim.RemoveHandler(EventDoubleClick, value);
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Drag"]/*' />
         public event HtmlElementEventHandler Drag
         {
             add => ElementShim.AddHandler(EventDrag, value);
@@ -603,7 +563,6 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.DragEnd"]/*' />
         public event HtmlElementEventHandler DragEnd
         {
             add => ElementShim.AddHandler(EventDragEnd, value);
@@ -611,7 +570,6 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Drag"]/*' />
         public event HtmlElementEventHandler DragLeave
         {
             add => ElementShim.AddHandler(EventDragLeave, value);
@@ -619,21 +577,18 @@ namespace System.Windows.Forms
 
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.DragOver"]/*' />
         public event HtmlElementEventHandler DragOver
         {
             add => ElementShim.AddHandler(EventDragOver, value);
             remove => ElementShim.RemoveHandler(EventDragOver, value);
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Focusing"]/*' />
         public event HtmlElementEventHandler Focusing
         {
             add => ElementShim.AddHandler(EventFocusing, value);
             remove => ElementShim.RemoveHandler(EventFocusing, value);
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Focus"]/*' />
         public event HtmlElementEventHandler GotFocus
         {
             add => ElementShim.AddHandler(EventGotFocus, value);
@@ -641,67 +596,57 @@ namespace System.Windows.Forms
 
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.LosingFocus"]/*' />
         public event HtmlElementEventHandler LosingFocus
         {
             add => ElementShim.AddHandler(EventLosingFocus, value);
             remove => ElementShim.RemoveHandler(EventLosingFocus, value);
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.LostFocus"]/*' />
         public event HtmlElementEventHandler LostFocus
         {
             add => ElementShim.AddHandler(EventLostFocus, value);
             remove => ElementShim.RemoveHandler(EventLostFocus, value);
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.KeyDown"]/*' />
         public event HtmlElementEventHandler KeyDown
         {
             add => ElementShim.AddHandler(EventKeyDown, value);
             remove => ElementShim.RemoveHandler(EventKeyDown, value);
         }
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.KeyPress"]/*' />
         public event HtmlElementEventHandler KeyPress
         {
             add => ElementShim.AddHandler(EventKeyPress, value);
             remove => ElementShim.RemoveHandler(EventKeyPress, value);
 
         }
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.KeyUp"]/*' />
         public event HtmlElementEventHandler KeyUp
         {
             add => ElementShim.AddHandler(EventKeyUp, value);
             remove => ElementShim.RemoveHandler(EventKeyUp, value);
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.MouseMove"]/*' />
         public event HtmlElementEventHandler MouseMove
         {
             add => ElementShim.AddHandler(EventMouseMove, value);
             remove => ElementShim.RemoveHandler(EventMouseMove, value);
         }
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.MouseDown"]/*' />
         public event HtmlElementEventHandler MouseDown
         {
             add => ElementShim.AddHandler(EventMouseDown, value);
             remove => ElementShim.RemoveHandler(EventMouseDown, value);
         }
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.MouseOver"]/*' />
         public event HtmlElementEventHandler MouseOver
         {
             add => ElementShim.AddHandler(EventMouseOver, value);
             remove => ElementShim.RemoveHandler(EventMouseOver, value);
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.MouseUp"]/*' />
         public event HtmlElementEventHandler MouseUp
         {
             add => ElementShim.AddHandler(EventMouseUp, value);
             remove => ElementShim.RemoveHandler(EventMouseUp, value);
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.MouseEnter"]/*' />
         /// <devdoc>
         ///    <para>Fires when the mouse enters the element</para>
         /// </devdoc>
@@ -711,7 +656,6 @@ namespace System.Windows.Forms
             remove => ElementShim.RemoveHandler(EventMouseEnter, value);
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.MouseLeave"]/*' />
         /// <devdoc>
         ///    <para>Fires when the mouse leaves the element</para>
         /// </devdoc>
@@ -1229,7 +1173,6 @@ namespace System.Windows.Forms
         }
 
             #region operators
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.operatorEQ"]/*' />
         [SuppressMessage("Microsoft.Design", "CA1046:DoNotOverrideOperatorEqualsOnReferenceTypes")]
         public static bool operator ==(HtmlElement left, HtmlElement right)
         {
@@ -1267,19 +1210,16 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.operatorNE"]/*' />
         public static bool operator !=(HtmlElement left, HtmlElement right)
         {
             return !(left == right);
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.GetHashCode"]/*' />
         public override int GetHashCode()
         {
             return htmlElement == null ? 0 : htmlElement.GetHashCode();
         }
 
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Equals"]/*' />
         public override bool Equals(object obj)
         {
             //If obj isn't an HtmlElement, we want Equals to return false.  this will
