@@ -208,20 +208,3 @@ jobs:
           /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\CodeCoverage.binlog
         displayName: Upload coverage to codecov.io (Debug)
         condition: and(succeeded(), eq(variables._Coverage, 'true'))
-
-      # Perform some internal-build-only tasks
-      - ${{ if eq(parameters.runAsPublic, 'false') }}:
-
-        # Publish the nuget package as a build artifact (only for release, ensuring package contents are real-signed)
-        - task: PublishPipelineArtifact@0
-          inputs:
-            artifactName: 'Packages'
-            targetPath: '$(Build.SourcesDirectory)/artifacts/packages/$(_BuildConfig)/Shipping'
-          displayName: Publish transport NuGet package & templates package to build artifacts
-          continueOnError: true
-          condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release'))
-
-        # Run component governance detection (only for release; only for internal)
-        - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
-          displayName: Component Governance Detection
-          condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release'))
