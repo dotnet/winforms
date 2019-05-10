@@ -24,7 +24,6 @@ namespace System.Windows.Forms
         private PropertyDescriptor _propertyDescriptor = null;
         private DataGridTableStyle _dataGridTableStyle = null;
         private Font _font = null;
-        private int _fontHeight = -1;
         private string _mappingName = string.Empty;
         private string _headerName = string.Empty;
         private bool _invalid = false;
@@ -69,7 +68,7 @@ namespace System.Windows.Forms
 #if DEBUG
             IsDefault = isDefault;
 #endif
-            if (isDefault)
+            if (isDefault && prop != null)
             {
                 // take the header name from the property name
                 _headerName = prop.Name;
@@ -182,13 +181,17 @@ namespace System.Windows.Forms
             if (PropertyDescriptor == null && value != null)
             {
                 CurrencyManager lm = value.ListManager;
-                if (lm == null) return;
+                if (lm == null)
+                {
+                    return;
+                }
+
                 PropertyDescriptorCollection propCollection = lm.GetItemProperties();
                 int propCount = propCollection.Count;
                 for (int i = 0; i < propCollection.Count; i++)
                 {
                     PropertyDescriptor prop = propCollection[i];
-                    if (!typeof(IList).IsAssignableFrom(prop.PropertyType) && prop.Name.Equals(this.HeaderText))
+                    if (!typeof(IList).IsAssignableFrom(prop.PropertyType) && prop.Name.Equals(HeaderText))
                     {
                         PropertyDescriptor = prop;
                         return;
@@ -233,21 +236,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected int FontHeight
         {
-            get
-            {
-                if (_fontHeight != -1)
-                {
-                    return _fontHeight;
-                }
-                else if (DataGridTableStyle != null)
-                {
-                    return DataGridTableStyle.DataGrid.FontHeight;
-                }
-                else
-                {
-                    return DataGridTableStyle.defaultFontHeight;
-                }
-            }
+            get => DataGridTableStyle?.DataGrid?.FontHeight ?? DataGridTableStyle.defaultFontHeight;
         }
 
         /// <summary>
@@ -358,7 +347,7 @@ namespace System.Windows.Forms
             get => _nullText;
             set
             {
-                if (_nullText == null || _nullText.Equals(value))
+                if (_nullText != value)
                 {
                     _nullText = value;
                     OnNullTextChanged(EventArgs.Empty);
@@ -410,7 +399,7 @@ namespace System.Windows.Forms
                 if (_width != value)
                 {
                     _width = value;
-                    DataGrid grid = DataGridTableStyle == null ? null : DataGridTableStyle.DataGrid;
+                    DataGrid grid = DataGridTableStyle?.DataGrid;
                     if (grid != null)
                     {
                         // rearrange the scroll bars
@@ -481,12 +470,13 @@ namespace System.Windows.Forms
         protected internal virtual object GetColumnValueAtRow(CurrencyManager source, int rowNum)
         {
             CheckValidDataSource(source);
-            if (PropertyDescriptor == null)
+            PropertyDescriptor descriptor = PropertyDescriptor;
+            if (descriptor == null)
             {
                 throw new InvalidOperationException(SR.DataGridColumnNoPropertyDescriptor);
             }
-            object value = PropertyDescriptor.GetValue(source[rowNum]);
-            return value;
+            
+            return descriptor.GetValue(source[rowNum]);
         }
 
         /// <summary>
@@ -514,11 +504,10 @@ namespace System.Windows.Forms
             }
 
             // The code may delete a gridColumn that was editing.
-            // In that case, we still have to push the value into the backEnd
+            // In that case, we still have to push the value into the backend
             // and we only need the propertyDescriptor to push the value.
             // (take a look at gridEditAndDeleteEditColumn)
-            PropertyDescriptor myPropDesc = PropertyDescriptor;
-            if (myPropDesc == null)
+            if (PropertyDescriptor == null)
             {
                 throw new InvalidOperationException(string.Format(SR.DataGridColumnUnbound, HeaderText));
             }
@@ -640,31 +629,37 @@ namespace System.Windows.Forms
             EventHandler eh = Events[s_propertyDescriptorEvent] as EventHandler;
             eh?.Invoke(this, e);
         }
+
         private void OnAlignmentChanged(EventArgs e)
         {
             EventHandler eh = Events[s_alignmentEvent] as EventHandler;
             eh?.Invoke(this, e);
         }
+
         private void OnHeaderTextChanged(EventArgs e)
         {
             EventHandler eh = Events[s_headerTextEvent] as EventHandler;
             eh?.Invoke(this, e);
         }
+
         private void OnMappingNameChanged(EventArgs e)
         {
             EventHandler eh = Events[s_mappingNameEvent] as EventHandler;
             eh?.Invoke(this, e);
         }
+
         private void OnReadOnlyChanged(EventArgs e)
         {
             EventHandler eh = Events[s_readOnlyEvent] as EventHandler;
             eh?.Invoke(this, e);
         }
+
         private void OnNullTextChanged(EventArgs e)
         {
             EventHandler eh = Events[s_nullTextEvent] as EventHandler;
             eh?.Invoke(this, e);
         }
+
         private void OnWidthChanged(EventArgs e)
         {
             EventHandler eh = Events[s_widthEvent] as EventHandler;
@@ -678,6 +673,11 @@ namespace System.Windows.Forms
         protected internal virtual void SetColumnValueAtRow(CurrencyManager source, int rowNum, object value)
         {
             CheckValidDataSource(source);
+            PropertyDescriptor descriptor = PropertyDescriptor;
+            if (descriptor == null)
+            {
+                throw new InvalidOperationException(SR.DataGridColumnNoPropertyDescriptor);
+            }
 
             if (source.Position != rowNum)
             {
@@ -688,12 +688,12 @@ namespace System.Windows.Forms
                 editableObject.BeginEdit();
             }
 
-            PropertyDescriptor.SetValue(source[rowNum], value);
+            descriptor.SetValue(source[rowNum], value);
         }
 
         protected internal virtual void ColumnStartedEditing(Control editingControl)
         {
-            DataGridTableStyle.DataGrid.ColumnStartedEditing(editingControl);
+            DataGridTableStyle?.DataGrid?.ColumnStartedEditing(editingControl);
         }
 
         void IDataGridColumnStyleEditingNotificationService.ColumnStartedEditing(Control editingControl)
