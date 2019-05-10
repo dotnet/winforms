@@ -6,17 +6,18 @@ namespace System.Windows.Forms
 {
     public class PowerStatus
     {
-        private NativeMethods.SYSTEM_POWER_STATUS systemPowerStatus;
+        private NativeMethods.SYSTEM_POWER_STATUS _systemPowerStatus;
 
-        internal PowerStatus() {
+        internal PowerStatus()
+        {
         }
-        
+
         public PowerLineStatus PowerLineStatus
         {
             get
             {
                 UpdateSystemPowerStatus();
-                return (PowerLineStatus)systemPowerStatus.ACLineStatus;
+                return (PowerLineStatus)_systemPowerStatus.ACLineStatus;
             }
         }
 
@@ -25,7 +26,7 @@ namespace System.Windows.Forms
             get
             {
                 UpdateSystemPowerStatus();
-                return (BatteryChargeStatus)systemPowerStatus.BatteryFlag;
+                return (BatteryChargeStatus)_systemPowerStatus.BatteryFlag;
             }
         }
 
@@ -34,7 +35,7 @@ namespace System.Windows.Forms
             get
             {
                 UpdateSystemPowerStatus();
-                return systemPowerStatus.BatteryFullLifeTime;
+                return _systemPowerStatus.BatteryFullLifeTime;
             }
         }
 
@@ -43,7 +44,7 @@ namespace System.Windows.Forms
             get
             {
                 UpdateSystemPowerStatus();
-                float lifePercent = systemPowerStatus.BatteryLifePercent / 100f;
+                float lifePercent = _systemPowerStatus.BatteryLifePercent / 100f;
                 return lifePercent > 1f ? 1f : lifePercent;
             }
         }
@@ -53,12 +54,13 @@ namespace System.Windows.Forms
             get
             {
                 UpdateSystemPowerStatus();
-                return systemPowerStatus.BatteryLifeTime;
+                return _systemPowerStatus.BatteryLifeTime;
             }
         }
 
-        private void UpdateSystemPowerStatus() {                
-            UnsafeNativeMethods.GetSystemPowerStatus(ref systemPowerStatus);
+        private void UpdateSystemPowerStatus()
+        {
+            UnsafeNativeMethods.GetSystemPowerStatus(ref _systemPowerStatus);
         }
     }
 }
