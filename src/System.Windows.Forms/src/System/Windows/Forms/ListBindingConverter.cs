@@ -163,10 +163,10 @@ namespace System.Windows.Forms {
                         val = b.PropertyName;
                         break;
                     case 1:
-                        val = b.BindToObject.DataSource;
+                        val = b.DataSource;
                         break;
                     case 2:
-                        val = b.BindToObject.BindingMemberInfo.BindingMember;
+                        val = b.BindingMemberInfo.BindingMember;
                         break;
                     default:
                         val = TypeDescriptor.GetProperties(b)[ConstructorParameterProperties[i]].GetValue(b);

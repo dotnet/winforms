@@ -360,12 +360,12 @@ namespace System.Windows.Forms
                     Binding binding = bindingManagerBase.Bindings[i];
                     if (binding.DataSource == propBinding.BindableComponent)
                     {
-                        if (propBinding.BindToObject.BindingMemberInfo.BindingMember.Equals(binding.PropertyName))
+                        if (propBinding.BindingMemberInfo.BindingMember.Equals(binding.PropertyName))
                         {
                             throw new ArgumentException(string.Format(SR.DataBindingCycle, binding.PropertyName), nameof(propBinding));
                         }
                     }
-                    else if (propBinding.BindToObject.BindingManagerBase is PropertyManager)
+                    else if (propBinding.BindingManagerBase is PropertyManager)
                     {
                         CheckPropertyBindingCycles(newBindingContext, binding);
                     }
@@ -420,13 +420,12 @@ namespace System.Windows.Forms
             {
                 // we need to first check for cycles before adding this binding to the collection
                 // of bindings.
-                if (binding.BindToObject.BindingManagerBase is PropertyManager)
+                if (binding.BindingManagerBase is PropertyManager)
                 {
                     CheckPropertyBindingCycles(newBindingContext, binding);
                 }
 
-                BindToObject bindTo = binding.BindToObject;
-                BindingManagerBase newManager = newBindingContext.EnsureListManager(bindTo.DataSource, bindTo.BindingMemberInfo.BindingPath);
+                BindingManagerBase newManager = newBindingContext.EnsureListManager(binding.DataSource, binding.BindingMemberInfo.BindingPath);
                 newManager.Bindings.Add(binding);
             }
         }
