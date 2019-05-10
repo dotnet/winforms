@@ -100,7 +100,7 @@ namespace System.Experimental.Gdi
 
 #if GDI_FINALIZATION_WATCH
         private string AllocationSite = DbgUtil.StackTrace;
-        private string DeAllocationSite = "";
+        private string DeAllocationSite = string.Empty;
 #endif
 
         ///

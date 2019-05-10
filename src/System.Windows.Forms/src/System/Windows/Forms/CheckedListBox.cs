@@ -628,7 +628,7 @@ namespace System.Windows.Forms {
 
                 // Setup text font, color, and text
                 //
-                string text = "";
+                string text = string.Empty;
                 Color backColor = (SelectionMode != SelectionMode.None) ? e.BackColor : BackColor;
                 Color foreColor = (SelectionMode != SelectionMode.None) ? e.ForeColor : ForeColor;
                 if (!Enabled) {

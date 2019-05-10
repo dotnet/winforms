@@ -42,7 +42,7 @@ namespace System.Windows.Forms {
         private ArrayList relationsList = new ArrayList(2);
 
         // the name of the table
-        private string mappingName = "";
+        private string mappingName = string.Empty;
         private GridColumnStylesCollection    gridColumns = null;
         private bool                     readOnly    = false;
         private bool                     isDefaultTableStyle = false;
@@ -1182,7 +1182,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value == null)
-                    value = "";
+                    value = string.Empty;
                 if (value.Equals(mappingName))
                     return;
                 string originalMappingName = this.MappingName;

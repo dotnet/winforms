@@ -967,7 +967,7 @@ namespace System.Windows.Forms.Layout {
              return info;
          }
          internal static string Debug_GetIndents(int indents) {
-             string str = "";
+             string str = string.Empty;
              for (int i = 0; i < indents; i++) {
                  str += "\t";
              }

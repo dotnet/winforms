@@ -45,15 +45,15 @@ namespace System.Windows.Forms {
         private object syncObj = new object();
 
         private Icon icon = null;
-        private string text = "";
+        private string text = string.Empty;
         private int id = 0;
         private bool added = false;
         private NotifyIconNativeWindow window = null;
         private ContextMenu contextMenu = null;
         private ContextMenuStrip contextMenuStrip = null;
         private ToolTipIcon balloonTipIcon;
-        private string balloonTipText = "";
-        private string balloonTipTitle = "";
+        private string balloonTipText = string.Empty;
+        private string balloonTipTitle = string.Empty;
         private static int nextId = 0;
         private object userData;
         private bool doubleClick = false; // checks if doubleclick is fired
@@ -268,7 +268,7 @@ namespace System.Windows.Forms {
                 return text;
             }
             set {
-                if (value == null) value = "";
+                if (value == null) value = string.Empty;
                 if (value != null && !value.Equals(this.text)) {
                     if (value != null && value.Length > 63) {
                         throw new ArgumentOutOfRangeException(nameof(Text), value, string.Format(SR.TrayIcon_TextTooLong));

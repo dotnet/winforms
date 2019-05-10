@@ -33,7 +33,7 @@ namespace System.Windows.Forms {
     ]
     public class TabPage : Panel {
         private ImageList.Indexer imageIndexer;
-        private string toolTipText = "";
+        private string toolTipText = string.Empty;
         private bool enterFired = false;
         private bool leaveFired = false;
         private bool useVisualStyleBackColor = false;
@@ -400,7 +400,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value == null) {
-                    value = "";
+                    value = string.Empty;
                 }
 
                 if (value == toolTipText)

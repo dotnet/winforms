@@ -642,7 +642,7 @@ namespace System.Windows.Forms {
                     Text = text.ToString();
                 }
                 else {
-                    Text = "";
+                    Text = string.Empty;
                 }
             }
         }
@@ -987,7 +987,7 @@ namespace System.Windows.Forms {
             }
 
             if( text == null ){
-                text = "";
+                text = string.Empty;
             }
 
             // The EM_LIMITTEXT message limits only the text the user can enter. It does not affect any text
@@ -1126,7 +1126,7 @@ namespace System.Windows.Forms {
             }
 
             set {
-                if (value == null) value = "";
+                if (value == null) value = string.Empty;
                 if (!WindowText.Equals(value)) {
                     textBoxFlags[codeUpdateText] = true;
                     try {
@@ -1147,7 +1147,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         internal void ForceWindowText(string value) {
             if (value == null) {
-                value = "";
+                value = string.Empty;
             }
             
             textBoxFlags[codeUpdateText] = true;

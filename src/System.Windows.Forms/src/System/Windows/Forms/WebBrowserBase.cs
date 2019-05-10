@@ -1231,7 +1231,7 @@ namespace System.Windows.Forms
                     return null;
                 case NativeMethods.ActiveX.DISPID_AMBIENT_DISPLAYNAME:
                     string rval = this.GetParentContainer().GetNameForControl(this);
-                    if (rval == null) rval = "";
+                    if (rval == null) rval = string.Empty;
                     return rval;
                 case NativeMethods.ActiveX.DISPID_AMBIENT_LOCALEID:
                     return Thread.CurrentThread.CurrentCulture.LCID;

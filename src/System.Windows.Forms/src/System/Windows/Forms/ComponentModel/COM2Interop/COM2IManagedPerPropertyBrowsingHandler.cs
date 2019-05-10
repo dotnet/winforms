@@ -86,7 +86,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
                     // check for an assembly name.
                     //
-                    string assemblyName = "";
+                    string assemblyName = string.Empty;
 
                     int comma = attrName.LastIndexOf(',');
 
@@ -203,7 +203,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                             SafeNativeMethods.SysFreeString(new HandleRef(null, bstr));
                         }
                         else {
-                            strs[i] = "";
+                            strs[i] = string.Empty;
                         }
                     }
                     catch (Exception ex) {

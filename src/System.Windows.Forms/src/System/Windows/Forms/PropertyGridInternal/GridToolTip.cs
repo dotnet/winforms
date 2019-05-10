@@ -67,7 +67,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                      //
                      if (value == null || value.Length == 0){
                         dontShow = true;
-                        value = "";
+                        value = string.Empty;
                      }
                      else{
                         dontShow = false;
@@ -182,7 +182,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             // thinks it's back in the regular state again
             //
             string oldText = this.ToolTip;
-            this.toolTipText = "";
+            this.toolTipText = string.Empty;
             for (int i = 0; i < controls.Length; i++) {
                if (0 == (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_UPDATETIPTEXT, 0, GetTOOLINFO(controls[i]))) {
                     //Debug.Fail("TTM_UPDATETIPTEXT failed for " + controls[i].GetType().Name);

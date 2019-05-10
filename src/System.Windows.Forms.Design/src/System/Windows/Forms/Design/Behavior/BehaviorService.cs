@@ -1653,7 +1653,7 @@ namespace System.Windows.Forms.Design.Behavior
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
         private void TestHook_GetRecentSnapLines(ref Message m)
         {
-            string snapLineInfo = "";
+            string snapLineInfo = string.Empty;
             if (_testHook_RecentSnapLines != null)
             {
                 foreach (string line in _testHook_RecentSnapLines)
@@ -1703,7 +1703,7 @@ namespace System.Windows.Forms.Design.Behavior
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
         private void TestHook_GetAllSnapLines(ref Message m)
         {
-            string snapLineInfo = "";
+            string snapLineInfo = string.Empty;
             if (!(_serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host))
             {
                 return;

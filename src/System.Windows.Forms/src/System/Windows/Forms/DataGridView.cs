@@ -2255,7 +2255,7 @@ namespace System.Windows.Forms
                         if (this.dataConnection.ShouldChangeDataMember(value))
                         {
                             // we fire DataMemberChanged event
-                            this.DataMember = "";
+                            this.DataMember = string.Empty;
                         }
                         this.dataConnection.SetDataConnection(value, this.DataMember);
                         if (value == null)

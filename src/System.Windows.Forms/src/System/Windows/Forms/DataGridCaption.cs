@@ -42,7 +42,7 @@ namespace System.Windows.Forms {
         private SolidBrush foreBrush         = DefaultForeBrush;
         private Pen        textBorderPen     = DefaultTextBorderPen;
 
-        private string text = "";
+        private string text = string.Empty;
         private bool   textBorderVisible = false;
         private Font   textFont = null;
 
@@ -222,7 +222,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value == null)
-                    text = "";
+                    text = string.Empty;
                 else
                     text = value;
                 Invalidate();

@@ -30,7 +30,7 @@ namespace System.Windows.Forms {
     ]
     public class DomainUpDown : UpDownBase {
 
-        private readonly static string     DefaultValue = "";
+        private readonly static string     DefaultValue = string.Empty;
         private readonly static bool       DefaultWrap = false;
 
         //////////////////////////////////////////////////////////////

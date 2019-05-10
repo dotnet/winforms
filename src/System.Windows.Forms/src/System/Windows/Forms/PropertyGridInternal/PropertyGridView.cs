@@ -618,7 +618,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     return "";
                 }
                 GridEntry gridEntry = selectedGridEntry;
-                string name = "";
+                string name = string.Empty;
                 while (gridEntry != null && gridEntry.PropertyDepth >= 0) {
                     if (name.Length > 0) {
                         name = gridEntry.PropertyName + "." + name;
@@ -744,7 +744,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     }
                     #endif
                     toolTip = new GridToolTip(new Control[]{this, Edit});
-                    toolTip.ToolTip = "";
+                    toolTip.ToolTip = string.Empty;
                     toolTip.Font = this.Font;
                 }   
                 return toolTip;
@@ -2500,7 +2500,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose,  "PropertyGridView:OnEditChange");
             SetCommitError(ERROR_NONE, Edit.Focused);
             
-            ToolTip.ToolTip = "";
+            ToolTip.ToolTip = string.Empty;
             ToolTip.Visible = false;
             
             if (!Edit.InSetText()) {
@@ -2819,7 +2819,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
 
             if (ToolTip.Visible) {
-                ToolTip.ToolTip = "";
+                ToolTip.ToolTip = string.Empty;
             }
 
             if (fBoth || sender == this || sender == this.ownerGrid) {
@@ -3118,7 +3118,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 pt = FindPosition(me.X,me.Y);
                 if (pt == InvalidPosition || (pt.X != ROWLABEL && pt.X != ROWVALUE)) {
                     rowMoveCur = -1;
-                    ToolTip.ToolTip = "";
+                    ToolTip.ToolTip = string.Empty;
                 }
                 else {
                     rowMoveCur = pt.Y;
@@ -3137,7 +3137,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             
             if ((rowMoveCur != this.TipRow || pt.X != this.TipColumn)  && !GetFlag(FlagIsSplitterMove)) {
                 GridEntry gridItem = GetGridEntryFromRow(rowMoveCur);
-                string tip = "";
+                string tip = string.Empty;
                 tipInfo = -1;
 
                 if (gridItem != null) {
@@ -3166,7 +3166,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     }
                 }
                 else {
-                    ToolTip.ToolTip = "";
+                    ToolTip.ToolTip = string.Empty;
                 }
             }
 
@@ -3275,7 +3275,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                  if (scrollBands != 0) {
                     
                     if (ToolTip.Visible) {
-                        ToolTip.ToolTip = "";
+                        ToolTip.ToolTip = string.Empty;
                     }
 
                     int newOffset = Math.Max(0,initialOffset - scrollBands);
@@ -5390,7 +5390,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                this.ControlBox = false;
                this.MinimizeBox = false;
                this.MaximizeBox = false;
-               this.Text = "";
+               this.Text = string.Empty;
                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
                this.AutoScaleMode = AutoScaleMode.None; // children may scale, but we won't interfere.
                mouseHook = new MouseHook(this, this, psheet);

@@ -672,7 +672,7 @@ namespace System.Windows.Forms {
                 }
             }
             set {
-                if (value == null) value = "";
+                if (value == null) value = string.Empty;
 
                 if (value.Equals(Rtf))
                     return;
@@ -1148,7 +1148,7 @@ namespace System.Windows.Forms {
             }
             set {
                 ForceHandleCreate();
-                if (value == null) value = "";
+                if (value == null) value = string.Empty;
                 StreamIn(value, RichTextBoxConstants.SFF_SELECTION | RichTextBoxConstants.SF_RTF);
             }
         }
@@ -1361,7 +1361,7 @@ namespace System.Windows.Forms {
                     else {
                         textPlain = null;
                         if (value == null) {
-                            value = "";
+                            value = string.Empty;
                         }
                         StreamIn(value, RichTextBoxConstants.SF_TEXT | RichTextBoxConstants.SF_UNICODE);
                         // reset Modified
@@ -2202,7 +2202,7 @@ namespace System.Windows.Forms {
                     flags = RichTextBoxConstants.SF_RTF;
                     break;
                 case RichTextBoxStreamType.PlainText:
-                    this.Rtf = "";
+                    this.Rtf = string.Empty;
                     flags = RichTextBoxConstants.SF_TEXT;
                     break;
                 case RichTextBoxStreamType.UnicodePlainText:

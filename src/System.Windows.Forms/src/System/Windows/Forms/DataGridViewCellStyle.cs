@@ -33,8 +33,6 @@ namespace System.Windows.Forms
         private static readonly int PropTag = PropertyStore.CreateKey();
         private static readonly int PropWrapMode = PropertyStore.CreateKey();
 
-        private const string DATAGRIDVIEWCELLSTYLE_nullText = "";    // default value of NullValue property
-
         private DataGridViewCellStyleScopes scope;
         private PropertyStore propertyStore;          // Contains all properties that are not always set.
         private DataGridView dataGridView;
@@ -349,16 +347,15 @@ namespace System.Windows.Forms
                 {
                     return true;
                 }
+
                 object nullValue = this.Properties.GetObject(PropNullValue);
-                return (nullValue is string && nullValue.Equals(DATAGRIDVIEWCELLSTYLE_nullText));
+                return nullValue is string nullValueString && nullValueString.Length == 0;
             }
         }
 
-        [
-            DefaultValue(DATAGRIDVIEWCELLSTYLE_nullText),
-            TypeConverter(typeof(StringConverter)),
-            SRCategory(nameof(SR.CatData))
-        ]
+        [DefaultValue("")]
+        [TypeConverter(typeof(StringConverter))]
+        [SRCategory(nameof(SR.CatData))]
         public object NullValue
         {
             get
@@ -367,7 +364,7 @@ namespace System.Windows.Forms
                 {
                     return this.Properties.GetObject(PropNullValue);
                 }
-                return DATAGRIDVIEWCELLSTYLE_nullText;
+                return string.Empty;
             }
             set
             {
@@ -379,9 +376,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (value is string &&
-                    value.Equals(DATAGRIDVIEWCELLSTYLE_nullText) &&
-                    this.Properties.ContainsObject(PropNullValue))
+                if (value is string stringValue && stringValue.Length == 0 && Properties.ContainsObject(PropNullValue))
                 {
                     this.Properties.RemoveObject(PropNullValue);
                 }
