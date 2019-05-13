@@ -27,7 +27,7 @@ namespace System.Windows.Forms.Design
                 if (s_inheritanceGlyph == null)
                 {
                     Icon iGlyph = new Icon(typeof(InheritanceUI), "InheritedGlyph");
-                    s_inheritanceGlyph = iGlyph.ToBitmap();
+                    s_inheritanceGlyph = new Icon(typeof(InheritanceUI), "InheritedGlyph").ToBitmap();
 
                     if (DpiHelper.IsScalingRequired)
                     {
