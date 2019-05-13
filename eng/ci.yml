@@ -1,7 +1,7 @@
 parameters:
   # parameters should default to values for running in the External / Public
   # be read from a user-defined variable (Azure DevOps limitation)
-  agentPoolName: NetCorePublic-Int-Pool
+  agentPoolName: NetCorePublic-Pool
   agentPool: BuildPool.Windows.10.Amd64.VS2019.BT.Open 
   runAsPublic: true                      
   repoName: dotnet/winforms              
