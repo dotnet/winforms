@@ -589,7 +589,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
                 finally
                 {
-                    serializationCompleteEventHandler?.Invoke(this, EventArgs.Empty);
+                    serializationCompleteEventHandler?.Invoke(this, e);
                 }
             }
             finally
