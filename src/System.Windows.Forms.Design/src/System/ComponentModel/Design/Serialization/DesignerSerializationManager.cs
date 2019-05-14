@@ -528,7 +528,7 @@ namespace System.ComponentModel.Design.Serialization
                 if (GetService(typeof(TypeDescriptionProviderService)) is TypeDescriptionProviderService typeProviderService)
                 {
                     TypeDescriptionProvider typeProvider = typeProviderService.GetProvider(type);
-                    if (!typeProvider.IsSupportedType(type))
+                    if (typeProvider != null && !typeProvider.IsSupportedType(type))
                     {
                         type = null;
                     }
