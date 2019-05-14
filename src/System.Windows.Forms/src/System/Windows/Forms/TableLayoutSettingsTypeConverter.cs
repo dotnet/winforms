@@ -15,7 +15,6 @@ namespace System.Windows.Forms.Layout {
     
     public class TableLayoutSettingsTypeConverter : TypeConverter {
 
-        /// <include file='doc\LinkConverter.uex' path='docs/doc[@for="LinkConverter.CanConvertFrom"]/*' />
         /// <devdoc>
         ///      Determines if this converter can convert an object in the given source
         ///      type to the native type of the converter.
@@ -27,7 +26,6 @@ namespace System.Windows.Forms.Layout {
             return base.CanConvertFrom(context, sourceType);
         }
     
-        /// <include file='doc\LinkConverter.uex' path='docs/doc[@for="LinkConverter.CanConvertTo"]/*' />
         /// <devdoc>
         ///    <para>Gets a value indicating whether this converter can
         ///       convert an object to the given destination type using the context.</para>
@@ -39,7 +37,6 @@ namespace System.Windows.Forms.Layout {
             return base.CanConvertTo(context, destinationType);
         }
 
-        /// <include file='doc\LinkConverter.uex' path='docs/doc[@for="LinkConverter.ConvertFrom"]/*' />
         /// <devdoc>
         ///      Converts the given object to the converter's native type.
         /// </devdoc>

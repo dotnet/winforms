@@ -73,7 +73,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
         
         
-        /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.AllowMerge"]/*' />
         /// <devdoc>
         /// specify that this grid entry should be allowed to be merged for.
         /// multi-select.
@@ -91,7 +90,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.HelpKeyword"]/*' />
         /// <devdoc>
         ///     Retrieves the keyword that the VS help dynamic help window will
         ///     use when this IPE is selected.
@@ -128,7 +126,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                    }
                    else {
 
-                        string typeName = "";
+                        string typeName = string.Empty;
 
                         Type componentType = propertyInfo.ComponentType;
                         
@@ -241,7 +239,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
         
-        /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.PropertyDescriptor"]/*' />
         /// <devdoc>
         ///      Retrieves the PropertyDescriptor that is surfacing the given object/
         /// </devdoc>
@@ -268,7 +265,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.PropertyName"]/*' />
         /// <devdoc>
         /// Returns non-localized name of this property.
         /// </devdoc>
@@ -290,7 +286,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
 
-        /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.PropertyValue"]/*' />
         /// <devdoc>
         /// Gets or sets the value for the property that is represented
         /// by this GridEntry.
@@ -370,7 +365,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.TypeConverter"]/*' />
         /// <devdoc>
         /// Returns the type converter for this entry.
         /// </devdoc>
@@ -387,7 +381,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.UITypeEditor"]/*' />
         /// <devdoc>
         /// Returns the type editor for this entry.  This may return null if there
         /// is no type editor.
@@ -405,7 +398,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
         
         
-        /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.EditPropertyValue"]/*' />
         /// <devdoc>
         /// Invokes the type editor for editing this item.
         /// </devdoc>
@@ -859,7 +851,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.ViewEvent"]/*' />
         /// <devdoc>
         ///     Navigates code to the given event.
         /// </devdoc>
@@ -993,7 +984,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return true;
         }
 
-        /// <include file='doc\CodeDomLoader.uex' path='docs/doc[@for="CodeDomLoader.IEventBindingService.ShowCode2"]/*' />
         /// <devdoc>
         ///     Displays the user code for the given event.  This will return true if the user
         ///     code could be displayed, or false otherwise.
@@ -1118,13 +1108,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.ExceptionConverter"]/*' />
         /// <devdoc>
         ///      The exception converter is a type converter that displays an exception to the user.
         /// </devdoc>
         private class ExceptionConverter : TypeConverter {
 
-            /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.ExceptionConverter.ConvertTo"]/*' />
             /// <devdoc>
             ///      Converts the given object to another type.  The most common types to convert
             ///      are to and from a string object.  The default implementation will make a call
@@ -1147,13 +1135,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.ExceptionEditor"]/*' />
         /// <devdoc>
         ///      The exception editor displays a message to the user.
         /// </devdoc>
         private class ExceptionEditor : UITypeEditor {
 
-            /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.ExceptionEditor.EditValue"]/*' />
             /// <devdoc>
             ///      Edits the given object value using the editor style provided by
             ///      GetEditorStyle.  A service provider is provided so that any
@@ -1183,7 +1169,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return value;
             }
 
-            /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.ExceptionEditor.GetEditStyle"]/*' />
             /// <devdoc>
             ///      Retrieves the editing style of the Edit method.  If the method
             ///      is not supported, this will return None.

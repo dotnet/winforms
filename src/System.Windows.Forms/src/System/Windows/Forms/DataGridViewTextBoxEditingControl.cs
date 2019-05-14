@@ -9,7 +9,6 @@ namespace System.Windows.Forms
     using System.Diagnostics;
     using System.Runtime.InteropServices;
 
-    /// <include file='doc\DataGridViewTextBoxEditingControl.uex' path='docs/doc[@for="DataGridViewTextBoxEditingControl"]/*' />
     [
         ComVisible(true),
         ClassInterface(ClassInterfaceType.AutoDispatch)
@@ -25,19 +24,16 @@ namespace System.Windows.Forms
         private bool repositionOnValueChange;
         private int rowIndex;
 
-        /// <include file='doc\DataGridViewTextBoxEditingControl.uex' path='docs/doc[@for="DataGridViewTextBoxEditingControl.DataGridViewTextBoxEditingControl"]/*' />
         public DataGridViewTextBoxEditingControl() : base()
         {
             this.TabStop = false;
         }
 
-        /// <include file='doc\DataGridViewTextBoxEditingControl.uex' path='docs/doc[@for="DataGridViewTextBoxEditingControl.CreateAccessibilityInstance"]/*' />
         protected override AccessibleObject CreateAccessibilityInstance()
         {
             return new DataGridViewTextBoxEditingControlAccessibleObject(this);
         }
 
-        /// <include file='doc\DataGridViewTextBoxEditingControl.uex' path='docs/doc[@for="DataGridViewTextBoxEditingControl.IDataGridViewEditingControl.EditingControlDataGridView"]/*' />
         public virtual DataGridView EditingControlDataGridView
         {
             get
@@ -50,7 +46,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewTextBoxEditingControl.uex' path='docs/doc[@for="DataGridViewTextBoxEditingControl.IDataGridViewEditingControl.EditingControlFormattedValue"]/*' />
         public virtual object EditingControlFormattedValue
         {
             get
@@ -63,7 +58,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewTextBoxEditingControl.uex' path='docs/doc[@for="DataGridViewTextBoxEditingControl.IDataGridViewEditingControl.EditingControlRowIndex"]/*' />
         public virtual int EditingControlRowIndex
         {
             get
@@ -76,7 +70,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewTextBoxEditingControl.uex' path='docs/doc[@for="DataGridViewTextBoxEditingControl.IDataGridViewEditingControl.EditingControlValueChanged"]/*' />
         public virtual bool EditingControlValueChanged
         {
             get
@@ -89,7 +82,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewTextBoxEditingControl.uex' path='docs/doc[@for="DataGridViewTextBoxEditingControl.IDataGridViewEditingControl.EditingPanelCursor"]/*' />
         public virtual Cursor EditingPanelCursor
         {
             get
@@ -98,7 +90,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewTextBoxEditingControl.uex' path='docs/doc[@for="DataGridViewTextBoxEditingControl.IDataGridViewEditingControl.RepositionEditingControlOnValueChange"]/*' />
         public virtual bool RepositionEditingControlOnValueChange
         {
             get
@@ -109,7 +100,6 @@ namespace System.Windows.Forms
 
         internal override bool SupportsUiaProviders => true;
 
-        /// <include file='doc\DataGridViewTextBoxEditingControl.uex' path='docs/doc[@for="DataGridViewTextBoxEditingControl.IDataGridViewEditingControl.ApplyCellStyleToEditingControl"]/*' />
         public virtual void ApplyCellStyleToEditingControl(DataGridViewCellStyle dataGridViewCellStyle)
         {
             this.Font = dataGridViewCellStyle.Font;
@@ -133,7 +123,6 @@ namespace System.Windows.Forms
             this.repositionOnValueChange = (dataGridViewCellStyle.WrapMode == DataGridViewTriState.True && (dataGridViewCellStyle.Alignment & anyTop) == 0);
         }
 
-        /// <include file='doc\DataGridViewTextBoxEditingControl.uex' path='docs/doc[@for="DataGridViewTextBoxEditingControl.IDataGridViewEditingControl.EditingControlWantsInputKey"]/*' />
         public virtual bool EditingControlWantsInputKey(Keys keyData, bool dataGridViewWantsInputKey)
         {
             switch (keyData & Keys.KeyCode)
@@ -212,13 +201,11 @@ namespace System.Windows.Forms
             return !dataGridViewWantsInputKey;
         }
 
-        /// <include file='doc\DataGridViewTextBoxEditingControl.uex' path='docs/doc[@for="DataGridViewTextBoxEditingControl.IDataGridViewEditingControl.GetEditingControlFormattedValue"]/*' />
         public virtual object GetEditingControlFormattedValue(DataGridViewDataErrorContexts context)
         {
             return this.Text;
         }
 
-        /// <include file='doc\DataGridViewTextBoxEditingControl.uex' path='docs/doc[@for="DataGridViewTextBoxEditingControl.IDataGridViewEditingControl.PrepareEditingControlForEdit"]/*' />
         public virtual void PrepareEditingControlForEdit(bool selectAll)
         {
             if (selectAll)
@@ -246,14 +233,12 @@ namespace System.Windows.Forms
             AccessibilityObject.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
         }
 
-        /// <include file='doc\DataGridViewTextBoxEditingControl.uex' path='docs/doc[@for="DataGridViewTextBoxEditingControl.OnMouseWheel"]/*' />
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             // Forwarding to grid control. Can't prevent the TextBox from handling the mouse wheel as expected.
             this.dataGridView.OnMouseWheelInternal(e);
         }
 
-        /// <include file='doc\DataGridViewTextBoxEditingControl.uex' path='docs/doc[@for="DataGridViewTextBoxEditingControl.OnTextChanged"]/*' />
         protected override void OnTextChanged(EventArgs e)
         {
             base.OnTextChanged(e);
@@ -261,7 +246,6 @@ namespace System.Windows.Forms
             NotifyDataGridViewOfValueChange();
         }
 
-        /// <include file='doc\DataGridViewTextBoxEditingControl.uex' path='docs/doc[@for="DataGridViewTextBoxEditingControl.ProcessKeyEventArgs"]/*' />
         protected override bool ProcessKeyEventArgs(ref Message m)
         {
             switch ((Keys)(int) m.WParam)

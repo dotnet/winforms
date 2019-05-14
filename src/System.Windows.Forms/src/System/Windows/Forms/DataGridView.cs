@@ -22,7 +22,6 @@ namespace System.Windows.Forms
     using Microsoft.Win32;
     using System.Collections.Specialized;
 
-    /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView"]/*' />
     [
         ComVisible(true),
         ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -411,7 +410,6 @@ namespace System.Windows.Forms
         internal bool dataStoreAccessAllowed = true;
 #pragma warning restore 0414
 #endif
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.DataGridView"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataGridView'/> class.</para>
         /// </devdoc>
@@ -535,7 +533,6 @@ namespace System.Windows.Forms
             return DpiHelper.IsScalingRequirementMet ? LogicalToDeviceUnits(value) : value;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AdjustedTopLeftHeaderBorderStyle"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -669,7 +666,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AdvancedCellBorderStyle"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced)
@@ -682,7 +678,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AdvancedColumnHeadersBorderStyle"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced)
@@ -695,7 +690,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AdvancedRowHeadersBorderStyle"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced)
@@ -708,7 +702,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AllowUserToAddRows"]/*' />
         [
             DefaultValue(true),
             SRCategory(nameof(SR.CatBehavior)),
@@ -749,7 +742,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AllowUserToAddRowsChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridViewOnAllowUserToAddRowsChangedDescr))
@@ -760,7 +752,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWALLOWUSERTOADDROWSCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AllowUserToDeleteRows"]/*' />
         [
             DefaultValue(true),
             SRCategory(nameof(SR.CatBehavior)),
@@ -797,7 +788,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AllowUserToDeleteRowsChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridViewOnAllowUserToDeleteRowsChangedDescr))
@@ -808,7 +798,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWALLOWUSERTODELETEROWSCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AllowUserToOrderColumns"]/*' />
         [
             DefaultValue(false),
             SRCategory(nameof(SR.CatBehavior)),
@@ -830,7 +819,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AllowUserToOrderColumnsChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridViewOnAllowUserToOrderColumnsChangedDescr))
@@ -841,7 +829,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWALLOWUSERTOORDERCOLUMNSCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AllowUserToResizeColumns"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a global value indicating if the dataGridView's columns are resizable with the mouse.
@@ -869,7 +856,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AllowUserToResizeColumnsChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridViewOnAllowUserToResizeColumnsChangedDescr))
@@ -880,7 +866,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWALLOWUSERTORESIZECOLUMNSCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AllowUserToResizeRows"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a global value indicating if the dataGridView's rows are resizable with the mouse.
@@ -908,7 +893,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AllowUserToResizeRowsChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridViewOnAllowUserToResizeRowsChangedDescr))
@@ -919,7 +903,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWALLOWUSERTORESIZEROWSCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AlternatingRowsDefaultCellStyle"]/*' />        
         [
             SRCategory(nameof(SR.CatAppearance)),
             SRDescription(nameof(SR.DataGridView_AlternatingRowsDefaultCellStyleDescr))
@@ -953,7 +936,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AlternatingRowsDefaultCellStyleChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridViewAlternatingRowsDefaultCellStyleChangedDescr))
@@ -980,7 +962,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoGenerateColumns"]/*' />
         /// <devdoc>
         ///    <para>
         ///    </para>
@@ -1005,7 +986,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoGenerateColumnsChanged"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced)
@@ -1016,7 +996,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWAUTOGENERATECOLUMNSCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoSize"]/*' />
         /// <devdoc>
         ///    <para> Overriding base implementation for perf gains. </para>
         /// </devdoc>
@@ -1033,7 +1012,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoSizeColumnsMode"]/*' />
         /// <devdoc>
         ///    <para> Gets or sets the columns' autosizing mode. Standard inheritance model is used:
         ///           Columns with AutoSizeMode property set to NotSet will use this auto size mode.
@@ -1102,7 +1080,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoSizeColumnsModeChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridViewAutoSizeColumnsModeChangedDescr))
@@ -1113,7 +1090,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWAUTOSIZECOLUMNSMODECHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoSizeRowsMode"]/*' />
         /// <devdoc>
         ///    <para> Gets or sets the rows' autosizing mode. </para>
         /// </devdoc>
@@ -1157,7 +1133,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoSizeRowsModeChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridViewAutoSizeRowsModeChangedDescr))
@@ -1168,7 +1143,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWAUTOSIZEROWSMODECHANGED, value);
         }
         
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.BackColor"]/*' />
         [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -1186,7 +1160,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.BackColorChanged"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never)
@@ -1205,7 +1178,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.BackgroundColor"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the background color of the dataGridView.</para>
         /// </devdoc>
@@ -1237,7 +1209,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.BackgroundColorChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridViewBackgroundColorChangedDescr))
@@ -1248,7 +1219,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWBACKGROUNDCOLORCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.BackgroundImage"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never)
@@ -1265,7 +1235,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.BackgroundImageLayout"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never)
@@ -1282,7 +1251,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.BackgroundImageChanged"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never)
@@ -1293,7 +1261,6 @@ namespace System.Windows.Forms
             remove => base.BackgroundImageChanged -= value;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.BackgroundImageLayoutChanged"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never)
@@ -1304,13 +1271,11 @@ namespace System.Windows.Forms
             remove => base.BackgroundImageLayoutChanged -= value;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ShouldSerializeBackgroundColor"]/*' />
         private bool ShouldSerializeBackgroundColor()
         {
             return !this.BackgroundColor.Equals(DefaultBackgroundBrush.Color);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.BorderStyle"]/*' />
         [
             DefaultValue(BorderStyle.FixedSingle),
             SRCategory(nameof(SR.CatAppearance)),
@@ -1344,7 +1309,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.BorderStyleChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridViewBorderStyleChangedDescr))
@@ -1402,7 +1366,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AdvancedCellBorderStyle"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance)),
             SRDescription(nameof(SR.DataGridView_CellBorderStyleDescr)),
@@ -1570,7 +1533,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellBorderStyleChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridView_CellBorderStyleChangedDescr))
@@ -1629,7 +1591,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ClipboardCopyMode"]/*' />
         [
             Browsable(true),
             DefaultValue(DataGridViewClipboardCopyMode.EnableWithAutoHeaderText),
@@ -1653,7 +1614,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnCount"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -1715,7 +1675,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnHeadersBorderStyle"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance)),
             SRDescription(nameof(SR.DataGridView_ColumnHeadersBorderStyleDescr)),
@@ -1791,7 +1750,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnHeadersBorderStyleChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridView_ColumnHeadersBorderStyleChangedDescr))
@@ -1802,7 +1760,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSBORDERSTYLECHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnHeadersDefaultCellStyle"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance)),
             SRDescription(nameof(SR.DataGridView_ColumnHeadersDefaultCellStyleDescr)),
@@ -1855,7 +1812,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnHeadersDefaultCellStyleChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridViewColumnHeadersDefaultCellStyleChangedDescr))
@@ -1866,7 +1822,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSDEFAULTCELLSTYLECHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnHeadersHeight"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance)),
             Localizable(true), 
@@ -1899,7 +1854,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnHeadersHeightChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridViewColumnHeadersHeightChangedDescr))
@@ -1915,7 +1869,6 @@ namespace System.Windows.Forms
             return this.ColumnHeadersHeightSizeMode != DataGridViewColumnHeadersHeightSizeMode.AutoSize && defaultColumnHeadersHeight != this.ColumnHeadersHeight;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnHeadersHeightSizeMode"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value that determines the behavior for adjusting the column headers height.
@@ -1953,7 +1906,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnHeadersHeightSizeModeChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridView_ColumnHeadersHeightSizeModeChangedDescr))
@@ -1974,7 +1926,6 @@ namespace System.Windows.Forms
         /// </summary>
         internal bool TextBoxControlWasDetached { get; set; }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnHeadersVisible"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets
@@ -2027,7 +1978,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.Columns"]/*' />
         [
             Editor("System.Windows.Forms.Design.DataGridViewColumnCollectionEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor)),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
@@ -2045,7 +1995,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CurrentCell"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -2107,7 +2056,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CurrentCellAddress"]/*' />
         [
             Browsable(false)
         ]
@@ -2185,7 +2133,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CurrentRow"]/*' />
         [
             Browsable(false)
         ]
@@ -2229,7 +2176,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.DataMember"]/*' />
         [
          DefaultValue(""),
          SRCategory(nameof(SR.CatData)),
@@ -2264,7 +2210,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.DataMemberChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridViewDataMemberChangedDescr))
@@ -2275,7 +2220,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWDATAMEMBERCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.DataSource"]/*' />
         [
          DefaultValue(null),
          SRCategory(nameof(SR.CatData)),
@@ -2311,7 +2255,7 @@ namespace System.Windows.Forms
                         if (this.dataConnection.ShouldChangeDataMember(value))
                         {
                             // we fire DataMemberChanged event
-                            this.DataMember = "";
+                            this.DataMember = string.Empty;
                         }
                         this.dataConnection.SetDataConnection(value, this.DataMember);
                         if (value == null)
@@ -2324,7 +2268,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.DataSourceChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridViewDataSourceChangedDescr))
@@ -2351,7 +2294,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.DefaultCellStyle"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance)),
             SRDescription(nameof(SR.DataGridView_DefaultCellStyleDescr)),
@@ -2453,7 +2395,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.DefaultCellStyleChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridViewDefaultCellStyleChangedDescr))
@@ -2524,7 +2465,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.DefaultSize"]/*' />
         protected override Size DefaultSize
         {
             get
@@ -2541,7 +2481,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.DisplayRectangle"]/*' />
         /// <devdoc>
         ///     Returns the client rect of the display area of the control.
         ///     The DataGridView control return its client rectangle minus the potential scrollbars.
@@ -2565,7 +2504,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.EditMode"]/*' />
         [
             SRCategory(nameof(SR.CatBehavior)),
             DefaultValue(DataGridViewEditMode.EditOnKeystrokeOrF2),
@@ -2592,7 +2530,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.EditModeChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridView_EditModeChangedDescr))
@@ -2657,7 +2594,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.EditingControl"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced)
@@ -2678,7 +2614,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.EditingPanel"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced)
@@ -2709,7 +2644,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.EnableHeadersVisualStyles"]/*' />
         /// <devdoc>
         ///    <para>
         ///     Determines whether the DataGridView's header cells render using XP theming visual styles or not
@@ -2739,7 +2673,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.FirstDisplayedCell"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -2909,7 +2842,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.FirstDisplayedScrollingColumnHiddenWidth"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -2923,7 +2855,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.FirstDisplayedScrollingColumnIndex"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -2999,7 +2930,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.FirstDisplayedScrollingRowIndex"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -3077,7 +3007,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ForeColor"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -3095,7 +3024,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ForeColorChanged"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced)
@@ -3106,7 +3034,6 @@ namespace System.Windows.Forms
             remove => base.ForeColorChanged -= value;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.Font"]/*' />
         [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Advanced)
@@ -3123,7 +3050,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.FontChanged"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced)
@@ -3134,7 +3060,6 @@ namespace System.Windows.Forms
             remove => base.FontChanged -= value;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.GridColor"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the grid color of the dataGridView (when Single mode is used).</para>
         /// </devdoc>
@@ -3171,7 +3096,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.GridColorChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridViewOnGridColorChangedDescr))
@@ -3182,7 +3106,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWGRIDCOLORCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ShouldSerializeGridColor"]/*' />
         private bool ShouldSerializeGridColor()
         {
             return !this.GridPen.Color.Equals(DefaultGridColor);
@@ -3302,7 +3225,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.HorizontalScrollBar"]/*' />
         protected ScrollBar HorizontalScrollBar
         {
             get
@@ -3327,7 +3249,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.HorizontalScrollingOffset"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -3443,7 +3364,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.IsCurrentCellDirty"]/*' />
         [Browsable(false)]
         public bool IsCurrentCellDirty
         {
@@ -3465,7 +3385,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.IsCurrentCellInEditMode"]/*' />
         [Browsable(false)]
         public bool IsCurrentCellInEditMode
         {
@@ -3475,7 +3394,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.IsCurrentRowDirty"]/*' />
         // Only used in bound scenarios, when binding to a IEditableObject
         [Browsable(false)]
         public bool IsCurrentRowDirty
@@ -3586,7 +3504,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.MultiSelect"]/*' />
         [
             SRCategory(nameof(SR.CatBehavior)),
             DefaultValue(true),
@@ -3609,7 +3526,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.MultiSelectChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridViewOnMultiSelectChangedDescr))
@@ -3620,7 +3536,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWMULTISELECTCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.NewRowIndex"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -3658,7 +3573,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.Padding"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never),
@@ -3676,7 +3590,6 @@ namespace System.Windows.Forms
             }        
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.PaddingChanged"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never),
@@ -3700,7 +3613,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ReadOnly"]/*' />
         [
             Browsable(true),
             DefaultValue(false),
@@ -3779,7 +3691,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ReadOnlyChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridViewOnReadOnlyChangedDescr))
@@ -3822,7 +3733,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowCount"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -3895,7 +3805,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowHeadersBorderStyle"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance)),
             SRDescription(nameof(SR.DataGridView_RowHeadersBorderStyleDescr)),
@@ -3972,7 +3881,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowHeadersBorderStyleChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridView_RowHeadersBorderStyleChangedDescr))
@@ -3983,7 +3891,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERSBORDERSTYLECHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowHeadersDefaultCellStyle"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance)),
             SRDescription(nameof(SR.DataGridView_RowHeadersDefaultCellStyleDescr)),
@@ -4017,7 +3924,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowHeadersDefaultCellStyleChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridViewRowHeadersDefaultCellStyleChangedDescr))
@@ -4028,7 +3934,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERSDEFAULTCELLSTYLECHANGED, value);
         }
         
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowHeadersVisible"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the dataGridView's row headers are
@@ -4071,7 +3976,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowHeadersWidth"]/*' />
         [
             SRCategory(nameof(SR.CatLayout)),
             Localizable(true), 
@@ -4132,7 +4036,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowHeadersWidthChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridViewRowHeadersWidthChangedDescr))
@@ -4149,7 +4052,6 @@ namespace System.Windows.Forms
                    defaultRowHeadersWidth != this.RowHeadersWidth;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowHeadersWidthSizeMode"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value that determines the behavior for adjusting the row headers width.
@@ -4190,7 +4092,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowHeadersWidthSizeModeChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridView_RowHeadersWidthSizeModeChangedDescr))
@@ -4201,7 +4102,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERSWIDTHSIZEMODECHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.Rows"]/*' />
         [
             Browsable(false)
         ]
@@ -4217,7 +4117,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowsDefaultCellStyle"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance)),
             SRDescription(nameof(SR.DataGridView_RowsDefaultCellStyleDescr))
@@ -4251,7 +4150,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowsDefaultCellStyleChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridViewRowsDefaultCellStyleChangedDescr))
@@ -4262,7 +4160,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWSDEFAULTCELLSTYLECHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowTemplate"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance)),
             Browsable(true),
@@ -4312,7 +4209,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ScrollBars"]/*' />
         /// <devdoc>
         ///     Possible return values are given by the ScrollBars enumeration.
         /// </devdoc>
@@ -4367,7 +4263,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.SelectedCells"]/*' />
         [
             Browsable(false)
         ]
@@ -4427,7 +4322,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.SelectedColumns"]/*' />
         [
             Browsable(false)
         ]
@@ -4457,7 +4351,6 @@ namespace System.Windows.Forms
             }
         }
         
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.SelectedRows"]/*' />
         [
             Browsable(false),
         ]
@@ -4488,7 +4381,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.SelectionMode"]/*' />
         [
             Browsable(true),
             SRCategory(nameof(SR.CatBehavior)),
@@ -4528,7 +4420,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ShowCellErrors"]/*' />
         [
             DefaultValue(true),
             SRCategory(nameof(SR.CatAppearance)),
@@ -4583,7 +4474,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ShowCellToolTips"]/*' />
         [
             DefaultValue(true),
             SRCategory(nameof(SR.CatAppearance)),
@@ -4637,7 +4527,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ShowEditingIcon"]/*' />
         [
             DefaultValue(true),
             SRCategory(nameof(SR.CatAppearance)),
@@ -4678,7 +4567,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ShowRowErrors"]/*' />
         [
             DefaultValue(true),
             SRCategory(nameof(SR.CatAppearance)),
@@ -4748,7 +4636,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.SortedColumn"]/*' />
         [
             Browsable(false)
         ]
@@ -4760,7 +4647,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.SortOrder"]/*' />
         [
             Browsable(false)
         ]
@@ -4772,7 +4658,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.StandardTab"]/*' />
         /// <devdoc>
         ///    <para>
         ///    </para>
@@ -4801,7 +4686,6 @@ namespace System.Windows.Forms
 
         internal override bool SupportsUiaProviders => true;
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.Text"]/*' />
         [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -4819,7 +4703,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.TextChanged"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never)
@@ -4830,7 +4713,6 @@ namespace System.Windows.Forms
             remove => base.TextChanged -= value;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.this"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -4850,7 +4732,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.this1"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -4878,7 +4759,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.TopLeftHeaderCell"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -4919,7 +4799,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.UserSetCursor"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced)
@@ -4971,7 +4850,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.VerticalScrollBar"]/*' />
         protected ScrollBar VerticalScrollBar
         {
             get
@@ -4980,7 +4858,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.VerticalScrollingOffset"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -5006,7 +4883,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.VirtualMode"]/*' />
         /// <devdoc>
         ///    <para>
         ///    </para>
@@ -5048,7 +4924,6 @@ namespace System.Windows.Forms
 
         // Events start here
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoSizeColumnModeChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)), 
             SRDescription(nameof(SR.DataGridViewAutoSizeColumnModeChangedDescr))
@@ -5059,7 +4934,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWAUTOSIZECOLUMNMODECHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CancelRowEdit"]/*' />
         [
             SRCategory(nameof(SR.CatAction)),
             SRDescription(nameof(SR.DataGridView_CancelRowEditDescr))
@@ -5070,7 +4944,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCANCELROWEDIT, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellBeginEdit"]/*' />
         [
             SRCategory(nameof(SR.CatData)),
             SRDescription(nameof(SR.DataGridView_CellBeginEditDescr))
@@ -5081,7 +4954,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLBEGINEDIT, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellClick"]/*' />
         [
             SRCategory(nameof(SR.CatMouse)),
             SRDescription(nameof(SR.DataGridView_CellClickDescr))
@@ -5092,7 +4964,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLCLICK, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellContentClick"]/*' />
         [
             SRCategory(nameof(SR.CatMouse)),
             SRDescription(nameof(SR.DataGridView_CellContentClick))
@@ -5103,7 +4974,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLCONTENTCLICK, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellContentDoubleClick"]/*' />
         [
             SRCategory(nameof(SR.CatMouse)),
             SRDescription(nameof(SR.DataGridView_CellContentDoubleClick))
@@ -5114,7 +4984,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLCONTENTDOUBLECLICK, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellContextMenuStripChanged"]/*' />
         [
             SRCategory(nameof(SR.CatAction)),
             SRDescription(nameof(SR.DataGridView_CellContextMenuStripChanged)),
@@ -5126,7 +4995,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLCONTEXTMENUSTRIPCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellContextMenuStripNeeded"]/*' />
         [
             SRCategory(nameof(SR.CatBehavior)),
             SRDescription(nameof(SR.DataGridView_CellContextMenuStripNeeded)),
@@ -5138,7 +5006,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLCONTEXTMENUSTRIPNEEDED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellDoubleClick"]/*' />
         [
             SRCategory(nameof(SR.CatMouse)),
             SRDescription(nameof(SR.DataGridView_CellDoubleClickDescr))
@@ -5149,7 +5016,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLDOUBLECLICK, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellEndEdit"]/*' />
         [
             SRCategory(nameof(SR.CatData)),
             SRDescription(nameof(SR.DataGridView_CellEndEditDescr))
@@ -5160,7 +5026,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLENDEDIT, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellEnter"]/*' />
         [
             SRCategory(nameof(SR.CatFocus)),
             SRDescription(nameof(SR.DataGridView_CellEnterDescr))
@@ -5171,7 +5036,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLENTER, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellErrorTextChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_CellErrorTextChangedDescr))
@@ -5182,7 +5046,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLERRORTEXTCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellErrorTextNeeded"]/*' />
         [
             SRCategory(nameof(SR.CatData)),
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -5194,7 +5057,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLERRORTEXTNEEDED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellFormatting"]/*' />
         [
             SRCategory(nameof(SR.CatDisplay)),
             SRDescription(nameof(SR.DataGridView_CellFormattingDescr))
@@ -5205,7 +5067,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLFORMATTING, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellLeave"]/*' />
         [
             SRCategory(nameof(SR.CatFocus)),
             SRDescription(nameof(SR.DataGridView_CellLeaveDescr))
@@ -5216,7 +5077,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLLEAVE, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellMouseClick"]/*' />
         [
             SRCategory(nameof(SR.CatMouse)),
             SRDescription(nameof(SR.DataGridView_CellMouseClickDescr))
@@ -5227,7 +5087,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSECLICK, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellMouseDoubleClick"]/*' />
         [
             SRCategory(nameof(SR.CatMouse)),
             SRDescription(nameof(SR.DataGridView_CellMouseDoubleClickDescr))
@@ -5238,7 +5097,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSEDOUBLECLICK, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellMouseDown"]/*' />
         [
             SRCategory(nameof(SR.CatMouse)),
             SRDescription(nameof(SR.DataGridView_CellMouseDownDescr))
@@ -5249,7 +5107,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSEDOWN, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellMouseEnter"]/*' />
         [
             SRCategory(nameof(SR.CatMouse)),
             SRDescription(nameof(SR.DataGridView_CellMouseEnterDescr))
@@ -5260,7 +5117,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSEENTER, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellMouseLeave"]/*' />
         [
             SRCategory(nameof(SR.CatMouse)),
             SRDescription(nameof(SR.DataGridView_CellMouseLeaveDescr))
@@ -5271,7 +5127,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSELEAVE, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellMouseMove"]/*' />
         [
             SRCategory(nameof(SR.CatMouse)),
             SRDescription(nameof(SR.DataGridView_CellMouseMoveDescr))
@@ -5282,7 +5137,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSEMOVE, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellMouseUp"]/*' />
         [
             SRCategory(nameof(SR.CatMouse)),
             SRDescription(nameof(SR.DataGridView_CellMouseUpDescr))
@@ -5293,7 +5147,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSEUP, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellPainting"]/*' />
         [
             SRCategory(nameof(SR.CatDisplay)),
             SRDescription(nameof(SR.DataGridView_CellPaintingDescr))
@@ -5304,7 +5157,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLPAINTING, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellParsing"]/*' />
         [
             SRCategory(nameof(SR.CatDisplay)),
             SRDescription(nameof(SR.DataGridView_CellParsingDescr))
@@ -5315,7 +5167,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLPARSING, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellStateChanged"]/*' />
         [
             SRCategory(nameof(SR.CatBehavior)),
             SRDescription(nameof(SR.DataGridView_CellStateChangedDescr))
@@ -5326,7 +5177,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLSTATECHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellStyleChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_CellStyleChangedDescr))
@@ -5337,7 +5187,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLSTYLECHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellStyleContentChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_CellStyleContentChangedDescr))
@@ -5348,7 +5197,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLSTYLECONTENTCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellToolTipTextChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_CellToolTipTextChangedDescr))
@@ -5359,7 +5207,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLTOOLTIPTEXTCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellToolTipTextNeeded"]/*' />
         [
             SRCategory(nameof(SR.CatBehavior)),
             SRDescription(nameof(SR.DataGridView_CellToolTipTextNeededDescr)),
@@ -5371,7 +5218,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLTOOLTIPTEXTNEEDED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellValidated"]/*' />
         [
             SRCategory(nameof(SR.CatFocus)),
             SRDescription(nameof(SR.DataGridView_CellValidatedDescr))
@@ -5382,7 +5228,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLVALIDATED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellValidating"]/*' />
         [
             SRCategory(nameof(SR.CatFocus)),
             SRDescription(nameof(SR.DataGridView_CellValidatingDescr))
@@ -5393,7 +5238,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLVALIDATING, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellValueChanged"]/*' />
         [
             SRCategory(nameof(SR.CatAction)),
             SRDescription(nameof(SR.DataGridView_CellValueChangedDescr))
@@ -5404,7 +5248,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLVALUECHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellValueNeeded"]/*' />
         [
             SRCategory(nameof(SR.CatData)),
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -5416,7 +5259,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLVALUENEEDED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellValuePushed"]/*' />
         [
             SRCategory(nameof(SR.CatData)),
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -5428,7 +5270,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLVALUEPUSHED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnAdded"]/*' />
         [
             SRCategory(nameof(SR.CatAction)),
             SRDescription(nameof(SR.DataGridView_ColumnAddedDescr))
@@ -5439,7 +5280,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNADDED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnContextMenuStripChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_ColumnContextMenuStripChangedDescr))
@@ -5450,7 +5290,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNCONTEXTMENUSTRIPCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnDataPropertyNameChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_ColumnDataPropertyNameChangedDescr))
@@ -5461,7 +5300,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNDATAPROPERTYNAMECHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnDefaultCellStyleChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_ColumnDefaultCellStyleChangedDescr))
@@ -5472,7 +5310,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNDEFAULTCELLSTYLECHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnDisplayIndexChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_ColumnDisplayIndexChangedDescr))
@@ -5483,7 +5320,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNDISPLAYINDEXCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnDividerDoubleClick"]/*' />
         [
             SRCategory(nameof(SR.CatMouse)),
             SRDescription(nameof(SR.DataGridView_ColumnDividerDoubleClickDescr))
@@ -5494,7 +5330,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNDIVIDERDOUBLECLICK, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnDividerWidthChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_ColumnDividerWidthChangedDescr))
@@ -5505,7 +5340,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNDIVIDERWIDTHCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnHeaderMouseClick"]/*' />
         [
             SRCategory(nameof(SR.CatMouse)),
             SRDescription(nameof(SR.DataGridView_ColumnHeaderMouseClickDescr))
@@ -5516,7 +5350,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERMOUSECLICK, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnHeaderMouseDoubleClick"]/*' />
         [
             SRCategory(nameof(SR.CatMouse)), 
             SRDescription(nameof(SR.DataGridView_ColumnHeaderMouseDoubleClickDescr))
@@ -5527,7 +5360,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERMOUSEDOUBLECLICK, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnHeaderCellChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_ColumnHeaderCellChangedDescr))
@@ -5538,7 +5370,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERCELLCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnMinimumWidthChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_ColumnMinimumWidthChangedDescr))
@@ -5549,7 +5380,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNMINIMUMWIDTHCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnNameChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_ColumnNameChangedDescr))
@@ -5560,7 +5390,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNNAMECHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnRemoved"]/*' />
         [
             SRCategory(nameof(SR.CatAction)),
             SRDescription(nameof(SR.DataGridView_ColumnRemovedDescr))
@@ -5571,15 +5400,13 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNREMOVED, value);
         }
 
-        /*/// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnsDefaultCellStyleChanged"]/*' />
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnsDefaultCellStyleChanged"]/*' />
+        /*
         public event EventHandler ColumnsDefaultCellStyleChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNSDEFAULTCELLSTYLECHANGED, value);
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNSDEFAULTCELLSTYLECHANGED, value);
         }*/
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnSortModeChanged"]/*' />
         [
             SRCategory(nameof(SR.CatBehavior)),
             SRDescription(nameof(SR.DataGridViewColumnSortModeChangedDescr))
@@ -5590,7 +5417,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNSORTMODECHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnStateChanged"]/*' />
         [
             SRCategory(nameof(SR.CatBehavior)),
             SRDescription(nameof(SR.DataGridView_ColumnStateChangedDescr))
@@ -5601,7 +5427,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNSTATECHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnToolTipTextChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_ColumnToolTipTextChangedDescr))
@@ -5612,7 +5437,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNTOOLTIPTEXTCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnWidthChanged"]/*' />
         [
             SRCategory(nameof(SR.CatAction)),
             SRDescription(nameof(SR.DataGridView_ColumnWidthChangedDescr))
@@ -5623,7 +5447,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNWIDTHCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CurrentCellChanged"]/*' />
         [
             SRCategory(nameof(SR.CatAction)), 
             SRDescription(nameof(SR.DataGridView_CurrentCellChangedDescr))
@@ -5634,7 +5457,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCURRENTCELLCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CurrentCellDirtyStateChanged"]/*' />
         [
             SRCategory(nameof(SR.CatBehavior)), 
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -5646,7 +5468,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCURRENTCELLDIRTYSTATECHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.BindingComplete"]/*' />
         [
             SRCategory(nameof(SR.CatData)), 
             SRDescription(nameof(SR.DataGridView_DataBindingCompleteDescr))
@@ -5657,7 +5478,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWDATABINDINGCOMPLETE, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.DataError"]/*' />
         [
             SRCategory(nameof(SR.CatBehavior)),
             SRDescription(nameof(SR.DataGridView_DataErrorDescr))
@@ -5668,7 +5488,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWDATAERROR, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.DefaultValuesNeeded"]/*' />
         [
             SRCategory(nameof(SR.CatData)), 
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -5680,7 +5499,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWDEFAULTVALUESNEEDED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.EditingControlShowing"]/*' />
         [
             SRCategory(nameof(SR.CatAction)),
             SRDescription(nameof(SR.DataGridView_EditingControlShowingDescr))
@@ -5692,22 +5510,19 @@ namespace System.Windows.Forms
         }
 
         /*
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.KeepNewRow"]/*' />
         public event QuestionEventHandler KeepNewRow
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWKEEPNEWROW, value);
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWKEEPNEWROW, value);
         }*/
 
-        /*/// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.NewRowDiscarded"]/*' />
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.NewRowDiscarded"]/*' />
+        /*
         public event EventHandler NewRowDiscarded
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWNEWROWDISCARDED, value);
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWNEWROWDISCARDED, value);
         }*/
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.NewRowNeeded"]/*' />
         [
             SRCategory(nameof(SR.CatData)),
             SRDescription(nameof(SR.DataGridView_NewRowNeededDescr))
@@ -5718,7 +5533,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWNEWROWNEEDED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowContextMenuStripChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_RowContextMenuStripChangedDescr))
@@ -5729,7 +5543,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWCONTEXTMENUSTRIPCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowContextMenuStripNeeded"]/*' />
         [
             SRCategory(nameof(SR.CatData)),
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -5741,7 +5554,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWCONTEXTMENUSTRIPNEEDED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowDefaultCellStyleChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_RowDefaultCellStyleChangedDescr))
@@ -5752,7 +5564,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWDEFAULTCELLSTYLECHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowDirtyStateNeeded"]/*' />
         [
             SRCategory(nameof(SR.CatData)),
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -5764,7 +5575,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWDIRTYSTATENEEDED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowDividerDoubleClick"]/*' />
         [
             SRCategory(nameof(SR.CatMouse)),
             SRDescription(nameof(SR.DataGridView_RowDividerDoubleClickDescr))
@@ -5775,7 +5585,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWDIVIDERDOUBLECLICK, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowDividerHeightChanged"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance)),
             SRDescription(nameof(SR.DataGridView_RowDividerHeightChangedDescr))
@@ -5786,7 +5595,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWDIVIDERHEIGHTCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowEnter"]/*' />
         [
             SRCategory(nameof(SR.CatFocus)),
             SRDescription(nameof(SR.DataGridView_RowEnterDescr))
@@ -5797,7 +5605,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWENTER, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowErrorTextChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_RowErrorTextChangedDescr))
@@ -5808,7 +5615,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWERRORTEXTCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowErrorTextNeeded"]/*' />
         [
             SRCategory(nameof(SR.CatData)),
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -5820,7 +5626,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWERRORTEXTNEEDED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowHeaderMouseClick"]/*' />
         [
             SRCategory(nameof(SR.CatMouse)),
             SRDescription(nameof(SR.DataGridView_RowHeaderMouseClickDescr))
@@ -5831,7 +5636,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERMOUSECLICK, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowHeaderMouseDoubleClick"]/*' />
         [
             SRCategory(nameof(SR.CatMouse)),
             SRDescription(nameof(SR.DataGridView_RowHeaderMouseDoubleClickDescr))
@@ -5842,7 +5646,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERMOUSEDOUBLECLICK, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowHeaderCellChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_RowHeaderCellChangedDescr))
@@ -5853,7 +5656,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERCELLCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowHeightChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_RowHeightChangedDescr))
@@ -5864,7 +5666,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEIGHTCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowHeightInfoNeeded"]/*' />
         [
             SRCategory(nameof(SR.CatData)),
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -5888,7 +5689,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowHeightInfoPushed"]/*' />
         [
             SRCategory(nameof(SR.CatData)),
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -5900,7 +5700,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEIGHTINFOPUSHED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowLeave"]/*' />
         [
             SRCategory(nameof(SR.CatFocus)),
             SRDescription(nameof(SR.DataGridView_RowLeaveDescr))
@@ -5911,7 +5710,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWLEAVE, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowMinimumHeightChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.DataGridView_RowMinimumHeightChangedDescr))
@@ -5922,7 +5720,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWMINIMUMHEIGHTCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowPostPaint"]/*' />
         [
             SRCategory(nameof(SR.CatDisplay)), 
             SRDescription(nameof(SR.DataGridView_RowPostPaintDescr))
@@ -5945,7 +5742,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowPrePaint"]/*' />
         [
             SRCategory(nameof(SR.CatDisplay)), 
             SRDescription(nameof(SR.DataGridView_RowPrePaintDescr))
@@ -5968,7 +5764,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowsAdded"]/*' />
         [
             SRCategory(nameof(SR.CatAction)), 
             SRDescription(nameof(SR.DataGridView_RowsAddedDescr))
@@ -5979,7 +5774,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWSADDED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowsRemoved"]/*' />
         [
             SRCategory(nameof(SR.CatAction)),
             SRDescription(nameof(SR.DataGridView_RowsRemovedDescr))
@@ -5990,7 +5784,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWSREMOVED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowStateChanged"]/*' />
         [
             SRCategory(nameof(SR.CatBehavior)),
             SRDescription(nameof(SR.DataGridView_RowStateChangedDescr))
@@ -6001,7 +5794,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWSTATECHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowUnshared"]/*' />
         [
             SRCategory(nameof(SR.CatBehavior)),
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -6013,7 +5805,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWUNSHARED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowValidated"]/*' />
         [
             SRCategory(nameof(SR.CatFocus)),
             SRDescription(nameof(SR.DataGridView_RowValidatedDescr))
@@ -6024,7 +5815,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWVALIDATED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowValidating"]/*' />
         [
             SRCategory(nameof(SR.CatFocus)),
             SRDescription(nameof(SR.DataGridView_RowValidatingDescr))
@@ -6035,7 +5825,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWVALIDATING, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.Scroll"]/*' />
         [
             SRCategory(nameof(SR.CatAction)), 
             SRDescription(nameof(SR.DataGridView_ScrollDescr))
@@ -6046,7 +5835,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWSCROLL, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.SelectionChanged"]/*' />
         [
             SRCategory(nameof(SR.CatAction)),
             SRDescription(nameof(SR.DataGridView_SelectionChangedDescr))
@@ -6057,7 +5845,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWSELECTIONCHANGED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.SortCompare"]/*' />
         [
             SRCategory(nameof(SR.CatData)),
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -6069,7 +5856,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWSORTCOMPARE, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.Sorted"]/*' />
         [
             SRCategory(nameof(SR.CatData)),
             SRDescription(nameof(SR.DataGridView_SortedDescr))
@@ -6080,7 +5866,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWSORTED, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.StyleChanged"]/*' />
         [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never)
@@ -6091,7 +5876,6 @@ namespace System.Windows.Forms
             remove => base.StyleChanged -= value;
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.UserAddedRow"]/*' />
         [
             SRCategory(nameof(SR.CatAction)),
             SRDescription(nameof(SR.DataGridView_UserAddedRowDescr))
@@ -6102,15 +5886,13 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWUSERADDEDROW, value);
         }
 
-        /*/// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.UserAddingRow"]/*' />
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.UserAddingRow"]/*' />
+        /*
         public event DataGridViewRowCancelEventHandler UserAddingRow
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWUSERADDINGROW, value);
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWUSERADDINGROW, value);
         }*/
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.UserDeletedRow"]/*' />
         [
             SRCategory(nameof(SR.CatAction)),
             SRDescription(nameof(SR.DataGridView_UserDeletedRowDescr))
@@ -6121,7 +5903,6 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWUSERDELETEDROW, value);
         }
 
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.UserDeletingRow"]/*' />
         [
             SRCategory(nameof(SR.CatAction)),
             SRDescription(nameof(SR.DataGridView_UserDeletingRowDescr))

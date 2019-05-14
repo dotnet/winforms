@@ -22,7 +22,6 @@ namespace System.Windows.Forms
 
         private ToolStripOverflowButton ownerItem;
 
-        /// <include file='doc\ToolStripOverflow.uex' path='docs/doc[@for="ToolStripOverflow.ToolStripOverflow"]/*' />
         public ToolStripOverflow (ToolStripItem parentItem) : base(parentItem) {
             if (parentItem == null) {
                 throw new ArgumentNullException(nameof(parentItem));
@@ -31,7 +30,6 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\ToolStripOverflow.uex' path='docs/doc[@for="ToolStripOverflow.DisplayedItems"]/*' />
         protected internal override ToolStripItemCollection DisplayedItems {
             get {
                 if (ParentToolStrip != null) {
@@ -57,33 +55,27 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\ToolStripOverflow.uex' path='docs/doc[@for="ToolStripOverflow.IArrangedElement.Children"]/*' />
         ArrangedElementCollection IArrangedElement.Children {
             get { return DisplayedItems; }
         }
         
-        /// <include file='doc\ToolStripOverflow.uex' path='docs/doc[@for="ToolStripOverflow.IArrangedElement.Container"]/*' />
         IArrangedElement IArrangedElement.Container {
             get { return ParentInternal; }
         }
         
-        /// <include file='doc\ToolStripOverflow.uex' path='docs/doc[@for="ToolStripOverflow.IArrangedElement.ParticipatesInLayout"]/*' />
         bool IArrangedElement.ParticipatesInLayout {
             get { return GetState(STATE_VISIBLE); }
         }
                 
 
-        /// <include file='doc\ToolStripOverflow.uex' path='docs/doc[@for="ToolStripOverflow.IArrangedElement.Properties"]/*' />
         PropertyStore IArrangedElement.Properties {
             get { return Properties; }
         }
         
-        /// <include file='doc\ToolStripOverflow.uex' path='docs/doc[@for="ToolStripOverflow.IArrangedElement.SetBounds"]/*' />
         void IArrangedElement.SetBounds(Rectangle bounds, BoundsSpecified specified) {
             SetBoundsCore(bounds.X, bounds.Y, bounds.Width, bounds.Height, specified);
         }
 
-        /// <include file='doc\ToolStripOverflow.uex' path='docs/doc[@for="ToolStripOverflow.CreateLayoutEngine"]/*' />
         /// <devdoc>
         /// Summary of CreateLayoutEngine.
         /// </devdoc>
@@ -125,7 +117,6 @@ namespace System.Windows.Forms
 
         }
 
-        /// <include file='doc\ToolStripOverflow.uex' path='docs/doc[@for="ToolStripOverflow.SetDisplayedItems"]/*' />
         protected override void SetDisplayedItems() {
             // do nothing here.... this is really for the setting the overflow/displayed items on the 
             // main ToolStrip.   Our working item collection is our displayed item collection... calling

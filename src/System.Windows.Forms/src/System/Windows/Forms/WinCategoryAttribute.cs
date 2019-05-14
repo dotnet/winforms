@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;   
     using System.Diagnostics;
 
-    /// <include file='doc\WinCategoryAttribute.uex' path='docs/doc[@for="WinCategoryAttribute"]/*' />
     /// <devdoc>
     ///    <para>
     ///       CategoryAttribute that can access WinForms localized strings.
@@ -18,7 +17,6 @@ namespace System.Windows.Forms {
     [AttributeUsage(AttributeTargets.All)]
     internal sealed class WinCategoryAttribute : CategoryAttribute {
 
-        /// <include file='doc\WinCategoryAttribute.uex' path='docs/doc[@for="WinCategoryAttribute.WinCategoryAttribute"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.ComponentModel.CategoryAttribute'/> class.
@@ -27,7 +25,6 @@ namespace System.Windows.Forms {
         public WinCategoryAttribute(string category) : base(category) {
         }
 
-        /// <include file='doc\WinCategoryAttribute.uex' path='docs/doc[@for="WinCategoryAttribute.GetLocalizedString"]/*' />
         /// <devdoc>
         ///     This method is called the first time the category property
         ///     is accessed.  It provides a way to lookup a localized string for

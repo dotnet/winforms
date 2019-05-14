@@ -12,7 +12,6 @@ namespace System.Windows.Forms
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
 
-    /// <include file='doc\DataGridViewHeaderCell.uex' path='docs/doc[@for="DataGridViewHeaderCell"]/*' />
     /// <devdoc>
     ///    <para>Identifies a cell in the dataGridView.</para>
     /// </devdoc>
@@ -30,12 +29,10 @@ namespace System.Windows.Forms
         private static readonly int PropFlipXPThemesBitmap = PropertyStore.CreateKey();
         private const string AEROTHEMEFILENAME = "Aero.msstyles";
 
-        /// <include file='doc\DataGridViewHeaderCell.uex' path='docs/doc[@for="DataGridViewHeaderCell.DataGridViewHeaderCell"]/*' />
         public DataGridViewHeaderCell()
         {
         }
 
-        /// <include file='doc\DataGridViewHeaderCell.uex' path='docs/doc[@for="DataGridViewHeaderCell.ButtonState"]/*' />
         protected ButtonState ButtonState
         {
             get
@@ -73,7 +70,6 @@ namespace System.Windows.Forms
                              
         }
 
-        /// <include file='doc\DataGridViewHeaderCell.uex' path='docs/doc[@for="DataGridViewHeaderCell.Displayed"]/*' />
         [
             Browsable(false)
         ]
@@ -120,7 +116,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewHeaderCell.uex' path='docs/doc[@for="DataGridViewHeaderCell.FormattedValueType"]/*' />
         public override Type FormattedValueType
         {
             get
@@ -129,7 +124,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewHeaderCell.uex' path='docs/doc[@for="DataGridViewHeaderCell.Frozen"]/*' />
         [
             Browsable(false)
         ]
@@ -168,7 +162,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewHeaderCell.uex' path='docs/doc[@for="DataGridViewHeaderCell.ReadOnly"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -185,7 +178,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewHeaderCell.uex' path='docs/doc[@for="DataGridViewHeaderCell.Resizable"]/*' />
         [
             Browsable(false)
         ]
@@ -211,7 +203,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewHeaderCell.uex' path='docs/doc[@for="DataGridViewHeaderCell.Selected"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -228,7 +219,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewHeaderCell.uex' path='docs/doc[@for="DataGridViewHeaderCell.ValueType"]/*' />
         public override Type ValueType
         {
             get
@@ -249,7 +239,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewHeaderCell.uex' path='docs/doc[@for="DataGridViewHeaderCell.Visible"]/*' />
         [
             Browsable(false)
         ]
@@ -281,7 +270,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewHeaderCell.uex' path='docs/doc[@for="DataGridViewHeaderCell.Clone"]/*' />
         public override object Clone()
         {
             DataGridViewHeaderCell dataGridViewCell;
@@ -301,7 +289,6 @@ namespace System.Windows.Forms
             return dataGridViewCell;
         }
 
-        /// <include file='doc\DataGridViewHeaderCell.uex' path='docs/doc[@for="DataGridViewHeaderCell.GetInheritedContextMenuStrip"]/*' />
         public override ContextMenuStrip GetInheritedContextMenuStrip(int rowIndex)
         {
             ContextMenuStrip contextMenuStrip = GetContextMenuStrip(rowIndex);
@@ -320,7 +307,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewHeaderCell.uex' path='docs/doc[@for="DataGridViewHeaderCell.GetInheritedState"]/*' />
         public override DataGridViewElementStates GetInheritedState(int rowIndex)
         {
             DataGridViewElementStates state = DataGridViewElementStates.ResizableSet | DataGridViewElementStates.ReadOnly;
@@ -430,7 +416,6 @@ namespace System.Windows.Forms
             return state;
         }
 
-        /// <include file='doc\DataGridViewHeaderCell.uex' path='docs/doc[@for="DataGridViewHeaderCell.GetSize"]/*' />
         protected override Size GetSize(int rowIndex)
         {
             if (this.DataGridView == null)
@@ -514,7 +499,6 @@ namespace System.Windows.Forms
             return rectThemeMargins;
         }
 
-        /// <include file='doc\DataGridViewHeaderCell.uex' path='docs/doc[@for="DataGridViewHeaderCell.GetValue"]/*' />
         protected override object GetValue(int rowIndex)
         {
             if (rowIndex != -1)
@@ -524,13 +508,11 @@ namespace System.Windows.Forms
             return this.Properties.GetObject(PropCellValue);
         }
 
-        /// <include file='doc\DataGridViewHeaderCell.uex' path='docs/doc[@for="DataGridViewHeaderCell.MouseDownUnsharesRow"]/*' />
         protected override bool MouseDownUnsharesRow(DataGridViewCellMouseEventArgs e)
         {
             return e.Button == MouseButtons.Left && this.DataGridView.ApplyVisualStylesToHeaderCells;
         }
 
-        /// <include file='doc\DataGridViewHeaderCell.uex' path='docs/doc[@for="DataGridViewHeaderCell.MouseEnterUnsharesRow"]/*' />
         protected override bool MouseEnterUnsharesRow(int rowIndex)
         {
             return this.ColumnIndex == this.DataGridView.MouseDownCellAddress.X &&
@@ -538,19 +520,16 @@ namespace System.Windows.Forms
                    this.DataGridView.ApplyVisualStylesToHeaderCells;
         }
 
-        /// <include file='doc\DataGridViewHeaderCell.uex' path='docs/doc[@for="DataGridViewHeaderCell.MouseLeaveUnsharesRow"]/*' />
         protected override bool MouseLeaveUnsharesRow(int rowIndex)
         {
             return this.ButtonState != ButtonState.Normal && this.DataGridView.ApplyVisualStylesToHeaderCells;
         }
 
-        /// <include file='doc\DataGridViewHeaderCell.uex' path='docs/doc[@for="DataGridViewHeaderCell.MouseUpUnsharesRow"]/*' />
         protected override bool MouseUpUnsharesRow(DataGridViewCellMouseEventArgs e)
         {
             return e.Button == MouseButtons.Left && this.DataGridView.ApplyVisualStylesToHeaderCells;
         }
 
-        /// <include file='doc\DataGridViewHeaderCell.uex' path='docs/doc[@for="DataGridViewHeaderCell.OnMouseDown"]/*' />
         protected override void OnMouseDown(DataGridViewCellMouseEventArgs e)
         {
             if (this.DataGridView == null)
@@ -565,7 +544,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewHeaderCell.uex' path='docs/doc[@for="DataGridViewHeaderCell.OnMouseEnter"]/*' />
         protected override void OnMouseEnter(int rowIndex)
         {
             if (this.DataGridView == null)
@@ -586,7 +564,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewHeaderCell.uex' path='docs/doc[@for="DataGridViewHeaderCell.OnMouseLeave"]/*' />
         protected override void OnMouseLeave(int rowIndex)
         {
             if (this.DataGridView == null)
@@ -606,7 +583,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewHeaderCell.uex' path='docs/doc[@for="DataGridViewHeaderCell.OnMouseUp"]/*' />
         protected override void OnMouseUp(DataGridViewCellMouseEventArgs e)
         {
             if (this.DataGridView == null)
@@ -619,7 +595,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewHeaderCell.uex' path='docs/doc[@for="DataGridViewHeaderCell.Paint"]/*' />
         protected override void Paint(Graphics graphics, 
                                       Rectangle clipBounds,
                                       Rectangle cellBounds, 
@@ -660,7 +635,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewHeaderCell.uex' path='docs/doc[@for="DataGridViewHeaderCell.ToString"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the row Index and column Index of the cell.

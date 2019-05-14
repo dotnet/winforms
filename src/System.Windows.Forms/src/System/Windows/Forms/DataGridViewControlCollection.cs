@@ -10,7 +10,6 @@ namespace System.Windows.Forms
 {
     public partial class DataGridView
     {
-        /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.DataGridViewControlCollection"]/*' />
         [
             ComVisible(false),
             SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface")    // Consider adding an IList<DataGridViewControlCollection> implementation
@@ -19,26 +18,22 @@ namespace System.Windows.Forms
         {
             DataGridView owner;
 
-            /// <include file='doc\DataGridViewControlCollection.uex' path='docs/doc[@for="DataGridView.DataGridViewControlCollection.DataGridViewControlCollection"]/*' />
             public DataGridViewControlCollection(DataGridView owner)
                 : base(owner)
             {
                 this.owner = owner;
             }
 
-            /// <include file='doc\DataGridViewControlCollection.uex' path='docs/doc[@for="DataGridView.DataGridViewControlCollection.CopyTo"]/*' />
             public void CopyTo(Control[] array, int index)
             {
                 base.CopyTo(array, index);
             }
 
-            /// <include file='doc\DataGridViewControlCollection.uex' path='docs/doc[@for="DataGridView.DataGridViewControlCollection.Insert"]/*' />
             public void Insert(int index, Control value)
             {
                 ((IList)this).Insert(index, (object)value);
             }
 
-            /// <include file='doc\DataGridViewControlCollection.uex' path='docs/doc[@for="DataGridView.DataGridViewControlCollection.Remove"]/*' />
             public override void Remove(Control value)
             {
                 if (value != owner.horizScrollBar && value != owner.vertScrollBar && value != this.owner.editingPanel)
@@ -52,7 +47,6 @@ namespace System.Windows.Forms
                 base.Remove(value);
             }
 
-            /// <include file='doc\DataGridViewControlCollection.uex' path='docs/doc[@for="DataGridView.DataGridViewControlCollection.Clear"]/*' />
             public override void Clear()
             {
                 for (int i = 0; i < this.Count; i++)

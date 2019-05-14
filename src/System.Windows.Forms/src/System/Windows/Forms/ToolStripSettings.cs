@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using System.Text;
     using System.Text.RegularExpressions;
 
-    /// <include file='doc\ToolStripSettings.uex' path='docs/doc[@for="ToolStripSettings"]/*' />
     /// <devdoc> 
     ///     A settings class used by the ToolStripManager to save toolstrip settings.
     /// </devdoc>
@@ -102,7 +101,6 @@ namespace System.Windows.Forms {
         }
     }
 
-    /// <include file='doc\ToolStripSettings.uex' path='docs/doc[@for="ToolStripSettings"]/*' />
     /// <devdoc> 
     ///     Helper class used by ToolStripManager that implements most of the logic to save out and apply
     ///     settings for toolstrips on a form.

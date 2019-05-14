@@ -29,7 +29,6 @@ namespace System.Windows.Forms
         private Padding scaledDefaultMargin = defaultMargin;
         private Padding scaledDefaultDropDownMargin = defaultDropDownMargin;
 
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.ToolStripTextBox"]/*' />
         public ToolStripTextBox() : base(CreateControlInstance()) {
             ToolStripTextBoxControl textBox = Control as ToolStripTextBoxControl;
             textBox.Owner = this;
@@ -44,7 +43,6 @@ namespace System.Windows.Forms
             this.Name = name;
         }
         
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.ToolStripTextBox1"]/*' />
         [EditorBrowsable(EditorBrowsableState.Never)]
         public ToolStripTextBox(Control c): base(c) {
             throw new NotSupportedException(SR.ToolStripMustSupplyItsOwnTextBox);
@@ -78,7 +76,6 @@ namespace System.Windows.Forms
             }
         }
         
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.DefaultMargin"]/*' />
         /// <devdoc>
         /// Deriving classes can override this to configure a default size for their control.
         /// This is more efficient than setting the size in the control's constructor.
@@ -94,13 +91,11 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.DefaultSize"]/*' />
         protected override Size DefaultSize {
             get {
                 return  new Size(100,22);
             }
         }
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.TextBox"]/*' />
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public TextBox TextBox {
             get{
@@ -151,7 +146,6 @@ namespace System.Windows.Forms
         }
 
      
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.GetPreferredSize"]/*' />
         public override Size GetPreferredSize(Size constrainingSize) {
             // dont call TextBox.GPS because it will grow and shrink as the text changes.
             Rectangle bounds = CommonProperties.GetSpecifiedBounds(TextBox);
@@ -178,33 +172,26 @@ namespace System.Windows.Forms
         private void HandleTextBoxTextAlignChanged(object sender, EventArgs e) {
             RaiseEvent(EventTextBoxTextAlignChanged, e);
         }               
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.OnAcceptsTabChanged"]/*' />
         protected virtual void OnAcceptsTabChanged(EventArgs e) {
             RaiseEvent(EventAcceptsTabChanged, e);            
         }
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.OnBorderStyleChanged"]/*' />
         protected virtual void OnBorderStyleChanged(EventArgs e) {
             RaiseEvent(EventBorderStyleChanged, e);            
         }
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.OnHideSelectionChanged"]/*' />
         protected virtual void OnHideSelectionChanged(EventArgs e) {
             RaiseEvent(EventHideSelectionChanged, e);            
         }
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.OnModifiedChanged"]/*' />
         protected virtual void OnModifiedChanged(EventArgs e) {
             RaiseEvent(EventModifiedChanged, e);            
         }
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.OnMultilineChanged"]/*' />
         protected virtual void OnMultilineChanged(EventArgs e) {
             RaiseEvent(EventMultilineChanged, e);            
         }
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.OnReadOnlyChanged"]/*' />
         protected virtual void OnReadOnlyChanged(EventArgs e) {
             RaiseEvent(EventReadOnlyChanged, e);            
         }
 
 
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.OnSubscribeControlEvents"]/*' />
         protected override void OnSubscribeControlEvents(Control control) {
             TextBox textBox = control as TextBox;
             if (textBox != null) {
@@ -223,7 +210,6 @@ namespace System.Windows.Forms
             base.OnSubscribeControlEvents(control);
         }
       
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.OnUnsubscribeControlEvents"]/*' />
         protected override void OnUnsubscribeControlEvents(Control control) {
 
               TextBox textBox = control as TextBox;
@@ -249,7 +235,6 @@ namespace System.Windows.Forms
 
     
 #region WrappedProperties   
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.AcceptsTab"]/*' />
         [
          SRCategory(nameof(SR.CatBehavior)),
          DefaultValue(false),
@@ -260,7 +245,6 @@ namespace System.Windows.Forms
             set { TextBox.AcceptsTab = value; }
         }
 
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.AcceptsReturn"]/*' />
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -271,7 +255,6 @@ namespace System.Windows.Forms
             set { TextBox.AcceptsReturn = value; }
         }
 
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.AutoCompleteCustomSource"]/*' />
         [
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
         Localizable(true),
@@ -284,7 +267,6 @@ namespace System.Windows.Forms
             set { TextBox.AutoCompleteCustomSource = value; }
         }
 
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.AutoCompleteMode"]/*' />
         [
         DefaultValue(AutoCompleteMode.None),
         SRDescription(nameof(SR.TextBoxAutoCompleteModeDescr)),
@@ -295,7 +277,6 @@ namespace System.Windows.Forms
             set { TextBox.AutoCompleteMode = value; }
         }
 
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.AutoCompleteSource"]/*' />
         [
         DefaultValue(AutoCompleteSource.None),
         SRDescription(nameof(SR.TextBoxAutoCompleteSourceDescr)),
@@ -306,7 +287,6 @@ namespace System.Windows.Forms
             set { TextBox.AutoCompleteSource = value; }
         }
 
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.BorderStyle"]/*' />
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(BorderStyle.Fixed3D),
@@ -318,7 +298,6 @@ namespace System.Windows.Forms
             set { TextBox.BorderStyle = value; }
         }
 
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.CanUndo"]/*' />
         [
         SRCategory(nameof(SR.CatBehavior)),
         Browsable(false),
@@ -329,7 +308,6 @@ namespace System.Windows.Forms
             get { return TextBox.CanUndo; } 
         }
 
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.CharacterCasing"]/*' />
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(CharacterCasing.Normal),
@@ -340,7 +318,6 @@ namespace System.Windows.Forms
             set { TextBox.CharacterCasing = value; }
         }
 
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.HideSelection"]/*' />
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
@@ -351,7 +328,6 @@ namespace System.Windows.Forms
             set { TextBox.HideSelection = value; }
         }
 
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.Lines"]/*' />
         [
         SRCategory(nameof(SR.CatAppearance)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -364,7 +340,6 @@ namespace System.Windows.Forms
             set { TextBox.Lines = value; }
         }
 
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.MaxLength"]/*' />
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(32767),
@@ -376,7 +351,6 @@ namespace System.Windows.Forms
             set { TextBox.MaxLength = value; }
         }
 
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.Modified"]/*' />
         [
         SRCategory(nameof(SR.CatBehavior)),
         Browsable(false),
@@ -388,7 +362,6 @@ namespace System.Windows.Forms
             set { TextBox.Modified = value; }
         }
 
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.Multiline"]/*' />
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -402,7 +375,6 @@ namespace System.Windows.Forms
             set { TextBox.Multiline = value; }
         }
 
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.ReadOnly"]/*' />
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -412,7 +384,6 @@ namespace System.Windows.Forms
             get { return TextBox.ReadOnly; }
             set { TextBox.ReadOnly = value; }
         }
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.SelectedText"]/*' />
         [
         SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
@@ -424,7 +395,6 @@ namespace System.Windows.Forms
             set { TextBox.SelectedText = value; }
         }
        
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.SelectionLength"]/*' />
         [
         SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
@@ -435,7 +405,6 @@ namespace System.Windows.Forms
             get { return TextBox.SelectionLength; }
             set { TextBox.SelectionLength = value; }
         }
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.SelectionStart"]/*' />
         [
         SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
@@ -446,7 +415,6 @@ namespace System.Windows.Forms
             get { return TextBox.SelectionStart; }
             set { TextBox.SelectionStart = value; }
         }
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.ShortcutsEnabled"]/*' />
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
@@ -456,7 +424,6 @@ namespace System.Windows.Forms
             get { return TextBox.ShortcutsEnabled; }
             set { TextBox.ShortcutsEnabled = value; }
         }
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.TextLength"]/*' />
         [Browsable(false)]
         public int TextLength { 
             get { return TextBox.TextLength; }
@@ -473,7 +440,6 @@ namespace System.Windows.Forms
             set { TextBox.TextAlign = value; }
         }
         
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.WordWrap"]/*' />
         [
         SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
@@ -492,7 +458,6 @@ namespace System.Windows.Forms
     
 
 #region WrappedEvents
-       /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.AcceptsTabChanged"]/*' />
        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnAcceptsTabChangedDescr))]
        public event EventHandler AcceptsTabChanged {
             add => Events.AddHandler(EventAcceptsTabChanged, value);
@@ -500,35 +465,30 @@ namespace System.Windows.Forms
         }
 
        
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.BorderStyleChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnBorderStyleChangedDescr))]
         public event EventHandler BorderStyleChanged {
             add => Events.AddHandler(EventBorderStyleChanged, value);
             remove => Events.RemoveHandler(EventBorderStyleChanged, value);
         }
 
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.HideSelectionChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnHideSelectionChangedDescr))]
         public event EventHandler HideSelectionChanged {
             add => Events.AddHandler(EventHideSelectionChanged, value);
             remove => Events.RemoveHandler(EventHideSelectionChanged, value);
         }
         
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.ModifiedChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnModifiedChangedDescr))]
         public event EventHandler ModifiedChanged {
             add => Events.AddHandler(EventModifiedChanged, value);
             remove => Events.RemoveHandler(EventModifiedChanged, value);
         }
 
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.MultilineChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnMultilineChangedDescr)),Browsable(false),EditorBrowsable(EditorBrowsableState.Never)]
         public event EventHandler MultilineChanged {
            add => Events.AddHandler(EventMultilineChanged, value);
            remove => Events.RemoveHandler(EventMultilineChanged, value);
         }
         
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.ReadOnlyChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnReadOnlyChangedDescr))]
         public event EventHandler ReadOnlyChanged {
            add => Events.AddHandler(EventReadOnlyChanged, value);
@@ -536,7 +496,6 @@ namespace System.Windows.Forms
         }
 
         
-        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.TextAlignChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripTextBoxTextBoxTextAlignChangedDescr))]
         public event EventHandler TextBoxTextAlignChanged {
             add => Events.AddHandler(EventTextBoxTextAlignChanged, value);
@@ -545,39 +504,22 @@ namespace System.Windows.Forms
 #endregion WrappedEvents
 
 #region WrappedMethods
-       /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.AppendText"]/*' />
        public void AppendText(string text) { TextBox.AppendText(text); }
-       /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.Clear"]/*' />
        public void Clear(){ TextBox.Clear(); }
-       /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.ClearUndo"]/*' />
        public void ClearUndo() {TextBox.ClearUndo(); }
-       /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.Copy"]/*' />
        public void Copy() {TextBox.Copy(); }
-       /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.Cut"]/*' />
        public void Cut() {TextBox.Copy(); }
-       /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.DeselectAll"]/*' />
        public void DeselectAll() { TextBox.DeselectAll(); }
-       /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.GetCharFromPosition"]/*' />
        public char GetCharFromPosition(System.Drawing.Point pt) { return TextBox.GetCharFromPosition(pt); }
-       /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.GetCharIndexFromPosition"]/*' />
        public int GetCharIndexFromPosition(System.Drawing.Point pt) { return TextBox.GetCharIndexFromPosition(pt); }
-       /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.GetFirstCharIndexFromLine"]/*' />
        public int GetFirstCharIndexFromLine(int lineNumber) { return TextBox.GetFirstCharIndexFromLine(lineNumber); }
-       /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.GetFirstCharIndexOfCurrentLine"]/*' />
        public int GetFirstCharIndexOfCurrentLine() { return TextBox.GetFirstCharIndexOfCurrentLine(); }
-       /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.GetLineFromCharIndex"]/*' />
        public int GetLineFromCharIndex(int index) { return TextBox.GetLineFromCharIndex(index); }
-       /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.GetPositionFromCharIndex"]/*' />
        public System.Drawing.Point GetPositionFromCharIndex(int index) { return TextBox.GetPositionFromCharIndex(index); }
-       /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.Paste"]/*' />
        public void Paste() {  TextBox.Paste(); } 
-       /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.ScrollToCaret"]/*' />
        public void ScrollToCaret() {  TextBox.ScrollToCaret(); }
-       /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.Select"]/*' />
        public void Select(int start, int length) {  TextBox.Select(start, length); }
-       /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.SelectAll"]/*' />
        public void SelectAll() { TextBox.SelectAll(); }
-       /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.Undo"]/*' />
        public void Undo() {  TextBox.Undo(); }
 #endregion
         private class ToolStripTextBoxControl : TextBox {

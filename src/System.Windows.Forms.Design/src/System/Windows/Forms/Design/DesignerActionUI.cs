@@ -203,7 +203,7 @@ namespace System.ComponentModel.Design
                     //either comp is a control or we failed to find a traycontrol (which could be the case for toolstripitem components) - in this case just create a standard glyoh.
                     if (dag == null)
                     {
-                        //if the related comp is a control, then this shortcut will just hang off its bounds
+                        //if the related comp is a control, then this shortcut will be off its bounds
                         dag = new DesignerActionGlyph(dab, _designerActionAdorner);
                     }
 
@@ -992,11 +992,10 @@ namespace System.ComponentModel.Design
 	     if (!DesignerActionUI.DropDownVisibilityDebug.TraceVerbose) {
                 return string.Empty;
              }
-             int textLen = SafeNativeMethods.GetWindowTextLength(new HandleRef(null, hwnd));
-             StringBuilder sb = new StringBuilder(textLen+1);
-             UnsafeNativeMethods.GetWindowText(new HandleRef(null, hwnd), sb, sb.Capacity);
+
+             string windowText = Interop.User32.GetWindowText(new HandleRef(null, hwnd));
              string typeOfControl = "Unknown";
-             string nameOfControl = "";
+             string nameOfControl = string.Empty;
              Control c = Control.FromHandle(hwnd);
              if (c != null) {
                 typeOfControl = c.GetType().Name;
@@ -1015,7 +1014,7 @@ namespace System.ComponentModel.Design
                     }
                 }
              }
-             return sb.ToString() + "\r\n\t\t\tType: [" + typeOfControl + "] Name: [" + nameOfControl + "]";
+             return windowText + "\r\n\t\t\tType: [" + typeOfControl + "] Name: [" + nameOfControl + "]";
 #else
             return string.Empty;
 #endif

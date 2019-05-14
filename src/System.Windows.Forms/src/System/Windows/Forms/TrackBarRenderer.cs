@@ -10,7 +10,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
 
-    /// <include file='doc\TrackBarRenderer.uex' path='docs/doc[@for="TrackBarRenderer"]/*' />
     /// <devdoc>
     ///    <para>
     ///       This is a rendering class for the TrackBar control.
@@ -27,7 +26,6 @@ using Microsoft.Win32;
        private TrackBarRenderer() {
        }
 
-       /// <include file='doc\TrackBarRenderer.uex' path='docs/doc[@for="TrackBarRenderer.IsSupported"]/*' />
        /// <devdoc>
        ///    <para>
        ///       Returns true if this class is supported for the current OS and user/application settings, 
@@ -40,7 +38,6 @@ using Microsoft.Win32;
            }
        }
 
-       /// <include file='doc\TrackBarRenderer.uex' path='docs/doc[@for="TrackBarRenderer.DrawHorizontalTrack"]/*' />
        /// <devdoc>
        ///    <para>
        ///       Renders a horizontal track.
@@ -53,7 +50,6 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <include file='doc\TrackBarRenderer.uex' path='docs/doc[@for="TrackBarRenderer.DrawVerticalTrack"]/*' />
        /// <devdoc>
        ///    <para>
        ///       Renders a vertical track.
@@ -66,7 +62,6 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <include file='doc\TrackBarRenderer.uex' path='docs/doc[@for="TrackBarRenderer.DrawHorizontalThumb"]/*' />
        /// <devdoc>
        ///    <para>
        ///       Renders a horizontal thumb.
@@ -79,7 +74,6 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <include file='doc\TrackBarRenderer.uex' path='docs/doc[@for="TrackBarRenderer.DrawVerticalThumb"]/*' />
        /// <devdoc>
        ///    <para>
        ///       Renders a vertical thumb.
@@ -92,7 +86,6 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <include file='doc\TrackBarRenderer.uex' path='docs/doc[@for="TrackBarRenderer.DrawLeftPointingThumb"]/*' />
        /// <devdoc>
        ///    <para>
        ///       Renders a constant size left pointing thumb centered in the given bounds.
@@ -105,7 +98,6 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <include file='doc\TrackBarRenderer.uex' path='docs/doc[@for="TrackBarRenderer.DrawRightPointingThumb"]/*' />
        /// <devdoc>
        ///    <para>
        ///       Renders a constant size right pointing thumb centered in the given bounds.
@@ -118,7 +110,6 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <include file='doc\TrackBarRenderer.uex' path='docs/doc[@for="TrackBarRenderer.DrawTopPointingThumb"]/*' />
        /// <devdoc>
        ///    <para>
        ///       Renders a constant size top pointing thumb centered in the given bounds.
@@ -131,7 +122,6 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <include file='doc\TrackBarRenderer.uex' path='docs/doc[@for="TrackBarRenderer.DrawBottomPointingThumb"]/*' />
        /// <devdoc>
        ///    <para>
        ///       Renders a constant size bottom pointing thumb centered in the given bounds.
@@ -144,7 +134,6 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <include file='doc\TrackBarRenderer.uex' path='docs/doc[@for="TrackBarRenderer.DrawHorizontalTick"]/*' />
        /// <devdoc>
        ///    <para>
        ///       Renders a horizontal tick.
@@ -175,7 +164,6 @@ using Microsoft.Win32;
            }
        }
 
-       /// <include file='doc\TrackBarRenderer.uex' path='docs/doc[@for="TrackBarRenderer.DrawVerticalTick"]/*' />
        /// <devdoc>
        ///    <para>
        ///       Renders a vertical tick.
@@ -206,7 +194,6 @@ using Microsoft.Win32;
            }
        }
 
-       /// <include file='doc\TrackBarRenderer.uex' path='docs/doc[@for="TrackBarRenderer.GetLeftPointingThumbSize"]/*' />
        /// <devdoc>
        ///    <para>
        ///       Returns the size of a left pointing thumb.
@@ -219,7 +206,6 @@ using Microsoft.Win32;
            return (visualStyleRenderer.GetPartSize(g, ThemeSizeType.True));
        }
 
-       /// <include file='doc\TrackBarRenderer.uex' path='docs/doc[@for="TrackBarRenderer.GetRightPointingThumbSize"]/*' />
        /// <devdoc>
        ///    <para>
        ///       Returns the size of a right pointing thumb.
@@ -232,7 +218,6 @@ using Microsoft.Win32;
            return (visualStyleRenderer.GetPartSize(g, ThemeSizeType.True));
        }
 
-       /// <include file='doc\TrackBarRenderer.uex' path='docs/doc[@for="TrackBarRenderer.GetTopPointingThumbSize"]/*' />
        /// <devdoc>
        ///    <para>
        ///       Returns the size of a top pointing thumb.
@@ -245,7 +230,6 @@ using Microsoft.Win32;
            return (visualStyleRenderer.GetPartSize(g, ThemeSizeType.True));
        }
 
-       /// <include file='doc\TrackBarRenderer.uex' path='docs/doc[@for="TrackBarRenderer.GetBottomPointingThumbSize"]/*' />
        /// <devdoc>
        ///    <para>
        ///       Returns the size of a bottom pointing thumb.

@@ -10,7 +10,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using Microsoft.Win32;
     using System.Globalization;
 
-    /// <include file='doc\COM2Enum.uex' path='docs/doc[@for="Com2Enum"]/*' />
     /// <devdoc>
     /// This class mimics a clr enum that we can create at runtime.
     /// It associates an array of names with an array of values and converts
@@ -26,14 +25,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     /// </devdoc>
     internal class Com2Enum {
 
-        /// <include file='doc\COM2Enum.uex' path='docs/doc[@for="Com2Enum.names"]/*' />
         /// <devdoc>
         /// Our array of value string names
         /// </devdoc>
         private string[] names;
 
 
-        /// <include file='doc\COM2Enum.uex' path='docs/doc[@for="Com2Enum.values"]/*' />
         /// <devdoc>
         /// Our values
         /// </devdoc>
@@ -41,19 +38,16 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
 
 
-        /// <include file='doc\COM2Enum.uex' path='docs/doc[@for="Com2Enum.stringValues"]/*' />
         /// <devdoc>
         /// Our cached array of value.ToString()'s
         /// </devdoc>
         private string[] stringValues;
 
-        /// <include file='doc\COM2Enum.uex' path='docs/doc[@for="Com2Enum.allowUnknownValues"]/*' />
         /// <devdoc>
         /// Should we allow values besides what's in the listbox?
         /// </devdoc>
         private bool    allowUnknownValues;
 
-        /// <include file='doc\COM2Enum.uex' path='docs/doc[@for="Com2Enum.Com2Enum1"]/*' />
         /// <devdoc>
         /// Our one and only ctor
         /// </devdoc>
@@ -71,7 +65,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             PopulateArrays(names, values);
         }
 
-        /// <include file='doc\COM2Enum.uex' path='docs/doc[@for="Com2Enum.IsStrictEnum"]/*' />
         /// <devdoc>
         /// Can this enum be values other than the strict enum?
         /// </devdoc>
@@ -81,7 +74,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2Enum.uex' path='docs/doc[@for="Com2Enum.Values"]/*' />
         /// <devdoc>
         /// Retrieve a copy of the value array
         /// </devdoc>
@@ -91,7 +83,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2Enum.uex' path='docs/doc[@for="Com2Enum.Names"]/*' />
         /// <devdoc>
         /// Retrieve a copy of the nme array.
         /// </devdoc>
@@ -101,7 +92,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2Enum.uex' path='docs/doc[@for="Com2Enum.FromString"]/*' />
         /// <devdoc>
         /// Associate a string to the appropriate value.
         /// </devdoc>
@@ -142,7 +132,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2Enum.uex' path='docs/doc[@for="Com2Enum.ToString"]/*' />
         /// <devdoc>
         /// Retrieves the string name of a given value.
         /// </devdoc>

@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\MainMenu.uex' path='docs/doc[@for="MainMenu"]/*' />
     /// <devdoc>
     ///    <para> 
     ///       Represents
@@ -24,7 +23,6 @@ namespace System.Windows.Forms {
         private RightToLeft rightToLeft = System.Windows.Forms.RightToLeft.Inherit;
         private EventHandler onCollapse;
        
-        /// <include file='doc\MainMenu.uex' path='docs/doc[@for="MainMenu.MainMenu"]/*' />
         /// <devdoc>
         ///     Creates a new MainMenu control.
         /// </devdoc>
@@ -33,7 +31,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\MainMenu.uex' path='docs/doc[@for="MainMenu.MainMenu2"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.MainMenu'/> class with the specified container.</para>
         /// </devdoc>
@@ -45,7 +42,6 @@ namespace System.Windows.Forms {
             container.Add(this);
         }
 
-        /// <include file='doc\MainMenu.uex' path='docs/doc[@for="MainMenu.MainMenu1"]/*' />
         /// <devdoc>
         ///     Creates a new MainMenu control with the given items to start
         ///     with.
@@ -55,7 +51,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\MainMenu.uex' path='docs/doc[@for="MainMenu.Collapse"]/*' />
         [SRDescription(nameof(SR.MainMenuCollapseDescr))]
         public event EventHandler Collapse {
             add => onCollapse += value;
@@ -63,7 +58,6 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <include file='doc\MainMenu.uex' path='docs/doc[@for="MainMenu.RightToLeft"]/*' />
         /// <devdoc>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
@@ -109,7 +103,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MainMenu.uex' path='docs/doc[@for="MainMenu.CloneMenu"]/*' />
         /// <devdoc>
         ///     Creates a new MainMenu object which is a dupliate of this one.
         /// </devdoc>
@@ -119,7 +112,6 @@ namespace System.Windows.Forms {
             return newMenu;
         }
 
-        /// <include file='doc\MainMenu.uex' path='docs/doc[@for="MainMenu.CreateMenuHandle"]/*' />
         /// <devdoc>
         /// </devdoc>
         
@@ -128,7 +120,6 @@ namespace System.Windows.Forms {
             return UnsafeNativeMethods.CreateMenu();
         }
 
-        /// <include file='doc\MainMenu.uex' path='docs/doc[@for="MainMenu.Dispose"]/*' />
         /// <devdoc>
         ///     Clears out this MainMenu object and discards all of it's resources.
         ///     If the menu is parented in a form, it is disconnected from that as
@@ -143,7 +134,6 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <include file='doc\MainMenu.uex' path='docs/doc[@for="MainMenu.GetForm"]/*' />
         /// <devdoc>
         ///     Indicates which form in which we are currently residing [if any]
         /// </devdoc>
@@ -155,7 +145,6 @@ namespace System.Windows.Forms {
              return form;
         }
 
-        /// <include file='doc\MainMenu.uex' path='docs/doc[@for="MainMenu.ItemsChanged"]/*' />
         /// <devdoc>
         /// </devdoc>
         internal override void ItemsChanged(int change) {
@@ -164,7 +153,6 @@ namespace System.Windows.Forms {
                 form.MenuChanged(change, this);
         }
 
-        /// <include file='doc\MainMenu.uex' path='docs/doc[@for="MainMenu.ItemsChanged1"]/*' />
         /// <devdoc>
         /// </devdoc>
         internal virtual void ItemsChanged(int change, Menu menu) {
@@ -172,7 +160,6 @@ namespace System.Windows.Forms {
                 form.MenuChanged(change, menu);
         }
 
-        /// <include file='doc\MainMenu.uex' path='docs/doc[@for="MainMenu.OnCollapse"]/*' />
         /// <devdoc>
         ///     Fires the collapse event
         /// </devdoc>
@@ -182,7 +169,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\MainMenu.uex' path='docs/doc[@for="MainMenu.ShouldSerializeRightToLeft"]/*' />
         /// <devdoc>
         ///     Returns true if the RightToLeft should be persisted in code gen.
         /// </devdoc>
@@ -193,7 +179,6 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <include file='doc\MainMenu.uex' path='docs/doc[@for="MainMenu.ToString"]/*' />
         /// <devdoc>
         ///     Returns a string representation for this control.
         /// </devdoc>

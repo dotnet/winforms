@@ -536,7 +536,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.ContextMenuDefaultLocation"]/*' />
         /// <devdoc>
         /// Returns a default location for showing the context menu.  This
         /// location is the center of the active property label in the grid, and
@@ -607,7 +606,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         */
 
         /*
-        /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.SelectedPropertyName"]/*' />
         /// <devdoc>
         /// Returns the currently selected property name.
         /// If no property or a category name is selected, "" is returned.
@@ -620,7 +618,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     return "";
                 }
                 GridEntry gridEntry = selectedGridEntry;
-                string name = "";
+                string name = string.Empty;
                 while (gridEntry != null && gridEntry.PropertyDepth >= 0) {
                     if (name.Length > 0) {
                         name = gridEntry.PropertyName + "." + name;
@@ -681,7 +679,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
         */
         
-        /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.ServiceProvider"]/*' />
         /// <devdoc>
         /// Returns or sets the IServiceProvider the PropertyGridView will use to obtain
         /// services.  This may be null.
@@ -747,7 +744,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     }
                     #endif
                     toolTip = new GridToolTip(new Control[]{this, Edit});
-                    toolTip.ToolTip = "";
+                    toolTip.ToolTip = string.Empty;
                     toolTip.Font = this.Font;
                 }   
                 return toolTip;
@@ -895,7 +892,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             tipInfo = -1;
         }
 
-        /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.CloseDropDown"]/*' />
         /// <devdoc>
         ///      Closes a previously opened drop down.  This should be called by the
         ///      drop down when the user does something that should close it.
@@ -1065,7 +1061,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return cProps;
         }
 
-        /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.CreateAccessibilityInstance"]/*' />
         /// <devdoc>
         ///     Constructs the new instance of the accessibility object for this control. Subclasses
         ///     should not call base.CreateAccessibilityObject.
@@ -1602,7 +1597,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return(int)(InternalLabelWidth * (labelRatio - 1));
         }
 
-        /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.DropDownControl"]/*' />
         /// <devdoc>
         ///      Displays the provided control in a drop down.  When possible, the
         ///      current dimensions of the control will be respected.  If this is not possible
@@ -1939,7 +1933,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return pos;
         }
 
-        /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.GetGridEntryHierarchy"]/*' />
         /// <devdoc>
         /// returns an array of IPE specifying the current heirarchy of ipes from the given
         /// gridEntry through its parents to the root.
@@ -2094,7 +2087,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return !ScrollBar.Visible;
         }
 
-        /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.GetTestingInfo"]/*' />
         /// <devdoc>
         /// Returns a string containing test info about a given GridEntry. Requires an offset into the top-level
         /// entry collection (ie. nested entries are not accessible). Or specify -1 to get info for the current
@@ -2167,7 +2159,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
      
-        /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.IsInputKey"]/*' />
         /// <devdoc>
         ///     Overridden to handle TAB key.
         /// </devdoc>
@@ -2509,7 +2500,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose,  "PropertyGridView:OnEditChange");
             SetCommitError(ERROR_NONE, Edit.Focused);
             
-            ToolTip.ToolTip = "";
+            ToolTip.ToolTip = string.Empty;
             ToolTip.Visible = false;
             
             if (!Edit.InSetText()) {
@@ -2828,7 +2819,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
 
             if (ToolTip.Visible) {
-                ToolTip.ToolTip = "";
+                ToolTip.ToolTip = string.Empty;
             }
 
             if (fBoth || sender == this || sender == this.ownerGrid) {
@@ -3127,7 +3118,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 pt = FindPosition(me.X,me.Y);
                 if (pt == InvalidPosition || (pt.X != ROWLABEL && pt.X != ROWVALUE)) {
                     rowMoveCur = -1;
-                    ToolTip.ToolTip = "";
+                    ToolTip.ToolTip = string.Empty;
                 }
                 else {
                     rowMoveCur = pt.Y;
@@ -3146,7 +3137,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             
             if ((rowMoveCur != this.TipRow || pt.X != this.TipColumn)  && !GetFlag(FlagIsSplitterMove)) {
                 GridEntry gridItem = GetGridEntryFromRow(rowMoveCur);
-                string tip = "";
+                string tip = string.Empty;
                 tipInfo = -1;
 
                 if (gridItem != null) {
@@ -3175,7 +3166,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     }
                 }
                 else {
-                    ToolTip.ToolTip = "";
+                    ToolTip.ToolTip = string.Empty;
                 }
             }
 
@@ -3284,7 +3275,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                  if (scrollBands != 0) {
                     
                     if (ToolTip.Visible) {
-                        ToolTip.ToolTip = "";
+                        ToolTip.ToolTip = string.Empty;
                     }
 
                     int newOffset = Math.Max(0,initialOffset - scrollBands);
@@ -4819,7 +4810,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return sbChange;
         }
 
-        /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.ShowDialog"]/*' />
         /// <devdoc>
         ///      Shows the given dialog, and returns its dialog result.  You should always
         ///      use this method rather than showing the dialog directly, as this will
@@ -5400,7 +5390,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                this.ControlBox = false;
                this.MinimizeBox = false;
                this.MaximizeBox = false;
-               this.Text = "";
+               this.Text = string.Empty;
                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
                this.AutoScaleMode = AutoScaleMode.None; // children may scale, but we won't interfere.
                mouseHook = new MouseHook(this, this, psheet);
@@ -6514,7 +6504,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
     
     
 
-            /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.GridViewEdit.IsInputKey"]/*' />
             /// <devdoc>
             ///     Overridden to handle TAB key.
             /// </devdoc>
@@ -6533,7 +6522,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return base.IsInputKey(keyData);
             }
 
-            /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.GridViewEdit.IsInputChar"]/*' />
             /// <devdoc>
             ///     Overridden to handle TAB key.
             /// </devdoc>
@@ -6651,7 +6639,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
 
 
-            /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.GridViewEdit.ProcessDialogKey"]/*' />
             /// <devdoc>
             ///      Overrides Control.ProcessDialogKey to handle the Escape and Return
             ///      keys.
@@ -6975,7 +6962,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }  
                     
 
-            /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.MouseHook.HookMouse"]/*' />
             /// <devdoc>
             ///     Sets up the needed windows hooks to catch messages.
             /// </devdoc>
@@ -7006,7 +6992,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
             }
             
-            /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.MouseHook.MouseHookProc"]/*' />
             /// <devdoc>
             ///     HookProc used for catch mouse messages.
             /// </devdoc>
@@ -7035,7 +7020,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return UnsafeNativeMethods.CallNextHookEx(new HandleRef(this, mouseHookHandle), nCode, wparam, lparam);
             }
             
-            /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.MouseHook.UnhookMouse"]/*' />
             /// <devdoc>
             ///     Removes the windowshook that was installed.
             /// </devdoc>
@@ -7121,7 +7105,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return false;
             }
             
-              /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.MouseHook.MouseHookObject"]/*' />
               /// <devdoc>
             ///     Forwards messageHook calls to ToolTip.messageHookProc
             /// </devdoc>
@@ -7148,7 +7131,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.PropertyGridViewAccessibleObject"]/*' />
         /// <devdoc>
         ///     The accessible object class for a PropertyGridView. The child accessible objects
         ///     are accessible objects corresponding to the property grid entries.        
@@ -7159,7 +7141,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             private PropertyGridView _owningPropertyGridView;
             private PropertyGrid _parentPropertyGrid;
 
-            /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.PropertyGridViewAccessibleObject.PropertyGridViewAccessibleObject"]/*' />
             /// <devdoc>
             ///     Construct a PropertyGridViewAccessibleObject
             /// </devdoc>
@@ -7489,7 +7470,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return null;
             }
 
-            /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.PropertyGridViewAccessibleObject.GetChild"]/*' />
             /// <devdoc>
             ///      Get the accessible child at the given index.
             ///      The accessible children of a PropertyGridView are accessible objects
@@ -7506,7 +7486,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
             }
 
-            /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.PropertyGridViewAccessibleObject.GetChildCount"]/*' />
             /// <devdoc>
             ///      Get the number of accessible children.
             ///      The accessible children of a PropertyGridView are accessible objects
@@ -7523,7 +7502,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
             }
 
-            /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.PropertyGridViewAccessibleObject.GetFocused"]/*' />
             /// <devdoc>
             ///      Get the accessible object for the currently focused grid entry.
             /// </devdoc>
@@ -7536,7 +7514,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return null;
             }
 
-            /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.PropertyGridViewAccessibleObject.GetSelected"]/*' />
             /// <devdoc>
             ///      Get the accessible object for the currently selected grid entry.
             /// </devdoc>
@@ -7550,7 +7527,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
 
 
-            /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.PropertyGridViewAccessibleObject.HitTest"]/*' />
             /// <devdoc>
             ///      Get the accessible child at the given screen location.
             ///      The accessible children of a PropertyGridView are accessible objects
@@ -7581,7 +7557,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return null;
             }
 
-            /// <include file='doc\PropertyGridView.uex' path='docs/doc[@for="PropertyGridView.PropertyGridViewAccessibleObject.Navigate"]/*' />
             /// <devdoc>
             ///      Navigate to another object.
             /// </devdoc>

@@ -19,7 +19,6 @@ namespace System.Resources {
     using System.Runtime.Serialization;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter"]/*' />
     /// <devdoc>
     ///     ResX resource writer. See the text in "ResourceSchema" for more 
     ///     information.
@@ -57,20 +56,13 @@ namespace System.Resources {
         internal static readonly string CompatBinSerializedObjectMimeType = "text/microsoft-urt/binary-serialized/base64";
         internal static readonly string CompatSoapSerializedObjectMimeType = "text/microsoft-urt/soap-serialized/base64";
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.BinSerializedObjectMimeType"]/*' />
         public static readonly string BinSerializedObjectMimeType = "application/x-microsoft.net.object.binary.base64";
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.SoapSerializedObjectMimeType"]/*' />
         public static readonly string SoapSerializedObjectMimeType = "application/x-microsoft.net.object.soap.base64";
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.DefaultSerializedObjectMimeType"]/*' />
         public static readonly string DefaultSerializedObjectMimeType = BinSerializedObjectMimeType;
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.ByteArraySerializedObjectMimeType"]/*' />
         public static readonly string ByteArraySerializedObjectMimeType = "application/x-microsoft.net.object.bytearray.base64";
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.ResMimeType"]/*' />
         public static readonly string ResMimeType = "text/microsoft-resx";
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.Version"]/*' />
         public static readonly string Version = "2.0";
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.ResourceSchema"]/*' />
         public static readonly string ResourceSchema = @"
     <xsd:schema id=""root"" xmlns="""" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:msdata=""urn:schemas-microsoft-com:xml-msdata"">
         <xsd:import namespace=""http://www.w3.org/XML/1998/namespace""/>
@@ -130,13 +122,11 @@ namespace System.Resources {
 
         private Func<Type, string> typeNameConverter; // no public property to be consistent with ResXDataNode class.
         
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.BasePath"]/*' />
         /// <devdoc>
         ///     Base Path for ResXFileRefs.
         /// </devdoc>
         public string BasePath { get; set; }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.ResXResourceWriter"]/*' />
         /// <devdoc>
         ///     Creates a new ResXResourceWriter that will write to the specified file.
         /// </devdoc>
@@ -148,7 +138,6 @@ namespace System.Resources {
             this.typeNameConverter = typeNameConverter;
         }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.ResXResourceWriter1"]/*' />
         /// <devdoc>
         ///     Creates a new ResXResourceWriter that will write to the specified stream.
         /// </devdoc>
@@ -160,7 +149,6 @@ namespace System.Resources {
             this.typeNameConverter = typeNameConverter;
         }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.ResXResourceWriter2"]/*' />
         /// <devdoc>
         ///     Creates a new ResXResourceWriter that will write to the specified TextWriter.
         /// </devdoc>
@@ -172,7 +160,6 @@ namespace System.Resources {
             this.typeNameConverter = typeNameConverter;
         }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.Finalize"]/*' />
         ~ResXResourceWriter() {
             Dispose(false);
         }
@@ -257,7 +244,6 @@ namespace System.Resources {
             }
         }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.AddAlias"]/*' />
         /// <devdoc>
         ///    Adds aliases to the resource file...
         /// </devdoc>
@@ -274,7 +260,6 @@ namespace System.Resources {
        }
 
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.AddMetadata"]/*' />
         /// <devdoc>
         ///    Adds the given value to the collection of metadata.  These name/value pairs 
         ///    will be emitted to the <metadata> elements in the .resx file.
@@ -283,7 +268,6 @@ namespace System.Resources {
             AddDataRow(MetadataStr, name, value);
         }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.AddMetadata1"]/*' />
         /// <devdoc>
         ///    Adds the given value to the collection of metadata.  These name/value pairs 
         ///    will be emitted to the <metadata> elements in the .resx file.
@@ -292,7 +276,6 @@ namespace System.Resources {
             AddDataRow(MetadataStr, name, value);
         }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.AddMetadata2"]/*' />
         /// <devdoc>
         ///    Adds the given value to the collection of metadata.  These name/value pairs 
         ///    will be emitted to the <metadata> elements in the .resx file.
@@ -301,7 +284,6 @@ namespace System.Resources {
             AddDataRow(MetadataStr, name, value);
         }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.AddResource"]/*' />
         /// <devdoc>
         ///     Adds a blob resource to the resources.
         /// </devdoc>
@@ -310,7 +292,6 @@ namespace System.Resources {
             AddDataRow(DataStr, name, value);
         }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.AddResource1"]/*' />
         /// <devdoc>
         ///     Adds a resource to the resources. If the resource is a string,
         ///     it will be saved that way, otherwise it will be serialized
@@ -326,7 +307,6 @@ namespace System.Resources {
             }
         }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.AddResource2"]/*' />
         /// <devdoc>
         ///     Adds a string resource to the resources.
         /// </devdoc>
@@ -335,7 +315,6 @@ namespace System.Resources {
             AddDataRow(DataStr, name, value);
         }
 
-         /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.AddResource3"]/*' />
         /// <devdoc>
         ///     Adds a string resource to the resources.
         /// </devdoc>
@@ -516,7 +495,6 @@ namespace System.Resources {
             return alias;
         }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.Close"]/*' />
         /// <devdoc>
         ///     Closes any files or streams locked by the writer.
         /// </devdoc>
@@ -525,14 +503,12 @@ namespace System.Resources {
             Dispose();
         }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.Dispose"]/*' />
         // NOTE: Part of IDisposable - not protected by class level LinkDemand.
         public virtual void Dispose() {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.Dispose1"]/*' />
         protected virtual void Dispose(bool disposing) {
             if (disposing) {
                 if (!hasBeenSaved) {
@@ -554,12 +530,12 @@ namespace System.Resources {
         }
 
         private string GetTypeName(string typeName) {
-             int indexStart = typeName.IndexOf(",");
+             int indexStart = typeName.IndexOf(',');
              return ((indexStart == -1) ? typeName : typeName.Substring(0, indexStart));
         }
 
         private string GetFullName(string typeName) {
-             int indexStart = typeName.IndexOf(",");
+             int indexStart = typeName.IndexOf(',');
              if(indexStart == -1)
                 return null;
              return typeName.Substring(indexStart + 2);
@@ -593,7 +569,6 @@ namespace System.Resources {
             return result;
         }
 
-        /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.Generate"]/*' />
         /// <devdoc>
         ///     Writes the resources out to the file or stream.
         /// </devdoc>

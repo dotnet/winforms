@@ -13,7 +13,6 @@ namespace System.Windows.Forms
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
 
-    /// <include file='doc\DataGridViewImageColumn.uex' path='docs/doc[@for="DataGridViewImageColumn"]/*' />
     [ToolboxBitmapAttribute(typeof(DataGridViewImageColumn), "DataGridViewImageColumn")]
     public class DataGridViewImageColumn : DataGridViewColumn
     {
@@ -21,12 +20,10 @@ namespace System.Windows.Forms
         private Image image;
         private Icon icon;
 
-        /// <include file='doc\DataGridViewImageColumn.uex' path='docs/doc[@for="DataGridViewImageColumn.DataGridViewImageColumn1"]/*' />
         public DataGridViewImageColumn() : this(false /*valuesAreIcons*/)
         {
         }
 
-        /// <include file='doc\DataGridViewImageColumn.uex' path='docs/doc[@for="DataGridViewImageColumn.DataGridViewImageColumn2"]/*' />
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors") // Can't think of a workaround.
         ]
@@ -46,7 +43,6 @@ namespace System.Windows.Forms
             this.DefaultCellStyle = defaultCellStyle;
         }
 
-        /// <include file='doc\DataGridViewImageColumn.uex' path='docs/doc[@for="DataGridViewImageColumn.CellTemplate"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -67,7 +63,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewImageColumn.uex' path='docs/doc[@for="DataGridViewImageColumn.DefaultCellStyle"]/*' />
         [
             Browsable(true),
             SRCategory(nameof(SR.CatAppearance)),
@@ -85,7 +80,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewImageColumn.uex' path='docs/doc[@for="DataGridViewImageColumn.Description"]/*' />
         [
             Browsable(true),
             DefaultValue(""),
@@ -126,7 +120,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewImageColumn.uex' path='docs/doc[@for="DataGridViewImageColumn.Icon"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -147,7 +140,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewImageColumn.uex' path='docs/doc[@for="DataGridViewImageColumn.Image"]/*' />
         [
             DefaultValue(null),
             SRCategory(nameof(SR.CatAppearance)),
@@ -177,7 +169,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewImageColumn.uex' path='docs/doc[@for="DataGridViewImageColumn.ImageLayout"]/*' />
         [
             DefaultValue(DataGridViewImageCellLayout.Normal),
             SRCategory(nameof(SR.CatAppearance)),
@@ -222,7 +213,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewImageColumn.uex' path='docs/doc[@for="DataGridViewImageColumn.ValuesAreIcons"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -274,7 +264,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewImageColumn.uex' path='docs/doc[@for="DataGridViewImageColumn.Clone"]/*' />
         public override object Clone()
         {
             DataGridViewImageColumn dataGridViewColumn;
@@ -340,7 +329,6 @@ namespace System.Windows.Forms
                     !defaultCellStyle.Padding.Equals(Padding.Empty));
         }
 
-        /// <include file='doc\DataGridViewImageColumn.uex' path='docs/doc[@for="DataGridViewImageColumn.ToString"]/*' />
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder(64);

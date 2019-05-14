@@ -677,7 +677,7 @@ namespace System.Windows.Forms.Layout {
         internal static readonly TraceSwitch PreferredSize = new TraceSwitch("PreferredSize", "Debug preferred size assertion");
 
         internal static string Debug_GetChangedProperties(IArrangedElement element) {
-            string diff = "";
+            string diff = string.Empty;
             if (PreferredSize.TraceVerbose) {
                 Hashtable propertyHash = element.Properties.GetObject(_lastKnownStateProperty) as Hashtable;
                 if(propertyHash != null) {

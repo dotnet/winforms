@@ -16,7 +16,6 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Stores the <see cref='System.Windows.Forms.StatusBar'/>
@@ -35,9 +34,9 @@ namespace System.Windows.Forms {
         private const int PANELTEXTINSET = 3;
         private const int PANELGAP = 2;
 
-        private string          text          = "";
-        private string          name          = "";
-        private string          toolTipText   = "";
+        private string          text          = string.Empty;
+        private string          name          = string.Empty;
+        private string          toolTipText   = string.Empty;
         private Icon            icon          = null;
 
         private HorizontalAlignment        alignment     = HorizontalAlignment.Left;
@@ -57,7 +56,6 @@ namespace System.Windows.Forms {
 
         private object userData;
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.StatusBarPanel"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new default instance of the <see cref='System.Windows.Forms.StatusBarPanel'/> class.
@@ -66,7 +64,6 @@ namespace System.Windows.Forms {
         public StatusBarPanel() {
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Alignment"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.StatusBarPanel.Alignment'/>
@@ -97,7 +94,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.AutoSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.StatusBarPanel.AutoSize'/>
@@ -129,7 +125,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.BorderStyle"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.StatusBarPanel.BorderStyle'/>
@@ -163,7 +158,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Created"]/*' />
         /// <devdoc>
         /// </devdoc>
         internal bool Created {
@@ -172,7 +166,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Icon"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.StatusBarPanel.Icon'/>
@@ -215,7 +208,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Index"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Expose index internally
@@ -232,7 +224,6 @@ namespace System.Windows.Forms {
                 index = value;
             }
         }
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.MinWidth"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the minimum width the <see cref='System.Windows.Forms.StatusBarPanel'/> can be within the <see cref='System.Windows.Forms.StatusBar'/>
@@ -267,7 +258,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Name"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the name of the panel.
@@ -290,7 +280,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Parent"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Represents the <see cref='System.Windows.Forms.StatusBar'/>
@@ -306,7 +295,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.ParentInternal"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Expose a direct setter for parent internally
@@ -320,7 +308,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Right"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Expose right internally
@@ -338,7 +325,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Style"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the style of the panel.
@@ -367,7 +353,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Tag"]/*' />
         [
         SRCategory(nameof(SR.CatData)),
         Localizable(false),
@@ -385,7 +370,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Text"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the text of the panel.
@@ -408,7 +392,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value == null) {
-                    value = "";
+                    value = string.Empty;
                 }
 
                 if (!Text.Equals(value)) {
@@ -425,7 +409,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.ToolTipText"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets
@@ -449,7 +432,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value == null) {
-                    value = "";
+                    value = string.Empty;
                 }
 
                 if (!ToolTipText.Equals(value)) {
@@ -468,7 +451,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Width"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the width of the <see cref='System.Windows.Forms.StatusBarPanel'/> within the <see cref='System.Windows.Forms.StatusBar'/>
@@ -495,7 +477,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.BeginInit"]/*' />
         /// <devdoc>
         ///      Handles tasks required when the control is being initialized.
         /// </devdoc>
@@ -503,7 +484,6 @@ namespace System.Windows.Forms {
             initializing = true;
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Dispose"]/*' />
         /// <devdoc>
         /// </devdoc>
         protected override void Dispose(bool disposing) {
@@ -518,7 +498,6 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.EndInit"]/*' />
         /// <devdoc>
         ///      Called when initialization of the control is complete.
         /// </devdoc>
@@ -530,7 +509,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.GetContentsWidth"]/*' />
         /// <devdoc>
         ///     Gets the width of the contents of the panel
         /// </devdoc>
@@ -538,7 +516,7 @@ namespace System.Windows.Forms {
             string text;
             if (newPanel) {
                 if (this.text == null)
-                    text = "";
+                    text = string.Empty;
                 else
                     text = this.text;
             }
@@ -556,7 +534,6 @@ namespace System.Windows.Forms {
             return Math.Max(width, minWidth);
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.GetIndex"]/*' />
         /// <devdoc>
         ///     Returns the index of the panel by making the parent control search
         ///     for it within its list.
@@ -565,7 +542,6 @@ namespace System.Windows.Forms {
             return index;
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Realize"]/*' />
         /// <devdoc>
         ///     Sets all the properties for this panel.
         /// </devdoc>
@@ -576,7 +552,7 @@ namespace System.Windows.Forms {
                 int     border = 0;
 
                 if (this.text == null) {
-                    text = "";
+                    text = string.Empty;
                 }
                 else {
                     text = this.text;
@@ -680,7 +656,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.ToString"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Retrieves a string that contains information about the
