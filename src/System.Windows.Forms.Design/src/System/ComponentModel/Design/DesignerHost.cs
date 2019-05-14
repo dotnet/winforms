@@ -327,7 +327,7 @@ namespace System.ComponentModel.Design
 
             try
             {
-                _loader.BeginLoad(this);
+                _loader?.BeginLoad(this);
             }
             catch (Exception e)
             {
@@ -509,6 +509,11 @@ namespace System.ComponentModel.Design
         private void OnActiveDesignerChanged(object sender, ActiveDesignerEventArgs e)
         {
             // NOTE: sender can be null (we call this directly in BeginLoad)
+            if (e == null)
+            {
+                return;
+            }
+
             object eventobj = null;
 
             if (e.OldDesigner == this)
@@ -527,7 +532,6 @@ namespace System.ComponentModel.Design
             }
 
             // If we are deactivating, flush any code changes. We always route through the design surface so it can correctly raise its Flushed event.
-            Debug.Assert(_surface != null, "calling OnActiveDesignerChanged on a disposed DesignerHost");
             if (e.OldDesigner == this && _surface != null)
             {
                 _surface.Flush();
@@ -690,7 +694,7 @@ namespace System.ComponentModel.Design
         [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         private void Unload()
         {
-            _surface.OnUnloading();
+            _surface?.OnUnloading();
 
             if (GetService(typeof(IHelpService)) is IHelpService helpService && _rootComponent != null && _designers[_rootComponent] != null)
             {
@@ -791,7 +795,7 @@ namespace System.ComponentModel.Design
                 }
             }
 
-            _surface.OnUnloaded();
+            _surface?.OnUnloaded();
 
             if (exceptions.Count > 0)
             {
@@ -1008,7 +1012,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         void IDesignerHost.Activate()
         {
-            _surface.OnViewActivate();
+            _surface?.OnViewActivate();
         }
 
         /// <summary>
