@@ -83,9 +83,6 @@ namespace System.ComponentModel.Design
             // TextBox needs a little space greater than that actualy text content to display the carent.
             private const int _caretPadding = 3;
 
-            // Keep textbox from expanding too close to the edge of the working area.
-            private const int _workAreaPadding = 16;
-
             internal MultilineStringEditorUI()
             {
                 InitializeComponent();
@@ -334,17 +331,15 @@ namespace System.ComponentModel.Design
 
                                     if (replaceFont == null)
                                     {
-                                        using (RegistryKey regkey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\LanguagePack\SurrogateFallback"))
+                                        using RegistryKey regkey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\LanguagePack\SurrogateFallback");
+                                        if (regkey != null)
                                         {
-                                            if (regkey != null)
+                                            string fallBackFontName = (string)regkey.GetValue("Plane" + planeNumber);
+                                            if (!string.IsNullOrEmpty(fallBackFontName))
                                             {
-                                                string fallBackFontName = (string)regkey.GetValue("Plane" + planeNumber);
-                                                if (!string.IsNullOrEmpty(fallBackFontName))
-                                                {
-                                                    replaceFont = new Font(fallBackFontName, base.Font.Size, base.Font.Style);
-                                                }
-                                                _fallbackFonts[planeNumber] = replaceFont;
+                                                replaceFont = new Font(fallBackFontName, base.Font.Size, base.Font.Style);
                                             }
+                                            _fallbackFonts[planeNumber] = replaceFont;
                                         }
                                     }
                                     if (replaceFont != null)
@@ -367,19 +362,16 @@ namespace System.ComponentModel.Design
                 {
                     if (IsHandleCreated)
                     {
-                        int textLen = NativeMethods.GetWindowTextLength(new HandleRef(this, Handle));
-                        StringBuilder sb = new StringBuilder(textLen + 1);
-                        UnsafeNativeMethods.GetWindowText(new HandleRef(this, Handle), sb, sb.Capacity);
+                        string windowText = Interop.User32.GetWindowText(new HandleRef(this, Handle));
                         if (!_ctrlEnterPressed)
                         {
-                            return sb.ToString();
+                            return windowText;
                         }
                         else
                         {
-                            string str = sb.ToString();
-                            int index = str.LastIndexOf("\r\n");
+                            int index = windowText.LastIndexOf("\r\n");
                             Debug.Assert(index != -1, "We should have found a Ctrl+Enter in the string");
-                            return str.Remove(index, 2);
+                            return windowText.Remove(index, 2);
                         }
                     }
                     else
@@ -469,7 +461,7 @@ namespace System.ComponentModel.Design
             {
                 get
                 {
-                    _richTextDbg = _richTextDbg ?? new TraceSwitch("RichTextDbg", "Debug info about RichTextBox");
+                    _richTextDbg ??= new TraceSwitch("RichTextDbg", "Debug info about RichTextBox");
                     return _richTextDbg;
                 }
             }
