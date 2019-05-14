@@ -47,6 +47,7 @@
     <Compile Include="..\..\Common\src\Interop\Interop.HandleCollector.cs" Link="Interop\Interop.HandleCollector.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.MAX_PATH.cs" Link="Interop\Kernel32\Interop.MAX_PATH.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.MAX_UNICODESTRING_LEN.cs" Link="Interop\Kernel32\Interop.MAX_UNICODESTRING_LEN.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowText.cs" Link="Interop\User32\Interop.GetWindowText.cs" />
   </ItemGroup>
 
 </Project>

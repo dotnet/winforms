@@ -40,8 +40,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
-        public void Control_Ctor_String(string text)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void Control_Ctor_String(string text, string expectedText)
         {
             var control = new Control(text);
             Assert.Equal(Control.DefaultBackColor, control.BackColor);
@@ -61,21 +61,21 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Size.Empty, control.Size);
             Assert.Equal(0, control.TabIndex);
             Assert.True(control.TabStop);
-            Assert.Equal(text ?? string.Empty, control.Text);
+            Assert.Same(expectedText, control.Text);
             Assert.Equal(0, control.Top);
             Assert.True(control.Visible);
         }
 
         public static IEnumerable<object[]> Ctor_String_Int_Int_Int_Int()
         {
-            yield return new object[] { null, -1, -2, -3, -4 };
-            yield return new object[] { string.Empty, 0, 0, 0, 0 };
-            yield return new object[] { "Foo", 1, 2, 3, 4 };
+            yield return new object[] { null, -1, -2, -3, -4, string.Empty };
+            yield return new object[] { string.Empty, 0, 0, 0, 0, string.Empty };
+            yield return new object[] { "Text", 1, 2, 3, 4, "Text" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_String_Int_Int_Int_Int))]
-        public void Control_ConstructorSize(string text, int left, int top, int width, int height)
+        public void Control_ConstructorSize(string text, int left, int top, int width, int height, string expectedText)
         {
             var control = new Control(text, left, top, width, height);
             Assert.Equal(Control.DefaultBackColor, control.BackColor);
@@ -95,21 +95,21 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(width, height), control.Size);
             Assert.Equal(0, control.TabIndex);
             Assert.True(control.TabStop);
-            Assert.Equal(text ?? string.Empty, control.Text);
+            Assert.Same(expectedText, control.Text);
             Assert.Equal(top, control.Top);
             Assert.True(control.Visible);
         }
 
         public static IEnumerable<object[]> Ctor_Control_String_TestData()
         {
-            yield return new object[] { null, null };
-            yield return new object[] { new Control(), string.Empty };
-            yield return new object[] { new Control(), "text" };
+            yield return new object[] { null, null, string.Empty };
+            yield return new object[] { new Control(), string.Empty, string.Empty };
+            yield return new object[] { new Control(), "text", "text" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_Control_String_TestData))]
-        public void Control_Ctor_Control_String(Control parent, string text)
+        public void Control_Ctor_Control_String(Control parent, string text, string expectedText)
         {
             var control = new Control(parent, text);
             Assert.Equal(Control.DefaultBackColor, control.BackColor);
@@ -129,21 +129,21 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Size.Empty, control.Size);
             Assert.Equal(0, control.TabIndex);
             Assert.True(control.TabStop);
-            Assert.Equal(text ?? string.Empty, control.Text);
+            Assert.Same(expectedText, control.Text);
             Assert.Equal(0, control.Top);
             Assert.True(control.Visible);
         }
 
         public static IEnumerable<object[]> Ctor_Control_String_Int_Int_Int_Int_TestData()
         {
-            yield return new object[] { null, null, -1, -2, -3, -4 };
-            yield return new object[] { new Control(), string.Empty, 0, 0, 0, 0 };
-            yield return new object[] { new Control(), "text", 1, 2, 3, 4 };
+            yield return new object[] { null, null, -1, -2, -3, -4, string.Empty };
+            yield return new object[] { new Control(), string.Empty, 0, 0, 0, 0, string.Empty };
+            yield return new object[] { new Control(), "text", 1, 2, 3, 4, "text" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_Control_String_Int_Int_Int_Int_TestData))]
-        public void Control_Ctor_Control_String_Int_Int_Int_Int(Control parent, string text, int left, int top, int width, int height)
+        public void Control_Ctor_Control_String_Int_Int_Int_Int(Control parent, string text, int left, int top, int width, int height, string expectedText)
         {
             var control = new Control(parent, text, left, top, width, height);
             Assert.Equal(Control.DefaultBackColor, control.BackColor);
@@ -163,7 +163,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(width, height), control.Size);
             Assert.Equal(0, control.TabIndex);
             Assert.True(control.TabStop);
-            Assert.Equal(text ?? string.Empty, control.Text);
+            Assert.Same(expectedText, control.Text);
             Assert.Equal(top, control.Top);
             Assert.True(control.Visible);
         }
@@ -1372,55 +1372,79 @@ namespace System.Windows.Forms.Tests
 
         #region Name and Text
 
-        /// <summary>
-        /// Data for the WindowTextGetSet test
-        /// </summary>
-        public static TheoryData<string> WindowTextGetSetData =>
-            CommonTestHelper.GetStringTheoryData();
-
         [Theory]
-        [MemberData(nameof(WindowTextGetSetData))]
-        public void Control_WindowTextGetSet(string expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        public void Control_WindowText_Set_GetReturnsExpected(string value)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                WindowText = value
+            };
+            Assert.Equal(value ?? string.Empty, control.WindowText);
 
-            cont.WindowText = expected;
-
-            Assert.Equal(expected, cont.WindowText);
+            // Set same.
+            control.WindowText = value; 
+            Assert.Equal(value ?? string.Empty, control.WindowText);
         }
 
-        /// <summary>
-        /// Data for the NameGetSet test
-        /// </summary>
-        public static TheoryData<string> NameGetSetData =>
-            CommonTestHelper.GetStringTheoryData();
-
         [Theory]
-        [MemberData(nameof(NameGetSetData))]
-        public void Control_NameGetSet(string expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        public void Control_WindowText_SetWithHandle_GetReturnsExpected(string value)
         {
-            var cont = new Control();
+            var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            
+            control.WindowText = value;
+            Assert.Equal(value ?? string.Empty, control.WindowText);
 
-            cont.Name = expected;
-
-            Assert.Equal(expected, cont.Name);
+            // Set same.
+            control.WindowText = value; 
+            Assert.Equal(value ?? string.Empty, control.WindowText);
         }
 
-        /// <summary>
-        /// Data for the TextGetSet test
-        /// </summary>
-        public static TheoryData<string> TextGetSetData =>
-            CommonTestHelper.GetStringTheoryData();
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        public void Control_Name_Set_GetReturnsExpected(string value)
+        {
+            var control = new Control
+            {
+                Name = value
+            };
+            Assert.Equal(value ?? string.Empty, control.Name);
+
+            // Set same.
+            control.Name = value; 
+            Assert.Equal(value ?? string.Empty, control.Name);
+        }
 
         [Theory]
-        [MemberData(nameof(TextGetSetData))]
-        public void Control_TextGetSet(string expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        public void Control_Text_Set_GetReturnsExpected(string value)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                Text = value
+            };
+            Assert.Equal(value ?? string.Empty, control.Text);
 
-            cont.Text = expected;
+            // Set same.
+            control.Text = value; 
+            Assert.Equal(value ?? string.Empty, control.Text);
+        }
 
-            Assert.Equal(expected, cont.Text);
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        public void Control_Text_SetWithHandle_GetReturnsExpected(string value)
+        {
+            var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            control.Text = value;
+            Assert.Equal(value ?? string.Empty, control.Text);
+
+            // Set same.
+            control.Text = value; 
+            Assert.Equal(value ?? string.Empty, control.Text);
         }
 
         #endregion

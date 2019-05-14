@@ -14,7 +14,6 @@ namespace System.Windows.Forms {
     using System.Reflection;
     using System.Collections.Specialized;
 
-    /// <include file='doc\ImageKeyConverter.uex' path='docs/doc[@for="ImageKeyConverter"]/*' />
     /// <devdoc>
     /// ImageIndexConverter is a class that can be used to convert
     /// image index values one data type to another.
@@ -23,7 +22,6 @@ namespace System.Windows.Forms {
 
         private string parentImageListProperty  = "Parent";
    
-        /// <include file='doc\ImageKeyConverter.uex' path='docs/doc[@for="ImageKeyConverter.IncludeNoneAsStandardValue"]/*' />
         protected virtual bool IncludeNoneAsStandardValue {
             get {
                 return true;
@@ -44,7 +42,6 @@ namespace System.Windows.Forms {
                 parentImageListProperty = value;
             }
         }
-        /// <include file='doc\ImageKeyConverter.uex' path='docs/doc[@for="ImageKeyConverter.CanConvertFrom"]/*' />
         /// <devdoc>
         /// <para>Gets a value indicating whether this converter can convert an object in the
         /// given source type to a string using the specified context.</para>
@@ -56,7 +53,6 @@ namespace System.Windows.Forms {
             return base.CanConvertFrom(context, sourceType);
         }
 
-        /// <include file='doc\ImageKeyConverter.uex' path='docs/doc[@for="ImageKeyConverter.ConvertFrom"]/*' />
         /// <devdoc>
         /// <para>Converts the specified value object to a string object.</para>
         /// </devdoc>
@@ -72,7 +68,6 @@ namespace System.Windows.Forms {
 
 
         
-        /// <include file='doc\ImageKeyConverter.uex' path='docs/doc[@for="ImageKeyConverter.ConvertTo"]/*' />
         /// <devdoc>
         /// Converts the given object to another type.  The most common types to convert
         /// are to and from a string object.  The default implementation will make a call
@@ -96,7 +91,6 @@ namespace System.Windows.Forms {
         }
 
      
-        /// <include file='doc\ImageKeyConverter.uex' path='docs/doc[@for="ImageKeyConverter.GetStandardValues"]/*' />
         /// <devdoc>
         /// Retrieves a collection containing a set of standard values
         /// for the data type this validator is designed for.  This
@@ -146,7 +140,7 @@ namespace System.Windows.Forms {
                         int nImages = imageList.Images.Count;
                         if (IncludeNoneAsStandardValue) {
                             values = new object[nImages + 1];
-                            values[nImages] = "";
+                            values[nImages] = string.Empty;
                         }
                         else {
                             values = new object[nImages];
@@ -174,7 +168,6 @@ namespace System.Windows.Forms {
             }
         }
     
-        /// <include file='doc\ImageKeyConverter.uex' path='docs/doc[@for="ImageKeyConverter.GetStandardValuesExclusive"]/*' />
         /// <devdoc>
         /// Determines if the list of standard values returned from
         /// GetStandardValues is an exclusive list.  If the list
@@ -187,7 +180,6 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <include file='doc\ImageKeyConverter.uex' path='docs/doc[@for="ImageKeyConverter.GetStandardValuesSupported"]/*' />
         /// <devdoc>
         /// Determines if this object supports a standard set of values
         /// that can be picked from a list.

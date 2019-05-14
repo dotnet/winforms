@@ -629,18 +629,11 @@ namespace System.Windows.Forms {
             }
             return retval;
         }
-        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
-        
-        public static extern int GetWindowText(HandleRef hWnd, StringBuilder lpString, int nMaxCount);
-        
+
         [DllImport(ExternDll.Kernel32, CharSet=CharSet.Auto)]            
         
         [SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable")]
         public static extern void GetTempFileName(string tempDirName, string prefixName, int unique, StringBuilder sb);
-        
-        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
-        
-        public static extern bool SetWindowText(HandleRef hWnd, string text);
 
         [DllImport(ExternDll.Kernel32, ExactSpelling=true, CharSet=CharSet.Auto)]
         
@@ -4831,7 +4824,6 @@ namespace System.Windows.Forms {
         ]
         public interface IMsoComponentManager {
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.QueryService"]/*' />
         /// <devdoc>
         ///      Return in *ppvObj an implementation of interface iid for service
         ///      guidService (same as IServiceProvider::QueryService).
@@ -4845,7 +4837,6 @@ namespace System.Windows.Forms {
             [MarshalAs(UnmanagedType.Interface)] 
             out object ppvObj);
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.FDebugMessage"]/*' />
         /// <devdoc>
         ///      Standard FDebugMessage method.
         ///      Since IMsoComponentManager is a reference counted interface, 
@@ -4859,7 +4850,6 @@ namespace System.Windows.Forms {
             IntPtr wParam, 
             IntPtr lParam);
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.FRegisterComponent"]/*' />
         /// <devdoc>
         ///      Register component piComponent and its registration info pcrinfo with
         ///      this component manager.  Return in *pdwComponentID a cookie which will
@@ -4873,7 +4863,6 @@ namespace System.Windows.Forms {
             NativeMethods.MSOCRINFOSTRUCT pcrinfo,
             out IntPtr dwComponentID);
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.FRevokeComponent"]/*' />
         /// <devdoc>
         ///      Undo the registration of the component identified by dwComponentID
         ///      (the cookie returned from the FRegisterComponent method).
@@ -4882,7 +4871,6 @@ namespace System.Windows.Forms {
         [PreserveSig]
         bool FRevokeComponent(IntPtr dwComponentID);
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.FUpdateComponentRegistration"]/*' />
         /// <devdoc>
         ///      Update the registration info of the component identified by
         ///      dwComponentID (the cookie returned from FRegisterComponent) with the
@@ -4894,7 +4882,6 @@ namespace System.Windows.Forms {
         [PreserveSig]
         bool FUpdateComponentRegistration(IntPtr dwComponentID,NativeMethods.MSOCRINFOSTRUCT pcrinfo);
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.FOnComponentActivate"]/*' />
         /// <devdoc>
         ///      Notify component manager that component identified by dwComponentID
         ///      (cookie returned from FRegisterComponent) has been activated.
@@ -4910,7 +4897,6 @@ namespace System.Windows.Forms {
         [PreserveSig]
         bool FOnComponentActivate(IntPtr dwComponentID);
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.FSetTrackingComponent"]/*' />
         /// <devdoc>
         ///      Called to inform component manager that  component identified by 
         ///      dwComponentID (cookie returned from FRegisterComponent) wishes
@@ -4931,7 +4917,6 @@ namespace System.Windows.Forms {
         [PreserveSig]
         bool FSetTrackingComponent(IntPtr dwComponentID, [In, MarshalAs(UnmanagedType.Bool)] bool fTrack);
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.OnComponentEnterState"]/*' />
         /// <devdoc>
         ///      Notify component manager that component identified by dwComponentID
         ///      (cookie returned from FRegisterComponent) is entering the state
@@ -4970,7 +4955,6 @@ namespace System.Windows.Forms {
         [PreserveSig]
         void OnComponentEnterState(IntPtr dwComponentID,int uStateID,int uContext,int cpicmExclude,/* IMsoComponentManger** */ int rgpicmExclude,int dwReserved);
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.FOnComponentExitState"]/*' />
         /// <devdoc>
         ///      Notify component manager that component identified by dwComponentID
         ///      (cookie returned from FRegisterComponent) is exiting the state
@@ -5001,7 +4985,6 @@ namespace System.Windows.Forms {
             int cpicmExclude, 
             /* IMsoComponentManager** */ int rgpicmExclude);
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.FInState"]/*' />
         /// <devdoc>
         ///      Return TRUE if the state identified by uStateID (a msocstateXXX value)
         ///      is in effect at the root of this component manager's state context, 
@@ -5011,7 +4994,6 @@ namespace System.Windows.Forms {
         [PreserveSig]
         bool FInState(int uStateID,/* PVOID */ IntPtr pvoid);
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.FContinueIdle"]/*' />
         /// <devdoc>
         ///      Called periodically by a component during IMsoComponent::FDoIdle.
         ///      Return TRUE if component can continue its idle time processing, 
@@ -5020,7 +5002,6 @@ namespace System.Windows.Forms {
         [PreserveSig]
         bool FContinueIdle();
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.FPushMessageLoop"]/*' />
         /// <devdoc>
         ///      Component identified by dwComponentID (cookie returned from 
         ///      FRegisterComponent) wishes to push a message loop for reason uReason.
@@ -5040,7 +5021,6 @@ namespace System.Windows.Forms {
         [PreserveSig]
         bool FPushMessageLoop(IntPtr dwComponentID,int uReason,/* PVOID */ int pvLoopData);
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.FCreateSubComponentManager"]/*' />
         /// <devdoc>
         ///      Cause the component manager to create a "sub" component manager, which
         ///      will be one of its children in the hierarchical tree of component
@@ -5063,7 +5043,6 @@ namespace System.Windows.Forms {
             ref Guid riid,
             out IntPtr ppvObj);
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.FGetParentComponentManager"]/*' />
         /// <devdoc>
         ///      Return in *ppicm an AddRef'ed ptr to this component manager's parent
         ///      in the hierarchical tree of component managers used to maintain state
@@ -5075,7 +5054,6 @@ namespace System.Windows.Forms {
         bool FGetParentComponentManager(
             out IMsoComponentManager ppicm);
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.FGetActiveComponent"]/*' />
         /// <devdoc>
         ///      Return in *ppic an AddRef'ed ptr to the current active or tracking
         ///      component (as indicated by dwgac (a msogacXXX value)), and
@@ -5101,7 +5079,6 @@ namespace System.Windows.Forms {
         ]
         public interface IMsoComponent {
 
-            /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponent.FDebugMessage"]/*' />
             /// <devdoc>
             ///      Standard FDebugMessage method.
             ///      Since IMsoComponentManager is a reference counted interface, 
@@ -5115,7 +5092,6 @@ namespace System.Windows.Forms {
                 IntPtr wParam, 
                 IntPtr lParam);
 
-            /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponent.FPreTranslateMessage"]/*' />
             /// <devdoc>
             ///      Give component a chance to process the message pMsg before it is
             ///      translated and dispatched. Component can do TranslateAccelerator
@@ -5125,7 +5101,6 @@ namespace System.Windows.Forms {
             [PreserveSig]
             bool FPreTranslateMessage(ref NativeMethods.MSG msg);            
 
-            /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponent.OnEnterState"]/*' />
             /// <devdoc>  
             ///      Notify component when app enters or exits (as indicated by fEnter)
             ///      the state identified by uStateID (a value from olecstate enumeration).
@@ -5147,7 +5122,6 @@ namespace System.Windows.Forms {
                 int uStateID,
                 bool fEnter);
 
-            /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponent.OnAppActivate"]/*' />
             /// <devdoc>  
             ///      Notify component when the host application gains or loses activation.
             ///     If fActive is TRUE, the host app is being activated and dwOtherThreadID
@@ -5163,7 +5137,6 @@ namespace System.Windows.Forms {
                 bool fActive,
                 int dwOtherThreadID);                
 
-            /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponent.OnLoseActivation"]/*' />
             /// <devdoc>      
             ///      Notify the active component that it has lost its active status because
             ///      the host or another component has become active.
@@ -5171,7 +5144,6 @@ namespace System.Windows.Forms {
             [PreserveSig]
             void OnLoseActivation();
 
-            /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponent.OnActivationChange"]/*' />
             /// <devdoc> 
             ///      Notify component when a new object is being activated.
             ///      If pic is non-NULL, then it is the component that is being activated.
@@ -5215,7 +5187,6 @@ namespace System.Windows.Forms {
                 int pchostinfo,
                 int dwReserved);
 
-            /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponent.FDoIdle"]/*' />
             /// <devdoc> 
             ///      Give component a chance to do idle time tasks.  grfidlef is a group of
             ///      bit flags taken from the enumeration of oleidlef values (above),
@@ -5237,7 +5208,6 @@ namespace System.Windows.Forms {
                 int grfidlef);            
 
 
-            /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponent.FContinueMessageLoop"]/*' />
             /// <devdoc>         
             ///      Called during each iteration of a message loop that the component
             ///      pushed. uReason and pvLoopData are the reason and the component private 
@@ -5259,7 +5229,6 @@ namespace System.Windows.Forms {
                 [MarshalAs(UnmanagedType.LPArray)] NativeMethods.MSG[] pMsgPeeked);            
 
 
-            /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponent.FQueryTerminate"]/*' />
             /// <devdoc> 
             ///      Called when component manager wishes to know if the component is in a
             ///      state in which it can terminate.  If fPromptUser is FALSE, component
@@ -5274,7 +5243,6 @@ namespace System.Windows.Forms {
             bool FQueryTerminate(
                 bool fPromptUser);
 
-            /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponent.Terminate"]/*' />
             /// <devdoc>     
             ///      Called when component manager wishes to terminate the component's
             ///      registration.  Component should revoke its registration with component
@@ -5284,7 +5252,6 @@ namespace System.Windows.Forms {
             [PreserveSig]
             void Terminate();
 
-            /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponent.HwndGetWindow"]/*' />
             /// <devdoc> 
             ///      Called to retrieve a window associated with the component, as specified
             ///      by dwWhich, a olecWindowXXX value (see olecWindow, above).
@@ -7733,7 +7700,6 @@ namespace System.Windows.Forms {
                     int cySrc);
         }
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods"]/*' />
         /// <devdoc>
         /// This class provides static methods to create, activate and deactivate the theming scope.
         /// </devdoc>

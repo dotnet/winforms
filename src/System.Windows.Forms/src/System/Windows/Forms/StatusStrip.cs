@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Windows.Forms.Layout;
     
-    /// <include file='doc\StatusStrip.uex' path='docs/doc[@for="StatusStrip"]/*' />
     [ComVisible(true),
      ClassInterface(ClassInterfaceType.AutoDispatch),
      SRDescription(nameof(SR.DescriptionStatusStrip))
@@ -34,7 +33,6 @@ namespace System.Windows.Forms {
         private RightToLeftLayoutGrip rtlLayoutGrip;
         private Orientation lastOrientation = Orientation.Horizontal;
         
-        /// <include file='doc\StatusStrip.uex' path='docs/doc[@for="StatusStrip.StatusStrip"]/*' />
         public StatusStrip() {
             SuspendLayout();
             this.CanOverflow = false;
@@ -106,7 +104,6 @@ namespace System.Windows.Forms {
         }
    
 
-       /// <include file='doc\StatusStrip.uex' path='docs/doc[@for="StatusStrip.Dock"]/*' />
        [DefaultValue(DockStyle.Bottom)]
        public override DockStyle Dock {
            get {
@@ -246,7 +243,6 @@ namespace System.Windows.Forms {
            get { return this.LayoutSettings as TableLayoutSettings; }
        }
  
-       /// <include file='doc\StatusStrip.uex' path='docs/doc[@for="StatusStrip.CreateAccessibilityInstance"]/*' />
        protected override AccessibleObject CreateAccessibilityInstance() {
            return new StatusStripAccessibleObject(this);
        }

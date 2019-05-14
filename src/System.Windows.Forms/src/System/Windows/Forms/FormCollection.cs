@@ -8,7 +8,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Globalization;
     
-    /// <include file='doc\FormCollection.uex' path='docs/doc[@for="FormCollection"]/*' />
     /// <devdoc>
     ///    <para>
     ///       This is a read only collection of Forms exposed as a static property of the 
@@ -19,7 +18,6 @@ namespace System.Windows.Forms {
 
         internal static object CollectionSyncRoot = new object();
         
-        /// <include file='doc\FormCollection.uex' path='docs/doc[@for="FormCollection.this"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a form specified by name, if present, else returns null. If there are multiple
@@ -41,7 +39,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\FormCollection.uex' path='docs/doc[@for="FormCollection.this1"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets a form specified by index.

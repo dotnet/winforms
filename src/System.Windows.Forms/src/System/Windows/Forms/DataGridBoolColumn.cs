@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using Microsoft.Win32;
 
-    /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn"]/*' />
     /// <devdoc>
     ///    <para>Specifies a column in
     ///       which each cell contains a check box for representing
@@ -36,24 +35,20 @@ namespace System.Windows.Forms {
         private static readonly object  EventFalseValue     = new object();
         private static readonly object  EventAllowNull      = new object();
         
-        /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.DataGridBoolColumn"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataGridBoolColumn'/> class.</para>
         /// </devdoc>
         public DataGridBoolColumn() : base() {}
 
-        /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.DataGridBoolColumn1"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of a <see cref='System.Windows.Forms.DataGridBoolColumn'/> with the specified <see cref='System.Data.DataColumn'/>.</para>
         /// </devdoc>
         public DataGridBoolColumn(PropertyDescriptor prop)
             : base(prop) {}
 
-        /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.DataGridBoolColumn2"]/*' />
         public DataGridBoolColumn(PropertyDescriptor prop, bool isDefault)
             : base(prop, isDefault){}
 
-        /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.TrueValue"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the actual value used when setting the 
         ///       value of the column to <see langword='true'/> .</para>
@@ -73,13 +68,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.TrueValueChanged"]/*' />
         public event EventHandler TrueValueChanged { 
             add => Events.AddHandler(EventTrueValue, value);
             remove => Events.RemoveHandler(EventTrueValue, value);
         }
         
-        /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.FalseValue"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the actual value used when setting the value of the column to 
         ///    <see langword='false'/>.</para>
@@ -98,13 +91,11 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.FalseValueChanged"]/*' />
         public event EventHandler FalseValueChanged { 
             add => Events.AddHandler(EventFalseValue, value);
             remove => Events.RemoveHandler(EventFalseValue, value);
         }
         
-        /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.NullValue"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the actual value used when setting the value of the column to 
         ///    <see langword='null'/>.</para>
@@ -131,7 +122,6 @@ namespace System.Windows.Forms {
         // so there is no data to be pushed back into the backEnd.
         // make isEditing false so that in the Commit call we do not do any work.
         //
-        /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.ConcedeFocus"]/*' />
         protected internal override void ConcedeFocus() {
             base.ConcedeFocus();
             this.isSelected = false;
@@ -151,7 +141,6 @@ namespace System.Windows.Forms {
                                      idealCheckSize);
         }
 
-        /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.GetColumnValueAtRow"]/*' />
         /// <devdoc>
         ///    <para>Gets the value at the specified row.</para>
         /// </devdoc>
@@ -177,7 +166,6 @@ namespace System.Windows.Forms {
             return ret;
         }
 
-        /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.SetColumnValueAtRow"]/*' />
         /// <devdoc>
         ///    <para>Sets the value a a specified row.</para>
         /// </devdoc>
@@ -196,7 +184,6 @@ namespace System.Windows.Forms {
             base.SetColumnValueAtRow(lm, row, baseValue);
         }
         
-        /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.GetPreferredSize"]/*' />
         /// <devdoc>
         ///    <para>Gets the optimum width and height of a cell given
         ///       a specific value to contain.</para>
@@ -205,7 +192,6 @@ namespace System.Windows.Forms {
             return new Size(idealCheckSize+2, idealCheckSize+2);
         }
 
-        /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.GetMinimumHeight"]/*' />
         /// <devdoc>
         ///    <para>Gets
         ///       the height of a cell in a column.</para>
@@ -214,7 +200,6 @@ namespace System.Windows.Forms {
             return idealCheckSize+2;
         }
 
-        /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.GetPreferredHeight"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets the height used when resizing columns.
@@ -225,7 +210,6 @@ namespace System.Windows.Forms {
             return idealCheckSize + 2;
         }
 
-        /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.Abort"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initiates a request to interrupt an edit procedure.
@@ -238,7 +222,6 @@ namespace System.Windows.Forms {
             return;
         }
 
-        /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.Commit"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initiates a request to complete an editing procedure.
@@ -256,7 +239,6 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.Edit"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Prepares the cell for editing a value.
@@ -335,7 +317,6 @@ namespace System.Windows.Forms {
                 eh(this, e);
         }
 
-        /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.Paint"]/*' />
         /// <devdoc>
         /// <para>Draws the <see cref='System.Windows.Forms.DataGridBoolColumn'/>
         /// with the given <see cref='System.Drawing.Graphics'/>,
@@ -346,7 +327,6 @@ namespace System.Windows.Forms {
             Paint(g,bounds,source, rowNum, false);
         }
 
-        /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.Paint1"]/*' />
         /// <devdoc>
         /// <para>Draws the <see cref='System.Windows.Forms.DataGridBoolColumn'/>
         /// with the given <see cref='System.Drawing.Graphics'/>, <see cref='System.Drawing.Rectangle'/>,
@@ -356,7 +336,6 @@ namespace System.Windows.Forms {
             Paint(g,bounds,source, rowNum, this.DataGridTableStyle.BackBrush, this.DataGridTableStyle.ForeBrush, alignToRight);
         }
 
-        /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.Paint2"]/*' />
         /// <devdoc>
         /// <para>Draws the <see cref='System.Windows.Forms.DataGridBoolColumn'/> with the given <see cref='System.Drawing.Graphics'/>, <see cref='System.Drawing.Rectangle'/>,
         ///    row number, <see cref='System.Drawing.Brush'/>, and <see cref='System.Drawing.Color'/>. </para>
@@ -401,7 +380,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.AllowNull"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets a value indicating whether null values are allowed.</para>
         /// </devdoc>
@@ -430,13 +408,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.AllowNullChanged"]/*' />
         public event EventHandler AllowNullChanged { 
             add => Events.AddHandler(EventAllowNull, value);
             remove => Events.RemoveHandler(EventAllowNull, value);
         }
         
-        /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.EnterNullValue"]/*' />
         /// <devdoc>
         /// <para>Enters a <see langword='null'/> into the column.</para>
         /// </devdoc>

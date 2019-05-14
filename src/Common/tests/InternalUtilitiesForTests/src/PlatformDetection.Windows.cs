@@ -200,7 +200,7 @@ namespace System
         private static string GetInstallationType()
         {
             string key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion";
-            string value = "";
+            string value = string.Empty;
 
             try
             {

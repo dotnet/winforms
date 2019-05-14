@@ -40,9 +40,7 @@ namespace System.Windows.Forms
                 throw new ArgumentException(SR.BindingsCollectionAdd2, nameof(dataBinding));
             }
 
-            // important to set prop first for error checking.
-            dataBinding.SetListManager(_bindingManagerBase);
-
+            dataBinding.BindingManagerBase = _bindingManagerBase;
             base.AddCore(dataBinding);
         }
 
@@ -51,8 +49,9 @@ namespace System.Windows.Forms
             int numLinks = Count;
             for (int i = 0; i < numLinks; i++)
             {
-                this[i].SetListManager(null);
+                this[i].BindingManagerBase = null;
             }
+
             base.ClearCore();
         }
 
@@ -67,7 +66,7 @@ namespace System.Windows.Forms
                 throw new ArgumentException(SR.BindingsCollectionForeign, nameof(dataBinding));
             }
 
-            dataBinding.SetListManager(null);
+            dataBinding.BindingManagerBase = null;
             base.RemoveCore(dataBinding);
         }
     }

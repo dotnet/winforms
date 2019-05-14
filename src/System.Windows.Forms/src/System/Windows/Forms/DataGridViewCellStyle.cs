@@ -13,7 +13,6 @@ namespace System.Windows.Forms
     using System.Drawing.Design;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle"]/*' />
     [
         TypeConverterAttribute(typeof(DataGridViewCellStyleConverter)),
         EditorAttribute("System.Windows.Forms.Design.DataGridViewCellStyleEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
@@ -34,13 +33,10 @@ namespace System.Windows.Forms
         private static readonly int PropTag = PropertyStore.CreateKey();
         private static readonly int PropWrapMode = PropertyStore.CreateKey();
 
-        private const string DATAGRIDVIEWCELLSTYLE_nullText = "";    // default value of NullValue property
-
         private DataGridViewCellStyleScopes scope;
         private PropertyStore propertyStore;          // Contains all properties that are not always set.
         private DataGridView dataGridView;
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.DataGridViewCellStyle"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewCellStyle'/> class.
@@ -52,7 +48,6 @@ namespace System.Windows.Forms
             this.scope = DataGridViewCellStyleScopes.None;
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.DataGridViewCellStyle2"]/*' />
         public DataGridViewCellStyle(DataGridViewCellStyle dataGridViewCellStyle)
         {
             if (dataGridViewCellStyle == null)
@@ -79,7 +74,6 @@ namespace System.Windows.Forms
             this.PaddingInternal = dataGridViewCellStyle.Padding;
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.Alignment"]/*' />
         [
             SRDescription(nameof(SR.DataGridViewCellStyleAlignmentDescr)),
             //Localizable(true),
@@ -136,7 +130,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.BackColor"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance))
         ]
@@ -160,7 +153,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.DataSourceNullValue"]/*' />
         [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -204,7 +196,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.Font"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance))
         ]
@@ -230,7 +221,6 @@ namespace System.Windows.Forms
             }
         }
         
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.ForeColor"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance))
         ]
@@ -254,7 +244,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.Format"]/*' />
         [
             DefaultValue(""),
             EditorAttribute("System.Windows.Forms.Design.FormatStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
@@ -289,7 +278,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.FormatProvider"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced)
@@ -319,7 +307,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.IsDataSourceNullValueDefault"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced)
@@ -336,7 +323,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.IsFormatProviderDefault"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced)
@@ -349,7 +335,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.IsNullValueDefault"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced)
@@ -362,17 +347,15 @@ namespace System.Windows.Forms
                 {
                     return true;
                 }
+
                 object nullValue = this.Properties.GetObject(PropNullValue);
-                return (nullValue is string && nullValue.Equals(DATAGRIDVIEWCELLSTYLE_nullText));
+                return nullValue is string nullValueString && nullValueString.Length == 0;
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.NullValue"]/*' />
-        [
-            DefaultValue(DATAGRIDVIEWCELLSTYLE_nullText),
-            TypeConverter(typeof(StringConverter)),
-            SRCategory(nameof(SR.CatData))
-        ]
+        [DefaultValue("")]
+        [TypeConverter(typeof(StringConverter))]
+        [SRCategory(nameof(SR.CatData))]
         public object NullValue
         {
             get
@@ -381,7 +364,7 @@ namespace System.Windows.Forms
                 {
                     return this.Properties.GetObject(PropNullValue);
                 }
-                return DATAGRIDVIEWCELLSTYLE_nullText;
+                return string.Empty;
             }
             set
             {
@@ -393,9 +376,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (value is string &&
-                    value.Equals(DATAGRIDVIEWCELLSTYLE_nullText) &&
-                    this.Properties.ContainsObject(PropNullValue))
+                if (value is string stringValue && stringValue.Length == 0 && Properties.ContainsObject(PropNullValue))
                 {
                     this.Properties.RemoveObject(PropNullValue);
                 }
@@ -412,7 +393,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.Padding"]/*' />
         [
             SRCategory(nameof(SR.CatLayout))
         ]
@@ -476,7 +456,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.SelectionBackColor"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance))
         ]
@@ -500,7 +479,6 @@ namespace System.Windows.Forms
             }
         }
         
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.SelectionForeColor"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance))
         ]
@@ -524,7 +502,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.Tag"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -544,7 +521,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.WrapMode"]/*' />
         [
             DefaultValue(DataGridViewTriState.NotSet),
             SRCategory(nameof(SR.CatLayout))
@@ -591,7 +567,6 @@ namespace System.Windows.Forms
             this.dataGridView = dataGridView;
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.Dispose"]/*' />
         public virtual void ApplyStyle(DataGridViewCellStyle dataGridViewCellStyle)
         {
             if (dataGridViewCellStyle == null)
@@ -652,12 +627,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.Clone"]/*' />
         public virtual DataGridViewCellStyle Clone() {
             return new DataGridViewCellStyle(this);
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.Equals"]/*' />
         public override bool Equals(object o) 
         {
             DataGridViewCellStyle dgvcs = o as DataGridViewCellStyle;
@@ -808,7 +781,6 @@ namespace System.Windows.Forms
             return found;
         }
         
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.ToString"]/*' />
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder(128);

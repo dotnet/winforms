@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using Xunit;
-using System.Windows.Forms;
 
 namespace System.Windows.Forms.Tests
 {
@@ -12,9 +11,22 @@ namespace System.Windows.Forms.Tests
         private const int LogicalDpi = 96;
 
         [Fact]
-        public void SystemInformation_CompareDeviceToLogicalValues()
+        public void SystemInformation_PowerStatus_Get_ReturnsExpected()
+        {
+            PowerStatus status = SystemInformation.PowerStatus;
+            Assert.NotNull(status);
+            Assert.Same(status, SystemInformation.PowerStatus);
+        }
+
+        [Fact]
+        public void SystemInformation_VerticalScrollBarArrowHeight_LogicalDpi_ReturnsVerticalScrollBarArrowHeight()
         {
             Assert.Equal(SystemInformation.VerticalScrollBarArrowHeight, SystemInformation.VerticalScrollBarArrowHeightForDpi(LogicalDpi));
+        }
+
+        [Fact]
+        public void SystemInformation_GetHorizontalScrollBarArrowWidthForDpi_LogicalDpi_HorizontalScrollBarArrowWidth()
+        {
             Assert.Equal(SystemInformation.HorizontalScrollBarArrowWidth, SystemInformation.GetHorizontalScrollBarArrowWidthForDpi(LogicalDpi));
         }
     }

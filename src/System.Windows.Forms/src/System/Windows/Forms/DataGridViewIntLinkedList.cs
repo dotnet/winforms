@@ -10,7 +10,6 @@ namespace System.Windows.Forms
     using System.Windows.Forms;
     using System.ComponentModel;
 
-    /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedList"]/*' />
     /// <devdoc>
     /// <para>Represents a linked list of integers</para>
     /// </devdoc>
@@ -20,19 +19,16 @@ namespace System.Windows.Forms
         private DataGridViewIntLinkedListElement headElement;
         private int count, lastAccessedIndex;
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedList.IEnumerable.GetEnumerator"]/*' />
         IEnumerator IEnumerable.GetEnumerator()
         {
             return new DataGridViewIntLinkedListEnumerator(this.headElement);
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedList.DataGridViewIntLinkedList"]/*' />
         public DataGridViewIntLinkedList()
         {
             lastAccessedIndex = -1;
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedList.DataGridViewIntLinkedList2"]/*' />
         public DataGridViewIntLinkedList(DataGridViewIntLinkedList source)
         {
             Debug.Assert(source != null);
@@ -43,7 +39,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedList.BandAt"]/*' />
         public int this[int index]
         {
             get
@@ -85,7 +80,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedList.Count"]/*' />
         public int Count
         {
             get
@@ -94,7 +88,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedList.HeadInt"]/*' />
         public int HeadInt
         {
             get
@@ -104,7 +97,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedList.Add"]/*' />
         public void Add(int integer)
         {
             DataGridViewIntLinkedListElement newHead = new DataGridViewIntLinkedListElement(integer);
@@ -118,7 +110,6 @@ namespace System.Windows.Forms
             this.lastAccessedIndex = -1;
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedList.Clear"]/*' />
         public void Clear()
         {
             this.lastAccessedElement = null;
@@ -127,7 +118,6 @@ namespace System.Windows.Forms
             this.count = 0;
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedList.Contains"]/*' />
         public bool Contains(int integer)
         {
             int index = 0;
@@ -146,7 +136,6 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedList.IndexOf"]/*' />
         public int IndexOf(int integer)
         {
             if (Contains(integer))
@@ -159,7 +148,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedList.Remove"]/*' />
         public bool Remove(int integer)
         {
             DataGridViewIntLinkedListElement tmp1 = null, tmp2 = this.headElement;
@@ -191,7 +179,6 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedList.RemoveAt"]/*' />
         public void RemoveAt(int index)
         {
             DataGridViewIntLinkedListElement tmp1 = null, tmp2 = this.headElement;
@@ -216,7 +203,6 @@ namespace System.Windows.Forms
         }
     }
 
-    /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedListEnumerator"]/*' />
     /// <devdoc>
     /// <para>Represents an emunerator of elements in a <see cref='System.Windows.Forms.DataGridViewIntLinkedList'/>  linked list.</para>
     /// </devdoc>
@@ -226,14 +212,12 @@ namespace System.Windows.Forms
         private DataGridViewIntLinkedListElement current;
         private bool reset;
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedListEnumerator.DataGridViewIntLinkedListEnumerator"]/*' />
         public DataGridViewIntLinkedListEnumerator(DataGridViewIntLinkedListElement headElement)
         {
             this.headElement = headElement;
             this.reset = true;
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedListEnumerator.IEnumerator.Current"]/*' />
         object IEnumerator.Current
         {
             get
@@ -243,7 +227,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedListEnumerator.IEnumerator.MoveNext"]/*' />
         bool IEnumerator.MoveNext()
         {
             if (this.reset)
@@ -260,7 +243,6 @@ namespace System.Windows.Forms
             return (this.current != null);
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedListEnumerator.IEnumerator.Reset"]/*' />
         void IEnumerator.Reset()
         {
             this.reset = true;
@@ -268,7 +250,6 @@ namespace System.Windows.Forms
         }
     }
 
-    /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedListElement"]/*' />
     /// <devdoc>
     /// <para>Represents an element in a <see cref='System.Windows.Forms.DataGridViewIntLinkedList'/> linked list.</para>
     /// </devdoc>
@@ -277,13 +258,11 @@ namespace System.Windows.Forms
         private int integer;
         private DataGridViewIntLinkedListElement next;
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedListElement.DataGridViewIntLinkedListElement"]/*' />
         public DataGridViewIntLinkedListElement(int integer)
         {
             this.integer = integer;
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedListElement.Int"]/*' />
         public int Int
         {
             get
@@ -296,7 +275,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedListElement.Next"]/*' />
         public DataGridViewIntLinkedListElement Next
         {
             get

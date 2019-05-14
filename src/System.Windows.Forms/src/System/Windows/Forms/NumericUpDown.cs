@@ -15,7 +15,6 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Windows.Forms.Layout;
 
-    /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown"]/*' />
     /// <devdoc>
     ///    <para>Represents a Windows up-down control that displays numeric values.</para>
     /// </devdoc>
@@ -83,7 +82,6 @@ namespace System.Windows.Forms {
         // to know when to get the next entry in the accelaration table.
         private long buttonPressedStartTime;
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.NumericUpDown"]/*' />
         [
             SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // "0" is the default value for numeric up down.
                                                                                                         // So we don't have to localize it.
@@ -117,7 +115,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.DecimalPlaces"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the number of decimal places to display in the up-down control.</para>
         /// </devdoc>
@@ -141,7 +138,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.Hexadecimal"]/*' />
         /// <devdoc>
         ///    <para>Gets or
         ///       sets a value indicating whether the up-down control should
@@ -164,7 +160,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.Increment"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the value
         ///       to increment or
@@ -195,7 +190,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.Maximum"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the maximum value for the up-down control.</para>
         /// </devdoc>
@@ -222,7 +216,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.Minimum"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the minimum allowed value for the up-down control.</para>
         /// </devdoc>
@@ -249,7 +242,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.Padding"]/*' />
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -277,7 +269,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.Text"]/*' />
         /// <devdoc>
         ///    <para>
         ///       The text displayed in the control.
@@ -298,14 +289,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.TextChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
         }
         
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.ThousandsSeparator"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets a value indicating whether a thousands
         ///       separator is displayed in the up-down control when appropriate.</para>
@@ -331,7 +320,6 @@ namespace System.Windows.Forms {
         /*
          * The current value of the control
          */
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.Value"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the value
         ///       assigned to the up-down control.</para>
@@ -373,7 +361,6 @@ namespace System.Windows.Forms {
         //
         //////////////////////////////////////////////////////////////
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.ValueChanged"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Occurs when the <see cref='System.Windows.Forms.NumericUpDown.Value'/> property has been changed in some way.
@@ -385,7 +372,6 @@ namespace System.Windows.Forms {
             remove => onValueChanged -= value;
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.BeginInit"]/*' />
         /// <devdoc>
         ///    Handles tasks required when the control is being initialized.
         /// </devdoc>
@@ -412,12 +398,10 @@ namespace System.Windows.Forms {
             return value;
         }
         
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.CreateAccessibilityInstance"]/*' />
         protected override AccessibleObject CreateAccessibilityInstance() {
             return new NumericUpDownAccessibleObject(this);
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.DownButton"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Decrements the value of the up-down control.
@@ -451,7 +435,6 @@ namespace System.Windows.Forms {
             Value = newValue;
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.EndInit"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Called when initialization of the control is complete.
@@ -485,7 +468,6 @@ namespace System.Windows.Forms {
             base.OnKeyUp(e);
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.OnTextBoxKeyPress"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Restricts the entry of characters to digits (including hex), the negative sign,
@@ -526,7 +508,6 @@ namespace System.Windows.Forms {
             }
         }
                                   
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.OnValueChanged"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.NumericUpDown.OnValueChanged'/> event.</para>
         /// </devdoc>        
@@ -538,7 +519,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.OnLostFocus"]/*' />
         protected override void OnLostFocus(EventArgs e) 
         {
             base.OnLostFocus(e);
@@ -562,7 +542,6 @@ namespace System.Windows.Forms {
             StopAcceleration();
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.ParseEditText"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Converts the text displayed in the up-down control to a
@@ -676,7 +655,6 @@ namespace System.Windows.Forms {
             this.buttonPressedStartTime        = InvalidValue;
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.ToString"]/*' />
         /// <devdoc>
         ///     Provides some interesting info about this control in String form.
         /// </devdoc>
@@ -687,7 +665,6 @@ namespace System.Windows.Forms {
             return s;
         }
         
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.UpButton"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Increments the value of the up-down control.
@@ -734,7 +711,6 @@ namespace System.Windows.Forms {
             return text;
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.UpdateEditText"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Displays the current value of the up-down control in the appropriate format.
@@ -770,7 +746,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.ValidateEditText"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Validates and updates

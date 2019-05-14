@@ -4,7 +4,6 @@
 
 namespace System.Windows.Forms
 {
-    /// <include file='doc\ListViewItemSelectionChangedEvent.uex' path='docs/doc[@for="ListViewItemSelectionChangedEventArgs"]/*' />
     /// <devdoc>
     /// The event class that is created when the selection state of a ListViewItem is changed.
     /// </devdoc>

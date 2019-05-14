@@ -128,16 +128,7 @@ namespace System.Windows.Forms
             set => SetOption(NativeMethods.OFN_NODEREFERENCELINKS, !value);
         }
 
-        private protected string DialogCaption
-        {
-            get
-            {
-                int textLen = SafeNativeMethods.GetWindowTextLength(new HandleRef(this, _dialogHWnd));
-                StringBuilder sb = new StringBuilder(textLen + 1);
-                UnsafeNativeMethods.GetWindowText(new HandleRef(this, _dialogHWnd), sb, sb.Capacity);
-                return sb.ToString();
-            }
-        }
+        private protected string DialogCaption => Interop.User32.GetWindowText(new HandleRef(this, _dialogHWnd));
 
         /// <summary>
         /// Gets or sets a string containing the file name selected in the file dialog box.

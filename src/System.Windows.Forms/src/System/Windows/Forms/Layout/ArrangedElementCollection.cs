@@ -6,7 +6,6 @@ namespace System.Windows.Forms.Layout {
 
     using System.Collections;
 
-    /// <include file='doc\Layout.uex' path='docs/doc[@for="Layout.ArrangedElementCollection"]/*' />
     public class ArrangedElementCollection : IList
     {
         internal static ArrangedElementCollection Empty = new ArrangedElementCollection(0);
@@ -37,7 +36,6 @@ namespace System.Windows.Forms.Layout {
             get { return (IArrangedElement) InnerList[index]; }
         }
 
-        /// <include file='doc\ArrangedElementCollection.uex' path='docs/doc[@for="ArrangedElementCollection.Equals"]/*' />
         public override bool Equals(object obj) {
             ArrangedElementCollection other = obj as ArrangedElementCollection;
 
@@ -54,7 +52,6 @@ namespace System.Windows.Forms.Layout {
         }
 
         // Required if you override Equals.
-        /// <include file='doc\ArrangedElementCollection.uex' path='docs/doc[@for="ArrangedElementCollection.GetHashCode"]/*' />
         public override int GetHashCode() { return base.GetHashCode(); }
 
         // Repositions a element in this list.
@@ -114,7 +111,6 @@ namespace System.Windows.Forms.Layout {
         void IList.Clear() { InnerList.Clear(); }
         bool IList.IsFixedSize { get { return InnerList.IsFixedSize; }}
         bool IList.Contains(object value) { return InnerList.Contains(value); }
-        /// <include file='doc\ArrangedElementCollection.uex' path='docs/doc[@for="ArrangedElementCollection.IsReadOnly"]/*' />
         public virtual bool IsReadOnly { get { return InnerList.IsReadOnly; }}
         void IList.RemoveAt(int index) { InnerList.RemoveAt(index); }
         void IList.Remove(object value) { InnerList.Remove(value); }
@@ -122,7 +118,6 @@ namespace System.Windows.Forms.Layout {
         int IList.IndexOf(object value) { return InnerList.IndexOf(value); }
         void IList.Insert(int index, object value) { throw new NotSupportedException(); /* InnerList.Insert(index, value); */ }
 
-        /// <include file='doc\ArrangedElementCollection.uex' path='docs/doc[@for="ArrangedElementCollection.IList.this"]/*' />
         object IList.this[int index] {
             get { return InnerList[index]; }            
             set { throw new NotSupportedException(); }
@@ -130,18 +125,15 @@ namespace System.Windows.Forms.Layout {
         #endregion
 
         #region ICollection Members
-        /// <include file='doc\ArrangedElementCollection.uex' path='docs/doc[@for="ArrangedElementCollection.Count"]/*' />
         public virtual int Count { 
             get { return InnerList.Count; }
         }
         object ICollection.SyncRoot { get { return InnerList.SyncRoot; }}
-        /// <include file='doc\ArrangedElementCollection.uex' path='docs/doc[@for="ArrangedElementCollection.CopyTo"]/*' />
         public void CopyTo(Array array, int index) { InnerList.CopyTo(array, index); }
         bool ICollection.IsSynchronized { get { return InnerList.IsSynchronized; }}
         #endregion
 
         #region IEnumerable Members
-        /// <include file='doc\ArrangedElementCollection.uex' path='docs/doc[@for="ArrangedElementCollection.GetEnumerator"]/*' />
         public virtual IEnumerator GetEnumerator() { return InnerList.GetEnumerator(); }
         #endregion
     }

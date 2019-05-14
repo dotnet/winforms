@@ -16,7 +16,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;    
     using System.Globalization;
     
-    /// <include file='doc\ColumnHeader.uex' path='docs/doc[@for="ColumnHeader"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Displays a single column header in a <see cref='System.Windows.Forms.ListView'/>
@@ -66,7 +65,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ColumnHeader.uex' path='docs/doc[@for="ColumnHeader.ColumnHeader"]/*' />
         /// <devdoc>
         ///     Creates a new ColumnHeader object
         /// </devdoc>
@@ -74,7 +72,6 @@ namespace System.Windows.Forms {
             imageIndexer = new ColumnHeaderImageListIndexer(this);
         }
 
-        /// <include file='doc\ColumnHeader.uex' path='docs/doc[@for="ColumnHeader.ColumnHeader1"]/*' />
         /// <devdoc>
         ///     Creates a new ColumnHeader object
         /// </devdoc>
@@ -82,7 +79,6 @@ namespace System.Windows.Forms {
             this.ImageIndex = imageIndex;
         }
 
-        /// <include file='doc\ColumnHeader.uex' path='docs/doc[@for="ColumnHeader.ColumnHeader2"]/*' />
         /// <devdoc>
         ///     Creates a new ColumnHeader object
         /// </devdoc>
@@ -103,7 +99,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ColumnHeader.uex' path='docs/doc[@for="ColumnHeader.DisplayIndex"]/*' />
 	[
         Localizable(true),
         RefreshProperties(RefreshProperties.Repaint),
@@ -165,7 +160,6 @@ namespace System.Windows.Forms {
             }
         }
 
-                /// <include file='doc\ColumnHeader.uex' path='docs/doc[@for="ColumnHeader.Index"]/*' />
         /// <devdoc>
         ///     The index of this column.  This index does not necessarily correspond
         ///     to the current visual position of the column in the ListView, because the
@@ -180,7 +174,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ColumnHeader.uex' path='docs/doc[@for="ColumnHeader.ImageIndex"]/*' />
         [
         DefaultValue(-1),
         TypeConverterAttribute(typeof(ImageIndexConverter)),
@@ -210,7 +203,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ImageList"]/*' />
         [Browsable(false)]
         public ImageList ImageList {
             // we added the ImageList property so that the ImageIndexConverter can find our image list
@@ -219,7 +211,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ColumnHeader.uex' path='docs/doc[@for="ColumnHeader.ImageKey"]/*' />
         [
         DefaultValue(""),
         TypeConverterAttribute(typeof(ImageKeyConverter)),
@@ -242,7 +233,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ColumnHeader.uex' path='docs/doc[@for="ColumnHeader.ListView"]/*' />
         /// <devdoc>
         ///     Returns the ListView control that this column is displayed in.  May be null
         /// </devdoc>
@@ -253,7 +243,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ColumnHeader.uex' path='docs/doc[@for="ColumnHeader.Text"]/*' />
         /// <devdoc>
         ///     The Name of the column header
         /// </devdoc>
@@ -267,7 +256,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value == null) {
-                    this.name = "";
+                    this.name = string.Empty;
                 }
                 else {
                     this.name = value;
@@ -279,7 +268,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ColumnHeader.uex' path='docs/doc[@for="ColumnHeader.Text"]/*' />
         /// <devdoc>
         ///     The text displayed in the column header
         /// </devdoc>
@@ -293,7 +281,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value == null) {
-                    this.text = "";
+                    this.text = string.Empty;
                 }
                 else {
                     this.text = value;
@@ -305,7 +293,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ColumnHeader.uex' path='docs/doc[@for="ColumnHeader.TextAlign"]/*' />
         /// <devdoc>
         ///     The horizontal alignment of the text contained in this column
         /// </devdoc>
@@ -348,7 +335,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ColumnHeader.uex' path='docs/doc[@for="ColumnHeader.Tag"]/*' />
         [
         SRCategory(nameof(SR.CatData)),
         Localizable(false),
@@ -371,7 +357,6 @@ namespace System.Windows.Forms {
                 return width;
             }
         }
-        /// <include file='doc\ColumnHeader.uex' path='docs/doc[@for="ColumnHeader.Width"]/*' />
         /// <devdoc>
         ///     The width of the column in pixels.
         /// </devdoc>
@@ -408,7 +393,6 @@ namespace System.Windows.Forms {
                 }
         }
 
-        /// <include file='doc\ColumnHeader.uex' path='docs/doc[@for="ColumnHeader.AutoResize"]/*' />
         public void AutoResize(ColumnHeaderAutoResizeStyle headerAutoResize) {
 
             if (headerAutoResize < ColumnHeaderAutoResizeStyle.None || headerAutoResize > ColumnHeaderAutoResizeStyle.ColumnContent) {
@@ -421,7 +405,6 @@ namespace System.Windows.Forms {
         }
         
 
-        /// <include file='doc\ColumnHeader.uex' path='docs/doc[@for="ColumnHeader.Clone"]/*' />
         /// <devdoc>
         ///     Creates an identical ColumnHeader, unattached to any ListView
         /// </devdoc>
@@ -442,7 +425,6 @@ namespace System.Windows.Forms {
             return columnHeader;
         }
 
-        /// <include file='doc\ColumnHeader.uex' path='docs/doc[@for="ColumnHeader.Dispose"]/*' />
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 if (listview != null) {
@@ -475,12 +457,10 @@ namespace System.Windows.Forms {
             return this.DisplayIndex != this.Index;
         }
 
-        /// <include file='doc\ColumnHeader.uex' path='docs/doc[@for="ColumnHeader.ShouldPersistText"]/*' />
         internal bool ShouldSerializeText() {
             return(text != null);
         }
         
-        /// <include file='doc\ColumnHeader.uex' path='docs/doc[@for="ColumnHeader.ToString"]/*' />
         /// <devdoc>
         ///     Returns a string representation of this column header
         /// </devdoc>

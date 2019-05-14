@@ -21,8 +21,6 @@ namespace System.Windows.Forms
 
         private BindToObject _bindToObject = null;
 
-        private string _propertyName = string.Empty;
-
         private PropertyDescriptor _propInfo;
         private PropertyDescriptor _propIsNullInfo;
         private EventDescriptor _validateInfo;
@@ -80,9 +78,11 @@ namespace System.Windows.Forms
         [SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters", Justification = "'formatString' is an appropriate name, since its a string passed to the Format method")]
         public Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode dataSourceUpdateMode, object nullValue, string formatString, IFormatProvider formatInfo)
         {
-            _bindToObject = new BindToObject(this, dataSource, dataMember);
+            DataSource = dataSource;
+            BindingMemberInfo = new BindingMemberInfo(dataMember);
+            _bindToObject = new BindToObject(this);
 
-            _propertyName = propertyName;
+            PropertyName = propertyName;
             _formattingEnabled = formattingEnabled;
             _formatString = formatString;
             _nullValue = nullValue;
@@ -100,11 +100,9 @@ namespace System.Windows.Forms
         {
         }
 
-        internal BindToObject BindToObject => _bindToObject;
+        public object DataSource { get; }
 
-        public object DataSource => _bindToObject.DataSource;
-
-        public BindingMemberInfo BindingMemberInfo => _bindToObject.BindingMemberInfo;
+        public BindingMemberInfo BindingMemberInfo { get; }
 
         /// <summary>
         /// Gets the control to which the binding belongs.
@@ -180,31 +178,36 @@ namespace System.Windows.Forms
         /// Gets the <see cref='System.Windows.Forms.BindingManagerBase'/> of this binding that
         /// allows enumeration of a set of bindings.
         /// </summary>
-        public BindingManagerBase BindingManagerBase => _bindingManagerBase;
-
-        internal void SetListManager(BindingManagerBase newBindingManagerBase)
+        public BindingManagerBase BindingManagerBase
         {
-            if (_bindingManagerBase is CurrencyManager oldCurrencyManagEr)
+            get => _bindingManagerBase;
+            internal set
             {
-                oldCurrencyManagEr.MetaDataChanged -= new EventHandler(binding_MetaDataChanged);
+                if (_bindingManagerBase != value)
+                {
+                    if (_bindingManagerBase is CurrencyManager oldCurrencyManager)
+                    {
+                        oldCurrencyManager.MetaDataChanged -= new EventHandler(binding_MetaDataChanged);
+                    }
+
+                    _bindingManagerBase = value;
+
+                    if (value is CurrencyManager newCurrencyManager)
+                    {
+                        newCurrencyManager.MetaDataChanged += new EventHandler(binding_MetaDataChanged);
+                    }
+
+                    _bindToObject.SetBindingManagerBase(value);
+                    CheckBinding();
+                }
             }
-
-            _bindingManagerBase = newBindingManagerBase;
-
-            if (newBindingManagerBase is CurrencyManager newCurrencyManager)
-            {
-                newCurrencyManager.MetaDataChanged += new EventHandler(binding_MetaDataChanged);
-            }
-
-            _bindToObject.SetBindingManagerBase(newBindingManagerBase);
-            CheckBinding();
         }
 
         /// <summary>
         /// Gets or sets the property on the control to bind to.
         /// </summary>
         [DefaultValue("")]
-        public string PropertyName => _propertyName;
+        public string PropertyName { get; } = string.Empty;
 
         public event BindingCompleteEventHandler BindingComplete
         {
@@ -409,14 +412,14 @@ namespace System.Windows.Forms
         {
             _bindToObject.CheckBinding();
 
-            if (_control != null && !string.IsNullOrEmpty(_propertyName))
+            if (_control != null && !string.IsNullOrEmpty(PropertyName))
             {
                 _control.DataBindings.CheckDuplicates(this);
 
                 Type controlClass = _control.GetType();
 
                 // Check Properties
-                string propertyNameIsNull = _propertyName + "IsNull";
+                string propertyNameIsNull = PropertyName + "IsNull";
                 Type propType = null;
                 PropertyDescriptor tempPropInfo = null;
                 PropertyDescriptor tempPropIsNullInfo = null;
@@ -440,7 +443,7 @@ namespace System.Windows.Forms
 
                 for (int i = 0; i < propInfos.Count; i++)
                 {
-                    if (tempPropInfo == null && string.Equals(propInfos[i].Name, _propertyName, StringComparison.OrdinalIgnoreCase))
+                    if (tempPropInfo == null && string.Equals(propInfos[i].Name, PropertyName, StringComparison.OrdinalIgnoreCase))
                     {
                         tempPropInfo = propInfos[i];
                         if (tempPropIsNullInfo != null)
@@ -460,11 +463,11 @@ namespace System.Windows.Forms
 
                 if (tempPropInfo == null)
                 {
-                    throw new ArgumentException(string.Format(SR.ListBindingBindProperty, _propertyName), "PropertyName");
+                    throw new ArgumentException(string.Format(SR.ListBindingBindProperty, PropertyName), nameof(PropertyName));
                 }
                 if (tempPropInfo.IsReadOnly && _controlUpdateMode != ControlUpdateMode.Never)
                 {
-                    throw new ArgumentException(string.Format(SR.ListBindingBindPropertyReadOnly, _propertyName), "PropertyName");
+                    throw new ArgumentException(string.Format(SR.ListBindingBindPropertyReadOnly, PropertyName), nameof(PropertyName));
                 }
 
                 _propInfo = tempPropInfo;
@@ -556,8 +559,6 @@ namespace System.Windows.Forms
 
         protected virtual void OnBindingComplete(BindingCompleteEventArgs e)
         {
-            // This recursion guard will only be in effect if FormattingEnabled because this method
-            // is only called if formatting is enabled.
             if (!_inOnBindingComplete)
             {
                 try
@@ -571,7 +572,10 @@ namespace System.Windows.Forms
                     // User code should not be throwing exceptions from this event as a way to signal new error conditions (they should use
                     // things like the Format or Parse events for that). Exceptions thrown here can mess up currency manager behavior big time.
                     // For now, eat any non-critical exceptions and instead just cancel the current push/pull operation.
-                    e.Cancel = true;
+                    if (e != null)
+                    {
+                        e.Cancel = true;
+                    }
                 }
                 finally
                 {
@@ -584,7 +588,7 @@ namespace System.Windows.Forms
         {
             _onParse?.Invoke(this, cevent);
 
-            if (!_formattingEnabled)
+            if (!_formattingEnabled && cevent != null)
             {
                 if (!(cevent.Value is DBNull) && cevent.Value != null && cevent.DesiredType != null && !cevent.DesiredType.IsInstanceOfType(cevent.Value) && (cevent.Value is IConvertible))
                 {
@@ -597,7 +601,7 @@ namespace System.Windows.Forms
         {
             _onFormat?.Invoke(this, cevent);
 
-            if (!_formattingEnabled)
+            if (!_formattingEnabled && cevent != null)
             {
                 if (!(cevent.Value is DBNull) && cevent.DesiredType != null && !cevent.DesiredType.IsInstanceOfType(cevent.Value) && (cevent.Value is IConvertible))
                 {
@@ -976,7 +980,7 @@ namespace System.Windows.Forms
                     {
                         _propIsNullInfo.SetValue(_control, true);
                     }
-                    else
+                    else if (_propInfo != null)
                     {
                         if (_propInfo.PropertyType == typeof(object))
                         {
@@ -1060,8 +1064,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (_control != null && !string.IsNullOrEmpty(_propertyName) &&
-                                _bindToObject.DataSource != null && _bindingManagerBase != null);
+                return (_control != null && !string.IsNullOrEmpty(PropertyName) &&
+                                DataSource != null && _bindingManagerBase != null);
             }
         }
 
@@ -1082,6 +1086,238 @@ namespace System.Windows.Forms
                     {
                         PushData();
                     }
+                }
+            }
+        }
+
+        private class BindToObject
+        {
+            private PropertyDescriptor _fieldInfo;
+            private readonly Binding _owner;
+            private string _errorText = string.Empty;
+
+            private bool _dataSourceInitialized = false;
+            private bool _waitingOnDataSource = false;
+
+            private void PropValueChanged(object sender, EventArgs e)
+            {
+                _owner.BindingManagerBase?.OnCurrentChanged(EventArgs.Empty);
+            }
+
+            private bool IsDataSourceInitialized
+            {
+                get
+                {
+                    Debug.Assert(_owner.DataSource != null, "how can we determine if DataSource is initialized or not if we have no data source?");
+                    if (_dataSourceInitialized)
+                    {
+                        return true;
+                    }
+
+                    if (!(_owner.DataSource is ISupportInitializeNotification ds) || ds.IsInitialized)
+                    {
+                        _dataSourceInitialized = true;
+                        return true;
+                    }
+
+                    // We have an ISupportInitializeNotification which was not initialized yet.
+                    // We already hooked up the Initialized event and the data source is not initialized yet.
+                    if (_waitingOnDataSource)
+                    {
+                        return false;
+                    }
+
+                    // Hook up the Initialized event.
+                    ds.Initialized += new EventHandler(DataSource_Initialized);
+                    _waitingOnDataSource = true;
+                    return false;
+                }
+            }
+
+            internal BindToObject(Binding owner)
+            {
+                Debug.Assert(owner != null);
+                _owner = owner;
+                CheckBinding();
+            }
+
+            private void DataSource_Initialized(object sender, EventArgs e)
+            {
+                Debug.Assert(sender == _owner.DataSource, "data source should not change");
+                Debug.Assert(_owner.DataSource is ISupportInitializeNotification, "data source should not change on the BindToObject");
+                Debug.Assert(_waitingOnDataSource);
+
+                // Unhook the Initialized event.
+                if (_owner.DataSource is ISupportInitializeNotification ds)
+                {
+                    ds.Initialized -= new EventHandler(DataSource_Initialized);
+                }
+
+                // The wait is over: DataSource is initialized.
+                _waitingOnDataSource = false;
+                _dataSourceInitialized = true;
+
+                // Rebind.
+                CheckBinding();
+            }
+
+            internal void SetBindingManagerBase(BindingManagerBase lManager)
+            {
+                // remove notification from the backEnd
+                if (_owner.BindingManagerBase != null && _fieldInfo != null && _owner.BindingManagerBase.IsBinding && !(_owner.BindingManagerBase is CurrencyManager))
+                {
+                    _fieldInfo.RemoveValueChanged(_owner.BindingManagerBase.Current, new EventHandler(PropValueChanged));
+                    _fieldInfo = null;
+                }
+
+                CheckBinding();
+            }
+
+            internal string DataErrorText => _errorText;
+
+            /// <summary>
+            /// Returns any data error info on the data source for the bound data field
+            /// in the current row
+            /// </summary>
+            private string GetErrorText(object value)
+            {
+                string text = string.Empty;
+
+                if (value is IDataErrorInfo errorInfo)
+                {
+                    // Get the row error if there is no DataMember
+                    if (_fieldInfo == null)
+                    {
+                        text = errorInfo.Error;
+                    }
+                    // Get the column error if there is a DataMember.
+                    // The DataTable uses its own Locale to lookup column names <sigh>.
+                    // So passing the DataMember from the BindingField could cause problems.
+                    // Pass the name from the PropertyDescriptor that the DataTable gave us.
+                    // (If there is no fieldInfo, data binding would have failed already )
+                    else
+                    {
+                        text = errorInfo[_fieldInfo.Name];
+                    }
+                }
+
+                return text ?? string.Empty;
+            }
+
+            internal object GetValue()
+            {
+                object obj = _owner.BindingManagerBase.Current;
+
+                // Update IDataErrorInfo text: it's ok to get this now because we're going to need
+                // this as part of the BindingCompleteEventArgs anyway.
+                _errorText = GetErrorText(obj);
+
+                if (_fieldInfo != null)
+                {
+                    obj = _fieldInfo.GetValue(obj);
+                }
+
+                return obj;
+            }
+
+            internal Type BindToType
+            {
+                get
+                {
+                    if (_owner.BindingMemberInfo.BindingField.Length == 0)
+                    {
+                        // if we are bound to a list w/o any properties, then
+                        // take the type from the BindingManager
+                        Type type = _owner.BindingManagerBase.BindType;
+                        if (typeof(Array).IsAssignableFrom(type))
+                        {
+                            type = type.GetElementType();
+                        }
+                        return type;
+                    }
+                    
+                    return _fieldInfo?.PropertyType;
+                }
+            }
+
+            internal void SetValue(object value)
+            {
+                object obj = null;
+
+                if (_fieldInfo != null)
+                {
+                    obj = _owner.BindingManagerBase.Current;
+                    if (obj is IEditableObject editableObject)
+                    {
+                        editableObject.BeginEdit();
+                    }
+                    if (!_fieldInfo.IsReadOnly)
+                    {
+                        _fieldInfo.SetValue(obj, value);
+                    }
+                }
+                else
+                {
+                    if (_owner.BindingManagerBase is CurrencyManager cm)
+                    {
+                        cm[cm.Position] = value;
+                        obj = value;
+                    }
+                }
+
+                // Update IDataErrorInfo text. 
+                _errorText = GetErrorText(obj);
+            }
+
+            internal PropertyDescriptor FieldInfo => _fieldInfo;
+
+            internal void CheckBinding()
+            {
+                // At design time, don't check anything.
+                if (_owner.BindableComponent != null && _owner.ControlAtDesignTime())
+                {
+                    return;
+                }
+
+                // Remove propertyChangedNotification when this binding is deleted
+                if (_owner.BindingManagerBase != null &&
+                    _fieldInfo != null &&
+                    _owner.BindingManagerBase.IsBinding &&
+                    !(_owner.BindingManagerBase is CurrencyManager))
+                {
+
+                    _fieldInfo.RemoveValueChanged(_owner.BindingManagerBase.Current, new EventHandler(PropValueChanged));
+                }
+
+                if (_owner.BindingManagerBase != null &&
+                    _owner.BindableComponent != null &&
+                    _owner.ComponentCreated &&
+                    IsDataSourceInitialized)
+                {
+                    string dataField = _owner.BindingMemberInfo.BindingField;
+
+                    _fieldInfo = _owner.BindingManagerBase.GetItemProperties().Find(dataField, true);
+                    if (_owner.BindingManagerBase.DataSource != null && _fieldInfo == null && dataField.Length > 0)
+                    {
+                        throw new ArgumentException(string.Format(SR.ListBindingBindField, dataField), "dataMember");
+                    }
+
+                    // Do not add propertyChange notification if the fieldInfo is null                
+                    //
+                    // We add an event handler to the dataSource in the BindingManagerBase because
+                    // if the binding is of the form (Control, ControlProperty, DataSource, Property1.Property2.Property3)
+                    // then we want to get notification from Current.Property1.Property2 and not from DataSource
+                    // when we get the backEnd notification we push the new value into the Control's property
+                    if (_fieldInfo != null && _owner.BindingManagerBase.IsBinding &&
+                        !(_owner.BindingManagerBase is CurrencyManager))
+                    {
+
+                        _fieldInfo.AddValueChanged(_owner.BindingManagerBase.Current, new EventHandler(PropValueChanged));
+                    }
+                }
+                else
+                {
+                    _fieldInfo = null;
                 }
             }
         }

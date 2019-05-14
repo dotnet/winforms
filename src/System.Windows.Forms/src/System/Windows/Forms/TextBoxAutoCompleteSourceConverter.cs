@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
         public TextBoxAutoCompleteSourceConverter(Type type) : base(type) {
         }
 
-        /// <include file='doc\TextBoxAutoCompleteSourceConverter.uex' path='docs/doc[@for="TextBoxAutoCompleteSourceConverter.GetStandardValues"]/*' />
         /// <devdoc>
         ///    <para>Gets a collection of standard values for the data type this validator is
         ///       designed for.</para>
