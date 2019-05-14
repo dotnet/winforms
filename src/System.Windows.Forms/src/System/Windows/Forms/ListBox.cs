@@ -4196,18 +4196,20 @@ namespace System.Windows.Forms {
                 {
                     int itemHeight = _owningListBox.SendMessage(NativeMethods.LB_GETITEMHEIGHT, i, 0).ToInt32();
 
-                    if ((itemsHeightSum += itemHeight) > listBoxHeight)
+                    if ((itemsHeightSum += itemHeight) <= listBoxHeight)
                     {
-                        int lastVisibleIndex = i - 1; // - 1 because last "i" index is invisible
-                        visibleItemsCount = lastVisibleIndex - firstVisibleIndex + 1; // + 1 because array indexes begin since 0
-
-                        if (itemId > lastVisibleIndex)
-                        {
-                            _owningListBox.SendMessage(NativeMethods.LB_SETTOPINDEX, itemId - visibleItemsCount + 1, 0);
-                        }
-
-                        break;
+                        continue;
                     }
+
+                    int lastVisibleIndex = i - 1; // - 1 because last "i" index is invisible
+                    visibleItemsCount = lastVisibleIndex - firstVisibleIndex + 1; // + 1 because array indexes begin since 0
+
+                    if (itemId > lastVisibleIndex)
+                    {
+                        _owningListBox.SendMessage(NativeMethods.LB_SETTOPINDEX, itemId - visibleItemsCount + 1, 0);
+                    }
+
+                    break;
                 }
             }
 
