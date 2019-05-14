@@ -2340,6 +2340,8 @@ namespace System.Windows.Forms {
                 this.listControl = listControl;
             }
 
+            internal Entry[] Entries { get { return entries; } }
+
             /// <devdoc>
             ///     The version of this array.  This number changes with each
             ///     change to the item list.
@@ -2658,7 +2660,7 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     This is a single entry in our item array.
             /// </devdoc>
-            private class Entry {
+            internal class Entry {
                 public object item;
                 public int state;
 
@@ -2779,6 +2781,8 @@ namespace System.Windows.Forms {
                 this.owner = owner;
                 this.AddRange(value);
             }
+
+            internal ItemArray EntryArray { get { return items; } }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.ObjectCollection.Count"]/*' />
             /// <devdoc>
@@ -4095,7 +4099,7 @@ namespace System.Windows.Forms {
                                                          
             internal override object GetObjectForChildInternal(int idChild)
             {
-                return _itemAccessibleObjects[_owningListBox.Items[idChild - 1]];
+                return _itemAccessibleObjects[_owningListBox.Items.EntryArray.Entries[idChild - 1]];
             }
 
             internal override bool IsIAccessibleExSupported()
@@ -4155,28 +4159,30 @@ namespace System.Windows.Forms {
         internal class ListBoxItemAccessibleObject : AccessibleObject
         {
             private readonly ListBox _owningListBox;
-            private readonly int _itemId;
+            private readonly object _item;
 
             public ListBoxItemAccessibleObject(ListBox owningListBox, object item)
             {
                 _owningListBox = owningListBox;
-                _itemId = owningListBox.Items.IndexOf(item);
+                _item = item;
             }
 
             internal override void ScrollIntoView()
             {
+                var itemId = Array.IndexOf(_owningListBox.Items.EntryArray.Entries, _item);
+                
                 if (_owningListBox.SelectedIndex == -1) //no item selected
                 {
-                    _owningListBox.SendMessage(NativeMethods.LB_SETCARETINDEX, _itemId, 0);
+                    _owningListBox.SendMessage(NativeMethods.LB_SETCARETINDEX, itemId, 0);
 
                     return;
                 }
                 
                 int firstVisibleIndex = _owningListBox.SendMessage(NativeMethods.LB_GETTOPINDEX, 0, 0).ToInt32();
 
-                if (_itemId < firstVisibleIndex)
+                if (itemId < firstVisibleIndex)
                 {
-                    _owningListBox.SendMessage(NativeMethods.LB_SETTOPINDEX, _itemId, 0);
+                    _owningListBox.SendMessage(NativeMethods.LB_SETTOPINDEX, itemId, 0);
 
                     return;
                 }
@@ -4195,9 +4201,9 @@ namespace System.Windows.Forms {
                         int lastVisibleIndex = i - 1; // - 1 because last "i" index is invisible
                         visibleItemsCount = lastVisibleIndex - firstVisibleIndex + 1; // + 1 because array indexes begin since 0
 
-                        if (_itemId > lastVisibleIndex)
+                        if (itemId > lastVisibleIndex)
                         {
-                            _owningListBox.SendMessage(NativeMethods.LB_SETTOPINDEX, _itemId - visibleItemsCount + 1, 0);
+                            _owningListBox.SendMessage(NativeMethods.LB_SETTOPINDEX, itemId - visibleItemsCount + 1, 0);
                         }
 
                         break;
