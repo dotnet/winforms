@@ -826,8 +826,13 @@ namespace System.ComponentModel.Design.Serialization
             while (t == null)
             {
                 t = GetType(typeName);
-                if (t == null && typeName != null && typeName.Length > 0)
+                if (t == null)
                 {
+                    if (string.IsNullOrEmpty(typeName))
+                    {
+                        break;
+                    }
+
                     int dotIndex = typeName.LastIndexOf('.');
                     if (dotIndex == -1 || dotIndex == typeName.Length - 1)
                     {
