@@ -1951,6 +1951,9 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(index));
                 }
 
+                // Remove ourselves as the owner.
+                _owner.subItems[index].owner = null;
+
                 // Collapse the items
                 for (int i = index + 1; i < _owner.SubItemCount; i++)
                 {
