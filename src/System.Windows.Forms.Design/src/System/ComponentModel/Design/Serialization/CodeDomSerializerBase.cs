@@ -23,7 +23,7 @@ namespace System.ComponentModel.Design.Serialization
         private static readonly Attribute[] runTimeProperties = new Attribute[] { DesignOnlyAttribute.No };
         private static readonly CodeThisReferenceExpression thisRef = new CodeThisReferenceExpression();
         private static TraceSwitch traceSerialization = new TraceSwitch("DesignerSerialization", "Trace design time serialization");
-        private static Stack traceScope;
+        private static Stack traceScope = null;
 
         /// <summary>
         ///     Internal constructor so only we can derive from this class.
@@ -461,8 +461,8 @@ namespace System.ComponentModel.Design.Serialization
         }
         internal static IDisposable TraceScope(string name)
         {
-            if (traceScope == null) traceScope = new Stack();
 #if DEBUG
+            if (traceScope == null) traceScope = new Stack();
             Trace(name);
             traceScope.Push(name);
 #endif
