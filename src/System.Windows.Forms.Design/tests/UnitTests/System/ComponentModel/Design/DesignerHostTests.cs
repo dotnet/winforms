@@ -14,6 +14,101 @@ namespace System.ComponentModel.Design.Tests
 {
     public class DesignerHostTests
     {
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void DesignerHost_CanReloadWithErrors_Set_GetReturnsExpected(bool value)
+        {
+            var surface = new SubDesignSurface();
+            IDesignerLoaderHost2 host = surface.Host;
+            host.CanReloadWithErrors = value;
+            Assert.Equal(value, host.CanReloadWithErrors);
+
+            // Set same.
+            host.CanReloadWithErrors = value;
+            Assert.Equal(value, host.CanReloadWithErrors);
+
+            // Set different.
+            host.CanReloadWithErrors = !value;
+            Assert.Equal(!value, host.CanReloadWithErrors);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void DesignerHost_IgnoreErrorsDuringReload_Set_GetReturnsExpected(bool value)
+        {
+            var surface = new SubDesignSurface();
+            IDesignerLoaderHost2 host = surface.Host;
+            host.IgnoreErrorsDuringReload = value;
+            Assert.False(host.IgnoreErrorsDuringReload);
+
+            // Set same.
+            host.IgnoreErrorsDuringReload = value;
+            Assert.False(host.IgnoreErrorsDuringReload);
+
+            // Set different.
+            host.IgnoreErrorsDuringReload = !value;
+            Assert.False(host.IgnoreErrorsDuringReload);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void DesignerHost_IgnoreErrorsDuringReload_SetWithCanReloadWithErrors_GetReturnsExpected(bool value)
+        {
+            var surface = new SubDesignSurface();
+            IDesignerLoaderHost2 host = surface.Host;
+            host.CanReloadWithErrors = true;
+
+            host.IgnoreErrorsDuringReload = value;
+            Assert.Equal(value, host.IgnoreErrorsDuringReload);
+
+            // Set same.
+            host.IgnoreErrorsDuringReload = value;
+            Assert.Equal(value, host.IgnoreErrorsDuringReload);
+
+            // Set different.
+            host.IgnoreErrorsDuringReload = !value;
+            Assert.Equal(!value, host.IgnoreErrorsDuringReload);
+        }
+
+        [Fact]
+        public void DesignerHost_Activate_Invoke_CallsViewActivated()
+        {
+            var surface = new SubDesignSurface();
+            int viewActivatedCallCount = 0;
+            int activatedCallCount = 0;
+            surface.ViewActivated += (sender, e) =>
+            {
+                Assert.Same(surface, sender);
+                Assert.Same(EventArgs.Empty, e);
+                viewActivatedCallCount++;
+            };
+            IDesignerLoaderHost2 host = surface.Host;
+            host.Activated += (sender, e) => activatedCallCount++;
+            host.Activate();
+            Assert.Equal(1, viewActivatedCallCount);
+            Assert.Equal(0, activatedCallCount);
+        }
+
+        [Fact]
+        public void DesignerHost_Activate_InvokeDisposed_Nop()
+        {
+            var surface = new SubDesignSurface();
+            int viewActivatedCallCount = 0;
+            int activatedCallCount = 0;
+            surface.ViewActivated += (sender, e) =>
+            {
+                Assert.Same(surface, sender);
+                Assert.Same(EventArgs.Empty, e);
+                viewActivatedCallCount++;
+            };
+            IDesignerLoaderHost2 host = surface.Host;
+            surface.Dispose();
+            host.Activated += (sender, e) => activatedCallCount++;
+            host.Activate();
+            Assert.Equal(0, viewActivatedCallCount);
+            Assert.Equal(0, activatedCallCount);
+        }
+
         public static IEnumerable<object[]> Add_InvalidNameCreationServiceParentProvider_TestData()
         {
             yield return new object[] { null };
@@ -81,7 +176,7 @@ namespace System.ComponentModel.Design.Tests
 
         [Theory]
         [MemberData(nameof(Add_ComponentParentProvider_TestData))]
-        public void Add_ComponentWithRootDesigner_Success(IServiceProvider parentProvider, string expectedName)
+        public void DesignerHost_Add_ComponentWithRootDesigner_Success(IServiceProvider parentProvider, string expectedName)
         {
             var surface = new SubDesignSurface(parentProvider);
             IDesignerLoaderHost2 host = surface.Host;
@@ -136,7 +231,7 @@ namespace System.ComponentModel.Design.Tests
 
         [Theory]
         [MemberData(nameof(Add_InvalidNameCreationServiceParentProvider_TestData))]
-        public void Add_ComponentStringWithRootDesigner_Success(IServiceProvider parentProvider)
+        public void DesignerHost_Add_ComponentStringWithRootDesigner_Success(IServiceProvider parentProvider)
         {
             var surface = new SubDesignSurface(parentProvider);
             IDesignerLoaderHost2 host = surface.Host;
@@ -190,7 +285,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void Add_SameComponent_Success()
+        public void DesignerHost_Add_SameComponent_Success()
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
@@ -212,7 +307,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void Add_ComponentWithNameCreationServiceWithoutName_CallsCreateName()
+        public void DesignerHost_Add_ComponentWithNameCreationServiceWithoutName_CallsCreateName()
         {
             var mockNameCreationService = new Mock<INameCreationService>(MockBehavior.Strict);
             mockNameCreationService
@@ -247,7 +342,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void Add_ComponentWithNameCreationServiceWithCustomReflectionType_CallsCreateName()
+        public void DesignerHost_Add_ComponentWithNameCreationServiceWithCustomReflectionType_CallsCreateName()
         {
             var component = new CustomTypeDescriptionProviderComponent();
             var mockCustomTypeDescriptor = new Mock<ICustomTypeDescriptor>(MockBehavior.Strict);
@@ -303,7 +398,7 @@ namespace System.ComponentModel.Design.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
-        public void Add_ComponentWithNameCreationServiceWithName_CallsValidateName(string name)
+        public void DesignerHost_Add_ComponentWithNameCreationServiceWithName_CallsValidateName(string name)
         {
             var mockNameCreationService = new Mock<INameCreationService>(MockBehavior.Strict);
             mockNameCreationService
@@ -332,7 +427,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void AddComponentIDictionaryServiceGetKey_NoDictionary_ReturnsNull()
+        public void DesignerHost_AddComponentIDictionaryServiceGetKey_NoDictionary_ReturnsNull()
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
@@ -345,7 +440,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void AddComponentIDictionaryServiceGetKey_NoSuchKeyWithDictionary_ReturnsNull()
+        public void DesignerHost_AddComponentIDictionaryServiceGetKey_NoSuchKeyWithDictionary_ReturnsNull()
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
@@ -364,7 +459,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void AddComponentIDictionaryServiceGetValue_NoDictionary_ReturnsNull()
+        public void DesignerHost_AddComponentIDictionaryServiceGetValue_NoDictionary_ReturnsNull()
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
@@ -376,7 +471,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void AddComponentIDictionaryServiceGetValue_NoSuchValueWithDictionary_ReturnsNull()
+        public void DesignerHost_AddComponentIDictionaryServiceGetValue_NoSuchValueWithDictionary_ReturnsNull()
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
@@ -394,7 +489,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void AddComponentIDictionaryServiceGetValue_NullValueNoDictionary_ReturnsNull()
+        public void DesignerHost_AddComponentIDictionaryServiceGetValue_NullValueNoDictionary_ReturnsNull()
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
@@ -406,7 +501,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void AddComponentIDictionaryServiceGetValue_NullValueWithDictionary_ThrowsArgumentNullException()
+        public void DesignerHost_AddComponentIDictionaryServiceGetValue_NullValueWithDictionary_ThrowsArgumentNullException()
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
@@ -424,7 +519,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void AddComponentIDictionaryServiceSetValue_Invoke_GetKeyValueReturnsExpected()
+        public void DesignerHost_AddComponentIDictionaryServiceSetValue_Invoke_GetKeyValueReturnsExpected()
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
@@ -460,7 +555,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void AddComponentIDictionaryServiceSetValue_NullKey_ThrowsArgumentNullException()
+        public void DesignerHost_AddComponentIDictionaryServiceSetValue_NullKey_ThrowsArgumentNullException()
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
@@ -487,7 +582,7 @@ namespace System.ComponentModel.Design.Tests
 
         [Theory]
         [MemberData(nameof(AddComponentISiteName_Set_TestData))]
-        public void AddComponentISiteName_SetRootComponent_GetReturnsExpected(IServiceProvider parentProvider, string oldName, string value, string expectedName)
+        public void DesignerHost_AddComponentISiteName_SetRootComponent_GetReturnsExpected(IServiceProvider parentProvider, string oldName, string value, string expectedName)
         {
             var surface = new SubDesignSurface(parentProvider);
             IDesignerLoaderHost2 host = surface.Host;
@@ -504,7 +599,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void AddComponentISiteName_SetDifferentCase_GetReturnsExpected()
+        public void DesignerHost_AddComponentISiteName_SetDifferentCase_GetReturnsExpected()
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
@@ -520,7 +615,7 @@ namespace System.ComponentModel.Design.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void AddComponentISiteName_SetWithMultipleComponents_GetReturnsExpected(string value)
+        public void DesignerHost_AddComponentISiteName_SetWithMultipleComponents_GetReturnsExpected(string value)
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
@@ -570,7 +665,7 @@ namespace System.ComponentModel.Design.Tests
 
         [Theory]
         [MemberData(nameof(AddComponentISiteName_SetWithNamespaceInRootComponentClassName_TestData))]
-        public void AddComponentISiteName_SetWithNamespaceInRootComponentClassName_GetReturnsExpected(string oldRootComponentClassName, string oldName, string value, string expectedName, string expectedRootComponentClassName)
+        public void DesignerHost_AddComponentISiteName_SetWithNamespaceInRootComponentClassName_GetReturnsExpected(string oldRootComponentClassName, string oldName, string value, string expectedName, string expectedRootComponentClassName)
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
@@ -593,7 +688,7 @@ namespace System.ComponentModel.Design.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void AddComponentISiteName_SetNameWithComponentRename_CallsHandler(string value)
+        public void DesignerHost_AddComponentISiteName_SetNameWithComponentRename_CallsHandler(string value)
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
@@ -633,7 +728,7 @@ namespace System.ComponentModel.Design.Tests
         [InlineData("", "", 1)]
         [InlineData("newName", "newName", 1)]
         [InlineData("OLDNAME", "OLDNAME", 0)]
-        public void AddComponentISite_SetNameWithINameCreateService_CallsValidateName(string value, string expectedName, int expectedCallCount)
+        public void DesignerHost_AddComponentISite_SetNameWithINameCreateService_CallsValidateName(string value, string expectedName, int expectedCallCount)
         {
             var mockNameCreationService = new Mock<INameCreationService>(MockBehavior.Strict);
             mockNameCreationService
@@ -669,7 +764,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void AddComponentISiteName_SetSameAsOtherComponent_GetReturnsExpected()
+        public void DesignerHost_AddComponentISiteName_SetSameAsOtherComponent_GetReturnsExpected()
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
@@ -682,7 +777,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void AddComponentISiteGetService_Invoke_ReturnsExpected()
+        public void DesignerHost_AddComponentISiteGetService_Invoke_ReturnsExpected()
         {
             var service = new object();
             var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
@@ -707,7 +802,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void AddComponentISiteGetService_InvokeWithNestedContainer_ReturnsNull()
+        public void DesignerHost_AddComponentISiteGetService_InvokeWithNestedContainer_ReturnsNull()
         {
             var service = new object();
             var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
@@ -735,7 +830,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void AddComponentISiteGetService_INestedContainer_ReturnsExpected()
+        public void DesignerHost_AddComponentISiteGetService_INestedContainer_ReturnsExpected()
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
@@ -748,7 +843,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void AddComponentISiteGetServiceINestedContainerGetService_Invoke_ReturnsExpected()
+        public void DesignerHost_AddComponentISiteGetServiceINestedContainerGetService_Invoke_ReturnsExpected()
         {
             var service = new object();
             var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
@@ -776,7 +871,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void AddComponentISiteGetService_IDictionaryService_ReturnsExpected()
+        public void DesignerHost_AddComponentISiteGetService_IDictionaryService_ReturnsExpected()
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
@@ -786,7 +881,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void AddComponentISiteGetService_IServiceContainerReturnsExpected()
+        public void DesignerHost_AddComponentISiteGetService_IServiceContainerReturnsExpected()
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
@@ -796,7 +891,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void AddComponentISiteGetService_IContainerReturnsExpected()
+        public void DesignerHost_AddComponentISiteGetService_IContainerReturnsExpected()
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
@@ -806,7 +901,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void AddComponentISiteGetService_NullServiceType_ThrowsArgumentNullException()
+        public void DesignerHost_AddComponentISiteGetService_NullServiceType_ThrowsArgumentNullException()
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
@@ -816,7 +911,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void Add_IComponentWithComponentAddingAndAdded_CallsHandler()
+        public void DesignerHost_Add_IComponentWithComponentAddingAndAdded_CallsHandler()
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
@@ -863,7 +958,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void Add_NullComponent_ThrowsArgumentNullException()
+        public void DesignerHost_Add_NullComponent_ThrowsArgumentNullException()
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
@@ -879,7 +974,7 @@ namespace System.ComponentModel.Design.Tests
 
         [Theory]
         [MemberData(nameof(Add_NoRootDesigner_TestData))]
-        public void Add_NoRootDesigner_ThrowsException(IComponent component)
+        public void DesignerHost_Add_NoRootDesigner_ThrowsException(IComponent component)
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
@@ -888,7 +983,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void Add_NonInitializingRootDesigner_ThrowsInvalidOperationException()
+        public void DesignerHost_Add_NonInitializingRootDesigner_ThrowsInvalidOperationException()
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
@@ -898,7 +993,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void Add_ThrowingInitializingRootDesigner_RethrowsException()
+        public void DesignerHost_Add_ThrowingInitializingRootDesigner_RethrowsException()
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
@@ -913,7 +1008,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void Add_CheckoutExceptionThrowingInitializingRootDesigner_RethrowsException()
+        public void DesignerHost_Add_CheckoutExceptionThrowingInitializingRootDesigner_RethrowsException()
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
@@ -935,6 +1030,286 @@ namespace System.ComponentModel.Design.Tests
             host.Container.Add(component, "name");
             Assert.Same(host.Container, component.Container);
             Assert.Equal("name", component.Site.Name);
+        }
+
+        [Fact]
+        public void DesignerHost_GetComponents_Invoke_ReturnsFiltered()
+        {
+            var collection = new ComponentCollection(new Component[] { new Component() });
+            var mockFilterService = new Mock<ContainerFilterService>(MockBehavior.Strict);
+            mockFilterService
+                .Setup(f => f.FilterComponents(new ComponentCollection(new IComponent[0])))
+                .Returns(collection);
+            var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(ContainerFilterService)))
+                .Returns(mockFilterService.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
+            Assert.Same(collection, surface.ComponentContainer.Components);
+        }
+
+        public static IEnumerable<object[]> GetService_InvalidLoader_TestData()
+        {
+            var mockLoader = new Mock<DesignerLoader>(MockBehavior.Strict);
+            mockLoader
+                .Setup(l => l.BeginLoad(It.IsAny<IDesignerLoaderHost>()));
+            yield return new object[] { mockLoader.Object, null };
+
+            var mockNullServiceProviderLoader = new Mock<DesignerLoader>(MockBehavior.Strict);
+            mockNullServiceProviderLoader
+                .Setup(l => l.BeginLoad(It.IsAny<IDesignerLoaderHost>()));
+            mockNullServiceProviderLoader
+                .As<IServiceProvider>()
+                .Setup(p => p.GetService(typeof(IMultitargetHelperService)))
+                .Returns(null);
+            yield return new object[] { mockNullServiceProviderLoader.Object, null };
+
+            var o = new object();
+            var mockInvalidServiceProviderLoader = new Mock<DesignerLoader>(MockBehavior.Strict);
+            mockInvalidServiceProviderLoader
+                .Setup(l => l.BeginLoad(It.IsAny<IDesignerLoaderHost>()));
+            mockInvalidServiceProviderLoader
+                .As<IServiceProvider>()
+                .Setup(p => p.GetService(typeof(IMultitargetHelperService)))
+                .Returns(o);
+            yield return new object[] { mockInvalidServiceProviderLoader.Object, o };
+        }
+
+        [Theory]
+        [MemberData(nameof(GetService_InvalidLoader_TestData))]
+        public void DesignerHost_GetService_IMultitargetHelperServiceWithLoader_ReturnsExpected(DesignerLoader loader, object expected)
+        {
+            var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(IDesignerEventService)))
+                .Returns(null);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
+            surface.BeginLoad(loader);
+
+            IDesignerLoaderHost2 host = surface.Host;
+            Assert.Same(expected, host.GetService(typeof(IMultitargetHelperService)));
+        }
+
+        [Fact]
+        public void DesignerHost_GetServiceIMultitargetHelperServiceWithoutLoader_ReturnsNull()
+        {
+            var service = new object();
+            var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
+            IDesignerLoaderHost2 host = surface.Host;
+            Assert.Null(host.GetService(typeof(IMultitargetHelperService)));
+        }
+
+        [Fact]
+        public void DesignerHost_GetService_InvokeWithServiceProvider_ReturnsExpected()
+        {
+            var service = new object();
+            var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(int)))
+                .Returns(service)
+                .Verifiable();
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
+            IDesignerLoaderHost2 host = surface.Host;
+            Assert.Same(service, host.GetService(typeof(int)));
+            mockServiceProvider.Verify(p => p.GetService(typeof(int)), Times.Once());
+        }
+
+        [Fact]
+        public void DesignerHost_GetService_InvokeWithoutServiceProvider_ReturnsNull()
+        {
+            var surface = new SubDesignSurface();
+            IDesignerLoaderHost2 host = surface.Host;
+            Assert.Null(host.GetService(typeof(int)));
+        }
+
+        [Fact]
+        public void DesignerHost_GetService_IContainer_ReturnsExpected()
+        {
+            var surface = new SubDesignSurface();
+            IDesignerLoaderHost2 host = surface.Host;
+            Assert.Same(host, host.GetService(typeof(IContainer)));
+        }
+
+        [Fact]
+        public void DesignerHost_GetService_NullType_ThrowsArgumentNullException()
+        {
+            var surface = new SubDesignSurface();
+            IDesignerLoaderHost2 host = surface.Host;
+            Assert.Throws<ArgumentNullException>("service", () => host.GetService(null));
+        }
+
+        private static IDesignerHost s_placeholderHost = new Mock<IDesignerHost>(MockBehavior.Strict).Object;
+
+        public static IEnumerable<object[]> ChangeActiveDesigner_TestData()
+        {
+            IDesignerLoaderHost2 otherHost = new SubDesignSurface().Host;
+
+            yield return new object[] { null, 0, 0, 0 };
+
+            yield return new object[] { new ActiveDesignerEventArgs(s_placeholderHost, s_placeholderHost), 0, 1, 1 };
+            yield return new object[] { new ActiveDesignerEventArgs(s_placeholderHost, otherHost), 0, 1, 1 };
+            yield return new object[] { new ActiveDesignerEventArgs(s_placeholderHost, null), 0, 1, 1 };
+
+            yield return new object[] { new ActiveDesignerEventArgs(otherHost, s_placeholderHost), 1, 0, 0 };
+            yield return new object[] { new ActiveDesignerEventArgs(otherHost, otherHost), 0, 0, 0 };
+            yield return new object[] { new ActiveDesignerEventArgs(otherHost, null), 0, 0, 0 };
+
+            yield return new object[] { new ActiveDesignerEventArgs(null, s_placeholderHost), 1, 0, 0 };
+            yield return new object[] { new ActiveDesignerEventArgs(null, otherHost), 0, 0, 0 };
+            yield return new object[] { new ActiveDesignerEventArgs(null, null), 0, 0, 0 };
+        }
+
+        [Theory]
+        [MemberData(nameof(ChangeActiveDesigner_TestData))]
+        public void DesignerHost_ChangeActiveDesigner_Invoke_Success(ActiveDesignerEventArgs eventArgs, int expectedActivatedCallCount, int expectedDeactivatedCallCount, int expectedFlushCount)
+        {
+            var mockDesignerEventService = new Mock<IDesignerEventService>(MockBehavior.Strict);
+            var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(IDesignerEventService)))
+                .Returns(mockDesignerEventService.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
+            IDesignerLoaderHost2 host = surface.Host;
+
+            int activatedCallCount = 0;
+            EventHandler activatedHandler = (sender, e) =>
+            {
+                Assert.Same(host, sender);
+                Assert.Same(EventArgs.Empty, e);
+                activatedCallCount++;
+            };
+            host.Activated += activatedHandler;
+            int deactivatedCallCount = 0;
+            EventHandler deactivatedHandler = (sender, e) =>
+            {
+                Assert.Same(host, sender);
+                Assert.Same(EventArgs.Empty, e);
+                deactivatedCallCount++;
+            };
+            host.Deactivated += deactivatedHandler;
+            int flushCallCount = 0;
+            EventHandler flushedHandler = (sender, e) =>
+            {
+                Assert.Same(surface, sender);
+                Assert.Same(EventArgs.Empty, e);
+                flushCallCount++;
+            };
+            surface.Flushed += flushedHandler;
+
+            var mockLoader = new Mock<DesignerLoader>(MockBehavior.Strict);
+            mockLoader
+                .Setup(l => l.BeginLoad((IDesignerLoaderHost)surface.ComponentContainer));
+            mockLoader
+                .Setup(l => l.Flush());
+            surface.BeginLoad(mockLoader.Object);
+            Assert.Equal(0, activatedCallCount);
+            Assert.Equal(0, deactivatedCallCount);
+            Assert.Equal(0, flushCallCount);
+
+            // Replace placeholders for "this"
+            ActiveDesignerEventArgs actualEventArgs = null;
+            if (eventArgs != null)
+            {
+                IDesignerHost newDesigner = eventArgs.NewDesigner == s_placeholderHost ? host : eventArgs.NewDesigner;
+                IDesignerHost oldDesigner = eventArgs.OldDesigner == s_placeholderHost ? host : eventArgs.OldDesigner;
+                actualEventArgs = new ActiveDesignerEventArgs(oldDesigner, newDesigner);
+            }
+            mockDesignerEventService.Raise(s => s.ActiveDesignerChanged += null, actualEventArgs);
+            Assert.Equal(expectedActivatedCallCount, activatedCallCount);
+            Assert.Equal(expectedDeactivatedCallCount, deactivatedCallCount);
+            Assert.Equal(expectedFlushCount, flushCallCount);
+            
+            // Should not invoke if removed.
+            host.Activated -= activatedHandler;
+            host.Deactivated -= deactivatedHandler;
+            surface.Flushed -= flushedHandler;
+            mockDesignerEventService.Raise(s => s.ActiveDesignerChanged += null, actualEventArgs);
+            Assert.Equal(expectedActivatedCallCount, activatedCallCount);
+            Assert.Equal(expectedDeactivatedCallCount, deactivatedCallCount);
+            Assert.Equal(expectedFlushCount, flushCallCount);
+        }
+
+        [Fact]
+        public void DesignerHost_IReflect_UnderlyingSystemType_ReturnsExpected()
+        {
+            var surface = new SubDesignSurface();
+            IReflect reflect = Assert.IsAssignableFrom<IReflect>(surface.Host);
+            Assert.Equal(typeof(IDesignerHost), reflect.UnderlyingSystemType);
+        }
+
+        [Fact]
+        public void DesignerHost_IReflect_GetField_Success()
+        {
+            var surface = new SubDesignSurface();
+            IReflect reflect = Assert.IsAssignableFrom<IReflect>(surface.Host);
+            Assert.Equal(typeof(IDesignerHost).GetField(nameof(IDesignerHost.Activate)), reflect.GetField(nameof(IDesignerHost.Activate), BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public));
+        }
+
+        [Fact]
+        public void DesignerHost_IReflect_GetFields_Success()
+        {
+            var surface = new SubDesignSurface();
+            IReflect reflect = Assert.IsAssignableFrom<IReflect>(surface.Host);
+            Assert.Equal(typeof(IDesignerHost).GetFields(), reflect.GetFields(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public));
+        }
+
+        [Fact]
+        public void DesignerHost_IReflect_GetMember_Success()
+        {
+            var surface = new SubDesignSurface();
+            IReflect reflect = Assert.IsAssignableFrom<IReflect>(surface.Host);
+            Assert.Equal(typeof(IDesignerHost).GetMember(nameof(IDesignerHost.Container)), reflect.GetMember(nameof(IDesignerHost.Container), BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public));
+        }
+
+        [Fact]
+        public void DesignerHost_IReflect_GetMembers_Success()
+        {
+            var surface = new SubDesignSurface();
+            IReflect reflect = Assert.IsAssignableFrom<IReflect>(surface.Host);
+            Assert.Equal(typeof(IDesignerHost).GetMembers(), reflect.GetMembers(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public));
+        }
+
+        [Fact]
+        public void DesignerHost_IReflect_GetMethod_Success()
+        {
+            var surface = new SubDesignSurface();
+            IReflect reflect = Assert.IsAssignableFrom<IReflect>(surface.Host);
+            Assert.Equal(typeof(IDesignerHost).GetMethod(nameof(IDesignerHost.Activate)), reflect.GetMethod(nameof(IDesignerHost.Activate), BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public));
+            Assert.Equal(typeof(IDesignerHost).GetMethod(nameof(IDesignerHost.Activate)), reflect.GetMethod(nameof(IDesignerHost.Activate), BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public, null, new Type[0], new ParameterModifier[0]));
+        }
+
+        [Fact]
+        public void DesignerHost_IReflect_GetMethods_Success()
+        {
+            var surface = new SubDesignSurface();
+            IReflect reflect = Assert.IsAssignableFrom<IReflect>(surface.Host);
+            Assert.Equal(typeof(IDesignerHost).GetMethods(), reflect.GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public));
+        }
+
+        [Fact]
+        public void DesignerHost_IReflect_GetProperty_Success()
+        {
+            var surface = new SubDesignSurface();
+            IReflect reflect = Assert.IsAssignableFrom<IReflect>(surface.Host);
+            Assert.Equal(typeof(IDesignerHost).GetProperty(nameof(IDesignerHost.Container)), reflect.GetProperty(nameof(IDesignerHost.Container), BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public));
+            Assert.Equal(typeof(IDesignerHost).GetProperty(nameof(IDesignerHost.Container)), reflect.GetProperty(nameof(IDesignerHost.Container), BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public, null, typeof(IContainer), new Type[0], new ParameterModifier[0]));
+        }
+
+        [Fact]
+        public void DesignerHost_IReflect_GetProperties_Success()
+        {
+            var surface = new SubDesignSurface();
+            IReflect reflect = Assert.IsAssignableFrom<IReflect>(surface.Host);
+            Assert.Equal(typeof(IDesignerHost).GetProperties(), reflect.GetProperties(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public));
+        }
+
+        [Fact]
+        public void DesignerHost_IReflect_InvokeMember()
+        {
+            var surface = new SubDesignSurface();
+            IReflect reflect = Assert.IsAssignableFrom<IReflect>(surface.Host);
+            Assert.Equal(surface.Host.Container, reflect.InvokeMember(nameof(IDesignerHost.Container), BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.GetProperty, null, surface.Host, new object[0], new ParameterModifier[0], null, new string[0]));
         }
 
         private class SubDesignSurface : DesignSurface
