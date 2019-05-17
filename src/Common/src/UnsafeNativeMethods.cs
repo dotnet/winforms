@@ -68,6 +68,7 @@ using System.Runtime.Versioning;
 namespace System.Windows.Forms {
 
     using Accessibility;
+    using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
     using System.Runtime.InteropServices.ComTypes;
     using System.Runtime.ConstrainedExecution;
@@ -1576,7 +1577,7 @@ namespace System.Windows.Forms {
         {
             unsafe
             {
-                return ref *(T*)ptr;
+                return ref Unsafe.AsRef<T>(ptr.ToPointer());
             }
         }
 
