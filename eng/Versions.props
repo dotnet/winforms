@@ -26,7 +26,6 @@
     <SystemConfigurationConfigurationManagerPackageVersion>4.6.0-preview6.19264.9</SystemConfigurationConfigurationManagerPackageVersion>
     <SystemDrawingCommonPackageVersion>4.6.0-preview6.19264.9</SystemDrawingCommonPackageVersion>
     <SystemSecurityCryptographyCngPackageVersion>4.6.0-preview6.19264.9</SystemSecurityCryptographyCngPackageVersion>
-    <SystemSecurityPermissionsPackageVersion>4.6.0-preview6.19264.9</SystemSecurityPermissionsPackageVersion>
     <SystemWindowsExtensionsPackageVersion>4.6.0-preview6.19264.9</SystemWindowsExtensionsPackageVersion>
   </PropertyGroup>
   <!-- CoreCLR via Core Setup -->
