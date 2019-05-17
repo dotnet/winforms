@@ -162,14 +162,8 @@
                 {
                     break;
                 }
-                UnicodeCategory category = CharUnicodeInfo.GetUnicodeCategory(character);
-                bool isWord = category == UnicodeCategory.LowercaseLetter ||
-                    category == UnicodeCategory.UppercaseLetter ||
-                    category == UnicodeCategory.TitlecaseLetter ||
-                    category == UnicodeCategory.OtherLetter ||
-                    category == UnicodeCategory.ModifierLetter ||
-                    category == UnicodeCategory.NonSpacingMark ||
-                    category == UnicodeCategory.DecimalDigitNumber;
+                bool isWord = char.IsLetterOrDigit(character) ||
+                    CharUnicodeInfo.GetUnicodeCategory(character) == UnicodeCategory.NonSpacingMark;
                 if ((isWord && lastSeen == CharType.NonWord && seenWord) ||
                     (!isWord && lastSeen == CharType.Word && index != 0))
                 {
@@ -451,7 +445,7 @@
                 }
             }
 
-        #region IList Members
+            #region IList Members
             public void Clear() { InnerList.Clear(); }
             public bool IsFixedSize { get { return InnerList.IsFixedSize; } }
             public bool Contains(object value) { return InnerList.Contains(CreateWeakRefObject(value)); }
