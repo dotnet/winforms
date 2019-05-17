@@ -43,11 +43,7 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/corefx</Uri>
       <Sha>6f9570e012054bf407778c0b07632e7733ecbb13</Sha>
     </Dependency>
-    <Dependency Name="System.Security.Permissions" Version="4.6.0-preview6.19266.12" CoherentParentDependency="Microsoft.NETCore.App">
-      <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>6f9570e012054bf407778c0b07632e7733ecbb13</Sha>
-    </Dependency>
-    <Dependency Name="System.Windows.Extensions" Version="4.6.0-preview6.19266.12" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="System.Windows.Extensions" Version="4.6.0-preview6.19264.9" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/corefx</Uri>
       <Sha>6f9570e012054bf407778c0b07632e7733ecbb13</Sha>
     </Dependency>

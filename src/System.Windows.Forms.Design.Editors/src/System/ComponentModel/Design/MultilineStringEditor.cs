@@ -9,7 +9,6 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.InteropServices;
-using System.Security.Permissions;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
@@ -117,7 +116,6 @@ namespace System.ComponentModel.Design
                 base.Dispose(disposing);
             }
 
-            [SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             protected override object CreateRichEditOleCallback()
             {
                 return new OleCallback(this);
