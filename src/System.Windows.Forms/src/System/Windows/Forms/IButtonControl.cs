@@ -6,7 +6,7 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Allows a control to act like a button on a form.
-    /// </devdoc>
+    /// </summary>
     public interface IButtonControl
     {
 
@@ -14,19 +14,19 @@ namespace System.Windows.Forms
         /// Gets and sets the dialog result of the Button control. This is used as the result
         /// for the dialog on which the button is set to be an "accept" or "cancel" button.
         ///       
-        /// </devdoc>
+        /// </summary>
         DialogResult DialogResult { get; set; }
 
         /// <summary>
         /// Notifies a control that it is the default button so that its appearance and behavior
         /// is adjusted accordingly.
         ///       
-        /// </devdoc>
+        /// </summary>
         void NotifyDefault(bool value);
 
         /// <summary>
         /// Generates a <see cref='System.Windows.Forms.Control.Click'/> event for the control.
-        /// </devdoc>
+        /// </summary>
         void PerformClick();
     }
 }

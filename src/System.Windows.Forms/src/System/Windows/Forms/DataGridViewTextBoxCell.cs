@@ -14,7 +14,7 @@ namespace System.Windows.Forms
 
     /// <summary>
     ///    <para>Identifies a cell in the dataGridView.</para>
-    /// </devdoc>
+    /// </summary>
     public class DataGridViewTextBoxCell : DataGridViewCell
     {
         private static readonly int PropTextBoxCellMaxInputLength = PropertyStore.CreateKey();

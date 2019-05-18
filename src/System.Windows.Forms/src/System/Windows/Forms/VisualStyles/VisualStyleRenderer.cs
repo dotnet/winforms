@@ -22,7 +22,7 @@ namespace System.Windows.Forms.VisualStyles {
     ///    <para>
     ///       This class provides full feature parity with UxTheme API.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     public sealed class VisualStyleRenderer {
         private const TextFormatFlags AllGraphicsProperties = TextFormatFlags.PreserveGraphicsClipping | TextFormatFlags.PreserveGraphicsTranslateTransform;
 
@@ -61,7 +61,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///       if it returns false, attempting to instantiate/use objects of this class 
         ///       will result in exceptions being thrown.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static bool IsSupported {
             get {
                 bool supported = AreClientAreaVisualStylesSupported;
@@ -88,7 +88,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///             we might still return true. When you use an invalid state to render, you get the default
         ///             state instead.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static bool IsElementDefined(VisualStyleElement element) {
             if (element == null) {
                 throw new ArgumentNullException(nameof(element));
@@ -147,7 +147,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       Constructor takes a VisualStyleElement.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public VisualStyleRenderer(VisualStyleElement element) : this(element.ClassName, element.Part, element.State) {
         }
 
@@ -156,7 +156,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///       Constructor takes weakly typed parameters - left for extensibility (using classes, parts or states
         ///       not defined in the VisualStyleElement class.)
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public VisualStyleRenderer(string className, int part, int state) {
             if (!IsCombinationDefined(className, part)) { //internally this call takes care of IsSupported. 
                 throw new ArgumentException(SR.VisualStylesInvalidCombination);
@@ -171,7 +171,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       Returns the current _class. Use SetParameters to set.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public string Class {
             get {
                 return _class;
@@ -182,7 +182,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       Returns the current part. Use SetParameters to set.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public int Part {
             get {
                 return part;
@@ -193,7 +193,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       Returns the current state. Use SetParameters to set.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public int State {
             get {
                 return state;
@@ -208,7 +208,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///             theme changed, hook on to SystemEvents.UserPreferenceChanged and look for ThemeChanged 
         ///             category.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public IntPtr Handle {
             get {
                 if (!IsSupported) {
@@ -228,7 +228,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       Used to set a new VisualStyleElement on this VisualStyleRenderer instance.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void SetParameters(VisualStyleElement element) {
             if (element == null) {
                 throw new ArgumentNullException(nameof(element));
@@ -243,7 +243,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///       These parameters cannot be set individually. 
         ///       This method is present for extensibility.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void SetParameters(string className, int part, int state) {
             if (!IsCombinationDefined(className, part)) { //internally this call takes care of IsSupported.
                 throw new ArgumentException(SR.VisualStylesInvalidCombination); 
@@ -258,7 +258,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void DrawBackground(IDeviceContext dc, Rectangle bounds) {
             DrawBackground(dc, bounds, IntPtr.Zero);
         }
@@ -288,7 +288,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void DrawBackground(IDeviceContext dc, Rectangle bounds, Rectangle clipRectangle) {
             DrawBackground(dc, bounds, clipRectangle, IntPtr.Zero);
         }
@@ -321,7 +321,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public Rectangle DrawEdge(IDeviceContext dc, Rectangle bounds, Edges edges, EdgeStyle style, EdgeEffects effects) {
             if (dc == null) {
                 throw new ArgumentNullException(nameof(dc));
@@ -354,7 +354,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///       [See win32 equivalent.]
         ///       This method uses Graphics.DrawImage as a backup if themed drawing does not work.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void DrawImage(Graphics g, Rectangle bounds, Image image) {
             if (g == null) {
                 throw new ArgumentNullException(nameof(g));
@@ -376,7 +376,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///       [See win32 equivalent.] 
         ///       This method uses Graphics.DrawImage as a backup if themed drawing does not work.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void DrawImage(Graphics g, Rectangle bounds, ImageList imageList, int imageIndex) {
             if (g == null) {
                 throw new ArgumentNullException(nameof(g));
@@ -414,7 +414,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///       control's parent to draw itself in there (it sends WM_ERASEBKGND & WM_PRINTCLIENT messages
         ///       to the parent).
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void DrawParentBackground(IDeviceContext dc, Rectangle bounds, Control childControl) {
             if (dc == null) {
                 throw new ArgumentNullException(nameof(dc));
@@ -440,7 +440,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void DrawText(IDeviceContext dc, Rectangle bounds, string textToDraw) {
             DrawText(dc, bounds, textToDraw, false);
         }
@@ -449,7 +449,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void DrawText(IDeviceContext dc, Rectangle bounds, string textToDraw, bool drawDisabled) {
             DrawText(dc, bounds, textToDraw, drawDisabled, TextFormatFlags.HorizontalCenter); 
         }
@@ -458,7 +458,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void DrawText(IDeviceContext dc, Rectangle bounds, string textToDraw, bool drawDisabled, TextFormatFlags flags) {
             if( dc == null ){
                 throw new ArgumentNullException(nameof(dc));
@@ -482,7 +482,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public Rectangle GetBackgroundContentRectangle(IDeviceContext dc, Rectangle bounds) {
             if( dc == null ){
                 throw new ArgumentNullException(nameof(dc));
@@ -505,7 +505,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public Rectangle GetBackgroundExtent(IDeviceContext dc, Rectangle contentBounds) {
             if( dc == null ){
                 throw new ArgumentNullException(nameof(dc));
@@ -530,7 +530,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///       rectangle. Return null if the region cannot be created.
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public Region GetBackgroundRegion(IDeviceContext dc, Rectangle bounds) {
             if (dc == null) {
                 throw new ArgumentNullException(nameof(dc));
@@ -565,7 +565,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public bool GetBoolean(BooleanProperty prop) {
             if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)BooleanProperty.Transparent, (int)BooleanProperty.SourceShrink)){
                 throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(BooleanProperty));
@@ -580,7 +580,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public Color GetColor(ColorProperty prop) {
             //valid values are 0xed9 to 0xeef
             if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)ColorProperty.BorderColor, (int)ColorProperty.AccentColorHint))
@@ -597,7 +597,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public int GetEnumValue(EnumProperty prop) {
             //valid values are 0xfa1 to 0xfaf
             if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)EnumProperty.BackgroundType, (int)EnumProperty.TrueSizeScalingType))
@@ -614,7 +614,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public string GetFilename(FilenameProperty prop) {
             //valid values are 0xbb9 to 0xbc0
             if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)FilenameProperty.ImageFile, (int)FilenameProperty.GlyphImageFile))
@@ -632,7 +632,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///       [See win32 equivalent.]
         ///       Returns null if the returned font was not true type, since GDI+ does not support it.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         public Font GetFont(IDeviceContext dc, FontProperty prop)
         {
@@ -677,7 +677,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public int GetInteger(IntegerProperty prop) {
             //valid values are 0x961 to 0x978
             if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)IntegerProperty.ImageCount, (int)IntegerProperty.MinDpi5))
@@ -694,7 +694,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public Size GetPartSize(IDeviceContext dc, ThemeSizeType type) {
             return GetPartSize(dc, type, IntPtr.Zero);
         }
@@ -730,7 +730,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public Size GetPartSize(IDeviceContext dc, Rectangle bounds, ThemeSizeType type) {
             if( dc == null ){
                 throw new ArgumentNullException(nameof(dc));
@@ -756,7 +756,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public Point GetPoint(PointProperty prop) {
             //valid values are 0xd49 to 0xd50
             if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)PointProperty.Offset, (int)PointProperty.MinSize5))
@@ -773,7 +773,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public Padding GetMargins(IDeviceContext dc, MarginProperty prop) {
             if( dc == null ){
                 throw new ArgumentNullException(nameof(dc));
@@ -800,7 +800,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public string GetString(StringProperty prop) {
             //valid values are 0xc81 to 0xc81
             if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)StringProperty.Text, (int)StringProperty.Text))
@@ -817,7 +817,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public Rectangle GetTextExtent(IDeviceContext dc, string textToDraw, TextFormatFlags flags) {
             if( dc == null ){
                 throw new ArgumentNullException(nameof(dc));
@@ -841,7 +841,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public Rectangle GetTextExtent(IDeviceContext dc, Rectangle bounds, string textToDraw, TextFormatFlags flags) {
             if( dc == null ){
                 throw new ArgumentNullException(nameof(dc));
@@ -865,7 +865,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public TextMetrics GetTextMetrics(IDeviceContext dc) {
             if( dc == null ){
                 throw new ArgumentNullException(nameof(dc));
@@ -885,7 +885,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         // PM team has reviewed and decided on naming changes already
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         public HitTestCode HitTestBackground(IDeviceContext dc, Rectangle backgroundRectangle, Point pt, HitTestOptions options) {
@@ -908,7 +908,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         // PM team has reviewed and decided on naming changes already
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         public HitTestCode HitTestBackground(Graphics g, Rectangle backgroundRectangle, Region region, Point pt, HitTestOptions options) {
@@ -926,7 +926,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         // PM team has reviewed and decided on naming changes already
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         public HitTestCode HitTestBackground(IDeviceContext dc, Rectangle backgroundRectangle, IntPtr hRgn, Point pt, HitTestOptions options) {
@@ -949,7 +949,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public bool IsBackgroundPartiallyTransparent() {
             return (SafeNativeMethods.IsThemeBackgroundPartiallyTransparent(new HandleRef(this, Handle), part, state));
         }
@@ -957,7 +957,7 @@ namespace System.Windows.Forms.VisualStyles {
         /// <summary>
         ///  This is similar to GetLastError in Win32.  It returns the last HRESULT returned from a native call
         ///  into theme apis.  We eat the errors and let the user handle any errors that occurred.
-        /// </devdoc>
+        /// </summary>
         public int LastHResult {
             get {
                 return lastHResult;
@@ -968,7 +968,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///       Instantiates the ThemeHandle cache hashtable.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         private static void CreateThemeHandleHashtable() {
             themeHandles = new Hashtable(numberOfPossibleClasses);
         }
@@ -978,7 +978,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///       Handles the ThemeChanged event. Basically, we need to ensure all per-thread theme handle
         ///       caches are refreshed.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         private static void OnUserPreferenceChanging(object sender, UserPreferenceChangingEventArgs ea) {
             if (ea.Category == UserPreferenceCategory.VisualStyle) {
                 // Let all threads know their cached handles are no longer valid; 
@@ -995,7 +995,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///    <para>
         ///     Refreshes this thread's theme handle cache.       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         private static void RefreshCache() {
             ThemeHandle tHandle = null;
 
@@ -1030,7 +1030,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///     Retrieves a IntPtr theme handle for the given class from the themeHandle cache. If its not 
         ///     present in the cache, it creates a new ThemeHandle object and stores it there.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         private static IntPtr GetHandle(string className, bool throwExceptionOnFail) {
             ThemeHandle tHandle;
 

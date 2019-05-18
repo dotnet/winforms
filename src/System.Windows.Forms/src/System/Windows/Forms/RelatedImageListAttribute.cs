@@ -9,7 +9,7 @@ namespace System.Windows.Forms {
     ///       Specifies which imagelist a property relates to. For example ImageListIndex must relate to a
     ///       specific ImageList property
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple=false, Inherited=true)]
     public sealed class RelatedImageListAttribute : Attribute {
         private string relatedImageList=null;

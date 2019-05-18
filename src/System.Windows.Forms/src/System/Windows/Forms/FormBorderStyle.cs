@@ -8,43 +8,43 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Specifies the border styles for a form.
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
     public enum FormBorderStyle
     {
         /// <summary>
         /// No border.
-        /// </devdoc>
+        /// </summary>
         None = 0,
 
         /// <summary>
         /// A fixed, single line border.
-        /// </devdoc>
+        /// </summary>
         FixedSingle = 1,
 
         /// <summary>
         /// A fixed, three-dimensional border.
-        /// </devdoc>
+        /// </summary>
         Fixed3D = 2,
 
         /// <summary>
         /// A thick, fixed dialog-style border.
-        /// </devdoc>
+        /// </summary>
         FixedDialog = 3,
 
         /// <summary>
         /// A resizable border.
-        /// </devdoc>
+        /// </summary>
         Sizable = 4,
 
         /// <summary>
         /// A tool window border that is not resizable.
-        /// </devdoc>
+        /// </summary>
         FixedToolWindow = 5,
 
         /// <summary>
         /// A resizable tool window border.
-        /// </devdoc>
+        /// </summary>
         SizableToolWindow = 6,
     }
 }

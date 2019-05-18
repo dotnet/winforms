@@ -6,17 +6,17 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// The site for a ComponentEditorPage.
-    /// </devdoc>
+    /// </summary>
     public interface IComponentEditorPageSite
     {
         /// <summary>
         /// Returns the parent control for the page window.
-        /// </devdoc>
+        /// </summary>
         Control GetControl();
 
         /// <summary>
         /// Notifies the site that the editor is in dirty state.
-        /// </devdoc>
+        /// </summary>
         void SetDirty();
     }
 }

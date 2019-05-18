@@ -17,7 +17,7 @@ namespace System.Windows.Forms
 
     /// <summary>
     ///    <para>Identifies a checkbox cell in the DataGridView.</para>
-    /// </devdoc>
+    /// </summary>
     public class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewEditingCell
     {
         private static readonly DataGridViewContentAlignment anyLeft = DataGridViewContentAlignment.TopLeft | DataGridViewContentAlignment.MiddleLeft | DataGridViewContentAlignment.BottomLeft;
@@ -1682,7 +1682,7 @@ namespace System.Windows.Forms
         ///    <para>
         ///       Gets the row Index and column Index of the cell.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override string ToString() {
             return "DataGridViewCheckBoxCell { ColumnIndex=" + this.ColumnIndex.ToString(CultureInfo.CurrentCulture) + ", RowIndex=" + this.RowIndex.ToString(CultureInfo.CurrentCulture) + " }";
         }

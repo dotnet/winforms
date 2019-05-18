@@ -13,7 +13,7 @@ namespace System.Windows.Forms {
     ///    <para>
     ///       CategoryAttribute that can access WinForms localized strings.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     [AttributeUsage(AttributeTargets.All)]
     internal sealed class WinCategoryAttribute : CategoryAttribute {
 
@@ -21,7 +21,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.ComponentModel.CategoryAttribute'/> class.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public WinCategoryAttribute(string category) : base(category) {
         }
 
@@ -32,7 +32,7 @@ namespace System.Windows.Forms {
         ///     own localized names to categories.  If a localized string is
         ///     available for the given value, the method should return it.
         ///     Otherwise, it should return null.
-        /// </devdoc>
+        /// </summary>
         protected override string GetLocalizedString(string value) {
             string localizedValue = base.GetLocalizedString(value);
             if (localizedValue == null) {

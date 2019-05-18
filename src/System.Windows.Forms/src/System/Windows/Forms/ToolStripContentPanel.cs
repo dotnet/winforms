@@ -37,7 +37,7 @@ namespace System.Windows.Forms {
 
          /// <summary>
          ///     Allows the control to optionally shrink when AutoSize is true.
-         /// </devdoc>
+         /// </summary>
          [
          EditorBrowsable(EditorBrowsableState.Never),
          DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),

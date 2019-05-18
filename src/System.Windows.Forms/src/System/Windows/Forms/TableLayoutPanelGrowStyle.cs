@@ -9,23 +9,23 @@ namespace System.Windows.Forms
     /// its existing cells become full.  If the value is 'None' then the
     /// TableLayoutPanel will throw an exception when the TableLayoutPanel is
     /// over-filled.
-    /// </devdoc>
+    /// </summary>
     public enum TableLayoutPanelGrowStyle
     {
         /// <summary>
         /// The TableLayoutPanel will not allow additional rows or columns once
         /// it is full.
-        /// </devdoc>
+        /// </summary>
         FixedSize = 0,
 
         /// <summary>
         /// The TableLayoutPanel will gain additional rows once it becomes full.
-        /// </devdoc>
+        /// </summary>
         AddRows = 1,
 
         /// <summary>
         /// The TableLayoutPanel will gain additional columns once it becomes full.
-        /// </devdoc>
+        /// </summary>
         AddColumns = 2
     }
 }

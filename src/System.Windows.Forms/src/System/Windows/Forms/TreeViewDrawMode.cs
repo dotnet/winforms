@@ -6,22 +6,22 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Specifies responsibility for drawing TreeView nodes.
-    /// </devdoc>
+    /// </summary>
     public enum TreeViewDrawMode
     {
         /// <summary>
         /// The operating system paints the nodes of the TreeView.
-        /// </devdoc>
+        /// </summary>
         Normal = 0,
 
         /// <summary>
         ///	The user needs to paint the text only.
-        /// </devdoc>
+        /// </summary>
         OwnerDrawText = 1,
 
         /// <summary>
         ///	The user paints the entire row corresponding to a node, including lines and boxes.
-        /// </devdoc>
+        /// </summary>
         OwnerDrawAll = 2,
     }
 }

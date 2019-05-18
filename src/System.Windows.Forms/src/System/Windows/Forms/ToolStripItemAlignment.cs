@@ -6,7 +6,7 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// This enum is used to determine alignment of the ToolStripItem on the ToolStrip.
-    /// </devdoc>
+    /// </summary>
     public enum ToolStripItemAlignment
     {
         Left=0x0,		

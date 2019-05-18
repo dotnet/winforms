@@ -620,7 +620,7 @@ namespace System.Windows.Forms
         /// the BindingSource (and any components bound through it) will end up in limbo,
         /// still processing list change events, etc. And when unhooking from the data source,
         /// take care not to trigger any events that could confuse compoents bound to us.
-        /// </devdoc>
+        /// </summary>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -1424,7 +1424,7 @@ namespace System.Windows.Forms
         /// own initialization. This situation can arise if the call to the DataSource's
         /// EndInit() method comes after the call to the BindingSource's EndInit() method
         /// (since code-generated ordering of these calls is non-deterministic).
-        /// </devdoc>
+        /// </summary>
         private void DataSource_Initialized(object sender, EventArgs e)
         {
             if (DataSource is ISupportInitializeNotification dsInit)

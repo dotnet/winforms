@@ -14,7 +14,7 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Identifies a row in the dataGridView.
-    /// </devdoc>
+    /// </summary>
     [TypeConverterAttribute(typeof(DataGridViewRowConverter))]
     public class DataGridViewRow : DataGridViewBand
     {
@@ -30,7 +30,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewRow'/> class.
-        /// </devdoc>
+        /// </summary>
         public DataGridViewRow() : base()
         {
             _bandIsRow = true;
@@ -1110,7 +1110,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Constructs the new instance of the Cells collection objects. Subclasses
         /// should not call base.CreateCellsInstance.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual DataGridViewCellCollection CreateCellsInstance()
         {

@@ -7,7 +7,7 @@ namespace System.Windows.Forms
     /// <summary>
     /// The SelectEvent is fired when the user makes an explicit date selection within a
     /// month calendar control.
-    /// </devdoc>
+    /// </summary>
     public class DateRangeEventArgs : EventArgs
     {
         public DateRangeEventArgs(DateTime start, DateTime end)

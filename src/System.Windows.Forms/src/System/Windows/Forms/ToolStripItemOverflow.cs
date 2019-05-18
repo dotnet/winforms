@@ -6,7 +6,7 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// This enum is used to determine placement of the ToolStripItem on the ToolStrip.
-    /// </devdoc>
+    /// </summary>
     public enum ToolStripItemOverflow
     {
         Never,		// on the main ToolStrip itself,

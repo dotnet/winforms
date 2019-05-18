@@ -8,7 +8,7 @@ namespace System.Windows.Forms
     /// Defined in such a way that you can cast the relation to an AnchorStyle and
     /// the direction of the AnchorStyle points to where the image goes.
     /// (e.g., (AnchorStyle)ImageBeforeText -> Left))
-    /// </devdoc>
+    /// </summary>
     public enum TextImageRelation
     {
         Overlay = AnchorStyles.None,

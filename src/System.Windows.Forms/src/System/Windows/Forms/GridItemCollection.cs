@@ -8,7 +8,7 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// A read-only collection of GridItem objects
-    /// </devdoc>
+    /// </summary>
     public class GridItemCollection : ICollection
     {
         public static GridItemCollection Empty = new GridItemCollection(Array.Empty<GridItem>());
@@ -22,7 +22,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Retrieves the number of member attributes.
-        /// </devdoc>
+        /// </summary>
         public int Count => _entries.Length;
 
         object ICollection.SyncRoot => this;
@@ -31,7 +31,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Retrieves the member attribute with the specified index.
-        /// </devdoc>
+        /// </summary>
         public GridItem this[int index] => _entries[index];
 
         public GridItem this[string label]
@@ -60,7 +60,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Creates and retrieves a new enumerator for this collection.
-        /// </devdoc>
+        /// </summary>
         public IEnumerator GetEnumerator() => _entries.GetEnumerator();
     }
 }

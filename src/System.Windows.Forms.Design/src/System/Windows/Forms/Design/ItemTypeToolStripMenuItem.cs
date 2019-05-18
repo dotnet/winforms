@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Design
 {
     /// <summary>
 	/// Associates Type with ToolStripMenuItem.
-	/// </devdoc>
+	/// </summary>
 	internal class ItemTypeToolStripMenuItem : ToolStripMenuItem
     {
         private static readonly string s_systemWindowsFormsNamespace = typeof(ToolStripItem).Namespace;

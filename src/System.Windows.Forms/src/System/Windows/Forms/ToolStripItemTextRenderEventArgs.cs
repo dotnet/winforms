@@ -8,7 +8,7 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// This class represents all the information to render the ToolStrip
-    /// </devdoc>
+    /// </summary>
     public class ToolStripItemTextRenderEventArgs : ToolStripItemRenderEventArgs
     {
         private ContentAlignment _textAlignment;
@@ -17,7 +17,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// This class represents all the information to render the ToolStrip
-        /// </devdoc>
+        /// </summary>
         public ToolStripItemTextRenderEventArgs(Graphics g, ToolStripItem item, string text, Rectangle textRectangle, Color textColor, Font textFont, TextFormatFlags format) : base(g, item)
         {
             Text = text;
@@ -31,7 +31,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// This class represents all the information to render the ToolStrip
-        /// </devdoc>
+        /// </summary>
         public ToolStripItemTextRenderEventArgs(Graphics g, ToolStripItem item, string text, Rectangle textRectangle, Color textColor, Font textFont, ContentAlignment textAlign) : base(g, item)
         {
             Text = text;
@@ -46,12 +46,12 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// The string to draw
-        /// </devdoc>
+        /// </summary>
         public string Text { get; set; }
 
         /// <summary>
         /// The color to draw the text
-        /// </devdoc>
+        /// </summary>
         public Color TextColor
         {
             get => _textColorChanged ? _textColor : DefaultTextColor;
@@ -66,22 +66,22 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// The font to draw the text
-        /// </devdoc>
+        /// </summary>
         public Font TextFont { get; set; }
 
         /// <summary>
         /// The rectangle to draw the text in
-        /// </devdoc>
+        /// </summary>
         public Rectangle TextRectangle { get; set; }
 
         /// <summary>
         /// The rectangle to draw the text in
-        /// </devdoc>
+        /// </summary>
         public TextFormatFlags TextFormat { get; set; }
 
         /// <summary>
         /// The angle at which the text should be drawn in tenths of degrees.
-        /// </devdoc>
+        /// </summary>
         public ToolStripTextDirection TextDirection { get; set; }
     }
 }

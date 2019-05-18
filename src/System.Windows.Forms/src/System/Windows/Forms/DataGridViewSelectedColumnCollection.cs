@@ -119,7 +119,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// <para>Adds a <see cref='System.Windows.Forms.DataGridViewCell'/> to this collection.</para>
-        /// </devdoc>
+        /// </summary>
         internal int Add(DataGridViewColumn dataGridViewColumn)
         {
             return this.items.Add(dataGridViewColumn);
@@ -157,7 +157,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///      Checks to see if a DataGridViewCell is contained in this collection.
-        /// </devdoc>
+        /// </summary>
         public bool Contains(DataGridViewColumn dataGridViewColumn)
         {
             return this.items.IndexOf(dataGridViewColumn) != -1;

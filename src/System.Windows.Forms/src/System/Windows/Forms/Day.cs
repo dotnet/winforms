@@ -6,47 +6,47 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Specifies the day of the week.
-    /// </devdoc>
+    /// </summary>
     public enum Day
     {
         /// <summary>
         /// The day Monday.
-        /// </devdoc>
+        /// </summary>
         Monday = 0,
 
         /// <summary>
         /// The day Tuesday.
-        /// </devdoc>
+        /// </summary>
         Tuesday = 1,
 
         /// <summary>
         /// The day Wednesday.
-        /// </devdoc>
+        /// </summary>
         Wednesday = 2,
 
         /// <summary>
         /// The day Thursday.
-        /// </devdoc>
+        /// </summary>
         Thursday = 3,
 
         /// <summary>
         /// The day Friday.
-        /// </devdoc>
+        /// </summary>
         Friday = 4,
 
         /// <summary>
         /// The day Saturday.
-        /// </devdoc>
+        /// </summary>
         Saturday  = 5,
 
         /// <summary>
         /// The day Sunday.
-        /// </devdoc>
+        /// </summary>
         Sunday = 6,
 
         /// <summary>
         /// A default day of the week specified by the application.
-        /// </devdoc>
+        /// </summary>
         Default = 7,
     }
 }

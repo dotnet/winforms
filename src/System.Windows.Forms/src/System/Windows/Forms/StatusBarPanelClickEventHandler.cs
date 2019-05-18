@@ -14,6 +14,6 @@ namespace System.Windows.Forms {
     ///       Represents the method that will handle the <see cref='System.Windows.Forms.StatusBar.OnPanelClick'/>
     ///       event of a <see cref='System.Windows.Forms.StatusBar'/>.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     public delegate void StatusBarPanelClickEventHandler(object sender, StatusBarPanelClickEventArgs e);
 }

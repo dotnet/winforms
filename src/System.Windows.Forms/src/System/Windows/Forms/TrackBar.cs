@@ -24,7 +24,7 @@ namespace System.Windows.Forms {
     ///     scroll, and also define increments for off-button clicks.  It can be
     ///     aligned horizontally or vertically.  You can also configure how many
     ///     'ticks' are shown for the total range of values
-    /// </devdoc>
+    /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -63,7 +63,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Creates a new TrackBar control with a default range of 0..10 and
         ///     ticks shown every value.
-        /// </devdoc>
+        /// </summary>
         public TrackBar()
         : base() {
             SetStyle(ControlStyles.UserPaint, false);
@@ -76,7 +76,7 @@ namespace System.Windows.Forms {
         ///     TrackBar will adjust either its height or width [depending on
         ///     orientation] to make sure that only the required amount of
         ///     space is used.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
@@ -157,7 +157,7 @@ namespace System.Windows.Forms {
         ///     this to add extra functionality, but should not forget to first call
         ///     base.getCreateParams() to make sure the control continues to work
         ///     correctly.
-        /// </devdoc>
+        /// </summary>
         protected override CreateParams CreateParams {
             get {
                 CreateParams cp = base.CreateParams;
@@ -201,7 +201,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
+        /// </summary>
         protected override Size DefaultSize {
             get {
                 return new Size(104, PreferredDimension);
@@ -211,7 +211,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     This property is overridden and hidden from statement completion
         ///     on controls that are based on Win32 Native Controls.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override bool DoubleBuffered {
             get {
@@ -241,7 +241,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     The current foreground color of the TrackBar.  Note that users
         ///     are unable to change this.  It is always Color.WINDOWTEXT
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor {
             get {
@@ -278,7 +278,7 @@ namespace System.Windows.Forms {
         ///     event considered a "large change" occurs.  These include, Clicking the
         ///     mouse to the side of the button, or using the PgUp/PgDn keys on the
         ///     keyboard.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(5),
@@ -305,7 +305,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     The upper limit of the range this TrackBar is working with.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(10),
@@ -328,7 +328,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     The lower limit of the range this TrackBar is working with.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(0),
@@ -353,7 +353,7 @@ namespace System.Windows.Forms {
         ///    <para>The orientation for this TrackBar. Valid values are from
         ///       the Orientation enumeration. The control currently supports being
         ///       oriented horizontally and vertically.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(Orientation.Horizontal),
@@ -415,7 +415,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Little private routine that helps with auto-sizing.
-        /// </devdoc>
+        /// </summary>
         private int PreferredDimension {
             get {
                 int cyhscroll = UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYHSCROLL);
@@ -428,7 +428,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Redraw control, if the handle's created
-        /// </devdoc>
+        /// </summary>
         private void RedrawControl()
         {
             if (IsHandleCreated)
@@ -444,7 +444,7 @@ namespace System.Windows.Forms {
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
         //      and the RightToLeft property is true, mirroring will be turned on on the trackbar.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
@@ -471,7 +471,7 @@ namespace System.Windows.Forms {
         ///     The number of ticks by which the TrackBar will change when an
         ///     event considered a "small change" occurs.  These are most commonly
         ///     seen by using the arrow keys to move the TrackBar thumb around.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(1),
@@ -516,7 +516,7 @@ namespace System.Windows.Forms {
         ///     both where the ticks will be drawn in relation to the moveable thumb,
         ///     and how the thumb itself will be drawn.  values are taken from the
         ///     TickStyle enumeration.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(TickStyle.BottomRight),
@@ -547,7 +547,7 @@ namespace System.Windows.Forms {
         ///     very small control.  Passing in a value of 5 here would only draw
         ///     20 ticks -- i.e. Each tick would represent 5 units in the TrackBars
         ///     range of values.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(1),
@@ -571,7 +571,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     The current location of the TrackBar thumb.  This value must
         ///     be between the lower and upper limits of the TrackBar range, of course.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(0),
@@ -639,7 +639,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     TrackBar Onpaint.
-        /// </devdoc>
+        /// </summary>
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
@@ -655,7 +655,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Enforces autoSizing
-        /// </devdoc>
+        /// </summary>
         private void AdjustSize() {
             if (IsHandleCreated) {
                 int saveDim = requestedDim;
@@ -673,7 +673,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///      Handles tasks required when the control is being initialized.
-        /// </devdoc>
+        /// </summary>
         public void BeginInit() {
             initializing = true;
         }
@@ -700,7 +700,7 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         protected override void CreateHandle() {
             if (!RecreatingHandle) {
                 IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
@@ -717,7 +717,7 @@ namespace System.Windows.Forms {
         
         /// <summary>
         ///      Called when initialization of the control is complete.
-        /// </devdoc>
+        /// </summary>
         public void EndInit() {
             initializing = false;
 
@@ -747,7 +747,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///      Handling special input keys, such as pgup, pgdown, home, end, etc...
-        /// </devdoc>
+        /// </summary>
         protected override bool IsInputKey(Keys keyData) {
             if ((keyData & Keys.Alt) == Keys.Alt) return false;
             switch (keyData & Keys.KeyCode) {
@@ -761,7 +761,7 @@ namespace System.Windows.Forms {
         }
         
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         protected override void OnHandleCreated(EventArgs e) {
             base.OnHandleCreated(e);
             SendMessage(NativeMethods.TBM_SETRANGEMIN, 0, minimum);
@@ -794,7 +794,7 @@ namespace System.Windows.Forms {
         ///     this method in favor of actually adding an EventHandler for this
         ///     event.  Inheriting classes should not forget to call
         ///     base.onScroll(e)
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnScroll(EventArgs e) {
             EventHandler handler = (EventHandler)Events[EVENT_SCROLL];
             if (handler != null) handler(this,e);
@@ -802,7 +802,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseWheel'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnMouseWheel(MouseEventArgs e) {
             base.OnMouseWheel( e );
@@ -860,7 +860,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Actually fires the "valueChanged" event.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnValueChanged(EventArgs e) {
             EventHandler handler = (EventHandler)Events[EVENT_VALUECHANGED];
             if (handler != null) handler(this,e);
@@ -870,7 +870,7 @@ namespace System.Windows.Forms {
         ///     This method is called by the control when any property changes. Inheriting
         ///     controls can overide this method to get property change notification on
         ///     basic properties. Inherting controls must call base.propertyChanged.
-        /// </devdoc>
+        /// </summary>
         protected override void OnBackColorChanged(EventArgs e) {
             base.OnBackColorChanged(e);
             RedrawControl();
@@ -883,7 +883,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Overrides Control.setBoundsCore to enforce autoSize.
-        /// </devdoc>
+        /// </summary>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
             //SetBoundsCore .. sets the height for a control in designer .. we should obey the requested 
             //height is Autosize is false..
@@ -910,7 +910,7 @@ namespace System.Windows.Forms {
         ///     Lets you set the the entire range for the TrackBar control at once.
         ///     The values passed are both the lower and upper limits to the range
         ///     with which the control will work.
-        /// </devdoc>
+        /// </summary>
         public void SetRange(int minValue, int maxValue) {
             if (minimum != minValue || maximum != maxValue) {
             
@@ -982,7 +982,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Returns a string representation for this control.
-        /// </devdoc>
+        /// </summary>
         public override string ToString() {
 
             string s = base.ToString();
@@ -993,7 +993,7 @@ namespace System.Windows.Forms {
         ///     The button's window procedure.  Inheriting classes can override this
         ///     to add extra functionality, but should not forget to call
         ///     base.wndProc(m); to ensure the button continues to function properly.
-        /// </devdoc>
+        /// </summary>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case Interop.WindowMessages.WM_REFLECT+Interop.WindowMessages.WM_HSCROLL:

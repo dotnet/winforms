@@ -16,7 +16,7 @@ namespace System.Windows.Forms {
     /// <summary>
     ///      This class fully encapsulates the painting logic for an addnew row
     ///      appearing in a DataGrid.
-    /// </devdoc>
+    /// </summary>
     internal class DataGridAddNewRow : DataGridRow {
 
         private bool dataBound = false;
@@ -35,7 +35,7 @@ namespace System.Windows.Forms {
         ///      true to signal that the AddNewRow can safely render
         ///      row contents and permit editing, etc because a DataRecord
         ///      exists in the cursor that created this row.
-        /// </devdoc>
+        /// </summary>
         public bool DataBound {
             get {
                 return dataBound;
@@ -71,7 +71,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///      Paints the row.
-        /// </devdoc>
+        /// </summary>
         public override int Paint(Graphics g, Rectangle bounds, Rectangle trueRowBounds, int firstVisibleColumn, int columnCount)
         {
             return Paint(g, bounds, trueRowBounds, firstVisibleColumn, columnCount, false);

@@ -14,7 +14,7 @@ namespace System.Windows.Forms {
     ///    <para> 
     ///       Represents
     ///       a menu structure for a form.</para>
-    /// </devdoc>
+    /// </summary>
     [ToolboxItemFilter("System.Windows.Forms.MainMenu")]
     public class MainMenu : Menu
     {
@@ -25,7 +25,7 @@ namespace System.Windows.Forms {
        
         /// <summary>
         ///     Creates a new MainMenu control.
-        /// </devdoc>
+        /// </summary>
         public MainMenu()
             : base(null) {
 
@@ -33,7 +33,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.MainMenu'/> class with the specified container.</para>
-        /// </devdoc>
+        /// </summary>
         public MainMenu(IContainer container) : this() {
             if (container == null) {
                 throw new ArgumentNullException(nameof(container));
@@ -45,7 +45,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Creates a new MainMenu control with the given items to start
         ///     with.
-        /// </devdoc>
+        /// </summary>
         public MainMenu(MenuItem[] items)
             : base(items) {
 
@@ -62,7 +62,7 @@ namespace System.Windows.Forms {
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
         ///     text alignment and reading order will be from right to left.
-        /// </devdoc>
+        /// </summary>
         // Add an AmbientValue attribute so that the Reset context menu becomes available in the Property Grid.
         [
         Localizable(true),
@@ -105,7 +105,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Creates a new MainMenu object which is a dupliate of this one.
-        /// </devdoc>
+        /// </summary>
         public virtual MainMenu CloneMenu() {
             MainMenu newMenu = new MainMenu();
             newMenu.CloneMenu(this);
@@ -113,7 +113,7 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         
         
         protected override IntPtr CreateMenuHandle() {
@@ -124,7 +124,7 @@ namespace System.Windows.Forms {
         ///     Clears out this MainMenu object and discards all of it's resources.
         ///     If the menu is parented in a form, it is disconnected from that as
         ///     well.
-        /// </devdoc>
+        /// </summary>
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 if (form != null && (ownerForm == null || form == ownerForm)) {
@@ -136,7 +136,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Indicates which form in which we are currently residing [if any]
-        /// </devdoc>
+        /// </summary>
         public Form GetForm() {
             return form;
         }
@@ -146,7 +146,7 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         internal override void ItemsChanged(int change) {
             base.ItemsChanged(change);
             if (form != null)
@@ -154,7 +154,7 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         internal virtual void ItemsChanged(int change, Menu menu) {
             if (form != null)
                 form.MenuChanged(change, menu);
@@ -162,7 +162,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Fires the collapse event
-        /// </devdoc>
+        /// </summary>
         protected internal virtual void OnCollapse(EventArgs e) {
             if (onCollapse != null) {
                 onCollapse(this, e);
@@ -171,7 +171,7 @@ namespace System.Windows.Forms {
         
         /// <summary>
         ///     Returns true if the RightToLeft should be persisted in code gen.
-        /// </devdoc>
+        /// </summary>
         internal virtual bool ShouldSerializeRightToLeft() {
             if (System.Windows.Forms.RightToLeft.Inherit == RightToLeft) {
                 return false;
@@ -181,7 +181,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Returns a string representation for this control.
-        /// </devdoc>
+        /// </summary>
         public override string ToString() {
             // Removing GetForm information 
             return base.ToString();

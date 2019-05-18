@@ -7,22 +7,22 @@ namespace System.Windows.Forms
     /// <summary>
     /// This Enumeration represents the styles the ProgressBar can take.
     /// Blocks and Continuous.  
-    /// </devdoc>
+    /// </summary>
     public enum ProgressBarStyle
     {
         /// <summary>
         /// The progress bar displays the progress status as a segmented bar.  
-        /// </devdoc>
+        /// </summary>
         Blocks,
 
         /// <summary>
         /// The progress bar displays the progress status in a smooth scrolling bar.  
-        /// </devdoc>
+        /// </summary>
         Continuous,
 
         /// <summary>
         /// The progress bar displays the progress status in the marquee style.  
-        /// </devdoc>
+        /// </summary>
         Marquee
     }
 }

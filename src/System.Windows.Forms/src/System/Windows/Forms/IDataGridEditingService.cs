@@ -6,7 +6,7 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// The DataGrid exposes hooks to request editing commands via this interface.
-    /// </devdoc>
+    /// </summary>
     public interface IDataGridEditingService
     {
         bool BeginEdit(DataGridColumnStyle gridColumn, int rowNumber);

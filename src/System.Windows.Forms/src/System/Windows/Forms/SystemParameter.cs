@@ -11,57 +11,57 @@ namespace System.Windows.Forms
     {
         /// <summary>
         /// DropShadow.
-        /// </devdoc>
+        /// </summary>
         DropShadow = 0,
 
         /// <summary>
         /// Flat Menu.
-        /// </devdoc>
+        /// </summary>
         FlatMenu = 1,
 
         /// <summary>
         /// FontSmoothingContrastMetric.
-        /// </devdoc>
+        /// </summary>
         FontSmoothingContrastMetric = 2,
 
         /// <summary>
         /// FontSmoothingTypeMetric.
-        /// </devdoc>
+        /// </summary>
         FontSmoothingTypeMetric = 3,
 
         /// <summary>
         /// MenuFadeEnabled.
-        /// </devdoc>
+        /// </summary>
         MenuFadeEnabled = 4,
 
         /// <summary>
         /// SelectionFade.
-        /// </devdoc>
+        /// </summary>
         SelectionFade = 5,
 
         /// <summary>
         /// ToolTipAnimationMetric.
-        /// </devdoc>
+        /// </summary>
         ToolTipAnimationMetric = 6,
 
         /// <summary>
         /// UIEffects.
-        /// </devdoc>
+        /// </summary>
         UIEffects = 7,
 
         /// <summary>
         /// CaretWidthMetric.
-        /// </devdoc>
+        /// </summary>
         CaretWidthMetric = 8,
 
         /// <summary>
         /// VerticalFocusThicknessMetric.
-        /// </devdoc>
+        /// </summary>
         VerticalFocusThicknessMetric = 9,
 
         /// <summary>
         /// HorizontalFocusThicknessMetric.
-        /// </devdoc>
+        /// </summary>
         HorizontalFocusThicknessMetric = 10,
     }
 }

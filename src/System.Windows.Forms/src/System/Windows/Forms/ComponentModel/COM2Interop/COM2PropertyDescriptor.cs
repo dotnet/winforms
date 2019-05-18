@@ -25,25 +25,25 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     ///
     /// It also allows other objects to register listeners to add extended
     /// information at runtime such as attributes of TypeConverters.
-    /// </devdoc>
+    /// </summary>
     internal class Com2PropertyDescriptor : PropertyDescriptor, ICloneable{
         private EventHandlerList events;
 
         /// <summary>
         /// Is this guy read only?
-        /// </devdoc>
+        /// </summary>
         private bool baseReadOnly;
         private bool readOnly;
 
         /// <summary>
         /// The resoved native type -> clr type
-        /// </devdoc>
+        /// </summary>
         private Type propertyType;
 
         /// <summary>
         /// The dispid. This is also in a DispIDAttiribute, but we
         /// need it a lot.
-        /// </devdoc>
+        /// </summary>
         private int  dispid;
         
         private TypeConverter   converter;
@@ -51,64 +51,64 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         /// <summary>
         /// The current display name to show for this property
-        /// </devdoc>
+        /// </summary>
         private string displayName;
 
         /// <summary>
         /// This is any extra data needed.  For IDispatch types, it's the GUID of
         /// the interface, etc.
-        /// </devdoc>
+        /// </summary>
         private object typeData;
 
         /// <summary>
         /// Keeps track of which data members need to be refreshed.
-        /// </devdoc>
+        /// </summary>
         private int  refreshState;
         
         /// <summary>
         /// Should we bother asking if refresh is needed?
-        /// </devdoc>
+        /// </summary>
         private bool queryRefresh = false;
 
         /// <summary>
         /// Our properties manager
-        /// </devdoc>
+        /// </summary>
         private Com2Properties com2props;
 
         /// <summary>
         /// Our original baseline properties
-        /// </devdoc>
+        /// </summary>
         private Attribute[] baseAttrs;
 
         /// <summary>
         /// Our cached last value -- this is only
         /// for checking if we should ask for a display value
-        /// </devdoc>
+        /// </summary>
         private object lastValue;
 
         /// <summary>
         /// For Object and dispatch types, we hide them by default.
-        /// </devdoc>
+        /// </summary>
         private bool   typeHide;
 
         /// <summary>
         /// Set if the metadata causes this property to always be hidden
-        /// </devdoc>
+        /// </summary>
         private bool   canShow;
 
         /// <summary>
         /// This property is hidden because its get didn't return S_OK
-        /// </devdoc>
+        /// </summary>
         private bool   hrHidden;
 
         /// <summary>
         /// Set if we are in the process of asking handlers for attributes
-        /// </devdoc>
+        /// </summary>
         private bool   inAttrQuery;
 
         /// <summary>
         /// Our event signitures.
-        /// </devdoc>
+        /// </summary>
         private static readonly object EventGetBaseAttributes      = new object();
         private static readonly object EventGetDynamicAttributes   = new object();
         private static readonly object EventShouldRefresh          = new object();
@@ -124,7 +124,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         
         /// <summary>
         /// Our map of native types that we can map to managed types for editors
-        /// </devdoc>
+        /// </summary>
         private static IDictionary oleConverters;
 
         static Com2PropertyDescriptor() {
@@ -138,12 +138,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
        
         /// <summary>
         /// Should we convert our type?
-        /// </devdoc>
+        /// </summary>
         private Com2DataTypeToManagedDataTypeConverter valueConverter;
 
         /// <summary>
         /// Ctor.
-        /// </devdoc>
+        /// </summary>
         public Com2PropertyDescriptor(int dispid, string name, Attribute[] attrs, bool readOnly, Type propType, object typeData, bool hrHidden)
         : base(name, attrs) {
             this.baseReadOnly = readOnly;
@@ -225,7 +225,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         /// <summary>
         ///     Attributes
-        /// </devdoc>
+        /// </summary>
         public override AttributeCollection Attributes {
             get {
                 if (this.AttributesValid || this.InAttrQuery) {
@@ -305,7 +305,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <summary>
         ///     Checks if the attributes are valid.  Asks any clients if they
         ///     would like attributes requeried.
-        /// </devdoc>
+        /// </summary>
         protected bool AttributesValid{
             get{
                 bool currentRefresh = !GetNeedsRefresh(Com2PropertyDescriptorRefresh.Attributes);
@@ -321,7 +321,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         /// <summary>
         ///     Checks if this item can be shown.
-        /// </devdoc>
+        /// </summary>
         public bool CanShow{
             get{
                 return this.canShow;
@@ -330,7 +330,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         /// <summary>
         ///     Retrieves the type of the component this PropertyDescriptor is bound to.
-        /// </devdoc>
+        /// </summary>
         public override Type ComponentType {
             get {
                 return typeof(UnsafeNativeMethods.IDispatch);
@@ -339,7 +339,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         
         /// <summary>
         ///      Retrieves the type converter for this property.
-        /// </devdoc>
+        /// </summary>
         public override TypeConverter Converter {
             get {
                if (TypeConverterValid) {
@@ -362,7 +362,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         /// <summary>
         ///     Retrieves whether this component is applying a type conversion...
-        /// </devdoc>
+        /// </summary>
         public bool ConvertingNativeType {
             get {
                 return(valueConverter != null);
@@ -371,7 +371,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         /// <summary>
         ///      Retrieves the default value for this property.
-        /// </devdoc>
+        /// </summary>
         protected virtual object DefaultValue {
             get {
                 return null;
@@ -380,7 +380,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         /// <summary>
         ///     Retrieves the DISPID for this item
-        /// </devdoc>
+        /// </summary>
         public int DISPID{
             get{
                 return this.dispid;
@@ -390,7 +390,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <summary>
         ///     Gets the friendly name that should be displayed to the user in a window like
         ///     the Property Browser.
-        /// </devdoc>
+        /// </summary>
         public override string DisplayName {
             get {
                 if (!this.DisplayNameValid) {
@@ -406,7 +406,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <summary>
         ///     Checks if the property display name is valid
         ///     asks clients if they would like display name requeried.
-        /// </devdoc>
+        /// </summary>
         protected bool DisplayNameValid{
             get{
                 bool currentRefresh = !(displayName == null || GetNeedsRefresh(Com2PropertyDescriptorRefresh.DisplayName));
@@ -437,7 +437,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         /// <summary>
         ///     Indicates whether this property is read only.
-        /// </devdoc>
+        /// </summary>
         public override bool IsReadOnly {
             get {
                 if (!this.ReadOnlyValid) {
@@ -462,7 +462,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         /// <summary>
         ///     Retrieves the type of the property.
-        /// </devdoc>
+        /// </summary>
         public override Type PropertyType {
             get {
                 // replace the type with the mapped converter type
@@ -478,7 +478,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <summary>
         ///     Checks if the read only state is valid.
         ///     Asks clients if they would like read-only requeried.
-        /// </devdoc>
+        /// </summary>
         protected bool ReadOnlyValid{
             get{
                 if (baseReadOnly) {
@@ -500,7 +500,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <summary>
         ///     Gets the Object that this descriptor was created for.
         ///     May be null if the Object's ref has died.
-        /// </devdoc>
+        /// </summary>
         public virtual object TargetObject
         {
             get{
@@ -590,7 +590,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         ///     a shouldPersist method, this will return what shouldPersist returns.
         ///     If there is just a reset method, this always returns true.  If none of these
         ///     cases apply, this returns false.
-        /// </devdoc>
+        /// </summary>
         public override bool CanResetValue(object component) {
 
             if (component is ICustomTypeDescriptor) {
@@ -612,7 +612,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <summary>
         ///     Creates a converter Object, first by looking for a ctor with a Com2ProeprtyDescriptor
         ///     parameter, then using the default ctor if it is not found.
-        /// </devdoc>
+        /// </summary>
         private Com2DataTypeToManagedDataTypeConverter CreateOleTypeConverter(Type t) {
 
             if (t == null) {
@@ -633,7 +633,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <summary>
         ///     Creates an instance of the member attribute collection. This can
         ///     be overriden by subclasses to return a subclass of AttributeCollection.
-        /// </devdoc>
+        /// </summary>
         protected override AttributeCollection CreateAttributeCollection() {
             return new AttributeCollection(AttributeArray);
         }
@@ -722,7 +722,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <summary>
         ///     Gets the value that should be displayed to the user, such as in
         ///     the Property Browser.
-        /// </devdoc>
+        /// </summary>
         public virtual string GetDisplayValue(string defaultValue) {
 
             GetNameItemEvent nie = new GetNameItemEvent(defaultValue);
@@ -734,7 +734,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         /// <summary>
         ///      Retrieves an editor of the requested type.
-        /// </devdoc>
+        /// </summary>
         public override object GetEditor(Type editorBaseType) {
                if (TypeEditorValid) {
                   return editor;
@@ -765,7 +765,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         ///     Retrieves the current native value of the property on component,
         ///     invoking the getXXX method.  An exception in the getXXX
         ///     method will pass through.
-        /// </devdoc>
+        /// </summary>
         public object GetNativeValue(object component){
             if (component == null)
                 return null;
@@ -811,7 +811,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         /// <summary>
         ///     Checks whether the particular item(s) need refreshing.
-        /// </devdoc>
+        /// </summary>
         private bool GetNeedsRefresh(int mask){
             return(refreshState & mask) != 0;
         }
@@ -821,7 +821,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         ///     Retrieves the current value of the property on component,
         ///     invoking the getXXX method.  An exception in the getXXX
         ///     method will pass through.
-        /// </devdoc>
+        /// </summary>
         public override object GetValue(object component) {
             lastValue = GetNativeValue(component);
             // do we need to convert the type?
@@ -848,7 +848,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         ///     See TypeConverter for a description of how system value editors are found.
         ///     If there is no system value editor, null is returned.  If the value editor found
         ///     takes an IEditorSite in its constructor, the parameter will be passed in.
-        /// </devdoc>
+        /// </summary>
         public void GetTypeConverterAndTypeEditor(ref TypeConverter typeConverter, Type editorBaseType, ref object typeEditor) {
         
                 // get the base editor and converter, attributes first
@@ -913,14 +913,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         
         /// <summary>
         ///     Is the given value equal to the last known value for this object?
-        /// </devdoc>
+        /// </summary>
         public bool IsCurrentValue(object value) {
             return (value == lastValue || (lastValue != null && lastValue.Equals(value)));
         }
 
         /// <summary>
         ///     Raises the appropriate event
-        /// </devdoc>
+        /// </summary>
         protected void OnCanResetValue(GetBoolValueEvent gvbe) {
             RaiseGetBoolValueEvent(EventCanResetValue, gvbe);
         }
@@ -940,21 +940,21 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         
         /// <summary>
         ///     Raises the appropriate event
-        /// </devdoc>
+        /// </summary>
         protected void OnGetDisplayName(GetNameItemEvent gnie) {
             RaiseGetNameItemEvent(EventGetDisplayName, gnie);
         }
 
         /// <summary>
         ///     Raises the appropriate event
-        /// </devdoc>
+        /// </summary>
         protected void OnGetDisplayValue(GetNameItemEvent gnie) {
             RaiseGetNameItemEvent(EventGetDisplayValue, gnie);
         }
 
         /// <summary>
         ///     Raises the appropriate event
-        /// </devdoc>
+        /// </summary>
         protected void OnGetDynamicAttributes(GetAttributesEvent e) {
 
             try {
@@ -969,7 +969,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         /// <summary>
         ///     Raises the appropriate event
-        /// </devdoc>
+        /// </summary>
         protected void OnGetIsReadOnly(GetBoolValueEvent gvbe) {
             RaiseGetBoolValueEvent(EventGetIsReadOnly, gvbe);
         }
@@ -987,14 +987,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         
         /// <summary>
         ///     Raises the appropriate event
-        /// </devdoc>
+        /// </summary>
         protected void OnResetValue(EventArgs e) {
             RaiseCom2Event(EventResetValue, e);
         }
 
         /// <summary>
         ///     Raises the appropriate event
-        /// </devdoc>
+        /// </summary>
         protected void OnShouldSerializeValue(GetBoolValueEvent gvbe) {
             RaiseGetBoolValueEvent(EventShouldSerializeValue, gvbe);
         }
@@ -1002,14 +1002,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         /// <summary>
         ///     Raises the appropriate event
-        /// </devdoc>
+        /// </summary>
         protected void OnShouldRefresh(GetRefreshStateEvent gvbe) {
             RaiseGetBoolValueEvent(EventShouldRefresh, gvbe);
         }
 
         /// <summary>
         ///     Raises the appropriate event
-        /// </devdoc>
+        /// </summary>
         private void RaiseGetBoolValueEvent(object key, GetBoolValueEvent e) {
             try {
                 com2props.AlwaysValid = com2props.CheckValid();
@@ -1023,7 +1023,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         /// <summary>
         ///     Raises the appropriate event
-        /// </devdoc>
+        /// </summary>
         private void RaiseCom2Event(object key, EventArgs e) {
             try {
                 com2props.AlwaysValid = com2props.CheckValid();
@@ -1037,7 +1037,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         /// <summary>
         ///     Raises the appropriate event
-        /// </devdoc>
+        /// </summary>
         private void RaiseGetNameItemEvent(object key, GetNameItemEvent e) {
             try {
                com2props.AlwaysValid = com2props.CheckValid();
@@ -1056,7 +1056,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         ///     there was no default value passed in, a ResetXXX method will be looked
         ///     for.  If one is found, it will be invoked.  If one is not found, this
         ///     is a nop.
-        /// </devdoc>
+        /// </summary>
         public override void ResetValue(object component) {
             if (component is ICustomTypeDescriptor) {
                 component = ((ICustomTypeDescriptor)component).GetPropertyOwner(this);
@@ -1069,7 +1069,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         /// <summary>
         ///     Sets whether the particular item(s) need refreshing.
-        /// </devdoc>
+        /// </summary>
         internal void SetNeedsRefresh(int mask, bool value){
             if (value) {
                 refreshState |= mask;
@@ -1086,7 +1086,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         ///     which will be passed up.  The component designer should design the
         ///     property so that getXXX following a setXXX should return the value
         ///     passed in if no exception was thrown in the setXXX call.
-        /// </devdoc>
+        /// </summary>
         public override void SetValue(object component, object value) {
 
             if (this.readOnly) {
@@ -1223,7 +1223,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         ///     these routes fail, true will be returned.
         ///
         ///     If this returns false, a tool should not persist this property's value.
-        /// </devdoc>
+        /// </summary>
         public override bool ShouldSerializeValue(object component) {
             GetBoolValueEvent gbv = new GetBoolValueEvent(false);
             OnShouldSerializeValue(gbv);
@@ -1233,7 +1233,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// we wrap all value editors in this one so we can intercept
         /// the GetTextFromValue calls for objects that would like
         /// to modify the display name
-        /// </devdoc>
+        /// </summary>
         private class Com2PropDescMainConverter : Com2ExtendedTypeConverter {
             Com2PropertyDescriptor pd;
             

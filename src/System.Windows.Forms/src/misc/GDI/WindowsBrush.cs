@@ -25,7 +25,7 @@ namespace System.Experimental.Gdi
     ///     <para>
     ///         Encapsulates a GDI Brush object.
     ///     </para>
-    /// </devdoc>
+    /// </summary>
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
 #else
@@ -51,7 +51,7 @@ namespace System.Experimental.Gdi
         /// <summary>
         ///     Parameterless constructor to use default color.
         ///     Notice that the actual object construction is done in the derived classes.
-        /// </devdoc>
+        /// </summary>
         
         public WindowsBrush(DeviceContext dc)
         {
@@ -108,7 +108,7 @@ namespace System.Experimental.Gdi
 
         /// <summary>
         ///       Gets the native Win32 brush handle. It creates it on demand.
-        /// </devdoc>
+        /// </summary>
         protected IntPtr NativeHandle
         {
             get
@@ -135,7 +135,7 @@ namespace System.Experimental.Gdi
         /// <summary>
         ///     Derived classes implement this method to get a native GDI brush wrapper with the same
         ///     properties as this object.
-        /// </devdoc>
+        /// </summary>
         
         
         public static WindowsBrush FromBrush(DeviceContext dc, Brush originalBrush)
@@ -155,7 +155,7 @@ namespace System.Experimental.Gdi
 
         /// <summary>
         ///     Creates a WindowsBrush from the DC currently selected HBRUSH
-        /// </devdoc>
+        /// </summary>
         
         
         public static WindowsBrush FromDC(DeviceContext dc)
@@ -171,7 +171,7 @@ namespace System.Experimental.Gdi
 
         /// <summary>
         ///     Creates a WindowsBrush from a LOGBRUSH.
-        /// </devdoc>
+        /// </summary>
         
         
         public static WindowsBrush FromLogBrush( DeviceContext dc, IntNativeMethods.LOGBRUSH logBrush )
@@ -198,7 +198,7 @@ namespace System.Experimental.Gdi
         ///    <para>
         ///       Returns the native Win32 brush handle.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public IntPtr HBrush
         { 
             get

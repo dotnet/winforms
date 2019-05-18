@@ -7,22 +7,22 @@ namespace System.Windows.Forms
     /// <summary>
     /// Specifies whether any characters in the current selection have the
     /// style or attribute.
-    /// </devdoc>
+    /// </summary>
     public enum DockingBehavior
     {
         /// <summary>
         /// Some but not all characters.
-        /// </devdoc>
+        /// </summary>
         Never = 0,
 
         /// <summary>
         /// No characters.
-        /// </devdoc>
+        /// </summary>
         Ask = 1,
 
         /// <summary>
         /// All characters.
-        /// </devdoc>
+        /// </summary>
         AutoDock = 2
     }
 }

@@ -12,7 +12,7 @@ namespace System.Experimental.Gdi
 {
     /// <summary>
     ///     Represent the device type the context refers to.
-    /// </devdoc>
+    /// </summary>
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
 #else

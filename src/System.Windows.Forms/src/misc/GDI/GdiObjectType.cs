@@ -12,7 +12,7 @@ namespace System.Experimental.Gdi
 {
     /// <summary>
     ///    Specifies the the type of a GDI object.
-    /// </devdoc>
+    /// </summary>
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
 #else

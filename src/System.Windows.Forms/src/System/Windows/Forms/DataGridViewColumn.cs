@@ -14,7 +14,7 @@ namespace System.Windows.Forms
 
     /// <summary>
     ///    <para> Base class for the columns in a data grid view.</para>
-    /// </devdoc>
+    /// </summary>
     [
         Designer("System.Windows.Forms.Design.DataGridViewColumnDesigner, " + AssemblyRef.SystemDesign),
         TypeConverterAttribute(typeof(DataGridViewColumnConverter)),
@@ -55,7 +55,7 @@ namespace System.Windows.Forms
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewColumn'/> class.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public DataGridViewColumn() : this((DataGridViewCell) null)
         {
         }

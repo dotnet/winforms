@@ -6,27 +6,27 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Specifies the angle of screen orientation
-    /// </devdoc>
+    /// </summary>
     public enum ScreenOrientation
     {
         /// <summary>
         /// The screen is oriented at 0 degrees
-        /// </devdoc>
+        /// </summary>
         Angle0 = 0,
 
         /// <summary>
         /// The screen is oriented at 90 degrees
-        /// </devdoc>
+        /// </summary>
         Angle90 = 1,
 
         /// <summary>
         /// The screen is oriented at 180 degrees.
-        /// </devdoc>
+        /// </summary>
         Angle180 = 2,
 
         /// <summary>
         /// The screen is oriented at 270 degrees.
-        /// </devdoc>
+        /// </summary>
         Angle270 = 3,
     }
 }

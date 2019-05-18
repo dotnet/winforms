@@ -649,7 +649,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///    <para>Fires when the mouse enters the element</para>
-        /// </devdoc>
+        /// </summary>
         public event HtmlElementEventHandler MouseEnter
         {
             add => ElementShim.AddHandler(EventMouseEnter, value);
@@ -658,7 +658,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///    <para>Fires when the mouse leaves the element</para>
-        /// </devdoc>
+        /// </summary>
         public event HtmlElementEventHandler MouseLeave
         {
             add => ElementShim.AddHandler(EventMouseLeave, value);
@@ -1040,7 +1040,7 @@ namespace System.Windows.Forms
         ///     HTMLElementEvents2: we create an IConnectionPoint (via ConnectionPointCookie) between us and MSHTML and it calls back
         ///                        on our an instance of HTMLElementEvents2.  The HTMLElementEvents2 class then fires the event.
         ///
-        ///</devdoc>  
+        ///</summary>  
         internal class HtmlElementShim : HtmlShim
         {
 

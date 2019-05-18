@@ -26,7 +26,7 @@ namespace System.Windows.Forms
         /// types and values, which are then used in the actual conversion. If the caller is expecting a nullable
         /// value back, we must also re-wrap the final result inside a nullable value before returning.
         ///
-        /// </devdoc>
+        /// </summary>
         public static object FormatObject(object value,
                                           Type targetType, 
                                           TypeConverter sourceConverter, 
@@ -80,7 +80,7 @@ namespace System.Windows.Forms
         /// - Uses TypeConverters or IConvertible where appropriate
         /// - Throws a FormatException is no suitable conversion can be found
         ///
-        /// </devdoc>
+        /// </summary>
         private static object FormatObjectInternal(object value,
                                                    Type targetType, 
                                                    TypeConverter sourceConverter, 
@@ -199,7 +199,7 @@ namespace System.Windows.Forms
         /// types and values, which are then used in the actual conversion. If the caller is expecting a nullable
         /// value back, we must also re-wrap the final result inside a nullable value before returning.
         ///
-        /// </devdoc>
+        /// </summary>
         public static object ParseObject(object value, 
                                          Type targetType, 
                                          Type sourceType, 
@@ -248,7 +248,7 @@ namespace System.Windows.Forms
         /// - Uses TypeConverters or IConvertible where appropriate
         /// - Throws a FormatException is no suitable conversion can be found
         ///
-        /// </devdoc>
+        /// </summary>
         private static object ParseObjectInternal(object value, 
                                                   Type targetType, 
                                                   Type sourceType, 
@@ -341,7 +341,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Converts a value to the specified type using Convert.ChangeType()
-        /// </devdoc>
+        /// </summary>
         private static object ChangeType(object value, Type type, IFormatProvider formatInfo) {
             try {
                 if (formatInfo == null) {
@@ -357,7 +357,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Indicates whether the specified value matches the display-formatted representation of 'null data' for a given binding.
-        /// </devdoc>
+        /// </summary>
         private static bool EqualsFormattedNullValue(object value, object formattedNullValue, IFormatProvider formatInfo) {
             string formattedNullValueStr = formattedNullValue as string;
             string valueStr = value as string;
@@ -377,7 +377,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Returns the FormatException message used when formatting/parsing fails to find any suitable conversion
-        /// </devdoc>
+        /// </summary>
         private static string GetCantConvertMessage(object value, Type targetType) {
             string stringResId = (value == null) ? SR.Formatter_CantConvertNull : SR.Formatter_CantConvert;
             return string.Format(CultureInfo.CurrentCulture, stringResId, value, targetType.Name);
@@ -385,7 +385,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Determines the correct culture to use during formatting and parsing
-        /// </devdoc>
+        /// </summary>
         private static CultureInfo GetFormatterCulture(IFormatProvider formatInfo) {
             if (formatInfo is CultureInfo) {
                 return formatInfo as CultureInfo;
@@ -397,7 +397,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Converts a value to the specified type using best Parse() method on that type
-        /// </devdoc>
+        /// </summary>
         public static object InvokeStringParseMethod(object value, Type targetType, IFormatProvider formatInfo) {
             try {
                 MethodInfo mi;
@@ -438,7 +438,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Indicates whether a given value represents 'null' for data source fields of the same type.
-        /// </devdoc>
+        /// </summary>
         public static bool IsNullData(object value, object dataSourceNullValue) {
             return value == null ||
                    value == System.DBNull.Value ||
@@ -447,7 +447,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Returns the default representation of 'null' for a given data source field type.
-        /// </devdoc>
+        /// </summary>
         public static object NullData(Type type, object dataSourceNullValue) {
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>)) {
                 // For nullable types, null is represented by an instance of that type with no assigned value.
@@ -473,7 +473,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Extract the inner type from a nullable type
-        /// </devdoc>
+        /// </summary>
         private static Type NullableUnwrap(Type type) {
             if (type == stringType) // ...performance optimization for the most common case
                 return stringType;
@@ -485,7 +485,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Extract the inner type converter from a nullable type converter
-        /// </devdoc>
+        /// </summary>
         private static TypeConverter NullableUnwrap(TypeConverter typeConverter) {
             NullableConverter nullableConverter = typeConverter as NullableConverter;
             return (nullableConverter != null) ? nullableConverter.UnderlyingTypeConverter : typeConverter;

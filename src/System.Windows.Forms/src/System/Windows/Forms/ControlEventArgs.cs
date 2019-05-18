@@ -6,12 +6,12 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// A ControlEventArgs is an event that has a control as a property.
-    /// </devdoc>
+    /// </summary>
     public class ControlEventArgs : EventArgs
     {
         /// <summary>
         /// Creates a new ControlEventArgs.
-        /// </devdoc>
+        /// </summary>
         public ControlEventArgs(Control control)
         {
             Control = control;
@@ -19,7 +19,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Retrieves the control object stored in this event.
-        /// </devdoc>
+        /// </summary>
         public Control Control { get; }
     }
 }

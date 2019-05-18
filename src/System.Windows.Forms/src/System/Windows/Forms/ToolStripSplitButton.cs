@@ -45,7 +45,7 @@ namespace System.Windows.Forms {
        
         /// <summary>
         /// Summary of ToolStripSplitButton.
-        /// </devdoc>
+        /// </summary>
         public ToolStripSplitButton() {
             Initialize(); // all additional work should be done in Initialize
         }
@@ -81,7 +81,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// Summary of ToolStripSplitButton.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
         public Rectangle ButtonBounds {
             get {
@@ -93,7 +93,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// Summary of ButtonPressed.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
         public bool ButtonPressed {
             get {
@@ -104,7 +104,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// Summary of ButtonPressed.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
         public bool ButtonSelected {
             get {
@@ -114,7 +114,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// <para>Occurs when the button portion of a split button is clicked.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAction)),
         SRDescription(nameof(SR.ToolStripSplitButtonOnButtonClickDescr))
@@ -125,7 +125,7 @@ namespace System.Windows.Forms {
         }
         /// <summary>
         /// <para>Occurs when the utton portion of a split button  is double clicked.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAction)),
         SRDescription(nameof(SR.ToolStripSplitButtonOnButtonDoubleClickDescr))
@@ -144,7 +144,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// Summary of DefaultItem.
-        /// </devdoc>
+        /// </summary>
         [DefaultValue(null), Browsable(false)]
         public ToolStripItem DefaultItem {
             get { 
@@ -161,7 +161,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// <para>Occurs when the default item has changed</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAction)),
         SRDescription(nameof(SR.ToolStripSplitButtonOnDefaultItemChangedDescr))
@@ -173,7 +173,7 @@ namespace System.Windows.Forms {
 	
         /// <summary>
         /// specifies the default behavior of these items on ToolStripDropDowns when clicked.
-        /// </devdoc>
+        /// </summary>
         internal protected override bool DismissWhenClicked {
             get {
                 return DropDown.Visible != true;
@@ -187,7 +187,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// The bounds of the DropDown in ToolStrip coordinates.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
         public Rectangle DropDownButtonBounds {
             get {
@@ -197,7 +197,7 @@ namespace System.Windows.Forms {
         }
         /// <summary>
         /// Summary of DropDownButtonBounds.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
         public bool DropDownButtonPressed {
             get {
@@ -207,7 +207,7 @@ namespace System.Windows.Forms {
         }
         /// <summary>
         /// Summary of DropDownButtonSelected.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
         public bool DropDownButtonSelected{
             get {
@@ -216,7 +216,7 @@ namespace System.Windows.Forms {
         }
         /// <summary>
         /// Summary of DropDownButtonWidth.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
         SRDescription(nameof(SR.ToolStripSplitButtonDropDownButtonWidthDescr))
@@ -241,7 +241,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// This is here for serialization purposes.
-        /// </devdoc>
+        /// </summary>
         private int DefaultDropDownButtonWidth {
             get {
                 // lets start off with a size roughly equivalent to a combobox dropdown
@@ -279,7 +279,7 @@ namespace System.Windows.Forms {
         }
         /// <summary>
         /// Summary of SplitButtonButtonLayout.
-        /// </devdoc>	
+        /// </summary>	
         internal ToolStripItemInternalLayout SplitButtonButtonLayout {
             get { 
                 // For preferred size caching reasons, we need to keep our two 
@@ -295,7 +295,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// the width of the separator between the default and drop down button
-        /// </devdoc>
+        /// </summary>
         [
         SRDescription(nameof(SR.ToolStripSplitButtonSplitterWidthDescr)),
         SRCategory(nameof(SR.CatLayout)),
@@ -319,7 +319,7 @@ namespace System.Windows.Forms {
         /// <summary>
         /// the boundaries of the separator between the default and drop down button, exposed for custom
         /// painting purposes.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
         public Rectangle SplitterBounds {
             get {
@@ -328,7 +328,7 @@ namespace System.Windows.Forms {
         }
         /// <summary>
         /// Summary of CalculateLayout.
-        /// </devdoc>	
+        /// </summary>	
         private void CalculateLayout() {
 
             // Figure out where the DropDown image goes.
@@ -389,7 +389,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// Summary of InvalidateSplitButtonLayout.
-        /// </devdoc>	
+        /// </summary>	
         private void InvalidateSplitButtonLayout() {
             this.splitButtonButtonLayout = null;	
             CalculateLayout();
@@ -418,7 +418,7 @@ namespace System.Windows.Forms {
         /// <summary>
         /// called when the button portion of a split button is clicked
         /// if there is a default item, this will route the click to the default item
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnButtonClick(System.EventArgs e) {
  
             if (DefaultItem != null) {
@@ -433,7 +433,7 @@ namespace System.Windows.Forms {
         /// <summary>
         /// called when the button portion of a split button is double clicked
         /// if there is a default item, this will route the double click to the default item
-        /// </devdoc>
+        /// </summary>
         public virtual void OnButtonDoubleClick(System.EventArgs e) {
             if (DefaultItem != null) {
                 DefaultItem.FireEvent(ToolStripItemEventType.DoubleClick);
@@ -446,7 +446,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// Inheriting classes should override this method to handle this event.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnDefaultItemChanged(EventArgs e) {
             InvalidateSplitButtonLayout();
             if (CanRaiseEvents) {
@@ -460,7 +460,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// Summary of OnMouseDown.
-        /// </devdoc>
+        /// </summary>
         protected override void OnMouseDown(MouseEventArgs e) {
 		    
             if (DropDownButtonBounds.Contains(e.Location)) {
@@ -482,7 +482,7 @@ namespace System.Windows.Forms {
             
         /// <summary>
         /// Summary of OnMouseUp.
-        /// </devdoc>
+        /// </summary>
         protected override void OnMouseUp(MouseEventArgs e) {
             if (!Enabled) {
                 return;
@@ -538,14 +538,14 @@ namespace System.Windows.Forms {
       	
         /// <summary>
         /// Summary of OnRightToLeftChanged.
-        /// </devdoc>
+        /// </summary>
         protected override void OnRightToLeftChanged(EventArgs e) {
             base.OnRightToLeftChanged(e);
             InvalidateSplitButtonLayout();			
         }
         /// <summary>
         /// Summary of OnPaint.
-        /// </devdoc>
+        /// </summary>
         /// <param name=e></param>
         protected override void OnPaint(System.Windows.Forms.PaintEventArgs e) {
 
@@ -575,7 +575,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// Resets the RightToLeft to be the default.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual void ResetDropDownButtonWidth() {
             DropDownButtonWidth = DefaultDropDownButtonWidth;
@@ -583,13 +583,13 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// Summary of SetDropDownBounds.
-        /// </devdoc>
+        /// </summary>
         private void SetDropDownButtonBounds(Rectangle rect) {
             dropDownButtonBounds = rect; 
         }
         /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.ToolStripItem.Size'/> property needs to be persisted.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeDropDownButtonWidth() {
             return  (DropDownButtonWidth != DefaultDropDownButtonWidth);
@@ -602,7 +602,7 @@ namespace System.Windows.Forms {
         ///  Note since this is NOT an actual item hosted on the ToolStrip - it wont get things
         ///  like MouseOver, wont be laid out by the ToolStrip, etc etc.  This is purely internal
         ///  convenience.
-        /// </devdoc>
+        /// </summary>
         private class ToolStripSplitButtonButton : ToolStripButton {
 
             private ToolStripSplitButton owner = null;
@@ -693,7 +693,7 @@ namespace System.Windows.Forms {
         ///  This class performs internal layout for the "split button button" portion of a split button.
         ///  Its main job is to make sure the inner button has the same parent as the split button, so
         ///  that layout can be performed using the correct graphics context.
-        /// </devdoc>
+        /// </summary>
         private class ToolStripSplitButtonButtonLayout : ToolStripItemInternalLayout {
 
             ToolStripSplitButton owner;

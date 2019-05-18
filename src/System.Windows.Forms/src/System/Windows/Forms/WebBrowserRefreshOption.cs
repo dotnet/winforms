@@ -6,7 +6,7 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Specifies the RefreshOptions in the <see cref='System.Windows.Forms.WebBrowser.Refresh'/> method.
-    /// </devdoc>
+    /// </summary>
     public enum WebBrowserRefreshOption
     {
         Normal = 0,

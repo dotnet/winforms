@@ -6,6 +6,6 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Represents the method that will handle PreviewKeyDown events.
-    /// </devdoc>
+    /// </summary>
     public delegate void PreviewKeyDownEventHandler(object sender, PreviewKeyDownEventArgs e);
 }

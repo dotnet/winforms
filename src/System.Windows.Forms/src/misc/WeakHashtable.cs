@@ -11,7 +11,7 @@ namespace System.ComponentModel {
     ///     This is a hashtable that stores object keys as weak references.  
     ///     It monitors memory usage and will periodically scavenge the
     ///     hash table to clean out dead references.
-    /// </devdoc>
+    /// </summary>
     internal sealed class WeakHashtable : Hashtable
     {
         private static IEqualityComparer _comparer = new WeakKeyComparer();
@@ -25,7 +25,7 @@ namespace System.ComponentModel {
 
         /// <summary>
         ///     Override of clear that performs a scavenge.
-        /// </devdoc>
+        /// </summary>
         public override void Clear()
         {
             base.Clear();
@@ -33,7 +33,7 @@ namespace System.ComponentModel {
 
         /// <summary>
         ///     Override of remove that performs a scavenge.
-        /// </devdoc>
+        /// </summary>
         public override void Remove(object key)
         {
             base.Remove(key);
@@ -42,7 +42,7 @@ namespace System.ComponentModel {
         /// <summary>
         ///     Override of Item that wraps a weak reference around the
         ///     key and performs a scavenge.
-        /// </devdoc>
+        /// </summary>
         public void SetWeak(object key, object value)
         {
             ScavengeKeys();
@@ -60,7 +60,7 @@ namespace System.ComponentModel {
         ///     will need to see if this is too often for extreme
         ///     use cases like the CompactFramework (they add
         ///     custom type data for every object at design time).
-        /// </devdoc>
+        /// </summary>
         private void ScavengeKeys()
         {
             int hashCount = Count;
@@ -170,7 +170,7 @@ namespace System.ComponentModel {
         ///     the object's hash code and will return True for a Equals
         ///     comparison of the object it is wrapping.  If the object
         ///     it is wrapping has finalized, Equals always returns false.
-        /// </devdoc>
+        /// </summary>
         private sealed class EqualityWeakReference : WeakReference
         {
             private int _hashCode;
@@ -211,7 +211,7 @@ namespace System.ComponentModel {
         /// <summary>
         ///     Override of add that wraps a weak reference around the
         ///     key and performs a scavenge.
-        /// </devdoc>
+        /// </summary>
         public void AddWeak(object key, object value)
         {
             ScavengeKeys();

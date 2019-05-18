@@ -8,13 +8,13 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Provides data for splitter events.
-    /// </devdoc>
+    /// </summary>
     public class SplitterCancelEventArgs : CancelEventArgs
     {
         /// <summary>
         /// Initializes an instance of the <see cref='System.Windows.Forms.SplitterCancelEventArgs'/> class with the specified coordinates
         /// of the mouse pointer and the upper-left corner of the <see cref='System.Windows.Forms.SplitContainer'/>.
-        /// </devdoc>
+        /// </summary>
         public SplitterCancelEventArgs(int mouseCursorX, int mouseCursorY, int splitX, int splitY)  : base (false)
         {
             MouseCursorX = mouseCursorX;
@@ -25,22 +25,22 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Gets the x-coordinate of the mouse pointer (in client coordinates).
-        /// </devdoc>
+        /// </summary>
         public int MouseCursorX { get; }
 
         /// <summary>
         /// Gets the y-coordinate of the mouse pointer (in client coordinates).
-        /// </devdoc>
+        /// </summary>
         public int MouseCursorY { get; }
         
         /// <summary>
         /// Gets the x-coordinate of the upper-left corner of the <see cref='System.Windows.Forms.SplitContainer'/> (in client coordinates).
-        /// </devdoc>
+        /// </summary>
         public int SplitX { get; set; }
 
         /// <summary>
         /// Gets the y-coordinate of the upper-left corner of the <see cref='System.Windows.Forms.SplitContainer'/> (in client coordinates).
-        /// </devdoc>
+        /// </summary>
         public int SplitY { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     /// be able to compile the internal one into different assemblies w/o
     /// creating any conflict/dependency on public namespaces.
     /// Additionally, TextFormatFlags has some extra values.
-    /// </devdoc>
+    /// </summary>
     [Flags]
     [SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "PM team has reviewed and decided on naming changes already")]
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Maps to native enum.")]
@@ -56,14 +56,14 @@ namespace System.Windows.Forms
         /// and apply to methods receiving a Graphics as the IDeviceContext object, and
         /// specify whether to reapply clipping and coordintate transformations to the hdc
         /// obtained from the Graphics object, which returns a clean hdc.
-        /// </devdoc>
+        /// </summary>
         PreserveGraphicsClipping           = 0x01000000,
         PreserveGraphicsTranslateTransform = 0x02000000,
 
         /// <summary>
         /// Adds padding related to the drawing binding box, computed according to the font size.
         /// Match the System.Internal.GDI.TextPaddingOptions.
-        /// </devdoc>
+        /// </summary>
         GlyphOverhangPadding = 0x00000000, // default.
         NoPadding            = 0x10000000,
         LeftAndRightPadding  = 0x20000000

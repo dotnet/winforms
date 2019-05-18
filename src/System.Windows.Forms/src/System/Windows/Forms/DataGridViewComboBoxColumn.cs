@@ -524,7 +524,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///    <para></para>
-        /// </devdoc>
+        /// </summary>
         public override string ToString() 
         {
             StringBuilder sb = new StringBuilder(64);

@@ -14,7 +14,7 @@ namespace System.Experimental.Gdi
 
     /// <summary>
     ///    Specifies the layout of a device context.
-    /// </devdoc>
+    /// </summary>
     [Flags]
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
@@ -25,27 +25,27 @@ namespace System.Experimental.Gdi
     {   
         /// <summary>
         ///     Right to left.
-        /// </devdoc>
+        /// </summary>
         Normal = 0x00000000,
 
         /// <summary>
         ///     Right to left. LAYOUT_RTL
-        /// </devdoc>
+        /// </summary>
         RightToLeft = 0x00000001,
 
         /// <summary>
         ///     Bottom to top. LAYOUT_BTT
-        /// </devdoc>
+        /// </summary>
         BottomToTop = 0x00000002,
         
         /// <summary>
         ///     Vertical before horizontal. LAYOUT_VBH
-        /// </devdoc>
+        /// </summary>
         VerticalBeforeHorizontal = 0x00000004,
 
         /// <summary>
         ///     Disables any reflection during BitBlt and StretchBlt operations. LAYOUT_BITMAPORIENTATIONPRESERVED
-        /// </devdoc>
+        /// </summary>
         BitmapOrientationPreserved = 0x00000008
     }
 }

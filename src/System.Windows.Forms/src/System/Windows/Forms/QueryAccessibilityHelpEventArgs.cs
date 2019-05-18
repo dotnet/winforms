@@ -9,7 +9,7 @@ namespace System.Windows.Forms
     /// <summary>
     /// The QueryAccessibilityHelpEventArgs is fired when AccessibleObject is providing help
     /// to accessibility applications.
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
     public class QueryAccessibilityHelpEventArgs  : EventArgs
     {

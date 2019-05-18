@@ -7,31 +7,31 @@ namespace System.Windows.Forms
     /// <summary>
     /// For a given container control, determines whether the data in child controls
     /// will automatically be validated when the user attempts to change the focus.
-    /// </devdoc>
+    /// </summary>
     public enum AutoValidate
     {
         /// <summary>
         /// Controls in this container will not be validated when the focus changes.
-        /// </devdoc>
+        /// </summary>
         Disable = 0,
 
         /// <summary>
         /// Controls in this container will be validated when the focus changes.
         /// If a validation error occurs, the focus is forced to stay in the
         /// current control.
-        /// </devdoc>
+        /// </summary>
         EnablePreventFocusChange = 1,
 
         /// <summary>
         /// Controls in this container will be validated when the focus changes.
         /// If a validation error occurs, the focus is allowed to move to the other
         /// control.
-        /// </devdoc>
+        /// </summary>
         EnableAllowFocusChange = 2,
 
         /// <summary>
         /// AutoValidate setting for this container is determined by its parent container.
-        /// </devdoc>
+        /// </summary>
         Inherit = -1,
     }
 }

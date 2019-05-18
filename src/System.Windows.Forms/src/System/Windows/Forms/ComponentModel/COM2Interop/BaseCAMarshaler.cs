@@ -17,7 +17,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     ///   which are structs in which the first word is the number of elements
     ///   and the second is a pointer to an array of such elements.
     ///
-    /// </devdoc>
+    /// </summary>
     internal abstract class BaseCAMarshaler {
 
         private static TraceSwitch CAMarshalSwitch = new TraceSwitch("CAMarshal", "BaseCAMarshaler: Debug CA* struct marshaling");
@@ -28,7 +28,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         /// <summary>
         ///     Base ctor
-        /// </devdoc>
+        /// </summary>
         protected BaseCAMarshaler(NativeMethods.CA_STRUCT caStruct) : base() {
             if (caStruct == null) {
                 count = 0;
@@ -56,7 +56,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <summary>
         ///     Returns the type of item this marshaler will
         ///     return in the items array.
-        /// </devdoc>
+        /// </summary>
         public abstract Type ItemType {
             get;
         }
@@ -65,7 +65,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <summary>
         ///     Returns the count of items that will be or have been
         ///     marshaled.
-        /// </devdoc>
+        /// </summary>
         public int Count {
             get {
                 return count;
@@ -76,7 +76,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         /// <summary>
         ///     The marshaled items.
-        /// </devdoc>
+        /// </summary>
         public virtual object[] Items {
             get {
                 try {
@@ -100,7 +100,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <summary>
         ///     Override this member to perform marshalling of a single item
         ///     given it's native address.
-        /// </devdoc>
+        /// </summary>
         protected abstract object GetItemFromAddress(IntPtr addr);
 
         // Retrieve the items

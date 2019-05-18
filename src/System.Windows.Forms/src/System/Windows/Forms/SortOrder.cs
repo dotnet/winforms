@@ -6,22 +6,22 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Specifies how items in a list are sorted.
-    /// </devdoc>
+    /// </summary>
     public enum SortOrder
     {
         /// <summary>
         /// The items are not sorted.
-        /// </devdoc>
+        /// </summary>
         None = 0,
 
         /// <summary>
         /// The items are sorted in ascending order.
-        /// </devdoc>
+        /// </summary>
         Ascending = 1,
 
         /// <summary>
         /// The items are sorted in descending order.
-        /// </devdoc>
+        /// </summary>
         Descending = 2,
     }
 }

@@ -43,7 +43,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// The ListSource to consume as this ListBox's source of data.
         /// When set, a user can not modify the Items collection.
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatData))]
         [DefaultValue(null)]
         [RefreshProperties(RefreshProperties.Repaint)]
@@ -100,7 +100,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// If the ListBox contains objects that support properties, this indicates
         /// which property of the object to show. If "", the object shows it's ToString().
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatData))]
         [DefaultValue("")]
         [TypeConverterAttribute("System.Windows.Forms.Design.DataMemberFieldConverter, " + AssemblyRef.SystemDesign)]
@@ -337,7 +337,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Indicates whether list currently allows selection of list items.
-        /// </devdoc>
+        /// </summary>
         protected virtual bool AllowSelection => true;
 
         public abstract int SelectedIndex { get; set; }
@@ -548,7 +548,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Handling special input keys, such as PageUp, PageDown, Home, End, etc...
-        /// </devdoc>
+        /// </summary>
         protected override bool IsInputKey(Keys keyData)
         {
             if ((keyData & Keys.Alt) == Keys.Alt)
@@ -616,7 +616,7 @@ namespace System.Windows.Forms
         /// adding an event handler on yourself for this event]. They should,
         /// however, remember to call base.OnSelectedIndexChanged(e); to ensure the event is
         /// still fired to external listeners
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnSelectedIndexChanged(EventArgs e)
         {
             OnSelectedValueChanged(e);

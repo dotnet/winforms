@@ -34,11 +34,11 @@ namespace System.Windows.Forms {
     /// to manage an application, such as methods to run and quit an application,
     /// to process Windows messages, and properties to get information about an application. This
     /// class cannot be inherited.</para>
-    /// </devdoc>
+    /// </summary>
     public sealed class Application {
         /// <summary>
         ///     Hash table for our event list
-        /// </devdoc>
+        /// </summary>
         static EventHandlerList eventHandlers;
         static string startupPath;
         static string executablePath;
@@ -61,12 +61,12 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     in case Application.exit gets called recursively
-        /// </devdoc>
+        /// </summary>
         private static bool exiting;
 
         /// <summary>
         ///     Events the user can hook into
-        /// </devdoc>
+        /// </summary>
         private static readonly object EVENT_APPLICATIONEXIT = new object();
         private static readonly object EVENT_THREADEXIT      = new object();
 
@@ -82,7 +82,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     This class is static, there is no need to ever create it.
-        /// </devdoc>
+        /// </summary>
         private Application() {
         }
 
@@ -93,7 +93,7 @@ namespace System.Windows.Forms {
         ///      windows forms control should not attempt to quit the application.
         ///
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static bool AllowQuit {
             get {
                 return ThreadContext.FromCurrent().GetAllowQuit();
@@ -102,7 +102,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///    <para>Returns True if it is OK to continue idle processing. Typically called in an Application.Idle event handler.</para>
-        /// </devdoc>
+        /// </summary>
         internal static bool CanContinueIdle
         {
             get
@@ -156,7 +156,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para>Gets the registry
         ///       key for the application data that is shared among all users.</para>
-        /// </devdoc>
+        /// </summary>
         public static RegistryKey CommonAppDataRegistry {
             get {
                 return Registry.LocalMachine.CreateSubKey(CommonAppDataRegistryKeyName);
@@ -203,7 +203,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///    <para>Gets the path for the application data that is shared among all users.</para>
-        /// </devdoc>
+        /// </summary>
         /// <remarks>
         /// Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
         // the Windows logo required adornments to the directory (Company\Product\Version)
@@ -233,7 +233,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///    <para>Gets the company name associated with the application.</para>
-        /// </devdoc>
+        /// </summary>
         public static string CompanyName {
             get {
                 lock(internalSyncObject) {
@@ -291,7 +291,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para>Gets
         ///       or sets the locale information for the current thread.</para>
-        /// </devdoc>
+        /// </summary>
         public static CultureInfo CurrentCulture {
             get {
                 return Thread.CurrentThread.CurrentCulture;
@@ -304,7 +304,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para>Gets or
         ///       sets the current input language for the current thread.</para>
-        /// </devdoc>
+        /// </summary>
         public static InputLanguage CurrentInputLanguage {
             get {
                 return InputLanguage.CurrentInputLanguage;
@@ -325,7 +325,7 @@ namespace System.Windows.Forms {
         ///       Gets the
         ///       path for the executable file that started the application.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         /// 
         [SuppressMessage("Microsoft.Security", "CA2103:ReviewImperativeSecurity")]
         public static string ExecutablePath {
@@ -380,7 +380,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///    <para>Gets the path for the application data specific to a local, non-roaming user.</para>
-        /// </devdoc>
+        /// </summary>
         /// <remarks>
         /// Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
         /// the Windows logo required adornments to the directory (Company\Product\Version)
@@ -412,7 +412,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Determines if a message loop exists on this thread.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static bool MessageLoop {
             get {
                 return ThreadContext.FromCurrent().GetMessageLoop();
@@ -421,7 +421,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// Gets the forms collection associated with this application.
-        /// </devdoc>
+        /// </summary>
         public static FormCollection OpenForms => s_forms ?? (s_forms = new FormCollection());
 
         /// <summary>
@@ -429,7 +429,7 @@ namespace System.Windows.Forms {
         ///       Gets
         ///       the product name associated with this application.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static string ProductName {
             get {
                 lock(internalSyncObject) {
@@ -489,7 +489,7 @@ namespace System.Windows.Forms {
         ///       Gets
         ///       the product version associated with this application.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static string ProductVersion {
             get {
                 lock(internalSyncObject) {
@@ -537,7 +537,7 @@ namespace System.Windows.Forms {
         ///    Magic property that answers a simple question - are my controls currently going to render with
         //     visual styles? If you are doing visual styles rendering, use this to be consistent with the rest
         //     of the controls in your app.
-        /// </devdoc>
+        /// </summary>
         public static bool RenderWithVisualStyles {
             get {
                 return (ComCtlSupportsVisualStyles && VisualStyles.VisualStyleRenderer.IsSupported);
@@ -547,7 +547,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para>Gets or sets the format string to apply to top level window captions
         ///       when they are displayed with a warning banner.</para>
-        /// </devdoc>
+        /// </summary>
         public static string SafeTopLevelCaptionFormat {
             get {
                 if (safeTopLevelCaptionSuffix == null) {
@@ -566,7 +566,7 @@ namespace System.Windows.Forms {
         ///       Gets the
         ///       path for the executable file that started the application.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
 
         /// 
         [SuppressMessage("Microsoft.Security", "CA2103:ReviewImperativeSecurity")]
@@ -592,7 +592,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para>Gets
         ///       or sets whether the wait cursor is used for all open forms of the application.</para>
-        /// </devdoc>
+        /// </summary>
         public static bool UseWaitCursor {
             get {
                 return useWaitCursor;
@@ -612,7 +612,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///    <para>Gets the path for the application data specific to the roaming user.</para>
-        /// </devdoc>
+        /// </summary>
         /// <remarks>
         /// Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
         /// the Windows logo required adornments to the directory (Company\Product\Version)
@@ -643,7 +643,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para>Gets the registry key of
         ///       the application data specific to the roaming user.</para>
-        /// </devdoc>
+        /// </summary>
         public static RegistryKey UserAppDataRegistry {
             get {
                 string template = @"Software\{0}\{1}\{2}";
@@ -672,7 +672,7 @@ namespace System.Windows.Forms {
         ///
         ///     This property can be set only to one of the S.W.F.VisualStyles.VisualStyleState enum values.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static VisualStyleState VisualStyleState {
             get {
                 if (!VisualStyleInformation.IsSupportedByOS) {
@@ -705,7 +705,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// This helper broadcasts out a WM_THEMECHANGED to appropriate top level windows of this app.
-        /// </devdoc>
+        /// </summary>
         private static bool SendThemeChanged(IntPtr handle, IntPtr extraParameter) {
             int processId;
             int thisPID = SafeNativeMethods.GetCurrentProcessId();
@@ -726,7 +726,7 @@ namespace System.Windows.Forms {
         /// <summary>
         /// This helper broadcasts out a WM_THEMECHANGED this window and all children.
         /// it is assumed at this point that the handle belongs to the current process and has a visible top level window.
-        /// </devdoc>
+        /// </summary>
         private static bool SendThemeChangedRecursive(IntPtr handle, IntPtr lparam) {
             //first send to all children...
             UnsafeNativeMethods.EnumChildWindows(new HandleRef(null, handle),
@@ -741,7 +741,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///    <para>Occurs when the application is about to shut down.</para>
-        /// </devdoc>
+        /// </summary>
         public static event EventHandler ApplicationExit {
             add => AddEventHandler(EVENT_APPLICATIONEXIT, value);
             remove => RemoveEventHandler(EVENT_APPLICATIONEXIT, value);
@@ -767,14 +767,14 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para>Adds a message filter to monitor Windows messages as they are routed to their
         ///       destinations.</para>
-        /// </devdoc>
+        /// </summary>
         public static void AddMessageFilter(IMessageFilter value) {
             ThreadContext.FromCurrent().AddMessageFilter(value);
         }
 
         /// <summary>
         ///  Processes all message filters for given message
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced),         
          SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference")  // using ref is OK.
         ]
@@ -805,7 +805,7 @@ namespace System.Windows.Forms {
         ///       Occurs when the application has finished processing and is about to enter the
         ///       idle state.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static event EventHandler Idle {
             add {
                 ThreadContext current = ThreadContext.FromCurrent();
@@ -829,7 +829,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Occurs when the application is about to enter a modal state
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static event EventHandler EnterThreadModal {
             add {
@@ -850,7 +850,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Occurs when the application is about to leave a modal state
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static event EventHandler LeaveThreadModal {
             add {
@@ -869,7 +869,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///    <para>Occurs when an untrapped thread exception is thrown.</para>
-        /// </devdoc>
+        /// </summary>
         public static event ThreadExceptionEventHandler ThreadException {
             add {
                 ThreadContext current = ThreadContext.FromCurrent();
@@ -890,7 +890,7 @@ namespace System.Windows.Forms {
         ///     the main thread for an application is about to be shut down,
         ///     this event will be raised first, followed by an ApplicationExit
         ///     event.</para>
-        /// </devdoc>
+        /// </summary>
         public static event EventHandler ThreadExit {
             add => AddEventHandler(EVENT_THREADEXIT, value);
             remove => RemoveEventHandler(EVENT_THREADEXIT, value);
@@ -899,7 +899,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Called immediately before we begin pumping messages for a modal message loop.
         ///     Does not actually start a message pump; that's the caller's responsibility.
-        /// </devdoc>
+        /// </summary>
         internal static void BeginModalMessageLoop() {
             ThreadContext.FromCurrent().BeginModalMessageLoop(null);
         }
@@ -907,13 +907,13 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para>Processes
         ///       all Windows messages currently in the message queue.</para>
-        /// </devdoc>
+        /// </summary>
         public static void DoEvents() {
             ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopDoEvents, null);
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         internal static void DoEventsModal() {
             ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopDoEventsModal, null);
         }
@@ -921,7 +921,7 @@ namespace System.Windows.Forms {
         /// <summary>
         /// Enables visual styles for all subsequent Application.Run() and CreateHandle() calls.
         /// Uses the default theming manifest file shipped with the redist.
-        /// </devdoc>
+        /// </summary>
         public static void EnableVisualStyles()
         {
             // Pull manifest from our resources
@@ -937,14 +937,14 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Called immediately after we stop pumping messages for a modal message loop.
         ///     Does not actually end the message pump itself.
-        /// </devdoc>
+        /// </summary>
         internal static void EndModalMessageLoop() {
             ThreadContext.FromCurrent().EndModalMessageLoop(null);
         }
 
         /// <summary>
         ///    <para>Overload of Exit that does not care about e.Cancel.</para>
-        /// </devdoc>
+        /// </summary>
         public static void Exit() {
 	        Exit(null);
         }
@@ -953,7 +953,7 @@ namespace System.Windows.Forms {
         ///    <para>Informs all message pumps that they are to terminate and
         ///       then closes all application windows after the messages have been processed.
         ///       e.Cancel indicates whether any of the open forms cancelled the exit call.</para>
-        /// </devdoc>
+        /// </summary>
         [
             EditorBrowsable(EditorBrowsableState.Advanced),
             SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")
@@ -967,7 +967,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///    <para>Private version of Exit which does not do any security checks.</para>
-        /// </devdoc>
+        /// </summary>
         private static bool ExitInternal() {
             bool cancelExit = false;
             lock (internalSyncObject) {
@@ -1006,7 +1006,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para>Exits the message loop on the
         ///       current thread and closes all windows on the thread.</para>
-        /// </devdoc>
+        /// </summary>
         public static void ExitThread() {
             ThreadContext context = ThreadContext.FromCurrent();
             if (context.ApplicationContext != null)
@@ -1032,7 +1032,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Retrieves the FileVersionInfo associated with the main module for
         ///     the application.
-        /// </devdoc>
+        /// </summary>
         private static FileVersionInfo GetAppFileVersionInfo() {
             lock (internalSyncObject) {
                 if (appFileVersion == null) {
@@ -1051,7 +1051,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Retrieves the Type that contains the "Main" method.
-        /// </devdoc>
+        /// </summary>
         private static Type GetAppMainType() {
             lock(internalSyncObject) {
                 if (mainType == null) {
@@ -1070,7 +1070,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Locates a thread context given a window handle.
-        /// </devdoc>
+        /// </summary>
         private static ThreadContext GetContextForHandle(HandleRef handle) {
 
             int pid;
@@ -1084,7 +1084,7 @@ namespace System.Windows.Forms {
         ///     Returns a string that is the combination of the
         ///     basePath + CompanyName + ProducName + ProductVersion. This
         ///     will also create the directory if it doesn't exist.
-        /// </devdoc>
+        /// </summary>
         private static string GetDataPath(string basePath) {
             string template = @"{0}\{1}\{2}\{3}";
 
@@ -1104,7 +1104,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Called by the last thread context before it shuts down.
-        /// </devdoc>
+        /// </summary>
         private static void RaiseExit() {
             if (eventHandlers != null) {
                 Delegate exit = eventHandlers[EVENT_APPLICATIONEXIT];
@@ -1115,7 +1115,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Called by the each thread context before it shuts down.
-        /// </devdoc>
+        /// </summary>
         private static void RaiseThreadExit() {
             if (eventHandlers != null) {
                 Delegate exit = eventHandlers[EVENT_THREADEXIT];
@@ -1129,7 +1129,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     "Parks" the given HWND to a temporary HWND.  This allows WS_CHILD windows to
         ///     be parked.
-        /// </devdoc>
+        /// </summary>
         internal static void ParkHandle(HandleRef handle, DpiAwarenessContext dpiAwarenessContext = DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED) {
             Debug.Assert(UnsafeNativeMethods.IsWindow(handle), "Handle being parked is not a valid window handle");
             Debug.Assert(((int)UnsafeNativeMethods.GetWindowLong(handle, NativeMethods.GWL_STYLE) & NativeMethods.WS_CHILD) != 0, "Only WS_CHILD windows should be parked.");
@@ -1157,14 +1157,14 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Initializes OLE on the current thread.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static System.Threading.ApartmentState OleRequired() {
             return ThreadContext.FromCurrent().OleRequired();
         }
 
         /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Application.ThreadException'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         public static void OnThreadException(Exception t) {
             ThreadContext.FromCurrent().OnThreadException(t);
         }
@@ -1172,7 +1172,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     "Unparks" the given HWND to a temporary HWND.  This allows WS_CHILD windows to
         ///     be parked.
-        /// </devdoc>
+        /// </summary>
         internal static void UnparkHandle(HandleRef handle, DpiAwarenessContext context) {
             ThreadContext cxt = GetContextForHandle(handle);
             if (cxt != null) {
@@ -1182,7 +1182,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Raises the Idle event.
-        /// </devdoc>
+        /// </summary>
         [
             EditorBrowsable(EditorBrowsableState.Advanced),
             SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers"),
@@ -1198,14 +1198,14 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para>Removes a message
         ///       filter from the application's message pump.</para>
-        /// </devdoc>
+        /// </summary>
         public static void RemoveMessageFilter(IMessageFilter value) {
             ThreadContext.FromCurrent().RemoveMessageFilter(value);
         }
 
         /// <summary>
         ///    <para>Restarts the application.</para>
-        /// </devdoc>
+        /// </summary>
         public static void Restart()
         {
             if (Assembly.GetEntryAssembly() == null)
@@ -1281,7 +1281,7 @@ namespace System.Windows.Forms {
         ///       standard
         ///       application message loop on the current thread,
         ///       without a form.</para>
-        /// </devdoc>
+        /// </summary>
         public static void Run() {
             ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopMain, new ApplicationContext());
         }
@@ -1289,7 +1289,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para>Begins running a standard application message loop on the current
         ///       thread, and makes the specified form visible.</para>
-        /// </devdoc>
+        /// </summary>
         public static void Run(Form mainForm) {
             ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopMain, new ApplicationContext(mainForm));
         }
@@ -1299,7 +1299,7 @@ namespace System.Windows.Forms {
         ///       standard
         ///       application message loop on the current thread,
         ///       without a form.</para>
-        /// </devdoc>
+        /// </summary>
         public static void Run(ApplicationContext context) {
             ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopMain, context);
         }
@@ -1308,7 +1308,7 @@ namespace System.Windows.Forms {
         ///     Runs a modal dialog.  This starts a special type of message loop that runs until
         ///     the dialog has a valid DialogResult.  This is called internally by a form
         ///     when an application calls System.Windows.Forms.Form.ShowDialog().
-        /// </devdoc>
+        /// </summary>
         internal static void RunDialog(Form form) {
             ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopModalForm, new ModalApplicationContext(form));
         }
@@ -1317,7 +1317,7 @@ namespace System.Windows.Forms {
         ///     Sets the static UseCompatibleTextRenderingDefault field on Control to the value passed in. 
         ///     This switch determines the default text rendering engine to use by some controls that support 
         ///     switching rendering engine.
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         public static void SetCompatibleTextRenderingDefault(bool defaultValue)
         {
@@ -1331,7 +1331,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Sets the suspend/hibernate state of the machine.
         ///     Returns true if the call succeeded, else false.
-        /// </devdoc>
+        /// </summary>
         public static bool SetSuspendState(PowerState state, bool force, bool disableWakeEvent) {
             return UnsafeNativeMethods.SetSuspendState(state == PowerState.Hibernate, force, disableWakeEvent);
         }
@@ -1339,7 +1339,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///      Overload version of SetUnhandledExceptionMode that sets the UnhandledExceptionMode 
         ///      mode at the current thread level.
-        /// </devdoc>
+        /// </summary>
         public static void SetUnhandledExceptionMode(UnhandledExceptionMode mode)
         {
             SetUnhandledExceptionMode(mode, true /*threadScope*/);
@@ -1363,7 +1363,7 @@ namespace System.Windows.Forms {
         ///     the current thread or the application.
         ///     When a thread exception mode isn't UnhandledExceptionMode.Automatic, it takes 
         ///     precedence over the application exception mode.
-        /// </devdoc>
+        /// </summary>
         public static void SetUnhandledExceptionMode(UnhandledExceptionMode mode, bool threadScope) {
             NativeWindow.SetUnhandledExceptionModeInternal(mode, threadScope);
         }
@@ -1378,7 +1378,7 @@ namespace System.Windows.Forms {
         ///      create our own and install it in the message filter.
         ///
         ///      This class is not used when running inside the Visual Studio shell.
-        /// </devdoc>
+        /// </summary>
         private class ComponentManager : UnsafeNativeMethods.IMsoComponentManager
         {
 
@@ -1411,7 +1411,7 @@ namespace System.Windows.Forms {
             ///      guidService (same as IServiceProvider::QueryService).
             ///      Return NOERROR if the requested service is supported, otherwise return
             ///      NULL in *ppvObj and an appropriate error (eg E_FAIL, E_NOINTERFACE).
-            /// </devdoc>
+            /// </summary>
             int UnsafeNativeMethods.IMsoComponentManager.QueryService(
                                                  ref Guid guidService,
                                                  ref Guid iid,
@@ -1427,7 +1427,7 @@ namespace System.Windows.Forms {
             ///      Since IMsoComponentManager is a reference counted interface,
             ///      MsoDWGetChkMemCounter should be used when processing the
             ///      msodmWriteBe message.
-            /// </devdoc>
+            /// </summary>
             bool UnsafeNativeMethods.IMsoComponentManager.FDebugMessage(
                                                    IntPtr hInst,
                                                    int msg,
@@ -1443,7 +1443,7 @@ namespace System.Windows.Forms {
             ///      identify the component when it calls other IMsoComponentManager
             ///      methods.
             ///      Return TRUE if successful, FALSE otherwise.
-            /// </devdoc>
+            /// </summary>
             bool UnsafeNativeMethods.IMsoComponentManager.FRegisterComponent(UnsafeNativeMethods.IMsoComponent component,
                                                          NativeMethods.MSOCRINFOSTRUCT pcrinfo,
                                                          out IntPtr dwComponentID) {
@@ -1466,7 +1466,7 @@ namespace System.Windows.Forms {
             ///      Undo the registration of the component identified by dwComponentID
             ///      (the cookie returned from the FRegisterComponent method).
             ///      Return TRUE if successful, FALSE otherwise.
-            /// </devdoc>
+            /// </summary>
             bool UnsafeNativeMethods.IMsoComponentManager.FRevokeComponent(IntPtr dwComponentID) {
                 int dwLocalComponentID = unchecked((int)(long)dwComponentID);
 
@@ -1498,7 +1498,7 @@ namespace System.Windows.Forms {
             ///      Typically this is used to update the idle time registration data, but
             ///      can be used to update other registration data as well.
             ///      Return TRUE if successful, FALSE otherwise.
-            /// </devdoc>
+            /// </summary>
             bool UnsafeNativeMethods.IMsoComponentManager.FUpdateComponentRegistration(
                                                                   IntPtr dwComponentID,
                                                                   NativeMethods.MSOCRINFOSTRUCT info
@@ -1527,7 +1527,7 @@ namespace System.Windows.Forms {
             ///      msoerrACompIsXActive (comp usually need not take any special action
             ///      in this case).
             ///      Return TRUE if successful.
-            /// </devdoc>
+            /// </summary>
             bool UnsafeNativeMethods.IMsoComponentManager.FOnComponentActivate(IntPtr dwComponentID) {
 
                 int dwLocalComponentID = unchecked((int)(long)dwComponentID);
@@ -1560,7 +1560,7 @@ namespace System.Windows.Forms {
             ///              time via IMsoComponent::FDoIdle.
             ///      Note: there can only be one tracking component at a time.
             ///      Return TRUE if successful, FALSE otherwise.
-            /// </devdoc>
+            /// </summary>
             bool UnsafeNativeMethods.IMsoComponentManager.FSetTrackingComponent(IntPtr dwComponentID, bool fTrack) {
 
                 int dwLocalComponentID = unchecked((int)(long)dwComponentID);
@@ -1617,7 +1617,7 @@ namespace System.Windows.Forms {
             ///      Note: inplace objects should not call this method with
             ///      uStateID == msocstateModal when entering modal state. Such objects
             ///      should call IOleInPlaceFrame::EnableModeless instead.
-            /// </devdoc>
+            /// </summary>
             void UnsafeNativeMethods.IMsoComponentManager.OnComponentEnterState(
                                                            IntPtr dwComponentID,
                                                            int uStateID,
@@ -1667,7 +1667,7 @@ namespace System.Windows.Forms {
             ///
             ///      Note: n calls to this method are symmetric with n calls to
             ///      OnComponentEnterState (see OnComponentEnterState comments, above).
-            /// </devdoc>
+            /// </summary>
             bool UnsafeNativeMethods.IMsoComponentManager.FOnComponentExitState(
                                                            IntPtr dwComponentID,
                                                            int uStateID,
@@ -1702,7 +1702,7 @@ namespace System.Windows.Forms {
             ///      is in effect at the root of this component manager's state context,
             ///      FALSE otherwise (see "Comments on State Contexts", above).
             ///      pvoid is reserved for future use and should be NULL.
-            /// </devdoc>
+            /// </summary>
             bool UnsafeNativeMethods.IMsoComponentManager.FInState(int uStateID, IntPtr pvoid) {
                 return(currentState & uStateID) != 0;
             }
@@ -1711,7 +1711,7 @@ namespace System.Windows.Forms {
             ///      Called periodically by a component during IMsoComponent::FDoIdle.
             ///      Return TRUE if component can continue its idle time processing,
             ///      FALSE if not (in which case component returns from FDoIdle.)
-            /// </devdoc>
+            /// </summary>
             bool UnsafeNativeMethods.IMsoComponentManager.FContinueIdle() {
 
                 // Essentially, if we have a message on queue, then don't continue
@@ -1736,7 +1736,7 @@ namespace System.Windows.Forms {
             ///      FALSE if it had to terminate the loop for some other reason.  In the
             ///      latter case, component should perform any necessary action (such as
             ///      cleanup).
-            /// </devdoc>
+            /// </summary>
             bool UnsafeNativeMethods.IMsoComponentManager.FPushMessageLoop(
                                                       IntPtr dwComponentID,
                                                       int reason,
@@ -1920,7 +1920,7 @@ namespace System.Windows.Forms {
             ///      will delegate its IMsoComponentManager::QueryService calls.
             ///      (see objext.h or docobj.h for definition of IServiceProvider).
             ///      Returns TRUE if successful.
-            /// </devdoc>
+            /// </summary>
             bool UnsafeNativeMethods.IMsoComponentManager.FCreateSubComponentManager(
                                                                 object punkOuter,
                                                                 object punkServProv,
@@ -1939,7 +1939,7 @@ namespace System.Windows.Forms {
             ///      contexts (see "Comments on State   Contexts", above).
             ///      Returns TRUE if the parent is returned, FALSE if no parent exists or
             ///      some error occurred.
-            /// </devdoc>
+            /// </summary>
             bool UnsafeNativeMethods.IMsoComponentManager.FGetParentComponentManager(out UnsafeNativeMethods.IMsoComponentManager ppicm) {
                 ppicm = null;
                 return false;
@@ -1954,7 +1954,7 @@ namespace System.Windows.Forms {
             ///      Returns TRUE if the component indicated by dwgac exists, FALSE if no
             ///      such component exists or some error occurred.
             ///      dwReserved is reserved for future use and should be zero.
-            /// </devdoc>
+            /// </summary>
             bool UnsafeNativeMethods.IMsoComponentManager.FGetActiveComponent(
                                                          int dwgac,
                                                          UnsafeNativeMethods.IMsoComponent[] ppic,
@@ -2001,7 +2001,7 @@ namespace System.Windows.Forms {
         ///     This class is the embodiment of TLS for windows forms.  We do not expose this to end users because
         ///     TLS is really just an unfortunate artifact of using Win 32.  We want the world to be free
         ///     threaded.
-        /// </devdoc>
+        /// </summary>
         internal sealed class ThreadContext : MarshalByRefObject, UnsafeNativeMethods.IMsoComponent {
 
             private const int STATE_OLEINITIALIZED       = 0x00000001;
@@ -2074,7 +2074,7 @@ namespace System.Windows.Forms {
 
             /// <summary>
             ///     Creates a new thread context object.
-            /// </devdoc>
+            /// </summary>
             public ThreadContext() {
                 IntPtr address = IntPtr.Zero;
 
@@ -2099,7 +2099,7 @@ namespace System.Windows.Forms {
             /// <summary>
             ///      Retrieves the component manager for this process.  If there is no component manager
             ///      currently installed, we install our own.
-            /// </devdoc>
+            /// </summary>
             internal UnsafeNativeMethods.IMsoComponentManager ComponentManager {
                 get {
 
@@ -2263,7 +2263,7 @@ namespace System.Windows.Forms {
             /// <summary>
             ///     Retrieves the actual parking form.  This will demand create the parking window
             ///     if it needs to.
-            /// </devdoc>
+            /// </summary>
             internal ParkingWindow GetParkingWindow(DpiAwarenessContext context) {
 
                 // Locking 'this' here is ok since this is an internal class.
@@ -2338,7 +2338,7 @@ namespace System.Windows.Forms {
             /// <summary>
             ///     Retrieves the actual parking form.  This will demand create the MarshalingControl window
             ///     if it needs to.
-            /// </devdoc>
+            /// </summary>
             internal Control MarshalingControl {
                 get {
                     lock (this) {
@@ -2360,7 +2360,7 @@ namespace System.Windows.Forms {
             /// <summary>
             ///     Allows you to setup a message filter for the application's message pump.  This
             ///     installs the filter on the current thread.
-            /// </devdoc>
+            /// </summary>
             internal void AddMessageFilter(IMessageFilter f) {
                 if (messageFilters == null) {
                     messageFilters = new List<IMessageFilter>();
@@ -2428,7 +2428,7 @@ namespace System.Windows.Forms {
 
             /// <summary>
             ///     Disposes this thread context object.  Note that this will marshal to the owning thread.
-            /// </devdoc>
+            /// </summary>
             internal void Dispose(bool postQuit) {
 
                 // need to avoid multiple threads coming in here or we'll leak the thread
@@ -2506,7 +2506,7 @@ namespace System.Windows.Forms {
 
             /// <summary>
             ///     Disposes of this thread's parking form.
-            /// </devdoc>
+            /// </summary>
             private void DisposeParkingWindow() {
                 if (parkingWindows.Count != 0) {
 
@@ -2538,7 +2538,7 @@ namespace System.Windows.Forms {
             /// <summary>
             ///     Gets rid of all windows in this thread context.  Nulls out
             ///     window objects that we hang on to.
-            /// </devdoc>
+            /// </summary>
             internal void DisposeThreadWindows() {
 
                 // We dispose the main window first, so it can perform any
@@ -2614,7 +2614,7 @@ namespace System.Windows.Forms {
 
             /// <summary>
             ///     Exits the program by disposing of all thread contexts and message loops.
-            /// </devdoc>
+            /// </summary>
             internal static void ExitApplication() {
                 ExitCommon(true /*disposing*/);
             }
@@ -2638,14 +2638,14 @@ namespace System.Windows.Forms {
 
             /// <summary>
             ///     Exits the program by disposing of all thread contexts and message loops.
-            /// </devdoc>
+            /// </summary>
             internal static void ExitDomain() {
                 ExitCommon(false /*disposing*/);
             }
 
             /// <summary>
             ///     Our finalization.  Minimal stuff... this shouldn't be called... We should always be disposed.
-            /// </devdoc>
+            /// </summary>
             ~ThreadContext() {
 
                 // We used to call OleUninitialize() here if we were
@@ -2687,7 +2687,7 @@ namespace System.Windows.Forms {
             }
             /// <summary>
             ///     Retrieves a ThreadContext object for the current thread
-            /// </devdoc>
+            /// </summary>
             internal static ThreadContext FromCurrent() {
                 ThreadContext context = currentThreadContext;
 
@@ -2700,7 +2700,7 @@ namespace System.Windows.Forms {
 
             /// <summary>
             ///     Retrieves a ThreadContext object for the given thread ID
-            /// </devdoc>
+            /// </summary>
             internal static ThreadContext FromId(int id) {
                 ThreadContext context = (ThreadContext)contextHash[(object)id];
                 if (context == null && id == SafeNativeMethods.GetCurrentThreadId()) {
@@ -2713,28 +2713,28 @@ namespace System.Windows.Forms {
             /// <summary>
             ///      Determines if it is OK to allow an application to quit and shutdown
             ///      the runtime.  We only allow this if we own the base message pump.
-            /// </devdoc>
+            /// </summary>
             internal bool GetAllowQuit() {
                 return totalMessageLoopCount > 0 && baseLoopReason == NativeMethods.MSOCM.msoloopMain;
             }
 
             /// <summary>
             ///     Retrieves the handle to this thread.
-            /// </devdoc>
+            /// </summary>
             internal IntPtr GetHandle() {
                 return handle;
             }
 
             /// <summary>
             ///     Retrieves the ID of this thread.
-            /// </devdoc>
+            /// </summary>
             internal int GetId() {
                 return id;
             }
 
             /// <summary>
             ///     Retrieves the culture for this thread.
-            /// </devdoc>
+            /// </summary>
             internal CultureInfo GetCulture() {
                 if (culture == null || culture.LCID != SafeNativeMethods.GetThreadLocale())
                     culture = new CultureInfo(SafeNativeMethods.GetThreadLocale());
@@ -2743,14 +2743,14 @@ namespace System.Windows.Forms {
 
             /// <summary>
             ///     Determines if a message loop exists on this thread.
-            /// </devdoc>
+            /// </summary>
             internal bool GetMessageLoop() {
                 return GetMessageLoop(false);
             }
 
             /// <summary>
             ///     Determines if a message loop exists on this thread.
-            /// </devdoc>
+            /// </summary>
             internal bool GetMessageLoop(bool mustBeActive) {
 
                 // If we are already running a loop, we're fine.
@@ -2838,7 +2838,7 @@ namespace System.Windows.Forms {
 
             /// <summary>
             ///     Revokes our component if needed.
-            /// </devdoc>
+            /// </summary>
             [PrePrepareMethod]
             private void OnDomainUnload(object sender, EventArgs e) {
                 RevokeComponent();
@@ -2849,7 +2849,7 @@ namespace System.Windows.Forms {
             ///     Called when an untrapped exception occurs in a thread.  This allows the
             ///     programmer to trap these, and, if left untrapped, throws a standard error
             ///     dialog.
-            /// </devdoc>
+            /// </summary>
             internal void OnThreadException(Exception t) {
                 if (GetState(STATE_INTHREADEXCEPTION)) return;
 
@@ -2920,7 +2920,7 @@ namespace System.Windows.Forms {
 
             /// <summary>
             ///     Removes a message filter previously installed with addMessageFilter.
-            /// </devdoc>
+            /// </summary>
             internal void RemoveMessageFilter(IMessageFilter f) {
                 if (messageFilters != null) {
                     SetState(STATE_FILTERSNAPSHOTVALID, false);
@@ -2930,7 +2930,7 @@ namespace System.Windows.Forms {
 
             /// <summary>
             ///     Starts a message loop for the given reason.
-            /// </devdoc>
+            /// </summary>
             internal void RunMessageLoop(int reason, ApplicationContext context) {
                 // Ensure that we attempt to apply theming before doing anything
                 // that might create a window.
@@ -3227,7 +3227,7 @@ namespace System.Windows.Forms {
             ///     If this returns true, the message is already processed.  If it returns
             ///     false, the message should be allowed to continue through the dispatch
             ///     mechanism.
-            /// </devdoc>
+            /// </summary>
             internal bool PreTranslateMessage(ref NativeMethods.MSG msg) {
                 bool modified = false;
                 if (ProcessFilters(ref msg, out modified)) {
@@ -3308,7 +3308,7 @@ namespace System.Windows.Forms {
             ///     Revokes our component from the active component manager.  Does
             ///     nothing if there is no active component manager or we are
             ///     already invoked.
-            /// </devdoc>
+            /// </summary>
             private void RevokeComponent() {
                 if (componentManager != null && componentID != INVALID_ID) {
                     int id = componentID;
@@ -3329,7 +3329,7 @@ namespace System.Windows.Forms {
 
             /// <summary>
             ///     Sets the culture for this thread.
-            /// </devdoc>
+            /// </summary>
             internal void SetCulture(CultureInfo culture) {
                 if (culture != null && culture.LCID != SafeNativeMethods.GetThreadLocale()) {
                     SafeNativeMethods.SetThreadLocale(culture.LCID);
@@ -3370,7 +3370,7 @@ namespace System.Windows.Forms {
             ///      Since IMsoComponentManager is a reference counted interface,
             ///      MsoDWGetChkMemCounter should be used when processing the
             ///      msodmWriteBe message.
-            /// </devdoc>
+            /// </summary>
             bool UnsafeNativeMethods.IMsoComponent.FDebugMessage(IntPtr hInst, int msg, IntPtr wparam, IntPtr lparam)
             {
                 return false;
@@ -3381,7 +3381,7 @@ namespace System.Windows.Forms {
             ///      translated and dispatched. Component can do TranslateAccelerator
             ///      do IsDialogMessage, modify pMsg, or take some other action.
             ///      Return TRUE if the message is consumed, FALSE otherwise.
-            /// </devdoc>
+            /// </summary>
             bool UnsafeNativeMethods.IMsoComponent.FPreTranslateMessage(ref NativeMethods.MSG msg) {
                 return PreTranslateMessage(ref msg);
             }
@@ -3401,7 +3401,7 @@ namespace System.Windows.Forms {
             ///     (incremented when this method is called with TRUE fEnter, decremented
             ///     when called with FALSE fEnter), the counter should not be decremented
             ///     for FALSE fEnter if it is already at zero.)
-            /// </devdoc>
+            /// </summary>
             void UnsafeNativeMethods.IMsoComponent.OnEnterState(int uStateID, bool fEnter) {
 
                 Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager : OnEnterState(" + uStateID + ", " + fEnter + ")");
@@ -3431,14 +3431,14 @@ namespace System.Windows.Forms {
             ///      activated.
             ///      Note: this method is not called when both the window being activated
             ///      and the one being deactivated belong to the host app.
-            /// </devdoc>
+            /// </summary>
             void UnsafeNativeMethods.IMsoComponent.OnAppActivate(bool fActive, int dwOtherThreadID) {
             }
 
             /// <summary>
             ///      Notify the active component that it has lost its active status because
             ///      the host or another component has become active.
-            /// </devdoc>
+            /// </summary>
             void UnsafeNativeMethods.IMsoComponent.OnLoseActivation() {
                 Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager : Our component is losing activation.");
             }
@@ -3476,7 +3476,7 @@ namespace System.Windows.Forms {
             ///      ExclusiveActive mode ends, indicated by a future call to
             ///      OnActivationChange with ExclusiveActivation bit not set or with NULL
             ///      pcrinfo.
-            /// </devdoc>
+            /// </summary>
             void UnsafeNativeMethods.IMsoComponent.OnActivationChange(UnsafeNativeMethods.IMsoComponent component, bool fSameComponent,
                                                   int pcrinfo,
                                                   bool fHostIsActivating,
@@ -3500,7 +3500,7 @@ namespace System.Windows.Forms {
             ///      Note: If this method is called on while component is performing a
             ///      tracking operation, component should only perform idle time tasks that
             ///      it deems are appropriate to perform during tracking.
-            /// </devdoc>
+            /// </summary>
             bool UnsafeNativeMethods.IMsoComponent.FDoIdle(int grfidlef) {
                  if (idleHandler != null) {
                      idleHandler(Thread.CurrentThread, EventArgs.Empty);
@@ -3521,7 +3521,7 @@ namespace System.Windows.Forms {
             ///      Return TRUE if the message loop should continue, FALSE otherwise.
             ///      If FALSE is returned, the component manager terminates the loop without
             ///      removing pMsgPeeked from the queue.
-            /// </devdoc>
+            /// </summary>
             bool UnsafeNativeMethods.IMsoComponent.FContinueMessageLoop(int reason, int pvLoopData, NativeMethods.MSG[] msgPeeked) {
 
                 bool continueLoop = true;
@@ -3583,7 +3583,7 @@ namespace System.Windows.Forms {
             ///      user, either 1.) asking user if it can terminate and returning TRUE
             ///      or FALSE appropriately, or 2.) giving an indication as to why it
             ///      cannot terminate and returning FALSE.
-            /// </devdoc>
+            /// </summary>
             bool UnsafeNativeMethods.IMsoComponent.FQueryTerminate(bool fPromptUser) {
                 return true;
             }
@@ -3593,7 +3593,7 @@ namespace System.Windows.Forms {
             ///      registration.  Component should revoke its registration with component
             ///      manager, release references to component manager and perform any
             ///      necessary cleanup.
-            /// </devdoc>
+            /// </summary>
             void UnsafeNativeMethods.IMsoComponent.Terminate() {
                 if (this.messageLoopCount > 0 && !(ComponentManager is ComponentManager)) {
                     this.messageLoopCount--;
@@ -3608,7 +3608,7 @@ namespace System.Windows.Forms {
             ///      dwReserved is reserved for future use and should be zero.
             ///      Component should return the desired window or NULL if no such window
             ///      exists.
-            /// </devdoc>
+            /// </summary>
             IntPtr UnsafeNativeMethods.IMsoComponent.HwndGetWindow(int dwWhich, int dwReserved) {
                 return IntPtr.Zero;
             }
@@ -3617,7 +3617,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     This class allows us to handle sends/posts in our winformssynchcontext on the correct thread via
         ///  control.invoke().
-        /// </devdoc>
+        /// </summary>
         internal sealed class MarshalingControl : Control {
             internal MarshalingControl()
                 : base(false) {
@@ -3652,7 +3652,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     This class embodies our parking window, which we create when the
         ///     first message loop is pushed onto the thread.
-        /// </devdoc>
+        /// </summary>
         internal sealed class ParkingWindow : ContainerControl, IArrangedElement {
 
             // WHIDBEY CHANGES
@@ -3742,7 +3742,7 @@ namespace System.Windows.Forms {
             /// <summary>
             ///     "Parks" the given HWND to a temporary HWND.  This allows WS_CHILD windows to
             ///     be parked.
-            /// </devdoc>
+            /// </summary>
             internal void ParkHandle(HandleRef handle) {
                 if (!IsHandleCreated) {
                     CreateHandle();
@@ -3754,7 +3754,7 @@ namespace System.Windows.Forms {
             /// <summary>
             ///     "Unparks" the given HWND to a temporary HWND.  This allows WS_CHILD windows to
             ///     be parked.
-            /// </devdoc>
+            /// </summary>
             internal void UnparkHandle(HandleRef handle) {
                 if (IsHandleCreated) {
                     Debug.Assert(UnsafeNativeMethods.GetParent(handle) != Handle, "Always set the handle's parent to someone else before calling UnparkHandle");
@@ -3787,7 +3787,7 @@ namespace System.Windows.Forms {
         ///     disable other windows on the thread when a modal dialog is to be shown.  It can also
         ///     be used to dispose all windows in a thread, which we do before returning from a message
         ///     loop.
-        /// </devdoc>
+        /// </summary>
         private sealed class ThreadWindows {
             private IntPtr[] windows;
             private int windowCount;

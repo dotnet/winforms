@@ -13,7 +13,7 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// A non selectable ToolStrip item
-    /// </devdoc>
+    /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.StatusStrip)]
     public class ToolStripStatusLabel : ToolStripLabel, IAutomationLiveRegion
     {
@@ -28,7 +28,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// A non selectable ToolStrip item
-        /// </devdoc>
+        /// </summary>
         public ToolStripStatusLabel() {
             Initialize();
         }
@@ -64,7 +64,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Creates an instance of the object that defines how image and text
         /// gets laid out in the ToolStripItem
-        /// </devdoc>
+        /// </summary>
         internal override ToolStripItemInternalLayout CreateInternalLayout() {
             return new ToolStripStatusLabelLayout(this);
         }
@@ -135,7 +135,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Called by all constructors of ToolStripButton.
-        /// </devdoc>
+        /// </summary>
         private void Initialize()
         {
             if (DpiHelper.IsScalingRequirementMet) {
@@ -210,7 +210,7 @@ namespace System.Windows.Forms
         
         /// <summary>
         /// Inheriting classes should override this method to handle this event.
-        /// </devdoc>
+        /// </summary>
         protected override void OnPaint(System.Windows.Forms.PaintEventArgs e) {
 
             if (this.Owner != null) {
@@ -260,7 +260,7 @@ namespace System.Windows.Forms
         ///  This class performs internal layout for the "split button button" portion of a split button.
         ///  Its main job is to make sure the inner button has the same parent as the split button, so
         ///  that layout can be performed using the correct graphics context.
-        /// </devdoc>
+        /// </summary>
         private class ToolStripStatusLabelLayout : ToolStripItemInternalLayout {
 
              ToolStripStatusLabel owner;

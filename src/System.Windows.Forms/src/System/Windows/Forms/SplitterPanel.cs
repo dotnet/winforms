@@ -37,7 +37,7 @@ namespace System.Windows.Forms
         
         /// <summary>
         ///    Override AutoSize to make it hidden from the user in the designer 
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -60,7 +60,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///     Allows the control to optionally shrink when AutoSize is true.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -77,7 +77,7 @@ namespace System.Windows.Forms
         
         /// <summary>
         ///    Override Anchor to make it hidden from the user in the designer 
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -95,7 +95,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///     Indicates what type of border the Splitter control has.  This value
         ///     comes from the System.Windows.Forms.BorderStyle enumeration.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -115,7 +115,7 @@ namespace System.Windows.Forms
         ///     of the container this control is docked to. For example, when docked to
         ///     the top of the container, the control will be displayed flush at the
         ///     top of the container, extending the length of the container.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -132,7 +132,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///    Override DockPadding to make it hidden from the user in the designer 
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -146,7 +146,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///     The height of this SplitterPanel
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
@@ -176,7 +176,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///     Override Location to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -194,7 +194,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Deriving classes can override this to configure a default size for their control.
         /// This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
+        /// </summary>
         protected override Padding DefaultMargin {
             get {
                 return new Padding(0, 0, 0, 0);
@@ -204,7 +204,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///    Override AutoSize to make it hidden from the user in the designer 
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -222,7 +222,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///    Override AutoSize to make it hidden from the user in the designer 
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -241,7 +241,7 @@ namespace System.Windows.Forms
         ///     Name of this control. The designer will set this to the same
         ///     as the programatic Id "(name)" of the control.  The name can be
         ///     used as a key into the ControlCollection.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -258,7 +258,7 @@ namespace System.Windows.Forms
         
         /// <summary>
         ///     The parent of this control.
-        /// </devdoc>
+        /// </summary>
         internal SplitContainer Owner {
             get {
                 return owner;
@@ -267,7 +267,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///     The parent of this control.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -284,7 +284,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///     Override Size to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -304,7 +304,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///     Override TabIndex to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -322,7 +322,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///     Override TabStop to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -339,7 +339,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///     Override Visible to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -356,7 +356,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///     The width of this control.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
@@ -386,7 +386,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///     Override VisibleChanged to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -399,7 +399,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///     Override DockChanged to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -412,7 +412,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///     Override LocationChanged to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -425,7 +425,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///     Override TabIndexChanged to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -438,7 +438,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///     Override TabStopChanged to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),

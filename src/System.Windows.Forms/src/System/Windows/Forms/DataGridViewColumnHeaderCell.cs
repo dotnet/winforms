@@ -1199,7 +1199,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///    <para></para>
-        /// </devdoc>
+        /// </summary>
         public override string ToString()
         {
             return "DataGridViewColumnHeaderCell { ColumnIndex=" + this.ColumnIndex.ToString(CultureInfo.CurrentCulture) + " }";

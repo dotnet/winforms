@@ -14,7 +14,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para>Gets a collection of standard values for the data type this validator is
         ///       designed for.</para>
-        /// </devdoc>
+        /// </summary>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context) {
             StandardValuesCollection values = base.GetStandardValues(context);
             ArrayList list = new ArrayList();

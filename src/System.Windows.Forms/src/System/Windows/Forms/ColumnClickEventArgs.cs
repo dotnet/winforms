@@ -6,7 +6,7 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.ListView.OnColumnClick'/> event.
-    /// </devdoc>
+    /// </summary>
     public class ColumnClickEventArgs : EventArgs
     {
         public ColumnClickEventArgs(int column)

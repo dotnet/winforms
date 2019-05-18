@@ -23,7 +23,7 @@ namespace System.Experimental.Gdi
     ///     <para>
     ///         Encapsulates a GDI Region object.
     ///     </para>
-    /// </devdoc>
+    /// </summary>
 
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
@@ -41,12 +41,12 @@ namespace System.Experimental.Gdi
 #endif
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         private WindowsRegion() {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         
         
         public WindowsRegion(Rectangle rect) {
@@ -54,7 +54,7 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         
         
         public WindowsRegion(int x, int y, int width, int height) {
@@ -66,7 +66,7 @@ namespace System.Experimental.Gdi
         /// <summary>
         ///     Creates a WindowsRegion from a region handle, if 'takeOwnership' is true, the handle is added to the HandleCollector
         ///     and is removed & destroyed on dispose. 
-        /// </devdoc>
+        /// </summary>
         public static WindowsRegion FromHregion(IntPtr hRegion, bool takeOwnership) {
             WindowsRegion wr = new WindowsRegion();
 
@@ -85,7 +85,7 @@ namespace System.Experimental.Gdi
 
         /// <summary>
         ///     Creates a WindowsRegion from a System.Drawing.Region. 
-        /// </devdoc>
+        /// </summary>
         public static WindowsRegion FromRegion( Region region, Graphics g ){
             if (region.IsInfinite(g)){
                 // An infinite region would cover the entire device region which is the same as
@@ -103,7 +103,7 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         
         
         public object Clone() {
@@ -118,13 +118,13 @@ namespace System.Experimental.Gdi
         /// <summary>
         ///     Combines region1 & region2 into this region.   The regions cannot be null. 
         ///     The three regions need not be distinct. For example, the sourceRgn1 can equal this region. 
-        /// </devdoc>
+        /// </summary>
         public IntNativeMethods.RegionFlags CombineRegion(WindowsRegion region1, WindowsRegion region2, RegionCombineMode mode) {
             return IntUnsafeNativeMethods.CombineRgn(new HandleRef(this, this.HRegion), new HandleRef(region1, region1.HRegion), new HandleRef(region2, region2.HRegion), mode);
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         
         
         private void CreateRegion(Rectangle rect) {
@@ -134,13 +134,13 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         public void Dispose() {
             Dispose(true);
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         public void Dispose(bool disposing) {
             if (this.nativeHandle != IntPtr.Zero) {
                 DbgUtil.AssertFinalization(this, disposing);
@@ -158,14 +158,14 @@ namespace System.Experimental.Gdi
         }
 
          /// <summary>
-        /// </devdoc>
+        /// </summary>
        ~WindowsRegion() {
             Dispose(false);
         }
 
         /// <summary>
         ///     The native region handle. 
-        /// </devdoc>
+        /// </summary>
         public IntPtr HRegion {
             get {
                 return this.nativeHandle;
@@ -173,7 +173,7 @@ namespace System.Experimental.Gdi
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         public bool IsInfinite {
             get {
                 return this.nativeHandle == IntPtr.Zero;
@@ -182,7 +182,7 @@ namespace System.Experimental.Gdi
 
         /// <summary>
         ///     A rectangle representing the window region set with the SetWindowRgn function. 
-        /// </devdoc>
+        /// </summary>
         public Rectangle ToRectangle() {            
             if( this.IsInfinite ) {
                 return new Rectangle( -int.MaxValue, -int.MaxValue, int.MaxValue, int.MaxValue );

@@ -8,13 +8,13 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.RichTextBox.ContentsResized'/> event.
-    /// </devdoc>
+    /// </summary>
     public class ContentsResizedEventArgs : EventArgs
     {
         /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.ContentsResizedEventArgs'/>
         /// class.
-        /// </devdoc>
+        /// </summary>
         public ContentsResizedEventArgs(Rectangle newRectangle)
         {
             NewRectangle = newRectangle;
@@ -22,7 +22,7 @@ namespace System.Windows.Forms
         
         /// <summary>
         /// Represents the requested size of the <see cref='System.Windows.Forms.RichTextBox'/> control.
-        /// </devdoc>
+        /// </summary>
         public Rectangle NewRectangle { get; }
     }
 }

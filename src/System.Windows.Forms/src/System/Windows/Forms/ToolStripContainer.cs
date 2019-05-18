@@ -354,7 +354,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Controls Collection...
         ///     This is overriden so that the Controls.Add ( ) is not Code Gened...
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Control.ControlCollection Controls {

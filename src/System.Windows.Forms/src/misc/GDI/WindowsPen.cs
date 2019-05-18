@@ -23,7 +23,7 @@ namespace System.Experimental.Gdi
     ///     <para>
     ///         Encapsulates a GDI Pen object.
     ///     </para>
-    /// </devdoc>
+    /// </summary>
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
 #else

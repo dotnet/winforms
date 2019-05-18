@@ -13,7 +13,7 @@ namespace System.Windows.Forms {
 
     /// <summary>
     ///     Standard cursors
-    /// </devdoc>
+    /// </summary>
     public sealed class Cursors {
         private static  Cursor appStarting = null;
         private static  Cursor arrow       = null;

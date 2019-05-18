@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Design {
 
     /// <summary>
     /// <para>Provides a user interface for <see cref='System.Windows.Forms.Design.WindowsFormsComponentEditor'/>.</para>
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true),
      ClassInterface(ClassInterfaceType.AutoDispatch)
     ]
@@ -55,7 +55,7 @@ namespace System.Windows.Forms.Design {
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.Design.ComponentEditorForm'/> class.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public ComponentEditorForm(object component, Type[] pageTypes) : base() {
         
             if (!(component is IComponent)) {
@@ -81,7 +81,7 @@ namespace System.Windows.Forms.Design {
 
         /// <summary>
         ///     Applies any changes in the set of ComponentPageControl to the actual component.
-        /// </devdoc>
+        /// </summary>
         internal virtual void ApplyChanges(bool lastApply) {
             if (dirty) {
                 IComponentChangeService changeService = null;
@@ -135,7 +135,7 @@ namespace System.Windows.Forms.Design {
         ///    <para>
         ///       Hide the property
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AutoSize
         {
@@ -166,7 +166,7 @@ namespace System.Windows.Forms.Design {
 
         /// <summary>
         ///     Handles ok/cancel/apply/help button click events
-        /// </devdoc>
+        /// </summary>
         private void OnButtonClick(object sender, EventArgs e) {
             if (sender == okButton) {
                 ApplyChanges(true);
@@ -185,7 +185,7 @@ namespace System.Windows.Forms.Design {
 
         /// <summary>
         ///     Lays out the UI of the form.
-        /// </devdoc>
+        /// </summary>
         private void OnConfigureUI() {
             Font uiFont = Control.DefaultFont;
             if (component.Site != null) {
@@ -321,7 +321,7 @@ namespace System.Windows.Forms.Design {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
         protected override void OnActivated(EventArgs e) {
@@ -339,7 +339,7 @@ namespace System.Windows.Forms.Design {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
         protected override void OnHelpRequested(HelpEventArgs e) {
@@ -349,7 +349,7 @@ namespace System.Windows.Forms.Design {
 
         /// <summary>
         ///     Called to initialize this form with the new component.
-        /// </devdoc>
+        /// </summary>
         private void OnNewObjects() {
             pageSites = null;
             maxSize = new Size(3 * (BUTTON_WIDTH + BUTTON_PAD), 24 * pageTypes.Length);
@@ -378,7 +378,7 @@ namespace System.Windows.Forms.Design {
 
         /// <summary>
         ///     Handles switching between pages.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnSelChangeSelector(object source, TreeViewEventArgs e) {
             if (firstActivate == true) {
                 // treeview seems to fire a change event when it is first setup before
@@ -407,7 +407,7 @@ namespace System.Windows.Forms.Design {
         /// <summary>
         ///    <para>Provides a method to override in order to pre-process input messages before 
         ///       they are dispatched.</para>
-        /// </devdoc>        
+        /// </summary>        
         public override bool PreProcessMessage(ref Message msg) {
             if (null != pageSites && pageSites[activePage].GetPageControl().IsPageMessage(ref msg))
                 return true;
@@ -418,7 +418,7 @@ namespace System.Windows.Forms.Design {
         /// <summary>
         ///     Sets the controls of the form to dirty.  This enables the "apply"
         ///     button.
-        /// </devdoc>
+        /// </summary>
         internal virtual void SetDirty() {
             dirty = true;
             applyButton.Enabled = true;
@@ -427,28 +427,28 @@ namespace System.Windows.Forms.Design {
 
         /// <summary>
         ///    <para>Shows the form. The form will have no owner window.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual DialogResult ShowForm() {
             return ShowForm(null, 0);
         }
 
         /// <summary>
         ///    <para> Shows the form and the specified page. The form will have no owner window.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual DialogResult ShowForm(int page) {
             return ShowForm(null, page);
         }
 
         /// <summary>
         ///    <para>Shows the form with the specified owner.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual DialogResult ShowForm(IWin32Window owner) {
             return ShowForm(owner, 0);
         }
 
         /// <summary>
         ///    <para>Shows the form and the specified page with the specified owner.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual DialogResult ShowForm(IWin32Window owner, int page) {
             initialActivePage = page;
 
@@ -473,7 +473,7 @@ namespace System.Windows.Forms.Design {
 
         /// <summary>
         ///     Shows help for the active page.
-        /// </devdoc>
+        /// </summary>
         private void ShowPageHelp() {
             Debug.Assert(activePage != -1);
 
@@ -485,7 +485,7 @@ namespace System.Windows.Forms.Design {
         /// <summary>
         ///     Implements a standard version of ComponentEditorPageSite for use within a
         ///     ComponentEditorForm.
-        /// </devdoc>
+        /// </summary>
         private sealed class ComponentEditorPageSite : IComponentEditorPageSite {
             internal IComponent component;
             internal ComponentEditorPage pageControl;
@@ -496,7 +496,7 @@ namespace System.Windows.Forms.Design {
 
             /// <summary>
             ///     Creates the page site.
-            /// </devdoc>
+            /// </summary>
             internal ComponentEditorPageSite(Control parent, Type pageClass, IComponent component, ComponentEditorForm form) {
                 this.component = component;
                 this.parent = parent;
@@ -522,7 +522,7 @@ namespace System.Windows.Forms.Design {
 
             /// <summary>
             ///     Called by the ComponentEditorForm to activate / deactivate the page.
-            /// </devdoc>
+            /// </summary>
             internal bool Active {
                 set {
                     if (value) {
@@ -556,21 +556,21 @@ namespace System.Windows.Forms.Design {
 
             /// <summary>
             ///     Called by a page to return a parenting control for itself.
-            /// </devdoc>
+            /// </summary>
             public Control GetControl() {
                 return parent;
             }
 
             /// <summary>
             ///     Called by the ComponentEditorForm to get the actual page.
-            /// </devdoc>
+            /// </summary>
             internal ComponentEditorPage GetPageControl() {
                 return pageControl;
             }
 
             /// <summary>
             ///     Called by a page to mark it's contents as dirty.
-            /// </devdoc>
+            /// </summary>
             public void SetDirty() {
                 if (isActive)
                     Dirty = true;
@@ -579,7 +579,7 @@ namespace System.Windows.Forms.Design {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         //  This should be moved into a shared location
         //  Its a duplication of what exists in the StyleBuilder.
         internal sealed class PageSelector : TreeView {

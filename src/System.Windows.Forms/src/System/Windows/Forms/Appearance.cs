@@ -8,18 +8,18 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Specifies the appearance of a control.
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
     public enum Appearance
     {
         /// <summary>
         /// The default appearance defined by the control class.
-        /// </devdoc>
+        /// </summary>
         Normal = 0,
 
         /// <summary>
         /// The appearance of a Windows button.
-        /// </devdoc>
+        /// </summary>
         Button = 1,
     }
 }

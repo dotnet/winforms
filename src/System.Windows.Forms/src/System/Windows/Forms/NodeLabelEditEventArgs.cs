@@ -7,7 +7,7 @@ namespace System.Windows.Forms
     /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.TreeView.OnBeforeLabelEdit'/>
     /// or <see cref='System.Windows.Forms.TreeView.OnAfterLabelEdit'/> event.
-    /// </devdoc>
+    /// </summary>
     public class NodeLabelEditEventArgs : EventArgs
     {
         public NodeLabelEditEventArgs(TreeNode node) : this(node, null)

@@ -9,12 +9,12 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Provides the base functionality for creating collections.
-    /// </devdoc>
+    /// </summary>
     public class BaseCollection : MarshalByRefObject, ICollection {
 
         /// <summary>
         /// Gets the total number of elements in a collection.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public virtual int Count => List.Count;
@@ -23,7 +23,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Gets an IEnumerator for the collection.
-        /// </devdoc>
+        /// </summary>
         public IEnumerator GetEnumerator() => List.GetEnumerator();
 
         [Browsable(false)]

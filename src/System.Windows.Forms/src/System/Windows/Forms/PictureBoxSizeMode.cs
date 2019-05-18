@@ -6,27 +6,27 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Specifies how an image is positioned within a <see cref='System.Windows.Forms.PictureBox'/>.
-    /// </devdoc>
+    /// </summary>
     public enum PictureBoxSizeMode
     {
         /// <summary>
         /// The image is placed in the top-left corner of the
         /// <see cref='System.Windows.Forms.PictureBox'/>. The image is clipped
         /// if the <see cref='System.Windows.Forms.PictureBox'/> is to small.
-        /// </devdoc>
+        /// </summary>
         Normal = 0,
 
         /// <summary>
         /// The image within the <see cref='System.Windows.Forms.PictureBox'/> is
         /// stretched or shrunk to fit the current size of the
         // <see cref='System.Windows.Forms.PictureBox'/>.
-        /// </devdoc>
+        /// </summary>
         StretchImage = 1,
 
         /// <summary>
         /// The <see cref='System.Windows.Forms.PictureBox'/> is sized to fit the
         /// size of the image that is displayed.
-        /// </devdoc>
+        /// </summary>
         AutoSize = 2,
 
         /// <summary>
@@ -36,12 +36,12 @@ namespace System.Windows.Forms
         /// the center of the picture is placed in the center of the
         /// <see cref='System.Windows.Forms.PictureBox'/> and the outside edges are
         /// clipped.
-        /// </devdoc>
+        /// </summary>
         CenterImage = 3,
 
         /// <summary>
         /// The size of image is increased or decresed maintaining the aspect ratio.
-        /// </devdoc>
+        /// </summary>
         Zoom = 4
     }
 }

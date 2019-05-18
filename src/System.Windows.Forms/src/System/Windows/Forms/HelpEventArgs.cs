@@ -9,13 +9,13 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Provides data for the Control.HelpRequest event.
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
     public class HelpEventArgs : EventArgs
     {
         /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.HelpEventArgs'/>class.
-        /// </devdoc>
+        /// </summary>
         public HelpEventArgs(Point mousePos)
         {
             MousePos = mousePos;
@@ -23,12 +23,12 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Gets the screen coordinates of the mouse pointer.
-        /// </devdoc>
+        /// </summary>
         public Point MousePos { get; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the Help event was handled.
-        /// </devdoc>
+        /// </summary>
         public bool Handled { get; set; }
     }
 }

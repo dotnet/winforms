@@ -18,7 +18,7 @@ namespace System.Windows.Forms
 
     /// <summary>
     ///    <para></para>
-    /// </devdoc>
+    /// </summary>
     public class DataGridViewComboBoxCell : DataGridViewCell
     {
         private static readonly int PropComboBoxCellDataSource                     = PropertyStore.CreateKey();
@@ -2660,7 +2660,7 @@ namespace System.Windows.Forms
         ///    <para>
         ///       Gets the row Index and column Index of the cell.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override string ToString() 
         {
             return "DataGridViewComboBoxCell { ColumnIndex=" + this.ColumnIndex.ToString(CultureInfo.CurrentCulture) + ", RowIndex=" + this.RowIndex.ToString(CultureInfo.CurrentCulture) + " }";
@@ -2700,7 +2700,7 @@ namespace System.Windows.Forms
         ///     <para>
         ///       A collection that stores objects.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [ListBindable(false)]
         public class ObjectCollection : IList 
         {
@@ -2728,7 +2728,7 @@ namespace System.Windows.Forms
                         
             /// <summary>
             ///     Retrieves the number of items.
-            /// </devdoc>
+            /// </summary>
             public int Count
             {
                 get 
@@ -2739,7 +2739,7 @@ namespace System.Windows.Forms
             
             /// <summary>
             ///     Internal access to the actual data store.
-            /// </devdoc>
+            /// </summary>
             internal ArrayList InnerArray 
             {
                 get
@@ -2790,7 +2790,7 @@ namespace System.Windows.Forms
             ///     the item is inserted into the list according to its sorted position.
             ///     The item's ToString() method is called to obtain the string that is
             ///     displayed in the combo box.
-            /// </devdoc>
+            /// </summary>
             public int Add(object item) 
             {
                 //this.owner.CheckNoSharedCell();
@@ -2848,7 +2848,7 @@ namespace System.Windows.Forms
             
             /// <summary>
             ///     Add range that bypasses the data source check.
-            /// </devdoc>
+            /// </summary>
             internal void AddRangeInternal(ICollection items) 
             {
                 if (items == null)
@@ -2879,7 +2879,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             ///     Retrieves the item with the specified index.
-            /// </devdoc>
+            /// </summary>
             public virtual object this[int index] 
             {
                 get 
@@ -2912,7 +2912,7 @@ namespace System.Windows.Forms
             
             /// <summary>
             ///     Removes all items from the collection.
-            /// </devdoc>
+            /// </summary>
             public void Clear()
             {
                 if (this.InnerArray.Count > 0)
@@ -2936,7 +2936,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             ///     Copies the DataGridViewComboBoxCell Items collection to a destination array.
-            /// </devdoc>
+            /// </summary>
             public void CopyTo(object[] destination, int arrayIndex) 
             {
                 int count = this.InnerArray.Count;
@@ -2957,7 +2957,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             ///     Returns an enumerator for the DataGridViewComboBoxCell Items collection.
-            /// </devdoc>
+            /// </summary>
             public IEnumerator GetEnumerator() 
             {
                 return this.InnerArray.GetEnumerator();
@@ -2978,7 +2978,7 @@ namespace System.Windows.Forms
             ///     the item is inserted into the list according to its sorted position.
             ///     The item's toString() method is called to obtain the string that is
             ///     displayed in the combo box.
-            /// </devdoc>
+            /// </summary>
             public void Insert(int index, object item) 
             {
                 //this.owner.CheckNoSharedCell();
@@ -3010,7 +3010,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///     Removes the given item from the collection, provided that it is
             ///     actually in the list.
-            /// </devdoc>
+            /// </summary>
             public void Remove(object value) 
             {
                 int index = this.InnerArray.IndexOf(value);
@@ -3023,7 +3023,7 @@ namespace System.Windows.Forms
         
             /// <summary>
             ///     Removes an item from the collection at the given index.
-            /// </devdoc>
+            /// </summary>
             public void RemoveAt(int index) 
             {
                 //this.owner.CheckNoSharedCell();

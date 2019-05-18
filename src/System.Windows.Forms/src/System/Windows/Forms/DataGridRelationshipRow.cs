@@ -19,7 +19,7 @@ namespace System.Windows.Forms {
     /// <summary>
     ///      This class fully encapsulates the painting logic for a row
     ///      appearing in a DataGrid.
-    /// </devdoc>
+    /// </summary>
     internal class DataGridRelationshipRow : DataGridRow {
         private const bool defaultOpen         = false;
         private const int  expandoBoxWidth     = 14;
@@ -200,7 +200,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///      Given an origin, this procedure returns
         ///      a rectangle that describes the location of an outline box.
-        /// </devdoc>
+        /// </summary>
         private Rectangle GetOutlineRect(int xOrigin, int yOrigin) {
             Rectangle outline = new Rectangle(xOrigin + 2,
                                               yOrigin + 2,
@@ -273,7 +273,7 @@ namespace System.Windows.Forms {
         ///      Called by the DataGrid when a click occurs in the row's client
         ///      area.  The coordinates are normalized to the rectangle's top
         ///      left point.
-        /// </devdoc>
+        /// </summary>
         private bool PointOverPlusMinusGlyph(int x, int y, Rectangle rowHeaders, bool alignToRight) {
             if (dgTable == null || dgTable.DataGrid == null || !dgTable.DataGrid.AllowNavigation)
                 return false;
@@ -371,7 +371,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///      Called by the DataGrid when a keypress occurs on a row with "focus."
-        /// </devdoc>
+        /// </summary>
         public override bool OnKeyPress(Keys keyData) {
             // ignore the shift key if it is not paired w/ the TAB key
             if ((keyData & Keys.Modifiers) == Keys.Shift && (keyData & Keys.KeyCode) != Keys.Tab)
@@ -503,7 +503,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///      Paints the row.
-        /// </devdoc>
+        /// </summary>
         public override int Paint(Graphics g, Rectangle bounds, Rectangle trueRowBounds, int firstVisibleColumn, int numVisibleColumns) {
             return Paint(g, bounds, trueRowBounds, firstVisibleColumn, numVisibleColumns, false);
         }
@@ -622,7 +622,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///      Paints the relationships below the data area.
-        /// </devdoc>
+        /// </summary>
         private void PaintRelations(Graphics g, Rectangle bounds, Rectangle trueRowBounds,
                                     int dataWidth, int firstCol, int nCols, bool alignToRight) {
 
@@ -990,7 +990,7 @@ namespace System.Windows.Forms {
 
             /// <summary>
             ///      Navigate to the next or previous grid entry.
-            /// </devdoc>
+            /// </summary>
             public override AccessibleObject Navigate(AccessibleNavigation navdir) {
                 switch (navdir) {
                     case AccessibleNavigation.Right:

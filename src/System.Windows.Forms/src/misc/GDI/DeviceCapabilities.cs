@@ -12,7 +12,7 @@ namespace System.Experimental.Gdi
 {
     /// <summary>
     ///    Device capability indexes - See Win32 GetDeviceCaps().
-    /// </devdoc>
+    /// </summary>
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
 #else

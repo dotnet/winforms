@@ -17,7 +17,7 @@ namespace System.Windows.Forms {
     /// <summary>
     /// ImageIndexConverter is a class that can be used to convert
     /// image index values one data type to another.
-    /// </devdoc>
+    /// </summary>
     public class TreeViewImageKeyConverter : ImageKeyConverter {
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace System.Windows.Forms {
         /// to ToString on the object if the object is valid and if the destination
         /// type is string.  If this cannot convert to the desitnation type, this will
         /// throw a NotSupportedException.
-        /// </devdoc>
+        /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
             if (destinationType == null) {
                 throw new ArgumentNullException(nameof(destinationType));

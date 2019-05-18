@@ -7,51 +7,51 @@ namespace System.Windows.Forms
     /// <summary>
     /// Specifies the bounds of the control to use when defining a control's size
     /// and position.
-    /// </devdoc>
+    /// </summary>
     [Flags]
     public enum BoundsSpecified
     {
         /// <summary>
         /// Specifies the left edge of the control is defined.
-        /// </devdoc>
+        /// </summary>
         X = 0x1,
 
         /// <summary>
         /// Specifies the top edge of the control of the control is defined.
-        /// </devdoc>
+        /// </summary>
         Y = 0x2,
 
         /// <summary>
         /// Specifies the width of the control is defined.
-        /// </devdoc>
+        /// </summary>
         Width = 0x4,
 
         /// <summary>
         /// Specifies the height of the control is defined.
-        /// </devdoc>
+        /// </summary>
         Height = 0x8,
 
         /// <summary>
         /// Both <see langword='X'/> and <see langword='Y'/> coordinates of the
         /// control are defined.
-        /// </devdoc>
+        /// </summary>
         Location = X | Y,
 
         /// <summary>
         /// Both <see cref='System.Windows.Forms.Control.Width'/> and <see cref='System.Windows.Forms.Control.Height'/>
         /// property values of the control are defined.
-        /// </devdoc>
+        /// </summary>
         Size = Width | Height,
 
         /// <summary>
         /// Both <see cref='System.Windows.Forms.Control.Location'/> and <see cref='System.Windows.Forms.Control.Size'/>
         /// property values are defined.
-        /// </devdoc>
+        /// </summary>
         All = Location | Size,
 
         /// <summary>
         /// No bounds are specified.
-        /// </devdoc>
+        /// </summary>
         None = 0,
     }
 }

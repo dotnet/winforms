@@ -10,18 +10,18 @@ namespace System.Windows.Forms
     /// Specifies whether an object or text is aligned to
     /// the left or
     /// right of a reference point.
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
     public enum LeftRightAlignment
     {
         /// <summary>
         /// The object or text is aligned to the left of the reference point.
-        /// </devdoc>
+        /// </summary>
         Left = 0,
 
         /// <summary>
         /// The object or text is aligned to the right of the reference point.
-        /// </devdoc>
+        /// </summary>
         Right = 1,
     }
 }

@@ -8,7 +8,7 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.ListView.OnItemDrag'/> event.
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
     public class ItemDragEventArgs : EventArgs
     {

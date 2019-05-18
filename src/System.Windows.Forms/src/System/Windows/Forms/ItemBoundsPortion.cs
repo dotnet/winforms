@@ -6,27 +6,27 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Specifies the display bounds of a ListItem.
-    /// </devdoc>
+    /// </summary>
     public enum ItemBoundsPortion
     {
         /// <summary>
         /// Both the icon and label portions. In Report View, this includes subitems.
-        /// </devdoc>
+        /// </summary>
         Entire = NativeMethods.LVIR_BOUNDS,
 
         /// <summary>
         /// Only the icon portion.
-        /// </devdoc>
+        /// </summary>
         Icon = NativeMethods.LVIR_ICON,
 
         /// <summary>
         /// Only the label portion.
-        /// </devdoc>
+        /// </summary>
         Label = NativeMethods.LVIR_LABEL,
 
         /// <summary>
         /// Both the icon and label portions. In Report view, this <see langword='Entire'/>.
-        /// </devdoc>
+        /// </summary>
         ItemOnly = NativeMethods.LVIR_SELECTBOUNDS,
     }
 }

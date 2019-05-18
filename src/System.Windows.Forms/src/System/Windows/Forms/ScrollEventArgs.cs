@@ -9,13 +9,13 @@ namespace System.Windows.Forms
     /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.ScrollBar.Scroll'/>
     /// event.
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
     public class ScrollEventArgs : EventArgs
     {
         /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.ScrollEventArgs'/>class.
-        /// </devdoc>
+        /// </summary>
         public ScrollEventArgs(ScrollEventType type, int newValue)
         {
             Type = type;
@@ -25,7 +25,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.ScrollEventArgs'/>class.
-        /// </devdoc>
+        /// </summary>
         public ScrollEventArgs(ScrollEventType type, int newValue, ScrollOrientation scroll)
         {
             Type = type;
@@ -51,22 +51,22 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Specifies the type of scroll event that occurred.
-        /// </devdoc>
+        /// </summary>
         public ScrollEventType Type { get; }
 
         /// <summary>
         /// Specifies the new location of the scroll box within the scroll bar.
-        /// </devdoc>
+        /// </summary>
         public int NewValue { get; set; }
 
        /// <summary>
        /// Specifies the last position  within the scroll bar.
-       /// </devdoc>
+       /// </summary>
        public int OldValue { get; }
 
         /// <summary>
         /// Specifies the type of scroll event that occurred.
-        /// </devdoc>
+        /// </summary>
         public ScrollOrientation ScrollOrientation { get; }
     }
 }

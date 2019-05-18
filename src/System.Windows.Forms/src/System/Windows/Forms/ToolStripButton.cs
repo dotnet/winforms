@@ -24,7 +24,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// Summary of ToolStripButton.
-        /// </devdoc>
+        /// </summary>
         public ToolStripButton() {
             Initialize();
         }
@@ -58,7 +58,7 @@ namespace System.Windows.Forms {
        
         /// <summary>
         /// Summary of CanSelect.
-        /// </devdoc>
+        /// </summary>
         public override bool CanSelect {
             get { 
                 return true; 
@@ -83,7 +83,7 @@ namespace System.Windows.Forms {
         /// <para>
         /// Gets or sets a value indicating whether the item is checked.
         /// </para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(false),
         SRCategory(nameof(SR.CatAppearance)),
@@ -106,7 +106,7 @@ namespace System.Windows.Forms {
         /// <summary>
         /// <para>Gets
         /// or sets a value indicating whether the check box is checked.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(CheckState.Unchecked),
@@ -137,7 +137,7 @@ namespace System.Windows.Forms {
         /// <para>Occurs when the
         /// value of the <see cref='System.Windows.Forms.CheckBox.Checked'/>
         /// property changes.</para>
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckedChangedDescr))]
         public event EventHandler CheckedChanged {
             add => Events.AddHandler(EventCheckedChanged, value);
@@ -147,7 +147,7 @@ namespace System.Windows.Forms {
         /// <para>Occurs when the
         /// value of the <see cref='System.Windows.Forms.CheckBox.CheckState'/>
         /// property changes.</para>
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckStateChangedDescr))]
         public event EventHandler CheckStateChanged {
             add => Events.AddHandler(EventCheckStateChanged, value);
@@ -164,7 +164,7 @@ namespace System.Windows.Forms {
         /// <summary>
         /// constructs the new instance of the accessibility object for this ToolStripItem. Subclasses
         /// should not call base.CreateAccessibilityObject.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override AccessibleObject CreateAccessibilityInstance() {
             return new ToolStripButtonAccessibleObject(this);
@@ -178,7 +178,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// Called by all constructors of ToolStripButton.
-        /// </devdoc>
+        /// </summary>
         private void Initialize() {
             SupportsSpaceKey = true;
             if (DpiHelper.IsScalingRequirementMet) {
@@ -189,7 +189,7 @@ namespace System.Windows.Forms {
         /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.ToolStripMenuItem.CheckedChanged'/>
         /// event.</para>
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnCheckedChanged(EventArgs e) {
             EventHandler handler = (EventHandler)Events[EventCheckedChanged];
             if (handler != null) handler(this,e);
@@ -197,7 +197,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.ToolStripMenuItem.CheckStateChanged'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnCheckStateChanged(EventArgs e) {
             AccessibilityNotifyClients(AccessibleEvents.StateChange);
             EventHandler handler = (EventHandler)Events[EventCheckStateChanged];
@@ -206,7 +206,7 @@ namespace System.Windows.Forms {
         
         /// <summary>
         /// Inheriting classes should override this method to handle this event.
-        /// </devdoc>
+        /// </summary>
         protected override void OnPaint(System.Windows.Forms.PaintEventArgs e) {
 
             if (this.Owner != null) {
@@ -235,7 +235,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// An implementation of AccessibleChild for use with ToolStripItems        
-        /// </devdoc>
+        /// </summary>
         [System.Runtime.InteropServices.ComVisible(true)]        
         internal class ToolStripButtonAccessibleObject : ToolStripItemAccessibleObject {
             private ToolStripButton ownerItem = null;

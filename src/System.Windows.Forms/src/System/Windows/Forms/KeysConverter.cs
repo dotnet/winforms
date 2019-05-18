@@ -19,7 +19,7 @@ namespace System.Windows.Forms {
     /// <summary>
     /// <para>Provides a type converter to convert <see cref='System.Windows.Forms.Keys'/> objects to and from various 
     ///    other representations.</para>
-    /// </devdoc>
+    /// </summary>
     public class KeysConverter : TypeConverter, IComparer {
         private IDictionary keyNames;
         private List<string> displayOrder;
@@ -83,7 +83,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///  Access to a lookup table of name/value pairs for keys.  These are localized
         ///  names.
-        /// </devdoc>
+        /// </summary>
         private IDictionary KeyNames {
             get {
                 if (keyNames == null) {
@@ -107,7 +107,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    Determines if this converter can convert an object in the given source
         ///    type to the native type of the converter.
-        /// </devdoc>
+        /// </summary>
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) {
             if (sourceType == typeof(string) || sourceType == typeof(Enum[])) {
                 return true;
@@ -118,7 +118,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para>Gets a value indicating whether this converter can
         ///       convert an object to the given destination type using the context.</para>
-        /// </devdoc>
+        /// </summary>
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType) {
             if (destinationType == typeof(Enum[])) {
                 return true;
@@ -128,14 +128,14 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///    <para>Compares two key values for equivalence.</para>
-        /// </devdoc>
+        /// </summary>
         public int Compare(object a, object b) {
             return string.Compare(ConvertToString(a), ConvertToString(b), false, CultureInfo.InvariantCulture);
         }
 
         /// <summary>
         ///    Converts the given object to the converter's native type.
-        /// </devdoc>
+        /// </summary>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
         
             if (value is string) {
@@ -219,7 +219,7 @@ namespace System.Windows.Forms {
         ///    to ToString on the object if the object is valid and if the destination
         ///    type is string.  If this cannot convert to the desitnation type, this will
         ///    throw a NotSupportedException.
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible")]            
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
             if (destinationType == null) {
@@ -320,7 +320,7 @@ namespace System.Windows.Forms {
         ///    for the data type this validator is designed for.  This
         ///    will return null if the data type does not support a
         ///    standard set of values.
-        /// </devdoc>
+        /// </summary>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context) {
             if (values == null) {
                 ArrayList list = new ArrayList();
@@ -345,7 +345,7 @@ namespace System.Windows.Forms {
         ///    in an enum data type.  If the list is not exclusive,
         ///    then there are other valid values besides the list of
         ///    standard values GetStandardValues provides.
-        /// </devdoc>
+        /// </summary>
         public override bool GetStandardValuesExclusive(ITypeDescriptorContext context) {
             return false;
         }
@@ -353,7 +353,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    Determines if this object supports a standard set of values
         ///    that can be picked from a list.
-        /// </devdoc>
+        /// </summary>
         public override bool GetStandardValuesSupported(ITypeDescriptorContext context) {
             return true;
         }

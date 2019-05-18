@@ -8,22 +8,22 @@ namespace System.Windows.Forms
     {
         /// <summary>
         /// No Icon.
-        /// </devdoc>
+        /// </summary>
         None = 0,
 
         /// <summary>
         /// A Information Icon.
-        /// </devdoc>
+        /// </summary>
         Info = 1,
 
         /// <summary>
         /// A Warning Icon.
-        /// </devdoc>
+        /// </summary>
         Warning = 2,
 
         /// <summary>
         /// A Error Icon.
-        /// </devdoc>
+        /// </summary>
         Error = 3
     }
 }

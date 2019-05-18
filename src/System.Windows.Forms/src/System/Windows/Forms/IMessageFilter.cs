@@ -6,12 +6,12 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Defines a message filter interface.
-    /// </devdoc>
+    /// </summary>
     public interface IMessageFilter
     {
         /// <summary>
         /// Filters out a message before it is dispatched.
-        /// </devdoc>
+        /// </summary>
         bool PreFilterMessage(ref Message m);
     }
 }

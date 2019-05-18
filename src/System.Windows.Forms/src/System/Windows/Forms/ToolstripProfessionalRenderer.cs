@@ -761,11 +761,11 @@ namespace System.Windows.Forms {
         }
     
 
-        // </devdoc>
+        // </summary>
         // We want to make sure the overflow button looks like it's the last thing on 
         // the toolbar.  This touches up the few pixels that get clobbered by painting the
         // border.
-        // </devdoc>
+        // </summary>
         private void RenderOverflowButtonEffectsOverBorder(ToolStripRenderEventArgs e) {
             
             ToolStrip toolStrip = e.ToolStrip;
@@ -813,7 +813,7 @@ namespace System.Windows.Forms {
         ///     (3)gradient from middle to end of width secondGradientWidth
         ///      
         ///     if there isnt enough room to do (2) and (3) it merges into a single gradient from beginning to end.
-        ///</devdoc>
+        ///</summary>
         private void FillWithDoubleGradient(Color beginColor, Color middleColor, Color endColor, Graphics g, Rectangle bounds, int firstGradientWidth, int secondGradientWidth, LinearGradientMode mode, bool flipHorizontal) {
             if ((bounds.Width == 0) || (bounds.Height == 0)) {
                 return;  // can't new up a linear gradient brush with no dimension.

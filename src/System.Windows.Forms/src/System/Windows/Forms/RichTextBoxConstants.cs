@@ -11,7 +11,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
     /// <summary>
-    /// </devdoc>
+    /// </summary>
     internal static class RichTextBoxConstants {
 
         // flags for enum that we don't want public

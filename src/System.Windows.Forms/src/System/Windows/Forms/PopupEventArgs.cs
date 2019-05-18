@@ -9,12 +9,12 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// This class contains the information a user needs to paint the ToolTip.
-    /// </devdoc>
+    /// </summary>
     public class PopupEventArgs : CancelEventArgs 
     {
         /// <summary>
         /// Creates a new PopupEventArgs with the given parameters.
-        /// </devdoc>
+        /// </summary>
         public PopupEventArgs(IWin32Window associatedWindow, Control associatedControl, bool isBalloon, Size size) 
         {
             AssociatedWindow = associatedWindow;
@@ -25,22 +25,22 @@ namespace System.Windows.Forms
         
         /// <summary>
         /// The Associated Window for which the tooltip is being painted. 
-        /// </devdoc>
+        /// </summary>
         public IWin32Window AssociatedWindow { get; }
 
         /// <summary>
         /// The control for which the tooltip is being painted. 
-        /// </devdoc>
+        /// </summary>
         public Control AssociatedControl { get; }
 	
         /// <summary>
         /// The rectangle outlining the area in which the painting should be done.
-        /// </devdoc>
+        /// </summary>
         public Size ToolTipSize { get; set; }
 
         /// <summary>
         /// Whether the tooltip is Ballooned. 
-        /// </devdoc>
+        /// </summary>
         public bool IsBalloon { get; }
     }
 }

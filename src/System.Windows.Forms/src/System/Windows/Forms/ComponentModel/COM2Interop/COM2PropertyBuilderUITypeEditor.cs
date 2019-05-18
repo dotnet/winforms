@@ -16,7 +16,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.Globalization;
 
     /// <summary>
-    /// </devdoc>
+    /// </summary>
     internal class Com2PropertyBuilderUITypeEditor : Com2ExtendedUITypeEditor {
 
         private Com2PropertyDescriptor propDesc;
@@ -35,7 +35,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         ///     an editor can launch a modal dialog or create a drop down editor to allow
         ///     the user to modify the value.  Host assistance in presenting UI to the user
         ///     can be found through the valueAccess.getService function.
-        /// </devdoc>
+        /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value) {
 
             IntPtr parentHandle = (IntPtr)UnsafeNativeMethods.GetFocus();
@@ -86,7 +86,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <summary>
         ///      Retrieves the editing style of the Edit method.  If the method
         ///      is not supported, this will return None.
-        /// </devdoc>
+        /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) {
             return UITypeEditorEditStyle.Modal;
         }

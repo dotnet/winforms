@@ -16,7 +16,7 @@ namespace System.Windows.Forms
     /// <summary>
     /// Represents an individual item that is displayed within a <see cref='System.Windows.Forms.Menu'/>
     /// or <see cref='System.Windows.Forms.Menu'/>.
-    /// </devdoc>
+    /// </summary>
     [ToolboxItem(false)]
     [DesignTimeVisible(false)]
     [DefaultEvent(nameof(Click))]
@@ -59,7 +59,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Initializes a <see cref='System.Windows.Forms.MenuItem'/> with a blank caption.
-        /// </devdoc>
+        /// </summary>
         public MenuItem() : this(MenuMerge.Add, 0, 0, null, null, null, null, null)
         {
         }
@@ -67,7 +67,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.MenuItem'/> class
         /// with a specified caption for the menu item.
-        /// </devdoc>
+        /// </summary>
         public MenuItem(string text) : this(MenuMerge.Add, 0, 0, text, null, null, null, null)
         {
         }
@@ -75,7 +75,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Initializes a new instance of the class with a specified caption and event handler
         /// for the menu item.
-        /// </devdoc>
+        /// </summary>
         public MenuItem(string text, EventHandler onClick) : this(MenuMerge.Add, 0, 0, text, onClick, null, null, null)
         {
         }
@@ -83,7 +83,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Initializes a new instance of the class with a specified caption, event handler,
         /// and associated shorcut key for the menu item.
-        /// </devdoc>
+        /// </summary>
         public MenuItem(string text, EventHandler onClick, Shortcut shortcut) : this(MenuMerge.Add, 0, shortcut, text, onClick, null, null, null)
         {
         }
@@ -91,7 +91,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Initializes a new instance of the class with a specified caption and an array of
         /// submenu items defined for the menu item.
-        /// </devdoc>
+        /// </summary>
         public MenuItem(string text, MenuItem[] items) : this(MenuMerge.Add, 0, 0, text, null, null, null, items)
         {
         }
@@ -109,7 +109,7 @@ namespace System.Windows.Forms
         /// Initializes a new instance of the class with a specified caption, defined
         /// event-handlers for the Click, Select and Popup events, a shortcut key,
         /// a merge type, and order specified for the menu item.
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Performance", "CA1806:DoNotIgnoreMethodResults")]
         public MenuItem(MenuMerge mergeType, int mergeOrder, Shortcut shortcut,
                         string text, EventHandler onClick, EventHandler onPopup,
@@ -129,7 +129,7 @@ namespace System.Windows.Forms
         /// Gets or sets a value indicating whether the item is placed on a new line (for a
         /// menu item added to a <see cref='System.Windows.Forms.MainMenu'/> object) or in a
         /// new column (for a submenu or menu displayed in a <see cref='System.Windows.Forms.ContextMenu'/>).
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
         [DefaultValue(false)]
         public bool BarBreak
@@ -150,7 +150,7 @@ namespace System.Windows.Forms
         /// Gets or sets a value indicating whether the item is placed on a new line (for a
         /// menu item added to a <see cref='System.Windows.Forms.MainMenu'/> object) or in a
         /// new column (for a submenu or menu displayed in a <see cref='System.Windows.Forms.ContextMenu'/>).
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
         [DefaultValue(false)]
         public bool Break
@@ -170,7 +170,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Gets or sets a value indicating whether a checkmark appears beside the text of
         /// the menu item.
-        /// </devdoc>
+        /// </summary>
         [DefaultValue(false)]
         [SRDescription(nameof(SR.MenuItemCheckedDescr))]
         public bool Checked
@@ -195,7 +195,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Gets or sets a value indicating whether the menu item is the default.
-        /// </devdoc>
+        /// </summary>
         [DefaultValue(false)]
         [SRDescription(nameof(SR.MenuItemDefaultDescr))]
         public bool DefaultItem
@@ -227,7 +227,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Gets or sets a value indicating whether code that you provide draws the menu
         /// item or Windows draws the menu item.
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(false)]
         [SRDescription(nameof(SR.MenuItemOwnerDrawDescr))]
@@ -247,7 +247,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Gets or sets a value indicating whether the menu item is enabled.
-        /// </devdoc>
+        /// </summary>
         [Localizable(true)]
         [DefaultValue(true)]
         [SRDescription(nameof(SR.MenuItemEnabledDescr))]
@@ -267,7 +267,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Gets or sets the menu item's position in its parent menu.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
         public int Index
         {
@@ -310,7 +310,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Gets a value indicating whether the menu item contains child menu items.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
         public override bool IsParent
         {
@@ -346,7 +346,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Gets or sets a value indicating whether the menu item will be populated with a
         /// list of the MDI child windows that are displayed within the associated form.
-        /// </devdoc>
+        /// </summary>
         [DefaultValue(false)]
         [SRDescription(nameof(SR.MenuItemMDIListDescr))]
         public bool MdiList
@@ -366,7 +366,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Gets the Windows identifier for this menu item.
-        /// </devdoc>
+        /// </summary>
         protected int MenuID
         {
             get
@@ -378,7 +378,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Is this menu item currently selected (highlighted) by the user?
-        /// </devdoc>
+        /// </summary>
         internal bool Selected
         {
             get
@@ -400,7 +400,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Gets the zero-based index of this menu item in the parent menu, or -1 if this
         /// menu item is not associated with a parent menu.
-        /// </devdoc>
+        /// </summary>
         internal int MenuIndex
         {
             get
@@ -435,7 +435,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Gets or sets a value that indicates the behavior of this
         /// menu item when its menu is merged with another.
-        /// </devdoc>
+        /// </summary>
         [DefaultValue(MenuMerge.Add)]
         [SRDescription(nameof(SR.MenuItemMergeTypeDescr))]
         public MenuMerge MergeType
@@ -460,7 +460,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Gets or sets the relative position the menu item when its
         /// menu is merged with another.
-        /// </devdoc>
+        /// </summary>
         [DefaultValue(0)]
         [SRDescription(nameof(SR.MenuItemMergeOrderDescr))]
         public int MergeOrder
@@ -482,7 +482,7 @@ namespace System.Windows.Forms
         /// The mnemonic is the first character after an ampersand symbol in the menu's text
         /// that is not itself an ampersand symbol. If no such mnemonic is defined this
         /// will return zero.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
         public char Mnemonic
         {
@@ -495,14 +495,14 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Gets the menu in which this menu item appears.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
         public Menu Parent { get; internal set; }
 
         /// <summary>
         /// Gets or sets a value that indicates whether the menu item, if checked,
         /// displays a radio-button mark instead of a check mark.
-        /// </devdoc>
+        /// </summary>
         [DefaultValue(false)]
         [SRDescription(nameof(SR.MenuItemRadioCheckDescr))]
         public bool RadioCheck
@@ -523,7 +523,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Gets or sets the text of the menu item.
-        /// </devdoc>
+        /// </summary>
         [Localizable(true)]
         [SRDescription(nameof(SR.MenuItemTextDescr))]
         public string Text
@@ -542,7 +542,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Gets or sets the shortcut key associated with the menu item.
-        /// </devdoc>
+        /// </summary>
         [Localizable(true)]
         [DefaultValue(Shortcut.None)]
         [SRDescription(nameof(SR.MenuItemShortCutDescr))]
@@ -570,7 +570,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Gets or sets a value that indicates whether the shortcut key that is associated
         /// with the menu item is displayed next to the menu item caption.
-        /// </devdoc>
+        /// </summary>
         [DefaultValue(true),
         Localizable(true)]
         [SRDescription(nameof(SR.MenuItemShowShortCutDescr))]
@@ -595,7 +595,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Gets or sets a value that indicates whether the menu item is visible on its
         /// parent menu.
-        /// </devdoc>
+        /// </summary>
         [Localizable(true)]
         [DefaultValue(true)]
         [SRDescription(nameof(SR.MenuItemVisibleDescr))]
@@ -616,7 +616,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Occurs when the menu item is clicked or selected using a shortcut key defined
         /// for the menu item.
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.MenuItemOnClickDescr))]
         public event EventHandler Click
         {
@@ -635,7 +635,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Occurs when when the property of a menu item is set to <see langword='true'/> and
         /// a request is made to draw the menu item.
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.drawItemEventDescr))]
         public event DrawItemEventHandler DrawItem
         {
@@ -653,7 +653,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Occurs when when the menu needs to know the size of a menu item before drawing it.
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.measureItemEventDescr))]
         public event MeasureItemEventHandler MeasureItem
         {
@@ -671,7 +671,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Occurs before a menu item's list of menu items is displayed.
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.MenuItemOnInitDescr))]
         public event EventHandler Popup
         {
@@ -690,7 +690,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Occurs when the user hovers their mouse over a menu item or selects it with the
         /// keyboard but has not activated it.
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.MenuItemOnSelectDescr))]
         public event EventHandler Select
         {
@@ -722,7 +722,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Creates and returns an identical copy of this menu item.
-        /// </devdoc>
+        /// </summary>
         public virtual MenuItem CloneMenu()
         {
             var newItem = new MenuItem();
@@ -732,7 +732,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Creates a copy of the specified menu item.
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Performance", "CA1806:DoNotIgnoreMethodResults")]
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Already shipped as public API")]
         protected void CloneMenu(MenuItem itemSrc)
@@ -871,7 +871,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Disposes the <see cref='System.Windows.Forms.MenuItem'/>.
-        /// </devdoc>
+        /// </summary>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -1082,7 +1082,7 @@ namespace System.Windows.Forms
         /// unfortunately just different enough in its working environment that we
         /// can't readily combine the two. But if you're fixing something here, chances
         /// are that the same issue will need scrutiny over there.
-        ///</devdoc>
+        ///</summary>
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")] // "-" is OK
         private void PopulateMdiList()
         {
@@ -1168,7 +1168,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Merges this menu item with another menu item and returns the resulting merged
         /// <see cref='System.Windows.Forms.MenuItem'/>.
-        /// </devdoc>
+        /// </summary>
         public virtual MenuItem MergeMenu()
         {
             CheckIfDisposed();
@@ -1181,7 +1181,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Merges another menu item with this menu item.
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "Already shipped as public API")]
         public void MergeMenu(MenuItem itemSrc)
         {
@@ -1191,7 +1191,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Raises the <see cref='System.Windows.Forms.MenuItem.Click'/> event.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnClick(EventArgs e)
         {
             CheckIfDisposed();
@@ -1212,7 +1212,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Raises the <see cref='System.Windows.Forms.MenuItem.DrawItem'/> event.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnDrawItem(DrawItemEventArgs e)
         {
             CheckIfDisposed();
@@ -1229,7 +1229,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Raises the <see cref='System.Windows.Forms.MenuItem.MeasureItem'/> event.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnMeasureItem(MeasureItemEventArgs e)
         {
             CheckIfDisposed();
@@ -1246,7 +1246,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Raises the <see cref='System.Windows.Forms.MenuItem.Popup'/> event.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnPopup(EventArgs e)
         {
             CheckIfDisposed();
@@ -1292,7 +1292,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Raises the <see cref='System.Windows.Forms.MenuItem.Select'/> event.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnSelect(EventArgs e)
         {
             CheckIfDisposed();
@@ -1312,12 +1312,12 @@ namespace System.Windows.Forms
         /// <summary>
         /// Generates a <see cref='System.Windows.Forms.Control.Click'/> event for the MenuItem,
         /// simulating a click by a user.
-        /// </devdoc>
+        /// </summary>
         public void PerformClick() => OnClick(EventArgs.Empty);
 
         /// <summary>
         /// Raises the <see cref='System.Windows.Forms.MenuItem.Select'/> event for this menu item.
-        /// </devdoc>
+        /// </summary>
         public virtual void PerformSelect() => OnSelect(EventArgs.Empty);
 
         internal virtual bool ShortcutClick()

@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     
     /// <summary>
     ///    <para></para>
-    /// </devdoc>
+    /// </summary>
     internal class DataGridViewUtilities
     {
         private const byte DATAGRIDVIEWROWHEADERCELL_iconMarginWidth = 3;      // 3 pixels of margin on the left and right of icons

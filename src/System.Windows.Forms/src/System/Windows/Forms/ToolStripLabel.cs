@@ -14,7 +14,7 @@ namespace System.Windows.Forms {
 
     /// <summary>
     /// A non selectable ToolStrip item
-    /// </devdoc>
+    /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip)]
     public class ToolStripLabel : ToolStripItem {
 
@@ -32,7 +32,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// A non selectable ToolStrip item
-        /// </devdoc>
+        /// </summary>
         public ToolStripLabel() {
         }
         public ToolStripLabel(string text):base(text,null,null) {
@@ -194,7 +194,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Invalidates the current set of fonts we use when painting
         ///     links.  The fonts will be recreated when needed.
-        /// </devdoc>
+        /// </summary>
         private void InvalidateLinkFonts() {
   
             if (linkFont != null) {
@@ -273,7 +273,7 @@ namespace System.Windows.Forms {
         /// <summary>
         /// Creates an instance of the object that defines how image and text
         /// gets laid out in the ToolStripItem
-        /// </devdoc>
+        /// </summary>
         internal override ToolStripItemInternalLayout CreateInternalLayout() {
             return new ToolStripLabelLayout(this);
         }
@@ -285,7 +285,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// Inheriting classes should override this method to handle this event.
-        /// </devdoc>
+        /// </summary>
         protected override void OnPaint(System.Windows.Forms.PaintEventArgs e) {
 
             if (this.Owner != null) {
@@ -402,7 +402,7 @@ namespace System.Windows.Forms {
         ///  This class performs internal layout for the "split button button" portion of a split button.
         ///  Its main job is to make sure the inner button has the same parent as the split button, so
         ///  that layout can be performed using the correct graphics context.
-        /// </devdoc>
+        /// </summary>
         private class ToolStripLabelLayout : ToolStripItemInternalLayout {
 
              ToolStripLabel owner;

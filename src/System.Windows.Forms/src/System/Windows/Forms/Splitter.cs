@@ -19,7 +19,7 @@ namespace System.Windows.Forms {
     ///     dock any control to an edge of a container, and then dock the splitter to the same
     ///     edge. The splitter will then resize the control that is previous in the docking
     ///     order.
-    /// </devdoc>
+    /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -53,7 +53,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Creates a new Splitter.
-        /// </devdoc>
+        /// </summary>
         public Splitter()
         : base() {
             SetStyle(ControlStyles.Selectable, false);
@@ -68,7 +68,7 @@ namespace System.Windows.Forms {
         ///     The current value of the anchor property. The anchor property
         ///     determines which edges of the control are anchored to the container's
         ///     edges.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DefaultValue(AnchorStyles.None)]
         public override AnchorStyles Anchor {
@@ -93,7 +93,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
+        /// </summary>
         protected override Size DefaultSize {
             get {
                 return new Size(defaultWidth, defaultWidth);
@@ -181,7 +181,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Indicates what type of border the Splitter control has.  This value
         ///     comes from the System.Windows.Forms.BorderStyle enumeration.
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(BorderStyle.None),
         SRCategory(nameof(SR.CatAppearance)),
@@ -211,7 +211,7 @@ namespace System.Windows.Forms {
         ///     can override this to provide extra functionality.  They should not,
         ///     however, forget to call base.getCreateParams() first to get the struct
         ///     filled up with the basic info.
-        /// </devdoc>
+        /// </summary>
         protected override CreateParams CreateParams {
             get {
                 CreateParams cp = base.CreateParams;
@@ -237,7 +237,7 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         [
         Localizable(true),
         DefaultValue(DockStyle.Left)
@@ -273,7 +273,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Determines if the splitter is horizontal.
-        /// </devdoc>
+        /// </summary>
         private bool Horizontal {
             get {
                 DockStyle dock = Dock;
@@ -302,7 +302,7 @@ namespace System.Windows.Forms {
         ///     area of the container. This area is center of the container that
         ///     is not occupied by edge docked controls, this is the are that
         ///     would be used for any fill docked control.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
@@ -323,7 +323,7 @@ namespace System.Windows.Forms {
         ///     The minSize is the minimum size (in pixels) of the target of the
         ///     splitter. The target of a splitter is always the control adjacent
         ///     to the splitter, just prior in the dock order.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
@@ -343,7 +343,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     The position of the splitter. If the splitter is not bound
         ///     to a control, SplitPosition will be -1.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
         Browsable(false),
@@ -480,7 +480,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Draws the splitter bar at the current location. Will automatically
         ///     cleanup anyplace the splitter was drawn previously.
-        /// </devdoc>
+        /// </summary>
         private void DrawSplitBar(int mode) {
             if (mode != DRAW_START && lastDrawSplit != -1) {
                 DrawSplitHelper(lastDrawSplit);
@@ -507,7 +507,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Calculates the bounding rect of the split line. minWeight refers
         ///     to the minimum height or width of the splitline.
-        /// </devdoc>
+        /// </summary>
         private Rectangle CalcSplitLine(int splitSize, int minWeight) {
             Rectangle r = Bounds;
             Rectangle bounds = splitTarget.Bounds;
@@ -534,7 +534,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Calculates the current size of the splitter-target.
-        /// </devdoc>
+        /// </summary>
         private int CalcSplitSize() {
             Control target = FindTarget();
             if (target == null) return -1;
@@ -553,7 +553,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Calculates the bounding criteria for the splitter.
-        /// </devdoc>
+        /// </summary>
         private SplitData CalcSplitBounds() {
             SplitData spd = new SplitData();
             Control target = FindTarget();
@@ -604,7 +604,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Draws the splitter line at the requested location. Should only be called
         ///     by drawSpltBar.
-        /// </devdoc>
+        /// </summary>
         private void DrawSplitHelper(int splitSize) {
             if (splitTarget == null) {
                 return;
@@ -624,7 +624,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Raises a splitter event
-        /// </devdoc>
+        /// </summary>
 
         /* No one seems to be calling this, so it is okay to comment it out
         private void RaiseSplitterEvent(object key, SplitterEventArgs spevent) {
@@ -638,7 +638,7 @@ namespace System.Windows.Forms {
         ///     control that is "outside" or the splitter. For example, if the splitter
         ///     is docked left, the target is the control that is just to the left
         ///     of the splitter.
-        /// </devdoc>
+        /// </summary>
         private Control FindTarget() {
             Control parent = ParentInternal;
             if (parent == null) return null;
@@ -669,7 +669,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Calculates the split size based on the mouse position (x, y).
-        /// </devdoc>
+        /// </summary>
         private int GetSplitSize(int x, int y) {
             int delta;
             if (Horizontal) {
@@ -697,7 +697,7 @@ namespace System.Windows.Forms {
         }
         
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         protected override void OnKeyDown(KeyEventArgs e) {
             base.OnKeyDown(e);
             if (splitTarget != null && e.KeyCode == Keys.Escape) {
@@ -706,7 +706,7 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         protected override void OnMouseDown(MouseEventArgs e) {
             base.OnMouseDown(e);
             if (e.Button == MouseButtons.Left && e.Clicks == 1) {
@@ -715,7 +715,7 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         protected override void OnMouseMove(MouseEventArgs e) {
             base.OnMouseMove(e);
             if (splitTarget != null) {
@@ -729,7 +729,7 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         protected override void OnMouseUp(MouseEventArgs e) {
             base.OnMouseUp(e);
             if (splitTarget != null) {
@@ -746,7 +746,7 @@ namespace System.Windows.Forms {
         ///     Inherriting classes should override this method to respond to the
         ///     splitterMoving event. This event occurs while the splitter is
         ///     being moved by the user.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnSplitterMoving(SplitterEventArgs sevent) {
             SplitterEventHandler handler = (SplitterEventHandler)Events[EVENT_MOVING];
             if (handler != null) handler(this,sevent);
@@ -759,7 +759,7 @@ namespace System.Windows.Forms {
         ///     Inherriting classes should override this method to respond to the
         ///     splitterMoved event. This event occurs when the user finishes
         ///     moving the splitter.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnSplitterMoved(SplitterEventArgs sevent) {
             SplitterEventHandler handler = (SplitterEventHandler)Events[EVENT_MOVED];
             if (handler != null) handler(this,sevent);
@@ -788,7 +788,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Begins the splitter moving.
-        /// </devdoc>
+        /// </summary>
         private void SplitBegin(int x, int y) {
             SplitData spd = CalcSplitBounds();
             if (spd.target != null && (minSize < maxSize)) {
@@ -809,7 +809,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Finishes the split movement.
-        /// </devdoc>
+        /// </summary>
         private void SplitEnd(bool accept) {
             DrawSplitBar(DRAW_END);
             splitTarget = null;
@@ -832,7 +832,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Sets the split position to be the current split size. This is called
         ///     by splitEdit
-        /// </devdoc>
+        /// </summary>
         private void ApplySplitPosition() {
             SplitPosition = splitSize;
         }
@@ -840,7 +840,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Moves the splitter line to the splitSize for the mouse position
         ///     (x, y).
-        /// </devdoc>
+        /// </summary>
         private void SplitMove(int x, int y) {
             int size = GetSplitSize(x-Left+anchor.X, y-Top+anchor.Y);
             if (splitSize != size) {
@@ -851,7 +851,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Returns a string representation for this control.
-        /// </devdoc>
+        /// </summary>
         public override string ToString() {
 
             string s = base.ToString();
@@ -860,7 +860,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Return value holder...
-        /// </devdoc>
+        /// </summary>
         private class SplitData {
             public int dockWidth = -1;
             public int dockHeight = -1;
@@ -878,7 +878,7 @@ namespace System.Windows.Forms {
             }
             
             /// <summary>
-            /// </devdoc>
+            /// </summary>
             public bool PreFilterMessage(ref Message m) {
                 if (m.Msg >= Interop.WindowMessages.WM_KEYFIRST && m.Msg <= Interop.WindowMessages.WM_KEYLAST) {
                     if (m.Msg == Interop.WindowMessages.WM_KEYDOWN && unchecked((int)(long)m.WParam) == (int)Keys.Escape) {

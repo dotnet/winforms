@@ -14,7 +14,7 @@ namespace System.Windows.Forms
     ///    <para>
     ///     This class provides API for drawing GDI text.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     public sealed class TextRenderer
     {
         //cannot instantiate

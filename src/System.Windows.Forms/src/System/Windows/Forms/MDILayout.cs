@@ -6,25 +6,25 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Specifies the layout of multiple document interface (MDI) child windows in an MDI parent window.
-    /// </devdoc>
+    /// </summary>
     public enum MdiLayout
     {
         /// <summary>
         /// All MDI child windows are cascaded within the client region of the
         /// MDI parent form.
-        /// </devdoc>
+        /// </summary>
         Cascade = 0,
 
         /// <summary>
         /// All MDI child windows are tiled horizontally within the client region
         /// of the MDI parent form.
-        /// </devdoc>
+        /// </summary>
         TileHorizontal = 1,
 
         /// <summary>
         /// All MDI child windows are tiled vertically within the client region of
         /// the MDI parent form.
-        /// </devdoc>
+        /// </summary>
         TileVertical = 2,
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace System.Windows.Forms
         /// parent form. An application sets this layout to arrange all minimized
         /// MDI child windows (in the bottom of the client area).
         /// It does not affect child windows that are not minimized.
-        /// </devdoc>
+        /// </summary>
         ArrangeIcons = 3,
     }
 }

@@ -8,23 +8,23 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Specifies the border style for a control or form.
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
     public enum BorderStyle
     {
         /// <summary>
         /// No border.
-        /// </devdoc>
+        /// </summary>
         None = 0,
 
         /// <summary>
         /// A single-line border.
-        /// </devdoc>
+        /// </summary>
         FixedSingle = 1,
 
         /// <summary>
         /// A three-dimensional border.
-        /// </devdoc>
+        /// </summary>
         Fixed3D = 2,
     }
 }

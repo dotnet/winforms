@@ -19,7 +19,7 @@ namespace System.Windows.Forms {
     ///    <para>
     ///       Represents the HTML 1.0 Help engine.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     public class Help {
 #if DEBUG        
         internal static readonly TraceSwitch WindowsFormsHelpTrace = new TraceSwitch("WindowsFormsHelpTrace", "Debug help system");
@@ -69,7 +69,7 @@ namespace System.Windows.Forms {
         ///       Displays
         ///       the contents of the Help file at located at a specified Url.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void ShowHelp(Control parent, string url) {
             ShowHelp(parent, url, HelpNavigator.TableOfContents, null);
         }
@@ -80,7 +80,7 @@ namespace System.Windows.Forms {
         ///       the Help
         ///       file for a specific topic found at the specified Url.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void ShowHelp(Control parent, string url, HelpNavigator navigator) {
             ShowHelp(parent, url, navigator, null);
         }
@@ -91,7 +91,7 @@ namespace System.Windows.Forms {
         ///       the Help
         ///       file for a specific topic found at the specified Url.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void ShowHelp(Control parent, string url, string keyword) {
             if (keyword != null && keyword.Length != 0) {
                 ShowHelp(parent, url, HelpNavigator.Topic, keyword);
@@ -108,7 +108,7 @@ namespace System.Windows.Forms {
         ///       supplied by the
         ///       user.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void ShowHelp(Control parent, string url, HelpNavigator command, object parameter) {
             Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "Help:: ShowHelp");
 
@@ -126,7 +126,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Displays the index of the specified file.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void ShowHelpIndex(Control parent, string url) {
             Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "Help:: ShowHelpIndex");
 
@@ -137,7 +137,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Displays a Help pop-up window.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void ShowPopup(Control parent, string caption, Point location) {
             Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "Help:: ShowPopup");
 
@@ -166,7 +166,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Displays HTML 1.0 Help with the specified parameters
-        /// </devdoc>
+        /// </summary>
         private static void ShowHTML10Help(Control parent, string url, HelpNavigator command, object param) {
             Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "Help:: ShowHTML10Help:: " + url + ", " + command.ToString("G") + ", " + param);
             
@@ -245,7 +245,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Displays HTMLFile with the specified parameters
-        /// </devdoc>
+        /// </summary>
         /// 
 
 
@@ -365,7 +365,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Maps one of the COMMAND_* constants to the HTML 1.0 Help equivalent.
-        /// </devdoc>
+        /// </summary>
         private static int MapCommandToHTMLCommand(HelpNavigator command, string param, out object htmlParam) {
             htmlParam = param;
 

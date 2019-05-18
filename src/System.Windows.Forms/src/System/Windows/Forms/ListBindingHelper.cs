@@ -13,7 +13,7 @@ namespace System.Windows.Forms {
     using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
-    /// </devdoc>
+    /// </summary>
     public static class ListBindingHelper {
 
         private static Attribute[] browsableAttribute;
@@ -495,7 +495,7 @@ namespace System.Windows.Forms {
         /// NOTE: A special rule is also enforced here - we only want to consider using the typed indexer on list
         /// based types, ie. types we already know are supposed to be treated as lists (rather than list items).
         ///
-        /// </devdoc>
+        /// </summary>
         private static PropertyInfo GetTypedIndexer(Type type)
         {
             PropertyInfo indexer = null;

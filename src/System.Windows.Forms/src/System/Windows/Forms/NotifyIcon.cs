@@ -19,7 +19,7 @@ namespace System.Windows.Forms {
     ///       Specifies a component that creates
     ///       an icon in the Windows System Tray. This class cannot be inherited.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     [
     DefaultProperty(nameof(Text)),
     DefaultEvent(nameof(MouseDoubleClick)),
@@ -67,7 +67,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.NotifyIcon'/> class.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public NotifyIcon() {
             id = ++nextId;
             window = new NotifyIconNativeWindow(this);
@@ -78,7 +78,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.NotifyIcon'/> class.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public NotifyIcon(IContainer container) : this() {
             if (container == null) {
                 throw new ArgumentNullException(nameof(container));
@@ -92,7 +92,7 @@ namespace System.Windows.Forms {
         ///       Gets or sets the BalloonTip text displayed when
         ///       the mouse hovers over a system tray icon.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
@@ -116,7 +116,7 @@ namespace System.Windows.Forms {
         ///       Gets or sets the BalloonTip icon displayed when
         ///       the mouse hovers over a system tray icon.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(ToolTipIcon.None),
@@ -142,7 +142,7 @@ namespace System.Windows.Forms {
         ///       Gets or sets the BalloonTip title displayed when
         ///       the mouse hovers over a system tray icon.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
@@ -162,7 +162,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///    <para>[This event is raised on the NIN_BALLOONUSERCLICK message.]</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NotifyIconOnBalloonTipClickedDescr))]
         public event EventHandler BalloonTipClicked {
             add => Events.AddHandler(EVENT_BALLOONTIPCLICKED, value);
@@ -172,7 +172,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///    <para>[This event is raised on the NIN_BALLOONTIMEOUT message.]</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NotifyIconOnBalloonTipClosedDescr))]
         public event EventHandler BalloonTipClosed {
             add => Events.AddHandler(EVENT_BALLOONTIPCLOSED, value);
@@ -182,7 +182,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///    <para>[This event is raised on the NIN_BALLOONSHOW or NIN_BALLOONHIDE message.]</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NotifyIconOnBalloonTipShownDescr))]
         public event EventHandler BalloonTipShown {
             add => Events.AddHandler(EVENT_BALLOONTIPSHOWN, value);
@@ -194,7 +194,7 @@ namespace System.Windows.Forms {
         ///       Gets or sets context menu
         ///       for the tray icon.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         DefaultValue(null),
@@ -231,7 +231,7 @@ namespace System.Windows.Forms {
         ///       Gets or sets the current
         ///       icon.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
@@ -255,7 +255,7 @@ namespace System.Windows.Forms {
         ///       Gets or sets the ToolTip text displayed when
         ///       the mouse hovers over a system tray icon.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
@@ -285,7 +285,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Gets or sets a value indicating whether the icon is visible in the Windows System Tray.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
@@ -323,7 +323,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Occurs when the user clicks the icon in the system tray.
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnClickDescr))]
         public event EventHandler Click {
             add => Events.AddHandler(EVENT_CLICK, value);
@@ -332,7 +332,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Occurs when the user double-clicks the icon in the system tray.
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnDoubleClickDescr))]
         public event EventHandler DoubleClick {
             add => Events.AddHandler(EVENT_DOUBLECLICK, value);
@@ -341,7 +341,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Occurs when the user clicks the icon in the system tray.
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NotifyIconMouseClickDescr))]
         public event MouseEventHandler MouseClick {
             add => Events.AddHandler(EVENT_MOUSECLICK, value);
@@ -350,7 +350,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Occurs when the user mouse double clicks the icon in the system tray.
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NotifyIconMouseDoubleClickDescr))]
         public event MouseEventHandler MouseDoubleClick {
             add => Events.AddHandler(EVENT_MOUSEDOUBLECLICK, value);
@@ -362,7 +362,7 @@ namespace System.Windows.Forms {
         ///       Occurs when the
         ///       user presses a mouse button while the pointer is over the icon in the system tray.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseDownDescr))]
         public event MouseEventHandler MouseDown {
             add => Events.AddHandler(EVENT_MOUSEDOWN, value);
@@ -374,7 +374,7 @@ namespace System.Windows.Forms {
         ///       Occurs
         ///       when the user moves the mouse pointer over the icon in the system tray.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseMoveDescr))]
         public event MouseEventHandler MouseMove {
             add => Events.AddHandler(EVENT_MOUSEMOVE, value);
@@ -387,7 +387,7 @@ namespace System.Windows.Forms {
         ///       user releases the mouse button while the pointer
         ///       is over the icon in the system tray.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseUpDescr))]
         public event MouseEventHandler MouseUp {
             add => Events.AddHandler(EVENT_MOUSEUP, value);
@@ -399,7 +399,7 @@ namespace System.Windows.Forms {
         ///       Disposes of the resources (other than memory) used by the
         ///    <see cref='System.Windows.Forms.NotifyIcon'/>.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 if (window != null) {
@@ -428,7 +428,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       This method raised the BalloonTipClicked event. 
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         private void OnBalloonTipClicked() {
             EventHandler handler = (EventHandler)Events[EVENT_BALLOONTIPCLICKED];
             if (handler != null) {
@@ -440,7 +440,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       This method raised the BalloonTipClosed event. 
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         private void OnBalloonTipClosed() {
             EventHandler handler = (EventHandler)Events[EVENT_BALLOONTIPCLOSED];
             if (handler != null) {
@@ -452,7 +452,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       This method raised the BalloonTipShown event. 
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         private void OnBalloonTipShown() {
             EventHandler handler = (EventHandler)Events[EVENT_BALLOONTIPSHOWN];
             if (handler != null) {
@@ -468,7 +468,7 @@ namespace System.Windows.Forms {
         ///       however, forget to call base.onClick(e); before exiting, to ensure that
         ///       other recipients do actually get the event.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         private void OnClick(EventArgs e) {
             EventHandler handler = (EventHandler) Events[ EVENT_CLICK ];
             if (handler != null)
@@ -478,7 +478,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Inheriting classes should override this method to handle this event.
         ///     Call base.onDoubleClick to send this event to any registered event listeners.
-        /// </devdoc>
+        /// </summary>
         private void OnDoubleClick(EventArgs e) {
             EventHandler handler = (EventHandler) Events[ EVENT_DOUBLECLICK ];
             if (handler != null)
@@ -489,7 +489,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Inheriting classes should override this method to handle this event.
         ///     Call base.OnMouseClick to send this event to any registered event listeners.
-        /// </devdoc>
+        /// </summary>
         private void OnMouseClick(MouseEventArgs mea) {
             MouseEventHandler handler = (MouseEventHandler) Events[ EVENT_MOUSECLICK ];
             if (handler != null)
@@ -499,7 +499,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Inheriting classes should override this method to handle this event.
         ///     Call base.OnMouseDoubleClick to send this event to any registered event listeners.
-        /// </devdoc>
+        /// </summary>
         private void OnMouseDoubleClick(MouseEventArgs mea) {
             MouseEventHandler handler = (MouseEventHandler) Events[ EVENT_MOUSEDOUBLECLICK ];
             if (handler != null)
@@ -513,7 +513,7 @@ namespace System.Windows.Forms {
         ///       Call base.onMouseDown to send this event to any registered event listeners.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         private void OnMouseDown(MouseEventArgs e) {
             MouseEventHandler handler = (MouseEventHandler)Events[EVENT_MOUSEDOWN];
             if (handler != null)
@@ -526,7 +526,7 @@ namespace System.Windows.Forms {
         ///       Call base.onMouseMove to send this event to any registered event listeners.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         private void OnMouseMove(MouseEventArgs e) {
             MouseEventHandler handler = (MouseEventHandler)Events[EVENT_MOUSEMOVE];
             if (handler != null)
@@ -538,7 +538,7 @@ namespace System.Windows.Forms {
         ///       Inheriting classes should override this method to handle this event.
         ///       Call base.onMouseUp to send this event to any registered event listeners.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         private void OnMouseUp(MouseEventArgs e) {
             MouseEventHandler handler = (MouseEventHandler)Events[EVENT_MOUSEUP];
             if (handler != null)
@@ -563,7 +563,7 @@ namespace System.Windows.Forms {
         ///       to display a balloon ToolTip. If the system minimum timeout is ten seconds, the first 
         ///       ToolTip displays for an additional three seconds before being replaced by the second ToolTip.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void ShowBalloonTip(int timeout) {
             ShowBalloonTip(timeout, this.balloonTipTitle, this.balloonTipText, this.balloonTipIcon);
         }
@@ -588,7 +588,7 @@ namespace System.Windows.Forms {
         ///       to display a balloon ToolTip. If the system minimum timeout is ten seconds, the first 
         ///       ToolTip displays for an additional three seconds before being replaced by the second ToolTip.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void ShowBalloonTip(int timeout, string tipTitle, string tipText, ToolTipIcon tipIcon) {
 
             if (timeout < 0) {
@@ -634,7 +634,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Shows the context menu for the tray icon.
-        /// </devdoc>
+        /// </summary>
         private void ShowContextMenu() {
 
             if (contextMenu != null || contextMenuStrip != null) {
@@ -669,7 +669,7 @@ namespace System.Windows.Forms {
     
         /// <summary>
         ///     Updates the icon in the system tray.
-        /// </devdoc>
+        /// </summary>
         private void UpdateIcon(bool showIconInTray) {
             lock(syncObj) {
 
@@ -718,7 +718,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Handles the mouse-down event
-        /// </devdoc>
+        /// </summary>
         private void WmMouseDown(ref Message m, MouseButtons button, int clicks) {
             if (clicks == 2) {
                 OnDoubleClick(new MouseEventArgs(button, 2, 0, 0, 0));
@@ -730,14 +730,14 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Handles the mouse-move event
-        /// </devdoc>
+        /// </summary>
         private void WmMouseMove(ref Message m) {
             OnMouseMove(new MouseEventArgs(Control.MouseButtons, 0, 0, 0, 0));
         }
 
         /// <summary>
         ///     Handles the mouse-up event
-        /// </devdoc>
+        /// </summary>
         private void WmMouseUp(ref Message m, MouseButtons button) {
             OnMouseUp(new MouseEventArgs(button, 0, 0, 0, 0));
             //subhag
@@ -890,14 +890,14 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Defines a placeholder window that the NotifyIcon is attached to.
-        /// </devdoc>
+        /// </summary>
         private class NotifyIconNativeWindow : NativeWindow {
             internal NotifyIcon reference;
             private  GCHandle   rootRef;   // We will root the control when we do not want to be elligible for garbage collection.
 
             /// <summary>
             ///     Create a new NotifyIcon, and bind the window to the NotifyIcon component.
-            /// </devdoc>
+            /// </summary>
             internal NotifyIconNativeWindow(NotifyIcon component) {
                 reference = component;
             }
@@ -933,7 +933,7 @@ namespace System.Windows.Forms {
 
             /// <summary>
             ///     Pass messages on to the NotifyIcon object's wndproc handler.
-            /// </devdoc>
+            /// </summary>
             protected override void WndProc(ref Message m) {
                 Debug.Assert(reference != null, "NotifyIcon was garbage collected while it was still visible.  How did we let that happen?");
                 reference.WndProc(ref m);

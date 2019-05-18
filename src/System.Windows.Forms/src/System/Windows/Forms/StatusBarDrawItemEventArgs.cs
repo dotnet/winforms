@@ -9,13 +9,13 @@ namespace System.Windows.Forms
     /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.StatusBar.OnDrawItem'/>
     /// event.
-    /// </devdoc>
+    /// </summary>
     public class StatusBarDrawItemEventArgs : DrawItemEventArgs
     {
         /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.StatusBarDrawItemEventArgs'/>
         /// class.
-        /// </devdoc>
+        /// </summary>
         public StatusBarDrawItemEventArgs(Graphics g, Font font, Rectangle r, int itemId,
                                           DrawItemState itemState, StatusBarPanel panel)
             : base(g, font, r, itemId, itemState)
@@ -26,7 +26,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.StatusBarDrawItemEventArgs'/>
         /// class using the Forecolor and Backcolor.
-        /// </devdoc>
+        /// </summary>
         public StatusBarDrawItemEventArgs(Graphics g, Font font, Rectangle r, int itemId,
                                           DrawItemState itemState, StatusBarPanel panel,
                                           Color foreColor, Color backColor)
@@ -37,7 +37,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Specifies the <see cref='System.Windows.Forms.StatusBarPanel'/> to draw.
-        /// </devdoc>
+        /// </summary>
         public StatusBarPanel Panel { get; }
     }
 }

@@ -8,7 +8,7 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Provides data for the MaskInputRejected event.
-    /// </devdoc>
+    /// </summary>
     public class MaskInputRejectedEventArgs : EventArgs
     {
         public MaskInputRejectedEventArgs(int position, MaskedTextResultHint rejectionHint)
@@ -19,12 +19,12 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// The position where the test failed the mask constraint.
-        /// </devdoc>
+        /// </summary>
         public int Position { get; }
 
         /// <summary>
         /// Retreives a hint on why the input is rejected.
-        /// </devdoc>
+        /// </summary>
         public MaskedTextResultHint RejectionHint { get; }
     }
 }

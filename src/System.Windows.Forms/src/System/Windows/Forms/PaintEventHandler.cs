@@ -6,6 +6,6 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Represents the method that will handle the <see cref='System.Windows.Forms.Control.Paint'/>event of a <see cref='System.Windows.Forms.Control'/>class.
-    /// </devdoc>
+    /// </summary>
     public delegate void PaintEventHandler(object sender, PaintEventArgs e);
 }

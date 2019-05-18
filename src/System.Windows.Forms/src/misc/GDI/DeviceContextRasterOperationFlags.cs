@@ -14,7 +14,7 @@ namespace System.Experimental.Gdi
 
     /// <summary>
     ///    Specifies the layout of a device context.
-    /// </devdoc>
+    /// </summary>
     [Flags]
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public

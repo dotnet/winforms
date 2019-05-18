@@ -9,7 +9,7 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Represents a collection of data bindings on a control.
-    /// </devdoc>
+    /// </summary>
     [DefaultEvent(nameof(CollectionChanged))]
     public class BindingsCollection : BaseCollection
     {
@@ -25,12 +25,12 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Gets the bindings in the collection as an object.
-        /// </devdoc>
+        /// </summary>
         protected override ArrayList List => _list ?? (_list = new ArrayList());
 
         /// <summary>
         /// Gets the <see cref='System.Windows.Forms.Binding'/> at the specified index.
-        /// </devdoc>
+        /// </summary>
         public Binding this[int index] => (Binding)List[index];
 
         internal protected void Add(Binding binding)
@@ -43,7 +43,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Adds a <see cref='System.Windows.Forms.Binding'/> to the collection.
-        /// </devdoc>
+        /// </summary>
         protected virtual void AddCore(Binding dataBinding)
         {
             if (dataBinding == null)
@@ -56,7 +56,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Occurs when the collection is about to change.
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.collectionChangingEventDescr))]
         public event CollectionChangeEventHandler CollectionChanging
         {
@@ -66,7 +66,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Occurs when the collection is changed.
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.collectionChangedEventDescr))]
         public event CollectionChangeEventHandler CollectionChanged
         {
@@ -84,12 +84,12 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Clears the collection of any members.
-        /// </devdoc>
+        /// </summary>
         protected virtual void ClearCore() => List.Clear();
 
         /// <summary>
         /// Raises the <see cref='System.Windows.Forms.BindingsCollection.CollectionChanging'/> event.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnCollectionChanging(CollectionChangeEventArgs e)
         {
             _onCollectionChanging?.Invoke(this, e);
@@ -97,7 +97,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Raises the <see cref='System.Windows.Forms.BindingsCollection.CollectionChanged'/> event.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnCollectionChanged(CollectionChangeEventArgs ccevent)
         {
             _onCollectionChanged?.Invoke(this, ccevent);
@@ -115,7 +115,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Removes the specified <see cref='System.Windows.Forms.Binding'/> from the collection.
-        /// </devdoc>
+        /// </summary>
         protected virtual void RemoveCore(Binding dataBinding) => List.Remove(dataBinding);
 
         internal protected bool ShouldSerializeMyAll() => Count > 0;

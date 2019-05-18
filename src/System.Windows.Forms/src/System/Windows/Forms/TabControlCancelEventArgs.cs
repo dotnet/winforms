@@ -9,7 +9,7 @@ namespace System.Windows.Forms
     /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.TabControl.OnDeselecting'/>,
     /// <see cref='System.Windows.Forms.TabControl.OnDeselected'/> event.
-    /// </devdoc>
+    /// </summary>
     public class TabControlCancelEventArgs : CancelEventArgs
     {
         public TabControlCancelEventArgs(TabPage tabPage, int tabPageIndex, bool cancel, TabControlAction action) : base(cancel)
@@ -21,18 +21,18 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Stores the referemce to the tabpage that is undergoing the TabControl event.
-        /// </devdoc>
+        /// </summary>
         public TabPage TabPage { get; }
 
         /// <summary>
         /// Stores the index to the tabpage that is undergoing the TabControl event.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public int TabPageIndex { get; }
 
         /// <summary>
         /// Stores the TabControl action which instigated the TabControl event.
-        /// </devdoc>
+        /// </summary>
         public TabControlAction Action { get; }
     }
 }

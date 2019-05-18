@@ -8,7 +8,7 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.Form.OnClosing'/> event.
-    /// </devdoc>
+    /// </summary>
     public class FormClosingEventArgs : CancelEventArgs
     {
         public FormClosingEventArgs(CloseReason closeReason, bool cancel) : base(cancel)
@@ -18,7 +18,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Provides the reason for the Form close.
-        /// </devdoc>
+        /// </summary>
         public CloseReason CloseReason { get; }
     }
 }

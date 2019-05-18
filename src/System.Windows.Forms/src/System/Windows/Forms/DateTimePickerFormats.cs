@@ -9,28 +9,28 @@ namespace System.Windows.Forms
     /// <summary>
     /// Constants that specify how the date and time picker control displays
     /// date and time information.
-    /// </devdoc>    
+    /// </summary>    
     [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
     public enum DateTimePickerFormat
     {
         /// <summary>
         /// Long format - produces output in the form "Wednesday, April 7, 1999"
-        /// </devdoc>
+        /// </summary>
         Long = 0x0001,
 
         /// <summary>
         /// Short format - produces output in the form "4/7/99"
-        /// </devdoc>
+        /// </summary>
         Short = 0x0002,
 
         /// <summary>
         /// Time format - produces output in time format
-        /// </devdoc>
+        /// </summary>
         Time = 0x0004,
 
         /// <summary>
         /// Custom format - produces output in custom format.
-        /// </devdoc>
+        /// </summary>
         Custom = 0x0008,
     }
 }

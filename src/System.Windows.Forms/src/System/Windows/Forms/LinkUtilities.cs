@@ -25,7 +25,7 @@ using System.Globalization;
         /// <summary>
         ///     Retrieves a named IE color from the registry. There are constants at the top
         ///     of this file of the valid names to retrieve.
-        /// </devdoc>
+        /// </summary>
         private static Color GetIEColor(string name) {
             RegistryKey key = Registry.CurrentUser.OpenSubKey(IESettingsRegPath);
 
@@ -105,7 +105,7 @@ using System.Globalization;
 
         /// <summary>
         ///     Retrieves the IE settings for link behavior from the registry.
-        /// </devdoc>
+        /// </summary>
         public static LinkBehavior GetIELinkBehavior() {
             RegistryKey key = null;
             try {

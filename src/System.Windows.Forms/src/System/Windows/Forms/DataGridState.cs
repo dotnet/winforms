@@ -17,7 +17,7 @@ namespace System.Windows.Forms {
     /// <summary>
     ///      Encapsulates the state of a DataGrid that changes when the
     ///      user navigates back and forth through ADO.NET data relations.
-    /// </devdoc>
+    /// </summary>
     internal sealed class DataGridState : ICloneable {
         // fields
         //
@@ -75,7 +75,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///      Called by a DataGrid when it wishes to preserve its
         ///      transient state in the current DataGridState object.
-        /// </devdoc>
+        /// </summary>
         public void PushState(DataGrid dataGrid) {
             this.DataSource = dataGrid.DataSource;
             this.DataMember = dataGrid.DataMember;
@@ -108,7 +108,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///      Called by a grid when it wishes to match its transient
         ///      state with the current DataGridState object.
-        /// </devdoc>
+        /// </summary>
         public void PullState(DataGrid dataGrid, bool createColumn) {
             // dataGrid.DataSource = DataSource;
             // dataGrid.DataMember = DataMember;
@@ -208,7 +208,7 @@ namespace System.Windows.Forms {
 
             /// <summary>
             ///      Navigate to the next or previous grid entry.
-            /// </devdoc>
+            /// </summary>
             public override AccessibleObject Navigate(AccessibleNavigation navdir) {
                 DataGridParentRows.DataGridParentRowsAccessibleObject parentAcc = (DataGridParentRows.DataGridParentRowsAccessibleObject)Parent;
 

@@ -11,12 +11,12 @@ namespace System.Windows.Forms
     /// <summary>
     /// This class contains the information a user needs to paint ListView
     /// column header (Details view only).
-    /// </devdoc>
+    /// </summary>
     public class DrawListViewColumnHeaderEventArgs : EventArgs 
     {
         /// <summary>
         /// Creates a new DrawListViewColumnHeaderEventArgs with the given parameters.
-        /// </devdoc>
+        /// </summary>
         public DrawListViewColumnHeaderEventArgs(Graphics graphics, Rectangle bounds, int columnIndex, 
                                                  ColumnHeader header, ListViewItemStates state,
                                                  Color foreColor, Color backColor, Font font)
@@ -33,52 +33,52 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Graphics object with which painting should be done.
-        /// </devdoc>
+        /// </summary>
         public Graphics Graphics { get; }
 
         /// <summary>
         /// The rectangle outlining the area in which the painting should be done.
-        /// </devdoc>
+        /// </summary>
         public Rectangle Bounds { get; }
 
         /// <summary>
         /// The index of this column. 
-        /// </devdoc>
+        /// </summary>
         public int ColumnIndex { get; }
 
         /// <summary>
         /// The header object.
-        /// </devdoc>
+        /// </summary>
         public ColumnHeader Header { get; }
 
         /// <summary>
         /// State information pertaining to the header.
-        /// </devdoc>
+        /// </summary>
         public ListViewItemStates State { get; }
 
         /// <summary>
         /// Color used to draw the header's text.
-        /// </devdoc>
+        /// </summary>
         public Color ForeColor { get; }
 
         /// <summary>
         /// Color used to draw the header's background.
-        /// </devdoc>
+        /// </summary>
         public Color BackColor { get; }
 
         /// <summary>
         /// Font used to render the header's text.
-        /// </devdoc>
+        /// </summary>
         public Font Font { get; }
         
         /// <summary>
         /// Causes the item do be drawn by the system instead of owner drawn.
-        /// </devdoc>
+        /// </summary>
         public bool DrawDefault { get; set; }
 
         /// <summary>
         /// Draws the header's background.
-        /// </devdoc>
+        /// </summary>
         public void DrawBackground()
         {
             if (Application.RenderWithVisualStyles)
@@ -117,7 +117,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Draws the header's text (overloaded) 
-        /// </devdoc>
+        /// </summary>
         public void DrawText()
         {
             HorizontalAlignment hAlign = Header.TextAlign;
@@ -131,7 +131,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Draws the header's text (overloaded) - takes a TextFormatFlags argument.
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")] // We want to measure the size of blank space so we don't have to localize it.
         public void DrawText(TextFormatFlags flags)
         {

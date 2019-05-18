@@ -6,6 +6,6 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Represents a method that will handle splitter events.
-    /// </devdoc>
+    /// </summary>
     public delegate void SplitterCancelEventHandler(object sender, SplitterCancelEventArgs e);
 }

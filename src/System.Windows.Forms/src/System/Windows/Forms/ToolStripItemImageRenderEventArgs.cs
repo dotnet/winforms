@@ -17,7 +17,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// This class represents all the information to render the ToolStrip
-        /// </devdoc>
+        /// </summary>
         public ToolStripItemImageRenderEventArgs(Graphics g, ToolStripItem item, Image image, Rectangle imageRectangle) : base(g, item)
         {
             Image = image;
@@ -26,22 +26,22 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// The image to draw
-        /// </devdoc>
+        /// </summary>
         public Image Image { get; }
 
 	    /// <summary>
 	    /// The rectangle to draw the Image in
-	    /// </devdoc>
+	    /// </summary>
 	    public Rectangle ImageRectangle { get; }
 
         /// <summary>
         /// Not public as it currently pertains to button &amp; system renderer.
-        /// </devdoc>
+        /// </summary>
         internal bool ShiftOnPress { get; set; }
 
         /// <summary>
         /// Not public as it currently pertains to ToolStripRenderer.
-        /// </devdoc>
+        /// </summary>
         internal ImageAttributes ImageAttributes { get; set; }
     }
 }

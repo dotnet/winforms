@@ -21,7 +21,7 @@ namespace System.Windows.Forms
     ///       that displays the control that allows the user to open a file. This class
     ///       cannot be inherited.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     [SRDescription(nameof(SR.DescriptionOpenFileDialog))]
     public sealed class OpenFileDialog : FileDialog
     {
@@ -31,7 +31,7 @@ namespace System.Windows.Forms
         ///       Gets or sets a value indicating whether the dialog box displays a
         ///       warning if the user specifies a file name that does not exist.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(true),
         SRDescription(nameof(SR.OFDcheckFileExistsDescr))
@@ -53,7 +53,7 @@ namespace System.Windows.Forms
         ///       Gets or sets a value
         ///       indicating whether the dialog box allows multiple files to be selected.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -76,7 +76,7 @@ namespace System.Windows.Forms
         ///       Gets or sets a value indicating whether
         ///       the read-only check box is selected.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -98,7 +98,7 @@ namespace System.Windows.Forms
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog contains a read-only check box.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -121,7 +121,7 @@ namespace System.Windows.Forms
         ///       Opens the file selected by the user with read-only permission.  The file
         ///       attempted is specified by the <see cref='System.Windows.Forms.FileDialog.FileName'/> property.
         ///    </para>
-        /// </devdoc>        
+        /// </summary>        
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
         public Stream OpenFile()
         {
@@ -138,7 +138,7 @@ namespace System.Windows.Forms
         ///    <para>
         ///       Resets all properties to their default values.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override void Reset()
         {
             base.Reset();
@@ -147,7 +147,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///     Displays a file open dialog.
-        /// </devdoc>
+        /// </summary>
         private protected override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn)
         {
             bool result = UnsafeNativeMethods.GetOpenFileName(ofn);

@@ -19,7 +19,7 @@ namespace System.Windows.Forms {
     ///    <para>
     ///       Represents a <see cref='System.Windows.Forms.Panel'/>
     ///       control.</para>
-    /// </devdoc>
+    /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -35,7 +35,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.Panel'/> class.</para>
-        /// </devdoc>
+        /// </summary>
         public Panel()
         : base() {
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
@@ -48,7 +48,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///    <para> Override to re-expose AutoSize.</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public override bool AutoSize
@@ -73,7 +73,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Allows the control to optionally shrink when AutoSize is true.
-        /// </devdoc>
+        /// </summary>
         [
         SRDescription(nameof(SR.ControlAutoSizeModeDescr)),
         SRCategory(nameof(SR.CatLayout)),        
@@ -107,7 +107,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para> Indicates the
         ///       border style for the control.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(BorderStyle.None),
@@ -138,7 +138,7 @@ namespace System.Windows.Forms {
         ///    can override this to provide extra functionality.  They should not,
         ///    however, forget to call base.getCreateParams() first to get the struct
         ///    filled up with the basic info.
-        /// </devdoc>
+        /// </summary>
         protected override CreateParams CreateParams {
             get {
                 CreateParams cp = base.CreateParams;
@@ -162,7 +162,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
+        /// </summary>
         protected override Size DefaultSize {
             get {
                 return new Size(200, 100);
@@ -200,7 +200,7 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         [DefaultValue(false)]
         new public bool TabStop {
             get {
@@ -212,7 +212,7 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
         public override string Text {
             get {
@@ -234,7 +234,7 @@ namespace System.Windows.Forms {
         ///       Inheriting controls should use this in favour of actually listening to
         ///       the event, but should not forget to call base.onResize() to
         ///       ensure that the event is still fired for external listeners.</para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnResize(EventArgs eventargs) {
             if (DesignMode && borderStyle == BorderStyle.None) {
                 Invalidate();
@@ -254,7 +254,7 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         private static string StringFromBorderStyle(BorderStyle value) {      
             Type borderStyleType = typeof(BorderStyle);
             return (ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D)) ? (borderStyleType.ToString() + "." + value.ToString()) : "[Invalid BorderStyle]";
@@ -262,7 +262,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Returns a string representation for this control.
-        /// </devdoc>
+        /// </summary>
         public override string ToString() {
 
             string s = base.ToString();

@@ -13,7 +13,7 @@ namespace System.Windows.Forms {
 
     /// <summary>
     ///      This class fully encapsulates the painting logic for a triangle.  (Used by DataGrid)
-    /// </devdoc>
+    /// </summary>
     internal static class Triangle {
         private const double TRI_HEIGHT_RATIO = 2.5;
         private const double TRI_WIDTH_RATIO  = 0.8;

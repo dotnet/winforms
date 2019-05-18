@@ -7,6 +7,6 @@ namespace System.Windows.Forms
     /// <summary>
     /// Represents a method that will handle the <see cref='System.Windows.Forms.Control.KeyPress'/>
     /// event of a <see cref='System.Windows.Forms.Control'/>.
-    /// </devdoc>
+    /// </summary>
     public delegate void KeyPressEventHandler(object sender, KeyPressEventArgs e);
 }

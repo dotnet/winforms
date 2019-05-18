@@ -12,7 +12,7 @@ namespace System.Experimental.Gdi
 {
     /// <summary>
     ///    Specifies the map-mode of a device context.
-    /// </devdoc>
+    /// </summary>
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
 #else

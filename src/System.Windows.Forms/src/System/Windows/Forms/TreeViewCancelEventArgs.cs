@@ -22,7 +22,7 @@ namespace System.Windows.Forms {
     ///       or <see cref='System.Windows.Forms.TreeView.OnBeforeSelect'/> event.
     ///
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     public class TreeViewCancelEventArgs : CancelEventArgs {
         private TreeNode node;
         private TreeViewAction action;

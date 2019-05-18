@@ -19,7 +19,7 @@ namespace System.Windows.Forms {
 
     /// <summary>
     /// <para>Represents the table drawn by the <see cref='System.Windows.Forms.DataGrid'/> control at run time.</para>
-    /// </devdoc>
+    /// </summary>
     [
     ToolboxItem(false),
     DesignTimeVisible(false),
@@ -131,7 +131,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// <para>[To be  supplied]</para>
-        /// </devdoc>
+        /// </summary>
         public event EventHandler AllowSortingChanged {
             add => Events.AddHandler(EventAllowSorting, value);
             remove => Events.RemoveHandler(EventAllowSorting, value);
@@ -1042,7 +1042,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataGridTableStyle'/> class.</para>
-        /// </devdoc>
+        /// </summary>
         public DataGridTableStyle(bool isDefaultTableStyle) {
             gridColumns = new GridColumnStylesCollection(this, isDefaultTableStyle);
             gridColumns.CollectionChanged += new CollectionChangeEventHandler(this.OnColumnCollectionChanged);
@@ -1055,7 +1055,7 @@ namespace System.Windows.Forms {
         /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataGridTableStyle'/> class with the specified
         /// <see cref='System.Windows.Forms.CurrencyManager'/>.</para>
-        /// </devdoc>
+        /// </summary>
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set the GridColumnStyles
                                                                                                     // it would be a breaking change.
@@ -1174,7 +1174,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///    <para>Gets the name of this grid table.</para>
-        /// </devdoc>
+        /// </summary>
         [Editor("System.Windows.Forms.Design.DataGridTableStyleMappingNameEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor)), DefaultValue("")]
         public string MappingName {
             get {
@@ -1208,7 +1208,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para>Gets the
         ///       list of relation objects for the grid table.</para>
-        /// </devdoc>
+        /// </summary>
         internal ArrayList RelationsList {
             get {
                 return relationsList;
@@ -1217,7 +1217,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///    <para>Gets the collection of columns drawn for this table.</para>
-        /// </devdoc>
+        /// </summary>
         [
         Localizable(true),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content)
@@ -1233,7 +1233,7 @@ namespace System.Windows.Forms {
         ///       Gets or sets the <see cref='System.Windows.Forms.DataGrid'/>
         ///       control displaying the table.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
 
         internal void SetInternalDataGrid(DataGrid dG, bool force)
         {
@@ -1251,7 +1251,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// <para>Gets or sets the <see cref='System.Windows.Forms.DataGrid'/> control for the drawn table.</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
         public virtual DataGrid DataGrid {
             get {
@@ -1265,7 +1265,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para>Gets or sets a value indicating whether columns can be
         ///       edited.</para>
-        /// </devdoc>
+        /// </summary>
         [DefaultValue(false)]
         public virtual bool ReadOnly {
             get {
@@ -1290,7 +1290,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///    <para>Requests an edit operation.</para>
-        /// </devdoc>
+        /// </summary>
         public bool BeginEdit(DataGridColumnStyle gridColumn, int rowNumber) {
             DataGrid grid = this.DataGrid;
             if (grid == null)
@@ -1302,7 +1302,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para> Requests an end to an edit
         ///       operation.</para>
-        /// </devdoc>
+        /// </summary>
         public bool EndEdit(DataGridColumnStyle gridColumn, int rowNumber, bool shouldAbort) {
             DataGrid grid = this.DataGrid;
             if (grid == null)
@@ -1352,7 +1352,7 @@ namespace System.Windows.Forms {
         ///      The DataColumnCollection class actually wires up this
         ///      event handler to the PropertyChanged events of
         ///      a DataGridTable's columns.
-        /// </devdoc>
+        /// </summary>
         internal void OnColumnChanged(object sender, PropertyChangedEvent event) {
             if (event.PropertyName.Equals("Visible"))
                 GenerateVisibleColumnsCache();

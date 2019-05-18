@@ -59,7 +59,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         /// <summary>
         /// The set of attributes that will be used for browse filtering
-        /// </devdoc>
+        /// </summary>
         public override AttributeCollection BrowsableAttributes {
             get {
                 if (browsableAttributes == null) {
@@ -176,7 +176,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// <summary>
         ///     Retrieves the keyword that the VS help dynamic help window will
         ///     use when this IPE is selected.
-        /// </devdoc>
+        /// </summary>
         public override string HelpKeyword {
             get {
                 
@@ -211,7 +211,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// <summary>
         /// Gets or sets the value for the property that is represented 
         /// by this GridEntry.
-        /// </devdoc>
+        /// </summary>
         public override object PropertyValue{
             get {
                 return objValue;
@@ -258,7 +258,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         /// <summary>
         /// Reset the Browsable attributes to the default (BrowsableAttribute.Yes)
-        /// </devdoc>
+        /// </summary>
         public void ResetBrowsableAttributes() {
             this.browsableAttributes = new AttributeCollection(new Attribute[]{BrowsableAttribute.Yes});
         }
@@ -266,7 +266,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         /// <summary>
         /// Sets the value of this GridEntry from text
-        /// </devdoc>
+        /// </summary>
         public virtual void ShowCategories(bool fCategories) {
             if (((this.PropertySort &= PropertySort.Categorized) !=0) != fCategories) {
                 

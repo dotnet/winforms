@@ -9,7 +9,7 @@ namespace System.Windows.Forms
     /// <summary>
     /// Specifies a value that determines the IME (Input Method Editor) status
     /// of the object when that object is selected.
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
     public enum ImeMode
     {
@@ -17,28 +17,28 @@ namespace System.Windows.Forms
         /// Inherit (Default). This value indicates inherit the ImeMode from the
         /// parent control. For controls with no parent, the ImeMode will default
         /// to NoControl.
-        /// </devdoc>
+        /// </summary>
         Inherit = -1,
 
         /// <summary>
         /// None. This value indicates "No control to IME". When the IMEMode
         /// property is set to 0, you can use the IMEStatus function to determine
         /// the current IME status.
-        /// </devdoc>
+        /// </summary>
         NoControl = 0,
 
         /// <summary>
         /// IME on. This value indicates that the IME is on and characters specific
         /// to Chinese or Japanese can be entered. This setting is valid for
         /// Japanese, Simplified Chinese, and Traditional Chinese IME only.
-        /// </devdoc>
+        /// </summary>
         On = 1,
 
         /// <summary>
         /// IME off. This mode indicates that the IME is off, meaning that the
         /// object behaves the same as English entry mode. This setting is valid
         /// for Japanese, Simplified Chinese, and Traditional Chinese IME only.
-        /// </devdoc>
+        /// </summary>
         Off = 2,
 
         /// <summary>
@@ -46,55 +46,55 @@ namespace System.Windows.Forms
         /// disables IME. With this setting, the users cannot turn the IME on from
         /// the keyboard, and the IME floating window is hidden. This setting is
         /// valid for Japanese IME only.
-        /// </devdoc>
+        /// </summary>
         Disable = 3,
 
         /// <summary>
         /// Hiragana double-byte characters (DBC). This setting is valid for
         /// Japanese IME only.
-        /// </devdoc>
+        /// </summary>
         Hiragana = 4,
 
         /// <summary>
         /// Katakana DBC. This setting is valid for Japanese IME only.
-        /// </devdoc>
+        /// </summary>
         Katakana = 5,
 
         /// <summary>
         /// Katakana single-byte characters (SBC). This setting is valid for
         /// Japanese IME only.
-        /// </devdoc>
+        /// </summary>
         KatakanaHalf = 6,
 
         /// <summary>
         /// Alphanumeric DBC. This setting is valid for Japanese IME only.
-        /// </devdoc>
+        /// </summary>
         AlphaFull = 7,
 
         /// <summary>
         /// Alphanumeric SBC. This setting is valid for Japanese IME only.
-        /// </devdoc>
+        /// </summary>
         Alpha = 8,
 
         /// <summary>
         /// Hangeul DBC. This setting is valid for Korean IME only.
-        /// </devdoc>
+        /// </summary>
         HangulFull = 9,
 
         /// <summary>
         /// Hangeul SBC. This setting is valid for Korean IME only.
-        /// </devdoc>
+        /// </summary>
         Hangul = 10,
 
         /// <summary>
         /// Ime Closed. This setting is valid for Chinese IME only.
-        /// </devdoc>
+        /// </summary>
         Close = 11,
 
         /// <summary>
         /// Ime On HalfShape. This setting is valid for Chinese IME only.
         /// Note: This value is for internal use only - See QFE 4448.
-        /// </devdoc>
+        /// </summary>
         OnHalf = 12,
     }
 }

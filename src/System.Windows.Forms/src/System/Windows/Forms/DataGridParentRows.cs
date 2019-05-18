@@ -238,7 +238,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///      Adds a DataGridState object to the top of the list of parents.
-        /// </devdoc>
+        /// </summary>
         internal void AddParent(DataGridState dgs) {
             CurrencyManager childDataSource = (CurrencyManager) dataGrid.BindingContext[dgs.DataSource, dgs.DataMember];
             parents.Add(dgs);
@@ -273,7 +273,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///      Retrieves the top most parent in the list of parents.
-        /// </devdoc>
+        /// </summary>
         internal DataGridState GetTopParent() {
             if (parentsCount < 1) {
                 return null;
@@ -283,14 +283,14 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///      Determines if there are any parent rows contained in this object.
-        /// </devdoc>
+        /// </summary>
         internal bool IsEmpty() {
             return parentsCount == 0;
         }
 
         /// <summary>
         ///      Similar to GetTopParent() but also removes it.
-        /// </devdoc>
+        /// </summary>
         internal DataGridState PopTop() {
             if (parentsCount < 1) {
                 return null;
@@ -523,7 +523,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///      Paints the parent rows
-        /// </devdoc>
+        /// </summary>
         internal void Paint(Graphics g, Rectangle visualbounds, bool alignRight) {
             Rectangle bounds = visualbounds;
             // Paint the border around our bounds
@@ -960,7 +960,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///      Draws on the screen the text. It is used only to paint the Table Name and the column Names
         ///      Returns the width of bounding rectangle that was passed in
-        /// </devdoc>
+        /// </summary>
         private int PaintText(Graphics g, Rectangle textBounds, string text, Font font, bool bold, bool alignToRight) {
             Font textFont = font;
             if (bold)
@@ -1109,7 +1109,7 @@ namespace System.Windows.Forms {
             /// <summary>
             ///      Returns the currently focused child, if any.
             ///      Returns this if the object itself is focused.
-            /// </devdoc>
+            /// </summary>
             public override AccessibleObject GetFocused() {
                 return null;
             }
@@ -1148,7 +1148,7 @@ namespace System.Windows.Forms {
 
             /// <summary>
             ///      Navigate to the next or previous grid entry.
-            /// </devdoc>
+            /// </summary>
             public override AccessibleObject Navigate(AccessibleNavigation navdir) {
                 switch (navdir) {
                     case AccessibleNavigation.Right:

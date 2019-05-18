@@ -7,27 +7,27 @@ namespace System.Windows.Forms
     /// <summary>
     //// Specifies the type of scroll arrow to create on a scroll bar.
     ////
-    /// </devdoc>
+    /// </summary>
     public enum ScrollButton
     {
         /// <summary>
         //// A down-scroll arrow.
-        /// </devdoc>
+        /// </summary>
         Down = NativeMethods.DFCS_SCROLLDOWN,
 
         /// <summary>
         //// A left-scroll arrow.
-        /// </devdoc>
+        /// </summary>
         Left = NativeMethods.DFCS_SCROLLLEFT,
 
         /// <summary>
         //// A right-scroll arrow.
-        /// </devdoc>
+        /// </summary>
         Right = NativeMethods.DFCS_SCROLLRIGHT,
 
         /// <summary>
         //// An up-scroll arrow.
-        /// </devdoc>
+        /// </summary>
         Up = NativeMethods.DFCS_SCROLLUP,
 
         Min = NativeMethods.DFCS_SCROLLUP,

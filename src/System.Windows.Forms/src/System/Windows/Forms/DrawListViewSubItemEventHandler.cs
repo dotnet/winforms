@@ -6,6 +6,6 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Handler for the ListView's DrawSubItem event. 
-    /// </devdoc>
+    /// </summary>
     public delegate void DrawListViewSubItemEventHandler(object sender, DrawListViewSubItemEventArgs e);
 }

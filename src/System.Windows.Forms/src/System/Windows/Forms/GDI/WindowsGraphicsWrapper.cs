@@ -15,7 +15,7 @@ namespace System.Windows.Forms
     ///     created from a Graphics object in the same way as one created from any other IDeviceContext object,
     ///     which could be a custom one.
     ///     This class was designed to help TextRenderer determine how to create the underlying WindowsGraphics.
-    /// </devdoc>
+    /// </summary>
     internal sealed class WindowsGraphicsWrapper : IDisposable
     {
         IDeviceContext idc;
@@ -34,7 +34,7 @@ namespace System.Windows.Forms
         ///     3. It is a custom IDeviceContext object:
         ///        In this case we create the WindowsGraphics from the native DC by calling IDeviceContext.GetHdc,
         ///        on dispose we need to call IDeviceContext.ReleaseHdc.
-        /// </devdoc>
+        /// </summary>
         
         
         public WindowsGraphicsWrapper( IDeviceContext idc, TextFormatFlags flags)

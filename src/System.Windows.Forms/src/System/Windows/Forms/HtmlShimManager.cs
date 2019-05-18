@@ -16,7 +16,7 @@ namespace System.Windows.Forms {
     ///
     ///  When a HtmlWindow unloads we prune our list of corresponding document, window, and element shims.
     ///
-    /// </devdoc>
+    /// </summary>
     internal sealed class HtmlShimManager :IDisposable {
 
             private Dictionary<HtmlWindow, HtmlWindow.HtmlWindowShim> htmlWindowShims;
@@ -28,7 +28,7 @@ namespace System.Windows.Forms {
 
             /// <summary> AddDocumentShim - adds a HtmlDocumentShim to list of shims to manage 
             ///   Can create a WindowShim as a side effect so it knows when to self prune from the list.
-            ///</devdoc>
+            ///</summary>
             public void AddDocumentShim(HtmlDocument doc) {
                HtmlDocument.HtmlDocumentShim shim = null;
                
@@ -48,7 +48,7 @@ namespace System.Windows.Forms {
            }
     
             /// <summary> AddWindowShim - adds a HtmlWindowShim to list of shims to manage 
-            ///</devdoc>
+            ///</summary>
 
             public void AddWindowShim(HtmlWindow window) {
                 HtmlWindow.HtmlWindowShim shim = null;
@@ -69,7 +69,7 @@ namespace System.Windows.Forms {
 
             /// <summary> AddElementShim - adds a HtmlDocumentShim to list of shims to manage 
             ///   Can create a WindowShim as a side effect so it knows when to self prune from the list.
-            ///</devdoc>
+            ///</summary>
             public void AddElementShim(HtmlElement element) {
                 HtmlElement.HtmlElementShim shim = null;
 
@@ -134,7 +134,7 @@ namespace System.Windows.Forms {
             /// <summary>
             /// HtmlWindowShim calls back on us when it has unloaded the page.  At this point we need to 
             /// walk through our lists and make sure we've cleaned up
-            /// </devdoc>
+            /// </summary>
             internal void OnWindowUnloaded(HtmlWindow unloadedWindow) {
                 Debug.Assert(unloadedWindow != null, "Why are we calling this with a null window?");
                 if (unloadedWindow != null) {

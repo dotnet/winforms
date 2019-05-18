@@ -12,7 +12,7 @@ namespace System.Windows.Forms {
 
 
     /// <summary>
-    /// </devdoc>
+    /// </summary>
     internal sealed class MdiWindowDialog : Form {
         private System.Windows.Forms.ListBox itemList;
         private System.Windows.Forms.Button okButton;
@@ -38,7 +38,7 @@ namespace System.Windows.Forms {
 
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         private class ListItem {
             public Form form;
 
@@ -81,7 +81,7 @@ namespace System.Windows.Forms {
         ///     NOTE: The following code is required by the Windows Forms
         ///     designer.  It can be modified using the form editor.  Do not
         ///     modify it using the code editor.
-        /// </devdoc>
+        /// </summary>
 
         private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MdiWindowDialog));

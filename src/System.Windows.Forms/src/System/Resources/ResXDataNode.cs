@@ -28,7 +28,7 @@ namespace System.Resources {
 
     /// <summary>
     ///    
-    /// </devdoc>
+    /// </summary>
     [Serializable]
     public sealed class ResXDataNode : ISerializable {
 
@@ -66,7 +66,7 @@ namespace System.Resources {
 
         // <summary>
         // this is a deep clone
-        //</devdoc>
+        //</summary>
         internal ResXDataNode DeepClone() {
             return new ResXDataNode
             {
@@ -87,7 +87,7 @@ namespace System.Resources {
             
         /// <summary>
         ///    
-        /// </devdoc>        
+        /// </summary>        
         public ResXDataNode(string name, object value) : this(name, value, null) {
         }
 
@@ -120,7 +120,7 @@ namespace System.Resources {
         
         /// <summary>
         ///    
-        /// </devdoc>  
+        /// </summary>  
         public ResXDataNode(string name, ResXFileRef fileRef) : this(name, fileRef, null) {
         }
 
@@ -175,7 +175,7 @@ namespace System.Resources {
 
         /// <summary>
         ///    
-        /// </devdoc>
+        /// </summary>
         public string Comment {
             get {
                 string result = comment;
@@ -191,7 +191,7 @@ namespace System.Resources {
 
         /// <summary>
         ///    
-        /// </devdoc>
+        /// </summary>
         public string Name {
             get {
                 string result = name;
@@ -217,7 +217,7 @@ namespace System.Resources {
         
         /// <summary>
         ///    
-        /// </devdoc>
+        /// </summary>
         public ResXFileRef FileRef {
             get {
                 if(FileRefFullPath == null) {
@@ -478,7 +478,7 @@ namespace System.Resources {
         /// <summary>
         ///    Might return the position in the resx file of the current node, if known
         ///    otherwise, will return Point(0,0) since point is a struct 
-        /// </devdoc>
+        /// </summary>
         public Point GetNodePosition()
         {
             return nodeInfo?.ReaderPosition ?? new Point();
@@ -487,7 +487,7 @@ namespace System.Resources {
         /// <summary>
         ///    Get the FQ type name for this datanode.
         ///    We return typeof(object) for ResXNullRef
-        /// </devdoc>
+        /// </summary>
         public string GetValueTypeName(ITypeResolutionService typeResolver) {
             // the type name here is always a FQN
             if(!string.IsNullOrEmpty(typeName))
@@ -549,14 +549,14 @@ namespace System.Resources {
 
         /// <summary>
         ///    Get the FQ type name for this datanode
-        /// </devdoc>
+        /// </summary>
         public string GetValueTypeName(AssemblyName[] names) {
             return GetValueTypeName(new AssemblyNamesTypeResolutionService(names));
         }
 
         /// <summary>
         ///    Get the value contained in this datanode
-        /// </devdoc>
+        /// </summary>
         public object GetValue(ITypeResolutionService typeResolver) {
 
             if(value != null) {
@@ -593,7 +593,7 @@ namespace System.Resources {
 
         /// <summary>
         ///    Get the value contained in this datanode
-        /// </devdoc>
+        /// </summary>
         public object GetValue(AssemblyName[] names) {
             return GetValue(new AssemblyNamesTypeResolutionService(names));
         }
@@ -654,7 +654,7 @@ namespace System.Resources {
 
         /// <summary>
         ///    Get the value contained in this datanode
-        /// </devdoc>        
+        /// </summary>        
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) {
             DataNodeInfo nodeInfo = GetDataNodeInfo();
             si.AddValue("Name", nodeInfo.Name, typeof(string));
@@ -936,7 +936,7 @@ namespace System.Resources {
 
         /// <summary>
         /// This is matching %windir%\Microsoft.NET\Framework*, so both 32bit and 64bit framework will be covered.
-        /// </devdoc>
+        /// </summary>
         private bool IsNetFrameworkAssembly(string assemblyPath)
         {
             return assemblyPath != null && assemblyPath.StartsWith(NetFrameworkPath, StringComparison.OrdinalIgnoreCase);

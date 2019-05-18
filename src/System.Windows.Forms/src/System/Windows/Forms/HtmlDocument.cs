@@ -368,7 +368,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///    <para>Executes a command on the document</para>
-        /// </devdoc>
+        /// </summary>
         public void ExecCommand(string command, bool showUI, object value)
         {
             this.NativeHtmlDocument2.ExecCommand(command, showUI, value);
@@ -527,7 +527,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///    <para>Occurs when the mouse leaves the document</para>
-        /// </devdoc>
+        /// </summary>
         public event HtmlElementEventHandler MouseLeave
         {
             add => DocumentShim.AddHandler(EventMouseLeave, value);
@@ -646,7 +646,7 @@ namespace System.Windows.Forms
         ///                                 for a method named DISPID=0.  For each event that's subscribed, we create 
         ///                                 a new HtmlToClrEventProxy, detect the callback and fire the corresponding
         ///                                 CLR event.
-        ///</devdoc>      
+        ///</summary>      
         internal class HtmlDocumentShim : HtmlShim
         {
             private AxHost.ConnectionPointCookie cookie;

@@ -12,12 +12,12 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Provides methods and fields to manage the input language.
-    /// </devdoc>
+    /// </summary>
     public sealed class InputLanguage
     {
         /// <summary>
         /// The HKL handle.
-        /// </devdoc>
+        /// </summary>
         private readonly IntPtr handle;
 
         internal InputLanguage(IntPtr handle)
@@ -27,12 +27,12 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Returns the culture of the current input language.
-        /// </devdoc>
+        /// </summary>
         public CultureInfo Culture => new CultureInfo((int)handle & 0xFFFF);
 
         /// <summary>
         /// Gets or sets the input language for the current thread.
-        /// </devdoc>
+        /// </summary>
         public static InputLanguage CurrentInputLanguage
         {
             get
@@ -59,7 +59,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Returns the default input language for the system.
-        /// </devdoc>
+        /// </summary>
         public static InputLanguage DefaultInputLanguage
         {
             get
@@ -72,12 +72,12 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Returns the handle for the input language.
-        /// </devdoc>
+        /// </summary>
         public IntPtr Handle => handle;
 
         /// <summary>
         /// Returns a list of all installed input languages.
-        /// </devdoc>
+        /// </summary>
         public static InputLanguageCollection InstalledInputLanguages
         {
             get
@@ -100,7 +100,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Returns the name of the current keyboard layout as it appears in the Windows
         /// Regional Settings on the computer.
-        /// </devdoc>
+        /// </summary>
         public string LayoutName
         {
             get
@@ -274,7 +274,7 @@ namespace System.Windows.Forms
         /// SHLoadIndirectString API (only on OSVersions >= 5).  Returning
         /// null from this method will force us to use the legacy codepath
         /// (pulling the text directly from the registry).
-        /// </devdoc>
+        /// </summary>
         private static string GetLocalizedKeyboardLayoutName(string layoutDisplayName)
         {
             if (layoutDisplayName != null)
@@ -292,7 +292,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Creates an InputLanguageChangedEventArgs given a windows message.
-        /// </devdoc>
+        /// </summary>
         internal static InputLanguageChangedEventArgs CreateInputLanguageChangedEventArgs(Message m)
         {
             return new InputLanguageChangedEventArgs(new InputLanguage(m.LParam), unchecked((byte)(long)m.WParam));
@@ -300,7 +300,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Creates an InputLanguageChangingEventArgs given a windows message.
-        /// </devdoc>
+        /// </summary>
         internal static InputLanguageChangingEventArgs CreateInputLanguageChangingEventArgs(Message m)
         {
             InputLanguage inputLanguage = new InputLanguage(m.LParam);
@@ -312,7 +312,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Specifies whether two input languages are equal.
-        /// </devdoc>
+        /// </summary>
         public override bool Equals(object value)
         {
             return (value is InputLanguage other) && (this.handle == other.handle);
@@ -320,7 +320,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Returns the input language associated with the specified culture.
-        /// </devdoc>
+        /// </summary>
         public static InputLanguage FromCulture(CultureInfo culture)
         {
             if (culture == null)
@@ -345,7 +345,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Hash code for this input language.
-        /// </devdoc>
+        /// </summary>
         public override int GetHashCode() => unchecked((int)(long)handle);
 
         private static string PadWithZeroes(string input, int length)

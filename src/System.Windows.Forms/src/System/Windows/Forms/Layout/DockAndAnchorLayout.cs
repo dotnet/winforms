@@ -532,7 +532,7 @@ namespace System.Windows.Forms.Layout {
         ///     Updates the Anchor information based on the controls current bounds.
         ///     This should only be called when the parent control changes or the
         ///     anchor mode changes.
-        /// </devdoc>
+        /// </summary>
         private static void UpdateAnchorInfo(IArrangedElement element) {
             Debug.Assert(!HasCachedBounds(element.Container),
                 "Do not call this method with an active cached bounds list.");

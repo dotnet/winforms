@@ -6,22 +6,22 @@ namespace System.Windows.Forms
 {
     /// <summary>
     ///   Specifies the border style of a panel on the <see cref='System.Windows.Forms.StatusBar'/>.
-    /// </devdoc>
+    /// </summary>
     public enum StatusBarPanelBorderStyle
     {
         /// <summary>
         /// No border.
-        /// </devdoc>
+        /// </summary>
         None = 1,
 
         /// <summary>
         /// A raised border.
-        /// </devdoc>
+        /// </summary>
         Raised = 2,
 
         /// <summary>
         /// A sunken border.
-        /// </devdoc>
+        /// </summary>
         Sunken = 3,
     }
 }

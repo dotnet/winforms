@@ -13,19 +13,19 @@ namespace System.Windows.Forms.PropertyGridInternal {
     /// <summary>
     ///     This class contains the set of menu commands our property browser
     ///     uses.
-    /// </devdoc>
+    /// </summary>
     public class PropertyGridCommands{
 
         /// <summary>
         ///      This guid corresponds to the menu grouping windows forms will use for its menus.  This is
         ///      defined in the windows forms menu CTC file, but we need it here so we can define what
         ///      context menus to use.
-        /// </devdoc>
+        /// </summary>
         protected static readonly Guid wfcMenuGroup = new Guid("{a72bd644-1979-4cbc-a620-ea4112198a66}");
 
         /// <summary>
         ///     This guid corresponds to the windows forms command set.
-        /// </devdoc>
+        /// </summary>
         protected static readonly Guid wfcMenuCommand = new Guid("{5a51cf82-7619-4a5d-b054-47f438425aa7}");
 
         public static readonly CommandID Reset          = new CommandID(wfcMenuCommand, 0x3000);

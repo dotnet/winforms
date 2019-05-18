@@ -7,7 +7,7 @@ namespace System.Windows.Forms
     /// <summary>
     /// Determines when changes to a data-bound control property get propagated
     /// back to the corresponding data source property.
-    /// </devdoc>
+    /// </summary>
     public enum DataSourceUpdateMode
     {
         /// <summary>
@@ -16,14 +16,14 @@ namespace System.Windows.Forms
         /// input focus leaves the control. After validation, the value in the
         /// control property will also be re-formatted.
         /// This is the default update mode.
-        /// </devdoc>
+        /// </summary>
         OnValidation = 0,
 
         /// <summary>
         /// Data source is updated whenever the control property changes (and also
         /// updated again during validation). After validation, the value in the
         /// control property will also be re-formatted.
-        /// </devdoc>
+        /// </summary>
         OnPropertyChanged = 1,
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace System.Windows.Forms
         /// the data source. Values entered into the control are *not* parsed,
         /// validated or re-formatted. To force the data source to be updated,
         /// use the Binding.WriteValue method.
-        /// </devdoc>
+        /// </summary>
         Never = 2,
     }
 }

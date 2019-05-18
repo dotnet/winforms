@@ -9,7 +9,7 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Identifies an element in the dataGridView (base class for TCell, TBand, TRow, TColumn.
-    /// </devdoc>
+    /// </summary>
     public class DataGridViewElement 
     {
         private DataGridViewElementStates _state; // enabled frozen readOnly resizable selected visible
@@ -17,7 +17,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewElement'/> class.
-        /// </devdoc>
+        /// </summary>
         public DataGridViewElement()
         {
             _state = DataGridViewElementStates.Visible;

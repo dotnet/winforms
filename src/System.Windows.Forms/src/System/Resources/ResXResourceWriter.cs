@@ -22,7 +22,7 @@ namespace System.Resources {
     /// <summary>
     ///     ResX resource writer. See the text in "ResourceSchema" for more 
     ///     information.
-    /// </devdoc>
+    /// </summary>
     public class ResXResourceWriter : IResourceWriter {
         internal const string TypeStr = "type";
         internal const string NameStr = "name";
@@ -124,12 +124,12 @@ namespace System.Resources {
         
         /// <summary>
         ///     Base Path for ResXFileRefs.
-        /// </devdoc>
+        /// </summary>
         public string BasePath { get; set; }
 
         /// <summary>
         ///     Creates a new ResXResourceWriter that will write to the specified file.
-        /// </devdoc>
+        /// </summary>
         public ResXResourceWriter(string fileName) {
             this.fileName = fileName;
         }
@@ -140,7 +140,7 @@ namespace System.Resources {
 
         /// <summary>
         ///     Creates a new ResXResourceWriter that will write to the specified stream.
-        /// </devdoc>
+        /// </summary>
         public ResXResourceWriter(Stream stream) {
             this.stream = stream;
         }
@@ -151,7 +151,7 @@ namespace System.Resources {
 
         /// <summary>
         ///     Creates a new ResXResourceWriter that will write to the specified TextWriter.
-        /// </devdoc>
+        /// </summary>
         public ResXResourceWriter(TextWriter textWriter) {
             this.textWriter = textWriter;
         }
@@ -246,7 +246,7 @@ namespace System.Resources {
 
         /// <summary>
         ///    Adds aliases to the resource file...
-        /// </devdoc>
+        /// </summary>
         public virtual void AddAlias(string aliasName, AssemblyName assemblyName) {
            if (assemblyName == null) {
                throw new ArgumentNullException(nameof(assemblyName));
@@ -263,7 +263,7 @@ namespace System.Resources {
         /// <summary>
         ///    Adds the given value to the collection of metadata.  These name/value pairs 
         ///    will be emitted to the <metadata> elements in the .resx file.
-        /// </devdoc>
+        /// </summary>
         public void AddMetadata(string name, byte[] value) {
             AddDataRow(MetadataStr, name, value);
         }
@@ -271,7 +271,7 @@ namespace System.Resources {
         /// <summary>
         ///    Adds the given value to the collection of metadata.  These name/value pairs 
         ///    will be emitted to the <metadata> elements in the .resx file.
-        /// </devdoc>
+        /// </summary>
         public void AddMetadata(string name, string value) {
             AddDataRow(MetadataStr, name, value);
         }
@@ -279,14 +279,14 @@ namespace System.Resources {
         /// <summary>
         ///    Adds the given value to the collection of metadata.  These name/value pairs 
         ///    will be emitted to the <metadata> elements in the .resx file.
-        /// </devdoc>
+        /// </summary>
         public void AddMetadata(string name, object value) {
             AddDataRow(MetadataStr, name, value);
         }
 
         /// <summary>
         ///     Adds a blob resource to the resources.
-        /// </devdoc>
+        /// </summary>
         // NOTE: Part of IResourceWriter - not protected by class level LinkDemand.
         public void AddResource(string name, byte[] value) {
             AddDataRow(DataStr, name, value);
@@ -296,7 +296,7 @@ namespace System.Resources {
         ///     Adds a resource to the resources. If the resource is a string,
         ///     it will be saved that way, otherwise it will be serialized
         ///     and stored as in binary.
-        /// </devdoc>
+        /// </summary>
         // NOTE: Part of IResourceWriter - not protected by class level LinkDemand.
         public void AddResource(string name, object value) {
             if (value is ResXDataNode node) {
@@ -309,7 +309,7 @@ namespace System.Resources {
 
         /// <summary>
         ///     Adds a string resource to the resources.
-        /// </devdoc>
+        /// </summary>
         // NOTE: Part of IResourceWriter - not protected by class level LinkDemand.
         public void AddResource(string name, string value) {
             AddDataRow(DataStr, name, value);
@@ -317,7 +317,7 @@ namespace System.Resources {
 
         /// <summary>
         ///     Adds a string resource to the resources.
-        /// </devdoc>
+        /// </summary>
         public void AddResource(ResXDataNode node) {
             // we're modifying the node as we're adding it to the resxwriter
             // this is BAD, so we clone it. adding it to a writer doesnt change it
@@ -341,7 +341,7 @@ namespace System.Resources {
 
         /// <summary>
         ///     Adds a blob resource to the resources.
-        /// </devdoc>
+        /// </summary>
         private void AddDataRow(string elementName, string name, byte[] value) {
             AddDataRow(elementName, name, ToBase64WrappedString(value), TypeNameWithAssembly(typeof(byte[])), null, null);
         }
@@ -350,7 +350,7 @@ namespace System.Resources {
         ///     Adds a resource to the resources. If the resource is a string,
         ///     it will be saved that way, otherwise it will be serialized
         ///     and stored as in binary.
-        /// </devdoc>
+        /// </summary>
         private void AddDataRow(string elementName, string name, object value)
         {
             Debug.WriteLineIf(ResValueProviderSwitch.TraceVerbose, "  resx: adding resource " + name);
@@ -381,7 +381,7 @@ namespace System.Resources {
 
         /// <summary>
         ///     Adds a string resource to the resources.
-        /// </devdoc>
+        /// </summary>
         private void AddDataRow(string elementName, string name, string value)
         {
             // if it's a null string, set it here as a resxnullref
@@ -395,7 +395,7 @@ namespace System.Resources {
         /// <summary>
         ///     Adds a new row to the Resources table. This helper is used because
         ///     we want to always late bind to the columns for greater flexibility.
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         private void AddDataRow(string elementName, string name, string value, string type, string mimeType, string comment) {
             if (hasBeenSaved)
@@ -497,7 +497,7 @@ namespace System.Resources {
 
         /// <summary>
         ///     Closes any files or streams locked by the writer.
-        /// </devdoc>
+        /// </summary>
         // NOTE: Part of IResourceWriter - not protected by class level LinkDemand.
         public void Close() {
             Dispose();
@@ -571,7 +571,7 @@ namespace System.Resources {
 
         /// <summary>
         ///     Writes the resources out to the file or stream.
-        /// </devdoc>
+        /// </summary>
         // NOTE: Part of IResourceWriter - not protected by class level LinkDemand.
         public void Generate() {
             if (hasBeenSaved)

@@ -22,7 +22,7 @@ namespace System.Windows.Forms {
     /// <summary>
     ///    <para>Represents a
     ///       Windows button.</para>
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true),
      ClassInterface(ClassInterfaceType.AutoDispatch),
      SRDescription(nameof(SR.DescriptionButton)),
@@ -33,7 +33,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     The dialog result that will be sent to the parent dialog form when
         ///     we are clicked.
-        /// </devdoc>
+        /// </summary>
         private DialogResult dialogResult;
 
         private const int InvalidDimensionValue = int.MinValue;
@@ -41,7 +41,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     For buttons whose FaltStyle = FlatStyle.Flat, this property specifies the size, in pixels  
         ///     of the border around the button.
-        /// </devdoc>
+        /// </summary>
         private Size systemSize = new Size(InvalidDimensionValue, InvalidDimensionValue);
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace System.Windows.Forms {
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.Button'/>
         ///       class.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public Button() : base() {
             // Buttons shouldn't respond to right clicks, so we need to do all our own click logic
             SetStyle(ControlStyles.StandardClick |
@@ -59,7 +59,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Allows the control to optionally shrink when AutoSize is true.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
         Browsable(true),
@@ -136,7 +136,7 @@ namespace System.Windows.Forms {
         ///       correctly.
         ///
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override CreateParams CreateParams {
             get {
                 CreateParams cp = base.CreateParams;
@@ -160,7 +160,7 @@ namespace System.Windows.Forms {
         ///       parent form when the button
         ///       is clicked.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(DialogResult.None),
@@ -183,7 +183,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseEnter'/> event.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnMouseEnter(EventArgs e) {
             base.OnMouseEnter(e);
         }
@@ -192,7 +192,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseLeave'/> event.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnMouseLeave(EventArgs e) {
             base.OnMouseLeave(e);
         }
@@ -218,7 +218,7 @@ namespace System.Windows.Forms {
         ///       accordingly.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public virtual void NotifyDefault(bool value) {
             if (IsDefault != value) {
                 IsDefault = value;                
@@ -234,7 +234,7 @@ namespace System.Windows.Forms {
         ///       other recipients do actually get the event.
         ///
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnClick(EventArgs e) {
             Form form = FindForm();
             if (form != null) form.DialogResult = dialogResult;
@@ -258,7 +258,7 @@ namespace System.Windows.Forms {
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnMouseUp'/> event.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent) {
             if (mevent.Button == MouseButtons.Left && MouseIsPressed) {
                 bool isMouseDown = base.MouseIsDown;
@@ -307,7 +307,7 @@ namespace System.Windows.Forms {
         ///       Generates a <see cref='System.Windows.Forms.Control.Click'/> event for a
         ///       button.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void PerformClick() {
             if (CanSelect) {
                 bool validatedControlAllowsFocusChange;
@@ -330,7 +330,7 @@ namespace System.Windows.Forms {
         ///       remains unchanged.
         ///
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected internal override bool ProcessMnemonic(char charCode) {
             if (UseMnemonic && CanProcessMnemonic() && IsMnemonic(charCode, Text)) {
                 PerformClick();
@@ -344,7 +344,7 @@ namespace System.Windows.Forms {
         ///       Provides some interesting information for the Button control in
         ///       String form.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override string ToString() {
 
             string s = base.ToString();
@@ -355,7 +355,7 @@ namespace System.Windows.Forms {
         ///     The button's window procedure.  Inheriting classes can override this
         ///     to add extra functionality, but should not forget to call
         ///     base.wndProc(m); to ensure the button continues to function properly.
-        /// </devdoc>
+        /// </summary>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_COMMAND:

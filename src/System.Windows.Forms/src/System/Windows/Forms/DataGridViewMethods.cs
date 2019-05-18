@@ -1474,7 +1474,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///    <para>Assigns a new parent control to the DataGridView.</para>
-        /// </devdoc>
+        /// </summary>
         internal override void AssignParent(Control value)
         {
             if (this.toolTipControl.Activated)
@@ -4137,7 +4137,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///      Determines which column is the first visible scrolling 
         ///      column given the object's horizontalOffset.
-        /// </devdoc>
+        /// </summary>
         private int ComputeFirstVisibleScrollingColumn() 
         {
             if (this.Columns.GetColumnsWidth(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen) >= this.layout.Data.Width)
@@ -5359,7 +5359,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///     Constructs the new instance of the Columns collection objects. Subclasses
         ///     should not call base.CreateColumnsInstance.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual DataGridViewColumnCollection CreateColumnsInstance()
         {
@@ -5369,7 +5369,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///     Constructs the new instance of the Rows collection objects. Subclasses
         ///     should not call base.CreateRowsInstance.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual DataGridViewRowCollection CreateRowsInstance()
         {
@@ -5679,7 +5679,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///      Draws an XOR region to give UI feedback for Column Resizing.
         ///      This looks just like the Splitter control's UI when resizing.
-        /// </devdoc>
+        /// </summary>
         private void DrawColSplitBar(int mouseX)
         {
             Rectangle r = CalcColResizeFeedbackRect(mouseX);
@@ -5689,7 +5689,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///      Draws an XOR region to give UI feedback for Row Resizing.
         ///      This looks just like the Splitter control's UI when resizing.
-        /// </devdoc>
+        /// </summary>
         private void DrawRowSplitBar(int mouseY)
         {
             Rectangle r = CalcRowResizeFeedbackRect(mouseY);
@@ -5718,7 +5718,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///      Draws an XOR region to give UI feedback for Column/Row Resizing.
         ///      This looks just like the Splitter control's UI when resizing.
-        /// </devdoc>
+        /// </summary>
         private void DrawSplitBar(Rectangle r)
         {
             IntPtr parentHandle = this.Handle;
@@ -8447,7 +8447,7 @@ namespace System.Windows.Forms
         ///      this.negOffset value, or because the column may start to the right of
         ///      data area, or behind the frozen area, or completely on the left of the control.
         ///      The right edge is returned in RightToLeft mode.
-        /// </devdoc>
+        /// </summary>
         internal int GetColumnXFromIndex(int index)
         {
             Debug.Assert(index < this.Columns.Count);
@@ -9204,7 +9204,7 @@ namespace System.Windows.Forms
         ///      the row does not need to be completely visible on the display area.
         ///      Value returned is not necessarily within layout.Data because the row 
         ///      may start below the data area.
-        /// </devdoc>
+        /// </summary>
         internal int GetRowYFromIndex(int index)
         {
             Debug.Assert(index >= 0 && index < this.Rows.Count);
@@ -9900,7 +9900,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///      Invalidate the painting region for the column specified.
-        /// </devdoc>
+        /// </summary>
         public void InvalidateColumn(int columnIndex)
         {
             if (columnIndex < 0 || columnIndex >= this.Columns.Count)
@@ -9934,7 +9934,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///      Invalidates the scrollable area of the DataGridView.
-        /// </devdoc>
+        /// </summary>
         private void InvalidateInside() 
         {
             if (this.IsHandleCreated)
@@ -9945,7 +9945,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///      Invalidate the painting region for the row specified.
-        /// </devdoc>
+        /// </summary>
         public void InvalidateRow(int rowIndex)
         {
             if (rowIndex < 0 || rowIndex >= this.Rows.Count)
@@ -10232,7 +10232,7 @@ namespace System.Windows.Forms
         ///      Determines if Scrollbars should be visible,
         ///      updates their bounds and the bounds of all
         ///      other regions in the dataGridView's Layout.
-        /// </devdoc>
+        /// </summary>
         private void LayoutScrollBars() 
         {
             SuspendLayout();
@@ -20349,7 +20349,7 @@ namespace System.Windows.Forms
         ///       Gets or sets a value that indicates whether a key should be processed
         ///       further.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override bool ProcessDialogKey(Keys keyData)
         {
             Keys key = (keyData & Keys.KeyCode);
@@ -21705,7 +21705,7 @@ namespace System.Windows.Forms
         ///     Sorts the current column.
         ///     'UseLegacyAccessibilityFeatures2' accessibility switch 
         ///     should be set to false to enable the feature.
-        /// </devdoc>
+        /// </summary>
         protected bool ProcessF3Key(Keys keyData)
         {
             if (this.ptCurrentCell.X != -1)
@@ -24229,7 +24229,7 @@ namespace System.Windows.Forms
         ///    <para>
         ///       Gets a value indicating whether the Tab key should be processed.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected bool ProcessTabKey(Keys keyData)
         {
             if (this.StandardTab)
@@ -24330,7 +24330,7 @@ namespace System.Windows.Forms
         ///    <para>
         ///       Processes keys for dataGridView navigation.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected virtual bool ProcessDataGridViewKey(KeyEventArgs e) 
         {
             switch (e.KeyCode)
@@ -25615,7 +25615,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///      Re-initializes all tracking related state.
-        /// </devdoc>
+        /// </summary>
         private void ResetTrackingState()
         {
             if (this.IsKeyboardOperationActive())
@@ -25690,7 +25690,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///      Re-initializes all UI related state.
-        /// </devdoc>
+        /// </summary>
         internal void ResetUIState(bool useRowShortcut, bool computeVisibleRows)
         {
             PerformLayoutPrivate(useRowShortcut, computeVisibleRows, true /*invalidInAdjustFillingColumns*/, !useRowShortcut /*repositionEditingControl*/);
@@ -29487,7 +29487,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///     Handles the WM_CONTEXTMENU message
-        /// </devdoc>
+        /// </summary>
         internal override void WmContextMenu(ref Message m) 
         {
             ContextMenuStrip contextMenuStrip;
@@ -29551,7 +29551,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///     Handles the WM_GETDLGCODE message
-        /// </devdoc>
+        /// </summary>
         private void WmGetDlgCode(ref Message m)
         {
             m.Result = (IntPtr)((long)m.Result | NativeMethods.DLGC_WANTARROWS | NativeMethods.DLGC_WANTCHARS);

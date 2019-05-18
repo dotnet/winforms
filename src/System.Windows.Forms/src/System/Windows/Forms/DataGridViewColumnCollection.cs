@@ -17,7 +17,7 @@ namespace System.Windows.Forms
     /// <summary>
     /// <para>Represents a collection of <see cref='System.Windows.Forms.DataGridViewColumn'/> objects in the <see cref='System.Windows.Forms.DataGrid'/> 
     /// control.</para>
-    /// </devdoc>
+    /// </summary>
     [
         ListBindable(false),
         SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable"), // Columns are only disposed in the designer.
@@ -161,7 +161,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///      Retrieves the DataGridViewColumn with the specified index.
-        /// </devdoc>
+        /// </summary>
         public DataGridViewColumn this[int index]
         {
             get
@@ -172,7 +172,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///      Retrieves the DataGridViewColumn with the Name provided.
-        /// </devdoc>
+        /// </summary>
         public DataGridViewColumn this[string columnName]
         {
             get
@@ -214,7 +214,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// <para>Adds a <see cref='System.Windows.Forms.DataGridViewColumn'/> to this collection.</para>
-        /// </devdoc>
+        /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual int Add(string columnName, string headerText)
         {
@@ -227,7 +227,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// <para>Adds a <see cref='System.Windows.Forms.DataGridViewColumn'/> to this collection.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual int Add(DataGridViewColumn dataGridViewColumn)
         {
             Debug.Assert(this.DataGridView != null);
@@ -407,7 +407,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///      Checks to see if a DataGridViewColumn is contained in this collection.
-        /// </devdoc>
+        /// </summary>
         public virtual bool Contains(DataGridViewColumn dataGridViewColumn)
         {
             return this.items.IndexOf(dataGridViewColumn) != -1;
@@ -898,7 +898,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// <para>Inserts a <see cref='System.Windows.Forms.DataGridViewColumn'/> in this collection.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual void Insert(int columnIndex, DataGridViewColumn dataGridViewColumn)
         {
             Debug.Assert(this.DataGridView != null);

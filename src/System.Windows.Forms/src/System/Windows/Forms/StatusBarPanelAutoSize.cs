@@ -6,24 +6,24 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Specifies how a panel on a status bar changes when the status bar resizes.
-    /// </devdoc>
+    /// </summary>
     public enum StatusBarPanelAutoSize
     {
         /// <summary>
         /// The panel does not change its size when the status bar resizes.
-        /// </devdoc>
+        /// </summary>
         None = 1,
 
         /// <summary>
         /// The panel shares the available status bar space (the space not taken
         /// up by panels with the <see langword='None'/> and <see langword='Contents'/>
         /// settings) with other panels that have the <see langword='Spring'/> setting.
-        /// </devdoc>
+        /// </summary>
         Spring = 2,
 
         /// <summary>
         /// The width of the panel is determined by its contents.
-        /// </devdoc>
+        /// </summary>
         Contents = 3,
     }
 }

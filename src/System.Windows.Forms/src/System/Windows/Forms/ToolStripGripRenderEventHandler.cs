@@ -6,6 +6,6 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Called when the background of a ToolStrip item is being rendered
-    /// </devdoc>
+    /// </summary>
     public delegate void ToolStripGripRenderEventHandler(object sender, ToolStripGripRenderEventArgs e);
 }

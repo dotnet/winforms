@@ -20,7 +20,7 @@ namespace System.Windows.Forms {
     ///     Represents an empty control that can be used in the Forms Designer to create other  controls.   By extending form, UserControl inherits all of
     ///     the standard positioning and mnemonic handling code that is necessary
     ///     in a user control.
-    /// </devdoc>
+    /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -37,7 +37,7 @@ namespace System.Windows.Forms {
         ///    Creates a new UserControl object. A vast majority of people
         ///    will not want to instantiate this class directly, but will be a
         ///    sub-class of it.
-        /// </devdoc>
+        /// </summary>
         public UserControl() {
             SetScrollState(ScrollStateAutoScrolling, false);
             SetState(STATE_VISIBLE, true);
@@ -47,7 +47,7 @@ namespace System.Windows.Forms {
         
         /// <summary>
         ///    <para> Override to re-expose AutoSize.</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public override bool AutoSize
@@ -64,7 +64,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///    <para> Re-expose AutoSizeChanged.</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public new event EventHandler AutoSizeChanged {
             add => base.AutoSizeChanged += value;
@@ -73,7 +73,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Allows the control to optionally shrink when AutoSize is true.
-        /// </devdoc>
+        /// </summary>
         [
         SRDescription(nameof(SR.ControlAutoSizeModeDescr)),
         SRCategory(nameof(SR.CatLayout)),
@@ -110,7 +110,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Indicates whether controls in this container will be automatically validated when the focus changes.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(true),
         EditorBrowsable(EditorBrowsableState.Always),
@@ -137,7 +137,7 @@ namespace System.Windows.Forms {
         ///    <para> 
         ///       Indicates the borderstyle for the UserControl.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(BorderStyle.None),
@@ -169,7 +169,7 @@ namespace System.Windows.Forms {
         ///    however, forget to call base.getCreateParams() first to get the struct
         ///    filled up with the basic info.This is required as we now need to pass the 
         ///    styles for appropriate BorderStyle that is set by the user.
-        /// </devdoc>
+        /// </summary>
         protected override CreateParams CreateParams {
             get {
                 CreateParams cp = base.CreateParams;
@@ -192,7 +192,7 @@ namespace System.Windows.Forms {
         
         /// <summary>
         ///     The default size for this user control.
-        /// </devdoc>
+        /// </summary>
         protected override Size DefaultSize {
             get {
                 return new Size(150, 150);
@@ -201,7 +201,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///    <para>Occurs before the control becomes visible.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.UserControlOnLoadDescr))]
         public event EventHandler Load {
             add => Events.AddHandler(EVENT_LOAD, value);
@@ -232,7 +232,7 @@ namespace System.Windows.Forms {
         ///     Validates all selectable child controls in the container, including descendants. This is
         ///     equivalent to calling ValidateChildren(ValidationConstraints.Selectable). See <see cref='ValidationConstraints.Selectable'/>
         ///     for details of exactly which child controls will be validated.
-        /// </devdoc>
+        /// </summary>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public override bool ValidateChildren() {
             return base.ValidateChildren();
@@ -241,7 +241,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Validates all the child controls in the container. Exactly which controls are
         ///     validated and which controls are skipped is determined by <paramref name="flags"/>.
-        /// </devdoc>
+        /// </summary>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public override bool ValidateChildren(ValidationConstraints validationConstraints) {
             return base.ValidateChildren(validationConstraints);
@@ -262,7 +262,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///    <para> Raises the CreateControl event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnCreateControl() {
             base.OnCreateControl();
@@ -272,7 +272,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///    <para>The Load event is fired before the control becomes visible for the first time.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnLoad(EventArgs e) {
             // There is no good way to explain this event except to say
@@ -283,7 +283,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     OnResize override to invalidate entire control in Stetch mode
-        /// </devdoc>
+        /// </summary>
         protected override void OnResize(EventArgs e) {
             base.OnResize(e);
             if (BackgroundImage != null) {

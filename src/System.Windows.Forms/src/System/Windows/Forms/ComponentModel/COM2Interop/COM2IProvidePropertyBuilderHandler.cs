@@ -59,7 +59,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <summary>
         /// Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing.   HideProperty
         /// such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
-        /// </devdoc>
+        /// </summary>
         private void OnGetBaseAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent) {
             NativeMethods.IProvidePropertyBuilder target = sender.TargetObject as NativeMethods.IProvidePropertyBuilder;
 

@@ -8,26 +8,26 @@ namespace System.Windows.Forms
     {
         /// <summary>
         /// A standard, three-dimensional button.
-        /// </devdoc>
+        /// </summary>
         PushButton = 1,
 
         /// <summary>
         /// A toggle button that appears sunken when clicked and retains the
         /// sunken appearance until clicked again.
-        /// </devdoc>
+        /// </summary>
         ToggleButton = 2,
 
         /// <summary>
         /// A space or line between toolbar buttons. The appearance depends on
         /// the value of the <see cref='System.Windows.Forms.ToolBar.Appearance'/>
         /// property.
-        /// </devdoc>
+        /// </summary>
         Separator = 3,
 
         /// <summary>
         /// A drop down control that displays a menu or other window when
         /// clicked.
-        /// </devdoc>
+        /// </summary>
         DropDownButton = 4,
     }
 }

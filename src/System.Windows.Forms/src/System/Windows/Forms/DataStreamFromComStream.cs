@@ -12,7 +12,7 @@ namespace System.Windows.Forms
 
 
     /// <summary>
-    /// </devdoc>
+    /// </summary>
     internal class DataStreamFromComStream : Stream
     {
 

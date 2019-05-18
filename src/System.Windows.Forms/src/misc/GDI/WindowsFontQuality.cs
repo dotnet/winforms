@@ -12,7 +12,7 @@ namespace System.Experimental.Gdi
 {
     /// <summary>
     ///    Device capability indexes - See Win32 GetDeviceCaps().
-    /// </devdoc>
+    /// </summary>
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
 #else
@@ -37,13 +37,13 @@ namespace System.Experimental.Gdi
 
         /// <summary>
         /// Font is never antialiased.
-        /// </devdoc>
+        /// </summary>
         NonAntiAliased = IntNativeMethods.NONANTIALIASED_QUALITY,
 
         /// <summary>
         /// Font is always antialiased if the font supports it and the size of the font is not
         /// too small or too large. 
-        /// </devdoc>
+        /// </summary>
         AntiAliased = IntNativeMethods.ANTIALIASED_QUALITY,
 
         /// <summary>

@@ -27,7 +27,7 @@ namespace System.Windows.Forms {
     ///     commonly used by other controls, such as the ListView, TreeView, or
     ///     Toolbar.  You can add either bitmaps or Icons to the ImageList, and the
     ///     other controls will be able to use the Images as they desire.
-    /// </devdoc>
+    /// </summary>
     [
     Designer("System.Windows.Forms.Design.ImageListDesigner, " + AssemblyRef.SystemDesign),
     ToolboxItemFilter("System.Windows.Forms"),
@@ -76,7 +76,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Creates a new ImageList Control with a default image size of 16x16
         ///     pixels
-        /// </devdoc>
+        /// </summary>
         public ImageList() { // DO NOT DELETE -- AUTOMATION BP 1
             if (!isScalingInitialized) {
                 if (DpiHelper.IsScalingRequired) {
@@ -90,7 +90,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Creates a new ImageList Control with a default image size of 16x16
         ///     pixels and adds the ImageList to the passed in container.
-        /// </devdoc>
+        /// </summary>
         public ImageList(IContainer container) : this() {
             if (container == null) {
                 throw new ArgumentNullException(nameof(container));
@@ -148,7 +148,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Retrieves the color depth of the imagelist.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.ImageListColorDepthDescr))
@@ -186,7 +186,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     The handle of the ImageList object.  This corresponds to a win32
         ///     HIMAGELIST Handle.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -203,7 +203,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Whether or not the underlying Win32 handle has been created.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -230,7 +230,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Returns the size of the images in the ImageList
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
@@ -270,7 +270,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Returns an ImageListStreamer, or null if the image list is empty.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DefaultValue(null),
@@ -359,7 +359,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     The color to treat as transparent.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.ImageListTransparentColorDescr))
@@ -478,7 +478,7 @@ namespace System.Windows.Forms {
         ///     Creates the underlying HIMAGELIST handle, and sets up all the
         ///     appropriate values with it.  Inheriting classes overriding this method
         ///     should not forget to call base.createHandle();
-        /// </devdoc>
+        /// </summary>
         private void CreateHandle() {
             Debug.Assert(nativeImageList == null, "Handle already created, this may be a source of temporary GDI leaks");
 
@@ -548,7 +548,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Frees all resources assocaited with this component.
-        /// </devdoc>
+        /// </summary>
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 if(originals != null) { // we might own some of the stuff that's not been created yet
@@ -566,7 +566,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Draw the image indicated by the given index on the given Graphics
         ///     at the given location.
-        /// </devdoc>
+        /// </summary>
         public void Draw(Graphics g, Point pt, int index) {
             Draw(g, pt.X, pt.Y, index);
         }
@@ -574,7 +574,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Draw the image indicated by the given index on the given Graphics
         ///     at the given location.
-        /// </devdoc>
+        /// </summary>
         public void Draw(Graphics g, int x, int y, int index) {
             Draw(g, x, y, imageSize.Width, imageSize.Height, index);
         }
@@ -583,7 +583,7 @@ namespace System.Windows.Forms {
         ///     Draw the image indicated by the given index using the location, size
         ///     and raster op code specified.  The image is stretched or compressed as
         ///     necessary to fit the bounds provided.
-        /// </devdoc>
+        /// </summary>
         public void Draw(Graphics g, int x, int y, int width, int height, int index) {
             if (index < 0 || index >= Images.Count)
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
@@ -646,7 +646,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Returns the image specified by the given index.  The bitmap returned is a
         ///     copy of the original image.
-        /// </devdoc>
+        /// </summary>
         // NOTE: forces handle creation, so doesn't return things from the original list
         
         private Bitmap GetBitmap(int index) {
@@ -746,7 +746,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Called when the Handle property changes.
-        /// </devdoc>
+        /// </summary>
         private void OnRecreateHandle(EventArgs eventargs) {
             if (recreateHandler != null) {
                 recreateHandler(this, eventargs);
@@ -766,7 +766,7 @@ namespace System.Windows.Forms {
         ///     control doesn't support, such as stretching images or copying images from
         ///     different image lists.  Since bitmap creation is expensive, the same instance
         ///     of the temporary Bitmap is reused.
-        /// </devdoc>
+        /// </summary>
         private void PutImageInTempBitmap(int index, bool useSnapshot) {
             Debug.Assert(!useSnapshot || himlTemp != 0, "Where's himlTemp?");
 
@@ -849,7 +849,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Returns a string representation for this control.
-        /// </devdoc>
+        /// </summary>
         public override string ToString() {
             string s = base.ToString();
             if (Images != null) {
@@ -960,7 +960,7 @@ namespace System.Windows.Forms {
             /// <summary>
             ///  <para>Returns the keys in the image list - images without keys return String.Empty.
             ///  </para>
-            /// </devdoc>
+            /// </summary>
             public StringCollection Keys {
                 get {
                     // pass back a copy of the current state.
@@ -1043,7 +1043,7 @@ namespace System.Windows.Forms {
 
             /// <summary>
             ///      Determines if the ImageList has any images, without forcing a handle creation.
-            /// </devdoc>
+            /// </summary>
             public bool Empty {
                 get  {
                     return Count == 0;
@@ -1119,7 +1119,7 @@ namespace System.Windows.Forms {
 
             /// <summary>
             ///     <para>Retrieves the child control with the specified key.</para>
-            /// </devdoc>
+            /// </summary>
             public Image this[string key] {
                 
                 
@@ -1144,7 +1144,7 @@ namespace System.Windows.Forms {
 
             /// <summary>
             ///     <para>Adds an image to the end of the image list with a key accessor.</para>
-            /// </devdoc>
+            /// </summary>
             public void Add(string key, Image image) {
                 Debug.Assert((this.Count == imageInfoCollection.Count), "The count of these two collections should be equal.");
 
@@ -1160,7 +1160,7 @@ namespace System.Windows.Forms {
 
             /// <summary>
             ///     <para>Adds an icon to the end of the image list with a key accessor.</para>
-            /// </devdoc>
+            /// </summary>
             public void Add(string key, Icon icon) {
                 Debug.Assert((this.Count == imageInfoCollection.Count), "The count of these two collections should be equal.");
 
@@ -1196,7 +1196,7 @@ namespace System.Windows.Forms {
 
             /// <summary>
             ///     Add the given image to the ImageList.
-            /// </devdoc>
+            /// </summary>
             public void Add(Image value) {
                 if (value == null) {
                     throw new ArgumentNullException(nameof(value));
@@ -1209,7 +1209,7 @@ namespace System.Windows.Forms {
             ///     Add the given image to the ImageList, using the given color
             ///     to generate the mask. The number of images to add is inferred from
             ///     the width of the given image.
-            /// </devdoc>
+            /// </summary>
             public int Add(Image value, Color transparentColor) {
                 if (value == null) {
                     throw new ArgumentNullException(nameof(value));
@@ -1288,7 +1288,7 @@ namespace System.Windows.Forms {
             /// <summary>
             ///     Add an image strip the given image to the ImageList.  A strip is a single Image
             ///     which is treated as multiple images arranged side-by-side.
-            /// </devdoc>
+            /// </summary>
             public int AddStrip(Image value) {
 
                 if (value == null) {
@@ -1311,7 +1311,7 @@ namespace System.Windows.Forms {
 
             /// <summary>
             ///     Remove all images and masks from the ImageList.
-            /// </devdoc>
+            /// </summary>
             public void Clear() {
                 AssertInvariant();
                 if (owner.originals != null)
@@ -1341,7 +1341,7 @@ namespace System.Windows.Forms {
 
             /// <summary>
             ///     <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
-            /// </devdoc>
+            /// </summary>
             public bool ContainsKey(string key) {
                return IsValidIndex(IndexOfKey(key));
             }
@@ -1363,7 +1363,7 @@ namespace System.Windows.Forms {
            /// <summary>
            ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase,
            ///           if found; otherwise, -1.</para>
-           /// </devdoc>
+           /// </summary>
            public int  IndexOfKey(string key) {
                 // Step 0 - Arg validation
                 if ((key == null) || (key.Length == 0)){
@@ -1402,7 +1402,7 @@ namespace System.Windows.Forms {
 
             /// <summary>
             ///     <para>Determines if the index is valid for the collection.</para>
-            /// </devdoc>
+            /// </summary>
             private bool IsValidIndex(int index) {
                 return ((index >= 0) && (index < this.Count));
             }
@@ -1456,7 +1456,7 @@ namespace System.Windows.Forms {
 
           /// <summary>
           ///     <para>Removes the child control with the specified key.</para>
-          /// </devdoc>
+          /// </summary>
           public void RemoveByKey(string key) {
                 int index = IndexOfKey(key);
                 if (IsValidIndex(index)) {
@@ -1466,7 +1466,7 @@ namespace System.Windows.Forms {
 
             /// <summary>
             ///     <para>Sets/Resets the key accessor for an image already in the image list.</para>
-            /// </devdoc>
+            /// </summary>
             public void SetKeyName(int index, string name) {
                 if (!IsValidIndex(index)) {
                     throw new IndexOutOfRangeException(); // 
@@ -1502,7 +1502,7 @@ namespace System.Windows.Forms {
         ///    <para>Gets a value indicating
         ///       whether this object supports properties using the
         ///       specified context.</para>
-        /// </devdoc>
+        /// </summary>
         public override bool GetPropertiesSupported(ITypeDescriptorContext context) {
             return true;
         }

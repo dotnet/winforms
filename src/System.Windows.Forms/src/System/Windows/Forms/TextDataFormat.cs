@@ -7,7 +7,7 @@ namespace System.Windows.Forms
     /// <summary>
     /// Specifies the formats that can be used with Clipboard.GetText and
     /// Clipboard.SetText methods
-    /// </devdoc>
+    /// </summary>
     public enum TextDataFormat
     {
         Text,

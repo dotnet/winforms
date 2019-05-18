@@ -8,12 +8,12 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// This class contains the information a user needs to paint TreeView nodes.
-    /// </devdoc>
+    /// </summary>
     public class DrawTreeNodeEventArgs : EventArgs
     {
         /// <summary>
         /// Creates a new DrawTreeNodeEventArgs with the given parameters.
-        /// </devdoc>
+        /// </summary>
         public DrawTreeNodeEventArgs(Graphics graphics, TreeNode node, Rectangle bounds, TreeNodeStates state)
         {
             Graphics = graphics;
@@ -24,28 +24,28 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Graphics object with which painting should be done.
-        /// </devdoc>
+        /// </summary>
         public Graphics Graphics { get; }
 
         /// <summary>
         /// The node to be painted.
-        /// </devdoc>
+        /// </summary>
         public TreeNode Node { get; }
 
         /// <summary>
         /// The rectangle outlining the area in which the painting should be done.
-        /// </devdoc>
+        /// </summary>
         public Rectangle Bounds { get; }
 
         /// <summary>
         /// Miscellaneous state information.
-        /// </devdoc>
+        /// </summary>
         public TreeNodeStates State { get; }
         
         /// <summary>
         /// Causes the item do be drawn by the system instead of owner drawn.
         /// NOTE: In OwnerDrawText mode, setting this to true is same as calling DrawText.
-        /// </devdoc>
+        /// </summary>
         public bool DrawDefault { get; set; }
     }
 }

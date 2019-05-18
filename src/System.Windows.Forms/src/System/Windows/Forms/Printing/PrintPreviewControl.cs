@@ -23,7 +23,7 @@ namespace System.Windows.Forms {
     ///       Most PrintPreviewControl's are found on PrintPreviewDialog's,
     ///       but they don't have to be.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultProperty(nameof(Document))]
@@ -59,7 +59,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.PrintPreviewControl'/> class.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public PrintPreviewControl() {
             ResetBackColor();
             ResetForeColor();
@@ -88,7 +88,7 @@ namespace System.Windows.Forms {
         ///       Gets or sets a value If true (the default), resizing the control or changing the number of pages shown
         ///       will automatically adjust Zoom to make everything visible.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
@@ -109,7 +109,7 @@ namespace System.Windows.Forms {
         ///       Gets or sets a value indicating the document to preview.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(null),
@@ -128,7 +128,7 @@ namespace System.Windows.Forms {
         ///       Gets or sets the number of pages
         ///       displayed horizontally across the screen.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(1),
         SRCategory(nameof(SR.CatLayout)),
@@ -152,7 +152,7 @@ namespace System.Windows.Forms {
         ///       If a subclass overrides this function, it must call the base implementation.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override CreateParams CreateParams {
             get {
                 CreateParams cp = base.CreateParams;
@@ -164,7 +164,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     The virtual coordinate of the upper left visible pixel.
-        /// </devdoc>
+        /// </summary>
 
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -184,7 +184,7 @@ namespace System.Windows.Forms {
         ///       Gets or sets the number of pages
         ///       displayed vertically down the screen.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(1),
         SRDescription(nameof(SR.PrintPreviewRowsDescr)),
@@ -207,7 +207,7 @@ namespace System.Windows.Forms {
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
         ///     control placement and text will be from right to left.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
@@ -249,7 +249,7 @@ namespace System.Windows.Forms {
         ///       Gets or sets the page number of the upper left page.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(0),
         SRDescription(nameof(SR.PrintPreviewStartPageDescr)),
@@ -288,7 +288,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     How big the control would be if the screen was infinitely large.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
@@ -307,7 +307,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Gets or sets a value indicating how large the pages will appear.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.PrintPreviewZoomDescr)),
@@ -446,7 +446,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Refreshes the preview of the document.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void InvalidatePreview() {
             pageInfo = null;
             InvalidateLayout();
@@ -456,7 +456,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Invalidate the layout, if necessary.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnResize(EventArgs eventargs) {
             InvalidateLayout();
             base.OnResize(eventargs);
@@ -492,7 +492,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Paints the control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnPaint(PaintEventArgs pevent) {
             Brush backBrush = new SolidBrush(BackColor);
 
@@ -651,7 +651,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Resets the back color to the defaults for the PrintPreviewControl.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override void ResetBackColor() {
             BackColor = SystemColors.AppWorkspace;
@@ -659,7 +659,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Resets the back color to the defaults for the PrintPreviewControl.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override void ResetForeColor() {
             ForeColor = Color.White;
@@ -667,7 +667,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     WM_HSCROLL handler
-        /// </devdoc>
+        /// </summary>
 
         private void WmHScroll(ref Message m) {
 
@@ -728,7 +728,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     WM_VSCROLL handler
-        /// </devdoc>
+        /// </summary>
 
         private void WmVScroll(ref Message m) {
 
@@ -750,7 +750,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Handles the WM_KEYDOWN message.
-        /// </devdoc>
+        /// </summary>
         //added to handle keyboard events
         //
         private void WmKeyDown(ref Message msg) {
@@ -884,7 +884,7 @@ namespace System.Windows.Forms {
         ///       Indicates whether the <see cref='System.Windows.Forms.Control.BackColor'/> property should be
         ///       persisted.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         internal override bool ShouldSerializeBackColor() {
             return !BackColor.Equals(SystemColors.AppWorkspace);
         }
@@ -894,7 +894,7 @@ namespace System.Windows.Forms {
         ///       Indicates whether the <see cref='System.Windows.Forms.Control.ForeColor'/> property should be
         ///       persisted.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         internal override bool ShouldSerializeForeColor() {
             return !ForeColor.Equals(Color.White);
         }

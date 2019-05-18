@@ -10,7 +10,7 @@ namespace System.Windows.Forms
     {
         /// <summary>
         /// This class represents all the information to render the ToolStrip
-        /// </devdoc>
+        /// </summary>
         public ToolStripItemRenderEventArgs(Graphics g, ToolStripItem item)
         {
             Graphics = g;
@@ -19,17 +19,17 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// The graphics object to draw with
-        /// </devdoc>
+        /// </summary>
         public Graphics Graphics { get; }
 
         /// <summary>
         /// The item to draw
-        /// </devdoc>
+        /// </summary>
         public ToolStripItem Item { get; }
         
 	    /// <summary>
 	    /// The toolstrip the item is currently parented to
-	    /// </devdoc>
+	    /// </summary>
         public ToolStrip ToolStrip => Item.ParentInternal;
     }
 }

@@ -17,7 +17,7 @@ namespace System.Windows.Forms
 
     /// <summary>
     ///    <para>Identifies a button cell in the dataGridView.</para>
-    /// </devdoc>
+    /// </summary>
     public class DataGridViewButtonCell : DataGridViewCell
     {
         private static readonly int PropButtonCellFlatStyle = PropertyStore.CreateKey();

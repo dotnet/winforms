@@ -15,7 +15,7 @@ namespace System.Windows.Forms {
     /// <summary>
     /// <para>Represents the child version of the System.Windows.Forms.ListManager
     /// that is used when a parent/child relationship exists in a System.Windows.Forms.DataSet.</para>
-    /// </devdoc>
+    /// </summary>
     internal class RelatedCurrencyManager : CurrencyManager {
 
         BindingManagerBase parentManager;
@@ -91,14 +91,14 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///    <para>Gets the properties of the item.</para>
-        /// </devdoc>
+        /// </summary>
         public override PropertyDescriptorCollection GetItemProperties() {
             return GetItemProperties(null);
         }
 
         // <summary>
         //    <para>Gets the name of the list.</para>
-        // </devdoc>
+        // </summary>
         internal override string GetListName() {
             string name = GetListName(new ArrayList());
             if (name.Length > 0) {
@@ -109,7 +109,7 @@ namespace System.Windows.Forms {
         
         /// <summary>
         ///    <para>Gets the name of the specified list.</para>
-        /// </devdoc>
+        /// </summary>
         protected internal override string GetListName(ArrayList listAccessors) {
             listAccessors.Insert(0, fieldInfo);
             return parentManager.GetListName(listAccessors);

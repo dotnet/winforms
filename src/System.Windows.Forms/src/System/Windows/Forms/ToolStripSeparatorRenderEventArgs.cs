@@ -8,12 +8,12 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// This class represents all the information to render the ToolStrip
-    /// </devdoc>
+    /// </summary>
     public class ToolStripSeparatorRenderEventArgs : ToolStripItemRenderEventArgs
     {
         /// <summary>
         /// This class represents all the information to render the ToolStrip
-        /// </devdoc>
+        /// </summary>
         public ToolStripSeparatorRenderEventArgs(Graphics g, ToolStripSeparator separator, bool vertical) : base(g, separator)
         {
             Vertical = vertical;

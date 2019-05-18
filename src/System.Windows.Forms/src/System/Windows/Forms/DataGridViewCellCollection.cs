@@ -15,7 +15,7 @@ namespace System.Windows.Forms
     /// <summary>
     /// <para>Represents a collection of <see cref='System.Windows.Forms.DataGridViewCell'/> objects in the <see cref='System.Windows.Forms.DataGridView'/> 
     /// control.</para>
-    /// </devdoc>
+    /// </summary>
     [
         ListBindable(false),
         SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface") // Consider adding an IList<DataGridViewCellCollection> implementation
@@ -118,7 +118,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///      Retrieves the DataGridViewCell with the specified index.
-        /// </devdoc>
+        /// </summary>
         public DataGridViewCell this[int index]
         {
             get
@@ -172,7 +172,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///      Retrieves the DataGridViewCell with the specified column name.
-        /// </devdoc>
+        /// </summary>
         public DataGridViewCell this[string columnName]
         {
             get
@@ -211,7 +211,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// <para>Adds a <see cref='System.Windows.Forms.DataGridViewCell'/> to this collection.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual int Add(DataGridViewCell dataGridViewCell)
         {
             if (this.owner.DataGridView != null)
@@ -307,7 +307,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///      Checks to see if a DataGridViewCell is contained in this collection.
-        /// </devdoc>
+        /// </summary>
         public virtual bool Contains(DataGridViewCell dataGridViewCell)
         {
             int index = this.items.IndexOf(dataGridViewCell);

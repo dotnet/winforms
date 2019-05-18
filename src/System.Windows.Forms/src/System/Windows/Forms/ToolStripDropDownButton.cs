@@ -12,7 +12,7 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// A ToolStripButton that can display a popup.
-    /// </devdoc>
+    /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip | ToolStripItemDesignerAvailability.StatusStrip)]
     public class ToolStripDropDownButton : ToolStripDropDownItem
     {
@@ -21,7 +21,7 @@ namespace System.Windows.Forms
             
         /// <summary>
         /// Constructs a ToolStripButton that can display a popup.
-        /// </devdoc>
+        /// </summary>
         public ToolStripDropDownButton() {
             Initialize();
         }
@@ -84,7 +84,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Creates an instance of the object that defines how image and text
         /// gets laid out in the ToolStripItem
-        /// </devdoc>
+        /// </summary>
         internal override ToolStripItemInternalLayout CreateInternalLayout() {
             return new ToolStripDropDownButtonInternalLayout(this);
         }
@@ -97,14 +97,14 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Called by all constructors of ToolStripButton.
-        /// </devdoc>
+        /// </summary>
         private void Initialize() {
             SupportsSpaceKey = true;            
         }
                 
         /// <summary>
         /// Overriden to invoke displaying the popup.
-        /// </devdoc>
+        /// </summary>
         protected override void OnMouseDown(MouseEventArgs e) {
             if ((Control.ModifierKeys != Keys.Alt) &&
                 (e.Button == MouseButtons.Left)) {
@@ -141,7 +141,7 @@ namespace System.Windows.Forms
         }
         /// <summary>
         /// Inheriting classes should override this method to handle this event.
-        /// </devdoc>
+        /// </summary>
         protected override void OnPaint(System.Windows.Forms.PaintEventArgs e) {        
                 
             if (this.Owner != null) {
@@ -188,7 +188,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// An implementation of Accessibleobject for use with ToolStripDropDownButton        
-        /// </devdoc>
+        /// </summary>
         [System.Runtime.InteropServices.ComVisible(true)]
         internal class ToolStripDropDownButtonAccessibleObject : ToolStripDropDownItemAccessibleObject {
             private ToolStripDropDownButton ownerItem = null;

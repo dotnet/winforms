@@ -6,12 +6,12 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// The event class that is created when the selection state of a ListViewItem is changed.
-    /// </devdoc>
+    /// </summary>
     public class ListViewVirtualItemsSelectionRangeChangedEventArgs : EventArgs
     {
         /// <summary>
         /// Constructs a ListViewVirtualItemsSelectionRangeChangedEventArgs object.
-        /// </devdoc>
+        /// </summary>
         public ListViewVirtualItemsSelectionRangeChangedEventArgs(int startIndex, int endIndex, bool isSelected)
         {
             if (startIndex > endIndex)
@@ -26,17 +26,17 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Returns the begining of the range where the selection changed
-        /// </devdoc>
+        /// </summary>
         public int StartIndex { get; }
 
         /// <summary>
         /// Returns the end of the range where the selection changed
-        /// </devdoc>
+        /// </summary>
         public int EndIndex { get; }
 
         /// <summary>
         /// Return true if the items are selected
-        /// </devdoc>
+        /// </summary>
         public bool IsSelected { get; }
     }
 }

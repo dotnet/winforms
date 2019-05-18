@@ -41,7 +41,7 @@ namespace System.Windows.Forms
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewCellStyle'/> class.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public DataGridViewCellStyle()
         {
             this.propertyStore = new PropertyStore();

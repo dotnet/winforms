@@ -17,7 +17,7 @@ namespace System.Windows.Forms {
     ///    <para>Specifies a column in
     ///       which each cell contains a check box for representing
     ///       a boolean value.</para>
-    /// </devdoc>
+    /// </summary>
     public class DataGridBoolColumn : DataGridColumnStyle {
         private static readonly int idealCheckSize = 14;
 
@@ -37,12 +37,12 @@ namespace System.Windows.Forms {
         
         /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataGridBoolColumn'/> class.</para>
-        /// </devdoc>
+        /// </summary>
         public DataGridBoolColumn() : base() {}
 
         /// <summary>
         /// <para>Initializes a new instance of a <see cref='System.Windows.Forms.DataGridBoolColumn'/> with the specified <see cref='System.Data.DataColumn'/>.</para>
-        /// </devdoc>
+        /// </summary>
         public DataGridBoolColumn(PropertyDescriptor prop)
             : base(prop) {}
 
@@ -52,7 +52,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para>Gets or sets the actual value used when setting the 
         ///       value of the column to <see langword='true'/> .</para>
-        /// </devdoc>
+        /// </summary>
         [TypeConverterAttribute(typeof(StringConverter)),
         DefaultValue(true)]
         public object TrueValue {
@@ -76,7 +76,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para>Gets or sets the actual value used when setting the value of the column to 
         ///    <see langword='false'/>.</para>
-        /// </devdoc>
+        /// </summary>
         [TypeConverterAttribute(typeof(StringConverter)), DefaultValue(false)]
         public object FalseValue {
             get {
@@ -99,7 +99,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para>Gets or sets the actual value used when setting the value of the column to 
         ///    <see langword='null'/>.</para>
-        /// </devdoc>
+        /// </summary>
         [TypeConverterAttribute(typeof(StringConverter))]
         public object NullValue {
             get {
@@ -143,7 +143,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///    <para>Gets the value at the specified row.</para>
-        /// </devdoc>
+        /// </summary>
         protected internal override object GetColumnValueAtRow(CurrencyManager lm, int row) {
             object baseValue = base.GetColumnValueAtRow(lm, row);
             object value = Convert.DBNull;
@@ -168,7 +168,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///    <para>Sets the value a a specified row.</para>
-        /// </devdoc>
+        /// </summary>
         protected internal override void SetColumnValueAtRow(CurrencyManager lm, int row, object value) {
             object baseValue = null;
             if (true.Equals(value)) {
@@ -187,7 +187,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para>Gets the optimum width and height of a cell given
         ///       a specific value to contain.</para>
-        /// </devdoc>
+        /// </summary>
         protected internal override Size GetPreferredSize(Graphics g, object value) {
             return new Size(idealCheckSize+2, idealCheckSize+2);
         }
@@ -195,7 +195,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para>Gets
         ///       the height of a cell in a column.</para>
-        /// </devdoc>
+        /// </summary>
         protected internal override int GetMinimumHeight() {
             return idealCheckSize+2;
         }
@@ -204,7 +204,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Gets the height used when resizing columns.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected internal override int GetPreferredHeight(Graphics g, object value)
         {
             return idealCheckSize + 2;
@@ -214,7 +214,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Initiates a request to interrupt an edit procedure.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected internal override void Abort(int rowNum) {
             isSelected = false;
             isEditing = false;
@@ -226,7 +226,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Initiates a request to complete an editing procedure.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected internal override bool Commit(CurrencyManager dataSource, int rowNum) {
             isSelected = false;
             // always invalidate
@@ -243,7 +243,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Prepares the cell for editing a value.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected internal override void Edit(CurrencyManager source,
                                     int rowNum,
                                     Rectangle bounds,
@@ -273,7 +273,7 @@ namespace System.Windows.Forms {
         ///       Provides a handler for determining which key was pressed, and whether to
         ///       process it.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         internal override bool KeyPress(int rowNum, Keys keyData) {
             if (isSelected && editingRow == rowNum && !IsReadOnly()) {
                 if ((keyData & Keys.KeyCode) == Keys.Space) {
@@ -290,7 +290,7 @@ namespace System.Windows.Forms {
         ///       Indicates whether the a mouse down event occurred at the specified row, at
         ///       the specified x and y coordinates.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         internal override bool MouseDown(int rowNum, int x, int y) {
             base.MouseDown(rowNum, x, y);
             if (isSelected && editingRow == rowNum && !IsReadOnly()) {
@@ -321,7 +321,7 @@ namespace System.Windows.Forms {
         /// <para>Draws the <see cref='System.Windows.Forms.DataGridBoolColumn'/>
         /// with the given <see cref='System.Drawing.Graphics'/>,
         /// <see cref='System.Drawing.Rectangle'/> and row number.</para>
-        /// </devdoc>
+        /// </summary>
         protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum)
         {
             Paint(g,bounds,source, rowNum, false);
@@ -331,7 +331,7 @@ namespace System.Windows.Forms {
         /// <para>Draws the <see cref='System.Windows.Forms.DataGridBoolColumn'/>
         /// with the given <see cref='System.Drawing.Graphics'/>, <see cref='System.Drawing.Rectangle'/>,
         /// row number, and alignment settings. </para>
-        /// </devdoc>
+        /// </summary>
         protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum, bool alignToRight) {
             Paint(g,bounds,source, rowNum, this.DataGridTableStyle.BackBrush, this.DataGridTableStyle.ForeBrush, alignToRight);
         }
@@ -339,7 +339,7 @@ namespace System.Windows.Forms {
         /// <summary>
         /// <para>Draws the <see cref='System.Windows.Forms.DataGridBoolColumn'/> with the given <see cref='System.Drawing.Graphics'/>, <see cref='System.Drawing.Rectangle'/>,
         ///    row number, <see cref='System.Drawing.Brush'/>, and <see cref='System.Drawing.Color'/>. </para>
-        /// </devdoc>
+        /// </summary>
         protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum,
                                      Brush backBrush, Brush foreBrush,
                                      bool alignToRight) {
@@ -382,7 +382,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///    <para>Gets or sets a value indicating whether null values are allowed.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
@@ -415,7 +415,7 @@ namespace System.Windows.Forms {
         
         /// <summary>
         /// <para>Enters a <see langword='null'/> into the column.</para>
-        /// </devdoc>
+        /// </summary>
         protected internal override void EnterNullValue()
         {
             // do not throw an exception when the column is marked as readOnly or

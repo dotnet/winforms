@@ -16,7 +16,7 @@ namespace System.Windows.Forms {
     ///    <para>
     ///       This is a rendering class for the ComboBox control.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     public sealed class ComboBoxRenderer {
 
         //Make this per-thread, so that different threads can safely use these methods.
@@ -34,7 +34,7 @@ namespace System.Windows.Forms {
         ///       Returns true if this class is supported for the current OS and user/application settings, 
         ///       otherwise returns false.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static bool IsSupported {
             get {
                 return VisualStyleRenderer.IsSupported; // no downlevel support
@@ -60,7 +60,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Renders the textbox part of a ComboBox control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // Using Graphics instead of IDeviceContext intentionally
         ]
@@ -79,7 +79,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Renders the textbox part of a ComboBox control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void DrawTextBox(Graphics g, Rectangle bounds, string comboBoxText, Font font, ComboBoxState state) {
             DrawTextBox(g, bounds, comboBoxText, font, TextFormatFlags.TextBoxControl, state);
         }
@@ -88,7 +88,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Renders the textbox part of a ComboBox control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void DrawTextBox(Graphics g, Rectangle bounds, string comboBoxText, Font font, Rectangle textBounds, ComboBoxState state) {
             DrawTextBox(g, bounds, comboBoxText, font, textBounds, TextFormatFlags.TextBoxControl, state);
         }
@@ -97,7 +97,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Renders the textbox part of a ComboBox control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void DrawTextBox(Graphics g, Rectangle bounds, string comboBoxText, Font font, TextFormatFlags flags, ComboBoxState state) {
             if (visualStyleRenderer == null) {
                 visualStyleRenderer = new VisualStyleRenderer(TextBoxElement.ClassName, TextBoxElement.Part, (int)state);
@@ -115,7 +115,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Renders the textbox part of a ComboBox control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // Using Graphics instead of IDeviceContext intentionally
         ]
@@ -136,7 +136,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Renders a ComboBox drop-down button.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // Using Graphics instead of IDeviceContext intentionally
         ]

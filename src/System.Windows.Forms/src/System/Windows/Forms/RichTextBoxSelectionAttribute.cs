@@ -8,22 +8,22 @@ namespace System.Windows.Forms
     /// Specifies whether any characters in the
     /// current selection have the style or attribute.
     ///
-    /// </devdoc>
+    /// </summary>
     public enum RichTextBoxSelectionAttribute
     {
         /// <summary>
         /// Some but not all characters.
-        /// </devdoc>
+        /// </summary>
         Mixed = -1,
 
         /// <summary>
         /// No characters.
-        /// </devdoc>
+        /// </summary>
         None = 0,
 
         /// <summary>
         /// All characters.
-        /// </devdoc>
+        /// </summary>
         All = 1,
     }
 }

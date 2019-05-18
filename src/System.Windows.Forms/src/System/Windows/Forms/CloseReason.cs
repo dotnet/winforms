@@ -8,44 +8,44 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Specifies the reason for the Form Closing.
-    /// </devdoc>
+    /// </summary>
     public enum CloseReason
     {
         /// <summary>
         /// No reason for closure of the Form.
-        /// </devdoc>
+        /// </summary>
         None = 0,
         
         /// <summary>
         /// In the process of shutting down, Windows has closed the application.
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", Justification = "Verb: Shut down, not noun Shutdown.")]
         WindowsShutDown = 1,
 
         /// <summary>
         /// The parent form of this MDI form is closing.
-        /// </devdoc>
+        /// </summary>
         MdiFormClosing = 2,
 
         /// <summary>
         /// The user has clicked the close button on the form window, selected
         /// Close from the window's control menu or hit Alt + F4.
-        /// </devdoc>
+        /// </summary>
         UserClosing = 3,
 
         /// <summary>
         /// The Microsoft Windows Task Manager is closing the application.
-        /// </devdoc>
+        /// </summary>
         TaskManagerClosing = 4,
 
         /// <summary>
         /// A form is closing because its owner is closing.
-        /// </devdoc>
+        /// </summary>
         FormOwnerClosing = 5,
 
         /// <summary>
         /// A form is closing because Application.Exit() was called.
-        /// </devdoc>
+        /// </summary>
         ApplicationExitCall = 6
     }
 }

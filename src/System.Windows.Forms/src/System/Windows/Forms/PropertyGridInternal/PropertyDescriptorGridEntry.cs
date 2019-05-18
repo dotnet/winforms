@@ -76,7 +76,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// <summary>
         /// specify that this grid entry should be allowed to be merged for.
         /// multi-select.
-        /// </devdoc>
+        /// </summary>
         public override bool AllowMerge {
             get {
                MergablePropertyAttribute mpa = (MergablePropertyAttribute)propertyInfo.Attributes[typeof(MergablePropertyAttribute)];
@@ -93,7 +93,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// <summary>
         ///     Retrieves the keyword that the VS help dynamic help window will
         ///     use when this IPE is selected.
-        /// </devdoc>
+        /// </summary>
         public override string HelpKeyword {
             get {
                 if (this.helpKeyword == null) {
@@ -241,7 +241,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         
         /// <summary>
         ///      Retrieves the PropertyDescriptor that is surfacing the given object/
-        /// </devdoc>
+        /// </summary>
         public override PropertyDescriptor PropertyDescriptor {
             get {
                 return propertyInfo;
@@ -267,7 +267,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         /// <summary>
         /// Returns non-localized name of this property.
-        /// </devdoc>
+        /// </summary>
         public override string PropertyName {
             get {
                 if (propertyInfo != null) {
@@ -289,7 +289,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// <summary>
         /// Gets or sets the value for the property that is represented
         /// by this GridEntry.
-        /// </devdoc>
+        /// </summary>
         public override object PropertyValue{
             get {
                 try
@@ -367,7 +367,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         /// <summary>
         /// Returns the type converter for this entry.
-        /// </devdoc>
+        /// </summary>
         internal override TypeConverter TypeConverter {
             get {
                 if (exceptionConverter != null) {
@@ -384,7 +384,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// <summary>
         /// Returns the type editor for this entry.  This may return null if there
         /// is no type editor.
-        /// </devdoc>
+        /// </summary>
         internal override UITypeEditor UITypeEditor {
             get {
                 if (exceptionEditor != null) {
@@ -400,7 +400,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         
         /// <summary>
         /// Invokes the type editor for editing this item.
-        /// </devdoc>
+        /// </summary>
         internal override void EditPropertyValue(PropertyGridView iva) {            
             base.EditPropertyValue(iva);
             
@@ -853,7 +853,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         /// <summary>
         ///     Navigates code to the given event.
-        /// </devdoc>
+        /// </summary>
         protected bool ViewEvent(object obj, string newHandler, EventDescriptor eventdesc, bool alwaysNavigate) {
 
             object value = GetPropertyValueCore(obj);
@@ -987,7 +987,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// <summary>
         ///     Displays the user code for the given event.  This will return true if the user
         ///     code could be displayed, or false otherwise.
-        /// </devdoc>
+        /// </summary>
         static private void ShowCodeIdle(object sender, EventArgs e) {
             Application.Idle -= new EventHandler(PropertyDescriptorGridEntry.ShowCodeIdle);
             if (targetBindingService != null) {
@@ -1110,7 +1110,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         /// <summary>
         ///      The exception converter is a type converter that displays an exception to the user.
-        /// </devdoc>
+        /// </summary>
         private class ExceptionConverter : TypeConverter {
 
             /// <summary>
@@ -1119,7 +1119,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             ///      to ToString on the object if the object is valid and if the destination
             ///      type is string.  If this cannot convert to the desitnation type, this will
             ///      throw a NotSupportedException.
-            /// </devdoc>
+            /// </summary>
             public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
                 if (destinationType == typeof(string)) {
                     if (value is Exception) {
@@ -1137,14 +1137,14 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         /// <summary>
         ///      The exception editor displays a message to the user.
-        /// </devdoc>
+        /// </summary>
         private class ExceptionEditor : UITypeEditor {
 
             /// <summary>
             ///      Edits the given object value using the editor style provided by
             ///      GetEditorStyle.  A service provider is provided so that any
             ///      required editing services can be obtained.
-            /// </devdoc>
+            /// </summary>
             public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value) {
                 Exception except = value as Exception;
 
@@ -1172,7 +1172,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// <summary>
             ///      Retrieves the editing style of the Edit method.  If the method
             ///      is not supported, this will return None.
-            /// </devdoc>
+            /// </summary>
             public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) {
                 return UITypeEditorEditStyle.Modal;
             }

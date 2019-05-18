@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     /// always be positioned flush against that edge while the container
     /// resizes. If more than one control is docked to an edge, the controls
     /// will not be placed on top of each other.
-    /// </devdoc>
+    /// </summary>
     [Editor("System.Windows.Forms.Design.DockEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
     public enum DockStyle
     {

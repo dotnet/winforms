@@ -78,7 +78,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Summary of CreateLayoutEngine.
-        /// </devdoc>
+        /// </summary>
         /// <param name=item></param>
         public override LayoutEngine LayoutEngine {
             get {

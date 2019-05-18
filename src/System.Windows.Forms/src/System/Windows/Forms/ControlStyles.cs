@@ -8,42 +8,42 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Specifies control functionality.
-    /// </devdoc>
+    /// </summary>
     [Flags]
     public enum ControlStyles
     {
         /// <summary>
         /// Indicates whether the control is a container-like control.
-        /// </devdoc>
+        /// </summary>
         ContainerControl = 0x00000001,
 
         /// <summary>
         /// The control paints itself; WM_PAINT and WM_ERASEBKGND messages are not
         /// passed on to the underlying NativeWindow.
         /// This style only applies to subclasses of Control.
-        /// </devdoc>
+        /// </summary>
         UserPaint = 0x00000002,
 
         /// <summary>
         /// If specified, a PaintBackground event will not be raised,
         /// OnPaintBackground will not be called, and Invalidate() will not
         /// invalidate the background of the HWND.
-        /// </devdoc>
+        /// </summary>
         Opaque = 0x00000004,
 
         /// <summary>
         /// The control is completely redrawn when it is resized.
-        /// </devdoc>
+        /// </summary>
         ResizeRedraw = 0x00000010,
 
         /// <summary>
         /// The control has a fixed width.
-        /// </devdoc>
+        /// </summary>
         FixedWidth = 0x00000020,
 
         /// <summary>
         /// The control has a fixed height.
-        /// </devdoc>
+        /// </summary>
         FixedHeight = 0x00000040,
 
         /// <summary>
@@ -51,18 +51,18 @@ namespace System.Windows.Forms
         /// control is clicked (unless it's the second click of a double-click and
         /// StandardDoubleClick is specified).
         /// Regardless of this style, the control may call OnClick directly.
-        /// </devdoc>
+        /// </summary>
         StandardClick = 0x00000100,
 
         /// <summary>
         /// The control can get the focus.
-        /// </devdoc>
+        /// </summary>
         Selectable = 0x00000200,
 
         /// <summary>
         /// The control does its own mouse processing; WM_MOUSEDOWN, WM_MOUSEMOVE,
         /// and WM_MOUSEUP messages are not passed on to the underlying NativeWindow.
-        /// </devdoc>
+        /// </summary>
         UserMouse = 0x00000400,
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace System.Windows.Forms
         /// and our parent, we will not show the control in the middle.
         /// This style only applies to subclasses of Control. It only works if
         /// UserPaint is set, and the parent control is a Control.
-        /// </devdoc>
+        /// </summary>
         SupportsTransparentBackColor = 0x00000800,
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace System.Windows.Forms
         /// Regardless of whether it is set, the control may call OnDoubleClick
         /// directly.
         /// This style is ignored if StandardClick is not set.
-        /// </devdoc>
+        /// </summary>
         StandardDoubleClick = 0x00001000,
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace System.Windows.Forms
         /// effect similar to ControlStyles.SupportsTransparentBackColor; for instance,
         /// ToolBar with flat appearance does this).
         /// This style only makes sense if UserPaint is true.
-        /// </devdoc>
+        /// </summary>
         AllPaintingInWmPaint = 0x00002000,
 
         /// <summary>
@@ -101,14 +101,14 @@ namespace System.Windows.Forms
         /// hWnd for the text every time. This improves performance but makes it
         /// difficult to keep the control and hWnd's text synchronized.
         /// This style defaults to false.
-        /// </devdoc>
+        /// </summary>
         CacheText = 0x00004000,
 
         /// <summary>
         /// If true, the OnNotifyMessage method will be called for every message
         /// sent to the control's WndProc.
         /// This style defaults to false.
-        /// </devdoc>
+        /// </summary>
         EnableNotifyMessage = 0x00008000,
 
         /// <summary>
@@ -116,13 +116,13 @@ namespace System.Windows.Forms
         /// set the UserPaint and AllPaintingInWmPaint style. Note: This is
         /// obsolete, please 
         /// use OptimizedDoubleBuffer instead.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)] // It is recommended that you use the DoubleBuffer property instead.
         DoubleBuffer = 0x00010000,
 
         /// <summary>
         /// If set, all control painting will be double buffered.
-        /// </devdoc>
+        /// </summary>
         OptimizedDoubleBuffer = 0x00020000,
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace System.Windows.Forms
         /// This style is set by default. Certain built-in control types such as
         /// TextBox and ComboBox un-set this style, so that their current text will
         /// not be used by Active Accessibility.
-        /// </devdoc>
+        /// </summary>
         UseTextForAccessibility = 0x00040000,
     }
 }

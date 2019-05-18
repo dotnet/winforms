@@ -10,27 +10,27 @@ namespace System.Windows.Forms
     /// Provides ambient property values to top-level controls.
     /// NOTE: internally, this class does double duty as storage for
     /// Control's inherited properties.
-    /// </devdoc>
+    /// </summary>
     public sealed class AmbientProperties
     {        
         /// <summary>
         /// Gets the ambient BackColor, or Color.Empty if there is none.
-        /// </devdoc>
+        /// </summary>
         public Color BackColor { get; set; }
 
         /// <summary>
         /// Gets the ambient BackColor, or null if there is none.
-        /// </devdoc>
+        /// </summary>
         public Cursor Cursor { get; set; }
 
         /// <summary>
         /// Gets the ambient Font, or null if there is none.
-        /// </devdoc>
+        /// </summary>
         public Font Font { get; set; }
         
         /// <summary>
         /// Gets the ambient ForeColor, or Color.Empty if there is none.
-        /// </devdoc>
+        /// </summary>
         public Color ForeColor { get; set; }
     }
 }

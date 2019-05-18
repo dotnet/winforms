@@ -11,7 +11,7 @@ namespace System.Experimental.Gdi
 #endif
 {
     /// <summary>
-    /// </devdoc>
+    /// </summary>
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
 #else

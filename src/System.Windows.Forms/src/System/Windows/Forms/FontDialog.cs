@@ -22,7 +22,7 @@ namespace System.Windows.Forms {
     ///       on
     ///       the system.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     [
     DefaultEvent(nameof(Apply)),
     DefaultProperty(nameof(Font)),
@@ -47,7 +47,7 @@ namespace System.Windows.Forms {
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.FontDialog'/>
         ///       class.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not call Reset
                                                                                                     // it would be a breaking change.
@@ -61,7 +61,7 @@ namespace System.Windows.Forms {
         ///       Gets or sets a value indicating whether the dialog box allows graphics device interface
         ///       (GDI) font simulations.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
@@ -81,7 +81,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box allows vector font selections.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
@@ -103,7 +103,7 @@ namespace System.Windows.Forms {
         ///       the dialog box displays both vertical and horizontal fonts or only
         ///       horizontal fonts.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
@@ -126,7 +126,7 @@ namespace System.Windows.Forms {
         ///       in the Script combo box to display a character set other than the one
         ///       currently displayed.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
@@ -146,7 +146,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Gets or sets a value indicating the selected font color.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatData)), 
         SRDescription(nameof(SR.FnDcolorDescr)),
@@ -178,7 +178,7 @@ namespace System.Windows.Forms {
         ///       Gets or sets
         ///       a value indicating whether the dialog box allows only the selection of fixed-pitch fonts.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -198,7 +198,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Gets or sets a value indicating the selected font.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatData)), 
         SRDescription(nameof(SR.FnDfontDescr))
@@ -229,7 +229,7 @@ namespace System.Windows.Forms {
         ///       Gets or sets a value indicating whether the dialog box specifies an error condition if the
         ///       user attempts to select a font or style that does not exist.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -250,7 +250,7 @@ namespace System.Windows.Forms {
         ///       Gets or sets the maximum
         ///       point size a user can select.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatData)), 
         DefaultValue(defaultMaxSize),
@@ -276,7 +276,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Gets or sets a value indicating the minimum point size a user can select.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatData)), 
         DefaultValue(defaultMinSize),
@@ -302,7 +302,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Gets the value passed to CHOOSEFONT.Flags.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected int Options {
             get {
                 return options;
@@ -315,7 +315,7 @@ namespace System.Windows.Forms {
         ///       value indicating whether the dialog box allows selection of fonts for all non-OEM and Symbol character
         ///       sets, as well as the ----n National Standards Institute (ANSI) character set.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -334,7 +334,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box contains an Apply button.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -353,7 +353,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box displays the color choice.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -373,7 +373,7 @@ namespace System.Windows.Forms {
         ///       Gets or sets a value indicating whether the dialog box contains controls that allow the
         ///       user to specify strikethrough, underline, and text color options.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
@@ -392,7 +392,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box displays a Help button.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -412,7 +412,7 @@ namespace System.Windows.Forms {
         ///       Occurs when the user clicks the Apply button in the font
         ///       dialog box.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.FnDapplyDescr))]
         public event EventHandler Apply {
             add => Events.AddHandler(EventApply, value);
@@ -421,7 +421,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Returns the state of the given option flag.
-        /// </devdoc>
+        /// </summary>
         internal bool GetOption(int option) {
             return(options & option) != 0;
         }
@@ -431,7 +431,7 @@ namespace System.Windows.Forms {
         ///       Specifies the common dialog box hook procedure that is overridden to add
         ///       specific functionality to a common dialog box.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override IntPtr HookProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam) {
             
             switch (msg) {
@@ -477,7 +477,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.FontDialog.Apply'/> event.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnApply(EventArgs e) {
             EventHandler handler = (EventHandler)Events[EventApply];
             if (handler != null) handler(this, e);
@@ -487,7 +487,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Resets all dialog box options to their default values.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override void Reset() {
             options = NativeMethods.CF_SCREENFONTS | NativeMethods.CF_EFFECTS;
             font = null;
@@ -510,7 +510,7 @@ namespace System.Windows.Forms {
         ///       base.runDialog() if necessary
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override bool RunDialog(IntPtr hWndOwner) {
             NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(this.HookProc);
             NativeMethods.CHOOSEFONT cf = new NativeMethods.CHOOSEFONT();
@@ -583,7 +583,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Sets the given option to the given boolean value.
-        /// </devdoc>
+        /// </summary>
         internal void SetOption(int option, bool value) {
             if (value) {
                 options |= option;
@@ -598,7 +598,7 @@ namespace System.Windows.Forms {
         ///       Indicates whether the <see cref='System.Windows.Forms.FontDialog.Font'/> property should be
         ///       persisted.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         private bool ShouldSerializeFont() {
             return !Font.Equals(Control.DefaultFont);
         }
@@ -609,14 +609,14 @@ namespace System.Windows.Forms {
         ///       the dialog box.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override string ToString() {
             string s = base.ToString();
             return s + ",  Font: " + Font.ToString();
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         private void UpdateColor(int rgb) {
             if (ColorTranslator.ToWin32(color) != rgb) {
                 color = ColorTranslator.FromOle(rgb);
@@ -625,7 +625,7 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         private void UpdateFont(NativeMethods.LOGFONT lf) {
             IntPtr screenDC = UnsafeNativeMethods.GetDC(NativeMethods.NullHandleRef);
             try {

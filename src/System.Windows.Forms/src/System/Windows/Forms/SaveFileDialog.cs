@@ -21,7 +21,7 @@ namespace System.Windows.Forms {
     ///       a common dialog box that allows the user to specify options for saving a
     ///       file. This class cannot be inherited.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     [
     Designer("System.Windows.Forms.Design.SaveFileDialogDesigner, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionSaveFileDialog))
@@ -33,7 +33,7 @@ namespace System.Windows.Forms {
         ///       Gets or sets a value indicating whether the dialog box prompts the user for
         ///       permission to create a file if the user specifies a file that does not exist.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -53,7 +53,7 @@ namespace System.Windows.Forms {
         ///       Gets or sets a value indicating whether the Save As dialog box displays a warning if the user specifies
         ///       a file name that already exists.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
@@ -72,7 +72,7 @@ namespace System.Windows.Forms {
         ///    <para>
         ///       Opens the file with read/write permission selected by the user.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
         public Stream OpenFile() {
@@ -93,7 +93,7 @@ namespace System.Windows.Forms {
         ///       does not exist. A return value of false prevents the dialog from
         ///       closing.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         private bool PromptFileCreate(string fileName) 
         {
             return MessageBoxWithFocusRestore(string.Format(SR.FileDialogCreatePrompt, fileName),
@@ -108,7 +108,7 @@ namespace System.Windows.Forms {
         ///       closing.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         private bool PromptFileOverwrite(string fileName) {
             return MessageBoxWithFocusRestore(string.Format(SR.FileDialogOverwritePrompt, fileName),
                     DialogCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
@@ -143,14 +143,14 @@ namespace System.Windows.Forms {
         ///       Resets all dialog box options to their default
         ///       values.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override void Reset() {
             base.Reset();
             SetOption(NativeMethods.OFN_OVERWRITEPROMPT, true);
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         private protected override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn) {
             bool result = UnsafeNativeMethods.GetSaveFileName(ofn);
 

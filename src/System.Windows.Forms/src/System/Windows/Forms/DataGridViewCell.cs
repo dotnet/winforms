@@ -19,7 +19,7 @@ namespace System.Windows.Forms
 
     /// <summary>
     ///    <para>Identifies a cell in the dataGridView.</para>
-    /// </devdoc>
+    /// </summary>
     [
         TypeConverterAttribute(typeof(DataGridViewCellConverter))
     ]
@@ -67,7 +67,7 @@ namespace System.Windows.Forms
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewCell'/> class.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected DataGridViewCell() : base()
         {
             if (!isScalingInitialized)
@@ -109,7 +109,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// <para>Gets or sets the Index of a column in the <see cref='System.Windows.Forms.DataGrid'/> control.</para>
-        /// </devdoc>
+        /// </summary>
         public int ColumnIndex
         {
             get
@@ -642,7 +642,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// <para>Gets or sets the index of a row in the <see cref='System.Windows.Forms.DataGrid'/> control.</para>
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(false)
         ]
@@ -4575,7 +4575,7 @@ namespace System.Windows.Forms
         ///    <para>
         ///       Gets the row Index and column Index of the cell.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override string ToString()
         {
             return "DataGridViewCell { ColumnIndex=" + this.ColumnIndex.ToString(CultureInfo.CurrentCulture) + ", RowIndex=" + this.RowIndex.ToString(CultureInfo.CurrentCulture) + " }";

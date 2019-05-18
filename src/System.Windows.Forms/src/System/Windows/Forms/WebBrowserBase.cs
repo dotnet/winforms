@@ -27,7 +27,7 @@ namespace System.Windows.Forms
     /// encapsulated in the class below.
     ///
     /// The classid of the ActiveX control is specified in the constructor.
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultProperty(nameof(Name)), DefaultEvent(nameof(Enter))]
@@ -74,7 +74,7 @@ namespace System.Windows.Forms
         /// Creates a new instance of a WinForms control which wraps an ActiveX control
         /// given by the clsid parameter.
         ///     </para>
-        /// </devdoc>
+        /// </summary>
         internal WebBrowserBase(string clsidString) : base() {
             if (Application.OleRequired() != ApartmentState.STA) {
                 throw new ThreadStateException(string.Format(SR.AXMTAThread, clsidString));
@@ -97,7 +97,7 @@ namespace System.Windows.Forms
         ///     <para>
         /// Returns the native webbrowser object that this control wraps.
         ///     </para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public object ActiveXInstance {
             get {
@@ -128,7 +128,7 @@ namespace System.Windows.Forms
         /// Returns an object that will be set as the site for the native ActiveX control.
         /// Implementors of the site can derive from <see cref='System.Windows.Forms.WebBrowserSiteBase'/> class.
         ///     </para>
-        /// </devdoc>
+        /// </summary>
         protected virtual WebBrowserSiteBase CreateWebBrowserSiteBase() {
             return new WebBrowserSiteBase(this);
         }
@@ -141,7 +141,7 @@ namespace System.Windows.Forms
         /// value in a member variable. However, they must release this value when
         /// DetachInterfaces is called (by setting the cached interface variable to null).
         ///     </para>
-        /// </devdoc>
+        /// </summary>
         protected virtual void AttachInterfaces(object nativeActiveXObject) {
         }
 
@@ -149,7 +149,7 @@ namespace System.Windows.Forms
         ///     <para>
         /// See AttachInterfaces for a description of when to override DetachInterfaces.
         ///     </para>
-        /// </devdoc>
+        /// </summary>
         protected virtual void DetachInterfaces() {
         }
 
@@ -158,7 +158,7 @@ namespace System.Windows.Forms
         /// This will be called when we are ready to start listening to events.
         /// Inheritors can override this method to hook their own connection points.
         ///     </para>
-        /// </devdoc>
+        /// </summary>
         protected virtual void CreateSink() {
         }
 
@@ -167,7 +167,7 @@ namespace System.Windows.Forms
         /// This will be called when it is time to stop listening to events.
         /// This is where inheritors have to disconnect their connection points.
         ///     </para>
-        /// </devdoc>
+        /// </summary>
         protected virtual void DetachSink() {
         }
 
@@ -1285,7 +1285,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///     Inheriting classes should override this method to find out when the
         ///     handle has been created. Call base.OnHandleCreated first.
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnHandleCreated(EventArgs e) {
@@ -1351,7 +1351,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///     <para>Hide ImeMode: it doesn't make sense for this control</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         new public ImeMode ImeMode
@@ -1717,7 +1717,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///     Defines a window that the ActiveX window is attached to so that we can override it's wndproc.
-        /// </devdoc>
+        /// </summary>
         private class WebBrowserBaseNativeWindow : NativeWindow {
             private WebBrowserBase WebBrowserBase;
 
@@ -1727,7 +1727,7 @@ namespace System.Windows.Forms
             
             /// <summary>
             ///     Pass messages on to the NotifyIcon object's wndproc handler.
-            /// </devdoc>
+            /// </summary>
             protected override void WndProc(ref Message m) {
                 switch (m.Msg) {
                     case Interop.WindowMessages.WM_WINDOWPOSCHANGING:

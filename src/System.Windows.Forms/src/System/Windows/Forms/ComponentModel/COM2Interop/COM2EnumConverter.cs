@@ -25,7 +25,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <summary>
         ///      Determines if this converter can convert an object in the given source
         ///      type to the native type of the converter.
-        /// </devdoc>
+        /// </summary>
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) {
             if (sourceType == typeof(string)) {
                 return true;
@@ -43,7 +43,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         /// <summary>
         ///      Converts the given object to the converter's native type.
-        /// </devdoc>
+        /// </summary>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
             if (value is string) {
                  return com2Enum.FromString((string)value);
@@ -57,7 +57,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         ///      to ToString on the object if the object is valid and if the destination
         ///      type is string.  If this cannot convert to the desitnation type, this will
         ///      throw a NotSupportedException.
-        /// </devdoc>
+        /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
             if (destinationType == null) {
                 throw new ArgumentNullException(nameof(destinationType));
@@ -81,7 +81,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         ///      for the data type this validator is designed for.  This
         ///      will return null if the data type does not support a
         ///      standard set of values.
-        /// </devdoc>
+        /// </summary>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context) {
             if (values == null) {
                 object[] objValues = com2Enum.Values;
@@ -99,7 +99,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         ///      in an enum data type.  If the list is not exclusive,
         ///      then there are other valid values besides the list of
         ///      standard values GetStandardValues provides.
-        /// </devdoc>
+        /// </summary>
         public override bool GetStandardValuesExclusive(ITypeDescriptorContext context) {
             return com2Enum.IsStrictEnum;
         }
@@ -107,14 +107,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <summary>
         ///      Determines if this object supports a standard set of values
         ///      that can be picked from a list.
-        /// </devdoc>
+        /// </summary>
         public override bool GetStandardValuesSupported(ITypeDescriptorContext context) {
             return true;
         }
         
         /// <summary>
         ///      Determines if the given object value is valid for this type.
-        /// </devdoc>
+        /// </summary>
         public override bool IsValid(ITypeDescriptorContext context, object value) {
             string strValue = com2Enum.ToString(value);
             return strValue != null && strValue.Length > 0;

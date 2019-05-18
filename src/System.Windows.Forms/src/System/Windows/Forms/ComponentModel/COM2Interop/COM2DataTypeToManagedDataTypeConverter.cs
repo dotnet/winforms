@@ -15,7 +15,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     /// <summary>
     /// This base class maps an ole defined data type (OLE_COLOR, IFont, etc.),
     ///
-    /// </devdoc>
+    /// </summary>
     internal abstract class Com2DataTypeToManagedDataTypeConverter{
 
 
@@ -27,19 +27,19 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
          /// <summary>
          ///     Returns the managed type that this editor maps the property type to.
-         /// </devdoc>
+         /// </summary>
          public abstract Type ManagedType{
             get;
          }
 
          /// <summary>
          ///     Converts the native value into a managed value
-         /// </devdoc>
+         /// </summary>
          public abstract object ConvertNativeToManaged(object nativeValue, Com2PropertyDescriptor pd);
 
          /// <summary>
          ///     Converts the managed value into a native value
-         /// </devdoc>
+         /// </summary>
          public abstract object ConvertManagedToNative(object managedValue, Com2PropertyDescriptor pd, ref bool cancelSet);
     }
 }

@@ -34,7 +34,7 @@ namespace System.Windows.Forms {
     /// <summary>
     ///     Rich Text control. The RichTextBox is a control that contains formatted text.
     ///     It supports font selection, boldface, and other type attributes.
-    /// </devdoc>
+    /// </summary>
 
     [ClassInterface(ClassInterfaceType.AutoDispatch),
      ComVisible(true),
@@ -55,7 +55,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Paste special flags.
-        /// </devdoc>
+        /// </summary>
         private const int DV_E_DVASPECT      = unchecked((int)0x8004006B);
         private const int DVASPECT_CONTENT   = 1;
         private const int DVASPECT_THUMBNAIL = 2;
@@ -132,7 +132,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Constructs a new RichTextBox.
-        /// </devdoc>
+        /// </summary>
         public RichTextBox() {
             InConstructor = true;
             richTextBoxFlags[autoWordSelectionSection] = 0;// This is false by default
@@ -149,7 +149,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     RichTextBox controls have built-in drag and drop support, but AllowDrop, DragEnter, DragDrop
         ///     may still be used: this should be hidden in the property grid, but not in code
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
         public override bool AllowDrop {
             get {
@@ -179,7 +179,7 @@ namespace System.Windows.Forms {
         ///       Note: this works differently than other Controls' AutoSize, so we're hiding
         ///       it to avoid confusion.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(false),
         RefreshProperties(RefreshProperties.Repaint),
@@ -197,7 +197,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Controls whether whether mouse selection snaps to whole words.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -250,7 +250,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Returns the amount of indent used in a RichTextBox control when
         ///     SelectionBullet is set to true.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(0),
@@ -289,7 +289,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///      Whether or not there are actions that can be Redone on the RichTextBox control.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -376,7 +376,7 @@ namespace System.Windows.Forms {
         ///     By default, this is true. Note that changing this property will not update text that is
         ///     already present in the RichTextBox control; it only affects text which is entered after the
         ///     property is changed.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
@@ -406,7 +406,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     We can't just enable drag/drop of text by default: it's a breaking change.
         ///     Should be false by default.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -508,7 +508,7 @@ namespace System.Windows.Forms {
         ///     Sets or gets the rich text box control' language option.
         ///     The IMF_AUTOFONT flag is set by default. 
         ///     The IMF_AUTOKEYBOARD and IMF_IMECANCELCOMPLETE flags are cleared by default.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -573,7 +573,7 @@ namespace System.Windows.Forms {
         ///     Returns the name of the action that will be performed if the user
         ///     Redo's their last Undone operation. If no operation can be redone,
         ///     an empty string ("") is returned.
-        /// </devdoc>
+        /// </summary>
         //NOTE: This is overridable, because we want people to be able to
         //      mess with the names if necessary...?
         [
@@ -609,7 +609,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     The right margin of a RichTextBox control.  A nonzero margin implies WordWrap.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(0),
@@ -648,7 +648,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     The text of a RichTextBox control, including all Rtf codes.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -689,7 +689,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     The current scrollbar settings for a multi-line rich edit control.
         ///     Possible return values are given by the RichTextBoxScrollBars enumeration.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(RichTextBoxScrollBars.Both),
@@ -727,7 +727,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     The alignment of the paragraphs in a RichTextBox control.
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(HorizontalAlignment.Left),
         Browsable(false),
@@ -797,7 +797,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Determines if a paragraph in the RichTextBox control
         ///     contains the current selection or insertion point has the bullet style.
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(false),
         Browsable(false),
@@ -851,7 +851,7 @@ namespace System.Windows.Forms {
         ///     Determines whether text in the RichTextBox control
         ///     appears on the baseline (normal), as a superscript above the baseline,
         ///     or as a subscript below the baseline.
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(0),
         Browsable(false),
@@ -898,7 +898,7 @@ namespace System.Windows.Forms {
         ///     The color of the currently selected text in the
         ///     RichTextBox control.
         ///     Returns Color.Empty if the selection has more than one color.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -931,7 +931,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     The background color of the currently selected text in the RichTextBox control.
         ///     Returns Color.Empty if the selection has more than one color.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -983,7 +983,7 @@ namespace System.Windows.Forms {
         ///     The font used to display the currently selected text
         ///     or the characters(s) immediately following the insertion point in the
         ///     RichTextBox control.  Null if the selection has more than one font.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -1003,7 +1003,7 @@ namespace System.Windows.Forms {
         ///     The distance (in pixels) between the left edge of the first line of text
         ///     in the selected paragraph(s) (as specified by the SelectionIndent property)
         ///     and the left edge of subsequent lines of text in the same paragraph(s).
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(0),
         Browsable(false),
@@ -1043,7 +1043,7 @@ namespace System.Windows.Forms {
         ///     The distance (in pixels) between the left edge of the RichTextBox control and
         ///     the left edge of the text that is selected or added at the current
         ///     insertion point.
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(0),
         Browsable(false),
@@ -1084,7 +1084,7 @@ namespace System.Windows.Forms {
         ///       Gets or sets the number of characters selected in the text
         ///       box.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
@@ -1113,7 +1113,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     true if the current selection prevents any changes to its contents.
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(false),
         SRDescription(nameof(SR.RichTextBoxSelProtected)),
@@ -1134,7 +1134,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     The currently selected text of a RichTextBox control, including
         ///     all Rtf codes.
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(""),
         Browsable(false),
@@ -1157,7 +1157,7 @@ namespace System.Windows.Forms {
         ///     The distance (in pixels) between the right edge of the RichTextBox control and
         ///     the right edge of the text that is selected or added at the current
         ///     insertion point.
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(0),
         Browsable(false),
@@ -1198,7 +1198,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     The absolute tab positions (in pixels) of text in a RichTextBox control.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -1250,7 +1250,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     The currently selected text of a RichTextBox control; consists of a
         ///     zero length string if no characters are selected.
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(""),
         Browsable(false),
@@ -1273,7 +1273,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     The type of the current selection. The returned value is one
         ///     of the values enumerated in RichTextBoxSelectionType.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Browsable(false),
@@ -1297,7 +1297,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Whether or not the left edge of the control will have a "selection margin" which
         ///     can be used to select entire lines
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -1400,7 +1400,7 @@ namespace System.Windows.Forms {
         ///     Returns the name of the action that will be undone if the user
         ///     Undo's their last operation. If no operation can be undone, it will
         ///     return an empty string ("").
-        /// </devdoc>
+        /// </summary>
         //NOTE: This is overridable, because we want people to be able to
         //      mess with the names if necessary...?
         [
@@ -1442,7 +1442,7 @@ namespace System.Windows.Forms {
         ///     The current zoom level for the RichTextBox control. This may be between 1/64 and 64. 1.0 indicates
         ///     no zoom (i.e. normal viewing).  Zoom works best with TrueType fonts;
         ///     for non-TrueType fonts, ZoomFactor will be treated as the nearest whole number.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(1.0f),
@@ -1491,7 +1491,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     RichTextBox controls have built-in drag and drop support, but AllowDrop, DragEnter, DragDrop
         ///     may still be used: this should be hidden in the property grid, but not in code
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
         public new event DragEventHandler DragDrop {
             add => base.DragDrop += value;
@@ -1501,7 +1501,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     RichTextBox controls have built-in drag and drop support, but AllowDrop, DragEnter, DragDrop
         ///     may still be used: this should be hidden in the property grid, but not in code
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
         public new event DragEventHandler DragEnter {
             add => base.DragEnter += value;
@@ -1575,7 +1575,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Returns a boolean indicating whether the RichTextBoxConstants control can paste the
         ///     given clipboard format.
-        /// </devdoc>
+        /// </summary>
         public bool CanPaste(DataFormats.Format clipFormat) {
             bool b = false;
             b = unchecked( (int) (long)SendMessage(Interop.EditMessages.EM_CANPASTE, clipFormat.Id, 0)) != 0;
@@ -1712,28 +1712,28 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Searches the text in a RichTextBox control for a given string.
-        /// </devdoc>
+        /// </summary>
         public int Find(string str) {
             return Find(str, 0, 0, RichTextBoxFinds.None);
         }
 
         /// <summary>
         ///     Searches the text in a RichTextBox control for a given string.
-        /// </devdoc>
+        /// </summary>
         public int Find(string str, RichTextBoxFinds options) {
             return Find(str, 0, 0, options);
         }
 
         /// <summary>
         ///     Searches the text in a RichTextBox control for a given string.
-        /// </devdoc>
+        /// </summary>
         public int Find(string str, int start, RichTextBoxFinds options) {
             return Find(str, start, -1, options);
         }                                   
 
         /// <summary>
         ///     Searches the text in a RichTextBox control for a given string.
-        /// </devdoc>
+        /// </summary>
         public int Find(string str, int start, int end, RichTextBoxFinds options) {
 
             int textLen = TextLength;
@@ -1849,21 +1849,21 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Searches the text in a RichTextBox control for the given characters.
-        /// </devdoc>
+        /// </summary>
         public int Find(char[] characterSet) {
             return Find(characterSet, 0, -1);
         }
 
         /// <summary>
         ///     Searches the text in a RichTextBox control for the given characters.
-        /// </devdoc>
+        /// </summary>
         public int Find(char[] characterSet, int start) {
             return Find(characterSet, start, -1);
         }
 
         /// <summary>
         ///     Searches the text in a RichTextBox control for the given characters.
-        /// </devdoc>
+        /// </summary>
         public int Find(char[] characterSet, int start, int end) {
             // Code used to support ability to search backwards and negate character sets.
             // The API no longer supports this, but in case we change our mind, I'm leaving
@@ -2029,7 +2029,7 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         private RichTextBoxSelectionAttribute GetCharFormat(int mask, int effect) {
             RichTextBoxSelectionAttribute charFormat = RichTextBoxSelectionAttribute.None;
 
@@ -2089,7 +2089,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Returns the index of the character nearest to the given point.
-        /// </devdoc>
+        /// </summary>
         public override int GetCharIndexFromPosition(Point pt) {
             NativeMethods.POINT wpt = new NativeMethods.POINT(pt.X, pt.Y);
             int index = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_CHARFROMPOS, 0, wpt);
@@ -2105,7 +2105,7 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         private bool GetCharInCharSet(char c, char[] charSet, bool negate) {
             bool match = false;
             int charSetLen = charSet.Length;
@@ -2124,14 +2124,14 @@ namespace System.Windows.Forms {
         ///     line (line number 0) word-wraps and extends to the second line, and if
         ///     you pass the index of a overflowed character, GetLineFromCharIndex would
         ///     return 1 and not 0.
-        /// </devdoc>
+        /// </summary>
         public override int GetLineFromCharIndex(int index) {
             return unchecked( (int) (long)SendMessage(Interop.EditMessages.EM_EXLINEFROMCHAR, 0, index));
         }
 
         /// <summary>
         ///     Returns the location of the character at the given index.
-        /// </devdoc>
+        /// </summary>
         public override Point GetPositionFromCharIndex(int index) {
             if (richEditMajorVersion == 2) {
                 return base.GetPositionFromCharIndex(index);
@@ -2147,7 +2147,7 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         private bool GetProtectedError() {
             if (ProtectedError) {
                 ProtectedError = false;
@@ -2159,7 +2159,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Loads the contents of the given RTF or text file into a RichTextBox control.
-        /// </devdoc>
+        /// </summary>
         
         
         public void LoadFile(string path) {
@@ -2168,7 +2168,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Loads the contents of a RTF or text into a RichTextBox control.
-        /// </devdoc>
+        /// </summary>
         
         
         public void LoadFile(string path, RichTextBoxStreamType fileType) {
@@ -2188,7 +2188,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Loads the contents of a RTF or text into a RichTextBox control.
-        /// </devdoc>
+        /// </summary>
         public void LoadFile(Stream data, RichTextBoxStreamType fileType) {
             //valid values are 0x0 to 0x4
             if (!ClientUtils.IsEnumValid(fileType, (int)fileType, (int)RichTextBoxStreamType.RichText, (int)RichTextBoxStreamType.UnicodePlainText))
@@ -2268,7 +2268,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Fires an event when the user changes the control's contents
         ///     are either smaller or larger than the control's window size.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnContentsResized(ContentsResizedEventArgs e) {
             ContentsResizedEventHandler handler = (ContentsResizedEventHandler)Events[EVENT_REQUESTRESIZE];
             if (handler != null) handler(this,e);
@@ -2379,7 +2379,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Fires an event when the user clicks a RichTextBox control's horizontal
         ///     scroll bar.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnHScroll(EventArgs e) {
             EventHandler handler = (EventHandler)Events[EVENT_HSCROLL];
             if (handler != null) handler(this,e);
@@ -2388,7 +2388,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Fires an event when the user clicks on a link
         ///     in a rich-edit control.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnLinkClicked(LinkClickedEventArgs e) {
             LinkClickedEventHandler handler = (LinkClickedEventHandler)Events[EVENT_LINKACTIVATE];
             if (handler != null) handler(this,e);
@@ -2397,7 +2397,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Fires an event when the user changes the control's IME conversion status.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnImeChange(EventArgs e) {
             EventHandler handler = (EventHandler)Events[EVENT_IMECHANGE];
             if (handler != null) handler(this,e);
@@ -2406,7 +2406,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Fires an event when the user is taking an action that would change
         ///     a protected range of text in the RichTextBox control.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnProtected(EventArgs e) {
             ProtectedError = true;
             EventHandler handler = (EventHandler)Events[EVENT_PROTECTED];
@@ -2416,7 +2416,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Fires an event when the current selection of text in the RichTextBox
         ///     control has changed or the insertion point has moved.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnSelectionChanged(EventArgs e) {
             EventHandler handler = (EventHandler)Events[EVENT_SELCHANGE];
             if (handler != null) handler(this,e);
@@ -2425,7 +2425,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Fires an event when the user clicks a RichTextBox control's vertical
         ///     scroll bar.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnVScroll(EventArgs e) {
             EventHandler handler = (EventHandler)Events[EVENT_VSCROLL];
             if (handler != null) handler(this,e);
@@ -2433,7 +2433,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// Pastes the contents of the clipboard in the given clipboard format.
-        /// </devdoc>
+        /// </summary>
         public void Paste(DataFormats.Format clipFormat)
         {
             UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_PASTESPECIAL, clipFormat.Id, 0);
@@ -2452,7 +2452,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Redoes the last undone editing operation.
-        /// </devdoc>
+        /// </summary>
         public void Redo() {
             SendMessage(Interop.EditMessages.EM_REDO, 0, 0);
         }
@@ -2461,7 +2461,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Saves the contents of a RichTextBox control to a file.
-        /// </devdoc>
+        /// </summary>
         
         
         public void SaveFile(string path) {
@@ -2470,7 +2470,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Saves the contents of a RichTextBox control to a file.
-        /// </devdoc>
+        /// </summary>
         
         
         public void SaveFile(string path, RichTextBoxStreamType fileType) {
@@ -2491,7 +2491,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Saves the contents of a RichTextBox control to a file.
-        /// </devdoc>
+        /// </summary>
         public void SaveFile(Stream data, RichTextBoxStreamType fileType) {
             int flags;
             switch (fileType) {
@@ -2519,7 +2519,7 @@ namespace System.Windows.Forms {
         
         /// <summary>
         ///     Core Zoom calculation and message passing (used by ZoomFactor property and CreateHandle()
-        /// </devdoc>
+        /// </summary>
         private void SendZoomFactor(float zoom) {
             int numerator;
             int denominator;
@@ -2559,7 +2559,7 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         private bool SetCharFormat(int mask, int effect, RichTextBoxSelectionAttribute charFormat) {
             // check to see if the control has been created
             if (IsHandleCreated) {
@@ -2620,7 +2620,7 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         private static void SetupLogPixels(IntPtr hDC) {
             bool release = false;
             if (hDC == IntPtr.Zero) {
@@ -2647,7 +2647,7 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         private void StreamIn(string str, int flags) {
             if (str.Length == 0 ) {
                 // Destroy the selection if callers was setting
@@ -2776,7 +2776,7 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         private string StreamOut(int flags) {
             Stream stream = new MemoryStream();
             StreamOut(stream, flags, false);
@@ -2975,14 +2975,14 @@ namespace System.Windows.Forms {
         ///   Creates the IRichEditOleCallback compatible object for handling RichEdit callbacks. For more
         ///   information look up the MSDN info on this interface. This is designed to be a back door of 
         ///   sorts, which is why it is fairly obscure, and uses the RichEdit name instead of RichTextBox.
-        /// </devdoc>
+        /// </summary>
         protected virtual object CreateRichEditOleCallback() {
             return new OleCallback(this);
         }
 
         /// <summary>
         ///      Handles link messages (mouse move, down, up, dblclk, etc)
-        /// </devdoc>
+        /// </summary>
         private void EnLinkMsgHandler(ref Message m) {
             NativeMethods.ENLINK enlink;
             //On 64-bit, we do some custom marshalling to get this to work. The richedit control
@@ -3017,7 +3017,7 @@ namespace System.Windows.Forms {
         ///     Converts a CHARRANGE to a string. Note: The behavior of this is dependent on the current window
         ///     class name being used. We have to create a CharBuffer of the type of RichTextBox DLL we're using,
         ///     not based on the SystemCharWidth.
-        /// </devdoc>
+        /// </summary>
         private string CharRangeToString(NativeMethods.CHARRANGE c) {
             NativeMethods.TEXTRANGE txrg = new NativeMethods.TEXTRANGE();
             txrg.chrg = c;
@@ -3053,7 +3053,7 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         private void WmReflectCommand(ref Message m) {
 
             // We check if we're in the middle of handle creation because
@@ -3082,7 +3082,7 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         internal void WmReflectNotify(ref Message m) {
             if (m.HWnd == Handle) {
                 NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
@@ -3242,7 +3242,7 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         private void WmSelectionChange(NativeMethods.SELCHANGE selChange) {
             int selStart = selChange.chrg.cpMin;
             int selEnd = selChange.chrg.cpMax;
@@ -3288,7 +3288,7 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         private void WmSetFont(ref Message m) {
 
             // This function would normally cause two TextChanged events to be fired, one

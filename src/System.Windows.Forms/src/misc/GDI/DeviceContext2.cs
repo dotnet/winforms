@@ -24,7 +24,7 @@ namespace System.Experimental.Gdi
     ///     WARNING: The properties of the dc are obtained on-demand, this object is light-weight because
     ///     of that; if you need to put back the old value after changing a property you need to get it
     ///     first and cache it.
-    /// </devdoc>
+    /// </summary>
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
 #else
@@ -37,7 +37,7 @@ namespace System.Experimental.Gdi
         /// <summary>
         ///     See DeviceContext.cs for information about this class.  The class has been split to be able
         ///     to compile the right set of functionalities into different assemblies.
-        /// </devdoc>
+        /// </summary>
 
         
         public WindowsFont ActiveFont {
@@ -48,7 +48,7 @@ namespace System.Experimental.Gdi
 
         /// <summary>
         ///     DC background color.
-        /// </devdoc>  
+        /// </summary>  
         public Color BackgroundColor
         {
             get
@@ -65,7 +65,7 @@ namespace System.Experimental.Gdi
 
         /// <summary>
         ///     Sets the DC background color and returns the old value.
-        /// </devdoc> 
+        /// </summary> 
         public Color SetBackgroundColor( Color newColor )
         {
             return ColorTranslator.FromWin32(IntUnsafeNativeMethods.SetBkColor( new HandleRef( this, this.Hdc ), ColorTranslator.ToWin32(newColor)));
@@ -73,7 +73,7 @@ namespace System.Experimental.Gdi
 
         /// <summary>
         ///     DC background mode.
-        /// </devdoc>  
+        /// </summary>  
         public DeviceContextBackgroundMode BackgroundMode 
         {
             get
@@ -90,7 +90,7 @@ namespace System.Experimental.Gdi
 
         /// <summary>
         ///     Sets the DC background mode and returns the old value.
-        /// </devdoc> 
+        /// </summary> 
         public DeviceContextBackgroundMode SetBackgroundMode( DeviceContextBackgroundMode newMode )
         {
             return (DeviceContextBackgroundMode) IntUnsafeNativeMethods.SetBkMode(new HandleRef(this, this.Hdc), (int) newMode);
@@ -99,7 +99,7 @@ namespace System.Experimental.Gdi
 
         /// <summary>
         ///     ROP2 currently on the DC.
-        /// </devdoc>
+        /// </summary>
         public DeviceContextBinaryRasterOperationFlags BinaryRasterOperation
         {
             get
@@ -119,7 +119,7 @@ namespace System.Experimental.Gdi
 
         /// <summary>
         ///     Sets the DC ROP2 and returns the old value.
-        /// </devdoc> 
+        /// </summary> 
         public DeviceContextBinaryRasterOperationFlags SetRasterOperation(DeviceContextBinaryRasterOperationFlags rasterOperation )
         {
             return (DeviceContextBinaryRasterOperationFlags) IntUnsafeNativeMethods.SetROP2(new HandleRef(this, this.Hdc), (int) rasterOperation);
@@ -128,7 +128,7 @@ namespace System.Experimental.Gdi
         ///<summary>
         ///     Get the number of pixels per logical inch along the device axes.
         ///     In a system with multiple display monitors, this value is the same for all monitors.
-        ///</devdoc>
+        ///</summary>
         public Size Dpi
         {
             get
@@ -140,7 +140,7 @@ namespace System.Experimental.Gdi
         ///<summary>
         ///     Get the number of pixels per logical inch along the device width.
         ///     In a system with multiple display monitors, this value is the same for all monitors.
-        ///</devdoc>
+        ///</summary>
         public int DpiX
         {
             get
@@ -152,7 +152,7 @@ namespace System.Experimental.Gdi
         ///<summary>
         ///     Get the number of pixels per logical inch along the device (screen) height.
         ///     In a system with multiple display monitors, this value is the same for all monitors.
-        ///</devdoc>
+        ///</summary>
         public int DpiY
         {
             get
@@ -165,7 +165,7 @@ namespace System.Experimental.Gdi
         ///     The font selected into the device context.  
         ///     It's OK to call dispose on it, the HFONT won't be deleted since the WindowsFont did not create it,
         ///     it got it from the HDC.
-        /// </devdoc>
+        /// </summary>
         
         public WindowsFont Font
         {
@@ -211,7 +211,7 @@ namespace System.Experimental.Gdi
         /// <summary>
         ///     Gets a DeviceContext object initialized to refer to the primary screen device.
         ///     Consider using WindowsGraphicsCacheManager.MeasurementGraphics instead.
-        /// </devdoc>
+        /// </summary>
         public static DeviceContext ScreenDC
         {
             get
@@ -241,7 +241,7 @@ namespace System.Experimental.Gdi
         /// <summary>
         ///     Selects the specified object into the dc.  If the specified object is the same as the one currently selected
         ///     in the dc, the object is not set and a null value is returned.
-        /// </devdoc>                         
+        /// </summary>                         
         public IntPtr SelectFont( WindowsFont font )
         {
            
@@ -303,7 +303,7 @@ namespace System.Experimental.Gdi
 
         /// <summary>
         ///     Retrieves device-specific information for this device. 
-        /// </devdoc> 
+        /// </summary> 
         public int GetDeviceCapabilities( DeviceCapabilities capabilityIndex )
         {
             return IntUnsafeNativeMethods.GetDeviceCaps( new HandleRef( this, this.Hdc ), (int) capabilityIndex );
@@ -311,7 +311,7 @@ namespace System.Experimental.Gdi
 
         /// <summary>
         ///     DC map mode.
-        /// </devdoc>  
+        /// </summary>  
         public DeviceContextMapMode MapMode
         {
             get
@@ -343,7 +343,7 @@ namespace System.Experimental.Gdi
 
         /// <summary>
         ///     Sets the DC map mode and returns the old value.
-        /// </devdoc>
+        /// </summary>
         public DeviceContextMapMode SetMapMode( DeviceContextMapMode newMode )
         {
             return (DeviceContextMapMode) IntUnsafeNativeMethods.SetMapMode( new HandleRef(this, this.Hdc), (int) newMode );
@@ -351,7 +351,7 @@ namespace System.Experimental.Gdi
 
         /// <summary>
         ///     Selects the specified object into the dc and returns the old object.
-        /// </devdoc>
+        /// </summary>
         public IntPtr SelectObject(IntPtr hObj, GdiObjectType type)
         {
             switch (type) {
@@ -371,7 +371,7 @@ namespace System.Experimental.Gdi
 
         /// <summary>
         ///     DC text alignment.
-        /// </devdoc>  
+        /// </summary>  
         public DeviceContextTextAlignment TextAlignment
         {
             get
@@ -388,7 +388,7 @@ namespace System.Experimental.Gdi
 
         /// <summary>
         ///     Sets the DC text alignment and returns the old value.
-        /// </devdoc>  
+        /// </summary>  
         public DeviceContextTextAlignment SetTextAlignment( DeviceContextTextAlignment newAligment )
         {
             return (DeviceContextTextAlignment) IntUnsafeNativeMethods.SetTextAlign(new HandleRef(this, this.Hdc), (int) newAligment );
@@ -397,7 +397,7 @@ namespace System.Experimental.Gdi
 
         /// <summary>
         ///     DC current text color.
-        /// </devdoc>  
+        /// </summary>  
         public Color TextColor
         {
             get
@@ -414,7 +414,7 @@ namespace System.Experimental.Gdi
 
         /// <summary>
         ///     Sets the DC text color and returns the old value.
-        /// </devdoc>  
+        /// </summary>  
         public Color SetTextColor( Color newColor )
         {
             return ColorTranslator.FromWin32(IntUnsafeNativeMethods.SetTextColor(new HandleRef( this, this.Hdc), ColorTranslator.ToWin32(newColor)));
@@ -422,7 +422,7 @@ namespace System.Experimental.Gdi
 
         /// <summary>
         ///     DC Viewport Extent in device units.
-        /// </devdoc>  
+        /// </summary>  
         public Size ViewportExtent
         {
             get
@@ -440,7 +440,7 @@ namespace System.Experimental.Gdi
 
         /// <summary>
         ///     Sets the DC Viewport extent to the specified value and returns its previous value; extent values are in device units.
-        /// </devdoc> 
+        /// </summary> 
         public Size SetViewportExtent( Size newExtent )
         {
             IntNativeMethods.SIZE oldExtent = new IntNativeMethods.SIZE();
@@ -452,7 +452,7 @@ namespace System.Experimental.Gdi
 
         /// <summary>
         ///     DC Viewport Origin in device units.
-        /// </devdoc>  
+        /// </summary>  
         public Point ViewportOrigin
         {
             get
@@ -470,7 +470,7 @@ namespace System.Experimental.Gdi
 
         /// <summary>
         ///     Sets the DC Viewport origin to the specified value and returns its previous value; origin values are in device units.
-        /// </devdoc> 
+        /// </summary> 
         public Point SetViewportOrigin( Point newOrigin )
         {
             IntNativeMethods.POINT oldOrigin = new IntNativeMethods.POINT();

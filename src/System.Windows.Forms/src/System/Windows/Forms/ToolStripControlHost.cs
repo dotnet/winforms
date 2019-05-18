@@ -14,7 +14,7 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// ToolStripItem that can host Controls.
-    /// </devdoc>
+    /// </summary>
     public class ToolStripControlHost : ToolStripItem
     {
         private Control control;
@@ -35,7 +35,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Constructs a ToolStripControlHost
-        /// </devdoc>
+        /// </summary>
         
         public ToolStripControlHost(Control c) {
             if (c == null) {
@@ -71,7 +71,7 @@ namespace System.Windows.Forms
         /// <para>
         /// Gets or sets the image that is displayed on a <see cref='System.Windows.Forms.Label'/>.
         /// </para>
-        /// </devdoc>
+        /// </summary>
         [
         Localizable(true),
         SRCategory(nameof(SR.CatAppearance)),
@@ -103,7 +103,7 @@ namespace System.Windows.Forms
         }
         /// <summary>
         /// Overriden to return value from Control.CanSelect.
-        /// </devdoc>
+        /// </summary>
         public override bool CanSelect {
             get { 
                 if (control != null) {
@@ -139,7 +139,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// The control that this item is hosting.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Control Control {
             get {  
@@ -156,7 +156,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Deriving classes can override this to configure a default size for their control.
         /// This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
+        /// </summary>
         protected override Size DefaultSize {
             get {
                 if (Control != null) {
@@ -188,7 +188,7 @@ namespace System.Windows.Forms
         //  For control hosts, this property has no effect
         /// as they get their own clicks.  Use ControlStyles.StandardClick
         /// instead. 
-        /// </devdoc>
+        /// </summary>
         [DefaultValue(false), Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new bool DoubleClickEnabled {
             get {
@@ -317,7 +317,7 @@ namespace System.Windows.Forms
 
          /// <summary>
          /// <para>Occurs when the control loses focus.</para>
-         /// </devdoc>
+         /// </summary>
          [
          SRCategory(nameof(SR.CatFocus)), 
          SRDescription(nameof(SR.ToolStripItemOnLostFocusDescr)), 
@@ -332,7 +332,7 @@ namespace System.Windows.Forms
 
          /// <summary>
          /// <para>Occurs when a key is pressed down while the control has focus.</para>
-         /// </devdoc>
+         /// </summary>
          [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyDownDescr))]
          public event KeyEventHandler KeyDown {
              add => Events.AddHandler(EventKeyDown, value);
@@ -341,7 +341,7 @@ namespace System.Windows.Forms
       
          /// <summary>
          /// <para> Occurs when a key is pressed while the control has focus.</para>
-         /// </devdoc>
+         /// </summary>
          [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyPressDescr))]
          public event KeyPressEventHandler KeyPress {
              add => Events.AddHandler(EventKeyPress, value);
@@ -350,7 +350,7 @@ namespace System.Windows.Forms
       
          /// <summary>
          /// <para> Occurs when a key is released while the control has focus.</para>
-         /// </devdoc>
+         /// </summary>
          [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyUpDescr))]
          public event KeyEventHandler KeyUp {
              add => Events.AddHandler(EventKeyUp, value);
@@ -361,7 +361,7 @@ namespace System.Windows.Forms
         /// This is used for international applications where the language
         /// is written from RightToLeft. When this property is true,
         /// control placement and text will be from right to left.
-        /// </devdoc>
+        /// </summary>
         public override RightToLeft RightToLeft {
             get { 
                 if (control != null) {
@@ -429,7 +429,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Overriden to set the Site for the control hosted. This is set at DesignTime when the component is added to the Container. 
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public override ISite Site {
             get {
@@ -450,7 +450,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Overriden to modify hosted control's text.
-        /// </devdoc>
+        /// </summary>
         [DefaultValue("")]
         public override string Text {
             get {
@@ -504,7 +504,7 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EventValidated, value);
         }
 
-                /// </devdoc>
+                /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override AccessibleObject CreateAccessibilityInstance() {
             return Control.AccessibilityObject;
@@ -512,7 +512,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Cleans up and destroys the hosted control.
-        /// </devdoc>
+        /// </summary>
         protected override void Dispose(bool disposing) {
             // Call base first so other things stop trying to talk to the control.  This will
             // unparent the host item which will cause a SyncControlParent, so the control
@@ -691,7 +691,7 @@ namespace System.Windows.Forms
         
         /// <summary>
         /// called when the control has lost focus
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnGotFocus(EventArgs e) {
             RaiseEvent(EventGotFocus, e);            
         }
@@ -702,7 +702,7 @@ namespace System.Windows.Forms
         
         /// <summary>
         /// called when the control has lost focus
-        /// </devdoc >
+        /// </summary>
         protected virtual void OnLostFocus(EventArgs e) {         
             RaiseEvent(EventLostFocus, e);                              
         } 
@@ -717,7 +717,7 @@ namespace System.Windows.Forms
         } 
         /// <summary>
         /// Called when the items bounds are changed.  Here, we update the Control's bounds.
-        /// </devdoc>
+        /// </summary>
         protected override void OnBoundsChanged() {
             if (control != null) {
                 SuspendSizeSync();
@@ -745,7 +745,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Called when the control fires its Paint event.
-        /// </devdoc>
+        /// </summary>
         protected override void OnPaint(PaintEventArgs e) {
             // do nothing....
         }
@@ -757,7 +757,7 @@ namespace System.Windows.Forms
     
         /// <summary>
         /// Called when the item's parent has been changed.
-        /// </devdoc>
+        /// </summary>
         protected override void OnParentChanged(ToolStrip oldParent, ToolStrip newParent) {
             if (oldParent != null && Owner == null  && newParent == null && Control != null) {
                 // if we've really been removed from the item collection,
@@ -782,7 +782,7 @@ namespace System.Windows.Forms
         /// The events from the hosted control are subscribed here.  
         /// Override to add/prevent syncing of control events.
         /// NOTE: if you override and hook up events here, you should unhook in OnUnsubscribeControlEvents.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnSubscribeControlEvents(Control control) {
 
             if (control != null) {
@@ -830,7 +830,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// The events from the hosted control are unsubscribed here.  
         /// Override to unhook events subscribed in OnSubscribeControlEvents.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnUnsubscribeControlEvents(Control control) {
              if (control != null) {
                 // Please keep this alphabetized and in sync with Subscribe
@@ -1011,7 +1011,7 @@ namespace System.Windows.Forms
             // The component sited by this component site.
             /// <summary>
             ///    <para>When implemented by a class, gets the component associated with the <see cref='System.ComponentModel.ISite'/>.</para>
-            /// </devdoc>
+            /// </summary>
             IComponent ISite.Component {
                 get
                 {
@@ -1022,7 +1022,7 @@ namespace System.Windows.Forms
             // The container in which the component is sited.
             /// <summary>
             /// <para>When implemented by a class, gets the container associated with the <see cref='System.ComponentModel.ISite'/>.</para>
-            /// </devdoc>
+            /// </summary>
             IContainer ISite.Container {
                 get {
                     return owner.Site.Container;
@@ -1032,7 +1032,7 @@ namespace System.Windows.Forms
             // Indicates whether the component is in design mode.
             /// <summary>
             ///    <para>When implemented by a class, determines whether the component is in design mode.</para>
-            /// </devdoc>
+            /// </summary>
             bool ISite.DesignMode {
                 get {
                     return owner.Site.DesignMode;
@@ -1044,7 +1044,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///    <para>When implemented by a class, gets or sets the name of
             ///       the component associated with the <see cref='System.ComponentModel.ISite'/>.</para>
-            /// </devdoc>
+            /// </summary>
             string ISite.Name {
                 get {
                     return owner.Site.Name;
@@ -1077,7 +1077,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             ///     Retrieves the key corresponding to the given value.
-            /// </devdoc>
+            /// </summary>
             object IDictionaryService.GetKey(object value) {
                 if (_dictionary != null) {
                     foreach (DictionaryEntry de in _dictionary) {
@@ -1092,7 +1092,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             ///     Retrieves the value corresponding to the given key.
-            /// </devdoc>
+            /// </summary>
             object IDictionaryService.GetValue(object key) {
                 if (_dictionary != null) {
                     return _dictionary[key];
@@ -1104,7 +1104,7 @@ namespace System.Windows.Forms
             ///     Stores the given key-value pair in an object's site.  This key-value
             ///     pair is stored on a per-object basis, and is a handy place to save
             ///     additional information about a component.
-            /// </devdoc>
+            /// </summary>
             void IDictionaryService.SetValue(object key, object value) {
                 if (_dictionary == null) {
                     _dictionary = new Hashtable();

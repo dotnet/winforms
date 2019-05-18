@@ -11,48 +11,48 @@ namespace System.Windows.Forms
     {
         /// <summary>
         /// Specifies that the message box contain no symbols.
-        /// </devdoc>
+        /// </summary>
         None = 0,
 
         /// <summary>
         /// Specifies that the message box contains a hand symbol.
-        /// </devdoc>
+        /// </summary>
         Hand = 0x00000010,
 
         /// <summary>
         /// Specifies that the message box contains a question mark symbol.
-        /// </devdoc>
+        /// </summary>
         Question = 0x00000020,
 
         /// <summary>
         /// Specifies that the message box contains an exclamation symbol.
-        /// </devdoc>
+        /// </summary>
         Exclamation  = 0x00000030,
 
         /// <summary>
         /// Specifies that the message box contains an asterisk symbol.
-        /// </devdoc>
+        /// </summary>
         Asterisk = 0x00000040,
 
         /// <summary>
         /// Specifies that the message box contains a hand icon. This field is
         /// constant.
-        /// </devdoc>
+        /// </summary>
         Stop = Hand,
 
         /// <summary>
         /// Specifies that the message box contains a hand icon.
-        /// </devdoc>
+        /// </summary>
         Error = Hand,
 
         /// <summary>
         /// Specifies that the message box contains an exclamation icon.
-        /// </devdoc>
+        /// </summary>
         Warning = Exclamation,
 
         /// <summary>
         /// Specifies that the message box contains an asterisk icon.
-        /// </devdoc>
+        /// </summary>
         Information  = Asterisk,
     }
 }

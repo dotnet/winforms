@@ -15,7 +15,7 @@ namespace System.Windows.Forms {
     /// <summary>
     ///      ListViewItemStateImageIndexConverter is a class that can be used to convert
     ///      image index values one data type to another.
-    /// </devdoc>
+    /// </summary>
     public class ListViewItemStateImageIndexConverter : ImageIndexConverter {
 
         protected override bool IncludeNoneAsStandardValue {
@@ -30,7 +30,7 @@ namespace System.Windows.Forms {
         ///      for the data type this validator is designed for.  This
         ///      will return null if the data type does not support a
         ///      standard set of values.
-        /// </devdoc>
+        /// </summary>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context) {
             if (context != null && context.Instance != null) {
                 object instance = context.Instance;

@@ -8,6 +8,6 @@ namespace System.Windows.Forms
     /// Represents the method that handles the <see langword='Scroll'/> event
     /// of a <see cref='System.Windows.Forms.ScrollBar'/>, <see cref='System.Windows.Forms.TrackBar'/>,
     /// or <see cref='System.Windows.Forms.DataGrid'/>.
-    /// </devdoc>
+    /// </summary>
     public delegate void ScrollEventHandler(object sender, ScrollEventArgs e);
 }

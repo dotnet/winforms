@@ -9,28 +9,28 @@ namespace System.Windows.Forms
     /// <summary>
     /// This class defines the possible kinds of punctuation tables that
     /// can be used with the RichTextBox word wrapping and word breaking features.
-    /// </devdoc>
+    /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
     public enum RichTextBoxWordPunctuations
     {
         /// <summary>
         /// Use pre-defined Level 1 punctuation table as default.
-        /// </devdoc>
+        /// </summary>
         Level1 = 0x080,
 
         /// <summary>
         /// Use pre-defined Level 2 punctuation table as default.
-        /// </devdoc>
+        /// </summary>
         Level2 = 0x100,
 
         /// <summary>
         /// Use a custom defined punctuation table.
-        /// </devdoc>
+        /// </summary>
         Custom = 0x200,
 
         /// <summary>
         /// Used as a mask.
-        /// </devdoc>
+        /// </summary>
         All = Level1 | Level2 | Custom,
     }
 }

@@ -29,7 +29,7 @@ namespace System.Windows.Forms
     ///       Provides a low-level encapsulation of a window handle
     ///       and a window procedure. The class automatically manages window class creation and registration.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     public class NativeWindow : MarshalByRefObject, IWin32Window {
 #if DEBUG
         private static readonly BooleanSwitch AlwaysUseNormalWndProc = new BooleanSwitch("AlwaysUseNormalWndProc", "Skips checking for the debugger when choosing the debuggable WndProc handler");
@@ -134,7 +134,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///     Override's the base object's finalize method.
-        /// </devdoc>
+        /// </summary>
         ~NativeWindow() {
             ForceExitMessageLoop();
         }
@@ -195,7 +195,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///     Indicates whether a window handle was created & is being tracked.
-        /// </devdoc>
+        /// </summary>
         internal static bool AnyHandleCreated {
             get {
                 return anyHandleCreated;
@@ -206,7 +206,7 @@ namespace System.Windows.Forms
         ///    <para>
         ///       Gets the handle for this window.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public IntPtr Handle {
             get {
 #if DEBUG
@@ -232,7 +232,7 @@ namespace System.Windows.Forms
         ///     previous NativeWindow subclass.
         ///
         ///     This should be public, but it is way too late for that.
-        /// </devdoc>
+        /// </summary>
         internal NativeWindow PreviousWindow {
             [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
             get {
@@ -243,7 +243,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///     Helper method that returns a static value for the
         ///     unmanaged DefWindowProc call.
-        /// </devdoc>
+        /// </summary>
         internal static IntPtr UserDefindowProc {
             get {
                 return userDefWindowProc;
@@ -323,7 +323,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///     Inserts an entry into this hashtable.
-        /// </devdoc>
+        /// </summary>
         private static void AddWindowToTable(IntPtr handle, NativeWindow window) {
 
             Debug.Assert(handle != IntPtr.Zero, "Should never insert a zero handle into the hash");
@@ -435,7 +435,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///     Inserts an entry into this ID hashtable.
-        /// </devdoc>
+        /// </summary>
         internal static void AddWindowToIDTable(object wrapper, IntPtr handle) {
             NativeWindow.hashForIdHandle[NativeWindow.globalID] = handle;
             NativeWindow.hashForHandleId[handle] = NativeWindow.globalID;
@@ -553,7 +553,7 @@ namespace System.Windows.Forms
         ///       Assigns a handle to this
         ///       window.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void AssignHandle(IntPtr handle) {
             AssignHandle(handle, true);
         }
@@ -616,7 +616,7 @@ namespace System.Windows.Forms
         ///     message is sent to this Window. This method packages the window message
         ///     in a Message object and invokes the wndProc() method. A WM_NCDESTROY
         ///     message automatically causes the releaseHandle() method to be called.
-        /// </devdoc>
+        /// </summary>
         private IntPtr Callback(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam) {
 
             // Note: if you change this code be sure to change the 
@@ -645,7 +645,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///     Raises an exception if the window handle is not zero.
-        /// </devdoc>
+        /// </summary>
         private void CheckReleased() {
             if (handle != IntPtr.Zero) {
                 throw new InvalidOperationException(SR.HandleAlreadyExists);
@@ -657,7 +657,7 @@ namespace System.Windows.Forms
         ///       Creates a window handle for this
         ///       window.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             // The call to UnsafeNativeMethods.CreateWindowEx is actually an interop call...
             System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Interoperability", "CA1404:CallGetLastErrorImmediatelyAfterPInvoke")
@@ -724,7 +724,7 @@ namespace System.Windows.Forms
         ///     message is sent to this Window. This method packages the window message
         ///     in a Message object and invokes the wndProc() method. A WM_NCDESTROY
         ///     message automatically causes the releaseHandle() method to be called.
-        /// </devdoc>
+        /// </summary>
         private IntPtr DebuggableCallback(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam) {
 
             // Note: if you change this code be sure to change the 
@@ -751,7 +751,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///     Invokes the default window procedure associated with this Window. It is
         ///     an error to call this method when the Handle property is zero.
-        /// </devdoc>
+        /// </summary>
         public void DefWndProc(ref Message m) {
             if (previousWindow == null) {
                 if (defWindowProc == IntPtr.Zero) {
@@ -779,7 +779,7 @@ namespace System.Windows.Forms
         ///       Destroys the
         ///       handle associated with this window.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public virtual void DestroyHandle() {
             // 
             lock (this) {
@@ -809,7 +809,7 @@ namespace System.Windows.Forms
         ///     that is larger than twice the current number of buckets, and the entries
         ///     in the hashtable are redistributed into the new buckets using the cached
         ///     hashcodes.
-        /// </devdoc>
+        /// </summary>
         private static void ExpandTable() {
             // Allocate new Array 
             int oldhashsize = hashBuckets.Length;
@@ -862,7 +862,7 @@ namespace System.Windows.Forms
         ///       Retrieves the window associated with the specified
         ///    <paramref name="handle"/>.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         public static NativeWindow FromHandle(IntPtr handle) {
             if (handle != IntPtr.Zero && handleCount > 0) {
@@ -874,7 +874,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///     Calculates a prime number of at least minSize using a static table, and
         ///     if we overflow it, we calculate directly.
-        /// </devdoc>
+        /// </summary>
         private static int GetPrime(int minSize) {
             if (minSize < 0) {
                 Debug.Fail("NativeWindow hashtable capacity overflow");
@@ -911,7 +911,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///     Returns the native window for the given handle, or null if 
         ///     the handle is not in our hash table.
-        /// </devdoc>
+        /// </summary>
         private static NativeWindow GetWindowFromTable(IntPtr handle) {
 
             Debug.Assert(handle != IntPtr.Zero, "Zero handles cannot be stored in the table");
@@ -955,7 +955,7 @@ namespace System.Windows.Forms
         ///     The out parameter 'seed' is h1(key), while the out parameter 
         ///     'incr' is h2(key, hashSize).  Callers of this function should 
         ///     add 'incr' each time through a loop.
-        /// </devdoc>
+        /// </summary>
         private static uint InitHash(IntPtr handle, int hashsize, out uint seed, out uint incr) {
             // Hashcode must be positive.  Also, we must not use the sign bit, since
             // that is used for the collision bit.
@@ -975,7 +975,7 @@ namespace System.Windows.Forms
         ///       Specifies a notification method that is called when the handle for a
         ///       window is changed.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnHandleChange() {
         }
 
@@ -986,7 +986,7 @@ namespace System.Windows.Forms
         ///     have access to their thread), and we cannot unregister window classes
         ///     (because the classes are in use by the windows we can't destroy).  Instead,
         ///     we move the class and window procs to DefWndProc
-        /// </devdoc>
+        /// </summary>
         [PrePrepareMethod]
         private static void OnShutdown(object sender, EventArgs e) {
 
@@ -1042,7 +1042,7 @@ namespace System.Windows.Forms
         ///       manages an unhandled thread
         ///       exception.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnThreadException(Exception e) {
         }
 
@@ -1050,7 +1050,7 @@ namespace System.Windows.Forms
         ///    <para>
         ///       Releases the handle associated with this window.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public virtual void ReleaseHandle() {
             ReleaseHandle(true);
         }
@@ -1061,7 +1061,7 @@ namespace System.Windows.Forms
         ///     should be false if we are releasing in response to a 
         ///     WM_DESTROY.  Unsubclassing during this message can cause problems
         ///     with XP's theme manager and it's not needed anyway.
-        /// </devdoc>
+        /// </summary>
         private void ReleaseHandle(bool handleValid) {
             if (handle != IntPtr.Zero) {
                 // 
@@ -1097,7 +1097,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///     Removes an entry from this hashtable. If an entry with the specified
         ///     key exists in the hashtable, it is removed.
-        /// </devdoc>
+        /// </summary>
         private static void RemoveWindowFromTable(IntPtr handle, NativeWindow window) {
 
             Debug.Assert(handle != IntPtr.Zero, "Incorrect handle");
@@ -1170,7 +1170,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///   Determines if the given window is the first member of the linked list
-        /// </devdoc>
+        /// </summary>
         private static bool IsRootWindowInListWithChildren(NativeWindow window) {
             // This seems backwards, but it isn't.  When a new subclass comes in, 
             // it's previousWindow field is set to the previous subclass.  Therefore,
@@ -1182,7 +1182,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///   Determines if the given window is the first member of the linked list
         ///   and has no children
-        /// </devdoc>
+        /// </summary>
 
         /* No one is calling this private method, so it is safe to comment it out.
         private static bool IsRootWindowInListWithNoChildren(NativeWindow window)
@@ -1194,7 +1194,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///     Inserts an entry into this ID hashtable.
-        /// </devdoc>
+        /// </summary>
         internal static void RemoveWindowFromIDTable(IntPtr handle) {
             short id = (short)NativeWindow.hashForHandleId[handle];
             NativeWindow.hashForHandleId.Remove(handle);
@@ -1221,7 +1221,7 @@ namespace System.Windows.Forms
         /// 
         ///     When threadScope is true, the thread exception mode is set. The thread 
         ///     exception mode overrides the application exception mode if it's not Automatic.
-        /// </devdoc>
+        /// </summary>
         internal static void SetUnhandledExceptionModeInternal(UnhandledExceptionMode mode, bool threadScope) {
 
             if (!threadScope && anyHandleCreatedInApp) {
@@ -1270,7 +1270,7 @@ namespace System.Windows.Forms
         ///        a NativeWindow that has GC'd
         ///     3) User releasing this handle but this NativeWindow is not the current
         ///        window proc.
-        /// </devdoc>
+        /// </summary>
         private void UnSubclass() {
             bool finalizing = (!weakThisPtr.IsAlive || weakThisPtr.Target == null);
             HandleRef href = new HandleRef(this, handle);
@@ -1342,7 +1342,7 @@ namespace System.Windows.Forms
         ///       Invokes the default window procedure associated with
         ///       this window.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
 
         protected virtual void WndProc(ref Message m) {
             DefWndProc(ref m);
@@ -1361,7 +1361,7 @@ namespace System.Windows.Forms
         ///     marked with the high bit.
         ///
         ///     Reclaimed buckets store -1 in their handle, not the hash table reference.
-        /// </devdoc>
+        /// </summary>
         private struct HandleBucket {
             public IntPtr handle; // Win32 window handle
             public GCHandle window; // a weak GC handle to the NativeWindow class
@@ -1373,7 +1373,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///     WindowClass encapsulates a window class.
-        /// </devdoc>
+        /// </summary>
         private class WindowClass {
             internal static WindowClass cache;
 
@@ -1407,7 +1407,7 @@ namespace System.Windows.Forms
             ///     Retrieves a WindowClass object for use.  This will create a new
             ///     object if there is no such class/style available, or retrun a
             ///     cached object if one exists.
-            /// </devdoc>
+            /// </summary>
             internal static WindowClass Create(string className, int classStyle) {
                 lock (wcInternalSyncObject) {
                     WindowClass wc = cache;
@@ -1440,7 +1440,7 @@ namespace System.Windows.Forms
             ///     from the actual cache; it merely attempts to unregister
             ///     the classes of everything in the cache.  This allows the unused
             ///     classes to be unrooted. They can later be re-rooted and reused.
-            /// </devdoc>
+            /// </summary>
             internal static void DisposeCache() {
                 lock (wcInternalSyncObject) {
                     WindowClass wc = cache;
@@ -1454,7 +1454,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             ///     Fabricates a full class name from a partial.
-            /// </devdoc>
+            /// </summary>
             private string GetFullClassName(string className) {
                 StringBuilder b = new StringBuilder(50);
                 b.Append(Application.WindowsFormsVersion);
@@ -1471,7 +1471,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///     Once the classname and style bits have been set, this can
             ///     be called to register the class.
-            /// </devdoc>
+            /// </summary>
             private void RegisterClass() {
                 NativeMethods.WNDCLASS_D wndclass = new NativeMethods.WNDCLASS_D();
 
@@ -1579,7 +1579,7 @@ namespace System.Windows.Forms
             ///     Unregisters this window class.  Unregistration is not a
             ///     last resort; the window class may be re-registered through
             ///     a call to registerClass.
-            /// </devdoc>
+            /// </summary>
             private void UnregisterClass() {
                 if (registered && UnsafeNativeMethods.UnregisterClass(windowClassName, new HandleRef(null, UnsafeNativeMethods.GetModuleHandle(null)))) {
                     windowProc = null;

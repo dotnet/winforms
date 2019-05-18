@@ -13,7 +13,7 @@ namespace System.Windows.Forms{
     /// <summary>
     /// <para>Represents a <see cref='System.Windows.Forms.TextBox'/> control that is hosted in a 
     /// <see cref='System.Windows.Forms.DataGridTextBoxColumn'/> .</para>
-    /// </devdoc>
+    /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -33,7 +33,7 @@ namespace System.Windows.Forms{
         }
         /// <summary>
         /// <para>Sets the <see cref='System.Windows.Forms.DataGrid'/> to which this <see cref='System.Windows.Forms.TextBox'/> control belongs.</para>
-        /// </devdoc>
+        /// </summary>
         public void SetDataGrid(DataGrid parentGrid)
         {
             dataGrid = parentGrid;

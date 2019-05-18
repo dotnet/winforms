@@ -13,7 +13,7 @@ namespace System.Windows.Forms {
 
     /// <summary>
     /// ToolStripOverflowButton
-    /// </devdoc>
+    /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.None)]
     public class ToolStripOverflowButton : ToolStripDropDownButton {
 

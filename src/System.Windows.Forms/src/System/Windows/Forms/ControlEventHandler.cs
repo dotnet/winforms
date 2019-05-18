@@ -7,6 +7,6 @@ namespace System.Windows.Forms
     /// <summary>
     /// Describes a delegate for an event that has a ControlEventArgs as
     /// a parameter.
-    /// </devdoc>
+    /// </summary>
     public delegate void ControlEventHandler(object sender, ControlEventArgs e);
 }

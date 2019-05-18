@@ -19,7 +19,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///      Creates our array of types on demand.
-        /// </devdoc>
+        /// </summary>
         private static Type[] ConstructorParamaterTypes {
             get {
                 if (ctorTypes == null) {
@@ -31,7 +31,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///      Creates our array of param names on demand.
-        /// </devdoc>
+        /// </summary>
 
         private static string[] ConstructorParameterProperties {
             get {
@@ -46,7 +46,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para>Gets a value indicating whether this converter can
         ///       convert an object to the given destination type using the context.</para>
-        /// </devdoc>
+        /// </summary>
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType) {
             if (destinationType == typeof(InstanceDescriptor)) {
                 return true;
@@ -60,7 +60,7 @@ namespace System.Windows.Forms {
         ///      to ToString on the object if the object is valid and if the destination
         ///      type is string.  If this cannot convert to the desitnation type, this will
         ///      throw a NotSupportedException.
-        /// </devdoc>
+        /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
             if (destinationType == null) {
                 throw new ArgumentNullException(nameof(destinationType));
@@ -78,7 +78,7 @@ namespace System.Windows.Forms {
         ///      Creates an instance of this type given a set of property values
         ///      for the object.  This is useful for objects that are immutable, but still
         ///      want to provide changable properties.
-        /// </devdoc>
+        /// </summary>
         public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues) {
             try
             {
@@ -99,7 +99,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///      Determines if changing a value on this object should require a call to
         ///      CreateInstance to create a new value.
-        /// </devdoc>
+        /// </summary>
         public override bool GetCreateInstanceSupported(ITypeDescriptorContext context) {
             return true;
         }
@@ -107,7 +107,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///      Gets the best matching ctor for a given binding and fills it out, based on the 
         ///      state of the Binding and the optimal ctor.
-        /// </devdoc>
+        /// </summary>
         private InstanceDescriptor GetInstanceDescriptorFromValues(Binding b) {
 
             // The BindingFormattingDialog turns on Binding::FormattingEnabled property.

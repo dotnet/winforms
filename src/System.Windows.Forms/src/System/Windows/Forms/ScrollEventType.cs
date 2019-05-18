@@ -8,7 +8,7 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Specifies the type of action used to raise the <see cref='System.Windows.Forms.ScrollBar.Scroll'/> event.
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
     public enum ScrollEventType
     {
@@ -16,56 +16,56 @@ namespace System.Windows.Forms
         /// The scroll box was moved a small distance. The user clicked the
         /// left (horizontal) or top (vertical) scroll arrow or pressed
         /// the UP ARROW
-        /// </devdoc>
+        /// </summary>
         SmallDecrement = NativeMethods.SB_LINELEFT,
 
         /// <summary>
         /// The scroll box was moved a small distance. The user clicked the
         /// right (horizontal) or bottom (vertical) scroll arrow or pressed
         /// the DOWN ARROW key.
-        /// </devdoc>
+        /// </summary>
         SmallIncrement = NativeMethods.SB_LINERIGHT,
 
         /// <summary>
         /// The scroll box moved a large distance. The user clicked the scroll bar
         /// to the left (horizontal) or above (vertical) the scroll box, or pressed
         /// the PAGE UP key.
-        /// </devdoc>
+        /// </summary>
         LargeDecrement = NativeMethods.SB_PAGELEFT,
 
         /// <summary>
         /// The scroll box moved a large distance. The user clicked the scroll bar
         /// to the right (horizontal) or below (vertical) the scroll box, or pressed
         /// the PAGE DOWN key.
-        /// </devdoc>
+        /// </summary>
         LargeIncrement = NativeMethods.SB_PAGERIGHT,
 
         /// <summary>
         ///    <para>
         /// The scroll box was moved.
-        /// </devdoc>
+        /// </summary>
         ThumbPosition = NativeMethods.SB_THUMBPOSITION,
 
         /// <summary>
         /// The scroll box is currently being moved.
-        /// </devdoc>
+        /// </summary>
         ThumbTrack = NativeMethods.SB_THUMBTRACK,
 
         /// <summary>
         /// The scroll box was moved to the <see cref='System.Windows.Forms.ScrollBar.Minimum'/>
         /// position.
-        /// </devdoc>
+        /// </summary>
         First = NativeMethods.SB_LEFT,
 
         /// <summary>
         /// The scroll box was moved to the <see cref='System.Windows.Forms.ScrollBar.Maximum'/>
         /// position.
-        /// </devdoc>
+        /// </summary>
         Last = NativeMethods.SB_RIGHT,
 
         /// <summary>
         /// The scroll box has stopped moving.
-        /// </devdoc>
+        /// </summary>
         EndScroll = NativeMethods.SB_ENDSCROLL
     }
 }

@@ -9,35 +9,35 @@ namespace System.Windows.Forms
     /// <summary>
     /// Specifies the starting position that the system uses to arrange minimized
     /// windows.
-    /// </devdoc>
+    /// </summary>
     [Flags]
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Maps to native enum.")]
     public enum ArrangeStartingPosition
     {
         /// <summary>
         /// Starts at the lower-left corner of the screen, which is the default position.
-        /// </devdoc>
+        /// </summary>
         BottomLeft = NativeMethods.ARW_BOTTOMLEFT,
 
         /// <summary>
         /// Starts at the lower-right corner of the screen.
-        /// </devdoc>
+        /// </summary>
         BottomRight = NativeMethods.ARW_BOTTOMRIGHT,
 
         /// <summary>
         /// Hides minimized windows by moving them off the visible area of the
         /// screen.
-        /// </devdoc>
+        /// </summary>
         Hide = NativeMethods.ARW_HIDE,
 
         /// <summary>
         /// Starts at the upper-left corner of the screen.
-        /// </devdoc>
+        /// </summary>
         TopLeft = NativeMethods.ARW_TOPLEFT,
 
         /// <summary>
         /// Starts at the upper-right corner of the screen.
-        /// </devdoc>
+        /// </summary>
         TopRight = NativeMethods.ARW_TOPRIGHT,
     }
 }

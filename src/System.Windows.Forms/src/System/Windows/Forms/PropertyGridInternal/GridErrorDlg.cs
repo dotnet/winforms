@@ -28,7 +28,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
     ///     in the top pane. We don't restrict dialog width in any way.  
     ///     Use caution and check at all DPI scaling factors if adding a new message
     ///     to be displayed in the top pane.
-    /// </devdoc>
+    /// </summary>
     internal class GridErrorDlg : Form {
         private TableLayoutPanel overarchingTableLayoutPanel;
         private TableLayoutPanel buttonTableLayoutPanel;
@@ -100,7 +100,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         /// <summary>
         ///     Called when the details button is clicked.
-        /// </devdoc>
+        /// </summary>
         private void DetailsClick(object sender, EventArgs devent) {
             int delta = details.Height + 8;
 
@@ -130,7 +130,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// <summary>
         ///     Tells whether the current resources for this dll have been
         ///     localized for a RTL language.
-        /// </devdoc>
+        /// </summary>
         private static bool IsRTLResources {
             get {
                 return SR.RTL != "RTL_False";

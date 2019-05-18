@@ -16,13 +16,13 @@ namespace System.Windows.Forms
     /// ListViewItemConverter is a class that can be used to convert
     /// ListViewItem objects from one data type to another.  Access this
     /// class through the TypeDescriptor.
-    /// </devdoc>
+    /// </summary>
     public class ListViewItemConverter : ExpandableObjectConverter
     {
         /// <summary>
         /// Gets a value indicating whether this converter can convert an object to the given
         /// destination type using the context.
-        /// </devdoc>
+        /// </summary>
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
         {
             if (destinationType == typeof(InstanceDescriptor))
@@ -39,7 +39,7 @@ namespace System.Windows.Forms
         /// to ToString on the object if the object is valid and if the destination
         /// type is string. If this cannot convert to the desitnation type, this will
         /// throw a NotSupportedException.
-        /// </devdoc>
+        /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
             if (destinationType == null)

@@ -45,14 +45,14 @@ namespace System.Windows.Forms {
         /// <summary>
         ///      Creates an empty BindingNavigator tool strip.
         ///      Call AddStandardItems() to add standard tool strip items.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public BindingNavigator() : this(false) {
         }
 
         /// <summary>
         ///      Creates a BindingNavigator strip containing standard items, bound to the specified BindingSource.
-        /// </devdoc>
+        /// </summary>
         public BindingNavigator(BindingSource bindingSource) : this(true) {
             BindingSource = bindingSource;
         }
@@ -60,7 +60,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///      Creates an empty BindingNavigator tool strip, and adds the strip to the specified container.
         ///      Call AddStandardItems() to add standard tool strip items.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public BindingNavigator(IContainer container) : this(false) {
             if (container == null) {
@@ -72,7 +72,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///      Creates a BindingNavigator strip, optionally containing a set of standard tool strip items.
-        /// </devdoc>
+        /// </summary>
         public BindingNavigator(bool addStandardItems) {
             if (addStandardItems) {
                 AddStandardItems();
@@ -81,14 +81,14 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     ISupportInitialize support. Disables updates to tool strip items during initialization.
-        /// </devdoc>
+        /// </summary>
         public void BeginInit() {
             initializing = true;
         }
 
         /// <summary>
         ///     ISupportInitialize support. Enables updates to tool strip items after initialization.
-        /// </devdoc>
+        /// </summary>
         public void EndInit() {
             initializing = false;
             RefreshItemsInternal();
@@ -96,7 +96,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Unhooks the BindingNavigator from the BindingSource.
-        /// </devdoc>
+        /// </summary>
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 BindingSource = null; // ...unwires from events of any prior BindingSource
@@ -121,7 +121,7 @@ namespace System.Windows.Forms {
         ///
         ///      Note: This method does NOT remove any previous items from the strip, or suspend
         ///      layout while items are being added. Those are responsibilities of the caller.
-        /// </devdoc>
+        /// </summary>
         public virtual void AddStandardItems() {
 
             //
@@ -234,7 +234,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///      The BindingSource who's list we are currently navigating, or null.
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(null),
         SRCategory(nameof(SR.CatData)),
@@ -254,7 +254,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     The ToolStripItem that triggers the 'Move first' action, or null.
-        /// </devdoc>
+        /// </summary>
         [
         TypeConverter(typeof(ReferenceConverter)),
         SRCategory(nameof(SR.CatItems)),
@@ -275,7 +275,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     The ToolStripItem that triggers the 'Move previous' action, or null.
-        /// </devdoc>
+        /// </summary>
         [
         TypeConverter(typeof(ReferenceConverter)),
         SRCategory(nameof(SR.CatItems)),
@@ -298,7 +298,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     The ToolStripItem that triggers the 'Move next' action, or null.
-        /// </devdoc>
+        /// </summary>
         [
         TypeConverter(typeof(ReferenceConverter)),
         SRCategory(nameof(SR.CatItems)),
@@ -319,7 +319,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     The ToolStripItem that triggers the 'Move last' action, or null.
-        /// </devdoc>
+        /// </summary>
         [
         TypeConverter(typeof(ReferenceConverter)),
         SRCategory(nameof(SR.CatItems)),
@@ -340,7 +340,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     The ToolStripItem that triggers the 'Add new' action, or null.
-        /// </devdoc>
+        /// </summary>
         [
         TypeConverter(typeof(ReferenceConverter)),
         SRCategory(nameof(SR.CatItems)),
@@ -365,7 +365,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     The ToolStripItem that triggers the 'Delete' action, or null.
-        /// </devdoc>
+        /// </summary>
         [
         TypeConverter(typeof(ReferenceConverter)),
         SRCategory(nameof(SR.CatItems)),
@@ -391,7 +391,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     The ToolStripItem that displays the current position, or null.
-        /// </devdoc>
+        /// </summary>
         [
         TypeConverter(typeof(ReferenceConverter)),
         SRCategory(nameof(SR.CatItems)),
@@ -412,7 +412,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     The ToolStripItem that displays the total number of items, or null.
-        /// </devdoc>
+        /// </summary>
         [
         TypeConverter(typeof(ReferenceConverter)),
         SRCategory(nameof(SR.CatItems)),
@@ -433,7 +433,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Formatting to apply to count displayed in the CountItem tool strip item.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.BindingNavigatorCountItemFormatPropDescr))
@@ -454,7 +454,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Event raised when the state of the tool strip items needs to be
         ///     refreshed to reflect the current state of the data.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.BindingNavigatorRefreshItemsEventDescr))
@@ -466,7 +466,7 @@ namespace System.Windows.Forms {
         
         /// <summary>
         ///     Refreshes the state of the standard items to reflect the current state of the data.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void RefreshItemsCore() {
             int count, position;
@@ -525,7 +525,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Called when the state of the tool strip items needs to be refreshed to reflect the current state of the data.
         ///     Calls <see cref='RefreshItemsCore'> to refresh the state of the standard items, then raises the RefreshItems event.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnRefreshItems() {
             // Refresh all the standard items
             RefreshItemsCore();
@@ -540,7 +540,7 @@ namespace System.Windows.Forms {
         ///     Triggers form validation. Used by the BindingNavigator's standard items when clicked. If a validation error occurs
         ///     on the form, focus remains on the active control and the standard item does not perform its standard click action.
         ///     Custom items may also use this method to trigger form validation and check for success before performing an action.
-        /// </devdoc>
+        /// </summary>
         public bool Validate() {
             bool validatedControlAllowsFocusChange;
             return this.ValidateActiveControl(out validatedControlAllowsFocusChange);
@@ -548,7 +548,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Accept new row position entered into PositionItem.
-        /// </devdoc>
+        /// </summary>
         private void AcceptNewPosition() {
             // If no position item or binding source, do nothing
             if (positionItem == null || bindingSource == null) {
@@ -582,7 +582,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Cancel new row position entered into PositionItem.
-        /// </devdoc>
+        /// </summary>
         private void CancelNewPosition() {
             // Just refresh state of all items to reflect current position
             // (causing position item's new value to get blasted away)
@@ -591,7 +591,7 @@ namespace System.Windows.Forms {
   
         /// <summary>
         ///     Navigates to first item in BindingSource's list when the MoveFirstItem is clicked.
-        /// </devdoc>
+        /// </summary>
         private void OnMoveFirst(object sender, EventArgs e) {
             if (Validate()) {
                 if (bindingSource != null) {
@@ -603,7 +603,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Navigates to previous item in BindingSource's list when the MovePreviousItem is clicked.
-        /// </devdoc>
+        /// </summary>
         private void OnMovePrevious(object sender, EventArgs e) {
             if (Validate()) {
                 if (bindingSource != null) {
@@ -615,7 +615,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Navigates to next item in BindingSource's list when the MoveNextItem is clicked.
-        /// </devdoc>
+        /// </summary>
         private void OnMoveNext(object sender, EventArgs e) {
             if (Validate()) {
                 if (bindingSource != null) {
@@ -627,7 +627,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Navigates to last item in BindingSource's list when the MoveLastItem is clicked.
-        /// </devdoc>
+        /// </summary>
         private void OnMoveLast(object sender, EventArgs e) {
             if (Validate()) {
                 if (bindingSource != null) {
@@ -639,7 +639,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Adds new item to BindingSource's list when the AddNewItem is clicked.
-        /// </devdoc>
+        /// </summary>
         private void OnAddNew(object sender, EventArgs e) {
             if (Validate()) {
                 if (bindingSource != null) {
@@ -651,7 +651,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Deletes current item from BindingSource's list when the DeleteItem is clicked.
-        /// </devdoc>
+        /// </summary>
         private void OnDelete(object sender, EventArgs e) {
             if (Validate()) {
                 if (bindingSource != null) {
@@ -663,7 +663,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Navigates to specific item in BindingSource's list when a value is entered into the PositionItem.
-        /// </devdoc>
+        /// </summary>
         private void OnPositionKey(object sender, KeyEventArgs e) {
             switch (e.KeyCode) {
                 case Keys.Enter:
@@ -677,28 +677,28 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Navigates to specific item in BindingSource's list when a value is entered into the PositionItem.
-        /// </devdoc>
+        /// </summary>
         private void OnPositionLostFocus(object sender, EventArgs e) {
             AcceptNewPosition();
         }
 
         /// <summary>
         ///     Refresh tool strip items when something changes in the BindingSource.
-        /// </devdoc>
+        /// </summary>
         private void OnBindingSourceStateChanged(object sender, EventArgs e) {
             RefreshItemsInternal();
         }
 
         /// <summary>
         ///     Refresh tool strip items when something changes in the BindingSource's list.
-        /// </devdoc>
+        /// </summary>
         private void OnBindingSourceListChanged(object sender, ListChangedEventArgs e) {
             RefreshItemsInternal();
         }
 
         /// <summary>
         ///     Refresh the state of the items when the state of the data changes.
-        /// </devdoc>
+        /// </summary>
         private void RefreshItemsInternal() {
             // Block all updates during initialization
             if (initializing) {
@@ -732,7 +732,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Wire up some member variable to the specified button item, hooking events
         ///     on the new button and unhooking them from the previous button, if required.
-        /// </devdoc>
+        /// </summary>
         private void WireUpButton(ref ToolStripItem oldButton, ToolStripItem newButton, EventHandler clickHandler) {
             if (oldButton == newButton) {
                 return;
@@ -753,7 +753,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Wire up some member variable to the specified text box item, hooking events
         ///     on the new text box and unhooking them from the previous text box, if required.
-        /// </devdoc>
+        /// </summary>
         private void WireUpTextBox(ref ToolStripItem oldTextBox, ToolStripItem newTextBox, KeyEventHandler keyUpHandler, EventHandler lostFocusHandler) {
             if (oldTextBox != newTextBox) {
                 ToolStripControlHost oldCtrl = oldTextBox as ToolStripControlHost;
@@ -777,7 +777,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Wire up some member variable to the specified label item, hooking events
         ///     on the new label and unhooking them from the previous label, if required.
-        /// </devdoc>
+        /// </summary>
         private void WireUpLabel(ref ToolStripItem oldLabel, ToolStripItem newLabel) {
             if (oldLabel != newLabel) {
                 oldLabel = newLabel;
@@ -788,7 +788,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Wire up some member variable to the specified binding source, hooking events
         ///     on the new binding source and unhooking them from the previous one, if required.
-        /// </devdoc>
+        /// </summary>
         private void WireUpBindingSource(ref BindingSource oldBindingSource, BindingSource newBindingSource) {
             if (oldBindingSource != newBindingSource) {
                 if (oldBindingSource != null) {

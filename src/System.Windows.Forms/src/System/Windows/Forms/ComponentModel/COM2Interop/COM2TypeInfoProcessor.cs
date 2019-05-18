@@ -23,7 +23,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     ///
     /// This class only knows how to process things that are natively in the typeinfo.  Other property
     /// information such as IPerPropertyBrowsing is handled elsewhere.
-    /// </devdoc>
+    /// </summary>
     internal class Com2TypeInfoProcessor {
         
         private static TraceSwitch DbgTypeInfoProcessorSwitch = new TraceSwitch("DbgTypeInfoProcessor", "Com2TypeInfoProcessor: debug Com2 type info processing");
@@ -51,7 +51,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
          
         /// <summary>
         /// Given an Object, this attempts to locate its type ifo
-        /// </devdoc>
+        /// </summary>
         public static UnsafeNativeMethods.ITypeInfo FindTypeInfo(object obj, bool wantCoClass) {
             UnsafeNativeMethods.ITypeInfo  pTypeInfo = null;
 
@@ -97,7 +97,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <summary>
         /// Given an Object, this attempts to locate its type info. If it implementes IProvideMultipleClassInfo
         /// all available type infos will be returned, otherwise the primary one will be alled.
-        /// </devdoc>
+        /// </summary>
         public static UnsafeNativeMethods.ITypeInfo[] FindTypeInfos(object obj, bool wantCoClass){
             
             UnsafeNativeMethods.ITypeInfo[] typeInfos = null;
@@ -136,7 +136,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <summary>
         /// Retrieve the dispid of the property that we are to use as the name
         /// member.  In this case, the grid will put parens around the name.
-        /// </devdoc>
+        /// </summary>
         public static int GetNameDispId(UnsafeNativeMethods.IDispatch obj){
             int dispid = NativeMethods.DISPID_UNKNOWN;
             string[] names = null;
@@ -181,7 +181,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <summary>
         /// Gets the properties for a given Com2 Object.  The returned Com2Properties
         /// Object contains the properties and relevant data about them.
-        /// </devdoc>
+        /// </summary>
         public static Com2Properties GetProperties(object obj) {
 
             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "Com2TypeInfoProcessor.GetProperties");
@@ -289,7 +289,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// Resolves a value type for a property from a TYPEDESC.  Value types can be
         /// user defined, which and may be aliased into other type infos.  This function
         /// will recusively walk the ITypeInfos to resolve the type to a clr Type.
-        /// </devdoc>
+        /// </summary>
         private static Type GetValueTypeFromTypeDesc(in NativeMethods.tagTYPEDESC typeDesc, UnsafeNativeMethods.ITypeInfo typeInfo, object[] typeData) {
             IntPtr hreftype;
             int hr = 0;
@@ -650,7 +650,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <summary>
         /// This converts a type info that describes a IDL defined enum
         /// into one we can use
-        /// </devdoc>
+        /// </summary>
         private static Type ProcessTypeInfoEnum(UnsafeNativeMethods.ITypeInfo enumTypeInfo) {
 
             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum entered");

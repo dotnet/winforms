@@ -21,7 +21,7 @@ namespace System.Windows.Forms {
     /// <summary>
     ///     TabPage implements a single page of a tab control.  It is essentially
     ///     a Panel with TabItem properties.
-    /// </devdoc>
+    /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -41,7 +41,7 @@ namespace System.Windows.Forms {
         
         /// <summary>
         ///     Constructs an empty TabPage.
-        /// </devdoc>
+        /// </summary>
         public TabPage ()
         : base() {
             SetStyle (ControlStyles.CacheText, true);
@@ -50,7 +50,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Allows the control to optionally shrink when AutoSize is true.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -67,7 +67,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     <para>Hide AutoSize: it doesn't make sense for this control</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AutoSize
@@ -94,7 +94,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     The background color of this control. This is an ambient property and
         ///     will always return a non-null value.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.ControlBackColorDescr))
@@ -137,7 +137,7 @@ namespace System.Windows.Forms {
         ///     Constructs the new instance of the Controls collection objects. Subclasses
         ///     should not call base.CreateControlsInstance.  Our version creates a control
         ///     collection that does not support
-        /// </devdoc>
+        /// </summary>
         protected override Control.ControlCollection CreateControlsInstance () {
             return new TabPageControlCollection (this);
         }
@@ -156,7 +156,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Returns the imageIndex for the tabPage.  This should point to an image
         ///     in the TabControl's associated imageList that will appear on the tab, or be -1.
-        /// </devdoc>
+        /// </summary>
         [
         TypeConverterAttribute (typeof(ImageIndexConverter)),
         Editor ("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
@@ -189,7 +189,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Returns the imageIndex for the tabPage.  This should point to an image
         ///     in the TabControl's associated imageList that will appear on the tab, or be -1.
-        /// </devdoc>
+        /// </summary>
         [
         TypeConverterAttribute (typeof(ImageKeyConverter)),
         Editor ("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
@@ -217,7 +217,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Constructs a TabPage with text for the tab.
-        /// </devdoc>
+        /// </summary>
         public TabPage (string text) : this() {
             Text = text;
         }
@@ -335,7 +335,7 @@ namespace System.Windows.Forms {
         /// <summary>
         /// This property is required by certain controls (TabPage) to render its transparency using theming API.
         /// We dont want all controls (that are have transparent BackColor) to use theming API to render its background because it has  HUGE PERF cost.
-        /// </devdoc>
+        /// </summary>
         internal override bool RenderTransparencyWithVisualStyles {
             get {
                 return true;
@@ -388,7 +388,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     The toolTipText for the tab, that will appear when the mouse hovers
         ///     over the tab and the TabControl's showToolTips property is true.
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue (""),
         Localizable (true),
@@ -430,7 +430,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Assigns a new parent control. Sends out the appropriate property change
         ///     notifications for properties that are affected by the change of parent.
-        /// </devdoc>
+        /// </summary>
         internal override void AssignParent (Control value) {
             if (value != null && !(value is TabControl)) {
                 throw new ArgumentException (string.Format (SR.TABCONTROLTabPageNotOnTabControl, value.GetType ().FullName));
@@ -442,7 +442,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Given a component, this retrieves the tab page that it's parented to, or
         /// null if it's not parented to any tab page.
-        /// </devdoc>
+        /// </summary>
         public static TabPage GetTabPageOfComponent (object comp) {
             if (!(comp is Control)) {
                 return null;
@@ -458,7 +458,7 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         internal NativeMethods.TCITEM_T GetTCITEM () {
             NativeMethods.TCITEM_T tcitem = new NativeMethods.TCITEM_T ();
 
@@ -523,7 +523,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// This is an internal method called by the TabControl to fire the Leave event when TabControl leave occurs.
-        /// </devdoc>
+        /// </summary>
         internal void FireLeave (EventArgs e) {
             leaveFired = true;
             OnLeave (e);
@@ -531,7 +531,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// This is an internal method called by the TabControl to fire the Enter event when TabControl leave occurs.
-        /// </devdoc>
+        /// </summary>
         internal void FireEnter (EventArgs e) {
             enterFired = true;
             OnEnter (e);
@@ -547,7 +547,7 @@ namespace System.Windows.Forms {
         ///     events on the TabPage.
         ///     TabPage should fire enter when the focus is on the TABPAGE and not when the control
         ///     within the TabPage gets Focused.
-        /// </devdoc>
+        /// </summary>
         protected override void OnEnter (EventArgs e) {
             TabControl parent = ParentInternal as TabControl;
 
@@ -572,7 +572,7 @@ namespace System.Windows.Forms {
         ///     within the TabPage gets Focused.
         ///     Similary the Leave should fire when the TabControl (and hence the TabPage) looses
         ///     Focus. 
-        /// </devdoc>
+        /// </summary>
         protected override void OnLeave (EventArgs e) {
             TabControl parent = ParentInternal as TabControl;
 
@@ -630,7 +630,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     overrides main setting of our bounds so that we can control our size and that of our
         ///     TabPages...
-        /// </devdoc>
+        /// </summary>
         protected override void SetBoundsCore (int x, int y, int width, int height, BoundsSpecified specified) {
             Control parent = ParentInternal;
 
@@ -648,7 +648,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Determines if the Location property needs to be persisted.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable (EditorBrowsableState.Never)]
         private bool ShouldSerializeLocation () {
             return Left != 0 || Top != 0;
@@ -656,13 +656,13 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     The text property is what is returned for the TabPages default printing.
-        /// </devdoc>
+        /// </summary>
         public override string ToString () {
             return "TabPage: {" + Text + "}";
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         internal void UpdateParent () {
             TabControl parent = ParentInternal as TabControl;
 
@@ -673,12 +673,12 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///      Our control collection will throw an exception if you try to add other tab pages.
-        /// </devdoc>
+        /// </summary>
         [ComVisible(false)]
         public class TabPageControlCollection : Control.ControlCollection {
             /// <summary>
             ///      Creates a new TabPageControlCollection.
-            /// </devdoc>
+            /// </summary>
             public TabPageControlCollection (TabPage owner) : base(owner) {
             }
 
@@ -688,7 +688,7 @@ namespace System.Windows.Forms {
             ///     control it is first removed from that control.  The tab page overrides
             ///     this method to ensure that child tab pages are not added to it, as these
             ///     are illegal.
-            /// </devdoc>
+            /// </summary>
             public override void Add (Control value) {
                 if (value is TabPage) {
                     throw new ArgumentException (string.Format (SR.TABCONTROLTabPageOnTabPage));

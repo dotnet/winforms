@@ -8,804 +8,804 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Specifies shortcut keys that can be used by menu items.
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
     public enum Shortcut
     {
         /// <summary>
         /// No shortcut key is associated with the menu item.
-        /// </devdoc>
+        /// </summary>
         None = 0,
 
         /// <summary>
         /// The shorcut keys CTRL+A.
-        /// </devdoc>
+        /// </summary>
         CtrlA = Keys.Control + Keys.A,
 
         /// <summary>
         /// The shorcut keys CTRL+B.
-        /// </devdoc>
+        /// </summary>
         CtrlB = Keys.Control + Keys.B,
 
         /// <summary>
         /// The shorcut keys CTRL+C.
-        /// </devdoc>
+        /// </summary>
         CtrlC = Keys.Control + Keys.C,
 
         /// <summary>
         /// The shorcut keys CTRL+D.
-        /// </devdoc>
+        /// </summary>
         CtrlD = Keys.Control + Keys.D,
 
         /// <summary>
         /// The shorcut keys CTRL+E.
-        /// </devdoc>
+        /// </summary>
         CtrlE = Keys.Control + Keys.E,
 
         /// <summary>
         /// The shorcut keys CTRL+F.
-        /// </devdoc>
+        /// </summary>
         CtrlF = Keys.Control + Keys.F,
 
         /// <summary>
         /// The shorcut keys CTRL+G.
-        /// </devdoc>
+        /// </summary>
         CtrlG = Keys.Control + Keys.G,
 
         /// <summary>
         /// The shorcut keys CTRL+H.
-        /// </devdoc>
+        /// </summary>
         CtrlH = Keys.Control + Keys.H,
 
         /// <summary>
         /// The shorcut keys CTRL+I.
-        /// </devdoc>
+        /// </summary>
         CtrlI = Keys.Control + Keys.I,
 
         /// <summary>
         /// The shorcut keys CTRL+J.
-        /// </devdoc>
+        /// </summary>
         CtrlJ = Keys.Control + Keys.J,
 
         /// <summary>
         /// The shorcut keys CTRL+K.
-        /// </devdoc>
+        /// </summary>
         CtrlK = Keys.Control + Keys.K,
 
         /// <summary>
         /// The shorcut keys CTRL+L.
-        /// </devdoc>
+        /// </summary>
         CtrlL = Keys.Control + Keys.L,
 
         /// <summary>
         /// The shorcut keys CTRL+M.
-        /// </devdoc>
+        /// </summary>
         CtrlM = Keys.Control + Keys.M,
 
         /// <summary>
         /// The shorcut keys CTRL+N.
-        /// </devdoc>
+        /// </summary>
         CtrlN = Keys.Control + Keys.N,
 
         /// <summary>
         /// The shorcut keys CTRL+O.
-        /// </devdoc>
+        /// </summary>
         CtrlO = Keys.Control + Keys.O,
 
         /// <summary>
         /// The shorcut keys CTRL+P.
-        /// </devdoc>
+        /// </summary>
         CtrlP = Keys.Control + Keys.P,
 
         /// <summary>
         /// The shorcut keys CTRL+Q.
-        /// </devdoc>
+        /// </summary>
         CtrlQ = Keys.Control + Keys.Q,
 
         /// <summary>
         /// The shorcut keys CTRL+R.
-        /// </devdoc>
+        /// </summary>
         CtrlR = Keys.Control + Keys.R,
 
         /// <summary>
         /// The shorcut keys CTRL+S.
-        /// </devdoc>
+        /// </summary>
         CtrlS = Keys.Control + Keys.S,
 
         /// <summary>
         /// The shorcut keys CTRL+T.
-        /// </devdoc>
+        /// </summary>
         CtrlT = Keys.Control + Keys.T,
 
         /// <summary>
         /// The shorcut keys CTRL+U
-        /// </devdoc>
+        /// </summary>
         CtrlU = Keys.Control + Keys.U,
 
         /// <summary>
         /// The shorcut keys CTRL+V.
-        /// </devdoc>
+        /// </summary>
         CtrlV = Keys.Control + Keys.V,
 
         /// <summary>
         /// The shorcut keys CTRL+W.
-        /// </devdoc>
+        /// </summary>
         CtrlW = Keys.Control + Keys.W,
 
         /// <summary>
         /// The shorcut keys CTRL+X.
-        /// </devdoc>
+        /// </summary>
         CtrlX = Keys.Control + Keys.X,
 
         /// <summary>
         /// The shorcut keys CTRL+Y.
-        /// </devdoc>
+        /// </summary>
         CtrlY = Keys.Control + Keys.Y,
 
         /// <summary>
         /// The shorcut keys CTRL+Z.
-        /// </devdoc>
+        /// </summary>
         CtrlZ = Keys.Control + Keys.Z,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+A.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftA = Keys.Control + Keys.Shift + Keys.A,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+B.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftB = Keys.Control + Keys.Shift + Keys.B,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+C.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftC = Keys.Control + Keys.Shift + Keys.C,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+D.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftD = Keys.Control + Keys.Shift + Keys.D,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+E.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftE = Keys.Control + Keys.Shift + Keys.E,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+F.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftF = Keys.Control + Keys.Shift + Keys.F,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+G.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftG = Keys.Control + Keys.Shift + Keys.G,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+H.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftH = Keys.Control + Keys.Shift + Keys.H,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+I.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftI = Keys.Control + Keys.Shift + Keys.I,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+J.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftJ = Keys.Control + Keys.Shift + Keys.J,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+K.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftK = Keys.Control + Keys.Shift + Keys.K,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+L.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftL = Keys.Control + Keys.Shift + Keys.L,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+M.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftM = Keys.Control + Keys.Shift + Keys.M,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+N.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftN = Keys.Control + Keys.Shift + Keys.N,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+O.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftO = Keys.Control + Keys.Shift + Keys.O,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+P.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftP = Keys.Control + Keys.Shift + Keys.P,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+Q.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftQ = Keys.Control + Keys.Shift + Keys.Q,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+R.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftR = Keys.Control + Keys.Shift + Keys.R,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+S.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftS = Keys.Control + Keys.Shift + Keys.S,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+T.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftT = Keys.Control + Keys.Shift + Keys.T,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+U.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftU = Keys.Control + Keys.Shift + Keys.U,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+V.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftV = Keys.Control + Keys.Shift + Keys.V,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+W.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftW = Keys.Control + Keys.Shift + Keys.W,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+X.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftX = Keys.Control + Keys.Shift + Keys.X,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+Y.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftY = Keys.Control + Keys.Shift + Keys.Y,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+Z.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftZ = Keys.Control + Keys.Shift + Keys.Z,
 
         /// <summary>
         /// The shortcut key F1.
-        /// </devdoc>
+        /// </summary>
         F1 = Keys.F1,
 
         /// <summary>
         /// The shortcut key F2.
-        /// </devdoc>
+        /// </summary>
         F2 = Keys.F2,
 
         /// <summary>
         /// The shortcut key F3.
-        /// </devdoc>
+        /// </summary>
         F3 = Keys.F3,
 
         /// <summary>
         /// The shortcut key F4.
-        /// </devdoc>
+        /// </summary>
         F4 = Keys.F4,
 
         /// <summary>
         /// The shortcut key F5.
-        /// </devdoc>
+        /// </summary>
         F5 = Keys.F5,
 
         /// <summary>
         /// The shortcut key F6.
-        /// </devdoc>
+        /// </summary>
         F6 = Keys.F6,
 
         /// <summary>
         /// The shortcut key F7.
-        /// </devdoc>
+        /// </summary>
         F7 = Keys.F7,
         F8 = Keys.F8,
 
         /// <summary>
         /// The shortcut key F9.
-        /// </devdoc>
+        /// </summary>
         F9 = Keys.F9,
 
         /// <summary>
         /// The shortcut key F10.
-        /// </devdoc>
+        /// </summary>
         F10 = Keys.F10,
 
         /// <summary>
         /// The shortcut key F11.
-        /// </devdoc>
+        /// </summary>
         F11 = Keys.F11,
 
         /// <summary>
         /// The shortcut key F12.
-        /// </devdoc>
+        /// </summary>
         F12 = Keys.F12,
 
         /// <summary>
         /// The shortcut keys SHIFT+F1.
-        /// </devdoc>
+        /// </summary>
         ShiftF1 = Keys.Shift + Keys.F1,
 
         /// <summary>
         /// The shortcut keys SHIFT+F2.
-        /// </devdoc>
+        /// </summary>
         ShiftF2 = Keys.Shift + Keys.F2,
 
         /// <summary>
         /// The shortcut keys SHIFT+F3.
-        /// </devdoc>
+        /// </summary>
         ShiftF3 = Keys.Shift + Keys.F3,
 
         /// <summary>
         /// The shortcut keys SHIFT+F4.
-        /// </devdoc>
+        /// </summary>
         ShiftF4 = Keys.Shift + Keys.F4,
 
         /// <summary>
         /// The shortcut keys SHIFT+F5.
-        /// </devdoc>
+        /// </summary>
         ShiftF5 = Keys.Shift + Keys.F5,
 
         /// <summary>
         /// The shortcut keys SHIFT+F6.
-        /// </devdoc>
+        /// </summary>
         ShiftF6 = Keys.Shift + Keys.F6,
 
         /// <summary>
         /// The shortcut keys SHIFT+F7.
-        /// </devdoc>
+        /// </summary>
         ShiftF7 = Keys.Shift + Keys.F7,
 
         /// <summary>
         /// The shortcut keys SHIFT+F8.
-        /// </devdoc>
+        /// </summary>
         ShiftF8 = Keys.Shift + Keys.F8,
 
         /// <summary>
         /// The shortcut keys SHIFT+F9.
-        /// </devdoc>
+        /// </summary>
         ShiftF9 = Keys.Shift + Keys.F9,
 
         /// <summary>
         /// The shortcut keys SHIFT+F10.
-        /// </devdoc>
+        /// </summary>
         ShiftF10 = Keys.Shift + Keys.F10,
 
         /// <summary>
         /// The shortcut keys SHIFT+F11.
-        /// </devdoc>
+        /// </summary>
         ShiftF11 = Keys.Shift + Keys.F11,
 
         /// <summary>
         /// The shortcut keys SHIFT+F12.
-        /// </devdoc>
+        /// </summary>
         ShiftF12 = Keys.Shift + Keys.F12,
 
         /// <summary>
         /// The shortcut keys CTRL+F1.
-        /// </devdoc>
+        /// </summary>
         CtrlF1 = Keys.Control + Keys.F1,
 
         /// <summary>
         /// The shortcut keys CTRL+F2.
-        /// </devdoc>
+        /// </summary>
         CtrlF2 = Keys.Control + Keys.F2,
 
         /// <summary>
         /// The shortcut keys CTRL+F3.
-        /// </devdoc>
+        /// </summary>
         CtrlF3 = Keys.Control + Keys.F3,
 
         /// <summary>
         /// The shortcut keys CTRL+F4.
-        /// </devdoc>
+        /// </summary>
         CtrlF4 = Keys.Control + Keys.F4,
 
         /// <summary>
         /// The shortcut keys CTRL+F5.
-        /// </devdoc>
+        /// </summary>
         CtrlF5 = Keys.Control + Keys.F5,
 
         /// <summary>
         /// The shortcut keys CTRL+F6.
-        /// </devdoc>
+        /// </summary>
         CtrlF6 = Keys.Control + Keys.F6,
 
         /// <summary>
         /// The shortcut keys CTRL+F7.
-        /// </devdoc>
+        /// </summary>
         CtrlF7 = Keys.Control + Keys.F7,
 
         /// <summary>
         /// The shortcut keys CTRL+F8.
-        /// </devdoc>
+        /// </summary>
         CtrlF8 = Keys.Control + Keys.F8,
 
         /// <summary>
         /// The shortcut keys CTRL+F9.
-        /// </devdoc>
+        /// </summary>
         CtrlF9 = Keys.Control + Keys.F9,
 
         /// <summary>
         /// The shortcut keys CTRL+F10.
-        /// </devdoc>
+        /// </summary>
         CtrlF10 = Keys.Control + Keys.F10,
 
         /// <summary>
         /// The shortcut keys CTRL+F11.
-        /// </devdoc>
+        /// </summary>
         CtrlF11 = Keys.Control + Keys.F11,
 
         /// <summary>
         /// The shortcut keys CTRL+F12.
-        /// </devdoc>
+        /// </summary>
         CtrlF12 = Keys.Control + Keys.F12,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+F1.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftF1 = Keys.Control + Keys.Shift + Keys.F1,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+F2.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftF2 = Keys.Control + Keys.Shift + Keys.F2,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+F3.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftF3 = Keys.Control + Keys.Shift + Keys.F3,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+F4.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftF4 = Keys.Control + Keys.Shift + Keys.F4,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+F5.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftF5 = Keys.Control + Keys.Shift + Keys.F5,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+F6.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftF6 = Keys.Control + Keys.Shift + Keys.F6,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+F7.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftF7 = Keys.Control + Keys.Shift + Keys.F7,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+F8.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftF8 = Keys.Control + Keys.Shift + Keys.F8,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+F9.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftF9 = Keys.Control + Keys.Shift + Keys.F9,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+F10.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftF10 = Keys.Control + Keys.Shift + Keys.F10,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+F11.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftF11 = Keys.Control + Keys.Shift + Keys.F11,
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+F12.
-        /// </devdoc>
+        /// </summary>
         CtrlShiftF12 = Keys.Control + Keys.Shift + Keys.F12,
 
         /// <summary>
         /// The shortcut key INSERT.
-        /// </devdoc>
+        /// </summary>
         Ins = Keys.Insert,
 
         /// <summary>
         /// The shortcut keys CTRL+INSERT.
-        /// </devdoc>
+        /// </summary>
         CtrlIns = Keys.Control + Keys.Insert,
 
         /// <summary>
         /// The shortcut keys SHIFT+INSERT.
-        /// </devdoc>
+        /// </summary>
         ShiftIns = Keys.Shift + Keys.Insert,
 
         /// <summary>
         /// The shortcut key DELETE.
-        /// </devdoc>
+        /// </summary>
         Del = Keys.Delete,
 
         /// <summary>
         /// The shortcut keys CTRL+DELETE.
-        /// </devdoc>
+        /// </summary>
         CtrlDel = Keys.Control + Keys.Delete,
 
         /// <summary>
         /// The shortcut keys SHIFT+DELETE.
-        /// </devdoc>
+        /// </summary>
         ShiftDel = Keys.Shift + Keys.Delete,
 
         /// <summary>
         /// The shortcut keys Alt + RightArrow.
-        /// </devdoc>
+        /// </summary>
         AltRightArrow = Keys.Alt + Keys.Right,
 
         /// <summary>
         /// The shortcut keys ALT+LeftArrow.
-        /// </devdoc>
+        /// </summary>
         AltLeftArrow = Keys.Alt + Keys.Left,
 
         /// <summary>
         /// The shortcut keys ALT+UpArrow.
-        /// </devdoc>
+        /// </summary>
         AltUpArrow = Keys.Alt + Keys.Up,
 
         /// <summary>
         /// The shortcut keys Alt + DownArrow.
-        /// </devdoc>
+        /// </summary>
         AltDownArrow = Keys.Alt + Keys.Down,
 
         /// <summary>
         /// The shortcut keys ALT+BACKSPACE.
-        /// </devdoc>
+        /// </summary>
         AltBksp = Keys.Alt + Keys.Back,
 
         /// <summary>
         /// The shortcut keys ALT+F1.
-        /// </devdoc>
+        /// </summary>
         AltF1 = Keys.Alt + Keys.F1,
 
         /// <summary>
         /// The shortcut keys ALT+F2.
-        /// </devdoc>
+        /// </summary>
         AltF2 = Keys.Alt + Keys.F2,
 
         /// <summary>
         /// The shortcut keys ALT+F3.
-        /// </devdoc>
+        /// </summary>
         AltF3 = Keys.Alt + Keys.F3,
 
         /// <summary>
         /// The shortcut keys ALT+F4.
-        /// </devdoc>
+        /// </summary>
         AltF4 = Keys.Alt + Keys.F4,
 
         /// <summary>
         /// The shortcut keys ALT+F5.
-        /// </devdoc>
+        /// </summary>
         AltF5 = Keys.Alt + Keys.F5,
 
         /// <summary>
         /// The shortcut keys ALT+F6.
-        /// </devdoc>
+        /// </summary>
         AltF6 = Keys.Alt + Keys.F6,
 
         /// <summary>
         /// The shortcut keys ALT+F7.
-        /// </devdoc>
+        /// </summary>
         AltF7 = Keys.Alt + Keys.F7,
 
         /// <summary>
         /// The shortcut keys ALT+F8.
-        /// </devdoc>
+        /// </summary>
         AltF8 = Keys.Alt + Keys.F8,
 
         /// <summary>
         /// The shortcut keys ALT+F9.
-        /// </devdoc>
+        /// </summary>
         AltF9 = Keys.Alt + Keys.F9,
 
         /// <summary>
         /// The shortcut keys ALT+F10.
-        /// </devdoc>
+        /// </summary>
         AltF10 = Keys.Alt + Keys.F10,
 
         /// <summary>
         /// The shortcut keys ALT+F11.
-        /// </devdoc>
+        /// </summary>
         AltF11 = Keys.Alt + Keys.F11,
 
         /// <summary>
         /// The shortcut keys ALT+F12.
-        /// </devdoc>
+        /// </summary>
         AltF12 = Keys.Alt + Keys.F12,
 
 
         /// <summary>
         /// The shortcut keys ALT+0.
-        /// </devdoc>
+        /// </summary>
         Alt0 = Keys.Alt + Keys.D0,
 
 
         /// <summary>
         /// The shortcut keys ALT+1.
-        /// </devdoc>
+        /// </summary>
         Alt1 = Keys.Alt + Keys.D1,
 
 
         /// <summary>
         /// The shortcut keys ALT+2.
-        /// </devdoc>
+        /// </summary>
         Alt2 = Keys.Alt + Keys.D2,
 
 
         /// <summary>
         /// The shortcut keys ALT+3.
-        /// </devdoc>
+        /// </summary>
         Alt3 = Keys.Alt + Keys.D3,
 
 
         /// <summary>
         /// The shortcut keys ALT+4.
-        /// </devdoc>
+        /// </summary>
         Alt4 = Keys.Alt + Keys.D4,
 
 
         /// <summary>
         /// The shortcut keys ALT+5.
-        /// </devdoc>
+        /// </summary>
         Alt5 = Keys.Alt + Keys.D5,
 
 
         /// <summary>
         /// The shortcut keys ALT+6.
-        /// </devdoc>
+        /// </summary>
         Alt6 = Keys.Alt + Keys.D6,
 
 
         /// <summary>
         /// The shortcut keys ALT+7.
-        /// </devdoc>
+        /// </summary>
         Alt7 = Keys.Alt + Keys.D7,
 
 
         /// <summary>
         /// The shortcut keys ALT+8.
-        /// </devdoc>
+        /// </summary>
         Alt8 = Keys.Alt + Keys.D8,
 
 
         /// <summary>
         /// The shortcut keys ALT+9.
-        /// </devdoc>
+        /// </summary>
         Alt9 = Keys.Alt + Keys.D9,
 
 
         /// <summary>
         /// The shortcut keys CTRL+0.
-        /// </devdoc>
+        /// </summary>
         Ctrl0 = Keys.Control + Keys.D0,
 
 
         /// <summary>
         /// The shortcut keys CTRL+1.
-        /// </devdoc>
+        /// </summary>
         Ctrl1 = Keys.Control + Keys.D1,
 
 
         /// <summary>
         /// The shortcut keys CTRL+2.
-        /// </devdoc>
+        /// </summary>
         Ctrl2 = Keys.Control + Keys.D2,
 
 
         /// <summary>
         /// The shortcut keys CTRL+3.
-        /// </devdoc>
+        /// </summary>
         Ctrl3 = Keys.Control + Keys.D3,
 
 
         /// <summary>
         /// The shortcut keys CTRL+4.
-        /// </devdoc>
+        /// </summary>
         Ctrl4 = Keys.Control + Keys.D4,
 
 
         /// <summary>
         /// The shortcut keys CTRL+5.
-        /// </devdoc>
+        /// </summary>
         Ctrl5 = Keys.Control + Keys.D5,
 
 
         /// <summary>
         /// The shortcut keys CTRL+6.
-        /// </devdoc>
+        /// </summary>
         Ctrl6 = Keys.Control + Keys.D6,
 
 
         /// <summary>
         /// The shortcut keys CTRL+7.
-        /// </devdoc>
+        /// </summary>
         Ctrl7 = Keys.Control + Keys.D7,
 
 
         /// <summary>
         /// The shortcut keys CTRL+8.
-        /// </devdoc>
+        /// </summary>
         Ctrl8 = Keys.Control + Keys.D8,
 
 
         /// <summary>
         /// The shortcut keys CTRL+9.
-        /// </devdoc>
+        /// </summary>
         Ctrl9 = Keys.Control + Keys.D9,
 
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+0.
-        /// </devdoc>
+        /// </summary>
         CtrlShift0 = Keys.Control + Keys.Shift + Keys.D0,
 
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+1.
-        /// </devdoc>
+        /// </summary>
         CtrlShift1 = Keys.Control + Keys.Shift + Keys.D1,
 
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+2.
-        /// </devdoc>
+        /// </summary>
         CtrlShift2 = Keys.Control + Keys.Shift + Keys.D2,
 
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+3.
-        /// </devdoc>
+        /// </summary>
         CtrlShift3 = Keys.Control + Keys.Shift + Keys.D3,
 
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+4.
-        /// </devdoc>
+        /// </summary>
         CtrlShift4 = Keys.Control + Keys.Shift + Keys.D4,
 
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+5.
-        /// </devdoc>
+        /// </summary>
         CtrlShift5 = Keys.Control + Keys.Shift + Keys.D5,
 
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+6.
-        /// </devdoc>
+        /// </summary>
         CtrlShift6 = Keys.Control + Keys.Shift + Keys.D6,
 
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+7.
-        /// </devdoc>
+        /// </summary>
         CtrlShift7 = Keys.Control + Keys.Shift + Keys.D7,
 
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+8.
-        /// </devdoc>
+        /// </summary>
         CtrlShift8 = Keys.Control + Keys.Shift + Keys.D8,
 
 
         /// <summary>
         /// The shortcut keys CTRL+SHIFT+9.
-        /// </devdoc>
+        /// </summary>
         CtrlShift9 = Keys.Control + Keys.Shift + Keys.D9,
     }
 }

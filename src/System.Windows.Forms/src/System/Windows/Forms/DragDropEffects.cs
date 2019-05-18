@@ -12,33 +12,33 @@ namespace System.Windows.Forms
     {
         /// <summary>
         /// The drop target does not accept the data.
-        /// </devdoc>
+        /// </summary>
         None = 0x00000000,
 
         /// <summary>
         /// The data is copied to the drop target.
-        /// </devdoc>
+        /// </summary>
         Copy = 0x00000001,
 
         /// <summary>
         /// The data from the drag source is moved to the drop target.
-        /// </devdoc>
+        /// </summary>
         Move = 0x00000002,
 
         /// <summary>
         /// The data from the drag source is linked to the drop target.
-        /// </devdoc>
+        /// </summary>
         Link = 0x00000004,
 
         /// <summary>
         /// Scrolling is about to start or is currently occurring in the drop target.
-        /// </devdoc>
+        /// </summary>
         Scroll = unchecked((int)0x80000000),
 
         /// <summary>
         /// The data is copied, removed from the drag source, and scrolled in the 
         /// drop target. NOTE: Link is intentionally not present in All.
-        /// </devdoc>
+        /// </summary>
         All = Copy | Move | Scroll,
     }
 }

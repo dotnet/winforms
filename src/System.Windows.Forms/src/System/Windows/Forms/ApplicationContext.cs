@@ -13,14 +13,14 @@ namespace System.Windows.Forms {
     ///    circurmstances cause a message loop to exit. By default the application
     ///    context listens to the close event on the mainForm, then exits the
     ///    thread's message loop.
-    /// </devdoc>
+    /// </summary>
     public class ApplicationContext : IDisposable {
         Form mainForm;
         object userData;
 
         /// <summary>
         ///     Creates a new ApplicationContext with no mainForm.
-        /// </devdoc>
+        /// </summary>
         public ApplicationContext() : this(null) {
         }
 
@@ -28,7 +28,7 @@ namespace System.Windows.Forms {
         ///     Creates a new ApplicationContext with the specified mainForm.
         ///     If OnMainFormClosed is not overriden, the thread's message
         ///     loop will be terminated when mainForm is closed.
-        /// </devdoc>
+        /// </summary>
         public ApplicationContext(Form mainForm) {
             this.MainForm = mainForm;
         }
@@ -42,7 +42,7 @@ namespace System.Windows.Forms {
         ///     at anytime.
         ///     If OnMainFormClosed is not overriden, the thread's message
         ///     loop will be terminated when mainForm is closed.
-        /// </devdoc>
+        /// </summary>
         public Form MainForm {
             get {
                 return mainForm;
@@ -81,14 +81,14 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Is raised when the thread's message loop should be terminated.
         ///     This is raised by calling ExitThread.
-        /// </devdoc>
+        /// </summary>
         public event EventHandler ThreadExit;
 
         /// <summary>
         ///     Disposes the context. This should dispose the mainForm. This is
         ///     called immediately after the thread's message loop is terminated.
         ///     Application will dispose all forms on this thread by default.
-        /// </devdoc>
+        /// </summary>
         public void Dispose() {
             Dispose(true);
             GC.SuppressFinalize(this);
@@ -108,14 +108,14 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Causes the thread's message loop to be terminated. This
         ///     will call ExitThreadCore.
-        /// </devdoc>
+        /// </summary>
         public void ExitThread() {
             ExitThreadCore();
         }
 
         /// <summary>
         ///     Causes the thread's message loop to be terminated.
-        /// </devdoc>
+        /// </summary>
         protected virtual void ExitThreadCore() {
             if (ThreadExit != null) {
                 ThreadExit(this, EventArgs.Empty);
@@ -125,7 +125,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Called when the mainForm is closed. The default implementation
         ///     of this will call ExitThreadCore.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnMainFormClosed(object sender, EventArgs e) {
             ExitThreadCore();
         }
@@ -133,7 +133,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Called when the mainForm is closed. The default implementation
         ///     of this will call ExitThreadCore.
-        /// </devdoc>
+        /// </summary>
         private void OnMainFormDestroy(object sender, EventArgs e) {
             Form form = (Form)sender;
             if (!form.RecreatingHandle) {

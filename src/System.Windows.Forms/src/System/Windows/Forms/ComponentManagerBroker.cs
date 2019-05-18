@@ -77,7 +77,7 @@ namespace System.Windows.Forms {
     ///    CProxy: IMsoComponent half of ComponentManagerProxy
     ///    CMProxy: IMsoComponentManager half of ComponentManagerProxy
     ///    AC: Application's IMsoComponent implementation
-    /// </devdoc>
+    /// </summary>
     internal sealed class ComponentManagerBroker : MarshalByRefObject {
 
         // These are constants per process and are initialized in 
@@ -100,7 +100,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///    Static ctor.  We just set up a few per-process globals here
-        /// </devdoc>
+        /// </summary>
         static ComponentManagerBroker() {
             int pid = SafeNativeMethods.GetCurrentProcessId();
             _syncObject = new object();
@@ -120,7 +120,7 @@ namespace System.Windows.Forms {
         ///     object, because the calling code will use the Singleton property
         ///     to extract the actual _broker value.
         ///    NOTE: ctor must be public here for remoting to grab hold.
-        /// </devdoc>
+        /// </summary>
         public ComponentManagerBroker() {
 
             // Note that we only ever configure a single broker object.
@@ -134,7 +134,7 @@ namespace System.Windows.Forms {
         ///     Called during creation to account for an existing component manager
         ///     broker that was never remoted.  We try not to remote the broker
         ///     until we need to because it is very expensive.
-        /// </devdoc>
+        /// </summary>
         internal ComponentManagerBroker Singleton {
             get {
                 return _broker;
@@ -142,7 +142,7 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         internal void ClearComponentManager() {
             _proxy = null;
         }
@@ -150,7 +150,7 @@ namespace System.Windows.Forms {
         #region Instance API only callable from a proxied object
         
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         public UnsafeNativeMethods.IMsoComponentManager GetProxy(long pCM) {
             if (_proxy == null) {
                 UnsafeNativeMethods.IMsoComponentManager original = (UnsafeNativeMethods.IMsoComponentManager)Marshal.GetObjectForIUnknown((IntPtr)pCM);
@@ -169,7 +169,7 @@ namespace System.Windows.Forms {
         ///    instance of ComponentManagerBroker.  That instance then demand-
         ///    creates an instance of ComponentManagerProxy for the calling thread
         ///    and returns it.
-        /// </devdoc>
+        /// </summary>
         internal static UnsafeNativeMethods.IMsoComponentManager GetComponentManager(IntPtr pOriginal) {
 
             lock(_syncObject) {
@@ -217,7 +217,7 @@ namespace System.Windows.Forms {
     /// <summary>
     ///   The proxy object. This acts as, well, a proxy between the unmanaged IMsoComponentManager and zero or more
     ///    managed components.  
-    /// </devdoc>
+    /// </summary>
     internal class ComponentManagerProxy : MarshalByRefObject, UnsafeNativeMethods.IMsoComponentManager, UnsafeNativeMethods.IMsoComponent {
 
         private ComponentManagerBroker _broker;

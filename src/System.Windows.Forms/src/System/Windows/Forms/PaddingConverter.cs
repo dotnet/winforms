@@ -15,7 +15,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Determines if this converter can convert an object in the given source type to
         /// the native type of the converter.
-        /// </devdoc>
+        /// </summary>
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
             if (sourceType == typeof(string))
@@ -38,7 +38,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Converts the given object to the converter's native type.
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes", Justification = "ConvertFromString returns an object")]
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {

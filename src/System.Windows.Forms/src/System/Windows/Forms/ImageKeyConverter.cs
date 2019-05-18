@@ -17,7 +17,7 @@ namespace System.Windows.Forms {
     /// <summary>
     /// ImageIndexConverter is a class that can be used to convert
     /// image index values one data type to another.
-    /// </devdoc>
+    /// </summary>
     public class ImageKeyConverter : StringConverter {
 
         private string parentImageListProperty  = "Parent";
@@ -33,7 +33,7 @@ namespace System.Windows.Forms {
         /// on the current object.  For example, in ToolBarButton - the ImageList is 
         /// on the ToolBarButton.Parent property.  In ToolStripItem, the ImageList is on 
         /// the ToolStripItem.Owner property.
-        /// </devdoc>
+        /// </summary>
         internal string ParentImageListProperty {
             get {
                 return parentImageListProperty;
@@ -45,7 +45,7 @@ namespace System.Windows.Forms {
         /// <summary>
         /// <para>Gets a value indicating whether this converter can convert an object in the
         /// given source type to a string using the specified context.</para>
-        /// </devdoc>
+        /// </summary>
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) {
             if (sourceType == typeof(string)) {
                 return true;
@@ -55,7 +55,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// <para>Converts the specified value object to a string object.</para>
-        /// </devdoc>
+        /// </summary>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
             if (value is string) {
                 return (string)value;
@@ -74,7 +74,7 @@ namespace System.Windows.Forms {
         /// to ToString on the object if the object is valid and if the destination
         /// type is string.  If this cannot convert to the desitnation type, this will
         /// throw a NotSupportedException.
-        /// </devdoc>
+        /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
             if (destinationType == null) {
                 throw new ArgumentNullException(nameof(destinationType));
@@ -96,7 +96,7 @@ namespace System.Windows.Forms {
         /// for the data type this validator is designed for.  This
         /// will return null if the data type does not support a
         /// standard set of values.
-        /// </devdoc>
+        /// </summary>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context) {
             if (context != null && context.Instance != null) {
                 object instance = context.Instance;               
@@ -175,7 +175,7 @@ namespace System.Windows.Forms {
         /// in an enum data type.  If the list is not exclusive,
         /// then there are other valid values besides the list of
         /// standard values GetStandardValues provides.
-        /// </devdoc>
+        /// </summary>
         public override bool GetStandardValuesExclusive(ITypeDescriptorContext context) {
             return true;
         }
@@ -183,7 +183,7 @@ namespace System.Windows.Forms {
         /// <summary>
         /// Determines if this object supports a standard set of values
         /// that can be picked from a list.
-        /// </devdoc>
+        /// </summary>
         public override bool GetStandardValuesSupported(ITypeDescriptorContext context) {
              return true;
         }

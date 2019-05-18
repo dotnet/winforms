@@ -16,7 +16,7 @@ namespace System.Windows.Forms {
     ///       This class is reponsible for initializing the SHAutoComplete COM object and setting options in it.
     ///       The StringSource contains an array of Strings which is passed to the COM object as the custom source.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     internal class StringSource : IEnumString {
 
         private string[] strings;
@@ -28,14 +28,14 @@ namespace System.Windows.Forms {
         ///    <para> 
         ///       SHAutoComplete COM object CLSID.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         private static Guid   autoCompleteClsid = new Guid("{00BB2763-6A77-11D0-A535-00C04FD7D062}");
 
         /// <summary>
         ///    <para> 
         ///       Constructor.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public StringSource(string[] strings) {
             Array.Clear(strings,0, size);
     
@@ -56,7 +56,7 @@ namespace System.Windows.Forms {
         ///       This is the method that binds the custom source with the IAutoComplete interface.The "hWndEdit" is the handle 
         ///       to the edit Control and the "options' are the options that need to be set in the AUTOCOMPLETE mode.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public bool Bind(HandleRef edit, int options) {
             
             bool retVal = false;

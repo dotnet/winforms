@@ -11,17 +11,17 @@ namespace System.Windows.Forms
     {
         /// <summary> 
         /// Honors the Insert key mode. 
-        /// </devdoc>
+        /// </summary>
         Default,
 
         /// <summary> 
         /// Forces insertion mode to be 'on' regardless of the Insert key mode. 
-        /// </devdoc>
+        /// </summary>
         Insert,
 
         /// <summary> 
         /// Forces insertion mode to be 'off' regardless of the Insert key mode. 
-        /// </devdoc>
+        /// </summary>
         Overwrite        
     }
 }

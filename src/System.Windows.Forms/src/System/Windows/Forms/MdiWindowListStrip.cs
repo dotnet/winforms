@@ -13,7 +13,7 @@ namespace System.Windows.Forms {
     
     /// <summary> this is the menu that merges into the MdiWindowListItem
     ///          in an MDI parent when an MDI child is maximized.
-    /// </devdoc>
+    /// </summary>
     internal class MdiWindowListStrip : MenuStrip {
 
         private Form mdiParent = null;
@@ -60,7 +60,7 @@ namespace System.Windows.Forms {
         ///     Based on similar code in MenuItem.cs::PopulateMdiList(), which is unfortunately just different 
         ///     enough in its working environment that we can't readily combine the two.
         ///     But if you're fixing something here, chances are that the same issue will need scrutiny over there.
-        ///</devdoc>
+        ///</summary>
         public void PopulateItems(Form mdiParent, ToolStripMenuItem mdiMergeItem, bool includeSeparator) {
             this.mdiParent = mdiParent;
             this.SuspendLayout();
@@ -133,7 +133,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <summary> handler for More Windows... This is similar to MenuItem.cs</devdoc>
+        /// <summary> handler for More Windows... This is similar to MenuItem.cs</summary>
         private void OnMoreWindowsMenuItemClick(object sender, EventArgs e) {
 
              Form[] forms = mdiParent.MdiChildren;
@@ -155,7 +155,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <summary> handler for 1 - 9.  This is similar to MenuItem.cs</devdoc>
+        /// <summary> handler for 1 - 9.  This is similar to MenuItem.cs</summary>
         private void OnWindowListItemClick(object sender, EventArgs e) {
             ToolStripMenuItem windowListItem = sender as ToolStripMenuItem;
 

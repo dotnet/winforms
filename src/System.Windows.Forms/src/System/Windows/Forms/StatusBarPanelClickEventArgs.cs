@@ -8,13 +8,13 @@ namespace System.Windows.Forms
     /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.StatusBar.OnPanelClick'/>
     /// event.
-    /// </devdoc>
+    /// </summary>
     public class StatusBarPanelClickEventArgs : MouseEventArgs
     {
         /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.StatusBarPanelClickEventArgs'/>
         /// class.
-        /// </devdoc>
+        /// </summary>
         public StatusBarPanelClickEventArgs(StatusBarPanel statusBarPanel, MouseButtons button, int clicks, int x, int y) : base(button, clicks, x, y, 0)
         {
             StatusBarPanel = statusBarPanel;
@@ -22,7 +22,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Specifies the <see cref='System.Windows.Forms.StatusBarPanel'/> that represents the clicked panel.
-        /// </devdoc>
+        /// </summary>
         public StatusBarPanel StatusBarPanel { get; }
     }
 }

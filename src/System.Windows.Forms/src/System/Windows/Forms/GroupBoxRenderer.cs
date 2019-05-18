@@ -17,7 +17,7 @@ using Microsoft.Win32;
     ///    <para>
     ///       This is a rendering class for the GroupBox control.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     public sealed class GroupBoxRenderer {
 
         //Make this per-thread, so that different threads can safely use these methods.
@@ -37,7 +37,7 @@ using Microsoft.Win32;
         /// determine how to render.
         ///      If this property is false, the renderer will always render with visualstyles.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static bool RenderMatchingApplicationState {
             get {
                 return renderMatchingApplicationState;
@@ -57,7 +57,7 @@ using Microsoft.Win32;
         ///    <para>
         ///       Returns true if the background corresponding to the given state is partially transparent, else false.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static bool IsBackgroundPartiallyTransparent(GroupBoxState state) {
            if (RenderWithVisualStyles) {
                InitializeRenderer((int)state);
@@ -73,7 +73,7 @@ using Microsoft.Win32;
         ///       This is just a convenience wrapper for VisualStyleRenderer.DrawThemeParentBackground. For downlevel,
         ///       this isn't required and does nothing.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // Using Graphics instead of IDeviceContext intentionally
         ]
@@ -88,7 +88,7 @@ using Microsoft.Win32;
         ///    <para>
         ///       Renders a GroupBox control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void DrawGroupBox(Graphics g, Rectangle bounds, GroupBoxState state) {
             if (RenderWithVisualStyles)
                 DrawThemedGroupBoxNoText(g, bounds, state);
@@ -100,7 +100,7 @@ using Microsoft.Win32;
         ///    <para>
         ///       Renders a GroupBox control. Uses the text color specified by the theme.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void DrawGroupBox(Graphics g, Rectangle bounds, string groupBoxText, Font font, GroupBoxState state) {
             DrawGroupBox(g, bounds, groupBoxText, font, TextFormatFlags.Top | TextFormatFlags.Left, state);
         }
@@ -109,7 +109,7 @@ using Microsoft.Win32;
         ///    <para>
         ///       Renders a GroupBox control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void DrawGroupBox(Graphics g, Rectangle bounds, string groupBoxText, Font font, Color textColor, GroupBoxState state) {
             DrawGroupBox(g, bounds, groupBoxText, font, textColor, TextFormatFlags.Top | TextFormatFlags.Left, state);
         }
@@ -118,7 +118,7 @@ using Microsoft.Win32;
         ///    <para>
         ///       Renders a GroupBox control. Uses the text color specified by the theme.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void DrawGroupBox(Graphics g, Rectangle bounds, string groupBoxText, Font font, TextFormatFlags flags, GroupBoxState state) {
             if (RenderWithVisualStyles)
                 DrawThemedGroupBoxWithText(g, bounds, groupBoxText, font, DefaultTextColor(state), flags, state);
@@ -130,7 +130,7 @@ using Microsoft.Win32;
         ///    <para>
         ///       Renders a GroupBox control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void DrawGroupBox(Graphics g, Rectangle bounds, string groupBoxText, Font font, Color textColor, TextFormatFlags flags, GroupBoxState state) {
             if (RenderWithVisualStyles)
                 DrawThemedGroupBoxWithText(g, bounds, groupBoxText, font, textColor, flags, state);

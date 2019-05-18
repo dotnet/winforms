@@ -8,14 +8,14 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.Control.KeyPress'/> event.
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
     public class KeyPressEventArgs : EventArgs
     {
         /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.KeyPressEventArgs'/>
         /// class.
-        /// </devdoc>
+        /// </summary>
         public KeyPressEventArgs(char keyChar)
         {
             KeyChar = keyChar;
@@ -23,13 +23,13 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Gets the character corresponding to the key pressed.
-        /// </devdoc>
+        /// </summary>
         public char KeyChar { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the <see cref='System.Windows.Forms.Control.KeyPress'/>
         /// event was handled.
-        /// </devdoc>
+        /// </summary>
         public bool Handled { get; set; }
     }
 }

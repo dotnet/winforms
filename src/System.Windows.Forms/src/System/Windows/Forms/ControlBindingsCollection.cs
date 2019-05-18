@@ -11,7 +11,7 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Represents the collection of data bindings for a control.
-    /// </devdoc>
+    /// </summary>
     [DefaultEvent(nameof(CollectionChanged))]
     [Editor("System.Drawing.Design.UITypeEditor, " + AssemblyRef.SystemDrawing, typeof(UITypeEditor))]
     [TypeConverter("System.Windows.Forms.Design.ControlBindingsConverter, " + AssemblyRef.SystemDesign)]
@@ -50,7 +50,7 @@ namespace System.Windows.Forms
         /// Property as an existing binding or if the binding's column isn't a valid column
         /// given this DataSource.Table's schema.
         /// Fires the CollectionChangedEvent.
-        /// </devdoc>
+        /// </summary>
         public new void Add(Binding binding) => base.Add(binding);
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace System.Windows.Forms
         /// to the same target and Property as an existing binding or if the binding's column
         /// isn't a valid column given this DataSource.Table's schema.
         /// Fires the CollectionChangedEvent.
-        /// </devdoc>
+        /// </summary>
         public Binding Add(string propertyName, object dataSource, string dataMember)
         {
             return Add(propertyName, dataSource, dataMember, false, DefaultDataSourceUpdateMode, null, string.Empty, null);
@@ -103,7 +103,7 @@ namespace System.Windows.Forms
         /// the same target and Property as an existing binding or if the binding's column isn't
         /// a valid column given this DataSource.Table's schema.
         /// Fires the CollectionChangedEvent.
-        /// </devdoc>
+        /// </summary>
         protected override void AddCore(Binding dataBinding)
         {
             if (dataBinding == null)
@@ -143,7 +143,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Clears the collection of any bindings.
         /// Fires the CollectionChangedEvent.
-        /// </devdoc>
+        /// </summary>
         public new void Clear() => base.Clear();
 
         protected override void ClearCore()
@@ -165,14 +165,14 @@ namespace System.Windows.Forms
         /// An ArgumentNullException is thrown if this binding is null. An ArgumentException is
         /// thrown if this binding doesn't belong to this collection.
         /// The CollectionChanged event is fired if it succeeds.
-        /// </devdoc>
+        /// </summary>
         public new void Remove(Binding binding) => base.Remove(binding);
 
         /// <summary>
         /// Removes the given binding from the collection.
         /// It throws an IndexOutOfRangeException if this doesn't have a valid binding.
         /// The CollectionChanged event is fired if it succeeds.
-        /// </devdoc>
+        /// </summary>
         public new void RemoveAt(int index) => base.RemoveAt(index);
 
         protected override void RemoveCore(Binding dataBinding)

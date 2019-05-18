@@ -15,7 +15,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     /// <summary>
     /// This class is responsible for managing a set or properties for a native object.  It determines
     /// when the properties need to be refreshed, and owns the extended handlers for those properties.
-    /// </devdoc>
+    /// </summary>
     internal class Com2Properties {
     
         private static TraceSwitch DbgCom2PropertiesSwitch = new TraceSwitch("DbgCom2Properties", "Com2Properties: debug Com2 properties manager");
@@ -27,36 +27,36 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// for this amount of time, we'll dump the properties from our cache.
         /// 
         /// 5 minutes -- ticks are 1/10,000,000th of a second
-        /// </devdoc>
+        /// </summary>
         private static long AGE_THRESHHOLD = (long)(10000000L * 60L * 5L);
 
         
         /// <summary>
         /// This is the object that gave us the properties.  We hold a WeakRef so we don't addref the object.
-        /// </devdoc>
+        /// </summary>
         internal WeakReference weakObjRef;
         
         /// <summary>
         /// This is our list of properties.
-        /// </devdoc>
+        /// </summary>
         private Com2PropertyDescriptor[] props;
         
         /// <summary>
         /// The index of the default property
-        /// </devdoc>
+        /// </summary>
         private int           defaultIndex = -1;
         
         
         /// <summary>
         /// The timestamp of the last operation on this property manager, usually
         /// when the property list was fetched.
-        /// </devdoc>
+        /// </summary>
         private long          touchedTime;  
 
         /// <summary>
         /// For non-IProvideMultipleClassInfo ITypeInfos, this is the version number on the last
         /// ITypeInfo we looked at.  If this changes, we know we need to dump the cache.
-        /// </devdoc>
+        /// </summary>
         private long[]       typeInfoVersions;
        
 
@@ -69,7 +69,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         /// <summary>
         /// These are the interfaces we recognize for extended browsing.
-        /// </devdoc>
+        /// </summary>
         private static Type[] extendedInterfaces = new Type[]{
                                                         typeof(NativeMethods.ICategorizeProperties),
                                                         typeof(NativeMethods.IProvidePropertyBuilder),
@@ -80,7 +80,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <summary>
         /// These are the classes of handlers corresponding to the extended
         /// interfaces above.
-        /// </devdoc>
+        /// </summary>
         private static Type[] extendedInterfaceHandlerTypes = new Type[]{
                                                         typeof(Com2ICategorizePropertiesHandler),
                                                         typeof(Com2IProvidePropertyBuilderHandler),
@@ -95,7 +95,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         /// <summary>
         /// Default ctor.
-        /// </devdoc>
+        /// </summary>
         public Com2Properties(object obj, Com2PropertyDescriptor[] props, int defaultIndex) {
 #if DEBUG
             ComNativeDescriptor cnd = new ComNativeDescriptor();
@@ -143,7 +143,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         /// <summary>
         /// Retrieve the default property.
-        /// </devdoc>
+        /// </summary>
         public Com2PropertyDescriptor DefaultProperty{
             get{
                 if (!CheckValid(true)) {
@@ -165,7 +165,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <summary>
         /// The object that created the list of properties.  This will
         /// return null if the timeout has passed or the ref has died.
-        /// </devdoc>
+        /// </summary>
         public object TargetObject{
             get{
                 if (!CheckValid(false) || touchedTime == 0) {
@@ -180,7 +180,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         /// <summary>
         /// How long since these props have been queried.
-        /// </devdoc>
+        /// </summary>
         public long TicksSinceTouched{
             get{
                 if (touchedTime == 0) {
@@ -192,7 +192,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         /// <summary>
         /// Returns the list of properties
-        /// </devdoc>
+        /// </summary>
         public Com2PropertyDescriptor[] Properties{
             get{
                 CheckValid(true);
@@ -215,7 +215,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         /// <summary>
         /// Should this guy be refreshed because of old age?
-        /// </devdoc>
+        /// </summary>
         public bool TooOld{
             get{
                 // check if the property is valid but don't dispose it if it's not
@@ -231,7 +231,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// Checks the source object for eache extended browsing inteface
         /// listed in extendedInterfaces and creates a handler from extendedInterfaceHandlerTypes
         /// to handle it.
-        /// </devdoc>
+        /// </summary>
         public void AddExtendedBrowsingHandlers(Hashtable handlers) {
 
             object target = this.TargetObject;
@@ -303,7 +303,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         ///
         /// 1) WeakRef is still alive
         /// 2) Our timeout hasn't passed
-        /// </devdoc>
+        /// </summary>
         public bool CheckValid(bool checkVersions) {
             return CheckValid(checkVersions, true);
         }
@@ -313,7 +313,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// Gets a list of version longs for each type info in the COM object
         /// representing hte current version stamp, function and variable count.
         /// If any of these things change, we'll re-fetch the properties.
-        /// </devdoc>
+        /// </summary>
         private long[] GetTypeInfoVersions(object comObject) {
 
             // get type infos
@@ -492,7 +492,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <summary>
         /// Set the props for this object, and notify each property
         /// that we are now it's manager
-        /// </devdoc>
+        /// </summary>
         internal void SetProps(Com2PropertyDescriptor[] props) {
             this.props = props;
             if (props != null) {

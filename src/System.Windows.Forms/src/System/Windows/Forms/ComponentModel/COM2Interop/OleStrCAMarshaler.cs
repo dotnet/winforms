@@ -12,7 +12,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     /// <summary>
     ///   This class performs marshaling on a CALPOLESTR struct given
     ///   from native code.
-    /// </devdoc>
+    /// </summary>
     internal class OleStrCAMarshaler: BaseCAMarshaler {
         public OleStrCAMarshaler(NativeMethods.CA_STRUCT caAddr) : base(caAddr) {
         }
@@ -20,7 +20,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <summary>
         ///     Returns the type of item this marshaler will
         ///     return in the items array.  In this case, the type is string.
-        /// </devdoc>
+        /// </summary>
         public override Type ItemType {
             get {
                 return typeof(string);
@@ -34,7 +34,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <summary>
         ///     Override this member to perform marshalling of a single item
         ///     given it's native address.
-        /// </devdoc>
+        /// </summary>
         protected override object GetItemFromAddress(IntPtr addr) {
             string item =  Marshal.PtrToStringUni(addr);
             // free the memory

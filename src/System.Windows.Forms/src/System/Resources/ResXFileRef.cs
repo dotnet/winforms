@@ -24,7 +24,7 @@ namespace System.Resources {
     ///     ResX File Reference class. This allows the developer to represent
     ///     a link to an external resource. When the resource manager asks
     ///     for the value of the resource item, the external resource is loaded.
-    /// </devdoc>
+    /// </summary>
     [TypeConverterAttribute(typeof(ResXFileRef.Converter)), Serializable]
     public class ResXFileRef {
         private string fileName;
@@ -36,7 +36,7 @@ namespace System.Resources {
         ///     Creates a new ResXFileRef that points to the specified file.
         ///     The type refered to by typeName must support a constructor
         ///     that accepts a System.IO.Stream as a parameter.
-        /// </devdoc>
+        /// </summary>
         public ResXFileRef(string fileName, string typeName) {
             this.fileName = fileName ?? throw new ArgumentNullException(nameof(fileName));
             this.typeName = typeName ?? throw new ArgumentNullException(nameof(typeName));
@@ -56,7 +56,7 @@ namespace System.Resources {
         ///     Creates a new ResXFileRef that points to the specified file.
         ///     The type refered to by typeName must support a constructor
         ///     that accepts a System.IO.Stream as a parameter.
-        /// </devdoc>
+        /// </summary>
         public ResXFileRef(string fileName, string typeName, Encoding textFileEncoding) : this(fileName, typeName)  {
             this.textFileEncoding = textFileEncoding;
         }
@@ -88,7 +88,7 @@ namespace System.Resources {
         ///   A string which is the relative path difference between path1 and
         ///  path2 such that if path1 and the calculated difference are used
         ///  as arguments to Combine(), path2 is returned
-        /// </devdoc>
+        /// </summary>
         private static string PathDifference(string path1, string path2, bool compareCase) {
             int i;
             int si = -1;

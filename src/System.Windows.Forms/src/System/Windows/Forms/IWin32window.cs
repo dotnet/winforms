@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     {
         /// <summary>
         /// Gets the handle to the window represented by the implementor.
-        /// </devdoc>
+        /// </summary>
         IntPtr Handle { get; }
     }
 }

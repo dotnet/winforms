@@ -20,13 +20,13 @@ namespace System.Windows.Forms {
     ///      SelectionRangeConverter is a class that can be used to convert
     ///      SelectionRange objects from one data type to another.  Access this
     ///      class through the TypeDescriptor.
-    /// </devdoc>
+    /// </summary>
     public class SelectionRangeConverter : TypeConverter {
     
         /// <summary>
         ///      Determines if this converter can convert an object in the given source
         ///      type to the native type of the converter.
-        /// </devdoc>
+        /// </summary>
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) {
             if (sourceType == typeof(string) || sourceType == typeof(DateTime)) {
                 return true;
@@ -37,7 +37,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para>Gets a value indicating whether this converter can
         ///       convert an object to the given destination type using the context.</para>
-        /// </devdoc>
+        /// </summary>
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType) {
             if (destinationType == typeof(InstanceDescriptor) || destinationType == typeof(DateTime)) {
                 return true;
@@ -47,7 +47,7 @@ namespace System.Windows.Forms {
         
         /// <summary>
         ///      Converts the given object to the converter's native type.
-        /// </devdoc>
+        /// </summary>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
             if (value is string) {
                 string text = ((string)value).Trim();
@@ -90,7 +90,7 @@ namespace System.Windows.Forms {
         ///      to ToString on the object if the object is valid and if the destination
         ///      type is string.  If this cannot convert to the desitnation type, this will
         ///      throw a NotSupportedException.
-        /// </devdoc>
+        /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
             if (destinationType == null) {
                 throw new ArgumentNullException(nameof(destinationType));
@@ -131,7 +131,7 @@ namespace System.Windows.Forms {
         ///      Creates an instance of this type given a set of property values
         ///      for the object.  This is useful for objects that are immutable, but still
         ///      want to provide changable properties.
-        /// </devdoc>
+        /// </summary>
         public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues) {
             try
             {
@@ -151,7 +151,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///      Determines if changing a value on this object should require a call to
         ///      CreateInstance to create a new value.
-        /// </devdoc>
+        /// </summary>
         public override bool GetCreateInstanceSupported(ITypeDescriptorContext context) {
             return true;
         }
@@ -160,7 +160,7 @@ namespace System.Windows.Forms {
         ///      Retrieves the set of properties for this type.  By default, a type has
         ///      does not return any properties.  An easy implementation of this method
         ///      can just call TypeDescriptor.GetProperties for the correct data type.
-        /// </devdoc>
+        /// </summary>
         public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes) {
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(SelectionRange), attributes);
             return props.Sort(new string[] {"Start", "End"});
@@ -169,7 +169,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///      Determines if this object supports properties.  By default, this
         ///      is false.
-        /// </devdoc>
+        /// </summary>
         public override bool GetPropertiesSupported(ITypeDescriptorContext context) {
             return true;
         }

@@ -16,7 +16,7 @@ namespace System.Windows.Forms {
     using System.Globalization;
 
     /// <summary>
-    /// </devdoc>
+    /// </summary>
     [Serializable]
     public sealed class ImageListStreamer : ISerializable, IDisposable {
     
@@ -89,7 +89,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Compresses the given input, returning a new array that represents
         ///     the compressed data.
-        /// </devdoc>
+        /// </summary>
         private byte[] Compress(byte[] input) {
         
             int finalLength = 0;
@@ -150,7 +150,7 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Decompresses the given input, returning a new array that represents
         ///     the uncompressed data.
-        /// </devdoc>
+        /// </summary>
         private byte[] Decompress(byte[] input) {
             
             int finalLength = 0;
@@ -237,7 +237,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Disposes the native image list handle.
-        /// </devdoc>
+        /// </summary>
         public void Dispose() {
             Dispose(true);
             GC.SuppressFinalize(this);

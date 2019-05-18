@@ -17,30 +17,30 @@ namespace System.Windows.Forms {
 
     /// <summary>
     ///     This is a class that represents the date selection range of a MonthCalendar control.
-    /// </devdoc>
+    /// </summary>
     [
     TypeConverterAttribute(typeof(SelectionRangeConverter))
     ]
     public sealed class SelectionRange {
         /// <summary>
         ///     The lower limit of the selection range.
-        /// </devdoc>
+        /// </summary>
         private DateTime start = DateTime.MinValue.Date;
 
         /// <summary>
         ///     The upper limit of the selection range.
-        /// </devdoc>
+        /// </summary>
         private DateTime end = DateTime.MaxValue.Date;
 
         /// <summary>
         ///     Create a new SelectionRange object with the range [null, null].
-        /// </devdoc>
+        /// </summary>
         public SelectionRange() {
         }
 
         /// <summary>
         ///     Create a new SelectionRange object with the given range.
-        /// </devdoc>
+        /// </summary>
         public SelectionRange(DateTime lower, DateTime upper) {
             //NOTE: simcooke: we explicitly DO NOT want to throw an exception here - just silently
             //                swap them around. This is because the win32 control can return non-
@@ -60,7 +60,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Create a new SelectionRange object given an existing SelectionRange object.
-        /// </devdoc>
+        /// </summary>
         public SelectionRange(SelectionRange range) {
             this.start = range.start;
             this.end = range.end;
@@ -68,7 +68,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Returns the ending time of this range.
-        /// </devdoc>
+        /// </summary>
         public DateTime End {
             get { 
                 return end;
@@ -80,7 +80,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Starting time of this range
-        /// </devdoc>
+        /// </summary>
         public DateTime Start {
             get {
                 return start;
@@ -92,7 +92,7 @@ namespace System.Windows.Forms {
 
         /// <summary>
         ///     Returns a string representation for this control.
-        /// </devdoc>
+        /// </summary>
         public override string ToString() {
             return "SelectionRange: Start: " + start.ToString() + ", End: " + end.ToString();
         }

@@ -99,7 +99,7 @@ namespace System.Windows.Forms {
         }
 
 
-        ///<summary>Static events only!!!</devdoc>
+        ///<summary>Static events only!!!</summary>
         private static void AddEventHandler(int key, Delegate value) {
             lock (internalSyncObject) {
                 if (staticEventHandlers == null) {
@@ -112,7 +112,7 @@ namespace System.Windows.Forms {
 
         /// <summary> 
         /// Find a toolstrip in the weak ref arraylist, return null if nothing was found
-        /// </devdoc>        
+        /// </summary>        
         public static ToolStrip FindToolStrip(string toolStripName) {
             ToolStrip result = null;
             for (int i = 0; i < ToolStrips.Count; i++) {
@@ -127,7 +127,7 @@ namespace System.Windows.Forms {
 
         /// <summary> 
         /// Find a toolstrip in the weak ref arraylist, return null if nothing was found
-        /// </devdoc>        
+        /// </summary>        
         internal static ToolStrip FindToolStrip(Form owningForm, string toolStripName)
         {
             ToolStrip result = null;
@@ -253,7 +253,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <summary> removes dead entries from the toolstrip weak reference collection. </devdoc>
+        /// <summary> removes dead entries from the toolstrip weak reference collection. </summary>
         internal static void PruneToolStripList() {
             if (toolStripWeakArrayList != null) {
                 if (toolStripWeakArrayList.Count > 0) {
@@ -266,7 +266,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <summary> static events only!!!</devdoc>
+        /// <summary> static events only!!!</summary>
         private static void RemoveEventHandler(int key, Delegate value) {
             lock (internalSyncObject) {
                 if (staticEventHandlers != null) {
@@ -418,7 +418,7 @@ namespace System.Windows.Forms {
 
         /// <summary> the default renderer for the thread.  When ToolStrip.RenderMode is set to manager - this
         /// is the property used.
-        /// </devdoc>
+        /// </summary>
 
         public static ToolStripRenderer Renderer {
             get {
@@ -449,7 +449,7 @@ namespace System.Windows.Forms {
         //
         // WARNING: When subscribing to static event handlers - make sure you unhook from them
         // otherwise you can leak USER objects on process shutdown.
-        // </devdoc>
+        // </summary>
         // PM team has reviewed and decided on naming changes already
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         public static event EventHandler RendererChanged {
@@ -459,7 +459,7 @@ namespace System.Windows.Forms {
 
 
 
-        /// <summary> returns the default toolstrip RenderMode for the thread </devdoc>
+        /// <summary> returns the default toolstrip RenderMode for the thread </summary>
         public static ToolStripManagerRenderMode RenderMode {
             get {
                 Type currentType = CurrentRendererType;
@@ -499,7 +499,7 @@ namespace System.Windows.Forms {
         /// <summary> an additional layering of control.  this lets you pick whether your toolbars
         /// should use visual style information (theming) to render itself.
         /// potentially you could want a themed app but an unthemed toolstrip. (e.g. Whidbey VS).
-        /// </devdoc>
+        /// </summary>
         public static bool VisualStylesEnabled {
             get {
                 return visualStylesEnabledIfPossible && Application.RenderWithVisualStyles;
@@ -591,7 +591,7 @@ namespace System.Windows.Forms {
 
         /// <summary> 
         ///     Loads settings for the given Form using the form type's fullname as settings key. 
-        /// </devdoc>
+        /// </summary>
         public static void LoadSettings(Form targetForm) {
             if (targetForm == null) {
                 throw new ArgumentNullException(nameof(targetForm));
@@ -602,7 +602,7 @@ namespace System.Windows.Forms {
 
         /// <summary> 
         ///     Loads settings for the given Form with the given settings key. 
-        /// </devdoc>
+        /// </summary>
         public static void LoadSettings(Form targetForm, string key) {
             if (targetForm == null) {
                 throw new ArgumentNullException(nameof(targetForm));
@@ -619,7 +619,7 @@ namespace System.Windows.Forms {
 
         /// <summary> 
         ///     Saves settings for the given form using the form type's fullname as settings key. 
-        /// </devdoc>
+        /// </summary>
         public static void SaveSettings(Form sourceForm) {
             if (sourceForm == null) {
                 throw new ArgumentNullException(nameof(sourceForm));
@@ -630,7 +630,7 @@ namespace System.Windows.Forms {
 
         /// <summary> 
         ///     Saves settings for the given form with the given settings key. 
-        /// </devdoc>
+        /// </summary>
         public static void SaveSettings(Form sourceForm, string key) {
             if (sourceForm == null) {
                 throw new ArgumentNullException(nameof(sourceForm));
@@ -1402,7 +1402,7 @@ namespace System.Windows.Forms {
 
         /// <summary> determines if the key combination is valid for a shortcut.  
         ///          must have a modifier key + a regular key.
-        /// </devdoc>
+        /// </summary>
         public static bool IsValidShortcut(Keys shortcut) {
             // should have a key and one or more modifiers.
 
@@ -1456,7 +1456,7 @@ namespace System.Windows.Forms {
 
         /// <summary> this function is called for toplevel controls to process shortcuts. 
         ///          this function should be called from the topmost container control only.
-        /// </devdoc>
+        /// </summary>
         internal static bool ProcessCmdKey(ref Message m, Keys keyData) {
 
             Debug.WriteLineIf(Control.ControlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessCmdKey - processing: [" + keyData.ToString() + "]");
@@ -1482,7 +1482,7 @@ namespace System.Windows.Forms {
         ///          each toolstrip maintains a hash of the current shortcuts its using.
         ///          this way the search only takes O(number of toolstrips in the thread)
         ///          ToolStripMenuItem pushes itself into this table as the owner is set or the shortcut changes.
-        /// </devdoc>
+        /// </summary>
         internal static bool ProcessShortcut(ref Message m, Keys shortcut) {
             if (!IsThreadUsingToolStrips()) {
                 return false;
@@ -1614,7 +1614,7 @@ namespace System.Windows.Forms {
         ///          if it finds a menustrip to select, it returns true,
         ///          if it doesnt it returns false.
         ///          if it finds a win32 menu is already associated with the control it bails, returning false.
-        /// </devdoc>
+        /// </summary>
         internal static bool ProcessMenuKey(ref Message m) {
 
             Debug.WriteLineIf(Control.ControlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessMenuKey: [" + m.ToString() + "]");
@@ -1777,7 +1777,7 @@ namespace System.Windows.Forms {
         }
 
         /// <summary> 
-        /// </devdoc>
+        /// </summary>
         internal static ArrayList FindMergeableToolStrips(ContainerControl container) {
             ArrayList result = new ArrayList();
             if (container != null) {
@@ -1803,7 +1803,7 @@ namespace System.Windows.Forms {
 
         /// <summary> 
         /// merge two toolstrips
-        /// </devdoc>
+        /// </summary>
         public static bool Merge(ToolStrip sourceToolStrip, ToolStrip targetToolStrip) {
             // check arguments
             if (sourceToolStrip == null) {
@@ -1970,7 +1970,7 @@ namespace System.Windows.Forms {
 
         /// <summary> 
         /// merge two toolstrips
-        /// </devdoc>
+        /// </summary>
         public static bool Merge(ToolStrip sourceToolStrip, string targetName) {
             if (sourceToolStrip == null) {
                 throw new ArgumentNullException(nameof(sourceToolStrip));
@@ -1990,7 +1990,7 @@ namespace System.Windows.Forms {
 
         /// <summary> 
         /// doesn't do a null check on source... if it's null we unmerge everything
-        /// </devdoc>
+        /// </summary>
         internal static bool RevertMergeInternal(ToolStrip targetToolStrip, ToolStrip sourceToolStrip, bool revertMDIControls) {
             bool result = false;
             if (targetToolStrip == null) {
@@ -2082,14 +2082,14 @@ namespace System.Windows.Forms {
 
         /// <summary> 
         /// unmerge two toolstrips
-        /// </devdoc>
+        /// </summary>
         public static bool RevertMerge(ToolStrip targetToolStrip) {
             return RevertMergeInternal(targetToolStrip, null, /*revertMDIControls*/false);
         }
 
         /// <summary> 
         /// unmerge two toolstrips
-        /// </devdoc>
+        /// </summary>
         public static bool RevertMerge(ToolStrip targetToolStrip, ToolStrip sourceToolStrip) {
             if (sourceToolStrip == null) {
                 throw new ArgumentNullException(nameof(sourceToolStrip));
@@ -2099,7 +2099,7 @@ namespace System.Windows.Forms {
 
         /// <summary> 
         /// unmerge two toolstrips
-        /// </devdoc>
+        /// </summary>
         public static bool RevertMerge(string targetName) {
             ToolStrip target = FindToolStrip(targetName);
             if (target == null) {

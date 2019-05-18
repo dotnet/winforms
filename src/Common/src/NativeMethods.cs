@@ -941,14 +941,14 @@ namespace System.Windows.Forms
         
         /// <summary>
         ///     Creates an LCID from a LangId
-        /// </devdoc>
+        /// </summary>
         public static int MAKELCID(int lgid) {
             return MAKELCID(lgid, SORT_DEFAULT);
         }
 
         /// <summary>
         ///     Creates an LCID from a LangId
-        /// </devdoc>
+        /// </summary>
         public static int MAKELCID(int lgid, int sort) {
             return ((0xFFFF & lgid) | (((0x000f) & sort) << 16));
         }
@@ -1940,7 +1940,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         [StructLayout(LayoutKind.Sequential)]
         public class PICTDESCbmp {
             internal int cbSizeOfStruct = Marshal.SizeOf<PICTDESCbmp>();
@@ -1956,7 +1956,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         [StructLayout(LayoutKind.Sequential)]
         public class PICTDESCicon {
             internal int cbSizeOfStruct = Marshal.SizeOf<PICTDESCicon>();
@@ -1971,7 +1971,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// </devdoc>
+        /// </summary>
         [StructLayout(LayoutKind.Sequential)]
         public class PICTDESCemf {
             internal int cbSizeOfStruct = Marshal.SizeOf<PICTDESCemf>();
@@ -2138,14 +2138,14 @@ namespace System.Windows.Forms
             /// Hides the property at the given dispid from the properties window
             /// implmentors should can return E_NOTIMPL to show all properties that
             /// are otherwise browsable.
-            /// </devdoc>
+            /// </summary>
             [PreserveSig]
             int HideProperty(int dispid,ref bool pfHide);
 
             /// <summary>
             /// Will have the "+" expandable glyph next to them and can be expanded or collapsed by the user
             /// Returning a non-S_OK return code or false for pfDisplay will suppress this feature
-            /// </devdoc>
+            /// </summary>
             [PreserveSig]
             int DisplayChildProperties(int dispid, 
                                        ref bool pfDisplay);
@@ -2153,7 +2153,7 @@ namespace System.Windows.Forms
             /// <summary>
             /// Retrieves the localized name and description for a property.
             /// returning a non-S_OK return code will display the default values
-            /// </devdoc>
+            /// </summary>
             [PreserveSig]
             int GetLocalizedPropertyInfo(int dispid, int localeID, 
                                          [Out, MarshalAs(UnmanagedType.LPArray)]
@@ -2164,14 +2164,14 @@ namespace System.Windows.Forms
             /// <summary>
             /// Determines if the given (usually current) value for a property is the default.  If it is not default,
             /// the property will be shown as bold in the browser to indcate that it has been modified from the default.
-            /// </devdoc>
+            /// </summary>
             [PreserveSig]
             int HasDefaultValue(int dispid,
                                ref bool fDefault);
 
             /// <summary>
             /// Determines if a property should be made read only.  This only applies to properties that are writeable,
-            /// </devdoc>
+            /// </summary>
             [PreserveSig]
             int IsPropertyReadOnly(int dispid, 
                                    ref bool fReadOnly);
@@ -2187,14 +2187,14 @@ namespace System.Windows.Forms
             /// <summary>
             /// Checks whether the given property can be reset to some default value.
             /// If return value is non-S_OK or *pfCanReset is 
-            /// </devdoc>
+            /// </summary>
             [PreserveSig]
             int CanResetPropertyValue(int dispid, [In, Out]ref bool pfCanReset);
 
             /// <summary>
             /// If the return value is S_OK, the property's value will then be refreshed to the
             /// new default values.
-            /// </devdoc>
+            /// </summary>
             [PreserveSig]
             int ResetPropertyValue(int dispid);
         }
@@ -5259,7 +5259,7 @@ namespace System.Windows.Forms
         ///     This method takes a file URL and converts it to a local path.  The trick here is that
         ///     if there is a '#' in the path, everything after this is treated as a fragment.  So
         ///     we need to append the fragment to the end of the path.
-        /// </devdoc>
+        /// </summary>
         internal static string GetLocalPath(string fileName) {
             System.Diagnostics.Debug.Assert(fileName != null && fileName.Length > 0, "Cannot get local path, fileName is not valid");
 

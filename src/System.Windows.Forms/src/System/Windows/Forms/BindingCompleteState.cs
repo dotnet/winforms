@@ -6,22 +6,22 @@ namespace System.Windows.Forms
 {
     /// <summary>
     /// Indicates the result of a completed binding operation.
-    /// </devdoc>
+    /// </summary>
     public enum BindingCompleteState
     {
         /// <summary>
         /// Binding operation completed successfully.
-        /// </devdoc>
+        /// </summary>
         Success = 0,
 
         /// <summary>
         /// Binding operation failed with a data error.
-        /// </devdoc>
+        /// </summary>
         DataError = 1,
 
         /// <summary>
         /// Binding operation failed with an exception.
-        /// </devdoc>
+        /// </summary>
         Exception = 2,
     }
 }

@@ -7,13 +7,13 @@ namespace System.Windows.Forms
     /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.ToolBar.ButtonClick'/>
     /// event.
-    /// </devdoc>
+    /// </summary>
     public class ToolBarButtonClickEventArgs : EventArgs
     {
         /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.ToolBarButtonClickEventArgs'/>
         /// class.
-        /// </devdoc>
+        /// </summary>
         public ToolBarButtonClickEventArgs(ToolBarButton button)
         {
             Button = button;
@@ -22,7 +22,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Specifies the <see cref='System.Windows.Forms.ToolBarButton'/>
         /// that was clicked.
-        /// </devdoc>
+        /// </summary>
         public ToolBarButton Button { get; set; }
     }
 }
