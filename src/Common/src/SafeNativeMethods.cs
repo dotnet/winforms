@@ -737,14 +737,11 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
 
         public static extern int CloseThemeData(HandleRef hTheme);
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
 
-        public static extern int GetCurrentThemeName(StringBuilder pszThemeFileName, int dwMaxNameChars, StringBuilder pszColorBuff, int dwMaxColorChars, StringBuilder pszSizeBuff, int cchMaxSizeChars);
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-
+        [DllImport(ExternDll.Uxtheme, CharSet=CharSet.Auto)]
         public static extern bool IsThemePartDefined(HandleRef hTheme, int iPartId, int iStateId);
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
 
+        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
         public static extern int DrawThemeBackground(HandleRef hTheme, HandleRef hdc, int partId, int stateId, [In] NativeMethods.COMRECT pRect, [In] NativeMethods.COMRECT pClipRect);
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
 
@@ -795,19 +792,6 @@ namespace System.Windows.Forms
 
         public static extern int GetThemeString(HandleRef hTheme, int iPartId, int iStateId, int iPropId, StringBuilder pszBuff, int cchMaxBuffChars);
 
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int GetThemeDocumentationProperty([MarshalAs(UnmanagedType.LPWStr)] string pszThemeName, [MarshalAs(UnmanagedType.LPWStr)] string pszPropertyName, StringBuilder pszValueBuff, int cchMaxValChars);
-
-        public static class VisualStyleDocProperty
-        {
-            public const string DisplayName = "DisplayName";
-            public const string Company = "Company";
-            public const string Author = "Author";
-            public const string Copyright = "Copyright";
-            public const string Url = "Url";
-            public const string Version = "Version";
-            public const string Description = "Description";
-        }
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
         public static extern int GetThemeTextExtent(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, [MarshalAs(UnmanagedType.LPWStr)] string pszText, int iCharCount, int dwTextFlags, [In] NativeMethods.COMRECT pBoundingRect, [Out] NativeMethods.COMRECT pExtentRect);

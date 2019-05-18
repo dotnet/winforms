@@ -45,15 +45,19 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public static bool IsEnabledByUser => SafeNativeMethods.IsAppThemed();
 
-        internal static string ThemeFilename
+        internal static unsafe string ThemeFilename
         {
             get
             {
                 if (IsEnabledByUser)
                 {
-                    StringBuilder filename = new StringBuilder(512);
-                    SafeNativeMethods.GetCurrentThemeName(filename, filename.Capacity, null, 0, null, 0);
-                    return (filename.ToString());
+                    Span<char> filename = stackalloc char[512];
+                    fixed (char* pFilename = filename)
+                    {
+                        Interop.UxTheme.GetCurrentThemeName(pFilename, filename.Length, null, 0, null, 0);
+                    }
+
+                    return filename.ToString();
                 }
 
                 return string.Empty;
@@ -63,15 +67,19 @@ namespace System.Windows.Forms.VisualStyles
         /// <summary>
         ///    The current visual style's color scheme name.
         /// </summary>
-        public static string ColorScheme
+        public static unsafe string ColorScheme
         {
             get
             {
                 if (IsEnabledByUser)
                 {
-                    StringBuilder colorScheme = new StringBuilder(512);
-                    SafeNativeMethods.GetCurrentThemeName(null, 0, colorScheme, colorScheme.Capacity, null, 0);
-                    return (colorScheme.ToString());
+                    Span<char> colorScheme = stackalloc char[512];
+                    fixed (char* pColorScheme = colorScheme)
+                    {
+                        Interop.UxTheme.GetCurrentThemeName(null, 0, pColorScheme, colorScheme.Length, null, 0);
+                    }
+
+                    return colorScheme.ToString();
                 }
 
                 return string.Empty;
@@ -81,15 +89,19 @@ namespace System.Windows.Forms.VisualStyles
         /// <summary>
         ///    The current visual style's size name.
         /// </summary>
-        public static string Size
+        public static unsafe string Size
         {
             get
             {
                 if (IsEnabledByUser)
                 {
-                    StringBuilder size = new StringBuilder(512);
-                    SafeNativeMethods.GetCurrentThemeName(null, 0, null, 0, size, size.Capacity);
-                    return (size.ToString());
+                    Span<char> size = stackalloc char[512];
+                    fixed (char* pSize = size)
+                    {
+                        Interop.UxTheme.GetCurrentThemeName(null, 0, null, 0, pSize, size.Length);
+                    }
+
+                    return size.ToString();
                 }
 
                 return string.Empty;
@@ -99,15 +111,13 @@ namespace System.Windows.Forms.VisualStyles
         /// <summary>
         ///    The current visual style's display name.
         /// </summary>
-        public static string DisplayName
+        public static unsafe string DisplayName
         {
             get
             {
                 if (IsEnabledByUser)
                 {
-                    StringBuilder name = new StringBuilder(512);
-                    SafeNativeMethods.GetThemeDocumentationProperty(ThemeFilename, SafeNativeMethods.VisualStyleDocProperty.DisplayName, name, name.Capacity);
-                    return name.ToString();
+                    return Interop.UxTheme.GetThemeDocumentationProperty(ThemeFilename, Interop.UxTheme.VisualStyleDocProperty.DisplayName);
                 }
 
                 return string.Empty;
@@ -123,9 +133,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 if (IsEnabledByUser)
                 {
-                    StringBuilder company = new StringBuilder(512);
-                    SafeNativeMethods.GetThemeDocumentationProperty(ThemeFilename, SafeNativeMethods.VisualStyleDocProperty.Company, company, company.Capacity);
-                    return company.ToString();
+                    return Interop.UxTheme.GetThemeDocumentationProperty(ThemeFilename, Interop.UxTheme.VisualStyleDocProperty.Company);
                 }
 
                 return string.Empty;
@@ -141,9 +149,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 if (IsEnabledByUser)
                 {
-                    StringBuilder author = new StringBuilder(512);
-                    SafeNativeMethods.GetThemeDocumentationProperty(ThemeFilename, SafeNativeMethods.VisualStyleDocProperty.Author, author, author.Capacity);
-                    return author.ToString();
+                    return Interop.UxTheme.GetThemeDocumentationProperty(ThemeFilename, Interop.UxTheme.VisualStyleDocProperty.Author);
                 }
 
                 return string.Empty;
@@ -159,9 +165,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 if (IsEnabledByUser)
                 {
-                    StringBuilder copyright = new StringBuilder(512);
-                    SafeNativeMethods.GetThemeDocumentationProperty(ThemeFilename, SafeNativeMethods.VisualStyleDocProperty.Copyright, copyright, copyright.Capacity);
-                    return copyright.ToString();
+                    return Interop.UxTheme.GetThemeDocumentationProperty(ThemeFilename, Interop.UxTheme.VisualStyleDocProperty.Copyright);
                 }
 
                 return string.Empty;
@@ -179,9 +183,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 if (IsEnabledByUser)
                 {
-                    StringBuilder url = new StringBuilder(512);
-                    SafeNativeMethods.GetThemeDocumentationProperty(ThemeFilename, SafeNativeMethods.VisualStyleDocProperty.Url, url, url.Capacity);
-                    return url.ToString();
+                    return Interop.UxTheme.GetThemeDocumentationProperty(ThemeFilename, Interop.UxTheme.VisualStyleDocProperty.Url);
                 }
 
                 return string.Empty;
@@ -197,9 +199,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 if (IsEnabledByUser)
                 {
-                    StringBuilder version = new StringBuilder(512);
-                    SafeNativeMethods.GetThemeDocumentationProperty(ThemeFilename, SafeNativeMethods.VisualStyleDocProperty.Version, version, version.Capacity);
-                    return version.ToString();
+                    return Interop.UxTheme.GetThemeDocumentationProperty(ThemeFilename, Interop.UxTheme.VisualStyleDocProperty.Version);
                 }
 
                 return string.Empty;
@@ -215,9 +215,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 if (IsEnabledByUser)
                 {
-                    StringBuilder description = new StringBuilder(512);
-                    SafeNativeMethods.GetThemeDocumentationProperty(ThemeFilename, SafeNativeMethods.VisualStyleDocProperty.Description, description, description.Capacity);
-                    return description.ToString();
+                    return Interop.UxTheme.GetThemeDocumentationProperty(ThemeFilename, Interop.UxTheme.VisualStyleDocProperty.Description);
                 }
 
                 return string.Empty;
