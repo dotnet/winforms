@@ -887,12 +887,12 @@ namespace System.ComponentModel.Design.Serialization
 
             if (instancesByName[name] != null)
             {
-                throw new ArgumentException(string.Format(SR.SerializationManagerNameInUse, name));
+                throw new ArgumentException(string.Format(SR.SerializationManagerNameInUse, name), nameof(name));
             }
 
             if (namesByInstance[instance] != null)
             {
-                throw new ArgumentException(string.Format(SR.SerializationManagerObjectHasName, name, (string)namesByInstance[instance]));
+                throw new ArgumentException(string.Format(SR.SerializationManagerObjectHasName, name, (string)namesByInstance[instance]), nameof(instance));
             }
             instancesByName[name] = instance;
             namesByInstance[instance] = name;
