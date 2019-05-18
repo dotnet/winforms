@@ -11,7 +11,7 @@ using System.Threading;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// RegisterDropTarget requires an HWND to back it's IDropTargets. Since some ToolStripItems
     /// do not have HWNDS, this guy's got to figure out who the event was really supposed
     /// to go to and pass it on to it. 
@@ -32,7 +32,7 @@ namespace System.Windows.Forms
         internal static readonly TraceSwitch DragDropDebug;
 #endif
 
-        /// <devdoc>
+        /// <summary>
         /// Summary of ToolStripDropTargetManager.
         /// </devdoc>
         /// <param name=owner></param>	
@@ -43,7 +43,7 @@ namespace System.Windows.Forms
             }
         }
     
-        /// <devdoc>
+        /// <summary>
         /// Summary of EnsureRegistered.
         /// </devdoc>
         /// <param name=dropTarget></param>	
@@ -52,7 +52,7 @@ namespace System.Windows.Forms
             SetAcceptDrops(true);	
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Summary of EnsureUnRegistered.
         /// </devdoc>
         /// <param name=dropTarget></param>	
@@ -74,7 +74,7 @@ namespace System.Windows.Forms
             owner.DropTargetManager = null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Takes a screen point and converts it into an item. May return null.
         /// </devdoc>
         /// <param name=x></param>
@@ -82,7 +82,7 @@ namespace System.Windows.Forms
         private ToolStripItem FindItemAtPoint(int x, int y) {
             return owner.GetItemAt(owner.PointToClient(new Point(x,y)));
         }	
-        /// <devdoc>
+        /// <summary>
         /// Summary of OnDragEnter.
         /// </devdoc>
         /// <param name=e></param>	
@@ -135,7 +135,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Summary of OnDragOver.
         /// </devdoc>
         /// <param name=e></param>	
@@ -185,7 +185,7 @@ namespace System.Windows.Forms
 				
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Summary of OnDragLeave.
         /// </devdoc>
         /// <param name=e></param>	
@@ -208,7 +208,7 @@ namespace System.Windows.Forms
             lastDropTarget = null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Summary of OnDragDrop.
         /// </devdoc>
         /// <param name=e></param>	
@@ -228,7 +228,7 @@ namespace System.Windows.Forms
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Used to actually register the control as a drop target.
         /// </devdoc>
         /// <param name=accept></param>	
@@ -272,7 +272,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// if we have a new active item, fire drag leave and
         /// enter.  This corresponds to the case where you 
         /// are dragging between items and havent actually

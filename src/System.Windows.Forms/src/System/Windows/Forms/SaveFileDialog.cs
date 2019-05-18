@@ -15,7 +15,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Represents
     ///       a common dialog box that allows the user to specify options for saving a
@@ -28,7 +28,7 @@ namespace System.Windows.Forms {
     ]
     public sealed class SaveFileDialog : FileDialog {
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box prompts the user for
         ///       permission to create a file if the user specifies a file that does not exist.
@@ -48,7 +48,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the Save As dialog box displays a warning if the user specifies
         ///       a file name that already exists.
@@ -68,7 +68,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Opens the file with read/write permission selected by the user.
         ///    </para>
@@ -85,7 +85,7 @@ namespace System.Windows.Forms {
             return new FileStream(filename, FileMode.Create, FileAccess.ReadWrite);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Prompts the user with a <see cref='System.Windows.Forms.MessageBox'/>
         ///       when a file is about to be created. This method is
@@ -100,7 +100,7 @@ namespace System.Windows.Forms {
                     DialogCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Prompts the user when a file is about to be overwritten. This method is
         ///       invoked when the "overwritePrompt" property is true and the specified
@@ -138,7 +138,7 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Resets all dialog box options to their default
         ///       values.
@@ -149,7 +149,7 @@ namespace System.Windows.Forms {
             SetOption(NativeMethods.OFN_OVERWRITEPROMPT, true);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         private protected override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn) {
             bool result = UnsafeNativeMethods.GetSaveFileName(ofn);

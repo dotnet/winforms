@@ -13,7 +13,7 @@ using Accessibility;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides an implementation for an object that can be inspected by an
     /// accessibility application.
     /// </devdoc>
@@ -43,13 +43,13 @@ namespace System.Windows.Forms
                                     UnsafeNativeMethods.IRawElementProviderHwndOverride,
                                     UnsafeNativeMethods.IScrollItemProvider
     {
-        /// <devdoc>
+        /// <summary>
         /// Specifies the <see langword='IAccessible '/>interface used by this
         /// <see cref='System.Windows.Forms.AccessibleObject'/>.
         /// </devdoc>
         private IAccessible systemIAccessible = null;
 
-        /// <devdoc>
+        /// <summary>
         /// Specifies the <see cref='NativeMethods.IEnumVariant'/> used by this
         /// <see cref='System.Windows.Forms.AccessibleObject'/> .
         /// </devdoc>
@@ -82,7 +82,7 @@ namespace System.Windows.Forms
             systemWrapper = true;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the bounds of the accessible object, in screen coordinates.
         /// </devdoc>
         public virtual Rectangle Bounds
@@ -106,7 +106,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets a description of the default action for an object.
         /// </devdoc>
         public virtual string DefaultAction
@@ -129,7 +129,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets a description of the object's visual appearance to the user.
         /// </devdoc>
         public virtual string Description
@@ -156,7 +156,7 @@ namespace System.Windows.Forms
             get => enumVariant ?? (enumVariant = new EnumVariantObject(this));
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets a description of what the object does or how the object is used.
         /// </devdoc>
         public virtual string Help
@@ -178,7 +178,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the object shortcut key or access key for an accessible object.
         /// </devdoc>
         public virtual string KeyboardShortcut
@@ -200,7 +200,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets or sets the object name.</para>
         /// </devdoc>
         public virtual string Name
@@ -237,7 +237,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// When overridden in a derived class, gets or sets the parent of an
         /// accessible object.</para>
         /// </devdoc>
@@ -256,7 +256,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the role of this accessible object.
         /// </devdoc>
         public virtual AccessibleRole Role
@@ -274,7 +274,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the state of this accessible object.</para>
         /// </devdoc>
         public virtual AccessibleStates State
@@ -292,7 +292,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets or sets the value of an accessible object.
         /// </devdoc>
         public virtual string Value
@@ -330,19 +330,19 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// When overridden in a derived class, gets the accessible child
         /// corresponding to the specified index.
         /// </devdoc>
         public virtual AccessibleObject GetChild(int index) => null;
 
-        /// <devdoc>
+        /// <summary>
         /// When overridden in a derived class, gets the number of children
         /// belonging to an accessible object.
         /// </devdoc>
         public virtual int GetChildCount() => -1;
 
-        /// <devdoc>
+        /// <summary>
         /// Mechanism for overriding default IEnumVariant behavior of the 'inner'
         /// system accessible object (IEnumVariant is how a system accessible
         /// object exposes its ordered list of child objects).
@@ -358,7 +358,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         internal virtual int[] GetSysChildOrder() => null;
 
-        /// <devdoc>
+        /// <summary>
         /// Mechanism for overriding default IAccessible.accNavigate behavior of
         /// the 'inner' system accessible object (accNavigate is how you move
         /// between parent, child and sibling accessible objects).
@@ -375,7 +375,7 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// When overridden in a derived class, gets the object that has the
         /// keyboard focus.
         /// </devdoc>
@@ -416,7 +416,7 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets an identifier for a Help topic and the path to the Help file
         /// associated with this accessible object.
         /// </devdoc>
@@ -437,7 +437,7 @@ namespace System.Windows.Forms
             return -1;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// When overridden in a derived class, gets the currently selected child.
         /// </devdoc>
         public virtual AccessibleObject GetSelected()
@@ -478,7 +478,7 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Return the child object at the given screen coordinates.
         /// </devdoc>
         public virtual AccessibleObject HitTest(int x, int y)
@@ -1026,7 +1026,7 @@ namespace System.Windows.Forms
             get => ContainingGrid;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Perform the default action
         /// </devdoc>
         void IAccessible.accDoDefaultAction(object childID)
@@ -1067,7 +1067,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Perform a hit test
         /// </devdoc>
         object IAccessible.accHitTest(int xLeft, int yTop)
@@ -1098,7 +1098,7 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The location of the Accessible object
         /// </devdoc>
         void IAccessible.accLocation(
@@ -1172,7 +1172,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Navigate to another accessible object.
         /// </devdoc>
         object IAccessible.accNavigate(int navDir, object childID)
@@ -1221,7 +1221,7 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Select an accessible object.
         /// </devdoc>
         void IAccessible.accSelect(int flagsSelect, object childID)
@@ -1263,7 +1263,7 @@ namespace System.Windows.Forms
 
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Performs the default action associated with this accessible object.
         /// </devdoc>
         public virtual void DoDefaultAction()
@@ -1283,7 +1283,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns a child Accessible object
         /// </devdoc>
         object IAccessible.get_accChild(object childID)
@@ -1320,7 +1320,7 @@ namespace System.Windows.Forms
             return systemIAccessible?.get_accChild(childID);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Return the number of children
         /// </devdoc>
         int IAccessible.accChildCount
@@ -1352,7 +1352,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Return the default action
         /// </devdoc>
         string IAccessible.get_accDefaultAction(object childID)
@@ -1390,7 +1390,7 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Return the object or child description
         /// </devdoc>
         string IAccessible.get_accDescription(object childID)
@@ -1427,7 +1427,7 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns the appropriate child from the Accessible Child Collection, if available
         /// </devdoc>
         private AccessibleObject GetAccessibleChild(object childID)
@@ -1444,7 +1444,7 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Return the object or child focus
         /// </devdoc>
         object IAccessible.accFocus
@@ -1478,7 +1478,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Return help for this accessible object.
         /// </devdoc>
         string IAccessible.get_accHelp(object childID)
@@ -1514,7 +1514,7 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Return the object or child help topic
         /// </devdoc>
         int IAccessible.get_accHelpTopic(out string pszHelpFile, object childID)
@@ -1551,7 +1551,7 @@ namespace System.Windows.Forms
             return -1;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Return the object or child keyboard shortcut
         /// </devdoc>
         string IAccessible.get_accKeyboardShortcut(object childID)
@@ -1592,7 +1592,7 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Return the object or child name
         /// </devdoc>
         string IAccessible.get_accName(object childID)
@@ -1643,7 +1643,7 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Return the parent object
         /// </devdoc>
         object IAccessible.accParent
@@ -1667,7 +1667,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The role property describes an object's purpose in terms of its
         /// relationship with sibling or child objects.
         /// </devdoc>
@@ -1694,7 +1694,7 @@ namespace System.Windows.Forms
             return systemIAccessible?.get_accRole(childID);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Return the object or child selection
         /// </devdoc>
         object IAccessible.accSelection
@@ -1728,7 +1728,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Return the object or child state
         /// </devdoc>
         object IAccessible.get_accState(object childID)
@@ -1757,7 +1757,7 @@ namespace System.Windows.Forms
             return systemIAccessible?.get_accState(childID);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Return the object or child value
         /// </devdoc>
         string IAccessible.get_accValue(object childID)
@@ -1794,7 +1794,7 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Set the object or child name
         /// </devdoc>
         void IAccessible.set_accName(object childID, string newName)
@@ -1823,7 +1823,7 @@ namespace System.Windows.Forms
             systemIAccessible?.set_accName(childID, newName);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Set the object or child value
         /// </devdoc>
         void IAccessible.set_accValue(object childID, string newValue)
@@ -1861,7 +1861,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Now that AccessibleObject is used to wrap all system-provided (OLEACC.DLL) accessible
         /// objects, it needs to implement IOleWindow and pass this down to the inner object. This is
         /// necessary because the OS function WindowFromAccessibleObject() walks up the parent chain
@@ -1896,7 +1896,7 @@ namespace System.Windows.Forms
             return NativeMethods.E_FAIL;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// See GetWindow() above for details.
         /// </devdoc>
         void UnsafeNativeMethods.IOleWindow.ContextSensitiveHelp(int fEnterMode)
@@ -1919,7 +1919,7 @@ namespace System.Windows.Forms
             // Or do nothing if there is no parent
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Clone this accessible object.
         /// </devdoc>
         void UnsafeNativeMethods.IEnumVariant.Clone(UnsafeNativeMethods.IEnumVariant[] v)
@@ -1927,7 +1927,7 @@ namespace System.Windows.Forms
             EnumVariant.Clone(v);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Obtain the next n children of this accessible object.
         /// </devdoc>
         int UnsafeNativeMethods.IEnumVariant.Next(int n, IntPtr rgvar, int[] ns)
@@ -1935,17 +1935,17 @@ namespace System.Windows.Forms
             return EnumVariant.Next(n, rgvar, ns);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Resets the child accessible object enumerator.
         /// </devdoc>
         void UnsafeNativeMethods.IEnumVariant.Reset() => EnumVariant.Reset();
 
-        /// <devdoc>
+        /// <summary>
         /// Skip the next n child accessible objects
         /// </devdoc>
         void UnsafeNativeMethods.IEnumVariant.Skip(int n) => EnumVariant.Skip(n);
 
-        /// <devdoc>
+        /// <summary>
         /// When overridden in a derived class, navigates to another object.
         /// </devdoc>
         public virtual AccessibleObject Navigate(AccessibleNavigation navdir)
@@ -1995,7 +1995,7 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Selects this accessible object.
         /// </devdoc>
         public virtual void Select(AccessibleSelection flags)
@@ -2034,7 +2034,7 @@ namespace System.Windows.Forms
             return obj;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Indicates what kind of 'inner' system accessible object we are using as our fall-back
         /// implementation of IAccessible (when the systemIAccessible member is not null). The inner
         /// object is provided by OLEACC.DLL. Note that although the term 'id' is used, this value
@@ -2055,13 +2055,13 @@ namespace System.Windows.Forms
             set => accObjId = value;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Indicates whether this accessible object represents the client area of
         /// the window.
         /// </devdoc>
         internal bool IsClientObject => AccessibleObjectId == NativeMethods.OBJID_CLIENT;
 
-        /// <devdoc>
+        /// <summary>
         /// Indicates whether this accessible object represents the non-client
         /// area of the window.
         /// </devdoc>
@@ -2102,7 +2102,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Performs custom navigation between parent/child/sibling accessible
         /// objects. This is basically just a wrapper for GetSysChild(), that
         /// does some of the dirty work, such as wrapping the returned object
@@ -2134,7 +2134,7 @@ namespace System.Windows.Forms
             return true;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Make sure that the childID is valid.
         /// </devdoc>
         internal void ValidateChildID(ref object childID)
@@ -2173,7 +2173,7 @@ namespace System.Windows.Forms
             return new AccessibleObject(accessible);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Return the requested method if it is implemented by the Reflection object. The
         /// match is based upon the name and DescriptorInfo which describes the signature
         /// of the method.
@@ -2183,7 +2183,7 @@ namespace System.Windows.Forms
             return typeof(IAccessible).GetMethod(name, bindingAttr, binder, types, modifiers);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Return the requested method if it is implemented by the Reflection object. The
         /// match is based upon the name of the method. If the object implementes multiple methods
         /// with the same name an AmbiguousMatchException is thrown.
@@ -2198,7 +2198,7 @@ namespace System.Windows.Forms
             return typeof(IAccessible).GetMethods(bindingAttr);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Return the requestion field if it is implemented by the Reflection
         /// object. The match is based upon a name. There cannot be more than
         /// a single field with a name.
@@ -2213,7 +2213,7 @@ namespace System.Windows.Forms
             return typeof(IAccessible).GetFields(bindingAttr);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Return the property based upon name. If more than one property has
         /// the given name an AmbiguousMatchException will be thrown. Returns
         /// null if no property is found.
@@ -2223,7 +2223,7 @@ namespace System.Windows.Forms
             return typeof(IAccessible).GetProperty(name, bindingAttr);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Return the property based upon the name and Descriptor info describing
         /// the property indexing. Return null if no property is found.
         /// </devdoc>
@@ -2232,7 +2232,7 @@ namespace System.Windows.Forms
             return typeof(IAccessible).GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns an array of PropertyInfos for all the properties defined on
         /// the Reflection object.
         /// </devdoc>
@@ -2241,7 +2241,7 @@ namespace System.Windows.Forms
             return typeof(IAccessible).GetProperties(bindingAttr);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Return an array of members which match the passed in name.
         /// </devdoc>
         MemberInfo[] IReflect.GetMember(string name, BindingFlags bindingAttr)
@@ -2249,7 +2249,7 @@ namespace System.Windows.Forms
             return typeof(IAccessible).GetMember(name, bindingAttr);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Return an array of all of the members defined for this object.
         /// </devdoc>
         MemberInfo[] IReflect.GetMembers(BindingFlags bindingAttr)
@@ -2257,7 +2257,7 @@ namespace System.Windows.Forms
             return typeof(IAccessible).GetMembers(bindingAttr);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Description of the Binding Process.
         /// We must invoke a method that is accessable and for which the provided
         /// parameters have the most specific match. A method may be called if
@@ -2310,7 +2310,7 @@ namespace System.Windows.Forms
             return typeof(IAccessible).InvokeMember(name, invokeAttr, binder, target, args, modifiers, culture, namedParameters);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Return the underlying Type that represents the IReflect Object. For
         /// expando object, this is the (Object) IReflectInstance.GetType().
         /// For Type object it is this.
@@ -2482,7 +2482,7 @@ namespace System.Windows.Forms
                 v[0] = new EnumVariantObject(owner, currentChild);
             }
 
-            /// <devdoc>
+            /// <summary>
             /// Resets the child accessible object enumerator.
             /// </devdoc>
             void UnsafeNativeMethods.IEnumVariant.Reset()
@@ -2491,7 +2491,7 @@ namespace System.Windows.Forms
                 owner.systemIEnumVariant?.Reset();
             }
 
-            /// <devdoc>
+            /// <summary>
             /// Skips the next n child accessible objects.
             /// </devdoc>
             void UnsafeNativeMethods.IEnumVariant.Skip(int n)
@@ -2500,7 +2500,7 @@ namespace System.Windows.Forms
                 owner.systemIEnumVariant?.Skip(n);
             }
 
-            /// <devdoc>
+            /// <summary>
             /// Gets the next n child accessible objects.
             /// </devdoc>
             int UnsafeNativeMethods.IEnumVariant.Next(int n, IntPtr rgvar, int[] ns)
@@ -2544,7 +2544,7 @@ namespace System.Windows.Forms
                 return (ns[0] == n) ? NativeMethods.S_OK : NativeMethods.S_FALSE;
             }
 
-            /// <devdoc>
+            /// <summary>
             /// When we have the IEnumVariant of an accessible proxy provided by the system (ie.
             /// OLEACC.DLL), we can fall back on that to return the children. Generally, the system
             /// proxy will enumerate the child windows, create a suitable kind of child accessible
@@ -2558,7 +2558,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.IEV.Next: Delegating to systemIEnumVariant");
             }
 
-            /// <devdoc>
+            /// <summary>
             /// Sometimes we want to rely on the system-provided behavior to create
             /// and return child accessible objects, but we want to impose a new
             /// order on those objects (or even filter some objects out).
@@ -2590,7 +2590,7 @@ namespace System.Windows.Forms
                 ns[0] = i;
             }
 
-            /// <devdoc>
+            /// <summary>
             /// If we have our own custom accessible child collection, return a set
             /// of 1-based integer child ids, that the caller will eventually pass
             /// back to us via IAccessible.get_accChild().
@@ -2609,7 +2609,7 @@ namespace System.Windows.Forms
                 ns[0] = i;
             }
 
-            /// <devdoc>
+            /// <summary>
             /// Default behavior if there is no custom child collection or
             /// system-provided proxy to fall back on. In this case, we return
             /// an empty child collection.
@@ -2620,7 +2620,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.IEV.Next: no children to add");
             }
 
-            /// <devdoc>
+            /// <summary>
             /// Given an IEnumVariant interface, this method jumps to a specific
             /// item in the collection and extracts the result for that one item.
             /// </devdoc>
@@ -2635,7 +2635,7 @@ namespace System.Windows.Forms
                 return ns[0] == 1;
             }
 
-            /// <devdoc>
+            /// <summary>
             /// Given an array of pointers to variants, calculate address of a given array element.
             /// </devdoc>
             private static IntPtr GetAddressOfVariantAtIndex(IntPtr variantArrayPtr, int index)

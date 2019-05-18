@@ -4,23 +4,23 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies whether any characters in the current selection have the
     /// style or attribute.
     /// </devdoc>
     public enum DockingBehavior
     {
-        /// <devdoc>
+        /// <summary>
         /// Some but not all characters.
         /// </devdoc>
         Never = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// No characters.
         /// </devdoc>
         Ask = 1,
 
-        /// <devdoc>
+        /// <summary>
         /// All characters.
         /// </devdoc>
         AutoDock = 2

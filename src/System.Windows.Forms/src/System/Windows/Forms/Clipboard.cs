@@ -18,7 +18,7 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Collections;
     
-    /// <devdoc>
+    /// <summary>
     ///    <para>Provides methods to place data on and retrieve data from the system clipboard. This class cannot be inherited.</para>
     /// </devdoc>
     public sealed class Clipboard {
@@ -78,21 +78,21 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Places nonpersistent data on the system <see cref='System.Windows.Forms.Clipboard'/>.</para>
         /// </devdoc>
         public static void SetDataObject(object data) {
             SetDataObject(data, false);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Overload that uses default values for retryTimes and retryDelay.</para>
         /// </devdoc>
         public static void SetDataObject(object data, bool copy) {
             SetDataObject(data, copy, 10 /*retryTimes*/, 100 /*retryDelay*/);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Places data on the system <see cref='System.Windows.Forms.Clipboard'/> and uses copy to specify whether the data 
         ///    should remain on the <see cref='System.Windows.Forms.Clipboard'/>
         ///    after the application exits.</para>
@@ -160,7 +160,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Retrieves the data that is currently on the system
         ///    <see cref='System.Windows.Forms.Clipboard'/>.</para>
         /// </devdoc>

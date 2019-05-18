@@ -7,12 +7,12 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// This class contains the information a user needs to paint ListView sub-items (Details view only).
     /// </devdoc>
     public class DrawListViewSubItemEventArgs : EventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// Creates a new DrawListViewSubItemEventArgs with the given parameters.
         /// </devdoc>
         public DrawListViewSubItemEventArgs(Graphics graphics, Rectangle bounds, ListViewItem item,
@@ -29,52 +29,52 @@ namespace System.Windows.Forms
             ItemState = itemState;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Graphics object with which painting should be done.
         /// </devdoc>
         public Graphics Graphics { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The rectangle outlining the area in which the painting should be done.
         /// </devdoc>
         public Rectangle Bounds { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The parent item.
         /// </devdoc>
         public ListViewItem Item { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The parent item.
         /// </devdoc>
         public ListViewItem.ListViewSubItem SubItem { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The index in the ListView of the parent item.
         /// </devdoc>
         public int ItemIndex { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The column index of this sub-item.
         /// </devdoc>
         public int ColumnIndex { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The header of this sub-item's column
         /// </devdoc>
         public ColumnHeader Header { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Miscellaneous state information pertaining to the parent item.
         /// </devdoc>
         public ListViewItemStates ItemState { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Causes the item do be drawn by the system instead of owner drawn.
         /// </devdoc>
         public bool DrawDefault { get; set; }
 
-        /// <devdoc>
+        /// <summary>
         /// Draws the sub-item's background.
         /// </devdoc>
         public void DrawBackground()
@@ -86,7 +86,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Draws a focus rectangle in the given bounds, if the item has focus.
         /// </devdoc>
         public void DrawFocusRectangle(Rectangle bounds)
@@ -97,7 +97,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Draws the sub-item's text (overloaded)
         /// </devdoc>
         public void DrawText()
@@ -112,7 +112,7 @@ namespace System.Windows.Forms
             DrawText(flags);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Draws the sub-item's text (overloaded) - takes a TextFormatFlags argument.
         /// </devdoc>
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")] // We want to measure the size of blank spaces o we don't have to localize it.

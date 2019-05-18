@@ -11,7 +11,7 @@ using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// A non selectable ToolStrip item
     /// </devdoc>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.StatusStrip)]
@@ -26,7 +26,7 @@ namespace System.Windows.Forms
         private AutomationLiveSetting liveSetting;
 
 
-        /// <devdoc>
+        /// <summary>
         /// A non selectable ToolStrip item
         /// </devdoc>
         public ToolStripStatusLabel() {
@@ -61,7 +61,7 @@ namespace System.Windows.Forms
             return new ToolStripStatusLabelAccessibleObject(this);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Creates an instance of the object that defines how image and text
         /// gets laid out in the ToolStripItem
         /// </devdoc>
@@ -133,7 +133,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Called by all constructors of ToolStripButton.
         /// </devdoc>
         private void Initialize()
@@ -208,7 +208,7 @@ namespace System.Windows.Forms
 
 
         
-        /// <devdoc>
+        /// <summary>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
         protected override void OnPaint(System.Windows.Forms.PaintEventArgs e) {
@@ -256,7 +256,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///  This class performs internal layout for the "split button button" portion of a split button.
         ///  Its main job is to make sure the inner button has the same parent as the split button, so
         ///  that layout can be performed using the correct graphics context.

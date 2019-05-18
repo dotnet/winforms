@@ -6,23 +6,23 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies the border style for a control or form.
     /// </devdoc>
     [ComVisible(true)]
     public enum BorderStyle
     {
-        /// <devdoc>
+        /// <summary>
         /// No border.
         /// </devdoc>
         None = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// A single-line border.
         /// </devdoc>
         FixedSingle = 1,
 
-        /// <devdoc>
+        /// <summary>
         /// A three-dimensional border.
         /// </devdoc>
         Fixed3D = 2,

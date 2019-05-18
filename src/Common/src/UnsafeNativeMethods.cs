@@ -4825,7 +4825,7 @@ namespace System.Windows.Forms {
         ]
         public interface IMsoComponentManager {
 
-        /// <devdoc>
+        /// <summary>
         ///      Return in *ppvObj an implementation of interface iid for service
         ///      guidService (same as IServiceProvider::QueryService).
         ///      Return NOERROR if the requested service is supported, otherwise return
@@ -4838,7 +4838,7 @@ namespace System.Windows.Forms {
             [MarshalAs(UnmanagedType.Interface)] 
             out object ppvObj);
 
-        /// <devdoc>
+        /// <summary>
         ///      Standard FDebugMessage method.
         ///      Since IMsoComponentManager is a reference counted interface, 
         ///      MsoDWGetChkMemCounter should be used when processing the 
@@ -4851,7 +4851,7 @@ namespace System.Windows.Forms {
             IntPtr wParam, 
             IntPtr lParam);
 
-        /// <devdoc>
+        /// <summary>
         ///      Register component piComponent and its registration info pcrinfo with
         ///      this component manager.  Return in *pdwComponentID a cookie which will
         ///      identify the component when it calls other IMsoComponentManager
@@ -4864,7 +4864,7 @@ namespace System.Windows.Forms {
             NativeMethods.MSOCRINFOSTRUCT pcrinfo,
             out IntPtr dwComponentID);
 
-        /// <devdoc>
+        /// <summary>
         ///      Undo the registration of the component identified by dwComponentID
         ///      (the cookie returned from the FRegisterComponent method).
         ///      Return TRUE if successful, FALSE otherwise.
@@ -4872,7 +4872,7 @@ namespace System.Windows.Forms {
         [PreserveSig]
         bool FRevokeComponent(IntPtr dwComponentID);
 
-        /// <devdoc>
+        /// <summary>
         ///      Update the registration info of the component identified by
         ///      dwComponentID (the cookie returned from FRegisterComponent) with the
         ///      new registration information pcrinfo.
@@ -4883,7 +4883,7 @@ namespace System.Windows.Forms {
         [PreserveSig]
         bool FUpdateComponentRegistration(IntPtr dwComponentID,NativeMethods.MSOCRINFOSTRUCT pcrinfo);
 
-        /// <devdoc>
+        /// <summary>
         ///      Notify component manager that component identified by dwComponentID
         ///      (cookie returned from FRegisterComponent) has been activated.
         ///      The active component gets the  chance to process messages before they
@@ -4898,7 +4898,7 @@ namespace System.Windows.Forms {
         [PreserveSig]
         bool FOnComponentActivate(IntPtr dwComponentID);
 
-        /// <devdoc>
+        /// <summary>
         ///      Called to inform component manager that  component identified by 
         ///      dwComponentID (cookie returned from FRegisterComponent) wishes
         ///      to perform a tracking operation (such as mouse tracking).
@@ -4918,7 +4918,7 @@ namespace System.Windows.Forms {
         [PreserveSig]
         bool FSetTrackingComponent(IntPtr dwComponentID, [In, MarshalAs(UnmanagedType.Bool)] bool fTrack);
 
-        /// <devdoc>
+        /// <summary>
         ///      Notify component manager that component identified by dwComponentID
         ///      (cookie returned from FRegisterComponent) is entering the state
         ///      identified by uStateID (msocstateXXX value).  (For convenience when
@@ -4956,7 +4956,7 @@ namespace System.Windows.Forms {
         [PreserveSig]
         void OnComponentEnterState(IntPtr dwComponentID,int uStateID,int uContext,int cpicmExclude,/* IMsoComponentManger** */ int rgpicmExclude,int dwReserved);
 
-        /// <devdoc>
+        /// <summary>
         ///      Notify component manager that component identified by dwComponentID
         ///      (cookie returned from FRegisterComponent) is exiting the state
         ///      identified by uStateID (a msocstateXXX value).  (For convenience when
@@ -4986,7 +4986,7 @@ namespace System.Windows.Forms {
             int cpicmExclude, 
             /* IMsoComponentManager** */ int rgpicmExclude);
 
-        /// <devdoc>
+        /// <summary>
         ///      Return TRUE if the state identified by uStateID (a msocstateXXX value)
         ///      is in effect at the root of this component manager's state context, 
         ///      FALSE otherwise (see "Comments on State Contexts", above).
@@ -4995,7 +4995,7 @@ namespace System.Windows.Forms {
         [PreserveSig]
         bool FInState(int uStateID,/* PVOID */ IntPtr pvoid);
 
-        /// <devdoc>
+        /// <summary>
         ///      Called periodically by a component during IMsoComponent::FDoIdle.
         ///      Return TRUE if component can continue its idle time processing, 
         ///      FALSE if not (in which case component returns from FDoIdle.) 
@@ -5003,7 +5003,7 @@ namespace System.Windows.Forms {
         [PreserveSig]
         bool FContinueIdle();
 
-        /// <devdoc>
+        /// <summary>
         ///      Component identified by dwComponentID (cookie returned from 
         ///      FRegisterComponent) wishes to push a message loop for reason uReason.
         ///      uReason is one the values from the msoloop enumeration (above).
@@ -5022,7 +5022,7 @@ namespace System.Windows.Forms {
         [PreserveSig]
         bool FPushMessageLoop(IntPtr dwComponentID,int uReason,/* PVOID */ int pvLoopData);
 
-        /// <devdoc>
+        /// <summary>
         ///      Cause the component manager to create a "sub" component manager, which
         ///      will be one of its children in the hierarchical tree of component
         ///      managers used to maintiain state contexts (see "Comments on State
@@ -5044,7 +5044,7 @@ namespace System.Windows.Forms {
             ref Guid riid,
             out IntPtr ppvObj);
 
-        /// <devdoc>
+        /// <summary>
         ///      Return in *ppicm an AddRef'ed ptr to this component manager's parent
         ///      in the hierarchical tree of component managers used to maintain state
         ///      contexts (see "Comments on State       Contexts", above).
@@ -5055,7 +5055,7 @@ namespace System.Windows.Forms {
         bool FGetParentComponentManager(
             out IMsoComponentManager ppicm);
 
-        /// <devdoc>
+        /// <summary>
         ///      Return in *ppic an AddRef'ed ptr to the current active or tracking
         ///      component (as indicated by dwgac (a msogacXXX value)), and
         ///      its registration information in *pcrinfo.  ppic and/or pcrinfo can be
@@ -5080,7 +5080,7 @@ namespace System.Windows.Forms {
         ]
         public interface IMsoComponent {
 
-            /// <devdoc>
+            /// <summary>
             ///      Standard FDebugMessage method.
             ///      Since IMsoComponentManager is a reference counted interface, 
             ///      MsoDWGetChkMemCounter should be used when processing the 
@@ -5093,7 +5093,7 @@ namespace System.Windows.Forms {
                 IntPtr wParam, 
                 IntPtr lParam);
 
-            /// <devdoc>
+            /// <summary>
             ///      Give component a chance to process the message pMsg before it is
             ///      translated and dispatched. Component can do TranslateAccelerator
             ///      do IsDialogMessage, modify pMsg, or take some other action.
@@ -5102,7 +5102,7 @@ namespace System.Windows.Forms {
             [PreserveSig]
             bool FPreTranslateMessage(ref NativeMethods.MSG msg);            
 
-            /// <devdoc>  
+            /// <summary>  
             ///      Notify component when app enters or exits (as indicated by fEnter)
             ///      the state identified by uStateID (a value from olecstate enumeration).
             ///      Component should take action depending on value of uStateID
@@ -5123,7 +5123,7 @@ namespace System.Windows.Forms {
                 int uStateID,
                 bool fEnter);
 
-            /// <devdoc>  
+            /// <summary>  
             ///      Notify component when the host application gains or loses activation.
             ///     If fActive is TRUE, the host app is being activated and dwOtherThreadID
             ///      is the ID of the thread owning the window being deactivated.
@@ -5138,14 +5138,14 @@ namespace System.Windows.Forms {
                 bool fActive,
                 int dwOtherThreadID);                
 
-            /// <devdoc>      
+            /// <summary>      
             ///      Notify the active component that it has lost its active status because
             ///      the host or another component has become active.
             /// </devdoc>
             [PreserveSig]
             void OnLoseActivation();
 
-            /// <devdoc> 
+            /// <summary> 
             ///      Notify component when a new object is being activated.
             ///      If pic is non-NULL, then it is the component that is being activated.
             ///      In this case, fSameComponent is TRUE if pic is the same component as
@@ -5188,7 +5188,7 @@ namespace System.Windows.Forms {
                 int pchostinfo,
                 int dwReserved);
 
-            /// <devdoc> 
+            /// <summary> 
             ///      Give component a chance to do idle time tasks.  grfidlef is a group of
             ///      bit flags taken from the enumeration of oleidlef values (above),
             ///      indicating the type of idle tasks to perform.  
@@ -5209,7 +5209,7 @@ namespace System.Windows.Forms {
                 int grfidlef);            
 
 
-            /// <devdoc>         
+            /// <summary>         
             ///      Called during each iteration of a message loop that the component
             ///      pushed. uReason and pvLoopData are the reason and the component private 
             ///      data that were passed to IOleComponentManager::FPushMessageLoop.
@@ -5230,7 +5230,7 @@ namespace System.Windows.Forms {
                 [MarshalAs(UnmanagedType.LPArray)] NativeMethods.MSG[] pMsgPeeked);            
 
 
-            /// <devdoc> 
+            /// <summary> 
             ///      Called when component manager wishes to know if the component is in a
             ///      state in which it can terminate.  If fPromptUser is FALSE, component
             ///      should simply return TRUE if it can terminate, FALSE otherwise.
@@ -5244,7 +5244,7 @@ namespace System.Windows.Forms {
             bool FQueryTerminate(
                 bool fPromptUser);
 
-            /// <devdoc>     
+            /// <summary>     
             ///      Called when component manager wishes to terminate the component's
             ///      registration.  Component should revoke its registration with component
             ///      manager, release references to component manager and perform any
@@ -5253,7 +5253,7 @@ namespace System.Windows.Forms {
             [PreserveSig]
             void Terminate();
 
-            /// <devdoc> 
+            /// <summary> 
             ///      Called to retrieve a window associated with the component, as specified
             ///      by dwWhich, a olecWindowXXX value (see olecWindow, above).
             ///      dwReserved is reserved for future use and should be zero.
@@ -7701,7 +7701,7 @@ namespace System.Windows.Forms {
                     int cySrc);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This class provides static methods to create, activate and deactivate the theming scope.
         /// </devdoc>
         internal class ThemingScope
@@ -7711,7 +7711,7 @@ namespace System.Windows.Forms {
             private static IntPtr hActCtx;
             private static bool contextCreationSucceeded;
 
-            /// <devdoc>
+            /// <summary>
             /// We now use explicitactivate everywhere and use this method to determine if we
             /// really need to activate the activationcontext.  This should be pretty fast.
             /// </devdoc>
@@ -7728,7 +7728,7 @@ namespace System.Windows.Forms {
                 return false;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Activate() does nothing if a theming context is already active on the current thread, which is good
             ///     for perf reasons. However, in some cases, like in the Timer callback, we need to put another context
             ///     on the stack even if one is already present. In such cases, this method helps - you get to manage
@@ -7755,7 +7755,7 @@ namespace System.Windows.Forms {
                 return userCookie;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Use this to deactivate a context activated by calling ExplicitActivate.
             /// </devdoc>
             public static IntPtr Deactivate(IntPtr userCookie)

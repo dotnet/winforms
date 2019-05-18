@@ -614,7 +614,7 @@ namespace System.Windows.Forms
             OnDataError(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Unhook BindingSource from its data source, since the data source could be some
         /// global object who's lifetime exceeds the lifetime of the parent form. Otherwise
         /// the BindingSource (and any components bound through it) will end up in limbo,
@@ -1419,7 +1419,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Respond to late completion of the DataSource's initialization, by completing our
         /// own initialization. This situation can arise if the call to the DataSource's
         /// EndInit() method comes after the call to the BindingSource's EndInit() method

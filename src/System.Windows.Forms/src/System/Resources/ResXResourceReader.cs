@@ -22,7 +22,7 @@ namespace System.Resources {
     using System.ComponentModel.Design;
     using System.Globalization;
     
-    /// <devdoc>
+    /// <summary>
     ///     ResX resource reader.
     /// </devdoc>
     public class ResXResourceReader : IResourceReader {
@@ -118,7 +118,7 @@ namespace System.Resources {
             Dispose(false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     BasePath for relatives filepaths with ResXFileRefs.
         /// </devdoc>
         public string BasePath {
@@ -133,7 +133,7 @@ namespace System.Resources {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     ResXFileRef's TypeConverter automatically unwraps it, creates the referenced
         ///     object and returns it. This property gives the user control over whether this unwrapping should
         ///     happen, or a ResXFileRef object should be returned. Default is true for backward compat and common case
@@ -151,7 +151,7 @@ namespace System.Resources {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Closes and files or streams being used by the reader.
         /// </devdoc>
         // NOTE: Part of IResourceReader - not protected by class level LinkDemand.
@@ -197,7 +197,7 @@ namespace System.Resources {
             reader.NameTable.Add(ResXResourceWriter.AliasStr);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Demand loads the resource data.
         /// </devdoc>
         private void EnsureResData() {
@@ -238,14 +238,14 @@ namespace System.Resources {
 
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a reader with the specified file contents.
         /// </devdoc>
         public static ResXResourceReader FromFileContents(string fileContents) {
             return FromFileContents(fileContents, (ITypeResolutionService)null);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a reader with the specified file contents.
         /// </devdoc>
         public static ResXResourceReader FromFileContents(string fileContents, ITypeResolutionService typeResolver) {
@@ -255,7 +255,7 @@ namespace System.Resources {
             };
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a reader with the specified file contents.
         /// </devdoc>
         public static ResXResourceReader FromFileContents(string fileContents, AssemblyName[] assemblyNames) {
@@ -277,7 +277,7 @@ namespace System.Resources {
             return resData.GetEnumerator();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Returns a dictionary enumerator that can be used to enumerate the <metadata> elements in the .resx file.
         /// </devdoc>
         public IDictionaryEnumerator GetMetadataEnumerator() {
@@ -285,7 +285,7 @@ namespace System.Resources {
             return resMetadata.GetEnumerator();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Attempts to return the line and column (Y, X) of the XML reader.
         /// </devdoc>
         private Point GetPosition(XmlReader reader) {

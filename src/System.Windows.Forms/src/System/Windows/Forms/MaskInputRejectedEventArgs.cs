@@ -6,7 +6,7 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the MaskInputRejected event.
     /// </devdoc>
     public class MaskInputRejectedEventArgs : EventArgs
@@ -17,12 +17,12 @@ namespace System.Windows.Forms
             RejectionHint = rejectionHint;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The position where the test failed the mask constraint.
         /// </devdoc>
         public int Position { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Retreives a hint on why the input is rejected.
         /// </devdoc>
         public MaskedTextResultHint RejectionHint { get; }

@@ -11,7 +11,7 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Design;
 
 
-    /// <devdoc>
+    /// <summary>
     /// ToolStripOverflowButton
     /// </devdoc>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.None)]

@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// This enum represents the current layout of the ToolStripItem. 
     /// </devdoc>
     public enum ToolStripItemPlacement

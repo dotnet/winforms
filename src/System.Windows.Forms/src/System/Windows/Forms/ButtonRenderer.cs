@@ -11,7 +11,7 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.VisualStyles;
     using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       This is a rendering class for the Button control. It works downlevel too (obviously
     ///       without visual styles applied.)
@@ -29,7 +29,7 @@ namespace System.Windows.Forms {
         private ButtonRenderer() {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///      If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to 
         /// determine how to render.
@@ -51,7 +51,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Returns true if the background corresponding to the given state is partially transparent, else false.
         ///    </para>
@@ -67,7 +67,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       This is just a convenience wrapper for VisualStyleRenderer.DrawThemeParentBackground. For downlevel,
         ///       this isn't required and does nothing.
@@ -81,7 +81,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a Button control.
         ///    </para>
@@ -124,7 +124,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a Button control.
         ///    </para>
@@ -133,7 +133,7 @@ namespace System.Windows.Forms {
             DrawButtonForHandle(g, bounds, focused, state, IntPtr.Zero);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a Button control.
         ///    </para>
@@ -145,7 +145,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a Button control.
         ///    </para>
@@ -174,7 +174,7 @@ namespace System.Windows.Forms {
                 }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a Button control.
         ///    </para>
@@ -200,7 +200,7 @@ namespace System.Windows.Forms {
                 }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a Button control.
         ///    </para>
@@ -211,7 +211,7 @@ namespace System.Windows.Forms {
                        image, imageBounds, focused, state);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a Button control.
         ///    </para>

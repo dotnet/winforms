@@ -24,7 +24,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Text;
 
-    /// <devdoc>
+    /// <summary>
     ///
     ///     This is a control that presents a list of items to the user.  They may be
     ///     navigated using the keyboard, or the scrollbar on the right side of the
@@ -55,11 +55,11 @@ namespace System.Windows.Forms {
     SRDescription(nameof(SR.DescriptionListBox))
     ]
     public class ListBox : ListControl {
-        /// <devdoc>
+        /// <summary>
         ///     while doing a search, if no matches are found, this is returned
         /// </devdoc>
         public const int NoMatches = NativeMethods.LB_ERR;
-        /// <devdoc>
+        /// <summary>
         /// The default item height for an owner-draw ListBox. The ListBox's non-ownderdraw
         // item height is 13 for the default font on Windows.
         /// </devdoc>
@@ -104,7 +104,7 @@ namespace System.Windows.Forms {
         //We need to change this in the count as well as SelectedIndex code where we access the SelectionMode.
         private bool selectionModeChanging = false;
 
-        /// <devdoc>
+        /// <summary>
         ///     This value stores the array of custom tabstops in the listbox. the array should be populated by
         ///     integers in a ascending order.
         /// </devdoc>
@@ -131,7 +131,7 @@ namespace System.Windows.Forms {
         internal int scaledListItemPaddingBuffer = defaultListItemPaddingBuffer;
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a basic win32 list box with default values for everything.
         /// </devdoc>
         public ListBox() : base() {
@@ -212,7 +212,7 @@ namespace System.Windows.Forms {
             remove => base.BackgroundImageLayoutChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the current border style.  Values for this are taken from
         ///     The System.Windows.Forms.BorderStyle enumeration.
         /// </devdoc>
@@ -249,7 +249,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -282,7 +282,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the parameters needed to create the handle.  Inheriting classes
         ///     can override this to provide extra functionality.  They should not,
         ///     however, forget to call base.getCreateParams() first to get the struct
@@ -344,7 +344,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Enables a list box to recognize and expand tab characters when drawing
         ///     its strings using the CustomTabOffsets integer array.
         /// </devdoc>
@@ -371,7 +371,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the style of the listbox.  This will indicate if the system
         ///     draws it, or if the user paints each item manually.  It also indicates
         ///     whether or not items have to be of the same height.
@@ -454,7 +454,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates the width, in pixels, by which a list box can be scrolled horizontally (the scrollable width).
         ///     This property will only have an effect if HorizontalScrollbars is true.
         /// </devdoc>
@@ -477,7 +477,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates whether or not the ListBox should display a horizontal scrollbar
         ///     when the items extend beyond the right edge of the ListBox.
         ///     If true, the scrollbar will automatically set its extent depending on the length
@@ -515,7 +515,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates if the listbox should avoid showing partial Items.  If so,
         ///     then only full items will be displayed, and the listbox will be resized
         ///     to prevent partial items from being shown.  Otherwise, they will be
@@ -551,7 +551,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Returns
         ///       the height of an item in an owner-draw list box.</para>
@@ -597,7 +597,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Collection of items in this listbox.
         /// </devdoc>
         [
@@ -644,7 +644,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Indicates if the listbox is multi-column
         ///       or not.</para>
@@ -669,7 +669,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The total height of the items in the list box.
         /// </devdoc>
         [
@@ -731,7 +731,7 @@ namespace System.Windows.Forms {
             return new Size(width, height) + Padding.Size;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets whether the scrollbar is shown at all times.</para>
         /// </devdoc>
@@ -753,7 +753,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Indicates whether list currently allows selection of list items.
         ///    For ListBox, this returns true unless SelectionMode is SelectionMode.None.
         /// </devdoc>
@@ -763,7 +763,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The index of the currently selected item in the list, if there
         ///     is one.  If the value is -1, there is currently no selection.  If the
         ///     value is 0 or greater, than the value is the index of the currently
@@ -847,7 +847,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     A collection of the indices of the selected items in the
         ///     list box. If there are no selected items in the list box, the result is
         ///     an empty collection.
@@ -866,7 +866,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The value of the currently selected item in the list, if there
         ///     is one.  If the value is null, there is currently no selection.  If the
         ///     value is non-null, then the value is that of the currently selected
@@ -903,7 +903,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The collection of selected items.
         /// </devdoc>
         [
@@ -920,7 +920,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Controls how many items at a time can be selected in the listbox. Valid
         ///     values are from the System.Windows.Forms.SelectionMode enumeration.
         /// </devdoc>
@@ -961,7 +961,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates if the ListBox is sorted or not.  'true' means that strings in
         ///     the list will be sorted alphabetically
         /// </devdoc>
@@ -1028,7 +1028,7 @@ namespace System.Windows.Forms {
             remove => base.TextChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The index of the first visible item in a list box. Initially
         ///     the item with index 0 is at the top of the list box, but if the list
         ///     box contents have been scrolled another item may be at the top.
@@ -1057,7 +1057,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Enables a list box to recognize and expand tab characters when drawing
         ///     its strings.
         /// </devdoc>
@@ -1077,7 +1077,7 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///     Allows to set the width of the tabs between the items in the list box.
         ///     The integer array should have the tab spaces in the ascending order.
         /// </devdoc>
@@ -1096,7 +1096,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Performs the work of adding the specified items to the Listbox
         /// </devdoc>
         [Obsolete("This method has been deprecated.  There is no replacement.  http://go.microsoft.com/fwlink/?linkid=14202")]
@@ -1139,7 +1139,7 @@ namespace System.Windows.Forms {
             add => base.PaddingChanged += value; 
             remove => base.PaddingChanged -= value; }
 
-        /// <devdoc>
+        /// <summary>
         ///     ListBox / CheckedListBox Onpaint.
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -1168,7 +1168,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_SELECTEDINDEXCHANGED, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     While the preferred way to insert items is to set Items.All,
         ///     and set all the items at once, there are times when you may wish to
         ///     insert each item one at a time.  To help with the performance of this,
@@ -1208,7 +1208,7 @@ namespace System.Windows.Forms {
             return Math.Max(oldMax, textSize.Width);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Unselects all currently selected items.
         /// </devdoc>
         public void ClearSelected() {
@@ -1231,7 +1231,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     While the preferred way to insert items is to set Items.All,
         ///     and set all the items at once, there are times when you may wish to
         ///     insert each item one at a time.  To help with the performance of this,
@@ -1245,13 +1245,13 @@ namespace System.Windows.Forms {
             --updateCount;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Finds the first item in the list box that starts with the given string.
         /// The search is not case sensitive.
         /// </devdoc>
         public int FindString(string s) => FindString(s, startIndex: -1);
 
-        /// <devdoc>
+        /// <summary>
         /// Finds the first item after the given index which starts with the given string.
         /// The search is not case sensitive.
         /// </devdoc>
@@ -1260,13 +1260,13 @@ namespace System.Windows.Forms {
             return FindStringInternal(s, itemsCollection, startIndex, exact: false, ignoreCase: true);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Finds the first item in the list box that matches the given string.
         /// The strings must match exactly, except for differences in casing.
         /// </devdoc>
         public int FindStringExact(string s) => FindStringExact(s, startIndex: -1);
 
-        /// <devdoc>
+        /// <summary>
         /// Finds the first item after the given index that matches the given string.
         /// The strings must match excatly, except for differences in casing.
         /// </devdoc>
@@ -1275,7 +1275,7 @@ namespace System.Windows.Forms {
             return FindStringInternal(s, itemsCollection, startIndex, exact: true, ignoreCase: true);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the height of the given item in a list box. The index parameter
         ///     is ignored if drawMode is not OwnerDrawVariable.
         /// </devdoc>
@@ -1300,7 +1300,7 @@ namespace System.Windows.Forms {
             return itemHeight;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves a Rectangle object which describes the bounding rectangle
         ///     around an item in the list.  If the item in question is not visible,
         ///     the rectangle will be outside the visible portion of the control.
@@ -1312,7 +1312,7 @@ namespace System.Windows.Forms {
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     List box overrides GetScaledBounds to ensure we always scale the requested
         ///     height, not the current height.
         /// </devdoc>
@@ -1324,7 +1324,7 @@ namespace System.Windows.Forms {
             return base.GetScaledBounds(bounds, factor, specified);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Tells you whether or not the item at the supplied index is selected
         ///     or not.
         /// </devdoc>
@@ -1349,14 +1349,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the index of the item at the given coordinates.
         /// </devdoc>
         public int IndexFromPoint(Point p) {
             return IndexFromPoint(p.X, p.Y);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the index of the item at the given coordinates.
         /// </devdoc>
         public int IndexFromPoint(int x, int y) {
@@ -1376,7 +1376,7 @@ namespace System.Windows.Forms {
             return NoMatches;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Adds the given item to the native combo box.  This asserts if the handle hasn't been
         ///     created.
         /// </devdoc>
@@ -1399,7 +1399,7 @@ namespace System.Windows.Forms {
             return insertIndex;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Clears the contents of the combo box.
         /// </devdoc>
         private void NativeClear() {
@@ -1407,7 +1407,7 @@ namespace System.Windows.Forms {
             SendMessage(NativeMethods.LB_RESETCONTENT, 0, 0);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Get the text stored by the native control for the specified list item.
         /// </devdoc>
         internal string NativeGetItemText(int index) {
@@ -1417,7 +1417,7 @@ namespace System.Windows.Forms {
             return sb.ToString();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Inserts the given item to the native combo box at the index.  This asserts if the handle hasn't been
         ///     created or if the resulting insert index doesn't match the passed in index.
         /// </devdoc>
@@ -1441,7 +1441,7 @@ namespace System.Windows.Forms {
             return insertIndex;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Removes the native item from the given index.
         /// </devdoc>
         private void NativeRemoveAt(int index) {
@@ -1458,7 +1458,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sets the selection of the given index to the native window.  This does not change
         ///     the collection; you must update the collection yourself.
         /// </devdoc>
@@ -1474,7 +1474,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This is called by the SelectedObjectCollection in response to the first
         ///     query on that collection after we have called Dirty().  Dirty() is called
         ///     when we receive a LBN_SELCHANGE message.
@@ -1529,7 +1529,7 @@ namespace System.Windows.Forms {
             base.OnChangeUICues(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Actually goes and fires the drawItem event.  Inheriting controls
         ///     should use this to know when the event is fired [this is preferable to
         ///     adding an event handler yourself for this event].  They should,
@@ -1543,7 +1543,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     We need to know when the window handle has been created so we can
         ///     set up a few things, like column width, etc!  Inheriting classes should
         ///     not forget to call base.OnHandleCreated().
@@ -1597,7 +1597,7 @@ namespace System.Windows.Forms {
             UpdateHorizontalExtent();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Overridden to make sure that we set up and clear out items
         ///     correctly.  Inheriting controls should not forget to call
         ///     base.OnHandleDestroyed()
@@ -1629,7 +1629,7 @@ namespace System.Windows.Forms {
         }
 
        
-        /// <devdoc>
+        /// <summary>
         ///    <para>We override this so we can re-create the handle if the parent has changed.</para>
         /// </devdoc>
         protected override void OnParentChanged(EventArgs e) {
@@ -1653,7 +1653,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Actually goes and fires the selectedIndexChanged event.  Inheriting controls
         ///     should use this to know when the event is fired [this is preferable to
         ///     adding an event handler on yourself for this event].  They should,
@@ -1714,7 +1714,7 @@ namespace System.Windows.Forms {
                 this.SelectedIndex = this.DataManager.Position;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Forces the ListBox to invalidate and immediately
         ///     repaint itself and any children if OwnerDrawVariable.
         /// </devdoc>
@@ -1738,7 +1738,7 @@ namespace System.Windows.Forms {
             }
             base.Refresh();
         }
-        /// <devdoc>
+        /// <summary>
         /// Reparses the objects, getting new text strings for them.
         /// </devdoc>
         protected override void RefreshItems() {
@@ -1799,7 +1799,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Reparses the object at the given index, getting new text string for it.
         /// </devdoc>
         protected override void RefreshItem(int index) {
@@ -1829,7 +1829,7 @@ namespace System.Windows.Forms {
        }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Overrides Control.SetBoundsCore to remember the requestedHeight.
         /// </devdoc>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
@@ -1843,7 +1843,7 @@ namespace System.Windows.Forms {
             base.SetBoundsCore(x, y, width, height, specified);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Performs the work of setting the specified items into the ListBox.
         /// </devdoc>
         protected override void SetItemsCore(IList value) {
@@ -1885,7 +1885,7 @@ namespace System.Windows.Forms {
             Items.SetItemInternal(index, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Allows the user to set an item as being selected or not.  This should
         ///     only be used with ListBoxes that allow some sort of multi-selection.
         /// </devdoc>
@@ -1905,7 +1905,7 @@ namespace System.Windows.Forms {
             OnSelectedIndexChanged(EventArgs.Empty);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sorts the items in the listbox.
         /// </devdoc>
         protected virtual void Sort() {
@@ -1936,7 +1936,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns a string representation for this control.
         /// </devdoc>
         public override string ToString() {
@@ -2046,7 +2046,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected virtual void WmReflectCommand(ref Message m) {
             switch (NativeMethods.Util.HIWORD(m.WParam)) {
@@ -2063,7 +2063,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         private void WmReflectDrawItem(ref Message m) {
             NativeMethods.DRAWITEMSTRUCT dis = (NativeMethods.DRAWITEMSTRUCT)m.GetLParam(typeof(NativeMethods.DRAWITEMSTRUCT));
@@ -2099,7 +2099,7 @@ namespace System.Windows.Forms {
             m.Result = (IntPtr)1;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         // This method is only called if in owner draw mode
         private void WmReflectMeasureItem(ref Message m) {
@@ -2124,7 +2124,7 @@ namespace System.Windows.Forms {
             m.Result = (IntPtr)1;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The list's window procedure.  Inheriting classes can override this
         ///     to add extra functionality, but should not forget to call
         ///     base.wndProc(m); to ensure the list continues to function properly.
@@ -2235,7 +2235,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This is similar to ArrayList except that it also
         ///     mantains a bit-flag based state element for each item
         ///     in the array.
@@ -2260,7 +2260,7 @@ namespace System.Windows.Forms {
                 this.listControl = listControl;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     The version of this array.  This number changes with each
             ///     change to the item list.
             /// </devdoc>
@@ -2270,7 +2270,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Adds the given item to the array.  The state is initially
             ///     zero.
             /// </devdoc>
@@ -2281,7 +2281,7 @@ namespace System.Windows.Forms {
                 return entries[count++];
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Adds the given collection of items to the array.
             /// </devdoc>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
@@ -2296,7 +2296,7 @@ namespace System.Windows.Forms {
                 version++;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Clears this array.
             /// </devdoc>
             public void Clear() {
@@ -2308,7 +2308,7 @@ namespace System.Windows.Forms {
                 version++;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Allocates a new bitmask for use.
             /// </devdoc>
             public static int CreateMask() {
@@ -2318,7 +2318,7 @@ namespace System.Windows.Forms {
                 return mask;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Ensures that our internal array has space for
             ///     the requested # of elements.
             /// </devdoc>
@@ -2334,7 +2334,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Turns a virtual index into an actual index.
             /// </devdoc>
             public int GetActualIndex(int virtualIndex, int stateMask) {
@@ -2356,7 +2356,7 @@ namespace System.Windows.Forms {
                 return -1;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Gets the count of items matching the given mask.
             /// </devdoc>
             public int GetCount(int stateMask) {
@@ -2379,7 +2379,7 @@ namespace System.Windows.Forms {
                 return filteredCount;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves an enumerator that will enumerate based on
             ///     the given mask.
             /// </devdoc>
@@ -2387,7 +2387,7 @@ namespace System.Windows.Forms {
                 return GetEnumerator(stateMask, false);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves an enumerator that will enumerate based on
             ///     the given mask.
             /// </devdoc>
@@ -2395,7 +2395,7 @@ namespace System.Windows.Forms {
                 return new EntryEnumerator(this, stateMask, anyBit);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Gets the item at the given index.  The index is
             ///     virtualized against the given mask value.
             /// </devdoc>
@@ -2408,7 +2408,7 @@ namespace System.Windows.Forms {
 
                 return entries[actualIndex].item;
             }
-            /// <devdoc>
+            /// <summary>
             ///     Gets the item at the given index.  The index is
             ///     virtualized against the given mask value.
             /// </devdoc>
@@ -2421,7 +2421,7 @@ namespace System.Windows.Forms {
 
                 return entries[actualIndex];
             }
-            /// <devdoc>
+            /// <summary>
             ///     Returns true if the requested state mask is set.
             ///     The index is the actual index to the array.
             /// </devdoc>
@@ -2429,7 +2429,7 @@ namespace System.Windows.Forms {
                 return ((entries[index].state & stateMask) == stateMask);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Returns the virtual index of the item based on the
             ///     state mask.
             /// </devdoc>
@@ -2449,7 +2449,7 @@ namespace System.Windows.Forms {
                 return -1;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Returns the virtual index of the item based on the
             ///     state mask. Uses reference equality to identify the
             ///     given object in the list.
@@ -2469,7 +2469,7 @@ namespace System.Windows.Forms {
                 return -1;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Inserts item at the given index.  The index
             ///     is not virtualized.
             /// </devdoc>
@@ -2485,7 +2485,7 @@ namespace System.Windows.Forms {
                 version++;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Removes the given item from the array.  If
             ///     the item is not in the array, this does nothing.
             /// </devdoc>
@@ -2497,7 +2497,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Removes the item at the given index.
             /// </devdoc>
             public void RemoveAt(int index) {
@@ -2509,14 +2509,14 @@ namespace System.Windows.Forms {
                 version++;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Sets the item at the given index to a new value.
             /// </devdoc>
             public void SetItem(int index, object item) {
                 entries[index].item = item;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Sets the state data for the given index.
             /// </devdoc>
             public void SetState(int index, int stateMask, bool value) {
@@ -2529,7 +2529,7 @@ namespace System.Windows.Forms {
                 version++;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Find element in sorted array. If element is not found returns a binary complement of index for inserting
             /// </devdoc>
             public int BinarySearch(object element)
@@ -2538,7 +2538,7 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <devdoc>
+            /// <summary>
             ///     Sorts our array.
             /// </devdoc>
             public void Sort() {
@@ -2575,7 +2575,7 @@ namespace System.Windows.Forms {
                 return compInfo.Compare(itemName1, itemName2, CompareOptions.StringSort);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     This is a single entry in our item array.
             /// </devdoc>
             private class Entry {
@@ -2588,7 +2588,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     EntryEnumerator is an enumerator that will enumerate over
             ///     a given state mask.
             /// </devdoc>
@@ -2599,7 +2599,7 @@ namespace System.Windows.Forms {
                 private int current;
                 private int version;
 
-                /// <devdoc>
+                /// <summary>
                 ///     Creates a new enumerator that will enumerate over the given state.
                 /// </devdoc>
                 public EntryEnumerator(ItemArray items, int state, bool anyBit) {
@@ -2610,7 +2610,7 @@ namespace System.Windows.Forms {
                     this.current = -1;
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///     Moves to the next element, or returns false if at the end.
                 /// </devdoc>
                 bool IEnumerator.MoveNext() {
@@ -2637,7 +2637,7 @@ namespace System.Windows.Forms {
                     }
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///     Resets the enumeration back to the beginning.
                 /// </devdoc>
                 void IEnumerator.Reset() {
@@ -2645,7 +2645,7 @@ namespace System.Windows.Forms {
                     current = -1;
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///     Retrieves the current value in the enumerator.
                 /// </devdoc>
                 object IEnumerator.Current {
@@ -2661,7 +2661,7 @@ namespace System.Windows.Forms {
         }
 
         // Items
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         ///       A collection that stores objects.
         ///    </para>
@@ -2676,7 +2676,7 @@ namespace System.Windows.Forms {
                 this.owner = owner;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     <para>
             ///       Initializes a new instance of ListBox.ObjectCollection based on another ListBox.ObjectCollection.
             ///    </para>
@@ -2686,7 +2686,7 @@ namespace System.Windows.Forms {
                 this.AddRange(value);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     <para>
             ///       Initializes a new instance of ListBox.ObjectCollection containing any array of objects.
             ///    </para>
@@ -2696,7 +2696,7 @@ namespace System.Windows.Forms {
                 this.AddRange(value);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the number of items.
             /// </devdoc>
             public int Count {
@@ -2705,7 +2705,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Internal access to the actual data store.
             /// </devdoc>
             internal ItemArray InnerArray {
@@ -2741,7 +2741,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Adds an item to the List box. For an unsorted List box, the item is
             ///     added to the end of the existing list of items. For a sorted List box,
             ///     the item is inserted into the list according to its sorted position.
@@ -2866,7 +2866,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the item with the specified index.
             /// </devdoc>
             [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -2884,7 +2884,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Removes all items from the ListBox.
             /// </devdoc>
             public virtual void Clear() {
@@ -2892,7 +2892,7 @@ namespace System.Windows.Forms {
                 ClearInternal();
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Removes all items from the ListBox.  Bypasses the data source check.
             /// </devdoc>
             internal void ClearInternal() {
@@ -2918,7 +2918,7 @@ namespace System.Windows.Forms {
                 return IndexOf(value) != -1;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Copies the ListBox Items collection to a destination array.
             /// </devdoc>
             public void CopyTo(object[] destination, int arrayIndex) {
@@ -2935,7 +2935,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Returns an enumerator for the ListBox Items collection.
             /// </devdoc>
             public IEnumerator GetEnumerator() {
@@ -2958,7 +2958,7 @@ namespace System.Windows.Forms {
                 return InnerArray.IndexOfIdentifier(value,0);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Adds an item to the combo box. For an unsorted combo box, the item is
             ///     added to the end of the existing list of items. For a sorted combo box,
             ///     the item is inserted into the list according to its sorted position.
@@ -3005,7 +3005,7 @@ namespace System.Windows.Forms {
                 owner.UpdateHorizontalExtent();
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Removes the given item from the ListBox, provided that it is
             ///     actually in the list.
             /// </devdoc>
@@ -3018,7 +3018,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Removes an item from the ListBox at the given index.
             /// </devdoc>
             public void RemoveAt(int index) {
@@ -3088,7 +3088,7 @@ namespace System.Windows.Forms {
                 this.owner = owner;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///    <para>Number of current selected items.</para>
             /// </devdoc>
             [Browsable(false)]
@@ -3169,7 +3169,7 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <devdoc>
+            /// <summary>
             ///     Add a unique integer to the collection in sorted order.
             ///     A SystemException occurs if there is insufficient space available to
             ///     store the new item.
@@ -3187,7 +3187,7 @@ namespace System.Windows.Forms {
                return index;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Adds a unique integer to the collection in sorted order.
             ///     A SystemException occurs if there is insufficient space available to
             ///     store the new item.
@@ -3219,7 +3219,7 @@ namespace System.Windows.Forms {
                 AddRangeInternal((ICollection)value);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Add range that bypasses the data source check.
             /// </devdoc>
             [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
@@ -3252,7 +3252,7 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <devdoc>
+            /// <summary>
             ///     Ensures that our internal array has space for
             ///     the requested # of elements.
             /// </devdoc>
@@ -3292,7 +3292,7 @@ namespace System.Windows.Forms {
                 RemoveAt(index);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Removes the given item from the array.  If
             ///     the item is not in the array, this does nothing.
             /// </devdoc>
@@ -3305,7 +3305,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Removes the item at the given index.
             /// </devdoc>
             public void RemoveAt(int index) {
@@ -3319,7 +3319,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the specified selected item.
             /// </devdoc>
             [
@@ -3379,7 +3379,7 @@ namespace System.Windows.Forms {
                 return new CustomTabOffsetsEnumerator(this);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     EntryEnumerator is an enumerator that will enumerate over
             ///     a given state mask.
             /// </devdoc>
@@ -3387,7 +3387,7 @@ namespace System.Windows.Forms {
                 private IntegerCollection items;
                 private int current;
 
-                /// <devdoc>
+                /// <summary>
                 ///     Creates a new enumerator that will enumerate over the given state.
                 /// </devdoc>
                 public CustomTabOffsetsEnumerator(IntegerCollection items) {
@@ -3395,7 +3395,7 @@ namespace System.Windows.Forms {
                     this.current = -1;
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///     Moves to the next element, or returns false if at the end.
                 /// </devdoc>
                 bool IEnumerator.MoveNext() {
@@ -3410,14 +3410,14 @@ namespace System.Windows.Forms {
                     }
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///     Resets the enumeration back to the beginning.
                 /// </devdoc>
                 void IEnumerator.Reset() {
                     current = -1;
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///     Retrieves the current value in the enumerator.
                 /// </devdoc>
                 object IEnumerator.Current {
@@ -3443,7 +3443,7 @@ namespace System.Windows.Forms {
                 this.owner = owner;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///    <para>Number of current selected items.</para>
             /// </devdoc>
             [Browsable(false)]
@@ -3535,7 +3535,7 @@ namespace System.Windows.Forms {
                 throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the specified selected item.
             /// </devdoc>
             public int this[int index] {
@@ -3554,7 +3554,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     This is the item array that stores our data.  We share this backing store
             ///     with the main object collection.
             /// </devdoc>
@@ -3604,7 +3604,7 @@ namespace System.Windows.Forms {
                 return new SelectedIndexEnumerator(this);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     EntryEnumerator is an enumerator that will enumerate over
             ///     a given state mask.
             /// </devdoc>
@@ -3612,7 +3612,7 @@ namespace System.Windows.Forms {
                 private SelectedIndexCollection items;
                 private int current;
 
-                /// <devdoc>
+                /// <summary>
                 ///     Creates a new enumerator that will enumerate over the given state.
                 /// </devdoc>
                 public SelectedIndexEnumerator(SelectedIndexCollection items) {
@@ -3620,7 +3620,7 @@ namespace System.Windows.Forms {
                     this.current = -1;
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///     Moves to the next element, or returns false if at the end.
                 /// </devdoc>
                 bool IEnumerator.MoveNext() {
@@ -3635,14 +3635,14 @@ namespace System.Windows.Forms {
                     }
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///     Resets the enumeration back to the beginning.
                 /// </devdoc>
                 void IEnumerator.Reset() {
                     current = -1;
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///     Retrieves the current value in the enumerator.
                 /// </devdoc>
                 object IEnumerator.Current {
@@ -3675,7 +3675,7 @@ namespace System.Windows.Forms {
                 this.lastVersion = -1;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Number of current selected items.
             /// </devdoc>
             public int Count {
@@ -3732,14 +3732,14 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Called by the list box to dirty the selected item state.
             /// </devdoc>
             internal void Dirty() {
                 stateDirty = true;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     This is the item array that stores our data.  We share this backing store
             ///     with the main object collection.
             /// </devdoc>
@@ -3751,7 +3751,7 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <devdoc>
+            /// <summary>
             ///     This is the function that Ensures that the selections are uptodate with
             ///     current listbox handle selections.
             /// </devdoc>
@@ -3809,7 +3809,7 @@ namespace System.Windows.Forms {
                return InnerArray.GetEntryObject(index, SelectedObjectCollection.SelectedObjectMask);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the specified selected item.
             /// </devdoc>
             [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -3833,7 +3833,7 @@ namespace System.Windows.Forms {
                 return InnerArray.GetEnumerator(SelectedObjectMask);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     This method returns if the actual item index is selected.  The index is the index to the MAIN
             ///     collection, not this one.
             /// </devdoc>
@@ -3853,7 +3853,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Same thing for GetSelected.
             /// </devdoc>
             internal void SetSelected(int index, bool value) {

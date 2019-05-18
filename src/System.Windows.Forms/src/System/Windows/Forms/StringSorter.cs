@@ -10,7 +10,7 @@ namespace System.Windows.Forms {
     using System;
     using System.Globalization;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       This class provides methods to perform locale based comparison of strings
     ///       and sorting of arrays.
@@ -18,42 +18,42 @@ namespace System.Windows.Forms {
     /// </devdoc>
     internal sealed class StringSorter
     {
-        /// <devdoc>
+        /// <summary>
         ///     Ignore case when comparing two strings. When this flag is specified in
         ///     calls to compare() and sort(), two strings are considered equal if they
         ///     differ only in casing.
         /// </devdoc>
         public const int IgnoreCase = 0x00000001;
 
-        /// <devdoc>
+        /// <summary>
         ///     Do not differentiate between Hiragana and Katakana characters. When this
         ///     flag is specified in calls to compare() and sort(), corresponding
         ///     Hiragana and Katakana characters compare as equal.
         /// </devdoc>
         public const int IgnoreKanaType = 0x00010000;
 
-        /// <devdoc>
+        /// <summary>
         ///     Ignore nonspacing marks (accents, diacritics, and vowel marks). When
         ///     this flag is specified in calls to compare() and sort(), strings compare
         ///     as equal if they differ only in how characters are accented.
         /// </devdoc>
         public const int IgnoreNonSpace = 0x00000002;
 
-        /// <devdoc>
+        /// <summary>
         ///     Ignore symbols. When this flag is specified in calls to compare() and
         ///     sort(), strings compare as equal if they differ only in what symbol
         ///     characters they contain.
         /// </devdoc>
         public const int IgnoreSymbols = 0x00000004;
 
-        /// <devdoc>
+        /// <summary>
         ///     Ignore character widths. When this flag is specified in calls to
         ///     compare() and sort(), string comparisons do not differentiate between a
         ///     single-ubyte character and the same character as a double-ubyte character.
         /// </devdoc>
         public const int IgnoreWidth = 0x00020000;
 
-        /// <devdoc>
+        /// <summary>
         ///     Treat punctuation the same as symbols. Typically, strings are compared
         ///     using what is called a "word sort" technique. In a word sort, all
         ///     punctuation marks and other nonalphanumeric characters, except for the
@@ -68,7 +68,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public const int StringSort = 0x00001000;
 
-        /// <devdoc>
+        /// <summary>
         ///     Descending sort. When this flag is specified in a call to sort(), the
         ///     strings are sorted in descending order. This flag should not be used in
         ///     calls to compare().
@@ -84,7 +84,7 @@ namespace System.Windows.Forms {
         private int options;
         private bool descending;
 
-        /// <devdoc>
+        /// <summary>
         ///     Constructs a StringSorter. Instances are created by the sort() routines,
         ///     but never by the user.
         /// </devdoc>
@@ -109,7 +109,7 @@ namespace System.Windows.Forms {
             this.descending = (options & Descending) != 0;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         internal static int ArrayLength(object[] array) {
             if (array == null)
@@ -118,7 +118,7 @@ namespace System.Windows.Forms {
                 return array.Length;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     Compares two strings using the default locale and no additional string
         ///     comparison flags.
         /// </devdoc>
@@ -126,7 +126,7 @@ namespace System.Windows.Forms {
             return Compare(SafeNativeMethods.GetThreadLocale(), s1, s2, 0);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Compares two strings using the default locale with the given set of
         ///     string comparison flags.
         /// </devdoc>
@@ -134,7 +134,7 @@ namespace System.Windows.Forms {
             return Compare(SafeNativeMethods.GetThreadLocale(), s1, s2, options);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Compares two strings using a given locale and a given set of comparison
         ///     flags. If the two strings are of different lengths, they are compared up
         ///     to the length of the shortest one. If they are equal to that point, then
@@ -152,7 +152,7 @@ namespace System.Windows.Forms {
             return Compare(culture.LCID, s1, s2, options);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         private static int Compare(int lcid, string s1, string s2, int options) {
             if (s1 == null) return s2 == null? 0: -1;
@@ -160,14 +160,14 @@ namespace System.Windows.Forms {
             return string.Compare(s1, s2, false, CultureInfo.CurrentCulture);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         private int CompareKeys(string s1, string s2) {
             int result = Compare(lcid, s1, s2, options);
             return descending? -result: result;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Implementation of Quicksort algorithm. Within the outer <code>do</code>
         ///     loop, the method recurses on the shorter side and loops on the longer
         ///     side. This bounds the recursive depth by log2(n) in the worst case.
@@ -206,7 +206,7 @@ namespace System.Windows.Forms {
             } while (left < right);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sorts an object array based on the string representation of the
         ///     elements. If the <code>items</code> parameter is not a string array, the
         /// <code>toString</code> method of each of the elements is called to
@@ -217,7 +217,7 @@ namespace System.Windows.Forms {
             Sort(null, null, items, 0, ArrayLength(items), 0);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sorts a range in an object array based on the string representation of
         ///     the elements. If the <code>items</code> parameter is not a string array,
         ///     the <code>toString</code> method of each of the elements is called to
@@ -228,7 +228,7 @@ namespace System.Windows.Forms {
             Sort(null, null, items, index, count, 0);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sorts a string array and an object array based on the elements of the
         ///     string array. The arrays are sorted using the default locale.
         /// </devdoc>
@@ -236,7 +236,7 @@ namespace System.Windows.Forms {
             Sort(null, keys, items, 0, ArrayLength(items), 0);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sorts a range in a string array and a range in an object array based on
         ///     the elements of the string array. The arrays are sorted using the
         ///     default locale.
@@ -245,7 +245,7 @@ namespace System.Windows.Forms {
             Sort(null, keys, items, index, count, 0);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sorts an object array based on the string representation of the
         ///     elements. If the <code>items</code> parameter is not a string array, the
         /// <code>toString</code> method of each of the elements is called to
@@ -257,7 +257,7 @@ namespace System.Windows.Forms {
             Sort(null, null, items, 0, ArrayLength(items), options);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sorts a range in an object array based on the string representation of
         ///     the elements. If the <code>items</code> parameter is not a string array,
         ///     the <code>toString</code> method of each of the elements is called to
@@ -269,7 +269,7 @@ namespace System.Windows.Forms {
             Sort(null, null, items, index, count, options);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sorts a string array and an object array based on the elements of the
         ///     string array. The arrays are sorted using the default locale and the
         ///     given sorting options.
@@ -278,7 +278,7 @@ namespace System.Windows.Forms {
             Sort(null, keys, items, 0, ArrayLength(items), options);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sorts a range in a string array and a range in an object array based on
         ///     the elements of the string array. The arrays are sorted using the
         ///     default locale and the given sorting options.
@@ -287,7 +287,7 @@ namespace System.Windows.Forms {
             Sort(null, keys, items, index, count, options);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sorts an object array based on the string representation of the
         ///     elements. If the <code>items</code> parameter is not a string array, the
         /// <code>toString</code> method of each of the elements is called to
@@ -299,7 +299,7 @@ namespace System.Windows.Forms {
             Sort(culture, null, items, 0, ArrayLength(items), options);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sorts a range in an object array based on the string representation of
         ///     the elements. If the <code>items</code> parameter is not a string array,
         ///     the <code>toString</code> method of each of the elements is called to
@@ -311,7 +311,7 @@ namespace System.Windows.Forms {
             Sort(culture, null, items, index, count, options);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sorts a string array and an object array based on the elements of the
         ///     string array. The arrays are sorted using the given locale and the
         ///     given sorting options.
@@ -320,7 +320,7 @@ namespace System.Windows.Forms {
             Sort(culture, keys, items, 0, ArrayLength(items), options);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sorts a range in a string array and a range in an object array based on
         ///     the elements of the string array. Elements in the <code>keys</code>
         ///     array specify the sort keys for corresponding elements in the

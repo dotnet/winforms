@@ -28,7 +28,7 @@ namespace System.Windows.Forms {
     using System.Drawing.Text;
     
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///
     ///       Displays a list with a checkbox to the left
@@ -53,37 +53,37 @@ namespace System.Windows.Forms {
         private const int BORDER_SIZE = 1;
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Decides whether or not to ignore the next LBN_SELCHANGE
         ///     message - used to prevent cursor keys from toggling checkboxes
         /// </devdoc>
         private bool killnextselect = false;
 
-        /// <devdoc>
+        /// <summary>
         ///     Current listener of the onItemCheck event.
         /// </devdoc>
         private ItemCheckEventHandler onItemCheck;
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates whether or not we should toggle check state on the first
         ///     click on an item, or whether we should wait for the user to click
         ///     again.
         /// </devdoc>
         private bool checkOnClick = false;
 
-        /// <devdoc>
+        /// <summary>
         ///     Should we use 3d checkboxes or flat ones?
         /// </devdoc>
         private bool flat = true;
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates which item was last selected.  We want to keep track
         ///     of this so we can be a little less aggressive about checking/
         ///     unchecking the items as the user moves around.
         /// </devdoc>
         private int lastSelected = -1;
 
-        /// <devdoc>
+        /// <summary>
         ///     The collection of checked items in the CheckedListBox.
         /// </devdoc>
         private CheckedItemCollection checkedItemCollection = null;
@@ -97,7 +97,7 @@ namespace System.Windows.Forms {
             LBC_SETCHECKSTATE = SafeNativeMethods.RegisterWindowMessage("LBC_SETCHECKSTATE");
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new CheckedListBox for the user.
         /// </devdoc>
         public CheckedListBox() : base() {
@@ -111,7 +111,7 @@ namespace System.Windows.Forms {
           
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates whether or not the checkbox should be toggled whenever an
         ///     item is selected.  The default behaviour is to just change the
         ///     selection, and then make the user click again to check it.  However,
@@ -132,7 +132,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Collection of checked indices in this CheckedListBox.
         /// </devdoc>
         [
@@ -148,7 +148,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Collection of checked items in this CheckedListBox.
         /// </devdoc>
         [
@@ -164,7 +164,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This is called when creating a window.  Inheriting classes can ovveride
         ///     this to add extra functionality, but should not forget to first call
         ///     base.CreateParams() to make sure the control continues to work
@@ -179,7 +179,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     CheckedListBox DataSource.
         /// </devdoc>
         /// <hideinheritance/>
@@ -193,7 +193,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     CheckedListBox DisplayMember.
         /// </devdoc>
         /// <hideinheritance/>
@@ -232,7 +232,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Collection of items in this listbox.
         /// </devdoc>
         [
@@ -259,7 +259,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     For CheckedListBoxes, multi-selection is not supported.  You can set
         ///     selection to be able to select one item or no items.
         /// </devdoc>
@@ -284,7 +284,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates if the CheckBoxes should show up as flat or 3D in appearance.
         /// </devdoc>
         [
@@ -311,7 +311,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
         /// </devdoc>
         [
@@ -328,7 +328,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines whether the control supports rendering text using GDI+ and GDI.
         ///     This is provided for container controls to iterate through its children to set UseCompatibleTextRendering to the same
         ///     value if the child control supports it.
@@ -339,7 +339,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     CheckedListBox ValueMember.
         /// </devdoc>
         /// <hideinheritance/>
@@ -416,7 +416,7 @@ namespace System.Windows.Forms {
             remove => base.ValueMemberChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Constructs the new instance of the accessibility object for this control. Subclasses
         ///    should not call base.CreateAccessibilityObject.
         /// </devdoc>
@@ -428,7 +428,7 @@ namespace System.Windows.Forms {
             return new ObjectCollection(this);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Gets the check value of the current item.  This value will be from the
         ///     System.Windows.Forms.CheckState enumeration.
         /// </devdoc>
@@ -439,7 +439,7 @@ namespace System.Windows.Forms {
             return CheckedItems.GetCheckedState(index);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates if the given item is, in any way, shape, or form, checked.
         ///     This will return true if the item is fully or indeterminately checked.
         /// </devdoc>
@@ -447,7 +447,7 @@ namespace System.Windows.Forms {
             return(GetItemCheckState(index) != CheckState.Unchecked);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Invalidates the given item in the listbox
         /// </devdoc>
         private void InvalidateItem(int index) {
@@ -458,7 +458,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     A redirected LBN_SELCHANGE message notification.
         /// </devdoc>
         private void LbnSelChange() {
@@ -508,7 +508,7 @@ namespace System.Windows.Forms {
             InvalidateItem(index);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Ensures that mouse clicks can toggle...
         /// </devdoc>
         protected override void OnClick(EventArgs e) {
@@ -517,7 +517,7 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <devdoc>
+        /// <summary>
         ///     When the handle is created we can dump any cached item-check pairs.
         /// </devdoc>
         protected override void OnHandleCreated(EventArgs e) {
@@ -526,7 +526,7 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Actually goes and fires the drawItem event.  Inheriting controls
         ///     should use this to know when the event is fired [this is preferable to
         ///     adding an event handler yourself for this event].  They should,
@@ -787,7 +787,7 @@ namespace System.Windows.Forms {
             base.OnFontChanged(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This is the code that actually fires the "keyPress" event.  The Checked
         ///     ListBox overrides this to look for space characters, since we
         ///     want to use those to check or uncheck items periodically.  Don't
@@ -804,7 +804,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This is the code that actually fires the itemCheck event.  Don't
         ///     forget to call base.onItemCheck() to ensure that itemCheck vents
         ///     are correctly fired for all other keys.
@@ -824,7 +824,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Actually goes and fires the selectedIndexChanged event.  Inheriting controls
         ///     should use this to know when the event is fired [this is preferable to
         ///     adding an event handler on yourself for this event].  They should,
@@ -840,7 +840,7 @@ namespace System.Windows.Forms {
 
 
         
-        /// <devdoc>
+        /// <summary>
         /// Reparses the objects, getting new text strings for them.
         /// </devdoc>
         protected override void RefreshItems() {
@@ -860,7 +860,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sets the checked value of the given item.  This value should be from
         ///     the System.Windows.Forms.CheckState enumeration.
         /// </devdoc>
@@ -885,7 +885,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sets the checked value of the given item.  This value should be a
         ///     boolean.
         /// </devdoc>
@@ -893,7 +893,7 @@ namespace System.Windows.Forms {
             SetItemCheckState(index, value ? CheckState.Checked : CheckState.Unchecked);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     We need to get LBN_SELCHANGE notifications
         /// </devdoc>
         protected override void WmReflectCommand(ref Message m) {
@@ -917,7 +917,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handle keyboard input to prevent arrow keys from toggling
         ///     checkboxes in CheckOnClick mode.
         /// </devdoc>
@@ -941,7 +941,7 @@ namespace System.Windows.Forms {
             m.Result = NativeMethods.InvalidIntPtr;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The listbox's window procedure.  Inheriting classes can override this
         ///     to add extra functionality, but should not forget to call
         ///     base.wndProc(m); to ensure the button continues to function properly.
@@ -991,7 +991,7 @@ namespace System.Windows.Forms {
                 this.owner = owner;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Lets the user add an item to the listbox with the given initial value
             ///     for the Checked portion of the item.
             /// </devdoc>
@@ -999,7 +999,7 @@ namespace System.Windows.Forms {
                 return Add(item, isChecked ? CheckState.Checked : CheckState.Unchecked);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Lets the user add an item to the listbox with the given initial value
             ///     for the Checked portion of the item.
             /// </devdoc>
@@ -1026,7 +1026,7 @@ namespace System.Windows.Forms {
                 this.owner = owner;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Number of current checked items.
             /// </devdoc>
             public int Count {
@@ -1059,7 +1059,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the specified checked item.
             /// </devdoc>
             [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -1119,7 +1119,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     This is the item array that stores our data.  We share this backing store
             ///     with the main object collection.
             /// </devdoc>
@@ -1166,7 +1166,7 @@ namespace System.Windows.Forms {
                 this.owner = owner;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Number of current checked items.
             /// </devdoc>
             public int Count {
@@ -1175,7 +1175,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     This is the item array that stores our data.  We share this backing store
             ///     with the main object collection.
             /// </devdoc>
@@ -1185,7 +1185,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the specified checked item.
             /// </devdoc>
             [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -1261,7 +1261,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     This method returns if the actual item index is checked.  The index is the index to the MAIN
             ///     collection, not this one.
             /// </devdoc>
@@ -1283,7 +1283,7 @@ namespace System.Windows.Forms {
                 return InnerArray.GetEnumerator(AnyMask, true);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Same thing for GetChecked.
             /// </devdoc>
             internal void SetCheckedState(int index, CheckState value) {
@@ -1320,12 +1320,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         [System.Runtime.InteropServices.ComVisible(true)]
         internal class CheckedListBoxAccessibleObject : ControlAccessibleObject {
 
-            /// <devdoc>
+            /// <summary>
             /// </devdoc>
             public CheckedListBoxAccessibleObject(CheckedListBox owner) : base(owner) {
             }
@@ -1336,7 +1336,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             /// </devdoc>
             public override AccessibleObject GetChild(int index) {
                 if (index >= 0 && index < CheckedListBox.Items.Count) {
@@ -1347,7 +1347,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             /// </devdoc>
             public override int GetChildCount() {
                 return CheckedListBox.Items.Count;
@@ -1405,7 +1405,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         [System.Runtime.InteropServices.ComVisible(true)]
         internal class CheckedListBoxItemAccessibleObject : AccessibleObject {

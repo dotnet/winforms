@@ -1197,7 +1197,7 @@ namespace System.Windows.Forms
             return true;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para></para>
         /// </devdoc>
         public override string ToString()

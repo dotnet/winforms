@@ -24,7 +24,7 @@ namespace System.Windows.Forms
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Provides a low-level encapsulation of a window handle
     ///       and a window procedure. The class automatically manages window class creation and registration.
@@ -132,7 +132,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Override's the base object's finalize method.
         /// </devdoc>
         ~NativeWindow() {
@@ -193,7 +193,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates whether a window handle was created & is being tracked.
         /// </devdoc>
         internal static bool AnyHandleCreated {
@@ -202,7 +202,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets the handle for this window.
         ///    </para>
@@ -225,7 +225,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This returns the previous NativeWindow in the chain of subclasses.
         ///     Generally it returns null, but if someone has subclassed a control
         ///     through the use of a NativeWindow class, this will return the 
@@ -240,7 +240,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Helper method that returns a static value for the
         ///     unmanaged DefWindowProc call.
         /// </devdoc>
@@ -321,7 +321,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Inserts an entry into this hashtable.
         /// </devdoc>
         private static void AddWindowToTable(IntPtr handle, NativeWindow window) {
@@ -433,7 +433,7 @@ namespace System.Windows.Forms
             Debug.Fail("native window hash table insert failed!  Load factor too high, or our double hashing function is incorrect.");
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Inserts an entry into this ID hashtable.
         /// </devdoc>
         internal static void AddWindowToIDTable(object wrapper, IntPtr handle) {
@@ -548,7 +548,7 @@ namespace System.Windows.Forms
             return wndProcFlags;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Assigns a handle to this
         ///       window.
@@ -611,7 +611,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Window message callback method. Control arrives here when a window
         ///     message is sent to this Window. This method packages the window message
         ///     in a Message object and invokes the wndProc() method. A WM_NCDESTROY
@@ -643,7 +643,7 @@ namespace System.Windows.Forms
             return m.Result;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Raises an exception if the window handle is not zero.
         /// </devdoc>
         private void CheckReleased() {
@@ -652,7 +652,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Creates a window handle for this
         ///       window.
@@ -719,7 +719,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Window message callback method. Control arrives here when a window
         ///     message is sent to this Window. This method packages the window message
         ///     in a Message object and invokes the wndProc() method. A WM_NCDESTROY
@@ -748,7 +748,7 @@ namespace System.Windows.Forms
             return m.Result;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Invokes the default window procedure associated with this Window. It is
         ///     an error to call this method when the Handle property is zero.
         /// </devdoc>
@@ -774,7 +774,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Destroys the
         ///       handle associated with this window.
@@ -801,7 +801,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Increases the bucket count of this hashtable. This method is called from
         ///     the Insert method when the actual load factor of the hashtable reaches
         ///     the upper limit specified when the hashtable was constructed. The number
@@ -857,7 +857,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Retrieves the window associated with the specified
         ///    <paramref name="handle"/>.
@@ -871,7 +871,7 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Calculates a prime number of at least minSize using a static table, and
         ///     if we overflow it, we calculate directly.
         /// </devdoc>
@@ -908,7 +908,7 @@ namespace System.Windows.Forms
             return minSize;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the native window for the given handle, or null if 
         ///     the handle is not in our hash table.
         /// </devdoc>
@@ -950,7 +950,7 @@ namespace System.Windows.Forms
             return handle;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Computes the hash function:  H(key, i) = h1(key) + i*h2(key, hashSize).
         ///     The out parameter 'seed' is h1(key), while the out parameter 
         ///     'incr' is h2(key, hashSize).  Callers of this function should 
@@ -970,7 +970,7 @@ namespace System.Windows.Forms
             return hashcode;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Specifies a notification method that is called when the handle for a
         ///       window is changed.
@@ -979,7 +979,7 @@ namespace System.Windows.Forms
         protected virtual void OnHandleChange() {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     On class load, we connect an event to Application to let us know when
         ///     the process or domain terminates.  When this happens, we attempt to
         ///     clear our window class cache.  We cannot destroy windows (because we don't
@@ -1036,7 +1036,7 @@ namespace System.Windows.Forms
             WindowClass.DisposeCache();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       When overridden in a derived class,
         ///       manages an unhandled thread
@@ -1046,7 +1046,7 @@ namespace System.Windows.Forms
         protected virtual void OnThreadException(Exception e) {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Releases the handle associated with this window.
         ///    </para>
@@ -1055,7 +1055,7 @@ namespace System.Windows.Forms
             ReleaseHandle(true);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Releases the handle associated with this window.  If handleValid
         ///     is true, this will unsubclass the window as well.  HandleValid
         ///     should be false if we are releasing in response to a 
@@ -1094,7 +1094,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Removes an entry from this hashtable. If an entry with the specified
         ///     key exists in the hashtable, it is removed.
         /// </devdoc>
@@ -1168,7 +1168,7 @@ namespace System.Windows.Forms
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///   Determines if the given window is the first member of the linked list
         /// </devdoc>
         private static bool IsRootWindowInListWithChildren(NativeWindow window) {
@@ -1179,7 +1179,7 @@ namespace System.Windows.Forms
             return ((window.PreviousWindow != null) && (window.nextWindow == null));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///   Determines if the given window is the first member of the linked list
         ///   and has no children
         /// </devdoc>
@@ -1192,7 +1192,7 @@ namespace System.Windows.Forms
         */
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Inserts an entry into this ID hashtable.
         /// </devdoc>
         internal static void RemoveWindowFromIDTable(IntPtr handle) {
@@ -1201,7 +1201,7 @@ namespace System.Windows.Forms
             NativeWindow.hashForIdHandle.Remove(id);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This method can be used to modify the exception handling behavior of
         ///     NativeWindow.  By default, NativeWindow will detect if an application
         ///     is running under a debugger, or is running on a machine with a debugger
@@ -1261,7 +1261,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Unsubclassing is a tricky business.  We need to account for
         ///     some border cases:
         ///     
@@ -1337,7 +1337,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Invokes the default window procedure associated with
         ///       this window.
@@ -1348,7 +1348,7 @@ namespace System.Windows.Forms
             DefWndProc(ref m);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     A struct that contains a single bucket for our handle / GCHandle hash table.
         ///     The hash table algorithm we use here was stolen selfishly from the framework's
         ///     Hashtable class.  We don't use Hashtable directly, however, because of boxing
@@ -1371,7 +1371,7 @@ namespace System.Windows.Forms
 #endif
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     WindowClass encapsulates a window class.
         /// </devdoc>
         private class WindowClass {
@@ -1403,7 +1403,7 @@ namespace System.Windows.Forms
                 return targetWindow.Callback(hWnd, msg, wparam, lparam);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves a WindowClass object for use.  This will create a new
             ///     object if there is no such class/style available, or retrun a
             ///     cached object if one exists.
@@ -1435,7 +1435,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Disposes our window class cache.  This doesn't free anything
             ///     from the actual cache; it merely attempts to unregister
             ///     the classes of everything in the cache.  This allows the unused
@@ -1452,7 +1452,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Fabricates a full class name from a partial.
             /// </devdoc>
             private string GetFullClassName(string className) {
@@ -1468,7 +1468,7 @@ namespace System.Windows.Forms
                 return b.ToString();
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Once the classname and style bits have been set, this can
             ///     be called to register the class.
             /// </devdoc>
@@ -1575,7 +1575,7 @@ namespace System.Windows.Forms
                 registered = true;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Unregisters this window class.  Unregistration is not a
             ///     last resort; the window class may be re-registered through
             ///     a call to registerClass.

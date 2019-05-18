@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Delegate to the WebBrowser ProgressChanged event.
     /// </devdoc>
     public delegate void WebBrowserProgressChangedEventHandler(object sender, WebBrowserProgressChangedEventArgs e);

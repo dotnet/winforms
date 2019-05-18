@@ -12,7 +12,7 @@ namespace System.Windows.Forms {
     using System.Collections;
     using System.Collections.Generic;
 
-    /// <devdoc>
+    /// <summary>
     /// <para>Represents the child version of the System.Windows.Forms.ListManager
     /// that is used when a parent/child relationship exists in a System.Windows.Forms.DataSet.</para>
     /// </devdoc>
@@ -89,14 +89,14 @@ namespace System.Windows.Forms {
             return parentManager.GetItemProperties(accessors);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the properties of the item.</para>
         /// </devdoc>
         public override PropertyDescriptorCollection GetItemProperties() {
             return GetItemProperties(null);
         }
 
-        // <devdoc>
+        // <summary>
         //    <para>Gets the name of the list.</para>
         // </devdoc>
         internal override string GetListName() {
@@ -107,7 +107,7 @@ namespace System.Windows.Forms {
             return base.GetListName();
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the name of the specified list.</para>
         /// </devdoc>
         protected internal override string GetListName(ArrayList listAccessors) {

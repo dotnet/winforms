@@ -16,7 +16,7 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Design;
     using System.Windows.Forms.Layout;
 
-    /// <devdoc>
+    /// <summary>
     ///     Represents an empty control that can be used in the Forms Designer to create other  controls.   By extending form, UserControl inherits all of
     ///     the standard positioning and mnemonic handling code that is necessary
     ///     in a user control.
@@ -33,7 +33,7 @@ namespace System.Windows.Forms {
         private static readonly object EVENT_LOAD = new object();
         private BorderStyle borderStyle = System.Windows.Forms.BorderStyle.None;
 
-        /// <devdoc>
+        /// <summary>
         ///    Creates a new UserControl object. A vast majority of people
         ///    will not want to instantiate this class directly, but will be a
         ///    sub-class of it.
@@ -45,7 +45,7 @@ namespace System.Windows.Forms {
 	    SetStyle(ControlStyles.SupportsTransparentBackColor, true);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para> Override to re-expose AutoSize.</para>
         /// </devdoc>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always),
@@ -62,7 +62,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Re-expose AutoSizeChanged.</para>
         /// </devdoc>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
@@ -71,7 +71,7 @@ namespace System.Windows.Forms {
             remove => base.AutoSizeChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Allows the control to optionally shrink when AutoSize is true.
         /// </devdoc>
         [
@@ -108,7 +108,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates whether controls in this container will be automatically validated when the focus changes.
         /// </devdoc>
         [
@@ -133,7 +133,7 @@ namespace System.Windows.Forms {
             remove => base.AutoValidateChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> 
         ///       Indicates the borderstyle for the UserControl.
         ///    </para>
@@ -163,7 +163,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Returns the parameters needed to create the handle.  Inheriting classes
         ///    can override this to provide extra functionality.  They should not,
         ///    however, forget to call base.getCreateParams() first to get the struct
@@ -190,7 +190,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     The default size for this user control.
         /// </devdoc>
         protected override Size DefaultSize {
@@ -199,7 +199,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs before the control becomes visible.</para>
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.UserControlOnLoadDescr))]
@@ -228,7 +228,7 @@ namespace System.Windows.Forms {
             remove => base.TextChanged -= value;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     Validates all selectable child controls in the container, including descendants. This is
         ///     equivalent to calling ValidateChildren(ValidationConstraints.Selectable). See <see cref='ValidationConstraints.Selectable'/>
         ///     for details of exactly which child controls will be validated.
@@ -238,7 +238,7 @@ namespace System.Windows.Forms {
             return base.ValidateChildren();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Validates all the child controls in the container. Exactly which controls are
         ///     validated and which controls are skipped is determined by <paramref name="flags"/>.
         /// </devdoc>
@@ -260,7 +260,7 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Raises the CreateControl event.</para>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -270,7 +270,7 @@ namespace System.Windows.Forms {
             OnLoad(EventArgs.Empty);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>The Load event is fired before the control becomes visible for the first time.</para>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -281,7 +281,7 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this,e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     OnResize override to invalidate entire control in Stetch mode
         /// </devdoc>
         protected override void OnResize(EventArgs e) {

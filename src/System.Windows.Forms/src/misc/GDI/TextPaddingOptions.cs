@@ -12,7 +12,7 @@ namespace System.Experimental.Gdi
 {
     using System;
 
-    /// <devdoc>
+    /// <summary>
     ///     Adds padding related to the drawing bounding box, computed according to the font size.
     /// </devdoc>
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY

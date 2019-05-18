@@ -22,7 +22,7 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
     using System.Globalization;
 
-    /// <devdoc>
+    /// <summary>
     ///     The TabControl.  This control has a lot of the functionality of a TabStrip
     ///     but manages a list of TabPages which are the 'pages' that appear on each tab.
     /// </devdoc>
@@ -83,7 +83,7 @@ namespace System.Windows.Forms {
 
 
 
-        /// <devdoc>
+        /// <summary>
         ///     This message is posted by the control to itself after a TabPage is
         ///     added to it.  On certain occasions, after items are added to a
         ///     TabControl in quick succession, TCM_ADJUSTRECT calls return the wrong
@@ -100,7 +100,7 @@ namespace System.Windows.Forms {
         private bool             rightToLeftLayout = false;
         private bool             skipUpdateSize;
 
-        /// <devdoc>
+        /// <summary>
         ///     Constructs a TabBase object, usually as the base class for a TabStrip or TabControl.
         /// </devdoc>
         public TabControl()
@@ -112,7 +112,7 @@ namespace System.Windows.Forms {
             SetStyle(ControlStyles.UserPaint, false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns on what area of the control the tabs reside on (A TabAlignment value).
         ///     The possibilities are Top (the default), Bottom, Left, and Right.  When alignment
         ///     is left or right, the Multiline property is ignored and Multiline is implicitly on.
@@ -146,7 +146,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates whether the tabs in the tabstrip look like regular tabs, or if they look
         ///     like buttons as seen in the Windows 95 taskbar.
         ///     If the alignment is anything other than top, TabAppearance.FlatButtons degenerates
@@ -235,7 +235,7 @@ namespace System.Windows.Forms {
             remove => base.BackgroundImageLayoutChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
         /// </devdoc>
@@ -245,7 +245,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This property is overridden and hidden from statement completion
         ///     on controls that are based on Win32 Native Controls.
         /// </devdoc>
@@ -275,7 +275,7 @@ namespace System.Windows.Forms {
             remove => base.ForeColorChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the parameters needed to create the handle.  Inheriting classes
         ///     can override this to provide extra functionality.  They should not,
         ///     however, forget to call base.getCreateParams() first to get the struct
@@ -337,7 +337,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The rectangle that represents the Area of the tab strip not
         ///     taken up by the tabs, borders, or anything else owned by the Tab.  This
         ///     is typically the rectangle you want to use to place the individual
@@ -387,7 +387,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     The drawing mode of the tabs in the tab strip.  This will indicate
         /// </devdoc>
         [
@@ -413,7 +413,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates whether the tabs visually change when the mouse passes over them.
         /// </devdoc>
         [
@@ -436,7 +436,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the imageList the control points at.  This is where tabs that have imageIndex
         ///     set will get there images from.
         /// </devdoc>
@@ -479,7 +479,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     By default, tabs will automatically size themselves to fit their icon, if any, and their label.
         ///     However, the tab size can be explicity set by setting this property.
         /// </devdoc>
@@ -518,7 +518,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This private property is set by the TabPageCollection when the user calls "InsertItem".
         ///     The problem is when InsertItem is called then we add this item to the ControlsCollection (in addition to the TabPageCollection)
         ///     to keep both the collections is sync. But the controlCollection.Add is overriden to again ADD the item to the TabPageCollection.
@@ -534,7 +534,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates if there can be more than one row of tabs.  By default [when
         ///     this property is false], if there are more tabs than available display
         ///     space, arrows are shown to let the user navigate between the extra
@@ -560,7 +560,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The amount of padding around the items in the individual tabs.
         ///     You can specify both horizontal and vertical padding.
         /// </devdoc>
@@ -588,7 +588,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
         //      and the RightToLeft is true, mirroring will be turned on on the form, and
@@ -618,7 +618,7 @@ namespace System.Windows.Forms {
 
 
 
-        /// <devdoc>
+        /// <summary>
         ///     The number of rows currently being displayed in
         ///     the tab strip.  This is most commonly used when the Multline property
         ///     is 'true' and you want to know how many rows the tabs are currently
@@ -638,7 +638,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The index of the currently selected tab in the strip, if there
         ///     is one.  If the value is -1, there is currently no selection.  If the
         ///     value is 0 or greater, than the value is the index of the currently
@@ -707,7 +707,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      The selection to the given tab, provided it .equals a tab in the
         ///      list.  The return value is the index of the tab that was selected,
         ///      or -1 if no tab was selected.
@@ -744,7 +744,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     By default, tabs are big enough to display their text, and any space
         ///     on the right of the strip is left as such.  However, you can also
         ///     set it such that the tabs are stretched to fill out the right extent
@@ -774,7 +774,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates whether tooltips are being shown for tabs that have tooltips set on
         ///     them.
         /// </devdoc>
@@ -796,7 +796,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the number of tabs in the strip
         /// </devdoc>
         [
@@ -809,7 +809,7 @@ namespace System.Windows.Forms {
             get { return tabPageCount;}
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the Collection of TabPages.
         /// </devdoc>
         [
@@ -859,7 +859,7 @@ namespace System.Windows.Forms {
             remove => onSelectedIndexChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Occurs before a tabpage is selected as the top tabPage.
         ///    </para>
@@ -871,7 +871,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_SELECTING, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Occurs after a tabpage is selected as the top tabPage.
         ///    </para>
@@ -883,7 +883,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_SELECTED, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Occurs before the visible property of the top tabpage is set to false.
         ///    </para>
@@ -895,7 +895,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_DESELECTING, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Occurs after the visible property of the top tabpage is set to false.
         ///    </para>
@@ -907,7 +907,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_DESELECTED, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     TabControl Onpaint.
         /// </devdoc>
         /// <hideinheritance/>
@@ -917,7 +917,7 @@ namespace System.Windows.Forms {
             remove => base.Paint -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         internal int AddTabPage(TabPage tabPage, NativeMethods.TCITEM_T tcitem) {
             int index = AddNativeTabPage(tcitem);
@@ -934,7 +934,7 @@ namespace System.Windows.Forms {
             return index;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         internal void ApplyItemSize() {
             if (IsHandleCreated && ShouldSerializeItemSize()) {
@@ -943,19 +943,19 @@ namespace System.Windows.Forms {
             cachedDisplayRect = Rectangle.Empty;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         internal void BeginUpdate() {
             BeginUpdateInternal();
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override Control.ControlCollection CreateControlsInstance() {
             return new ControlCollection(this);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override void CreateHandle() {
             if (!RecreatingHandle) {
@@ -977,7 +977,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Allows the user to specify the index in Tabcontrol.TabPageCollection of the tabpage to be hidden.
         /// </devdoc>
         public void DeselectTab(int index) {
@@ -992,7 +992,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Allows the user to specify the tabpage in Tabcontrol.TabPageCollection  to be hidden.
         /// </devdoc>
         public void DeselectTab(TabPage tabPage) {
@@ -1004,7 +1004,7 @@ namespace System.Windows.Forms {
             DeselectTab(index);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Allows the user to specify the name of the tabpage in Tabcontrol.TabPageCollection to be hidden.
         /// </devdoc>
         public void DeselectTab(string tabPageName) {
@@ -1044,7 +1044,7 @@ namespace System.Windows.Forms {
             return -1;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         public Control GetControl(int index) {
             return(Control) GetTabPage(index);
@@ -1058,7 +1058,7 @@ namespace System.Windows.Forms {
             return tabPages[index];
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This has package scope so that TabStrip and TabControl can call it.
         /// </devdoc>
         protected virtual object[] GetItems() {
@@ -1067,7 +1067,7 @@ namespace System.Windows.Forms {
             return result;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This has package scope so that TabStrip and TabControl can call it.
         /// </devdoc>
         protected virtual object[] GetItems(Type baseType) {
@@ -1080,7 +1080,7 @@ namespace System.Windows.Forms {
             return (TabPage[])GetItems();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the bounding rectangle for the given tab in the tab strip.
         /// </devdoc>
         public Rectangle GetTabRect(int index) {
@@ -1099,7 +1099,7 @@ namespace System.Windows.Forms {
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected string GetToolTipText(object item) {
             return((TabPage)item).ToolTipText;
@@ -1110,7 +1110,7 @@ namespace System.Windows.Forms {
                 SendMessage(NativeMethods.TCM_SETIMAGELIST, 0, ImageList.Handle);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         internal void Insert(int index, TabPage tabPage) {
             if (tabPages == null) {
@@ -1133,7 +1133,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This function is used by the Insert Logic to insert a tabPage in the current TabPage in the TabPageCollection.
         /// </devdoc>
         private void InsertItem(int index, TabPage tabPage) {
@@ -1153,7 +1153,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Handling special input keys, such as pgup, pgdown, home, end, etc...
         /// </devdoc>
         protected override bool IsInputKey(Keys keyData) {
@@ -1168,7 +1168,7 @@ namespace System.Windows.Forms {
             return base.IsInputKey(keyData);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This is a notification that the handle has been created.
         ///     We do some work here to configure the handle.
         ///     Overriders should call base.OnHandleCreated()
@@ -1244,7 +1244,7 @@ namespace System.Windows.Forms {
             base.OnHandleDestroyed(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Actually goes and fires the OnDrawItem event.  Inheriting controls
         ///     should use this to know when the event is fired [this is preferable to
         ///     adding an event handler on yourself for this event].  They should,
@@ -1255,7 +1255,7 @@ namespace System.Windows.Forms {
             if (onDrawItem != null) onDrawItem(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Actually goes and fires the OnLeave event.  Inheriting controls
         ///     should use this to know when the event is fired [this is preferable to
         ///     adding an event handler on yourself for this event].  They should,
@@ -1277,7 +1277,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Actually goes and fires the OnLeave event.  Inheriting controls
         ///     should use this to know when the event is fired [this is preferable to
         ///     adding an event handler on yourself for this event].  They should,
@@ -1298,7 +1298,7 @@ namespace System.Windows.Forms {
             base.OnLeave(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     We override this to get tabbing functionality.
         ///     If overriding this, remember to call base.onKeyDown.
         /// </devdoc>
@@ -1330,7 +1330,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override void OnResize(EventArgs e) {
             base.OnResize(e);
@@ -1354,7 +1354,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Actually goes and fires the onSelectedIndexChanged event.  Inheriting controls
         ///     should use this to know when the event is fired [this is preferable to
         ///     adding an event handler on yourself for this event].  They should,
@@ -1371,7 +1371,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.TabControl.OnSelecting'/> event.
         ///    </para>
@@ -1381,7 +1381,7 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.TabControl.OnSelected'/> event.
         ///    </para>
@@ -1397,7 +1397,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.TabControl.OnDeselecting'/> event.
         ///    </para>
@@ -1409,7 +1409,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.TabControl.OnDeselected'/> event.
         ///    </para>
@@ -1424,7 +1424,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     We override this to get the Ctrl and Ctrl-Shift Tab functionality.
         /// </devdoc>
         protected override bool ProcessKeyPreview(ref Message m) {
@@ -1432,7 +1432,7 @@ namespace System.Windows.Forms {
             return base.ProcessKeyPreview(ref m);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         internal void UpdateSize() {
             if (this.skipUpdateSize) {
@@ -1497,7 +1497,7 @@ namespace System.Windows.Forms {
             tabPageCount = 0;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         internal void RemoveTabPage(int index) {
             if (index < 0 || index >= tabPageCount)
@@ -1530,7 +1530,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
         /// </devdoc>
         internal void SetToolTip(ToolTip toolTip, string controlToolTipText) {
@@ -1539,7 +1539,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         internal void SetTabPage(int index, TabPage tabPage, NativeMethods.TCITEM_T tcitem) {
             if (index < 0 || index >= tabPageCount)
@@ -1553,7 +1553,7 @@ namespace System.Windows.Forms {
             tabPages[index] = tabPage;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Allows the user to specify the index in Tabcontrol.TabPageCollection of the tabpage to be shown.
         /// </devdoc>
         public void SelectTab(int index) {
@@ -1564,7 +1564,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Allows the user to specify the tabpage in Tabcontrol.TabPageCollection  to be shown.
         /// </devdoc>
         public void SelectTab(TabPage tabPage) {
@@ -1576,7 +1576,7 @@ namespace System.Windows.Forms {
             SelectTab(index);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Allows the user to specify the name of the tabpage in Tabcontrol.TabPageCollection to be shown.
         /// </devdoc>
         public void SelectTab(string tabPageName) {
@@ -1588,7 +1588,7 @@ namespace System.Windows.Forms {
             SelectTab(tabPage);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This is called by TabControl in response to the KeyDown event to override the selection of tabpages
         ///     for different key combinations.
         ///     Control + Tab selects the next tabpage.
@@ -1663,7 +1663,7 @@ namespace System.Windows.Forms {
             return !padding.Equals(DEFAULT_PADDING);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns a string representation for this control.
         /// </devdoc>
         public override string ToString() {
@@ -1684,9 +1684,9 @@ namespace System.Windows.Forms {
             currentlyScaling = false;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
-        /// <devdoc>
+        /// <summary>
         ///     Set the panel selections appropriately
         /// </devdoc>
         protected void UpdateTabSelection(bool updateFocus) {
@@ -1757,7 +1757,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override void OnStyleChanged(EventArgs e) {
             base.OnStyleChanged(e);
@@ -1767,7 +1767,7 @@ namespace System.Windows.Forms {
 
 
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         internal void UpdateTab(TabPage tabPage) {
             int index = FindTabPage(tabPage);
@@ -1781,7 +1781,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         private void WmNeedText(ref Message m) {
            
@@ -1807,7 +1807,7 @@ namespace System.Windows.Forms {
            
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         private void WmReflectDrawItem(ref Message m) {
 
@@ -1822,7 +1822,7 @@ namespace System.Windows.Forms {
             m.Result = (IntPtr)1;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         private bool WmSelChange() {
             TabControlCancelEventArgs tcc = new TabControlCancelEventArgs(this.SelectedTab, this.SelectedIndex, false, TabControlAction.Selecting);
@@ -1839,7 +1839,7 @@ namespace System.Windows.Forms {
             return tcc.Cancel;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         private bool WmSelChanging() {
             IContainerControl c = GetContainerControl();
@@ -1865,7 +1865,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         private void WmTabBaseReLayout(ref Message m) {
             BeginUpdate();
@@ -1885,7 +1885,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The tab's window procedure.  Inheritng classes can override this
         ///     to add extra functionality, but should not forget to call
         ///     base.wndProc(m); to ensure the tab continues to function properly.
@@ -1999,7 +1999,7 @@ namespace System.Windows.Forms {
                     }
                 }
             }
-            /// <devdoc>
+            /// <summary>
             ///     <para>Retrieves the child control with the specified key.</para>
             /// </devdoc>
             public virtual TabPage  this[string key] {
@@ -2143,7 +2143,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-           /// <devdoc>
+           /// <summary>
            ///     <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
            /// </devdoc>
            public virtual bool ContainsKey(string key) {
@@ -2175,7 +2175,7 @@ namespace System.Windows.Forms {
                     return -1;
                 }
             }
-            /// <devdoc>
+            /// <summary>
             ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
             /// </devdoc>
             public virtual int  IndexOfKey(string key) {
@@ -2206,7 +2206,7 @@ namespace System.Windows.Forms {
            }
 
 
-            /// <devdoc>
+            /// <summary>
             ///    <para>Inserts the supplied Tabpage at the given index.</para>
             /// </devdoc>
             public void Insert(int index, TabPage tabPage) {
@@ -2272,7 +2272,7 @@ namespace System.Windows.Forms {
             // END - NEW INSERT OVERLOADS FOR WHIDBEY -->
 
 
-           /// <devdoc>
+           /// <summary>
            ///     <para>Determines if the index is valid for the collection.</para>
            /// </devdoc>
            private bool IsValidIndex(int index) {
@@ -2321,7 +2321,7 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <devdoc>
+            /// <summary>
             ///     <para>Removes the child control with the specified key.</para>
             /// </devdoc>
             public virtual void RemoveByKey(string key) {
@@ -2334,7 +2334,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Collection of controls...
         /// </devdoc>
         [ComVisible(false)]

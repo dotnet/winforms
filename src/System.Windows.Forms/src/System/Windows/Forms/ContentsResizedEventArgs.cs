@@ -6,12 +6,12 @@ using System.Drawing;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.RichTextBox.ContentsResized'/> event.
     /// </devdoc>
     public class ContentsResizedEventArgs : EventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.ContentsResizedEventArgs'/>
         /// class.
         /// </devdoc>
@@ -20,7 +20,7 @@ namespace System.Windows.Forms
             NewRectangle = newRectangle;
         }
         
-        /// <devdoc>
+        /// <summary>
         /// Represents the requested size of the <see cref='System.Windows.Forms.RichTextBox'/> control.
         /// </devdoc>
         public Rectangle NewRectangle { get; }

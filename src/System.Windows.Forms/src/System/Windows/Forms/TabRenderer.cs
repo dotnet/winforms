@@ -11,7 +11,7 @@ using System.Windows.Forms.Internal;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       This is a rendering class for the Tab control.
     ///    </para>
@@ -26,7 +26,7 @@ using Microsoft.Win32;
        private TabRenderer() {
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Returns true if this class is supported for the current OS and user/application settings, 
        ///       otherwise returns false.
@@ -38,7 +38,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a Tab item.
        ///    </para>
@@ -52,7 +52,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a Tab item.
        ///    </para>
@@ -69,7 +69,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a Tab item.
        ///    </para>
@@ -78,7 +78,7 @@ using Microsoft.Win32;
            DrawTabItem(g, bounds, tabItemText, font, false, state);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a Tab item.
        ///    </para>
@@ -89,7 +89,7 @@ using Microsoft.Win32;
                        focused, state);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a Tab item.
        ///    </para>
@@ -108,7 +108,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a Tab item.
        ///    </para>
@@ -128,7 +128,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a Tab item.
        ///    </para>
@@ -139,7 +139,7 @@ using Microsoft.Win32;
                        image, imageRectangle, focused, state);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a Tab item.
        ///    </para>
@@ -160,7 +160,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a TabPage.
        ///    </para>

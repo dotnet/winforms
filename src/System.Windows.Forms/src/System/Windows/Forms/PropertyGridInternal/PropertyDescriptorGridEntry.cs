@@ -73,7 +73,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
         
         
-        /// <devdoc>
+        /// <summary>
         /// specify that this grid entry should be allowed to be merged for.
         /// multi-select.
         /// </devdoc>
@@ -90,7 +90,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the keyword that the VS help dynamic help window will
         ///     use when this IPE is selected.
         /// </devdoc>
@@ -239,7 +239,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the PropertyDescriptor that is surfacing the given object/
         /// </devdoc>
         public override PropertyDescriptor PropertyDescriptor {
@@ -265,7 +265,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns non-localized name of this property.
         /// </devdoc>
         public override string PropertyName {
@@ -286,7 +286,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Gets or sets the value for the property that is represented
         /// by this GridEntry.
         /// </devdoc>
@@ -365,7 +365,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns the type converter for this entry.
         /// </devdoc>
         internal override TypeConverter TypeConverter {
@@ -381,7 +381,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns the type editor for this entry.  This may return null if there
         /// is no type editor.
         /// </devdoc>
@@ -398,7 +398,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
         
         
-        /// <devdoc>
+        /// <summary>
         /// Invokes the type editor for editing this item.
         /// </devdoc>
         internal override void EditPropertyValue(PropertyGridView iva) {            
@@ -851,7 +851,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Navigates code to the given event.
         /// </devdoc>
         protected bool ViewEvent(object obj, string newHandler, EventDescriptor eventdesc, bool alwaysNavigate) {
@@ -984,7 +984,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return true;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Displays the user code for the given event.  This will return true if the user
         ///     code could be displayed, or false otherwise.
         /// </devdoc>
@@ -1108,12 +1108,12 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      The exception converter is a type converter that displays an exception to the user.
         /// </devdoc>
         private class ExceptionConverter : TypeConverter {
 
-            /// <devdoc>
+            /// <summary>
             ///      Converts the given object to another type.  The most common types to convert
             ///      are to and from a string object.  The default implementation will make a call
             ///      to ToString on the object if the object is valid and if the destination
@@ -1135,12 +1135,12 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      The exception editor displays a message to the user.
         /// </devdoc>
         private class ExceptionEditor : UITypeEditor {
 
-            /// <devdoc>
+            /// <summary>
             ///      Edits the given object value using the editor style provided by
             ///      GetEditorStyle.  A service provider is provided so that any
             ///      required editing services can be obtained.
@@ -1169,7 +1169,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return value;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Retrieves the editing style of the Edit method.  If the method
             ///      is not supported, this will return None.
             /// </devdoc>

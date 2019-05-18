@@ -51,7 +51,7 @@ namespace System.Windows.Forms {
             AddRange(value);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para></para>
         /// </devdoc>
         public new virtual ToolStripItem this[int index] {
@@ -60,7 +60,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         /// <para>Retrieves the child control with the specified key.</para>
         /// </devdoc>
         public virtual ToolStripItem this[string key] {
@@ -183,7 +183,7 @@ namespace System.Windows.Forms {
             }
         }
    
-        /// <devdoc>
+        /// <summary>
         /// <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
         /// </devdoc>
         public virtual bool ContainsKey(string key) {
@@ -211,7 +211,7 @@ namespace System.Windows.Forms {
            
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Searches for Items by their Name property, builds up an array 
         /// of all the controls that match. 
         /// </para>
@@ -230,7 +230,7 @@ namespace System.Windows.Forms {
             return stronglyTypedFoundItems;
         }
       
-        /// <devdoc>
+        /// <summary>
         ///     <para>Searches for Items by their Name property, builds up an array list
         ///           of all the items that match. 
         ///     </para>
@@ -326,7 +326,7 @@ namespace System.Windows.Forms {
         public int IndexOf(ToolStripItem value) {
             return InnerList.IndexOf(value);
         }
-        /// <devdoc>
+        /// <summary>
         /// <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
         /// </devdoc>
         public virtual int IndexOfKey(string key) {
@@ -355,14 +355,14 @@ namespace System.Windows.Forms {
             return -1;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>Determines if the index is valid for the collection.</para>
         /// </devdoc>
         private bool IsValidIndex(int index) {
             return ((index >= 0) && (index < this.Count));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///  Do proper cleanup of ownership, etc.
         /// </devdoc>
         private void OnAfterRemove(ToolStripItem item) {
@@ -411,7 +411,7 @@ namespace System.Windows.Forms {
             OnAfterRemove(item);
         }
       
-        /// <devdoc>
+        /// <summary>
         /// <para>Removes the child item with the specified key.</para>
         /// </devdoc>
         public virtual void RemoveByKey(string key) {

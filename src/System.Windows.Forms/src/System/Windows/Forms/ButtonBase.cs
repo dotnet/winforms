@@ -18,7 +18,7 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Implements the basic functionality required by a button control.
     ///    </para>
@@ -57,7 +57,7 @@ namespace System.Windows.Forms {
 
         private bool isEnableVisualStyleBackgroundSet = false;
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.ButtonBase'/> class.
         ///       
@@ -83,7 +83,7 @@ namespace System.Windows.Forms {
             SetFlag(FlagShowToolTip, false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> This property controls the activation handling of bleedover for the text that 
         ///    extends beyond the width of the button. </para>
         /// </devdoc>
@@ -112,7 +112,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates whether the control is automatically resized to fit its contents
         /// </devdoc>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always),
@@ -138,7 +138,7 @@ namespace System.Windows.Forms {
             remove => base.AutoSizeChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The background color of this control. This is an ambient property and
         ///     will always return a non-null value.
         /// </devdoc>
@@ -168,7 +168,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
         /// </devdoc>
@@ -241,7 +241,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or
         ///       sets
@@ -269,7 +269,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         [
             Browsable(true),
@@ -287,7 +287,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the image
         ///       that is displayed on a button control.
@@ -336,7 +336,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the alignment of the image on the button control.
         ///    </para>
@@ -363,7 +363,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the image list index value of the image
         ///       displayed on the button control.
@@ -402,7 +402,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the image list index key of the image
         ///       displayed on the button control.  Note - setting this unsets the ImageIndex
@@ -436,7 +436,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.ImageList'/> that contains the <see cref='System.Drawing.Image'/> displayed on a button control.
         ///    </para>
@@ -500,7 +500,7 @@ namespace System.Windows.Forms {
             remove => base.ImeModeChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Specifies whether the control is willing to process mnemonics when hosted in an container ActiveX (Ax Sourcing).  
         /// </devdoc>
         internal override bool IsMnemonicsListenerAxSourced 
@@ -510,7 +510,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         ///         The area of the button encompassing any changes between the button's
         ///     resting appearance and its appearance when the mouse is over it.
@@ -540,7 +540,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         ///         The area of the button encompassing any changes between the button's
         ///     appearance when the mouse is over it but not pressed and when it is pressed.
@@ -580,7 +580,7 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <devdoc>
+        /// <summary>
         ///     Indicates whether the tooltip should be shown
         /// </devdoc>   
         internal bool ShowToolTip {
@@ -605,7 +605,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the alignment of the text on the button control.
         ///    </para>
@@ -660,7 +660,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets a value indicating whether an ampersand (&amp;) included in the text of
         ///       the control.</para>
         /// </devdoc>
@@ -714,7 +714,7 @@ namespace System.Windows.Forms {
             ImageList = null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override void Dispose(bool disposing) {
             if (disposing) {
@@ -741,7 +741,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnGotFocus'/> event.
         ///    </para>
@@ -751,7 +751,7 @@ namespace System.Windows.Forms {
             Invalidate();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnLostFocus'/> event.
         ///    </para>
@@ -766,7 +766,7 @@ namespace System.Windows.Forms {
             Invalidate();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseEnter'/> event.
         ///    </para>
@@ -783,7 +783,7 @@ namespace System.Windows.Forms {
             base.OnMouseEnter(eventargs);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseLeave'/> event.
         ///    </para>
@@ -799,7 +799,7 @@ namespace System.Windows.Forms {
             base.OnMouseLeave(eventargs);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseMove'/> event.
         ///    </para>
@@ -826,7 +826,7 @@ namespace System.Windows.Forms {
             base.OnMouseMove(mevent);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseDown'/> event.
         ///    </para>
@@ -843,7 +843,7 @@ namespace System.Windows.Forms {
             base.OnMouseDown(mevent);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnMouseUp'/> event.
         ///       
@@ -853,7 +853,7 @@ namespace System.Windows.Forms {
             base.OnMouseUp(mevent);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Used for quick re-painting of the button after the pressed state.
         ///    </para>
@@ -865,7 +865,7 @@ namespace System.Windows.Forms {
             Update();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Central paint dispatcher to one of the three styles of painting.
         /// </devdoc>
         private void PaintControl(PaintEventArgs pevent) {        
@@ -979,7 +979,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnKeyDown'/> event.
         ///       
@@ -1006,7 +1006,7 @@ namespace System.Windows.Forms {
             base.OnKeyDown(kevent);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnKeyUp'/> event.
         ///       
@@ -1035,7 +1035,7 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnPaint'/> event.
         ///       
@@ -1099,7 +1099,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
         /// </devdoc>
         [
@@ -1116,7 +1116,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines whether the control supports rendering text using GDI+ and GDI.
         ///     This is provided for container controls to iterate through its children to set UseCompatibleTextRendering to the same
         ///     value if the child control supports it.

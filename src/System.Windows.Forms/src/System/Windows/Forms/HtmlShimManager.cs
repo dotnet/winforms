@@ -9,7 +9,7 @@ namespace System.Windows.Forms {
     using System.Collections;
     using System.Diagnostics;
     
-    /// <devdoc>
+    /// <summary>
     ///  HtmlShimManager - this class manages the shims for HtmlWindows, HtmlDocuments, and HtmlElements.
     ///  essentially we need a long-lasting object to call back on events from the web browser, and the 
     ///  manager is the one in charge of making sure this list stays around as long as needed.  
@@ -26,7 +26,7 @@ namespace System.Windows.Forms {
             internal HtmlShimManager() {
             }
 
-            /// <devdoc> AddDocumentShim - adds a HtmlDocumentShim to list of shims to manage 
+            /// <summary> AddDocumentShim - adds a HtmlDocumentShim to list of shims to manage 
             ///   Can create a WindowShim as a side effect so it knows when to self prune from the list.
             ///</devdoc>
             public void AddDocumentShim(HtmlDocument doc) {
@@ -47,7 +47,7 @@ namespace System.Windows.Forms {
                
            }
     
-            /// <devdoc> AddWindowShim - adds a HtmlWindowShim to list of shims to manage 
+            /// <summary> AddWindowShim - adds a HtmlWindowShim to list of shims to manage 
             ///</devdoc>
 
             public void AddWindowShim(HtmlWindow window) {
@@ -67,7 +67,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc> AddElementShim - adds a HtmlDocumentShim to list of shims to manage 
+            /// <summary> AddElementShim - adds a HtmlDocumentShim to list of shims to manage 
             ///   Can create a WindowShim as a side effect so it knows when to self prune from the list.
             ///</devdoc>
             public void AddElementShim(HtmlElement element) {
@@ -131,7 +131,7 @@ namespace System.Windows.Forms {
                     }
                 }
             }
-            /// <devdoc>
+            /// <summary>
             /// HtmlWindowShim calls back on us when it has unloaded the page.  At this point we need to 
             /// walk through our lists and make sure we've cleaned up
             /// </devdoc>

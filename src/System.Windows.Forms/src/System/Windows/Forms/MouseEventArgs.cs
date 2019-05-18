@@ -7,14 +7,14 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see langword='MouseUp'/>, <see langword='MouseDown'/>, and
     /// <see langword='MouseMove '/> events.
     /// </devdoc>
     [ComVisible(true)]
     public class MouseEventArgs : EventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.MouseEventArgs'/> class.
         /// </devdoc>
         public MouseEventArgs(MouseButtons button, int clicks, int x, int y, int delta)
@@ -26,32 +26,32 @@ namespace System.Windows.Forms
             Delta = delta;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets which mouse button was pressed.
         /// </devdoc>
         public MouseButtons Button { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the number of times the mouse button was pressed and released.
         /// </devdoc>
         public int Clicks { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the x-coordinate of a mouse click.
         /// </devdoc>
         public int X { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the y-coordinate of a mouse click.
         /// </devdoc>
         public int Y { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets a signed count of the number of detents the mouse wheel has rotated.
         /// </devdoc>
         public int Delta { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the location of the mouse during MouseEvent.
         /// </devdoc>
         public Point Location => new Point(X, Y);

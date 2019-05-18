@@ -5,7 +5,7 @@
 namespace System.Windows.Forms {
     using System;
   
-    /// <devdoc>
+    /// <summary>
     ///    Comprises the information specifying how acceleration should be performed
     ///     on a Windows up-down control when the up/down button is pressed for certain
     ///     amount of time.
@@ -31,7 +31,7 @@ namespace System.Windows.Forms {
             this.increment = increment;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines the amount of time for the UpDown control to wait to set the increment
         ///     step when holding the up/down button.
         /// </devdoc>
@@ -51,7 +51,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines the amount to increment by.
         /// </devdoc>
         public decimal Increment {

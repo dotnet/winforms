@@ -4,18 +4,18 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.ScrollBar.Scroll'/>
     /// event. This enumeration gives the orientation of the scroll that took place
     /// </devdoc>
     public enum ScrollOrientation
     {
-        /// <devdoc>
+        /// <summary>
         /// Denotes that horizontal scrolling took place.
         /// </devdoc>
         HorizontalScroll,
 
-        /// <devdoc>
+        /// <summary>
         /// Denotes that vertical scrolling took place.
         /// </devdoc>
         VerticalScroll

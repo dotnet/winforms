@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Represents the method that will handle the <see cref='System.Windows.Forms.Control.DpiChanged'/>,
     /// <see cref='System.Windows.Forms.Control.DpiChanged'/>, or <see cref='System.Windows.Forms.Control.DpiChanged'/>
     /// event of a <see cref='System.Windows.Forms.Control'/>.

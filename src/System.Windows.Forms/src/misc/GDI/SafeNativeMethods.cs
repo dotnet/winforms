@@ -16,7 +16,7 @@ namespace System.Experimental.Gdi
     using System.ComponentModel;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     ///   This is an extract of the System.Drawing IntNativeMethods in the CommonUI tree.
     ///   This is done to be able to compile the GDI code in both assemblies System.Drawing
     ///   and System.Windows.Forms.

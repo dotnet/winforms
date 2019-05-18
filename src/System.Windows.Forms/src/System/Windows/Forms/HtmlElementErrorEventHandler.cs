@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// EventHandler for HtmlElementErrorEventArgs
     /// </devdoc>
     public delegate void HtmlElementErrorEventHandler(object sender, HtmlElementErrorEventArgs e);

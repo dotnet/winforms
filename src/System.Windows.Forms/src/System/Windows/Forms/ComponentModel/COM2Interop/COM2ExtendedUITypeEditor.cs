@@ -16,7 +16,7 @@ namespace System.Drawing.Design {
     using System.Drawing;
     using System.Drawing.Design;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>Provides an editor that provides a way to visually edit the values of a COM2 
     ///       type.</para>
     /// </devdoc>
@@ -38,7 +38,7 @@ namespace System.Drawing.Design {
             }
         }
   
-        /// <devdoc>
+        /// <summary>
         ///      Edits the given object value using the editor style provided by
         ///      GetEditorStyle.  A service provider is provided so that any
         ///      required editing services can be obtained.
@@ -52,7 +52,7 @@ namespace System.Drawing.Design {
             }
         }
   
-        /// <devdoc>
+        /// <summary>
         ///      Determines if this editor supports the painting of a representation
         ///      of an object's value.
         /// </devdoc>
@@ -63,7 +63,7 @@ namespace System.Drawing.Design {
             return base.GetPaintValueSupported(context);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the editing style of the Edit method.  If the method
         ///      is not supported, this will return None.
         /// </devdoc>
@@ -74,7 +74,7 @@ namespace System.Drawing.Design {
             return base.GetEditStyle(context);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Paints a representative value of the given object to the provided
         ///      canvas.  Painting should be done within the boundaries of the
         ///      provided rectangle.

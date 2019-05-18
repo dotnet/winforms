@@ -9,7 +9,7 @@ using System.Globalization;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Represents the collection of data bindings for a control.
     /// </devdoc>
     [DefaultEvent(nameof(CollectionChanged))]
@@ -44,7 +44,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Adds the binding to the collection. An ArgumentNullException is thrown if this
         /// binding is null. An exception is thrown if a binding to the same target and
         /// Property as an existing binding or if the binding's column isn't a valid column
@@ -53,7 +53,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         public new void Add(Binding binding) => base.Add(binding);
 
-        /// <devdoc>
+        /// <summary>
         /// Creates the binding and adds it to the collection. An InvalidBindingException is
         /// thrown if this binding can't be constructed. An exception is thrown if a binding
         /// to the same target and Property as an existing binding or if the binding's column
@@ -97,7 +97,7 @@ namespace System.Windows.Forms
             return binding;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Creates the binding and adds it to the collection. An InvalidBindingException is
         /// thrown if this binding can't be constructed. An exception is thrown if a binding to
         /// the same target and Property as an existing binding or if the binding's column isn't
@@ -140,7 +140,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Clears the collection of any bindings.
         /// Fires the CollectionChangedEvent.
         /// </devdoc>
@@ -160,7 +160,7 @@ namespace System.Windows.Forms
 
         public DataSourceUpdateMode DefaultDataSourceUpdateMode { get; set; } = DataSourceUpdateMode.OnValidation;
 
-        /// <devdoc>
+        /// <summary>
         /// Removes the given binding from the collection.
         /// An ArgumentNullException is thrown if this binding is null. An ArgumentException is
         /// thrown if this binding doesn't belong to this collection.
@@ -168,7 +168,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         public new void Remove(Binding binding) => base.Remove(binding);
 
-        /// <devdoc>
+        /// <summary>
         /// Removes the given binding from the collection.
         /// It throws an IndexOutOfRangeException if this doesn't have a valid binding.
         /// The CollectionChanged event is fired if it succeeds.

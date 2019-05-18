@@ -12,7 +12,7 @@ namespace System.Experimental.Gdi
 {
     using System;
 
-    /// <devdoc>
+    /// <summary>
     ///     Enumeration defining the different Graphics properties to apply to a WindowsGraphics when creating it
     ///     from a Graphics object.
     /// </devdoc>

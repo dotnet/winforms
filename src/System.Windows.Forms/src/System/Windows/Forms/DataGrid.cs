@@ -20,7 +20,7 @@ namespace System.Windows.Forms {
         using System.Diagnostics.CodeAnalysis;
         using System.Globalization;
     
-        /// <devdoc>
+        /// <summary>
         ///    <para>Displays ADO.NET data in a scrollable
         ///       grid.</para>
         /// </devdoc>
@@ -314,7 +314,7 @@ namespace System.Windows.Forms {
             // =-----------------------------------------------------------------
     
     
-            /// <devdoc>
+            /// <summary>
             /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataGrid'/>
             /// class.</para>
             /// </devdoc>
@@ -373,7 +373,7 @@ namespace System.Windows.Forms {
             // =        Properties
             // =------------------------------------------------------------------
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>Gets or sets a value indicating whether the grid can be resorted by clicking on
             ///       a column header.</para>
             /// </devdoc>
@@ -440,7 +440,7 @@ namespace System.Windows.Forms {
     
             // overrode those properties just to move the BackColor and the ForeColor 
             // from the Appearance group onto the Color Group
-            /// <devdoc>
+            /// <summary>
             ///    <para>Gets or sets the background color of the grid.</para>
             /// </devdoc>
             [
@@ -484,7 +484,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets a value
             ///       indicating whether the <see cref='System.Windows.Forms.DataGrid.AlternatingBackColor'/> property should be
@@ -503,7 +503,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets or
             ///       sets the border style.
@@ -668,7 +668,7 @@ namespace System.Windows.Forms {
             }
     
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets or sets the background color of the caption area.
             ///    </para>
@@ -692,7 +692,7 @@ namespace System.Windows.Forms {
                 Caption.ResetBackColor();
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets a value
             ///       indicating whether the <see cref='System.Windows.Forms.DataGrid.CaptionBackColor'/> property should be
@@ -704,7 +704,7 @@ namespace System.Windows.Forms {
                 return Caption.ShouldSerializeBackColor();
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets
             ///       or sets the foreground color
@@ -728,7 +728,7 @@ namespace System.Windows.Forms {
                 Caption.ResetForeColor();
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets a value
             ///       indicating whether the <see cref='System.Windows.Forms.DataGrid.CaptionForeColor'/> property should be
@@ -740,7 +740,7 @@ namespace System.Windows.Forms {
                 return Caption.ShouldSerializeForeColor();
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets or sets the font of the grid's caption.
             ///    </para>
@@ -760,7 +760,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets a value indicating whether the
             ///       caption's font is persisted.
@@ -774,7 +774,7 @@ namespace System.Windows.Forms {
                 Caption.ResetFont();
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets or sets the text of the grid's caption.
             ///    </para>
@@ -794,7 +794,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets or sets a value that indicates
             ///       whether the grid's caption is visible.
@@ -827,7 +827,7 @@ namespace System.Windows.Forms {
                 remove => Events.RemoveHandler(EVENT_CAPTIONVISIBLECHANGED, value);
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets or sets which cell has the focus. Not available at design time.
             ///    </para>
@@ -1192,7 +1192,7 @@ namespace System.Windows.Forms {
                 return !DefaultForeBrush.Color.Equals(this.ForeColor);
             }
     
-            /// <devdoc>
+            /// <summary>
             /// <para>Indicates whether the <see cref='System.Windows.Forms.DataGrid.BackColor'/> property should be 
             ///    persisted.</para>
             /// </devdoc>
@@ -1255,7 +1255,7 @@ namespace System.Windows.Forms {
     
            
   
-            /// <devdoc>
+            /// <summary>
             ///      Given a cursor, this will Create the right DataGridRows
             /// </devdoc>
             private void CreateDataGridRows() {
@@ -1301,7 +1301,7 @@ namespace System.Windows.Forms {
                 SetDataGridRows(null, nDataGridRows);
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Sets the array of DataGridRow objects used for
             ///      all row-related logic in the DataGrid.
             /// </devdoc>
@@ -1337,7 +1337,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>Gets or sets the data source that the grid is displaying data for.</para>
             /// </devdoc>
             [
@@ -1391,7 +1391,7 @@ namespace System.Windows.Forms {
                 remove => Events.RemoveHandler(EVENT_DATASOURCECHANGED, value);
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets or sets the specific table in a DataSource for the control.
             ///    </para>
@@ -1606,7 +1606,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>Gets or sets index of the selected row.</para>
             /// </devdoc>
             // will set the position in the ListManager
@@ -1651,7 +1651,7 @@ namespace System.Windows.Forms {
             }
     
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>Gets the collection of tables for the grid.</para>
             /// </devdoc>
             [
@@ -1684,7 +1684,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
              ///    <para>Gets or sets the color of the grid lines.</para>
              /// </devdoc>
             [
@@ -1723,7 +1723,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-             /// <devdoc>
+             /// <summary>
              ///    <para>
              ///       Gets or sets the line style of the grid.
              ///    </para>
@@ -1758,7 +1758,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-             /// <devdoc>
+             /// <summary>
              ///    <para>
              ///       Gets or
              ///       sets the
@@ -1805,7 +1805,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets the index of the first visible column in a grid.
             ///    </para>
@@ -1820,7 +1820,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets or sets a value indicating whether the grid displays in flat mode.
             ///    </para>
@@ -1851,7 +1851,7 @@ namespace System.Windows.Forms {
                 remove => Events.RemoveHandler(EVENT_FLATMODECHANGED, value);
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets or
             ///       sets the background color of all row and column headers.
@@ -1919,7 +1919,7 @@ namespace System.Windows.Forms {
     
     
             // using this property, the user can set the backGround color 
-            /// <devdoc>
+            /// <summary>
             ///    <para>Gets or sets the background color of the grid.</para>
             /// </devdoc>
             [
@@ -1955,7 +1955,7 @@ namespace System.Windows.Forms {
                 remove => Events.RemoveHandler(EVENT_BACKGROUNDCOLORCHANGED, value);
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Indicates whether the <see cref='System.Windows.Forms.DataGrid.HeaderFont'/> property should be persisted.
             ///    </para>
@@ -1993,12 +1993,12 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Resets the <see cref='System.Windows.Forms.DataGrid.HeaderFont'/> property to its default value.
             ///    </para>
             /// </devdoc>
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets or sets the foreground color of the grid's headers.
             ///    </para>
@@ -2130,7 +2130,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             /// </devdoc>
             [
              SRDescription(nameof(SR.DataGridHorizScrollBarDescr))        
@@ -2141,7 +2141,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Retrieves a value indicating whether odd and even
             ///       rows are painted using a different background color.
@@ -2162,7 +2162,7 @@ namespace System.Windows.Forms {
                 */
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Indicates whether the <see cref='System.Windows.Forms.DataGrid.LinkColor'/> property should be persisted.
             ///    </para>
@@ -2201,7 +2201,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets
             ///       or sets the color a link changes to when
@@ -2235,7 +2235,7 @@ namespace System.Windows.Forms {
                     LinkHoverColor = defaultLinkHoverBrush.Color;*/
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Indicates whether the <see cref='System.Windows.Forms.DataGrid.LinkHoverColor'/> property should be
             ///       persisted.
@@ -2254,7 +2254,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>Gets or sets a value
             ///       that specifies which links are shown and in what context.</para>
             /// </devdoc>
@@ -2350,7 +2350,7 @@ namespace System.Windows.Forms {
                 remove => base.BackgroundImageLayoutChanged -= value;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets or sets the background color of parent rows.
             ///    </para>
@@ -2376,7 +2376,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Indicates whether the <see cref='System.Windows.Forms.DataGrid.ParentRowsBackColor'/> property should be
             ///       persisted.
@@ -2392,7 +2392,7 @@ namespace System.Windows.Forms {
                     parentRows.BackBrush = DefaultParentRowsBackBrush;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets or sets the foreground color of parent rows.
             ///    </para>
@@ -2416,7 +2416,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Indicates whether the <see cref='System.Windows.Forms.DataGrid.ParentRowsForeColor'/> property should be
             ///       persisted.
@@ -2433,7 +2433,7 @@ namespace System.Windows.Forms {
             }
     
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets
             ///       or sets the default width of the grid columns in
@@ -2459,7 +2459,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets or sets the preferred row height for the <see cref='System.Windows.Forms.DataGrid'/> control.
             ///    </para>
@@ -2488,7 +2488,7 @@ namespace System.Windows.Forms {
                 return prefferedRowHeight != defaultFontHeight + 3;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>Gets or sets a value indicating whether the grid
             ///       is in read-only mode.</para>
             /// </devdoc>
@@ -2545,7 +2545,7 @@ namespace System.Windows.Forms {
                 remove => Events.RemoveHandler(EVENT_READONLYCHANGED, value);
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets
             ///       or sets a value indicating if the grid's column headers are visible.
@@ -2570,7 +2570,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets or sets a value indicating whether the parent rows of a table are
             ///       visible.
@@ -2610,7 +2610,7 @@ namespace System.Windows.Forms {
                 return parentRows.IsEmpty();
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets or sets a value indicating whether the data grid's row headers are
             ///       visible.
@@ -2657,7 +2657,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets or sets the width of headers.
             ///    </para>
@@ -2683,7 +2683,7 @@ namespace System.Windows.Forms {
                 remove => base.TextChanged -= value;
             }
             
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets the vertical scroll bar of the control.
             ///    </para>
@@ -2698,7 +2698,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets the number of visible columns.
             ///    </para>
@@ -2713,7 +2713,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets the number of rows visible.
             ///    </para>
@@ -2729,7 +2729,7 @@ namespace System.Windows.Forms {
             }
     
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>Gets or sets the value of the cell at
             ///       the specified the row and column.</para>
             /// </devdoc>
@@ -2765,7 +2765,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             /// <para>Gets or sets the value of a specified <see cref='System.Windows.Forms.DataGridCell'/>.</para>
             /// </devdoc>
             public object this[DataGridCell cell] {
@@ -2807,7 +2807,7 @@ namespace System.Windows.Forms {
                 gridTable.AllowSortingChanged -= new EventHandler(AllowSortingChanged);
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      DataSource events are handled
             /// </devdoc>
             private void WireDataSource() {
@@ -2944,7 +2944,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Fired by the DataSource when row position moves.
             ///    </para>
@@ -3166,7 +3166,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Raises the <see cref='System.Windows.Forms.DataGrid.Navigate'/>
             ///       event.
@@ -3178,7 +3178,7 @@ namespace System.Windows.Forms {
             }
     
             /*
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Raises the <see cref='System.Windows.Forms.DataGrid.ColumnResize'/> event.
             ///    </para>
@@ -3214,7 +3214,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             /// <para>Raises the <see cref='System.Windows.Forms.DataGrid.RowHeaderClick'/> event.</para>
             /// </devdoc>
             protected void OnRowHeaderClick(EventArgs e) {
@@ -3222,7 +3222,7 @@ namespace System.Windows.Forms {
                     onRowHeaderClick(this, e);
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Raises the <see cref='System.Windows.Forms.DataGrid.Scroll'/> event.
             ///    </para>
@@ -3238,7 +3238,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Listens
             ///       for the horizontal scrollbar's scroll
@@ -3321,7 +3321,7 @@ namespace System.Windows.Forms {
                 this.gridState[GRIDSTATE_isScrolling] = false;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Listens
             ///       for the vertical scrollbar's scroll event.
@@ -3386,7 +3386,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Listens
             ///       for the caption's back button clicked event.
@@ -3438,7 +3438,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Listens for
             ///       the caption's down button clicked event.
@@ -3496,7 +3496,7 @@ namespace System.Windows.Forms {
                 base.OnFontChanged(e);
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Raises the <see cref='System.Windows.Forms.Control.PaintBackground'/>
             ///       event.
@@ -3506,7 +3506,7 @@ namespace System.Windows.Forms {
                 // null body
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Raises the <see cref='System.Windows.Forms.Control.Layout'/> event which
             ///       repositions controls
@@ -3542,7 +3542,7 @@ namespace System.Windows.Forms {
     
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Raises the <see cref='System.Windows.Forms.Control.CreateHandle'/>
             ///       event.
@@ -3559,7 +3559,7 @@ namespace System.Windows.Forms {
                 PerformLayout();
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Raises the <see cref='System.Windows.Forms.Control.DestroyHandle'/>
             ///       event.
@@ -3577,7 +3577,7 @@ namespace System.Windows.Forms {
                 toolTipId = 0;
             }
     
-            /// <devdoc>
+            /// <summary>
             /// <para>Raises the <see cref='System.Windows.Forms.Control.Enter'/>
             /// event.</para>
             /// </devdoc>
@@ -3591,7 +3591,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             /// <para>Raises the <see cref='System.Windows.Forms.Control.Leave'/>
             /// event.</para>
             /// </devdoc>
@@ -3627,7 +3627,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Raises the <see cref='System.Windows.Forms.Control.KeyDown'/>
             ///       event.
@@ -3639,7 +3639,7 @@ namespace System.Windows.Forms {
                 ProcessGridKey(ke);
             }
     
-            /// <devdoc>
+            /// <summary>
             /// <para>Raises the <see cref='System.Windows.Forms.Control.KeyPress'/> event.</para>
             /// </devdoc>
             protected override void OnKeyPress(KeyPressEventArgs kpe) {
@@ -3655,7 +3655,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseDown'/> event.</para>
             /// </devdoc>
             protected override void OnMouseDown(MouseEventArgs e) {
@@ -3829,7 +3829,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             /// <para>Creates the <see cref='System.Windows.Forms.Control.MouseLeave'/>
             /// event.</para>
             /// </devdoc>
@@ -3850,7 +3850,7 @@ namespace System.Windows.Forms {
                 this.OnMouseWheel(e);
             }
     
-            /// <devdoc>
+            /// <summary>
             /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseMove'/>
             /// event.</para>
             /// </devdoc>
@@ -3957,7 +3957,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseUp'/> event.</para>
             /// </devdoc>
             protected override void OnMouseUp(MouseEventArgs e) {
@@ -3993,7 +3993,7 @@ namespace System.Windows.Forms {
                 trackColumnHeader = null;
             }
     
-            /// <devdoc>
+            /// <summary>
             /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseWheel'/> event.</para>
             /// </devdoc>
             protected override void OnMouseWheel(MouseEventArgs e) {
@@ -4040,7 +4040,7 @@ namespace System.Windows.Forms {
                 gridState[GRIDSTATE_isScrolling] = false;
             }
     
-            /// <devdoc>
+            /// <summary>
             /// <para>Raises the <see cref='System.Windows.Forms.Control.Paint'/>
             /// event.</para>
             /// </devdoc>
@@ -4102,7 +4102,7 @@ namespace System.Windows.Forms {
     
             // Since Win32 only invalidates the area that gets uncovered,
             // we have to manually invalidate the old border area
-            /// <devdoc>
+            /// <summary>
             /// <para>Raises the <see cref='System.Windows.Forms.Control.Resize'/> event.</para>
             /// </devdoc>
             protected override void OnResize(EventArgs e) {
@@ -4212,7 +4212,7 @@ namespace System.Windows.Forms {
                 editColumn = null;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>Occurs when the user navigates to a new table.</para>
             /// </devdoc>
             [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.DataGridNavigateEventDescr))]
@@ -4221,7 +4221,7 @@ namespace System.Windows.Forms {
                 remove => onNavigate -= value;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>Occurs when a row header is clicked.</para>
             /// </devdoc>
             protected event EventHandler RowHeaderClick {
@@ -4229,7 +4229,7 @@ namespace System.Windows.Forms {
                 remove => onRowHeaderClick -= value;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Adds an event handler for the 'System.Windows.Forms.DataGrid.OnNodeClick'
             ///       event.
@@ -4241,7 +4241,7 @@ namespace System.Windows.Forms {
                 remove => Events.RemoveHandler(EVENT_NODECLICKED, value);
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Occurs when the user scrolls the <see cref='System.Windows.Forms.DataGrid'/> control.
             ///    </para>
@@ -4287,7 +4287,7 @@ namespace System.Windows.Forms {
                 gridState[GRIDSTATE_inListAddNew] = false;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>Attempts to
             ///       put the grid into a state where editing is
             ///       allowed.</para>
@@ -4310,7 +4310,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>Specifies the beginning of the initialization code.</para>
             /// </devdoc>
             public void BeginInit() {
@@ -4357,7 +4357,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      The DataGrid caches an array of rectangular areas
             ///      which represent the area which scrolls left to right.
             ///      This method is invoked whenever the DataGrid's
@@ -4368,7 +4368,7 @@ namespace System.Windows.Forms {
                 cachedScrollableRegion = null;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Determines the best fit size for the given column.
             /// </devdoc>
             private void ColAutoResize(int col) {
@@ -4490,7 +4490,7 @@ namespace System.Windows.Forms {
                 // OnColumnResize(EventArgs.Empty);
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Collapses child relations, if any exist for all rows, or for a
             ///       specified row.
@@ -4778,7 +4778,7 @@ namespace System.Windows.Forms {
                 // OnRowResize(EventArgs.Empty);
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Fires the ColumnHeaderClicked event and handles column
             ///      sorting.
             /// </devdoc>
@@ -4814,7 +4814,7 @@ namespace System.Windows.Forms {
                 InvalidateInside();
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Attempts to commit editing if a cell is being edited.
             ///      Return true if successfully commited editing.
             ///      Return false if editing can not be completed and the gird must
@@ -4868,7 +4868,7 @@ namespace System.Windows.Forms {
                 return retVal;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Figure out how many rows we need to scroll down
             ///      to move targetRow into visibility.
             /// </devdoc>
@@ -4919,7 +4919,7 @@ namespace System.Windows.Forms {
                 return dRows;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Given the a logical vertical offset, figure out
             ///      which row number should be the first fully visible
             ///      row on or after the offset.
@@ -4937,7 +4937,7 @@ namespace System.Windows.Forms {
                 return first;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Constructs an updated Layout object.
             /// </devdoc>
             private void ComputeLayout() {
@@ -5085,7 +5085,7 @@ namespace System.Windows.Forms {
                 Debug.WriteLineIf(CompModSwitches.DataGridLayout.TraceVerbose, "DataGridLayout: " + layout.ToString());
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Computes the number of pixels to scroll to scroll from one
             ///      row to another.
             /// </devdoc>
@@ -5118,7 +5118,7 @@ namespace System.Windows.Forms {
                     minRowHeaderWidth += 15; // the size of the plus/minus glyph and spacing around it
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Updates the internal variables with the number of columns visible
             ///      inside the Grid's client rectangle.
             /// </devdoc>
@@ -5196,7 +5196,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Determines which column is the first visible given
             ///      the object's horizontalOffset.
             /// </devdoc>
@@ -5247,7 +5247,7 @@ namespace System.Windows.Forms {
                 return first;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Updates the internal variables with the number of rows visible
             ///      in a given DataGrid Layout.
             /// </devdoc>
@@ -5301,7 +5301,7 @@ namespace System.Windows.Forms {
             }
     
     
-            /// <devdoc>
+            /// <summary>
             ///     Constructs the new instance of the accessibility object for this control. Subclasses
             ///     should not call base.CreateAccessibilityObject.
             /// </devdoc>
@@ -5310,7 +5310,7 @@ namespace System.Windows.Forms {
             }
     
     
-            /// <devdoc>
+            /// <summary>
             ///      Creates a DataGridState representing the child table retrieved
             ///      from the passed DataRelation.
             /// </devdoc>
@@ -5340,7 +5340,7 @@ namespace System.Windows.Forms {
             }
     
     
-            /// <devdoc>
+            /// <summary>
             ///      Constructs a Layout object containing the state
             ///      for a newly constructed DataGrid.
             /// </devdoc>
@@ -5363,7 +5363,7 @@ namespace System.Windows.Forms {
                 return newLayout;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      The DataGrid caches an array of rectangular areas
             ///      which represent the area which scrolls left to right.
             ///      This method is invoked whenever the DataGrid needs
@@ -5408,7 +5408,7 @@ namespace System.Windows.Forms {
                 return cachedScrollableRegion;
              }
     
-            /// <devdoc>
+            /// <summary>
             ///    Disposes of the resources (other than memory) used
             ///    by the <see cref='System.Windows.Forms.DataGrid'/>.
             /// </devdoc>
@@ -5436,7 +5436,7 @@ namespace System.Windows.Forms {
                 base.Dispose(disposing);
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Draws an XOR region to give UI feedback for Column Resizing.
             ///      This looks just like the Splitter control's UI when resizing.
             /// </devdoc>
@@ -5446,7 +5446,7 @@ namespace System.Windows.Forms {
                 DrawSplitBar(r);
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Draws an XOR region to give UI feedback for Row Resizing.
             ///      This looks just like the Splitter control's UI when resizing.
             /// </devdoc>
@@ -5456,7 +5456,7 @@ namespace System.Windows.Forms {
                 DrawSplitBar(r);
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Draws an XOR region to give UI feedback for Column/Row Resizing.
             ///      This looks just like the Splitter control's UI when resizing.
             /// </devdoc>
@@ -5472,7 +5472,7 @@ namespace System.Windows.Forms {
                 UnsafeNativeMethods.ReleaseDC(new HandleRef(this, parentHandle), new HandleRef(this, dc));
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Begin in-place editing of a cell.  Any editing is commited
             ///      before the new edit takes place.
             ///
@@ -5560,7 +5560,7 @@ namespace System.Windows.Forms {
                 gridState[GRIDSTATE_editControlChanging] = false;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>Requests an end to an edit operation taking place on the
             ///    <see cref='System.Windows.Forms.DataGrid'/>
             ///    control.</para>
@@ -5585,7 +5585,7 @@ namespace System.Windows.Forms {
                 return ret;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Ends any editing in progress by attempting to commit and then
             ///      aborting if not possible.
             /// </devdoc>
@@ -5693,7 +5693,7 @@ namespace System.Windows.Forms {
                 ColumnStartedEditing(editingControl.Bounds);
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Displays child relations, if any exist, for all rows or a
             ///       specific row.
@@ -5703,7 +5703,7 @@ namespace System.Windows.Forms {
                 SetRowExpansionState(row, true);
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Creates a <see cref='System.Windows.Forms.DataGridColumnStyle'/> using the specified <see cref='System.ComponentModel.PropertyDescriptor'/>.
             ///    </para>
@@ -5781,7 +5781,7 @@ namespace System.Windows.Forms {
     
     #endif
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>Specifies the end of the initialization code.</para>
             /// </devdoc>
             public void EndInit() {
@@ -5793,7 +5793,7 @@ namespace System.Windows.Forms {
                     myGridTable.DataGrid = this;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Given a x coordinate, returns the column it is over.
             /// </devdoc>
             private int GetColFromX(int x) {
@@ -5821,7 +5821,7 @@ namespace System.Windows.Forms {
                 return -1;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Returns the coordinate of the left edge of the given column
             ///      Bi-Di: if the grid has the RightToLeft property set to RightToLeft.Yes, this will
             ///      return what appears as the right edge of the column
@@ -5841,7 +5841,7 @@ namespace System.Windows.Forms {
                 return MirrorPoint(offset, layout.Data, isRightToLeft());
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Returns the coordinate of the right edge of the given column
             ///      Bi-Di: if the grid has the RightToLeft property set to RightToLeft.Yes, this will
             ///      return what appears as the left edge of the column
@@ -5868,7 +5868,7 @@ namespace System.Windows.Forms {
                 return sum;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Not all rows in the DataGrid are expandable,
             ///      this computes which ones are and returns an array
             ///      of references to them.
@@ -5884,7 +5884,7 @@ namespace System.Windows.Forms {
                 return expandableRows;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Returns the row number underneath the given y coordinate.
             /// </devdoc>
             private int GetRowFromY(int y) {
@@ -5914,7 +5914,7 @@ namespace System.Windows.Forms {
                 return layout.ColumnHeaders;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Determines where on the control's ClientRectangle a given row is
             ///      painting to.
             /// </devdoc>
@@ -5942,7 +5942,7 @@ namespace System.Windows.Forms {
                 return Rectangle.Empty;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Returns the coordinate of the top edge of the given row
             /// </devdoc>
             private int GetRowTop(int row) {
@@ -5958,7 +5958,7 @@ namespace System.Windows.Forms {
                 return offset;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Returns the coordinate of the bottom edge of the given row
             /// </devdoc>
             private int GetRowBottom(int row) {
@@ -5967,7 +5967,7 @@ namespace System.Windows.Forms {
                 return GetRowTop(row) + localGridRows[row].Height;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      This method is called on methods that need the grid
             ///      to be bound to a DataTable to work.
             /// </devdoc>
@@ -6017,7 +6017,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             /// <para>Gets a <see cref='T:System.Drawing.Rectangle'/>
             /// that specifies the four corners of the selected cell.</para>
             /// </devdoc>
@@ -6026,7 +6026,7 @@ namespace System.Windows.Forms {
                 return GetCellBounds(current.RowNumber, current.ColumnNumber);
             }
     
-            /// <devdoc>
+            /// <summary>
             /// <para>Gets the <see cref='T:System.Drawing.Rectangle'/> of the cell specified by row and column number.</para>
             /// </devdoc>
             public Rectangle GetCellBounds(int row, int col) {
@@ -6038,7 +6038,7 @@ namespace System.Windows.Forms {
                 return cellBounds;
             }
     
-            /// <devdoc>
+            /// <summary>
             /// <para>Gets the <see cref='T:System.Drawing.Rectangle'/> of the cell specified by <see cref='System.Windows.Forms.DataGridCell'/>.</para>
             /// </devdoc>
             public Rectangle GetCellBounds(DataGridCell dgc) {
@@ -6057,7 +6057,7 @@ namespace System.Windows.Forms {
                 return rowBounds;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>Gets information, such as row and column number of a
             ///       clicked point on
             ///       the grid,
@@ -6124,7 +6124,7 @@ namespace System.Windows.Forms {
                 return ci;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>Gets information, such as row and column number of a
             ///       clicked point on the grid, about the
             ///       grid using a specific
@@ -6134,7 +6134,7 @@ namespace System.Windows.Forms {
                 return HitTest(position.X, position.Y);
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Initializes the values for column widths in the table.
             /// </devdoc>
             private void InitializeColumnWidths() {
@@ -6159,14 +6159,14 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Invalidates the scrollable area of the DataGrid.
             /// </devdoc>
             internal void InvalidateInside() {
                 Invalidate(layout.Inside);
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Invalidates the caption area of the DataGrid.
             /// </devdoc>
             internal void InvalidateCaption() {
@@ -6174,7 +6174,7 @@ namespace System.Windows.Forms {
                     Invalidate(layout.Caption);
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Invalidates a rectangle normalized to the caption's
             ///      visual bounds.
             /// </devdoc>
@@ -6184,7 +6184,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Invalidates the display region of a given DataGridColumn.
             /// </devdoc>
             internal void InvalidateColumn(int column) {
@@ -6214,7 +6214,7 @@ namespace System.Windows.Forms {
                 Invalidate(columnArea);
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Invalidates the parent rows area of the DataGrid
             /// </devdoc>
             internal void InvalidateParentRows() {
@@ -6222,7 +6222,7 @@ namespace System.Windows.Forms {
                     Invalidate(layout.ParentRows);
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Invalidates a rectangle normalized to the parent
             ///      rows area's visual bounds.
             /// </devdoc>
@@ -6235,7 +6235,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Invalidate the painting region for the row specified.
             /// </devdoc>
             internal void InvalidateRow(int rowNumber) {
@@ -6274,7 +6274,7 @@ namespace System.Windows.Forms {
                 }
             }
             
-            /// <devdoc>
+            /// <summary>
             ///    <para>Gets a value that indicates whether a specified row's node is expanded or collapsed.</para>
             /// </devdoc>
             public bool IsExpanded(int rowNumber) {
@@ -6294,7 +6294,7 @@ namespace System.Windows.Forms {
                     return false;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets a value indicating whether a
             ///       specified row is selected.
@@ -6310,7 +6310,7 @@ namespace System.Windows.Forms {
                 return color.A < 255;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Determines if Scrollbars should be visible,
             ///      updates their bounds and the bounds of all
             ///      other regions in the DataGrid's Layout.
@@ -6454,7 +6454,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>Navigates back to the table previously displayed in the grid.</para>
             /// </devdoc>
             public void NavigateBack() {
@@ -6557,7 +6557,7 @@ namespace System.Windows.Forms {
                 OnNavigate(new NavigateEventArgs(false));
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Navigates to the table specified by row and relation
             ///       name.
@@ -6669,7 +6669,7 @@ namespace System.Windows.Forms {
             }
     
     
-            /// <devdoc>
+            /// <summary>
             ///      Given a coordinate in the control this method returns
             ///      the equivalent point for a row.
             /// </devdoc>
@@ -6709,7 +6709,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Paints column headers.
             /// </devdoc>
             private void PaintColumnHeaders(Graphics g) {
@@ -6879,7 +6879,7 @@ namespace System.Windows.Forms {
             }
     
             
-            /// <devdoc>
+            /// <summary>
             ///      Paints a border around the bouding rectangle given
             /// </devdoc>
             private void PaintBorder(Graphics g, Rectangle bounds)
@@ -6910,7 +6910,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Paints the grid in the bounding rectangle given.
             ///      This includes the column headers and each visible row.
             /// </devdoc>
@@ -6982,7 +6982,7 @@ namespace System.Windows.Forms {
                 SetDataGridRows(newDataGridRows, newDataGridRowsLength);
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Paints the visible rows on the grid.
             /// </devdoc>
             private void PaintRows(Graphics g, ref Rectangle boundingRect) {
@@ -7058,7 +7058,7 @@ namespace System.Windows.Forms {
             }
     
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets or sets a value that indicates whether a key should be processed
             ///       further.
@@ -7238,7 +7238,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Processes keys for grid navigation.
             ///    </para>
@@ -7789,7 +7789,7 @@ namespace System.Windows.Forms {
                 return true;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>Previews a keyboard message and returns a value indicating if the key was
             ///       consumed.</para>
             /// </devdoc>
@@ -7829,7 +7829,7 @@ namespace System.Windows.Forms {
                 return base.ProcessKeyPreview(ref m);
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>
             ///       Gets a value indicating whether the Tab key should be processed.
             ///    </para>
@@ -8045,7 +8045,7 @@ namespace System.Windows.Forms {
     
             // the BackButtonClicked event:
             //
-            /// <devdoc>
+            /// <summary>
             ///    <para>Occurs when the BackButton is clicked.</para>
             /// </devdoc>
             [
@@ -8059,7 +8059,7 @@ namespace System.Windows.Forms {
     
             // the DownButtonClick event
             //
-            /// <devdoc>
+            /// <summary>
             ///    Occurs when the Down button is clicked.
             /// </devdoc>
             [
@@ -8076,7 +8076,7 @@ namespace System.Windows.Forms {
                 gridState[GRIDSTATE_overCaption] = true;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Turns off selection for all rows that are selected.
             /// </devdoc>
             protected void ResetSelection() {
@@ -8097,7 +8097,7 @@ namespace System.Windows.Forms {
                 caption.SetDownButtonDirection(!layout.ParentRowsVisible);
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Re-initializes all UI related state.
             /// </devdoc>
             private void ResetUIState() {
@@ -8115,7 +8115,7 @@ namespace System.Windows.Forms {
                     vertScrollBar.Invalidate();
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Scrolls the datagrid down an arbritrary number of rows.
             /// </devdoc>
             private void ScrollDown(int rows) {
@@ -8156,7 +8156,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Scrolls the datagrid right an arbritrary number of columns.
             /// </devdoc>
             private void ScrollRight(int columns) {
@@ -8191,7 +8191,7 @@ namespace System.Windows.Forms {
                 HorizontalOffset = newColOffset;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Scrolls a given column into visibility.
             /// </devdoc>
             private void ScrollToColumn(int targetCol) {
@@ -8210,7 +8210,7 @@ namespace System.Windows.Forms {
                     ScrollRight(dCols);
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Selects a given row
             /// </devdoc>
             public void Select(int row) {
@@ -8287,7 +8287,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Sets the current GridTable for the DataGrid.
             ///      This GridTable is the table which is currently
             ///      being displayed on the grid.
@@ -8357,7 +8357,7 @@ namespace System.Windows.Forms {
                 checkHierarchy = true;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Scrolls the data area down to make room for the parent rows
             ///      and lays out the different regions of the DataGrid.
             /// </devdoc>
@@ -8419,7 +8419,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Sets whether a row is expanded or not.
             /// </devdoc>
             private void SetRowExpansionState(int row, bool expanded) {
@@ -8510,7 +8510,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Unselects a given row
             /// </devdoc>
             public void UnSelect(int row) {
@@ -8523,7 +8523,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Asks the cursor to update.
             /// </devdoc>
             private void UpdateListManager() {
@@ -8538,7 +8538,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    Will return the string that will be used as a delimiter between columns
             ///    when copying rows contents to the Clipboard.
             ///    At the moment, return "\t"
@@ -8547,13 +8547,13 @@ namespace System.Windows.Forms {
                 return "\t";
             }
     
-            /// <devdoc>
+            /// <summary>
             ///     The accessible object class for a DataGrid. The child accessible objects
             ///     are accessible objects corresponding to the propertygrid entries.        
             /// </devdoc>
             [System.Runtime.InteropServices.ComVisible(true)]        
             internal class DataGridAccessibleObject : ControlAccessibleObject {
-                /// <devdoc>
+                /// <summary>
                 ///     Construct a PropertyGridViewAccessibleObject
                 /// </devdoc>
                 public DataGridAccessibleObject(DataGrid owner) : base(owner) {
@@ -8832,7 +8832,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///    <para>Contains information
             ///       about the part of the <see cref='System.Windows.Forms.DataGrid'/> control the user
             ///       has clicked. This class cannot be inherited.</para>
@@ -8843,7 +8843,7 @@ namespace System.Windows.Forms {
                 internal int row;
                 internal int col;
     
-                /// <devdoc>
+                /// <summary>
                 /// <para>Allows the <see cref='System.Windows.Forms.DataGrid.HitTestInfo'/> object to inform you the 
                 ///    extent of the grid.</para>
                 /// </devdoc>
@@ -8863,7 +8863,7 @@ namespace System.Windows.Forms {
                     row = col = -1;
                 }
     
-                /// <devdoc>
+                /// <summary>
                 ///    <para>Gets the number of the clicked column.</para>
                 /// </devdoc>
                 public int Column {
@@ -8872,7 +8872,7 @@ namespace System.Windows.Forms {
                     }
                 }
     
-                /// <devdoc>
+                /// <summary>
                 ///    <para>Gets the
                 ///       number of the clicked row.</para>
                 /// </devdoc>
@@ -8882,7 +8882,7 @@ namespace System.Windows.Forms {
                     }
                 }
     
-                /// <devdoc>
+                /// <summary>
                 /// <para>Gets the part of the <see cref='System.Windows.Forms.DataGrid'/> control, other than the row or column, that was 
                 ///    clicked.</para>
                 /// </devdoc>
@@ -8892,7 +8892,7 @@ namespace System.Windows.Forms {
                     }
                 }
     
-                /// <devdoc>
+                /// <summary>
                 ///    <para>Indicates whether two objects are identical.</para>
                 /// </devdoc>
                 public override bool Equals(object value) {
@@ -8905,14 +8905,14 @@ namespace System.Windows.Forms {
                     return false;
                 }
     
-                /// <devdoc>
+                /// <summary>
                 /// <para>Gets the hash code for the <see cref='System.Windows.Forms.DataGrid.HitTestInfo'/> instance.</para>
                 /// </devdoc>
                 public override int GetHashCode() {
                     return(int)type +(row << 8) +(col << 16);
                 }
     
-                /// <devdoc>
+                /// <summary>
                 ///    <para>Gets the type, row number, and column number.</para>
                 /// </devdoc>
                 public override string ToString() {
@@ -8920,7 +8920,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             /// Specifies the part of the <see cref='System.Windows.Forms.DataGrid'/>
             /// control the user has clicked.<
             /// </devdoc>
@@ -8937,7 +8937,7 @@ namespace System.Windows.Forms {
                 ParentRows = 0x00000040
             }
     
-            /// <devdoc>
+            /// <summary>
             ///      Holds policy information for what the grid can and cannot do.
             /// </devdoc>
             private class Policy {

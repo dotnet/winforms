@@ -6,13 +6,13 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.Control.KeyPress'/> event.
     /// </devdoc>
     [ComVisible(true)]
     public class KeyPressEventArgs : EventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.KeyPressEventArgs'/>
         /// class.
         /// </devdoc>
@@ -21,12 +21,12 @@ namespace System.Windows.Forms
             KeyChar = keyChar;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the character corresponding to the key pressed.
         /// </devdoc>
         public char KeyChar { get; set; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets or sets a value indicating whether the <see cref='System.Windows.Forms.Control.KeyPress'/>
         /// event was handled.
         /// </devdoc>

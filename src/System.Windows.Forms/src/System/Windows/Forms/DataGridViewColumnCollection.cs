@@ -14,7 +14,7 @@ namespace System.Windows.Forms
     using System.ComponentModel.Design.Serialization;
     using System.Globalization;
     
-    /// <devdoc>
+    /// <summary>
     /// <para>Represents a collection of <see cref='System.Windows.Forms.DataGridViewColumn'/> objects in the <see cref='System.Windows.Forms.DataGrid'/> 
     /// control.</para>
     /// </devdoc>
@@ -159,7 +159,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the DataGridViewColumn with the specified index.
         /// </devdoc>
         public DataGridViewColumn this[int index]
@@ -170,7 +170,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the DataGridViewColumn with the Name provided.
         /// </devdoc>
         public DataGridViewColumn this[string columnName]
@@ -212,7 +212,7 @@ namespace System.Windows.Forms
             return dataGridViewColumn.Index;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Adds a <see cref='System.Windows.Forms.DataGridViewColumn'/> to this collection.</para>
         /// </devdoc>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -225,7 +225,7 @@ namespace System.Windows.Forms
             return Add(dataGridViewTextBoxColumn);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Adds a <see cref='System.Windows.Forms.DataGridViewColumn'/> to this collection.</para>
         /// </devdoc>
         public virtual int Add(DataGridViewColumn dataGridViewColumn)
@@ -405,7 +405,7 @@ namespace System.Windows.Forms
             return actualDisplayIndex;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Checks to see if a DataGridViewColumn is contained in this collection.
         /// </devdoc>
         public virtual bool Contains(DataGridViewColumn dataGridViewColumn)
@@ -896,7 +896,7 @@ namespace System.Windows.Forms
             return this.items.IndexOf(dataGridViewColumn);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Inserts a <see cref='System.Windows.Forms.DataGridViewColumn'/> in this collection.</para>
         /// </devdoc>
         public virtual void Insert(int columnIndex, DataGridViewColumn dataGridViewColumn)

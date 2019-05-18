@@ -15,30 +15,30 @@ namespace System.Windows.Forms {
     using System.IO;
     using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     ///     This is a class that represents the date selection range of a MonthCalendar control.
     /// </devdoc>
     [
     TypeConverterAttribute(typeof(SelectionRangeConverter))
     ]
     public sealed class SelectionRange {
-        /// <devdoc>
+        /// <summary>
         ///     The lower limit of the selection range.
         /// </devdoc>
         private DateTime start = DateTime.MinValue.Date;
 
-        /// <devdoc>
+        /// <summary>
         ///     The upper limit of the selection range.
         /// </devdoc>
         private DateTime end = DateTime.MaxValue.Date;
 
-        /// <devdoc>
+        /// <summary>
         ///     Create a new SelectionRange object with the range [null, null].
         /// </devdoc>
         public SelectionRange() {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Create a new SelectionRange object with the given range.
         /// </devdoc>
         public SelectionRange(DateTime lower, DateTime upper) {
@@ -58,7 +58,7 @@ namespace System.Windows.Forms {
             }                        
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Create a new SelectionRange object given an existing SelectionRange object.
         /// </devdoc>
         public SelectionRange(SelectionRange range) {
@@ -66,7 +66,7 @@ namespace System.Windows.Forms {
             this.end = range.end;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the ending time of this range.
         /// </devdoc>
         public DateTime End {
@@ -78,7 +78,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Starting time of this range
         /// </devdoc>
         public DateTime Start {
@@ -90,7 +90,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns a string representation for this control.
         /// </devdoc>
         public override string ToString() {

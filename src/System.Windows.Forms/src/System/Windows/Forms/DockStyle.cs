@@ -7,7 +7,7 @@ using System.Drawing.Design;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Control Dock values.
     /// When a control is docked to an edge of it's container it will
     /// always be positioned flush against that edge while the container

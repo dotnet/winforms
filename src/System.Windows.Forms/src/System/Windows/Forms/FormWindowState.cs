@@ -6,23 +6,23 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies how a form window is displayed.
     /// </devdoc>
     [ComVisible(true)]
     public enum FormWindowState
     {
-        /// <devdoc>
+        /// <summary>
         /// A default sized window.
         /// </devdoc>
         Normal = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// A minimized window.
         /// </devdoc>
         Minimized = 1,
 
-        /// <devdoc>
+        /// <summary>
         /// A maximized window.
         /// </devdoc>
         Maximized = 2,

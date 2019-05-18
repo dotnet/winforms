@@ -10,7 +10,7 @@ namespace System.Windows.Forms
     using System.Diagnostics;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     ///     This class wrapps a WindowsGraphics and is provided to be able to manipulate WindowsGraphics objects 
     ///     created from a Graphics object in the same way as one created from any other IDeviceContext object,
     ///     which could be a custom one.
@@ -21,7 +21,7 @@ namespace System.Windows.Forms
         IDeviceContext idc;
         WindowsGraphics wg;
 
-        /// <devdoc>
+        /// <summary>
         ///     Constructor that determines how to create the WindowsGraphics, there are three posible cases
         ///     for the IDeviceContext object type:
         ///     1. It is a Graphics object: In this case we need to check the TextFormatFlags to determine whether

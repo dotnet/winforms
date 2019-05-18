@@ -9,48 +9,48 @@ namespace System.Windows.Forms
     [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
     public enum MessageBoxIcon
     {
-        /// <devdoc>
+        /// <summary>
         /// Specifies that the message box contain no symbols.
         /// </devdoc>
         None = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// Specifies that the message box contains a hand symbol.
         /// </devdoc>
         Hand = 0x00000010,
 
-        /// <devdoc>
+        /// <summary>
         /// Specifies that the message box contains a question mark symbol.
         /// </devdoc>
         Question = 0x00000020,
 
-        /// <devdoc>
+        /// <summary>
         /// Specifies that the message box contains an exclamation symbol.
         /// </devdoc>
         Exclamation  = 0x00000030,
 
-        /// <devdoc>
+        /// <summary>
         /// Specifies that the message box contains an asterisk symbol.
         /// </devdoc>
         Asterisk = 0x00000040,
 
-        /// <devdoc>
+        /// <summary>
         /// Specifies that the message box contains a hand icon. This field is
         /// constant.
         /// </devdoc>
         Stop = Hand,
 
-        /// <devdoc>
+        /// <summary>
         /// Specifies that the message box contains a hand icon.
         /// </devdoc>
         Error = Hand,
 
-        /// <devdoc>
+        /// <summary>
         /// Specifies that the message box contains an exclamation icon.
         /// </devdoc>
         Warning = Exclamation,
 
-        /// <devdoc>
+        /// <summary>
         /// Specifies that the message box contains an asterisk icon.
         /// </devdoc>
         Information  = Asterisk,

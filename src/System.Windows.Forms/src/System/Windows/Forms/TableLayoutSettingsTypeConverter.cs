@@ -15,7 +15,7 @@ namespace System.Windows.Forms.Layout {
     
     public class TableLayoutSettingsTypeConverter : TypeConverter {
 
-        /// <devdoc>
+        /// <summary>
         ///      Determines if this converter can convert an object in the given source
         ///      type to the native type of the converter.
         /// </devdoc>
@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Layout {
             return base.CanConvertFrom(context, sourceType);
         }
     
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets a value indicating whether this converter can
         ///       convert an object to the given destination type using the context.</para>
         /// </devdoc>
@@ -37,7 +37,7 @@ namespace System.Windows.Forms.Layout {
             return base.CanConvertTo(context, destinationType);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Converts the given object to the converter's native type.
         /// </devdoc>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {

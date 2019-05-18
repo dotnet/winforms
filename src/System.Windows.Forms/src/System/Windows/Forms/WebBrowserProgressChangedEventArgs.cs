@@ -4,12 +4,12 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.WebBrowser.OnProgressChanged'/> event.
     /// </devdoc>
     public class WebBrowserProgressChangedEventArgs : EventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// Creates an instance of the <see cref='System.Windows.Forms.WebBrowserProgressChangedEventArgs'/> class.
         /// </devdoc>
         public WebBrowserProgressChangedEventArgs(long currentProgress, long maximumProgress)
@@ -18,12 +18,12 @@ namespace System.Windows.Forms
             MaximumProgress = maximumProgress;
         }
         
-        /// <devdoc>
+        /// <summary>
         /// Specifies current number of bytes donwloaded. CurrentProgress/MaximumProgress*100 = progress percentage.
         /// </devdoc>
         public long CurrentProgress { get; }
         
-        /// <devdoc>
+        /// <summary>
         /// Specifies total number of bytes of item being downloaded.
         /// CurrentProgress/MaximumProgress*100 = progress percentage.
         /// </devdoc>

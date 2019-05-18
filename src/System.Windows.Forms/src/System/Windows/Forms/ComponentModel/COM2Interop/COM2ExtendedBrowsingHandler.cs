@@ -8,7 +8,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.Diagnostics;
     using System;
     
-    /// <devdoc>
+    /// <summary>
     /// This is the base class for handlers for COM2 extended browsing interface
     /// such as IPerPropertyBrowsing, etc.
     ///
@@ -21,7 +21,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     /// </devdoc>
     internal abstract class Com2ExtendedBrowsingHandler{
         
-         /// <devdoc>
+         /// <summary>
          /// The interface that this handler managers
          /// such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
          /// </devdoc>
@@ -29,7 +29,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             get;
          }    
          
-         /// <devdoc>
+         /// <summary>
          /// Called to setup the property handlers on a given property
          /// In this method, the handler will add listeners to the events that
          /// the COM2PropertyDescriptor surfaces that it cares about.
@@ -38,7 +38,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             SetupPropertyHandlers(new Com2PropertyDescriptor[]{propDesc});
          }
          
-         /// <devdoc>
+         /// <summary>
          /// Called to setup the property handlers on a given properties
          /// In this method, the handler will add listeners to the events that
          /// the Com2PropertyDescriptor surfaces that it cares about.

@@ -16,14 +16,14 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Reflection;
 
-    /// <devdoc>
+    /// <summary>
     ///      SelectionRangeConverter is a class that can be used to convert
     ///      SelectionRange objects from one data type to another.  Access this
     ///      class through the TypeDescriptor.
     /// </devdoc>
     public class SelectionRangeConverter : TypeConverter {
     
-        /// <devdoc>
+        /// <summary>
         ///      Determines if this converter can convert an object in the given source
         ///      type to the native type of the converter.
         /// </devdoc>
@@ -34,7 +34,7 @@ namespace System.Windows.Forms {
             return base.CanConvertFrom(context, sourceType);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets a value indicating whether this converter can
         ///       convert an object to the given destination type using the context.</para>
         /// </devdoc>
@@ -45,7 +45,7 @@ namespace System.Windows.Forms {
             return base.CanConvertTo(context, destinationType);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///      Converts the given object to the converter's native type.
         /// </devdoc>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
@@ -84,7 +84,7 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <devdoc>
+        /// <summary>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call
         ///      to ToString on the object if the object is valid and if the destination
@@ -127,7 +127,7 @@ namespace System.Windows.Forms {
             return base.ConvertTo(context, culture, value, destinationType);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///      Creates an instance of this type given a set of property values
         ///      for the object.  This is useful for objects that are immutable, but still
         ///      want to provide changable properties.
@@ -148,7 +148,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Determines if changing a value on this object should require a call to
         ///      CreateInstance to create a new value.
         /// </devdoc>
@@ -156,7 +156,7 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the set of properties for this type.  By default, a type has
         ///      does not return any properties.  An easy implementation of this method
         ///      can just call TypeDescriptor.GetProperties for the correct data type.
@@ -166,7 +166,7 @@ namespace System.Windows.Forms {
             return props.Sort(new string[] {"Start", "End"});
         }
        
-        /// <devdoc>
+        /// <summary>
         ///      Determines if this object supports properties.  By default, this
         ///      is false.
         /// </devdoc>

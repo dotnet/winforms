@@ -6,29 +6,29 @@ using System.Drawing;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides ambient property values to top-level controls.
     /// NOTE: internally, this class does double duty as storage for
     /// Control's inherited properties.
     /// </devdoc>
     public sealed class AmbientProperties
     {        
-        /// <devdoc>
+        /// <summary>
         /// Gets the ambient BackColor, or Color.Empty if there is none.
         /// </devdoc>
         public Color BackColor { get; set; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the ambient BackColor, or null if there is none.
         /// </devdoc>
         public Cursor Cursor { get; set; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the ambient Font, or null if there is none.
         /// </devdoc>
         public Font Font { get; set; }
         
-        /// <devdoc>
+        /// <summary>
         /// Gets the ambient ForeColor, or Color.Empty if there is none.
         /// </devdoc>
         public Color ForeColor { get; set; }

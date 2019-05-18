@@ -112,7 +112,7 @@ namespace System.Windows.Forms {
             get { return (TableLayoutControlCollection)base.Controls; }
         }
         
-        /// <devdoc>
+        /// <summary>
         /// This sets the maximum number of columns allowed on this table instead of allocating
         /// actual spaces for these columns. So it is OK to set ColumnCount to Int32.MaxValue without
         /// causing out of memory exception
@@ -129,7 +129,7 @@ namespace System.Windows.Forms {
             }
         }
  
-        /// <devdoc>
+        /// <summary>
         ///       Specifies if a TableLayoutPanel will gain additional rows or columns once its existing cells
         ///       become full.  If the value is 'FixedSize' then the TableLayoutPanel will throw an exception
         ///       when the TableLayoutPanel is over-filled.
@@ -146,7 +146,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This sets the maximum number of rows allowed on this table instead of allocating
         /// actual spaces for these rows. So it is OK to set RowCount to Int32.MaxValue without
         /// causing out of memory exception
@@ -180,7 +180,7 @@ namespace System.Windows.Forms {
             get { return _tableLayoutSettings.ColumnStyles; }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override Control.ControlCollection CreateControlsInstance() {
@@ -275,7 +275,7 @@ namespace System.Windows.Forms {
             Debug.Assert(GetColumn(control) == column, "GetColumn should be the same as we set it");
         }
         
-        /// <devdoc>
+        /// <summary>
         /// get the control which covers the specified row and column. return null if we can't find one
         /// </devdoc>
         public Control GetControlFromPosition (int column, int row) {
@@ -287,7 +287,7 @@ namespace System.Windows.Forms {
             return _tableLayoutSettings.GetPositionFromControl(control);
         }
         
-        /// <devdoc>
+        /// <summary>
         /// This returns an array representing the widths (in pixels) of the columns in the TableLayoutPanel.
         /// </devdoc>        
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -304,7 +304,7 @@ namespace System.Windows.Forms {
              return cw;
         }      
         
-        /// <devdoc>
+        /// <summary>
         /// This returns an array representing the heights (in pixels) of the rows in the TableLayoutPanel.
         /// </devdoc>        
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -332,7 +332,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EventCellPaint, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    When a layout fires, make sure we're painting all of our
         ///    cell borders.
         /// </devdoc>
@@ -454,7 +454,7 @@ namespace System.Windows.Forms {
             ScaleAbsoluteStyles(new SizeF(dx,dy));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Scale this form.  Form overrides this to enforce a maximum / minimum size.
         /// </devdoc>
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified) {
@@ -514,7 +514,7 @@ namespace System.Windows.Forms {
         #endregion 
     }
 
-    /// <devdoc>
+    /// <summary>
     /// Represents a collection of controls on the TableLayoutPanel.
     /// </devdoc>
     [ListBindable(false)]

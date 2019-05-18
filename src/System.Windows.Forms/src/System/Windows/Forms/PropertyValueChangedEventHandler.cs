@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// The event handler class that is invoked when a property
     /// in the grid is modified by the user.
     /// </devdoc>

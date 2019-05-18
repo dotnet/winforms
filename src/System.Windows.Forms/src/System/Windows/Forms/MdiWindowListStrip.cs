@@ -11,7 +11,7 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Globalization;
     
-    /// <devdoc> this is the menu that merges into the MdiWindowListItem
+    /// <summary> this is the menu that merges into the MdiWindowListItem
     ///          in an MDI parent when an MDI child is maximized.
     /// </devdoc>
     internal class MdiWindowListStrip : MenuStrip {
@@ -53,7 +53,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc> Given a form, the items on this toolstrip populate with the mdi children 
+        /// <summary> Given a form, the items on this toolstrip populate with the mdi children 
         ///     with mnemonics 1-9 and More Windows menu item.
         ///     These items can then be merged into a menustrip.
         ///
@@ -133,7 +133,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc> handler for More Windows... This is similar to MenuItem.cs</devdoc>
+        /// <summary> handler for More Windows... This is similar to MenuItem.cs</devdoc>
         private void OnMoreWindowsMenuItemClick(object sender, EventArgs e) {
 
              Form[] forms = mdiParent.MdiChildren;
@@ -155,7 +155,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc> handler for 1 - 9.  This is similar to MenuItem.cs</devdoc>
+        /// <summary> handler for 1 - 9.  This is similar to MenuItem.cs</devdoc>
         private void OnWindowListItemClick(object sender, EventArgs e) {
             ToolStripMenuItem windowListItem = sender as ToolStripMenuItem;
 

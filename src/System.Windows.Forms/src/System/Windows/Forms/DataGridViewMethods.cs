@@ -1472,7 +1472,7 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Assigns a new parent control to the DataGridView.</para>
         /// </devdoc>
         internal override void AssignParent(Control value)
@@ -4134,7 +4134,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Determines which column is the first visible scrolling 
         ///      column given the object's horizontalOffset.
         /// </devdoc>
@@ -5356,7 +5356,7 @@ namespace System.Windows.Forms
             return new DataGridViewControlCollection(this);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Constructs the new instance of the Columns collection objects. Subclasses
         ///     should not call base.CreateColumnsInstance.
         /// </devdoc>
@@ -5366,7 +5366,7 @@ namespace System.Windows.Forms
             return new DataGridViewColumnCollection(this);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Constructs the new instance of the Rows collection objects. Subclasses
         ///     should not call base.CreateRowsInstance.
         /// </devdoc>
@@ -5676,7 +5676,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Draws an XOR region to give UI feedback for Column Resizing.
         ///      This looks just like the Splitter control's UI when resizing.
         /// </devdoc>
@@ -5686,7 +5686,7 @@ namespace System.Windows.Forms
             DrawSplitBar(r);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Draws an XOR region to give UI feedback for Row Resizing.
         ///      This looks just like the Splitter control's UI when resizing.
         /// </devdoc>
@@ -5715,7 +5715,7 @@ namespace System.Windows.Forms
             UnsafeNativeMethods.ReleaseDC(new HandleRef(this, parentHandle), new HandleRef(this, dc));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Draws an XOR region to give UI feedback for Column/Row Resizing.
         ///      This looks just like the Splitter control's UI when resizing.
         /// </devdoc>
@@ -8440,7 +8440,7 @@ namespace System.Windows.Forms
             return Math.Max(1, 4000 / xOffset);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Returns the coordinate of the left edge of the given column. Note that
         ///      the column does not need to be completely visible on the display area.
         ///      Value returned is not necessarily within layout.Data because of the
@@ -9199,7 +9199,7 @@ namespace System.Windows.Forms
             return Math.Max(1, 600 / yOffset);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Returns the coordinate of the upper edge of the given row. Note that
         ///      the row does not need to be completely visible on the display area.
         ///      Value returned is not necessarily within layout.Data because the row 
@@ -9898,7 +9898,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Invalidate the painting region for the column specified.
         /// </devdoc>
         public void InvalidateColumn(int columnIndex)
@@ -9932,7 +9932,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Invalidates the scrollable area of the DataGridView.
         /// </devdoc>
         private void InvalidateInside() 
@@ -9943,7 +9943,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Invalidate the painting region for the row specified.
         /// </devdoc>
         public void InvalidateRow(int rowIndex)
@@ -10228,7 +10228,7 @@ namespace System.Windows.Forms
             return base.IsInputKey(keyData);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Determines if Scrollbars should be visible,
         ///      updates their bounds and the bounds of all
         ///      other regions in the dataGridView's Layout.
@@ -20344,7 +20344,7 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value that indicates whether a key should be processed
         ///       further.
@@ -21701,7 +21701,7 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sorts the current column.
         ///     'UseLegacyAccessibilityFeatures2' accessibility switch 
         ///     should be set to false to enable the feature.
@@ -24225,7 +24225,7 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets a value indicating whether the Tab key should be processed.
         ///    </para>
@@ -24326,7 +24326,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Processes keys for dataGridView navigation.
         ///    </para>
@@ -25613,7 +25613,7 @@ namespace System.Windows.Forms
             base.ResetText();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Re-initializes all tracking related state.
         /// </devdoc>
         private void ResetTrackingState()
@@ -25688,7 +25688,7 @@ namespace System.Windows.Forms
             return (this.dataGridViewOper.Data & DATAGRIDVIEWOPER_keyboardOperationMask) != 0;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Re-initializes all UI related state.
         /// </devdoc>
         internal void ResetUIState(bool useRowShortcut, bool computeVisibleRows)
@@ -29485,7 +29485,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_CONTEXTMENU message
         /// </devdoc>
         internal override void WmContextMenu(ref Message m) 
@@ -29549,7 +29549,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_GETDLGCODE message
         /// </devdoc>
         private void WmGetDlgCode(ref Message m)

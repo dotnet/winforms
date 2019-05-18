@@ -56,7 +56,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing.   HideProperty
         /// such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
         /// </devdoc>

@@ -10,7 +10,7 @@ namespace System.Drawing.Internal
 namespace System.Experimental.Gdi
 #endif
 {
-    /// <devdoc>
+    /// <summary>
     ///    Specifies the map-mode of a device context.
     /// </devdoc>
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY

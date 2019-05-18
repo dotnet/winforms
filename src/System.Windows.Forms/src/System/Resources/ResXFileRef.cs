@@ -20,7 +20,7 @@ namespace System.Resources {
     using System.Runtime.Serialization;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     ///     ResX File Reference class. This allows the developer to represent
     ///     a link to an external resource. When the resource manager asks
     ///     for the value of the resource item, the external resource is loaded.
@@ -32,7 +32,7 @@ namespace System.Resources {
         [OptionalField(VersionAdded = 2)]
         private Encoding textFileEncoding;
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new ResXFileRef that points to the specified file.
         ///     The type refered to by typeName must support a constructor
         ///     that accepts a System.IO.Stream as a parameter.
@@ -52,7 +52,7 @@ namespace System.Resources {
         private void OnDeserialized(StreamingContext ctx) {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new ResXFileRef that points to the specified file.
         ///     The type refered to by typeName must support a constructor
         ///     that accepts a System.IO.Stream as a parameter.
@@ -83,7 +83,7 @@ namespace System.Resources {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    path1+result = path2
         ///   A string which is the relative path difference between path1 and
         ///  path2 such that if path1 and the calculated difference are used

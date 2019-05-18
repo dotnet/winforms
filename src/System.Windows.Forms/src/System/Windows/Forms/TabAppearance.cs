@@ -4,25 +4,25 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// The various tab controls will let you configure their appearance.
     /// This enumeration contains the possible values.
     /// </devdoc>
     public enum TabAppearance
     {
-        /// <devdoc>
+        /// <summary>
         /// Indicates that the tabs look like normal tabs typically seen in Property
         /// page type situations.
         /// </devdoc>
         Normal = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// Indicates that the tabs look like buttons as seen on the taskbar found
         /// in Windows 95 or Windows NT.
         /// </devdoc>
         Buttons = 1,
 
-        /// <devdoc>
+        /// <summary>
         /// Indicates that buttons should be draw flat instead of like regular
         /// windows pushbuttons.
         /// </devdoc>

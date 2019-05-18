@@ -16,7 +16,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Globalization;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Represents a caption in the DataGrid control.
     ///    </para>
@@ -300,7 +300,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Adds a listener for the BackwardClicked event.
         /// </devdoc>
         internal event EventHandler BackwardClicked {
@@ -309,7 +309,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Adds a listener for the CaptionClicked event.
         /// </devdoc>
         internal event EventHandler CaptionClicked {
@@ -439,7 +439,7 @@ namespace System.Windows.Forms {
                                   downButtonSize.Height);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Called by the dataGrid when it needs the caption
         ///      to repaint.
         /// </devdoc>
@@ -607,7 +607,7 @@ namespace System.Windows.Forms {
             return DownButtonDown;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Called by the dataGrid when the mouse is pressed
         ///      inside the caption.
         /// </devdoc>
@@ -628,7 +628,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Called by the dataGrid when the mouse is released
         ///      inside the caption.
         /// </devdoc>
@@ -650,7 +650,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Called by the dataGrid when the mouse leaves
         ///      the caption area.
         /// </devdoc>
@@ -660,7 +660,7 @@ namespace System.Windows.Forms {
             InvalidateLocation(oldLoc);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Called by the dataGrid when the mouse is
         ///      inside the caption.
         /// </devdoc>
@@ -707,7 +707,7 @@ namespace System.Windows.Forms {
             DownButtonDown = pointDown;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Toggles the direction the "Down Button" is pointing.
         /// </devdoc>
         internal bool ToggleDownButtonDirection() {

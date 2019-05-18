@@ -17,7 +17,7 @@ namespace System.Windows.Forms {
     ]
     public class ContextMenuStrip : ToolStripDropDownMenu {
 
-        /// <devdoc>
+        /// <summary>
         /// Summary of ContextMenuStrip.
         /// </devdoc>
         public ContextMenuStrip(IContainer container) : base() {

@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms {
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Specifies how a control should be docked by default when added through the designer.
     ///    </para>
@@ -13,7 +13,7 @@ namespace System.Windows.Forms {
     public sealed class DockingAttribute : Attribute {
         private DockingBehavior dockingBehavior;
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Default constructor.
         ///    </para>
@@ -22,7 +22,7 @@ namespace System.Windows.Forms {
             this.dockingBehavior = DockingBehavior.Never;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Constructor.
         ///    </para>
@@ -31,7 +31,7 @@ namespace System.Windows.Forms {
             this.dockingBehavior = dockingBehavior;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>
         ///    Specifies the default value for the <see cref='System.ComponentModel.DockingAttribute'/>.
         ///    This <see langword='static '/>field is read-only.
@@ -39,7 +39,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static readonly DockingAttribute Default = new DockingAttribute();
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       DockingBehavior property.
         ///    </para>
@@ -50,7 +50,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         public override bool Equals(object obj) {
             if (obj == this) {
@@ -66,7 +66,7 @@ namespace System.Windows.Forms {
             return dockingBehavior.GetHashCode();
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         public override bool IsDefaultAttribute() {
             return (this.Equals(Default));

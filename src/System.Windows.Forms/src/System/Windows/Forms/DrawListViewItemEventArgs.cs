@@ -6,12 +6,12 @@ using System.Drawing;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// This class contains the information a user needs to paint ListView items.
     /// </devdoc>
     public class DrawListViewItemEventArgs : EventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// Creates a new DrawListViewItemEventArgs with the given parameters.
         /// </devdoc>
         public DrawListViewItemEventArgs(Graphics graphics, ListViewItem item, Rectangle bounds, int itemIndex, ListViewItemStates state)
@@ -23,37 +23,37 @@ namespace System.Windows.Forms
             State = state;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Graphics object with which painting should be done.
         /// </devdoc>
         public Graphics Graphics { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The item to be painted.
         /// </devdoc>
         public ListViewItem Item { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The rectangle outlining the area in which the painting should be done.
         /// </devdoc>
         public Rectangle Bounds { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The index of the item that should be painted.
         /// </devdoc>
         public int ItemIndex { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Miscellaneous state information.
         /// </devdoc>
         public ListViewItemStates State { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Causes the item do be drawn by the system instead of owner drawn.
         /// </devdoc>
         public bool DrawDefault { get; set; }
 
-        /// <devdoc>
+        /// <summary>
         /// Draws the item's background.
         /// </devdoc>
         public void DrawBackground()
@@ -64,7 +64,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Draws a focus rectangle in the given bounds, if the item is focused. In Details View, if FullRowSelect is
         /// true, the rectangle is drawn around the whole item, else around the first sub-item's text area.
         /// </devdoc>
@@ -76,7 +76,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Draws the item's text (overloaded) - useful only when View != View.Details
         /// </devdoc>
         public void DrawText()
@@ -84,7 +84,7 @@ namespace System.Windows.Forms
             DrawText(TextFormatFlags.Left);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Draws the item's text (overloaded) - useful only when View != View.Details - takes a TextFormatFlags argument.
         /// </devdoc>
         public void DrawText(TextFormatFlags flags)

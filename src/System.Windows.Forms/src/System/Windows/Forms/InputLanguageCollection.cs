@@ -7,14 +7,14 @@ namespace System.Windows.Forms {
     using System.Collections;
     
     
-    /// <devdoc>
+    /// <summary>
     ///     <para>
     ///       A collection that stores <see cref='System.Windows.Forms.InputLanguage'/> objects.
     ///    </para>
     /// </devdoc>
     public class InputLanguageCollection : ReadOnlyCollectionBase {
         
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         ///       Initializes a new instance of <see cref='System.Windows.Forms.InputLanguageCollection'/> containing any array of <see cref='System.Windows.Forms.InputLanguage'/> objects.
         ///    </para>
@@ -23,7 +23,7 @@ namespace System.Windows.Forms {
             InnerList.AddRange(value);
         }
         
-        /// <devdoc>
+        /// <summary>
         /// <para>Represents the entry at the specified index of the <see cref='System.Windows.Forms.InputLanguage'/>.</para>
         /// </devdoc>
         public InputLanguage this[int index] {
@@ -32,7 +32,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets a value indicating whether the 
         ///    <see cref='System.Windows.Forms.InputLanguageCollection'/> contains the specified <see cref='System.Windows.Forms.InputLanguage'/>.</para>
         /// </devdoc>
@@ -40,7 +40,7 @@ namespace System.Windows.Forms {
             return InnerList.Contains(value);
         }
         
-        /// <devdoc>
+        /// <summary>
         /// <para>Copies the <see cref='System.Windows.Forms.InputLanguageCollection'/> values to a one-dimensional <see cref='System.Array'/> instance at the 
         ///    specified index.</para>
         /// </devdoc>
@@ -48,7 +48,7 @@ namespace System.Windows.Forms {
             InnerList.CopyTo(array, index);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>Returns the index of a <see cref='System.Windows.Forms.InputLanguage'/> in 
         ///       the <see cref='System.Windows.Forms.InputLanguageCollection'/> .</para>
         /// </devdoc>

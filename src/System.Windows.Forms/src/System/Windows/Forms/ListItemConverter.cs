@@ -12,14 +12,14 @@ using System.Reflection;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// ListViewItemConverter is a class that can be used to convert
     /// ListViewItem objects from one data type to another.  Access this
     /// class through the TypeDescriptor.
     /// </devdoc>
     public class ListViewItemConverter : ExpandableObjectConverter
     {
-        /// <devdoc>
+        /// <summary>
         /// Gets a value indicating whether this converter can convert an object to the given
         /// destination type using the context.
         /// </devdoc>
@@ -33,7 +33,7 @@ namespace System.Windows.Forms
             return base.CanConvertTo(context, destinationType);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Converts the given object to another type. The most common types to convert
         /// are to and from a string object. The default implementation will make a call
         /// to ToString on the object if the object is valid and if the destination

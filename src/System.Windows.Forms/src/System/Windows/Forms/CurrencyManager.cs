@@ -13,7 +13,7 @@ namespace System.Windows.Forms {
     using System.Reflection;
     using System.Globalization;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>Manages the position and bindings of a
     ///       list.</para>
     /// </devdoc>
@@ -25,7 +25,7 @@ namespace System.Windows.Forms {
         private bool bound = false;
         private bool shouldBind = true;
         
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         [
             SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields") // We can't make CurrencyManager.listposition internal
@@ -46,12 +46,12 @@ namespace System.Windows.Forms {
         private ItemChangedEventArgs resetEvent = new ItemChangedEventArgs(-1);
         private EventHandler onMetaDataChangedHandler;
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the type of the list.</para>
         /// </devdoc>
         protected Type finalType;
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the
         ///       current item has been
         ///       altered.</para>
@@ -67,7 +67,7 @@ namespace System.Windows.Forms {
             remove => onListChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set the dataSource
@@ -77,7 +77,7 @@ namespace System.Windows.Forms {
             SetDataSource(dataSource);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets a value indicating
         ///       whether items can be added to the list.</para>
         /// </devdoc>
@@ -92,7 +92,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets a value
         ///       indicating whether edits to the list are allowed.</para>
         /// </devdoc>
@@ -107,7 +107,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets a value indicating whether items can be removed from the list.</para>
         /// </devdoc>
         internal bool AllowRemove {
@@ -121,7 +121,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the number of items in the list.</para>
         /// </devdoc>
         public override int Count {
@@ -133,7 +133,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the current item in the list.</para>
         /// </devdoc>
         public override object Current {
@@ -148,7 +148,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the data source of the list.</para>
         /// </devdoc>
         internal override object DataSource {
@@ -198,7 +198,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets a value indicating whether the list is bound to a data source.</para>
         /// </devdoc>
         internal override bool IsBinding {
@@ -214,7 +214,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the list as an object.</para>
         /// </devdoc>
         public IList List {
@@ -229,7 +229,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Gets or sets the position you are at within the list.</para>
         /// </devdoc>
         public override int Position {
@@ -252,7 +252,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets the object at the specified index.</para>
         /// </devdoc>
         internal object this[int index] {
@@ -284,7 +284,7 @@ namespace System.Windows.Forms {
                                                                                                                     // true for pulling data from the controls
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Cancels the current edit operation.</para>
         /// </devdoc>
         public override void CancelCurrentEdit() {
@@ -358,7 +358,7 @@ namespace System.Windows.Forms {
             }                
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Throws an exception if there is no list.</para>
         /// </devdoc>
         protected void CheckEmpty() {
@@ -419,7 +419,7 @@ namespace System.Windows.Forms {
             list.RemoveAt(index);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Ends the current edit operation.</para>
         /// </devdoc>
         public override void EndCurrentEdit() {
@@ -462,7 +462,7 @@ namespace System.Windows.Forms {
             throw new InvalidOperationException(SR.DataBindingPushDataException);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Sets the column to sort by, and the direction of the sort.</para>
         /// </devdoc>
         internal void SetSort(PropertyDescriptor property, ListSortDirection sortDirection) {
@@ -471,7 +471,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets a <see cref='System.ComponentModel.PropertyDescriptor'/> for a CurrencyManager.</para>
         /// </devdoc>
         internal PropertyDescriptor GetSortProperty() {
@@ -481,7 +481,7 @@ namespace System.Windows.Forms {
             return null;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the sort direction of a list.</para>
         /// </devdoc>
         internal ListSortDirection GetSortDirection() {
@@ -491,7 +491,7 @@ namespace System.Windows.Forms {
             return ListSortDirection.Ascending;
         }
                 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Find the position of a desired list item.</para>
         /// </devdoc>
         internal int Find(PropertyDescriptor property, object key, bool keepIndex) {
@@ -514,7 +514,7 @@ namespace System.Windows.Forms {
             return -1;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the name of the list.</para>
         /// </devdoc>
         internal override string GetListName() {
@@ -526,7 +526,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the name of the specified list.</para>
         /// </devdoc>
         protected internal override string GetListName(ArrayList listAccessors) {
@@ -538,13 +538,13 @@ namespace System.Windows.Forms {
             return "";            
         }
         
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         internal override PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors) {
             return ListBindingHelper.GetListItemProperties(this.list, listAccessors);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets the <see cref='T:System.ComponentModel.PropertyDescriptorCollection'/> for
         ///    the list.</para>
         /// </devdoc>
@@ -552,7 +552,7 @@ namespace System.Windows.Forms {
             return GetItemProperties(null);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets the <see cref='T:System.ComponentModel.PropertyDescriptorCollection'/> for the specified list.</para>
         /// </devdoc>
         private void List_ListChanged(object sender, System.ComponentModel.ListChangedEventArgs e) {
@@ -738,7 +738,7 @@ namespace System.Windows.Forms {
             remove => onMetaDataChangedHandler -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Causes the CurrentChanged event to occur. </para>
         /// </devdoc>
         internal protected override void OnCurrentChanged(EventArgs e) {
@@ -779,7 +779,7 @@ namespace System.Windows.Forms {
             _onCurrentItemChangedHandler?.Invoke(this, e);
         }
         
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected virtual void OnItemChanged(ItemChangedEventArgs e) {
             // It is possible that CurrencyManager_PushData will change the position
@@ -816,7 +816,7 @@ namespace System.Windows.Forms {
                 onMetaDataChangedHandler(this,e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected virtual void OnPositionChanged(EventArgs e) {
             // if (!inChangeRecordState) {
@@ -831,7 +831,7 @@ namespace System.Windows.Forms {
             // }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Forces a repopulation of the CurrencyManager
         ///    </para>
@@ -852,7 +852,7 @@ namespace System.Windows.Forms {
             UnwireEvents(list);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Resumes binding of component properties to list items.</para>
         /// </devdoc>
         public override void ResumeBinding() {
@@ -872,7 +872,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Suspends binding.</para>
         /// </devdoc>
         public override void SuspendBinding() {

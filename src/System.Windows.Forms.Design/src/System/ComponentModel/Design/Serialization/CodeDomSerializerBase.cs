@@ -50,7 +50,7 @@ namespace System.ComponentModel.Design.Serialization
             return manager.CreateInstance(type, parameters, name, addToContainer);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This routine returns the correct typename given a CodeTypeReference.  It expands the child typenames
         /// and builds up the clr formatted generic name.  If its not a generic, it just returns BaseType.
         /// </devdoc>
@@ -843,7 +843,7 @@ namespace System.ComponentModel.Design.Serialization
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This is a helper method that will deserialize a given expression.  It deserializes
         ///     the statement by interpreting and executing the CodeDom expression, returning
         ///     the results.

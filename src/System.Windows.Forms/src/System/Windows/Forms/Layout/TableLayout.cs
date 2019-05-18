@@ -160,7 +160,7 @@ namespace System.Windows.Forms.Layout {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// LayoutCore: EntryPoint from LayoutEngine.
         /// Container: IArrangedElement to layout (could be table layout panel but doesnt have to be - eg. ToolStrip)
         /// LayoutEventArgs: args created from PerformLayout.
@@ -209,7 +209,7 @@ namespace System.Windows.Forms.Layout {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// GetPreferredSize:  Called on the container to determine the size that best fits its contents.
         /// Container: IArrangedElement to determine preferredSize (could be table layout panel but doesnt have to be - eg. ToolStrip)
         /// ProposedContstraints: the suggested size that the table layout should fit into.  If either argument is 0, 
@@ -284,7 +284,7 @@ namespace System.Windows.Forms.Layout {
             return (prefSize + cellBorderSize);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// EnsureRowAndColumnAssignments: Sets up Row/Column assignments for all the children of the container 
         ///    - Does nothing if Cache is valid
         ///    - sets RowStart,RowSpan,ColumnStart,ColumnSpan into the LayoutInfo[] collection (containerInfo.ChildrenInfo)
@@ -299,7 +299,7 @@ namespace System.Windows.Forms.Layout {
 
         }
        
-        /// <devdoc>
+        /// <summary>
         /// ExpandLastElement: expands the row/column to fill the rest of the space in the container.
         /// </devdoc>
         private void ExpandLastElement(ContainerInfo containerInfo, Size usedSpace, Size totalSpace) {
@@ -313,7 +313,7 @@ namespace System.Windows.Forms.Layout {
             }
         }
      
-        /// <devdoc>
+        /// <summary>
         /// AssignRowsAndColumns: part of EnsureRowAndColumnAssignments.
         ///    determines the number of rows and columns we need to create
         /// </devdoc>
@@ -379,7 +379,7 @@ namespace System.Windows.Forms.Layout {
 
    
         
-        /// <devdoc>
+        /// <summary>
         /// xAssignRowsAndColumns: part of AssignRowsAndColumns.
         ///   def: fixed element: has a specific row/column assignment (assigned by SetRow,SetColumn, or Add(c,row,column)
         ///   def: flow element: does NOT have a specific row/column assignment.
@@ -535,7 +535,7 @@ namespace System.Windows.Forms.Layout {
 
         }
         
-        /// <devdoc>
+        /// <summary>
         /// GetNextLayoutInfo: part of xAssignRowsAndColumns.
         ///    helper function that walks through the collection picking out the next flow element or fixed element.
         /// </devdoc>
@@ -552,7 +552,7 @@ namespace System.Windows.Forms.Layout {
         }
         
 
-        /// <devdoc>
+        /// <summary>
         /// IsCursorPastInsertionPoint: part of xAssignRowsAndColumns.
         ///       check to see if the user specified location for fixedLayoutInfo has passed the insertion point specified by the cursor
         /// </devdoc>
@@ -570,7 +570,7 @@ namespace System.Windows.Forms.Layout {
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// IsOverlappingWithReservationGrid: part of xAssignRowsAndColumns.
         ///      check to see if the absolutely positioned layoutInfo fits in the reservation grid
         /// </devdoc>
@@ -589,7 +589,7 @@ namespace System.Windows.Forms.Layout {
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// AdvanceUntilFits: part of xAssignRowsAndColumns.
         ///     Advances the position of layoutInfo until we have enough space and do not
         ///     collide with a rowSpanned element.  ColStop will be the column on which the
@@ -602,7 +602,7 @@ namespace System.Windows.Forms.Layout {
             } while(ScanRowForOverlap(maxColumns, reservationGrid, layoutInfo, colStop, layoutInfo.RowStart - prevRow));
         }
 
-        /// <devdoc>
+        /// <summary>
         /// GetColStartAndStop: part of xAssignRowsAndColumns.
         ///     
         /// </devdoc>
@@ -968,7 +968,7 @@ namespace System.Windows.Forms.Layout {
             return (index < styles.Count) && ((TableLayoutStyle)styles[index]).SizeType == SizeType.Absolute;
         }
 
-        ///<devdoc>
+        ///<summary>
         /// Now that we've allocated minimum and maximum sizes to everyone (the strips), distribute the extra space
         /// as according to the Row/Column styles.
         ///</devdoc>
@@ -1299,7 +1299,7 @@ namespace System.Windows.Forms.Layout {
         }        
 
 
-        ///<devdoc>
+        ///<summary>
         /// This class contains layout related information pertaining
         /// to a child control of the container being laid out.
         /// it contains Row,column assignments as well as RowSpan/ColumnSpan.
@@ -1432,7 +1432,7 @@ namespace System.Windows.Forms.Layout {
         }
 
 
-        ///<devdoc>
+        ///<summary>
         /// this class contains layout related information pertaining to the container
         /// being laid out by this instance of the TableLayout.  It contains references
         /// to all the information that should be used from the table layout engine,
@@ -1482,7 +1482,7 @@ namespace System.Windows.Forms.Layout {
 
 
 
-            /// <devdoc>
+            /// <summary>
             /// the container being laid out
             /// </devdoc>
             public IArrangedElement Container {
@@ -1502,7 +1502,7 @@ namespace System.Windows.Forms.Layout {
             }
 
 
-            /// <devdoc>
+            /// <summary>
             /// list of ints that represent the sizes of individual columns
             /// </devdoc>
             public Strip[] Columns {
@@ -1527,7 +1527,7 @@ namespace System.Windows.Forms.Layout {
 
             }
 
-            /// <devdoc>
+            /// <summary>
             /// Same as TableLayoutSettings.RowCount
             /// </devdoc>
             public int MaxRows {
@@ -1544,7 +1544,7 @@ namespace System.Windows.Forms.Layout {
                 }                
             }
 
-            /// <devdoc>
+            /// <summary>
             /// Same as TableLayoutSettings.ColumnCount
             /// </devdoc>
             public int MaxColumns {
@@ -1589,7 +1589,7 @@ namespace System.Windows.Forms.Layout {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Gets/sets the grow style for our containerinfo.  This
             ///     is used to determine if we will add rows/cols/or throw
             ///     when the table gets full.
@@ -1639,7 +1639,7 @@ namespace System.Windows.Forms.Layout {
             }
 
 
-            /// <devdoc>
+            /// <summary>
             /// gets cached information about the children of the control being layed out.
             /// </devdoc>
             public LayoutInfo[] ChildrenInfo {

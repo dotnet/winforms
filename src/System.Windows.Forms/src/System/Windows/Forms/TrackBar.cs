@@ -18,7 +18,7 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
     using System.Globalization;
     
-    /// <devdoc>
+    /// <summary>
     ///     The TrackBar is a scrollable control similar to the ScrollBar, but
     ///     has a different UI.  You can configure ranges through which it should
     ///     scroll, and also define increments for off-button clicks.  It can be
@@ -60,7 +60,7 @@ namespace System.Windows.Forms {
 
         private bool rightToLeftLayout = false;        
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new TrackBar control with a default range of 0..10 and
         ///     ticks shown every value.
         /// </devdoc>
@@ -71,7 +71,7 @@ namespace System.Windows.Forms {
             requestedDim = PreferredDimension;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     Indicates if the control is being auto-sized.  If true, the
         ///     TrackBar will adjust either its height or width [depending on
         ///     orientation] to make sure that only the required amount of
@@ -152,7 +152,7 @@ namespace System.Windows.Forms {
             remove => base.BackgroundImageLayoutChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This is called when creating a window.  Inheriting classes can override
         ///     this to add extra functionality, but should not forget to first call
         ///     base.getCreateParams() to make sure the control continues to work
@@ -198,7 +198,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
         /// </devdoc>
@@ -208,7 +208,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This property is overridden and hidden from statement completion
         ///     on controls that are based on Win32 Native Controls.
         /// </devdoc>
@@ -238,7 +238,7 @@ namespace System.Windows.Forms {
             remove => base.FontChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The current foreground color of the TrackBar.  Note that users
         ///     are unable to change this.  It is always Color.WINDOWTEXT
         /// </devdoc>
@@ -273,7 +273,7 @@ namespace System.Windows.Forms {
             remove => base.ImeModeChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The number of ticks by which the TrackBar will change when an
         ///     event considered a "large change" occurs.  These include, Clicking the
         ///     mouse to the side of the button, or using the PgUp/PgDn keys on the
@@ -303,7 +303,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The upper limit of the range this TrackBar is working with.
         /// </devdoc>
         [
@@ -326,7 +326,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The lower limit of the range this TrackBar is working with.
         /// </devdoc>
         [
@@ -349,7 +349,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>The orientation for this TrackBar. Valid values are from
         ///       the Orientation enumeration. The control currently supports being
         ///       oriented horizontally and vertically.</para>
@@ -413,7 +413,7 @@ namespace System.Windows.Forms {
             add => base.PaddingChanged += value; 
             remove => base.PaddingChanged -= value; }
 
-        /// <devdoc>
+        /// <summary>
         ///     Little private routine that helps with auto-sizing.
         /// </devdoc>
         private int PreferredDimension {
@@ -426,7 +426,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Redraw control, if the handle's created
         /// </devdoc>
         private void RedrawControl()
@@ -440,7 +440,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
         //      and the RightToLeft property is true, mirroring will be turned on on the trackbar.
@@ -467,7 +467,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The number of ticks by which the TrackBar will change when an
         ///     event considered a "small change" occurs.  These are most commonly
         ///     seen by using the arrow keys to move the TrackBar thumb around.
@@ -511,7 +511,7 @@ namespace System.Windows.Forms {
             remove => base.TextChanged -= value;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     Indicates how the TrackBar control will draw itself.  This affects
         ///     both where the ticks will be drawn in relation to the moveable thumb,
         ///     and how the thumb itself will be drawn.  values are taken from the
@@ -541,7 +541,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates just how many ticks will be drawn.  For a TrackBar with a
         ///     range of 0..100, it might be impractical to draw all 100 ticks for a
         ///     very small control.  Passing in a value of 5 here would only draw
@@ -568,7 +568,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The current location of the TrackBar thumb.  This value must
         ///     be between the lower and upper limits of the TrackBar range, of course.
         /// </devdoc>
@@ -637,7 +637,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_SCROLL, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     TrackBar Onpaint.
         /// </devdoc>
         /// <hideinheritance/>
@@ -653,7 +653,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_VALUECHANGED, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Enforces autoSizing
         /// </devdoc>
         private void AdjustSize() {
@@ -671,7 +671,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Handles tasks required when the control is being initialized.
         /// </devdoc>
         public void BeginInit() {
@@ -699,7 +699,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override void CreateHandle() {
             if (!RecreatingHandle) {
@@ -715,7 +715,7 @@ namespace System.Windows.Forms {
             base.CreateHandle();
         }
         
-        /// <devdoc>
+        /// <summary>
         ///      Called when initialization of the control is complete.
         /// </devdoc>
         public void EndInit() {
@@ -745,7 +745,7 @@ namespace System.Windows.Forms {
             }
         }                                               
 
-        /// <devdoc>
+        /// <summary>
         ///      Handling special input keys, such as pgup, pgdown, home, end, etc...
         /// </devdoc>
         protected override bool IsInputKey(Keys keyData) {
@@ -760,7 +760,7 @@ namespace System.Windows.Forms {
             return base.IsInputKey(keyData);
         }
         
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override void OnHandleCreated(EventArgs e) {
             base.OnHandleCreated(e);
@@ -789,7 +789,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Actually fires the "scroll" event.  Inheriting classes should override
         ///     this method in favor of actually adding an EventHandler for this
         ///     event.  Inheriting classes should not forget to call
@@ -800,7 +800,7 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this,e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseWheel'/> event.</para>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -858,7 +858,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Actually fires the "valueChanged" event.
         /// </devdoc>
         protected virtual void OnValueChanged(EventArgs e) {
@@ -866,7 +866,7 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this,e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This method is called by the control when any property changes. Inheriting
         ///     controls can overide this method to get property change notification on
         ///     basic properties. Inherting controls must call base.propertyChanged.
@@ -881,7 +881,7 @@ namespace System.Windows.Forms {
             RedrawControl();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Overrides Control.setBoundsCore to enforce autoSize.
         /// </devdoc>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
@@ -906,7 +906,7 @@ namespace System.Windows.Forms {
             base.SetBoundsCore(x, y, width, height, specified);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Lets you set the the entire range for the TrackBar control at once.
         ///     The values passed are both the lower and upper limits to the range
         ///     with which the control will work.
@@ -980,7 +980,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns a string representation for this control.
         /// </devdoc>
         public override string ToString() {
@@ -989,7 +989,7 @@ namespace System.Windows.Forms {
             return s + ", Minimum: " + Minimum.ToString(CultureInfo.CurrentCulture) + ", Maximum: " + Maximum.ToString(CultureInfo.CurrentCulture) + ", Value: " + value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The button's window procedure.  Inheriting classes can override this
         ///     to add extra functionality, but should not forget to call
         ///     base.wndProc(m); to ensure the button continues to function properly.

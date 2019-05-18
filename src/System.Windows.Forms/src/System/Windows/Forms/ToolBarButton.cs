@@ -19,7 +19,7 @@ namespace System.Windows.Forms {
     using System.Globalization;
 
 
-    /// <devdoc>
+    /// <summary>
     ///    <para> 
     ///       Represents a Windows toolbar button.</para>
     /// </devdoc>
@@ -48,24 +48,24 @@ namespace System.Windows.Forms {
         // These variables below are used by the ToolBar control to help
         // it manage some information about us.
 
-        /// <devdoc>
+        /// <summary>
         ///     If this button has a string, what it's index is in the ToolBar's
         ///     internal list of strings.  Needs to be package protected.
         /// </devdoc>
         internal IntPtr stringIndex = (IntPtr)(-1);
 
-        /// <devdoc>
+        /// <summary>
         ///     Our parent ToolBar control.
         /// </devdoc>
         internal ToolBar parent;
 
-        /// <devdoc>
+        /// <summary>
         ///     For DropDown buttons, we can optionally show a
         ///     context menu when the button is dropped down.
         /// </devdoc>
         internal Menu dropDownMenu = null;
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.ToolBarButton'/> class.</para>
         /// </devdoc>
         public ToolBarButton() {
@@ -109,7 +109,7 @@ namespace System.Windows.Forms {
             }
         }
  
-        /// <devdoc>
+        /// <summary>
         ///    <para> 
         ///       Indicates the menu to be displayed in
         ///       the drop-down toolbar button.</para>
@@ -134,7 +134,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates whether the button is enabled or not.</para>
         /// </devdoc>
         [
@@ -160,7 +160,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Indicates the index
         ///       value of the image assigned to the button.</para>
         /// </devdoc>
@@ -187,7 +187,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Indicates the index
         ///       value of the image assigned to the button.</para>
         /// </devdoc>
@@ -210,7 +210,7 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///     Name of this control. The designer will set this to the same
         ///     as the programatic Id "(name)" of the control - however this
         ///     property has no bearing on the runtime aspects of this control.
@@ -234,7 +234,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates the toolbar control that the toolbar button is assigned to. This property is 
         ///       read-only.</para>
         /// </devdoc>
@@ -247,7 +247,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> 
         ///       Indicates whether a toggle-style toolbar button
         ///       is partially pushed.</para>
@@ -277,7 +277,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates whether a toggle-style toolbar button is currently in the pushed state.</para>
         /// </devdoc>
         [
@@ -300,7 +300,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates the bounding rectangle for a toolbar button. This property is 
         ///       read-only.</para>
         /// </devdoc>
@@ -315,7 +315,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Indicates the style of the
         ///       toolbar button.</para>
         /// </devdoc>
@@ -356,7 +356,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Indicates the text that is displayed on the toolbar button.</para>
         /// </devdoc>
         [
@@ -384,7 +384,7 @@ namespace System.Windows.Forms {
 
          
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> 
         ///       Indicates
         ///       the text that appears as a tool tip for a control.</para>
@@ -403,7 +403,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> 
         ///       Indicates whether the toolbar button
         ///       is visible.</para>
@@ -425,7 +425,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This is somewhat nasty -- by default, the windows ToolBar isn't very
         ///     clever about setting the width of buttons, and has a very primitive
         ///     algorithm that doesn't include for things like drop down arrows, etc.
@@ -483,7 +483,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override void Dispose(bool disposing) {
             if (disposing) {
@@ -497,7 +497,7 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Finds out index in the parent.
         /// </devdoc>
         private int FindButtonIndex() {
@@ -541,7 +541,7 @@ namespace System.Windows.Forms {
             return pushed;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns a TBBUTTON object that represents this ToolBarButton.
         /// </devdoc>
         internal NativeMethods.TBBUTTON GetTBBUTTON(int commandId) {
@@ -584,7 +584,7 @@ namespace System.Windows.Forms {
             return button;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns a TBBUTTONINFO object that represents this ToolBarButton.
         /// </devdoc>
         internal NativeMethods.TBBUTTONINFO GetTBBUTTONINFO(bool updateText, int newCommandId) {
@@ -681,13 +681,13 @@ namespace System.Windows.Forms {
             value = newString.ToString();
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         public override string ToString() {
             return "ToolBarButton: " + Text + ", Style: " + Style.ToString("G");
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     When a button property changes and the parent control is created,
         ///     we need to make sure it gets the new button information.
         ///     If Text was changed, call the next overload.
@@ -696,7 +696,7 @@ namespace System.Windows.Forms {
             UpdateButton(recreate, false, true);        
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     When a button property changes and the parent control is created,
         ///     we need to make sure it gets the new button information.
         /// </devdoc>

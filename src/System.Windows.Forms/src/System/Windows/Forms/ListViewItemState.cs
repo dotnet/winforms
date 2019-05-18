@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Gives state information about a ListView item/sub-item. Used with owner draw. 
     /// </devdoc>
     [Flags]

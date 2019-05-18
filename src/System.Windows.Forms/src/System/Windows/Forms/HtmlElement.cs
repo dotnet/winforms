@@ -647,7 +647,7 @@ namespace System.Windows.Forms
             remove => ElementShim.RemoveHandler(EventMouseUp, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Fires when the mouse enters the element</para>
         /// </devdoc>
         public event HtmlElementEventHandler MouseEnter
@@ -656,7 +656,7 @@ namespace System.Windows.Forms
             remove => ElementShim.RemoveHandler(EventMouseEnter, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Fires when the mouse leaves the element</para>
         /// </devdoc>
         public event HtmlElementEventHandler MouseLeave
@@ -1033,7 +1033,7 @@ namespace System.Windows.Forms
         }
 
 
-        ///<devdoc>
+        ///<summary>
         /// HtmlElementShim - this is the glue between the DOM eventing mechanisms
         ///                    and our CLR callbacks.  
         ///             

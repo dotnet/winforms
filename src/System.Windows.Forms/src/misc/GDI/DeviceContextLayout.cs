@@ -12,7 +12,7 @@ namespace System.Experimental.Gdi
 {
     using System;
 
-    /// <devdoc>
+    /// <summary>
     ///    Specifies the layout of a device context.
     /// </devdoc>
     [Flags]
@@ -23,27 +23,27 @@ namespace System.Experimental.Gdi
 #endif
     enum DeviceContextLayout
     {   
-        /// <devdoc>
+        /// <summary>
         ///     Right to left.
         /// </devdoc>
         Normal = 0x00000000,
 
-        /// <devdoc>
+        /// <summary>
         ///     Right to left. LAYOUT_RTL
         /// </devdoc>
         RightToLeft = 0x00000001,
 
-        /// <devdoc>
+        /// <summary>
         ///     Bottom to top. LAYOUT_BTT
         /// </devdoc>
         BottomToTop = 0x00000002,
         
-        /// <devdoc>
+        /// <summary>
         ///     Vertical before horizontal. LAYOUT_VBH
         /// </devdoc>
         VerticalBeforeHorizontal = 0x00000004,
 
-        /// <devdoc>
+        /// <summary>
         ///     Disables any reflection during BitBlt and StretchBlt operations. LAYOUT_BITMAPORIENTATIONPRESERVED
         /// </devdoc>
         BitmapOrientationPreserved = 0x00000008

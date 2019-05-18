@@ -12,7 +12,7 @@ namespace System.Windows.Forms
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para> Base class for the columns in a data grid view.</para>
     /// </devdoc>
     [
@@ -51,7 +51,7 @@ namespace System.Windows.Forms
 
         private static readonly int PropDataGridViewColumnValueType = PropertyStore.CreateKey();
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewColumn'/> class.
         ///    </para>

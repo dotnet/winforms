@@ -21,7 +21,7 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
     using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Encapsulates a
     ///       standard
@@ -56,7 +56,7 @@ namespace System.Windows.Forms {
         internal int flatSystemStylePaddingWidth = FlatSystemStylePaddingWidth;
         internal int flatSystemStyleMinimumHeight = FlatSystemStyleMinimumHeight;
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.RadioButton'/>
         ///       class.
@@ -76,7 +76,7 @@ namespace System.Windows.Forms {
             SetAutoSizeMode(AutoSizeMode.GrowAndShrink);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets or sets a value indicating whether the <see cref='System.Windows.Forms.RadioButton.Checked'/>
         /// value and the appearance of
         /// the control automatically change when the control is clicked.</para>
@@ -99,7 +99,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the appearance of the radio
         ///       button
@@ -148,7 +148,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_APPEARANCECHANGED, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or
         ///       sets the location of the check box portion of the
@@ -181,7 +181,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the
         ///       control is checked or not.
@@ -227,7 +227,7 @@ namespace System.Windows.Forms {
             remove => base.MouseDoubleClick -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override CreateParams CreateParams {
             get {
@@ -253,7 +253,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
         /// </devdoc>
@@ -332,7 +332,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the value indicating whether the user can give the focus to this
         ///       control using the TAB key.
@@ -352,7 +352,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Occurs when the
         ///       value of the <see cref='System.Windows.Forms.RadioButton.Checked'/>
@@ -365,7 +365,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_CHECKEDCHANGED, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Constructs the new instance of the accessibility object for this control. Subclasses
         ///       should not call base.CreateAccessibilityObject.
@@ -375,7 +375,7 @@ namespace System.Windows.Forms {
             return new RadioButtonAccessibleObject(this);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override void OnHandleCreated(EventArgs e) {
             base.OnHandleCreated(e);
@@ -387,7 +387,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.CheckBox.CheckedChanged'/>
         ///       event.
@@ -400,7 +400,7 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     We override this to implement the autoCheck functionality.
         /// </devdoc>
         protected override void OnClick(EventArgs e) {
@@ -410,7 +410,7 @@ namespace System.Windows.Forms {
             base.OnClick(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override void OnEnter(EventArgs e) {
             // Just like the Win32 RadioButton, fire a click if the
@@ -438,7 +438,7 @@ namespace System.Windows.Forms {
             base.OnEnter(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         private void PerformAutoUpdates(bool tabbedInto) {
             if (autoCheck) {
@@ -465,7 +465,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Removes tabstops from all radio buttons, other than the one that currently has the focus.
         /// </devdoc>
         private void WipeTabStops(bool tabbedInto) {
@@ -506,7 +506,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnMouseUp'/> event.
         ///       
@@ -531,7 +531,7 @@ namespace System.Windows.Forms {
             base.OnMouseUp(mevent);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Generates a <see cref='System.Windows.Forms.Control.Click'/> event for the
         ///       button, simulating a click by a user.
@@ -549,7 +549,7 @@ namespace System.Windows.Forms {
                 
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected internal override bool ProcessMnemonic(char charCode) {
             if (UseMnemonic && IsMnemonic(charCode, Text) && CanSelect) {
@@ -564,7 +564,7 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns a string representation for this control.
         /// </devdoc>
         public override string ToString() {
@@ -573,7 +573,7 @@ namespace System.Windows.Forms {
             return s + ", Checked: " + Checked.ToString();
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         [System.Runtime.InteropServices.ComVisible(true)]        
         public class RadioButtonAccessibleObject : ButtonBaseAccessibleObject {

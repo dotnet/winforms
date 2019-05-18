@@ -12,7 +12,7 @@ namespace System.Windows.Forms
     using System.Windows.Forms.Internal;
     using System.Globalization;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>Identifies a cell in the dataGridView.</para>
     /// </devdoc>
     public class DataGridViewTextBoxCell : DataGridViewCell

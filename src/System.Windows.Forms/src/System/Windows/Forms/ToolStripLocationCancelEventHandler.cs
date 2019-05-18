@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Represents the method that will handle the event raised when canceling an
     /// OnLocationChanging event for ToolStrips.
     /// </devdoc>

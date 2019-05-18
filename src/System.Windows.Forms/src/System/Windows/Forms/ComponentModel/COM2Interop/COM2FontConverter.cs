@@ -13,7 +13,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using Microsoft.Win32;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     /// This class maps an OLE_COLOR to a managed Color editor.
     /// </devdoc>
     internal class Com2FontConverter : Com2DataTypeToManagedDataTypeConverter {
@@ -27,7 +27,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
              }
          }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the managed type that this editor maps the property type to.
         /// </devdoc>
         public override Type ManagedType {
@@ -36,7 +36,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Converts the native value into a managed value
         /// </devdoc>
         public override object ConvertNativeToManaged(object nativeValue, Com2PropertyDescriptor pd) {
@@ -79,7 +79,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return lastFont;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Converts the managed value into a native value
         /// </devdoc>
         public override object ConvertManagedToNative(object managedValue, Com2PropertyDescriptor pd, ref bool cancelSet) {

@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Describes a delegate for an event that has a ControlEventArgs as
     /// a parameter.
     /// </devdoc>

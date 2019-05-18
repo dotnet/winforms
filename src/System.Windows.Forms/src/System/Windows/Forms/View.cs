@@ -4,17 +4,17 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies how list items are displayed in a <see cref='System.Windows.Forms.ListView'/> control.
     /// </devdoc>
     public enum View
     {
-        /// <devdoc>
+        /// <summary>
         /// Each item appears as a full-sized icon with a label below it.
         /// </devdoc>
         LargeIcon = NativeMethods.LVS_ICON,
 
-        /// <devdoc>
+        /// <summary>
         /// Each item appears on a seperate line with further
         /// information about each item arranged in columns. The left
         /// most column
@@ -25,19 +25,19 @@ namespace System.Windows.Forms
         /// </devdoc>
         Details = NativeMethods.LVS_REPORT,
 
-        /// <devdoc>
+        /// <summary>
         /// Each item appears as a small icon with a label to its right.
         /// </devdoc>
         SmallIcon = NativeMethods.LVS_SMALLICON,
 
-        /// <devdoc>
+        /// <summary>
         /// Each item
         /// appears as a small icon with a label to its right.
         /// Items are arranged in columns with no column headers.
         /// </devdoc>
         List = NativeMethods.LVS_LIST,
 
-        /// <devdoc>
+        /// <summary>
         ///   Tile view.
         /// </devdoc>
         Tile = NativeMethods.LV_VIEW_TILE,

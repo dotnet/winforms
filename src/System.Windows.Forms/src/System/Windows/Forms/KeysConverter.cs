@@ -16,7 +16,7 @@ namespace System.Windows.Forms {
     using System.Reflection;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <devdoc>
+    /// <summary>
     /// <para>Provides a type converter to convert <see cref='System.Windows.Forms.Keys'/> objects to and from various 
     ///    other representations.</para>
     /// </devdoc>
@@ -80,7 +80,7 @@ namespace System.Windows.Forms {
             AddKey("9", Keys.D9);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///  Access to a lookup table of name/value pairs for keys.  These are localized
         ///  names.
         /// </devdoc>
@@ -104,7 +104,7 @@ namespace System.Windows.Forms {
             }
         }
     
-        /// <devdoc>
+        /// <summary>
         ///    Determines if this converter can convert an object in the given source
         ///    type to the native type of the converter.
         /// </devdoc>
@@ -115,7 +115,7 @@ namespace System.Windows.Forms {
             return base.CanConvertFrom(context, sourceType);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets a value indicating whether this converter can
         ///       convert an object to the given destination type using the context.</para>
         /// </devdoc>
@@ -126,14 +126,14 @@ namespace System.Windows.Forms {
             return base.CanConvertTo(context, destinationType);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Compares two key values for equivalence.</para>
         /// </devdoc>
         public int Compare(object a, object b) {
             return string.Compare(ConvertToString(a), ConvertToString(b), false, CultureInfo.InvariantCulture);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Converts the given object to the converter's native type.
         /// </devdoc>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
@@ -213,7 +213,7 @@ namespace System.Windows.Forms {
             return base.ConvertFrom(context, culture, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Converts the given object to another type.  The most common types to convert
         ///    are to and from a string object.  The default implementation will make a call
         ///    to ToString on the object if the object is valid and if the destination
@@ -315,7 +315,7 @@ namespace System.Windows.Forms {
             return base.ConvertTo(context, culture, value, destinationType);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    Retrieves a collection containing a set of standard values
         ///    for the data type this validator is designed for.  This
         ///    will return null if the data type does not support a
@@ -338,7 +338,7 @@ namespace System.Windows.Forms {
             return values;
         }
     
-        /// <devdoc>
+        /// <summary>
         ///    Determines if the list of standard values returned from
         ///    GetStandardValues is an exclusive list.  If the list
         ///    is exclusive, then no other values are valid, such as
@@ -350,7 +350,7 @@ namespace System.Windows.Forms {
             return false;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    Determines if this object supports a standard set of values
         ///    that can be picked from a list.
         /// </devdoc>

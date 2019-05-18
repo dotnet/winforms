@@ -67,7 +67,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Go to a specific Uri in the history</para>
         /// </devdoc>
         [SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings")]
@@ -76,7 +76,7 @@ namespace System.Windows.Forms {
             Go(url.ToString());
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Go to a specific url(string) in the history</para>
         /// </devdoc>
         /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have 
@@ -90,7 +90,7 @@ namespace System.Windows.Forms {
             this.NativeOmHistory.Go(ref loc);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Go to the specified position in the history list</para>
         /// </devdoc>
         public void Go(int relativePosition) {

@@ -4,32 +4,32 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// This enum is used to specify the action that caused a TreeViewEventArgs.
     /// </devdoc>
     public enum TreeViewAction
     {
-        /// <devdoc>
+        /// <summary>
         /// The action is unknown.
         /// </devdoc>
         Unknown = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// The event was caused by a keystroke.
         /// </devdoc>
         ByKeyboard = 1,
 
-        /// <devdoc>
+        /// <summary>
         /// The event was caused by a mouse click.
         /// </devdoc>
         ByMouse = 2,
         
-        /// <devdoc>
+        /// <summary>
         /// The tree node is collapsing.
         /// </devdoc>
         Collapse = 3,
         
-        /// <devdoc>
+        /// <summary>
         /// The tree node is expanding.
         /// </devdoc>
         Expand = 4,

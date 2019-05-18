@@ -15,7 +15,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.Windows.Forms.Design;
     using System.Globalization;
 
-    /// <devdoc>
+    /// <summary>
     /// </devdoc>
     internal class Com2PropertyBuilderUITypeEditor : Com2ExtendedUITypeEditor {
 
@@ -29,7 +29,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             this.bldrType = type;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Takes the value returned from valueAccess.getValue() and modifies or replaces
         ///     the value, passing the result into valueAccess.setValue().  This is where
         ///     an editor can launch a modal dialog or create a drop down editor to allow
@@ -83,7 +83,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the editing style of the Edit method.  If the method
         ///      is not supported, this will return None.
         /// </devdoc>

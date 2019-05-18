@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Represents the method that will handle the SearchForVirtualItem event of a ListView.
     /// </devdoc>
     public delegate void SearchForVirtualItemEventHandler(object sender, SearchForVirtualItemEventArgs e);

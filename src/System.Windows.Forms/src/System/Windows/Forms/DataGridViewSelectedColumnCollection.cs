@@ -117,7 +117,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Adds a <see cref='System.Windows.Forms.DataGridViewCell'/> to this collection.</para>
         /// </devdoc>
         internal int Add(DataGridViewColumn dataGridViewColumn)
@@ -155,7 +155,7 @@ namespace System.Windows.Forms
             throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Checks to see if a DataGridViewCell is contained in this collection.
         /// </devdoc>
         public bool Contains(DataGridViewColumn dataGridViewColumn)

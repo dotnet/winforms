@@ -55,7 +55,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing.   HideProperty
         /// such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
         /// </devdoc>
@@ -214,7 +214,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 this.arraysFetched = false;
              }
 
-             /// <devdoc>
+             /// <summary>
              /// Retrieve a copy of the value array
              /// </devdoc>
              public override object[] Values {
@@ -224,7 +224,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 }
              }
     
-             /// <devdoc>
+             /// <summary>
              /// Retrieve a copy of the nme array.
              /// </devdoc>
              public override string[] Names {

@@ -12,7 +12,7 @@ namespace System.Windows.Forms
     using System.Globalization;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <devdoc>
+    /// <summary>
     /// <para>Represents a collection of selected <see cref='System.Windows.Forms.DataGridViewCell'/> objects in the <see cref='System.Windows.Forms.DataGridView'/> 
     /// control.</para>
     /// </devdoc>
@@ -120,7 +120,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Adds a <see cref='System.Windows.Forms.DataGridViewCell'/> to this collection.</para>
         /// </devdoc>
         internal int Add(DataGridViewRow dataGridViewRow)
@@ -156,7 +156,7 @@ namespace System.Windows.Forms
             throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Checks to see if a DataGridViewCell is contained in this collection.
         /// </devdoc>
         public bool Contains(DataGridViewRow dataGridViewRow)

@@ -22,7 +22,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
     using Message = System.Windows.Forms.Message;
     using System.Drawing.Drawing2D;    
 
-    /// <devdoc>
+    /// <summary>
     ///     Implements a dialog that is displayed when an unhandled exception occurs in
     ///     a thread. This dialog's width is defined by the summary message
     ///     in the top pane. We don't restrict dialog width in any way.  
@@ -98,7 +98,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             detailsBtn.Image = expandImage;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Called when the details button is clicked.
         /// </devdoc>
         private void DetailsClick(object sender, EventArgs devent) {
@@ -127,7 +127,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Tells whether the current resources for this dll have been
         ///     localized for a RTL language.
         /// </devdoc>

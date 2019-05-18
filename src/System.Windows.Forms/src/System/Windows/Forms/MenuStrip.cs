@@ -188,7 +188,7 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Called from ToolStripManager.ProcessMenuKey.  Fires MenuActivate event and sets focus.
         /// </devdoc>
         internal bool OnMenuKey() {
@@ -233,7 +233,7 @@ namespace System.Windows.Forms {
 
 
         }
-        /// <devdoc>
+        /// <summary>
         /// Summary of WndProc.
         /// </devdoc>
         /// <param name=m></param>

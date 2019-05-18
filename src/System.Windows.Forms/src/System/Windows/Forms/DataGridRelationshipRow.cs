@@ -16,7 +16,7 @@ namespace System.Windows.Forms {
     using System.Collections;
     using System.Globalization;
 
-    /// <devdoc>
+    /// <summary>
     ///      This class fully encapsulates the painting logic for a row
     ///      appearing in a DataGrid.
     /// </devdoc>
@@ -197,7 +197,7 @@ namespace System.Windows.Forms {
             return cellBounds;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Given an origin, this procedure returns
         ///      a rectangle that describes the location of an outline box.
         /// </devdoc>
@@ -269,7 +269,7 @@ namespace System.Windows.Forms {
             return relRect;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Called by the DataGrid when a click occurs in the row's client
         ///      area.  The coordinates are normalized to the rectangle's top
         ///      left point.
@@ -369,7 +369,7 @@ namespace System.Windows.Forms {
             base.OnMouseLeft();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Called by the DataGrid when a keypress occurs on a row with "focus."
         /// </devdoc>
         public override bool OnKeyPress(Keys keyData) {
@@ -501,7 +501,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Paints the row.
         /// </devdoc>
         public override int Paint(Graphics g, Rectangle bounds, Rectangle trueRowBounds, int firstVisibleColumn, int numVisibleColumns) {
@@ -620,7 +620,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Paints the relationships below the data area.
         /// </devdoc>
         private void PaintRelations(Graphics g, Rectangle bounds, Rectangle trueRowBounds,
@@ -988,7 +988,7 @@ namespace System.Windows.Forms {
                 ((DataGrid.DataGridAccessibleObject) DataGrid.AccessibilityObject).NotifyClients(AccessibleEvents.Selection, DataGrid.CurrentCellAccIndex);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Navigate to the next or previous grid entry.
             /// </devdoc>
             public override AccessibleObject Navigate(AccessibleNavigation navdir) {

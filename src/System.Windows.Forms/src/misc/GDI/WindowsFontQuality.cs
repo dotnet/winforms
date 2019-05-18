@@ -10,7 +10,7 @@ namespace System.Drawing.Internal
 namespace System.Experimental.Gdi
 #endif
 {
-    /// <devdoc>
+    /// <summary>
     ///    Device capability indexes - See Win32 GetDeviceCaps().
     /// </devdoc>
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
@@ -35,18 +35,18 @@ namespace System.Experimental.Gdi
         /// fonts are synthesized if necessary.
         Proof = IntNativeMethods.PROOF_QUALITY,
 
-        /// <devdoc>
+        /// <summary>
         /// Font is never antialiased.
         /// </devdoc>
         NonAntiAliased = IntNativeMethods.NONANTIALIASED_QUALITY,
 
-        /// <devdoc>
+        /// <summary>
         /// Font is always antialiased if the font supports it and the size of the font is not
         /// too small or too large. 
         /// </devdoc>
         AntiAliased = IntNativeMethods.ANTIALIASED_QUALITY,
 
-        /// <devdoc>
+        /// <summary>
         /// The following situations do not support ClearType antialiasing: 
         /// - Text is rendered on a printer. 
         /// - Display set for 256 colors or less. 
@@ -57,7 +57,7 @@ namespace System.Experimental.Gdi
         /// - The font has tuned embedded bitmaps, for any font sizes that contain the embedded bitmaps. 
         ///   For example, this occurs commonly in East Asian fonts. 
         /// If set, text is rendered (when possible) using ClearType antialiasing method. 
-        /// <devdoc>
+        /// <summary>
         ClearType        = IntNativeMethods.CLEARTYPE_QUALITY,
 
         ClearTypeNatural = IntNativeMethods.CLEARTYPE_NATURAL_QUALITY

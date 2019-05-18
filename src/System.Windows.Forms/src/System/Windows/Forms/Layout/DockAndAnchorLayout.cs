@@ -528,7 +528,7 @@ namespace System.Windows.Forms.Layout {
             return CommonProperties.GetAutoSize(container);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Updates the Anchor information based on the controls current bounds.
         ///     This should only be called when the parent control changes or the
         ///     anchor mode changes.

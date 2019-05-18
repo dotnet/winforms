@@ -16,7 +16,7 @@ namespace System.Windows.Forms
     using System.Globalization;
     using System.Diagnostics.CodeAnalysis;
     
-    /// <devdoc>
+    /// <summary>
     /// <para>Represents a collection of <see cref='System.Windows.Forms.DataGridViewRow'/> objects in the <see cref='System.Windows.Forms.DataGrid'/> 
     /// control.</para>
     /// </devdoc>
@@ -211,7 +211,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the DataGridViewRow with the specified index.
         /// </devdoc>
         public DataGridViewRow this[int index] 
@@ -409,7 +409,7 @@ namespace System.Windows.Forms
             return AddInternal(false /*newRow*/, values);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Adds a <see cref='System.Windows.Forms.DataGridViewRow'/> to this collection.</para>
         /// </devdoc>
         public virtual int Add(DataGridViewRow dataGridViewRow)
@@ -928,7 +928,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Checks to see if a DataGridViewRow is contained in this collection.
         /// </devdoc>
         public virtual bool Contains(DataGridViewRow dataGridViewRow)
@@ -1428,7 +1428,7 @@ namespace System.Windows.Forms
             Insert(rowIndex, dataGridViewRow);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Inserts a <see cref='System.Windows.Forms.DataGridViewRow'/> to this collection.</para>
         /// </devdoc>
         public virtual void Insert(int rowIndex, DataGridViewRow dataGridViewRow)
@@ -1794,7 +1794,7 @@ namespace System.Windows.Forms
 #endif
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Inserts a range of <see cref='System.Windows.Forms.DataGridViewRow'/> to this collection.</para>
         /// </devdoc>
         public virtual void InsertRange(int rowIndex, params DataGridViewRow[] dataGridViewRows)
@@ -2831,7 +2831,7 @@ namespace System.Windows.Forms
             private DataGridViewRowCollection owner;
             private int current;
                 
-            /// <devdoc>
+            /// <summary>
             ///     Creates a new enumerator that will enumerate over the rows and unshare the accessed rows if needed.
             /// </devdoc>
             public UnsharingRowEnumerator(DataGridViewRowCollection owner) 
@@ -2840,7 +2840,7 @@ namespace System.Windows.Forms
                 this.current = -1;
             }
                 
-            /// <devdoc>
+            /// <summary>
             ///     Moves to the next element, or returns false if at the end.
             /// </devdoc>
             bool IEnumerator.MoveNext() 
@@ -2858,7 +2858,7 @@ namespace System.Windows.Forms
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///     Resets the enumeration back to the beginning.
             /// </devdoc>
             void IEnumerator.Reset() 
@@ -2866,7 +2866,7 @@ namespace System.Windows.Forms
                 this.current = -1;
             }
     
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the current value in the enumerator.
             /// </devdoc>
             object IEnumerator.Current 

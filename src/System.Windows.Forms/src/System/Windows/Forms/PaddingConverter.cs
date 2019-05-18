@@ -12,7 +12,7 @@ namespace System.Windows.Forms
 {
     public class PaddingConverter : TypeConverter
     {
-        /// <devdoc>
+        /// <summary>
         /// Determines if this converter can convert an object in the given source type to
         /// the native type of the converter.
         /// </devdoc>
@@ -36,7 +36,7 @@ namespace System.Windows.Forms
             return base.CanConvertTo(context, destinationType);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Converts the given object to the converter's native type.
         /// </devdoc>
         [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes", Justification = "ConvertFromString returns an object")]

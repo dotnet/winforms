@@ -6,72 +6,72 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides a format-independent mechanism for transferring data.
     /// </devdoc>
     [ComVisible(true)]
     public interface IDataObject
     {
-        /// <devdoc>
+        /// <summary>
         /// Retrieves the data associated with the specified data format, using
         /// autoConvert to determine whether to convert the data to the  format.
         /// </devdoc>
         object GetData(string format, bool autoConvert);
 
-        /// <devdoc>
+        /// <summary>
         ///  Retrieves the data associated with the specified data format.
         /// </devdoc>
         object GetData(string format);
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieves the data associated with the specified class type format.
         /// </devdoc>
         object GetData(Type format);
 
-        /// <devdoc>
+        /// <summary>
         /// Stores the specified data and its associated format in  this instance,
         /// using autoConvert to specify whether the data can be converted to
         /// another format.</para>
         /// </devdoc>
         void SetData(string format, bool autoConvert, object data);
 
-        /// <devdoc>
+        /// <summary>
         /// Stores the specified data and its associated format in this instance.
         /// </devdoc>
         void SetData(string format, object data);
 
-        /// <devdoc>
+        /// <summary>
         ///  Stores the specified data and its associated class type in this
         /// instance.
         /// </devdoc>
         void SetData(Type format, object data);
 
-        /// <devdoc>
+        /// <summary>
         /// Stores the specified data in this instance, using the class of the
         /// data for the format.
         /// </devdoc>
         void SetData(object data);
 
-        /// <devdoc>
+        /// <summary>
         /// Determines whether data stored in this instance is  associated with the
         /// specified format, using autoConvert to determine whether to convert the
         /// data to the format.
         /// </devdoc>
         bool GetDataPresent(string format, bool autoConvert);
 
-        /// <devdoc>
+        /// <summary>
         /// Determines whether data stored in this instance is associated with, or
         /// can be converted to, the specified format.
         /// </devdoc>
         bool GetDataPresent(string format);
 
-        /// <devdoc>
+        /// <summary>
         /// Determines whether data stored in this instance is associated with, or
         /// can be converted to, the specified format.
         /// </devdoc>
         bool GetDataPresent(Type format);
 
-        /// <devdoc>
+        /// <summary>
         /// Gets a list of all formats that data stored in this instance is
         /// associated with or can be converted to, using autoConvert to determine
         /// whether to retrieve all formats that the data can be converted to or'
@@ -79,7 +79,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         string[] GetFormats(bool autoConvert);
 
-        /// <devdoc>
+        /// <summary>
         /// Gets a list of all formats that data stored in this instance is
         /// associated with or can be converted to.
         /// </devdoc>

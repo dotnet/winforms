@@ -77,7 +77,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>Retrieves the child control with the specified key.</para>
         /// </devdoc>
         public virtual TreeNode this[string key] {
@@ -130,7 +130,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new child node under this node.  Child node is positioned after siblings.
         /// </devdoc>
         public virtual TreeNode Add(string text) {
@@ -141,7 +141,7 @@ namespace System.Windows.Forms {
 
         // <-- NEW ADD OVERLOADS IN WHIDBEY
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new child node under this node.  Child node is positioned after siblings.
         /// </devdoc>
         public virtual TreeNode Add(string key, string text) {
@@ -151,7 +151,7 @@ namespace System.Windows.Forms {
             return tn;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new child node under this node.  Child node is positioned after siblings.
         /// </devdoc>
         public virtual TreeNode Add(string key, string text, int imageIndex) {
@@ -162,7 +162,7 @@ namespace System.Windows.Forms {
             return tn;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new child node under this node.  Child node is positioned after siblings.
         /// </devdoc>
         public virtual TreeNode Add(string key, string text, string imageKey) {
@@ -173,7 +173,7 @@ namespace System.Windows.Forms {
             return tn;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new child node under this node.  Child node is positioned after siblings.
         /// </devdoc>
         public virtual TreeNode Add(string key, string text, int imageIndex, int selectedImageIndex) {
@@ -183,7 +183,7 @@ namespace System.Windows.Forms {
             return tn;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new child node under this node.  Child node is positioned after siblings.
         /// </devdoc>
         public virtual TreeNode Add(string key, string text, string imageKey, string selectedImageKey) {
@@ -262,7 +262,7 @@ namespace System.Windows.Forms {
             return foundTreeNodes;
         }
 
-		/// <devdoc>
+		/// <summary>
 		///     Adds a new child node to this node.  Child node is positioned after siblings.
 		/// </devdoc>
 		public virtual int Add(TreeNode node) {
@@ -327,7 +327,7 @@ namespace System.Windows.Forms {
             return IndexOf(node) != -1;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
         /// </devdoc>
         public virtual bool ContainsKey(string key) {
@@ -363,7 +363,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
         /// </devdoc>
         public virtual int  IndexOfKey(string key) {
@@ -394,7 +394,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Inserts a new child node on this node.  Child node is positioned as specified by index.
         /// </devdoc>
         public virtual void Insert(int index, TreeNode node) {
@@ -427,7 +427,7 @@ namespace System.Windows.Forms {
 
         // <-- NEW INSERT OVERLOADS IN WHIDBEY
 
-        /// <devdoc>
+        /// <summary>
         ///     Inserts a new child node on this node.  Child node is positioned as specified by index.
         /// </devdoc>
         public virtual TreeNode Insert(int index, string text) {
@@ -436,7 +436,7 @@ namespace System.Windows.Forms {
             return tn;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Inserts a new child node on this node.  Child node is positioned as specified by index.
         /// </devdoc>
         public virtual TreeNode Insert(int index, string key, string text) {
@@ -446,7 +446,7 @@ namespace System.Windows.Forms {
             return tn;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Inserts a new child node on this node.  Child node is positioned as specified by index.
         /// </devdoc>
         public virtual TreeNode Insert(int index, string key, string text, int imageIndex) {
@@ -457,7 +457,7 @@ namespace System.Windows.Forms {
             return tn;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Inserts a new child node on this node.  Child node is positioned as specified by index.
         /// </devdoc>
         public virtual TreeNode Insert(int index, string key, string text, string imageKey) {
@@ -468,7 +468,7 @@ namespace System.Windows.Forms {
             return tn;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Inserts a new child node on this node.  Child node is positioned as specified by index.
         /// </devdoc>
         public virtual TreeNode Insert(int index, string key, string text, int imageIndex, int selectedImageIndex) {
@@ -478,7 +478,7 @@ namespace System.Windows.Forms {
             return tn;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Inserts a new child node on this node.  Child node is positioned as specified by index.
         /// </devdoc>
         public virtual TreeNode Insert(int index, string key, string text, string imageKey, string selectedImageKey) {
@@ -492,14 +492,14 @@ namespace System.Windows.Forms {
 
         // END - NEW INSERT OVERLOADS IN WHIDBEY -->
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>Determines if the index is valid for the collection.</para>
         /// </devdoc>
         private bool IsValidIndex(int index) {
             return ((index >= 0) && (index < this.Count));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Remove all nodes from the tree view.
         /// </devdoc>
         public virtual void Clear() {
@@ -526,7 +526,7 @@ namespace System.Windows.Forms {
             this[index].Remove();
         }
        
-        /// <devdoc>
+        /// <summary>
         ///     <para>Removes the child control with the specified key.</para>
         /// </devdoc>
         public virtual void RemoveByKey(string key) {

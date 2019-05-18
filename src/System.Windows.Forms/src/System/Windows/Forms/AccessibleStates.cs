@@ -4,101 +4,101 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies values representing possible states for an accessible object
     /// </devdoc>
     [Flags]
     public enum AccessibleStates
     {
-        /// <devdoc>
+        /// <summary>
         /// No state.
         /// </devdoc>
         None = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// An unavailable object.
         /// </devdoc>
         Unavailable =     0x1,
 
-        /// <devdoc>
+        /// <summary>
         /// A selected object.
         /// </devdoc>
         Selected =        0x2,
 
-        /// <devdoc>
+        /// <summary>
         /// An object with the keyboard focus.
         /// </devdoc>
         Focused =         0x4,
 
-        /// <devdoc>
+        /// <summary>
         /// A pressed object.
         /// </devdoc>
         Pressed =         0x8,
 
-        /// <devdoc>
+        /// <summary>
         /// An object with a selected check box.
         /// </devdoc>
         Checked =    0x10,
 
-        /// <devdoc>
+        /// <summary>
         /// A three-state check box or toolbar button whose state is indeterminate.
         /// The check box is neither checked nor unchecked and it is in the third
         /// or mixed state.
         /// </devdoc>
         Mixed =      0x20,
 
-        /// <devdoc>
+        /// <summary>
         /// A three-state check box or toolbar button whose state is indeterminate.
         /// The check box is neither checked nor unchecked and it is in the third
         /// or mixed state.
         /// </devdoc>
         Indeterminate =      Mixed,
 
-        /// <devdoc>
+        /// <summary>
         /// A read-only object.
         /// </devdoc>
         ReadOnly =   0x40,
 
-        /// <devdoc>
+        /// <summary>
         /// The object is hot-tracked by the mouse, meaning its appearance is
         /// highlighted to indicate the mouse pointer is located over it.
         /// </devdoc>
         HotTracked = 0x80,
 
-        /// <devdoc>
+        /// <summary>
         /// The default button or menu item.
         /// </devdoc>
         Default =    0x100,
 
-        /// <devdoc>
+        /// <summary>
         /// Children of the object that are items in an outline or tree structure
         /// are displayed.
         /// </devdoc>
         Expanded =   0x200,
 
-        /// <devdoc>
+        /// <summary>
         /// Children of the object that are items in an outline or tree structure
         /// are hidden.
         /// </devdoc>
         Collapsed =  0x400,
 
-        /// <devdoc>
+        /// <summary>
         /// A control that cannot accept input in its current condition.
         /// </devdoc>
         Busy =       0x800,
 
-        /// <devdoc>
+        /// <summary>
         /// The object is not fixed to the boundary of its parent object, and
         /// does not move automatically along with the parent.
         /// </devdoc>
         Floating =   0x1000,
 
-        /// <devdoc>
+        /// <summary>
         /// An object with scrolling or moving text or graphics.
         /// </devdoc>
         Marqueed =   0x2000,
 
-        /// <devdoc>
+        /// <summary>
         /// The object has a rapidly or constantly changing appearance. Graphics
         /// that are occasionally animated, but not always, should be defined as
         /// <see cref='AccessibleRole.Graphic'/>|<see cref='AccessibleStates.Animated'/>.
@@ -107,28 +107,28 @@ namespace System.Windows.Forms
         /// </devdoc>
         Animated =   0x4000,
 
-        /// <devdoc>
+        /// <summary>
         /// An object that is currently invisible.
         /// </devdoc>
         Invisible =  0x8000,
 
-        /// <devdoc>
+        /// <summary>
         /// No on-screen representation. A sound or alert object would have this
         /// state, or a hidden window that is never made visible.
         /// </devdoc>
         Offscreen =  0x10000,
 
-        /// <devdoc>
+        /// <summary>
         /// A sizable object.
         /// </devdoc>
         Sizeable =   0x20000,
 
-        /// <devdoc>
+        /// <summary>
         /// A movable object.
         /// </devdoc>
         Moveable =   0x40000,
 
-        /// <devdoc>
+        /// <summary>
         /// The object or child can use text-to-speech (TTS) to describe itself. A
         /// speech-based accessibility aid should not announce information when an
         /// object with this state has the focus because the object will
@@ -136,32 +136,32 @@ namespace System.Windows.Forms
         /// </devdoc>
         SelfVoicing =        0x80000,
 
-        /// <devdoc>
+        /// <summary>
         /// The object is on the active window and can receive keyboard focus.
         /// </devdoc>
         Focusable =  0x100000,
 
-        /// <devdoc>
+        /// <summary>
         /// An object that can accept selection.
         /// </devdoc>
         Selectable = 0x200000,
 
-        /// <devdoc>
+        /// <summary>
         /// A linked object that has not been previously selected.
         /// </devdoc>
         Linked =     0x400000,
 
-        /// <devdoc>
+        /// <summary>
         /// A linked object that has previously been selected.
         /// </devdoc>
         Traversed =  0x800000,
 
-        /// <devdoc>
+        /// <summary>
         /// An object that accepts multiple selected items.
         /// </devdoc>
         MultiSelectable =    0x1000000,
 
-        /// <devdoc>
+        /// <summary>
         /// Alters the selection so that all objects between the selection anchor,
         /// which is the object with the keyboard focus, and this object take on
         /// the anchor object's selection state. If the anchor object is not
@@ -179,12 +179,12 @@ namespace System.Windows.Forms
         /// </devdoc>
         ExtSelectable =      0x2000000,
 
-        /// <devdoc>
+        /// <summary>
         /// Low-priority information that may not be important to the user.
         /// </devdoc>
         AlertLow =  0x4000000,
 
-        /// <devdoc>
+        /// <summary>
         /// Important information that does not need to be conveyed to the user
         /// immediately. For example, when a battery level indicator is starting
         /// to reach a low level, it could generate a medium-level alert. Blind
@@ -195,7 +195,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         AlertMedium =       0x8000000,
 
-        /// <devdoc>
+        /// <summary>
         /// Important information that should be conveyed to the user immediately.
         /// For example, a battery level indicator reaching a critical low level
         /// would transition to this state, in which case a blind access utility
@@ -207,12 +207,12 @@ namespace System.Windows.Forms
         /// </devdoc>
         AlertHigh = 0x10000000,
 
-        /// <devdoc>
+        /// <summary>
         /// A password-protected edit control.
         /// </devdoc>
         Protected =  0x20000000,
 
-        /// <devdoc>
+        /// <summary>
         /// Object displays a pop-up menu or window when invoked.
         /// </devdoc>
         HasPopup =  0x40000000,

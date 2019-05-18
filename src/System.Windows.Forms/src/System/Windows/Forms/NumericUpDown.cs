@@ -15,7 +15,7 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Windows.Forms.Layout;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>Represents a Windows up-down control that displays numeric values.</para>
     /// </devdoc>
     [
@@ -42,12 +42,12 @@ namespace System.Windows.Forms {
         //
         //////////////////////////////////////////////////////////////
 
-        /// <devdoc>
+        /// <summary>
         ///     The number of decimal places to display.
         /// </devdoc>
         private int decimalPlaces = DefaultDecimalPlaces;
 
-        /// <devdoc>
+        /// <summary>
         ///     The amount to increment by.
         /// </devdoc>
         private decimal increment = DefaultIncrement;
@@ -99,7 +99,7 @@ namespace System.Windows.Forms {
         //////////////////////////////////////////////////////////////
 
 		
-        /// <devdoc>
+        /// <summary>
         ///     Specifies the acceleration information.
         /// </devdoc>
         [
@@ -115,7 +115,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets the number of decimal places to display in the up-down control.</para>
         /// </devdoc>
         [
@@ -138,7 +138,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or
         ///       sets a value indicating whether the up-down control should
         ///       display the value it contains in hexadecimal format.</para>
@@ -160,7 +160,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets the value
         ///       to increment or
         ///       decrement the up-down control when the up or down buttons are clicked.</para>
@@ -190,7 +190,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets the maximum value for the up-down control.</para>
         /// </devdoc>
         [
@@ -216,7 +216,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets the minimum allowed value for the up-down control.</para>
         /// </devdoc>
         [
@@ -260,7 +260,7 @@ namespace System.Windows.Forms {
             add => base.PaddingChanged += value; 
             remove => base.PaddingChanged -= value; }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines whether the UpDownButtons have been pressed for enough time to activate acceleration.
         /// </devdoc>
         private bool Spinning {
@@ -269,7 +269,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       The text displayed in the control.
         ///    </para>
@@ -295,7 +295,7 @@ namespace System.Windows.Forms {
             remove => base.TextChanged -= value;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets a value indicating whether a thousands
         ///       separator is displayed in the up-down control when appropriate.</para>
         /// </devdoc>
@@ -320,7 +320,7 @@ namespace System.Windows.Forms {
         /*
          * The current value of the control
          */
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets the value
         ///       assigned to the up-down control.</para>
         /// </devdoc>
@@ -361,7 +361,7 @@ namespace System.Windows.Forms {
         //
         //////////////////////////////////////////////////////////////
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Occurs when the <see cref='System.Windows.Forms.NumericUpDown.Value'/> property has been changed in some way.
         ///    </para>
@@ -372,7 +372,7 @@ namespace System.Windows.Forms {
             remove => onValueChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Handles tasks required when the control is being initialized.
         /// </devdoc>
         public void BeginInit() {
@@ -402,7 +402,7 @@ namespace System.Windows.Forms {
             return new NumericUpDownAccessibleObject(this);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Decrements the value of the up-down control.
         ///    </para>
@@ -435,7 +435,7 @@ namespace System.Windows.Forms {
             Value = newValue;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Called when initialization of the control is complete.
         ///    </para>
@@ -446,7 +446,7 @@ namespace System.Windows.Forms {
             UpdateEditText();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Overridden to set/reset acceleration variables.
         /// </devdoc>
         protected override void OnKeyDown(KeyEventArgs e) {
@@ -457,7 +457,7 @@ namespace System.Windows.Forms {
             base.OnKeyDown(e);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     Overridden to set/reset acceleration variables.
         /// </devdoc>
         protected override void OnKeyUp(KeyEventArgs e) {
@@ -468,7 +468,7 @@ namespace System.Windows.Forms {
             base.OnKeyUp(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Restricts the entry of characters to digits (including hex), the negative sign,
         ///       the decimal point, and editing keystrokes (backspace).
@@ -508,7 +508,7 @@ namespace System.Windows.Forms {
             }
         }
                                   
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.NumericUpDown.OnValueChanged'/> event.</para>
         /// </devdoc>        
         protected virtual void OnValueChanged(EventArgs e) {
@@ -528,21 +528,21 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///   Overridden to start/end acceleration.
         /// </devdoc>
         internal override void OnStartTimer() {
             StartAcceleration();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///   Overridden to start/end acceleration.
         /// </devdoc>
         internal override void OnStopTimer() {
             StopAcceleration();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Converts the text displayed in the up-down control to a
         ///       numeric value and evaluates it.
@@ -574,7 +574,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Updates the index of the UpDownNumericAcceleration entry to use (if needed).
         /// </devdoc>
         private void SetNextAcceleration() {
@@ -610,7 +610,7 @@ namespace System.Windows.Forms {
             Value = DefaultValue;
         }
         
-        /// <devdoc>
+        /// <summary>
         /// <para>Indicates whether the <see cref='System.Windows.Forms.NumericUpDown.Increment'/> property should be
         ///    persisted.</para>
         /// </devdoc>
@@ -618,21 +618,21 @@ namespace System.Windows.Forms {
             return !Increment.Equals(NumericUpDown.DefaultIncrement);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Indicates whether the <see cref='System.Windows.Forms.NumericUpDown.Maximum'/> property should be persisted.</para>
         /// </devdoc>
         private bool ShouldSerializeMaximum() {
             return !Maximum.Equals(NumericUpDown.DefaultMaximum);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Indicates whether the <see cref='System.Windows.Forms.NumericUpDown.Minimum'/> property should be persisted.</para>
         /// </devdoc>
         private bool ShouldSerializeMinimum() {
             return !Minimum.Equals(NumericUpDown.DefaultMinimum);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Indicates whether the <see cref='System.Windows.Forms.NumericUpDown.Value'/> property should be persisted.</para>
         /// </devdoc>
         private bool ShouldSerializeValue() {
@@ -640,14 +640,14 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <devdoc>
+        /// <summary>
         ///     Records when UpDownButtons are pressed to enable acceleration.
         /// </devdoc>
         private void StartAcceleration() {
             this.buttonPressedStartTime = DateTime.Now.Ticks;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Reset when UpDownButtons are pressed.
         /// </devdoc>
         private void StopAcceleration() {
@@ -655,7 +655,7 @@ namespace System.Windows.Forms {
             this.buttonPressedStartTime        = InvalidValue;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Provides some interesting info about this control in String form.
         /// </devdoc>
         public override string ToString() {
@@ -665,7 +665,7 @@ namespace System.Windows.Forms {
             return s;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Increments the value of the up-down control.
         ///    </para>
@@ -711,7 +711,7 @@ namespace System.Windows.Forms {
             return text;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays the current value of the up-down control in the appropriate format.
         ///    </para>
@@ -746,7 +746,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Validates and updates
         ///       the text displayed in the up-down control.

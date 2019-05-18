@@ -13,7 +13,7 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Collections.Specialized;
     
-    /// <devdoc>
+    /// <summary>
     ///      TreeViewImageIndexConverter is a class that can be used to convert
     ///      image index values one data type to another.
     /// </devdoc>
@@ -25,7 +25,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Converts the given value object to a 32-bit signed integer object.
         ///    </para>
@@ -46,7 +46,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call
         ///      to ToString on the object if the object is valid and if the destination
@@ -72,7 +72,7 @@ namespace System.Windows.Forms {
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves a collection containing a set of standard values
         ///      for the data type this validator is designed for.  This
         ///      will return null if the data type does not support a

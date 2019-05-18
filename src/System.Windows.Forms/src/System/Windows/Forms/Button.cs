@@ -19,7 +19,7 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Internal;
     using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>Represents a
     ///       Windows button.</para>
     /// </devdoc>
@@ -30,7 +30,7 @@ namespace System.Windows.Forms {
     ]
     public class Button : ButtonBase, IButtonControl {
 
-        /// <devdoc>
+        /// <summary>
         ///     The dialog result that will be sent to the parent dialog form when
         ///     we are clicked.
         /// </devdoc>
@@ -38,13 +38,13 @@ namespace System.Windows.Forms {
 
         private const int InvalidDimensionValue = int.MinValue;
 
-        /// <devdoc>
+        /// <summary>
         ///     For buttons whose FaltStyle = FlatStyle.Flat, this property specifies the size, in pixels  
         ///     of the border around the button.
         /// </devdoc>
         private Size systemSize = new Size(InvalidDimensionValue, InvalidDimensionValue);
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.Button'/>
         ///       class.
@@ -57,7 +57,7 @@ namespace System.Windows.Forms {
                      false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Allows the control to optionally shrink when AutoSize is true.
         /// </devdoc>
         [
@@ -128,7 +128,7 @@ namespace System.Windows.Forms {
             return AutoSizeMode == AutoSizeMode.GrowAndShrink ? paddedSize : LayoutUtils.UnionSizes(paddedSize, Size);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       This is called when creating a window. Inheriting classes can overide
         ///       this to add extra functionality, but should not forget to first call
@@ -154,7 +154,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value that is returned to the
         ///       parent form when the button
@@ -179,7 +179,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseEnter'/> event.
         ///    </para>
@@ -188,7 +188,7 @@ namespace System.Windows.Forms {
             base.OnMouseEnter(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseLeave'/> event.
         ///    </para>
@@ -211,7 +211,7 @@ namespace System.Windows.Forms {
             remove => base.MouseDoubleClick -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Notifies the <see cref='System.Windows.Forms.Button'/>
         ///       whether it is the default button so that it can adjust its appearance
@@ -225,7 +225,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       This method actually raises the Click event. Inheriting classes should
         ///       override this if they wish to be notified of a Click event. (This is far
@@ -253,7 +253,7 @@ namespace System.Windows.Forms {
             base.OnFontChanged(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnMouseUp'/> event.
         ///       
@@ -302,7 +302,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Generates a <see cref='System.Windows.Forms.Control.Click'/> event for a
         ///       button.
@@ -322,7 +322,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Lets a control process mnmemonic characters. Inheriting classes can
         ///       override this to add extra functionality, but should not forget to call
@@ -339,7 +339,7 @@ namespace System.Windows.Forms {
             return base.ProcessMnemonic(charCode);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Provides some interesting information for the Button control in
         ///       String form.
@@ -351,7 +351,7 @@ namespace System.Windows.Forms {
             return s + ", Text: " + Text;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The button's window procedure.  Inheriting classes can override this
         ///     to add extra functionality, but should not forget to call
         ///     base.wndProc(m); to ensure the button continues to function properly.

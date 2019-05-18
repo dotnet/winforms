@@ -14,7 +14,7 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     ///      Encapsulates the state of a DataGrid that changes when the
     ///      user navigates back and forth through ADO.NET data relations.
     /// </devdoc>
@@ -72,7 +72,7 @@ namespace System.Windows.Forms {
             return dgs;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Called by a DataGrid when it wishes to preserve its
         ///      transient state in the current DataGridState object.
         /// </devdoc>
@@ -105,7 +105,7 @@ namespace System.Windows.Forms {
             this.ListManager.MetaDataChanged -= new EventHandler(DataSource_MetaDataChanged);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Called by a grid when it wishes to match its transient
         ///      state with the current DataGridState object.
         /// </devdoc>
@@ -206,7 +206,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Navigate to the next or previous grid entry.
             /// </devdoc>
             public override AccessibleObject Navigate(AccessibleNavigation navdir) {

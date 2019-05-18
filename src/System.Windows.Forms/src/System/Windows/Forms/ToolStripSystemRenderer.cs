@@ -40,7 +40,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Draw the background color
         /// </devdoc>
         private static VisualStyleRenderer VisualStyleRenderer {
@@ -58,7 +58,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fill the item's background as bounded by the rectangle
         /// </devdoc>
         private static void FillBackground(Graphics g, Rectangle bounds, Color backColor) {
@@ -73,7 +73,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     returns true if you are required to dispose the pen
         /// </devdoc>
         private static bool GetPen(Color color, ref Pen pen) {
@@ -86,25 +86,25 @@ namespace System.Windows.Forms {
                   return true;
               }
         }
-        /// <devdoc>
+        /// <summary>
         ///     translates the ToolStrip item state into a toolbar state, which is something the renderer understands
         /// </devdoc>
         private static int GetItemState(ToolStripItem item) {
             return (int)GetToolBarState(item);
         }
-        /// <devdoc>
+        /// <summary>
         ///     translates the ToolStrip item state into a toolbar state, which is something the renderer understands
         /// </devdoc>
         private static int GetSplitButtonDropDownItemState(ToolStripSplitButton item) {
             return (int)GetSplitButtonToolBarState(item, true);
         }
-        /// <devdoc>
+        /// <summary>
         ///     translates the ToolStrip item state into a toolbar state, which is something the renderer understands
         /// </devdoc>
         private static int GetSplitButtonItemState(ToolStripSplitButton item) {
             return (int)GetSplitButtonToolBarState(item, false);
         }
-        /// <devdoc>
+        /// <summary>
         ///     translates the ToolStrip item state into a toolbar state, which is something the renderer understands
         /// </devdoc>
         private static ToolBarState GetSplitButtonToolBarState(ToolStripSplitButton button, bool dropDownButton) {
@@ -134,7 +134,7 @@ namespace System.Windows.Forms {
             return state;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     translates the ToolStrip item state into a toolbar state, which is something the renderer understands
         /// </devdoc>
         private static ToolBarState GetToolBarState(ToolStripItem item) {
@@ -163,7 +163,7 @@ namespace System.Windows.Forms {
   
 
                 
-        /// <devdoc>
+        /// <summary>
         /// Draw the ToolStrip background.  ToolStrip users should override this if they want to draw differently.
         /// </devdoc>
         protected override void OnRenderToolStripBackground(ToolStripRenderEventArgs e) {  
@@ -207,7 +207,7 @@ namespace System.Windows.Forms {
 
         }
         
-        /// <devdoc>
+        /// <summary>
         /// Draw the border around the ToolStrip.  This should be done as the last step.
         /// </devdoc>
         protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e) {  
@@ -243,7 +243,7 @@ namespace System.Windows.Forms {
            }
         }
         
-        /// <devdoc>
+        /// <summary>
         /// Draw the grip.  ToolStrip users should override this if they want to draw differently.
         /// </devdoc>
         protected override void OnRenderGrip(ToolStripGripRenderEventArgs e) {
@@ -290,32 +290,32 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Draw the items background
         /// </devdoc>
         protected override void OnRenderItemBackground(ToolStripItemRenderEventArgs e) {
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Draw the items background
         /// </devdoc>
         protected override void OnRenderImageMargin(ToolStripRenderEventArgs e) {
         }
-        /// <devdoc>
+        /// <summary>
         /// Draw the button background
         /// </devdoc>
         protected override void OnRenderButtonBackground(ToolStripItemRenderEventArgs e) {
             RenderItemInternal(e);
         }
    
-        /// <devdoc>
+        /// <summary>
         /// Draw the button background
         /// </devdoc>
         protected override void OnRenderDropDownButtonBackground(ToolStripItemRenderEventArgs e) {
             RenderItemInternal(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Draw the button background
         /// </devdoc>
         protected override void OnRenderOverflowButtonBackground(ToolStripItemRenderEventArgs e) {
@@ -337,13 +337,13 @@ namespace System.Windows.Forms {
             } 
         }
        
-        /// <devdoc>
+        /// <summary>
         /// Draw the button background
         /// </devdoc>
         protected override void OnRenderLabelBackground(ToolStripItemRenderEventArgs e) {
             RenderLabelInternal(e);
         }
-        /// <devdoc>
+        /// <summary>
         /// Draw the items background
         /// </devdoc>
         protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e) {
@@ -413,7 +413,7 @@ namespace System.Windows.Forms {
            
         }
         
-        /// <devdoc>
+        /// <summary>
         /// Draws a toolbar separator. ToolStrip users should override this function to change the 
         /// drawing of all separators.
         /// </devdoc>
@@ -429,7 +429,7 @@ namespace System.Windows.Forms {
             ControlPaint.DrawBorder3D(e.Graphics, new Rectangle(0,0,item.Width-1, item.Height-1), item.BorderStyle, (Border3DSide)item.BorderSides);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Draw the item's background.
         /// </devdoc>
         protected override void OnRenderSplitButtonBackground(ToolStripItemRenderEventArgs e) {
@@ -533,7 +533,7 @@ namespace System.Windows.Forms {
           
         }
    
-        /// <devdoc>
+        /// <summary>
         ///    This exists mainly so that buttons, labels and items, etc can share the same implementation.
         ///    If OnRenderButton called OnRenderItem we would never be able to change the implementation
         ///    as it would be a breaking change. If in v1, the user overrode OnRenderItem to draw green triangles
@@ -576,7 +576,7 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <devdoc>
+        /// <summary>
         ///  </devdoc>
         private void RenderSeparatorInternal(Graphics g, ToolStripItem item, Rectangle bounds, bool vertical) {
             VisualStyleElement separator = (vertical) ? VisualStyleElement.ToolBar.SeparatorHorizontal.Normal : VisualStyleElement.ToolBar.SeparatorVertical.Normal;

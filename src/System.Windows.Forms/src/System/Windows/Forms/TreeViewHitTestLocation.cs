@@ -6,64 +6,64 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies the return value for HITTEST on treeview.
     /// </devdoc>
     [Flags]
     [ComVisible(true)]
     public enum TreeViewHitTestLocations
     {
-        /// <devdoc>
+        /// <summary>
         /// No Information.
         /// </devdoc>
         None = NativeMethods.TVHT_NOWHERE,
 
-        /// <devdoc>
+        /// <summary>
         /// On Image.
         /// </devdoc>
         Image = NativeMethods.TVHT_ONITEMICON,
 
-        /// <devdoc>
+        /// <summary>
         /// On Label.
         /// </devdoc>
         Label = NativeMethods.TVHT_ONITEMLABEL,
 
-        /// <devdoc>
+        /// <summary>
         /// Indent.
         /// </devdoc>
         Indent = NativeMethods.TVHT_ONITEMINDENT,
 
-        /// <devdoc>
+        /// <summary>
         /// AboveClientArea.
         /// </devdoc>
         AboveClientArea =  NativeMethods.TVHT_ABOVE,
 
-        /// <devdoc>
+        /// <summary>
         /// BelowClientArea.
         /// </devdoc>
         BelowClientArea = NativeMethods.TVHT_BELOW,
 
-        /// <devdoc>
+        /// <summary>
         /// LeftOfClientArea.
         /// </devdoc>
         LeftOfClientArea = NativeMethods.TVHT_TOLEFT,
 
-        /// <devdoc>
+        /// <summary>
         /// RightOfClientArea.
         /// </devdoc>
         RightOfClientArea = NativeMethods.TVHT_TORIGHT,
 
-        /// <devdoc>
+        /// <summary>
         /// RightOfNode.
         /// </devdoc>
         RightOfLabel =   NativeMethods.TVHT_ONITEMRIGHT,
 
-        /// <devdoc>
+        /// <summary>
         /// StateImage.
         /// </devdoc>
         StateImage = NativeMethods.TVHT_ONITEMSTATEICON,
 
-        /// <devdoc>
+        /// <summary>
         ///      PlusMinus.
         /// </devdoc>
         PlusMinus = NativeMethods.TVHT_ONITEMBUTTON,

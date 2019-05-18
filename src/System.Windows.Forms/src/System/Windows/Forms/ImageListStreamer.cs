@@ -15,7 +15,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Globalization;
 
-    /// <devdoc>
+    /// <summary>
     /// </devdoc>
     [Serializable]
     public sealed class ImageListStreamer : ISerializable, IDisposable {
@@ -86,7 +86,7 @@ namespace System.Windows.Forms {
             }
         }
              
-        /// <devdoc>
+        /// <summary>
         ///     Compresses the given input, returning a new array that represents
         ///     the compressed data.
         /// </devdoc>
@@ -147,7 +147,7 @@ namespace System.Windows.Forms {
             return output;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     Decompresses the given input, returning a new array that represents
         ///     the uncompressed data.
         /// </devdoc>
@@ -235,7 +235,7 @@ namespace System.Windows.Forms {
             return SafeNativeMethods.ImageList_Write(new HandleRef(this, imagelistHandle), new UnsafeNativeMethods.ComStreamFromDataStream(stream));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Disposes the native image list handle.
         /// </devdoc>
         public void Dispose() {

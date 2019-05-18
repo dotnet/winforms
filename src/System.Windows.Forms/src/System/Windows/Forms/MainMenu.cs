@@ -10,7 +10,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para> 
     ///       Represents
     ///       a menu structure for a form.</para>
@@ -23,7 +23,7 @@ namespace System.Windows.Forms {
         private RightToLeft rightToLeft = System.Windows.Forms.RightToLeft.Inherit;
         private EventHandler onCollapse;
        
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new MainMenu control.
         /// </devdoc>
         public MainMenu()
@@ -31,7 +31,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.MainMenu'/> class with the specified container.</para>
         /// </devdoc>
         public MainMenu(IContainer container) : this() {
@@ -42,7 +42,7 @@ namespace System.Windows.Forms {
             container.Add(this);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new MainMenu control with the given items to start
         ///     with.
         /// </devdoc>
@@ -58,7 +58,7 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <devdoc>
+        /// <summary>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
         ///     text alignment and reading order will be from right to left.
@@ -103,7 +103,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new MainMenu object which is a dupliate of this one.
         /// </devdoc>
         public virtual MainMenu CloneMenu() {
@@ -112,7 +112,7 @@ namespace System.Windows.Forms {
             return newMenu;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         
         
@@ -120,7 +120,7 @@ namespace System.Windows.Forms {
             return UnsafeNativeMethods.CreateMenu();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Clears out this MainMenu object and discards all of it's resources.
         ///     If the menu is parented in a form, it is disconnected from that as
         ///     well.
@@ -134,7 +134,7 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates which form in which we are currently residing [if any]
         /// </devdoc>
         public Form GetForm() {
@@ -145,7 +145,7 @@ namespace System.Windows.Forms {
              return form;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         internal override void ItemsChanged(int change) {
             base.ItemsChanged(change);
@@ -153,14 +153,14 @@ namespace System.Windows.Forms {
                 form.MenuChanged(change, this);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         internal virtual void ItemsChanged(int change, Menu menu) {
             if (form != null)
                 form.MenuChanged(change, menu);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the collapse event
         /// </devdoc>
         protected internal virtual void OnCollapse(EventArgs e) {
@@ -169,7 +169,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     Returns true if the RightToLeft should be persisted in code gen.
         /// </devdoc>
         internal virtual bool ShouldSerializeRightToLeft() {
@@ -179,7 +179,7 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns a string representation for this control.
         /// </devdoc>
         public override string ToString() {

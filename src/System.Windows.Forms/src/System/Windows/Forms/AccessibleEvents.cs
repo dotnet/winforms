@@ -6,14 +6,14 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies events that are reported by accessible applications.</para>
     /// </devdoc>
 
     [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
     public enum AccessibleEvents
     {
-        /// <devdoc>>
+        /// <summary>>
         /// EVENT_SYSTEM_SOUND
         /// Sent when a sound is played. Currently nothing is generating this, we
         /// are going to be cleaning up the SOUNDSENTRY feature in the control panel
@@ -23,21 +23,21 @@ namespace System.Windows.Forms
         /// </devdoc>>
         SystemSound = 0x0001,
 
-        /// <devdoc>>
+        /// <summary>>
         /// EVENT_SYSTEM_ALERT
         /// Sent when an alert needs to be given to the user. MessageBoxes generate
         /// alerts for example.
         /// </devdoc>>
         SystemAlert = 0x0002,
 
-        /// <devdoc>>
+        /// <summary>>
         /// EVENT_SYSTEM_FOREGROUND
         /// Sent when the foreground (active) window changes, even if it is changing
         /// to another window in the same thread as the previous one.
         /// </devdoc>>
         SystemForeground = 0x0003,
 
-        /// <devdoc>>
+        /// <summary>>
         /// EVENT_SYSTEM_MENUSTART
         /// EVENT_SYSTEM_MENUEND
         /// Sent when entering into and leaving from menu mode (system, app bar, and
@@ -46,7 +46,7 @@ namespace System.Windows.Forms
         SystemMenuStart = 0x0004,
         SystemMenuEnd = 0x0005,
 
-        /// <devdoc>>
+        /// <summary>>
         /// EVENT_SYSTEM_MENUPOPUPSTART
         /// EVENT_SYSTEM_MENUPOPUPEND
         /// Sent when a menu popup comes up and just before it is taken down. Note
@@ -58,7 +58,7 @@ namespace System.Windows.Forms
         SystemMenuPopupEnd = 0x0007,
 
 
-        /// <devdoc>>
+        /// <summary>>
         /// EVENT_SYSTEM_CAPTURESTART
         /// EVENT_SYSTEM_CAPTUREEND
         /// Sent when a window takes the capture and releases the capture.
@@ -74,7 +74,7 @@ namespace System.Windows.Forms
         SystemMoveSizeStart = 0x000A,
         SystemMoveSizeEnd = 0x000B,
 
-        /// <devdoc>>
+        /// <summary>>
         /// EVENT_SYSTEM_CONTEXTHELPSTART
         /// EVENT_SYSTEM_CONTEXTHELPEND
         /// Sent when a window enters and leaves context sensitive help mode.
@@ -82,7 +82,7 @@ namespace System.Windows.Forms
         SystemContextHelpStart = 0x000C,
         SystemContextHelpEnd = 0x000D,
 
-        /// <devdoc>>
+        /// <summary>>
         /// EVENT_SYSTEM_DRAGDROPSTART
         /// EVENT_SYSTEM_DRAGDROPEND
         /// Sent when a window enters and leaves drag drop mode. Note that it is up
@@ -92,7 +92,7 @@ namespace System.Windows.Forms
         SystemDragDropStart = 0x000E,
         SystemDragDropEnd = 0x000F,
 
-        /// <devdoc>>
+        /// <summary>>
         /// EVENT_SYSTEM_DIALOGSTART
         /// EVENT_SYSTEM_DIALOGEND
         /// Sent when a dialog comes up and just before it goes away.
@@ -100,7 +100,7 @@ namespace System.Windows.Forms
         SystemDialogStart = 0x0010,
         SystemDialogEnd = 0x0011,
 
-        /// <devdoc>>
+        /// <summary>>
         /// EVENT_SYSTEM_SCROLLINGSTART
         /// EVENT_SYSTEM_SCROLLINGEND
         /// Sent when beginning and ending the tracking of a scrollbar in a window,
@@ -109,7 +109,7 @@ namespace System.Windows.Forms
         SystemScrollingStart = 0x0012,
         SystemScrollingEnd = 0x0013,
 
-        /// <devdoc>>
+        /// <summary>>
         /// EVENT_SYSTEM_SWITCHSTART
         /// EVENT_SYSTEM_SWITCHEND
         /// Sent when beginning and ending alt-tab mode with the switch window.
@@ -117,7 +117,7 @@ namespace System.Windows.Forms
         SystemSwitchStart = 0x0014,
         SystemSwitchEnd = 0x0015,
 
-        /// <devdoc>>
+        /// <summary>>
         /// EVENT_SYSTEM_MINIMIZESTART
         /// EVENT_SYSTEM_MINIMIZEEND
         /// Sent when a window minimizes and just before it restores.
@@ -154,7 +154,7 @@ namespace System.Windows.Forms
         Hide =    0x8003,  // hwnd + ID + idChild is hidden item
         Reorder = 0x8004,  // hwnd + ID + idChild is parent of zordering children
 
-        /// <devdoc>
+        /// <summary>
         /// Minimize the number of notifications!
         /// When you are hiding a parent object, obviously all child objects are no
         /// longer visible on screen. They still have the same "visible" status,
@@ -167,7 +167,7 @@ namespace System.Windows.Forms
         SelectionRemove = 0x8008,  // hwnd + ID + idChild is item removed
         SelectionWithin = 0x8009,  // hwnd + ID + idChild is parent of changed selected items
 
-        /// <devdoc>
+        /// <summary>
         /// There is only one "focused" child item in a parent. This is the place
         /// keystrokes are going at a given moment. Hence only send a notification
         /// about where the NEW focus is going. A NEW item getting the focus already

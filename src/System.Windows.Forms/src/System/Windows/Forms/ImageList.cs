@@ -22,7 +22,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Globalization;
 
-    /// <devdoc>
+    /// <summary>
     ///     The ImageList is an object that stores a collection of Images, most
     ///     commonly used by other controls, such as the ListView, TreeView, or
     ///     Toolbar.  You can add either bitmaps or Icons to the ImageList, and the
@@ -73,7 +73,7 @@ namespace System.Windows.Forms {
 
         private bool inAddRange = false;
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new ImageList Control with a default image size of 16x16
         ///     pixels
         /// </devdoc>
@@ -87,7 +87,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new ImageList Control with a default image size of 16x16
         ///     pixels and adds the ImageList to the passed in container.
         /// </devdoc>
@@ -146,7 +146,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the color depth of the imagelist.
         /// </devdoc>
         [
@@ -183,7 +183,7 @@ namespace System.Windows.Forms {
             ColorDepth = ColorDepth.Depth8Bit;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The handle of the ImageList object.  This corresponds to a win32
         ///     HIMAGELIST Handle.
         /// </devdoc>
@@ -201,7 +201,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Whether or not the underlying Win32 handle has been created.
         /// </devdoc>
         [
@@ -228,7 +228,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the size of the images in the ImageList
         /// </devdoc>
         [
@@ -268,7 +268,7 @@ namespace System.Windows.Forms {
             return (Images.Count==0);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns an ImageListStreamer, or null if the image list is empty.
         /// </devdoc>
         [
@@ -357,7 +357,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The color to treat as transparent.
         /// </devdoc>
         [
@@ -474,7 +474,7 @@ namespace System.Windows.Forms {
             return index;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates the underlying HIMAGELIST handle, and sets up all the
         ///     appropriate values with it.  Inheriting classes overriding this method
         ///     should not forget to call base.createHandle();
@@ -546,7 +546,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Frees all resources assocaited with this component.
         /// </devdoc>
         protected override void Dispose(bool disposing) {
@@ -563,7 +563,7 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draw the image indicated by the given index on the given Graphics
         ///     at the given location.
         /// </devdoc>
@@ -571,7 +571,7 @@ namespace System.Windows.Forms {
             Draw(g, pt.X, pt.Y, index);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draw the image indicated by the given index on the given Graphics
         ///     at the given location.
         /// </devdoc>
@@ -579,7 +579,7 @@ namespace System.Windows.Forms {
             Draw(g, x, y, imageSize.Width, imageSize.Height, index);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draw the image indicated by the given index using the location, size
         ///     and raster op code specified.  The image is stretched or compressed as
         ///     necessary to fit the bounds provided.
@@ -643,7 +643,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the image specified by the given index.  The bitmap returned is a
         ///     copy of the original image.
         /// </devdoc>
@@ -744,7 +744,7 @@ namespace System.Windows.Forms {
         }
 #endif // DEBUG_ONLY_APIS
 
-        /// <devdoc>
+        /// <summary>
         ///     Called when the Handle property changes.
         /// </devdoc>
         private void OnRecreateHandle(EventArgs eventargs) {
@@ -760,7 +760,7 @@ namespace System.Windows.Forms {
         }
 
 #if false
-        /// <devdoc>
+        /// <summary>
         ///     Copies the image at the specified index into the temporary Bitmap object.
         ///     The temporary Bitmap object is used for stuff that the Windows ImageList
         ///     control doesn't support, such as stretching images or copying images from
@@ -847,7 +847,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns a string representation for this control.
         /// </devdoc>
         public override string ToString() {
@@ -957,7 +957,7 @@ namespace System.Windows.Forms {
             /// issues by holding on to extra references.
             private int lastAccessedIndex = -1;
 
-            /// <devdoc>
+            /// <summary>
             ///  <para>Returns the keys in the image list - images without keys return String.Empty.
             ///  </para>
             /// </devdoc>
@@ -1041,7 +1041,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Determines if the ImageList has any images, without forcing a handle creation.
             /// </devdoc>
             public bool Empty {
@@ -1117,7 +1117,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     <para>Retrieves the child control with the specified key.</para>
             /// </devdoc>
             public Image this[string key] {
@@ -1142,7 +1142,7 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <devdoc>
+            /// <summary>
             ///     <para>Adds an image to the end of the image list with a key accessor.</para>
             /// </devdoc>
             public void Add(string key, Image image) {
@@ -1158,7 +1158,7 @@ namespace System.Windows.Forms {
 
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     <para>Adds an icon to the end of the image list with a key accessor.</para>
             /// </devdoc>
             public void Add(string key, Icon icon) {
@@ -1194,7 +1194,7 @@ namespace System.Windows.Forms {
                 // changing it now is a breaking change, so we have to keep track of this specific icon and dispose that
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Add the given image to the ImageList.
             /// </devdoc>
             public void Add(Image value) {
@@ -1205,7 +1205,7 @@ namespace System.Windows.Forms {
                 Add(original, null);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Add the given image to the ImageList, using the given color
             ///     to generate the mask. The number of images to add is inferred from
             ///     the width of the given image.
@@ -1285,7 +1285,7 @@ namespace System.Windows.Forms {
                 owner.OnChangeHandle(EventArgs.Empty);
              }
 
-            /// <devdoc>
+            /// <summary>
             ///     Add an image strip the given image to the ImageList.  A strip is a single Image
             ///     which is treated as multiple images arranged side-by-side.
             /// </devdoc>
@@ -1309,7 +1309,7 @@ namespace System.Windows.Forms {
                 return Add(original, null);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Remove all images and masks from the ImageList.
             /// </devdoc>
             public void Clear() {
@@ -1339,7 +1339,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
             /// </devdoc>
             public bool ContainsKey(string key) {
@@ -1360,7 +1360,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-           /// <devdoc>
+           /// <summary>
            ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase,
            ///           if found; otherwise, -1.</para>
            /// </devdoc>
@@ -1400,7 +1400,7 @@ namespace System.Windows.Forms {
                 throw new NotSupportedException();
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     <para>Determines if the index is valid for the collection.</para>
             /// </devdoc>
             private bool IsValidIndex(int index) {
@@ -1454,7 +1454,7 @@ namespace System.Windows.Forms {
              }
 
 
-          /// <devdoc>
+          /// <summary>
           ///     <para>Removes the child control with the specified key.</para>
           /// </devdoc>
           public void RemoveByKey(string key) {
@@ -1464,7 +1464,7 @@ namespace System.Windows.Forms {
                 }
            }
 
-            /// <devdoc>
+            /// <summary>
             ///     <para>Sets/Resets the key accessor for an image already in the image list.</para>
             /// </devdoc>
             public void SetKeyName(int index, string name) {
@@ -1498,7 +1498,7 @@ namespace System.Windows.Forms {
         public ImageListConverter() : base(typeof(ImageList)) {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets a value indicating
         ///       whether this object supports properties using the
         ///       specified context.</para>

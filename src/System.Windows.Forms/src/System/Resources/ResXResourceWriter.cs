@@ -19,7 +19,7 @@ namespace System.Resources {
     using System.Runtime.Serialization;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <devdoc>
+    /// <summary>
     ///     ResX resource writer. See the text in "ResourceSchema" for more 
     ///     information.
     /// </devdoc>
@@ -122,12 +122,12 @@ namespace System.Resources {
 
         private Func<Type, string> typeNameConverter; // no public property to be consistent with ResXDataNode class.
         
-        /// <devdoc>
+        /// <summary>
         ///     Base Path for ResXFileRefs.
         /// </devdoc>
         public string BasePath { get; set; }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new ResXResourceWriter that will write to the specified file.
         /// </devdoc>
         public ResXResourceWriter(string fileName) {
@@ -138,7 +138,7 @@ namespace System.Resources {
             this.typeNameConverter = typeNameConverter;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new ResXResourceWriter that will write to the specified stream.
         /// </devdoc>
         public ResXResourceWriter(Stream stream) {
@@ -149,7 +149,7 @@ namespace System.Resources {
             this.typeNameConverter = typeNameConverter;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new ResXResourceWriter that will write to the specified TextWriter.
         /// </devdoc>
         public ResXResourceWriter(TextWriter textWriter) {
@@ -244,7 +244,7 @@ namespace System.Resources {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Adds aliases to the resource file...
         /// </devdoc>
         public virtual void AddAlias(string aliasName, AssemblyName assemblyName) {
@@ -260,7 +260,7 @@ namespace System.Resources {
        }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    Adds the given value to the collection of metadata.  These name/value pairs 
         ///    will be emitted to the <metadata> elements in the .resx file.
         /// </devdoc>
@@ -268,7 +268,7 @@ namespace System.Resources {
             AddDataRow(MetadataStr, name, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Adds the given value to the collection of metadata.  These name/value pairs 
         ///    will be emitted to the <metadata> elements in the .resx file.
         /// </devdoc>
@@ -276,7 +276,7 @@ namespace System.Resources {
             AddDataRow(MetadataStr, name, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Adds the given value to the collection of metadata.  These name/value pairs 
         ///    will be emitted to the <metadata> elements in the .resx file.
         /// </devdoc>
@@ -284,7 +284,7 @@ namespace System.Resources {
             AddDataRow(MetadataStr, name, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Adds a blob resource to the resources.
         /// </devdoc>
         // NOTE: Part of IResourceWriter - not protected by class level LinkDemand.
@@ -292,7 +292,7 @@ namespace System.Resources {
             AddDataRow(DataStr, name, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Adds a resource to the resources. If the resource is a string,
         ///     it will be saved that way, otherwise it will be serialized
         ///     and stored as in binary.
@@ -307,7 +307,7 @@ namespace System.Resources {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Adds a string resource to the resources.
         /// </devdoc>
         // NOTE: Part of IResourceWriter - not protected by class level LinkDemand.
@@ -315,7 +315,7 @@ namespace System.Resources {
             AddDataRow(DataStr, name, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Adds a string resource to the resources.
         /// </devdoc>
         public void AddResource(ResXDataNode node) {
@@ -339,14 +339,14 @@ namespace System.Resources {
             AddDataRow(DataStr, info.Name, info.ValueData, info.TypeName, info.MimeType, info.Comment);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Adds a blob resource to the resources.
         /// </devdoc>
         private void AddDataRow(string elementName, string name, byte[] value) {
             AddDataRow(elementName, name, ToBase64WrappedString(value), TypeNameWithAssembly(typeof(byte[])), null, null);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Adds a resource to the resources. If the resource is a string,
         ///     it will be saved that way, otherwise it will be serialized
         ///     and stored as in binary.
@@ -379,7 +379,7 @@ namespace System.Resources {
             }
         }        
 
-        /// <devdoc>
+        /// <summary>
         ///     Adds a string resource to the resources.
         /// </devdoc>
         private void AddDataRow(string elementName, string name, string value)
@@ -392,7 +392,7 @@ namespace System.Resources {
             AddDataRow(elementName, name, value, typeName, null, null);     
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Adds a new row to the Resources table. This helper is used because
         ///     we want to always late bind to the columns for greater flexibility.
         /// </devdoc>
@@ -495,7 +495,7 @@ namespace System.Resources {
             return alias;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Closes any files or streams locked by the writer.
         /// </devdoc>
         // NOTE: Part of IResourceWriter - not protected by class level LinkDemand.
@@ -569,7 +569,7 @@ namespace System.Resources {
             return result;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Writes the resources out to the file or stream.
         /// </devdoc>
         // NOTE: Part of IResourceWriter - not protected by class level LinkDemand.

@@ -8,7 +8,7 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Globalization;
     
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       This is a read only collection of Forms exposed as a static property of the 
     ///       Application class. This is used to store all the currently loaded forms in an app.
@@ -18,7 +18,7 @@ namespace System.Windows.Forms {
 
         internal static object CollectionSyncRoot = new object();
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets a form specified by name, if present, else returns null. If there are multiple
         ///       forms with matching names, the first form found is returned.
@@ -39,7 +39,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets a form specified by index.
         ///    </para>
@@ -55,7 +55,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    Used internally to add a Form to the FormCollection
         /// </devdoc>
         internal void Add(Form form) {
@@ -64,7 +64,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Used internally to check if a Form is in the FormCollection
         /// </devdoc>
         internal bool Contains(Form form)
@@ -77,7 +77,7 @@ namespace System.Windows.Forms {
             return inCollection;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Used internally to add a Form to the FormCollection
         /// </devdoc>
         internal void Remove(Form form) {

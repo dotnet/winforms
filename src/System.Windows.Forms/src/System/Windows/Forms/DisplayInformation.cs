@@ -41,7 +41,7 @@ namespace System.Windows.Forms
            }
        }
 
-        ///<devdoc>
+        ///<summary>
         ///tests to see if the monitor is in low resolution mode (8-bit color depth or less).
         ///</devdoc>
         public static bool LowResolution {
@@ -57,7 +57,7 @@ namespace System.Windows.Forms
             }
         }
 
-        ///<devdoc>
+        ///<summary>
         ///tests to see if we are under high contrast mode
         ///</devdoc>
         public static bool HighContrast {
@@ -81,7 +81,7 @@ namespace System.Windows.Forms
             }
         }
 
-        ///<devdoc>
+        ///<summary>
         ///test to see if we are under terminal server mode
         ///</devdoc>
         public static bool TerminalServer {
@@ -108,7 +108,7 @@ namespace System.Windows.Forms
             }
         }
 
-        ///<devdoc>
+        ///<summary>
         ///event handler for change in display setting
         ///</devdoc>
         private static void DisplaySettingsChanging(object obj, EventArgs ea)
@@ -121,7 +121,7 @@ namespace System.Windows.Forms
 
         }
 
-        ///<devdoc>
+        ///<summary>
         ///event handler for change in user preference
         ///</devdoc>
         private static void UserPreferenceChanging(object obj, UserPreferenceChangingEventArgs e) {

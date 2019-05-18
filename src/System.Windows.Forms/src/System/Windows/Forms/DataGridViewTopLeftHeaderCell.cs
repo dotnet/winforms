@@ -11,7 +11,7 @@ namespace System.Windows.Forms
     using System.ComponentModel;
     using System.Windows.Forms.Internal;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para></para>
     /// </devdoc>
     public class DataGridViewTopLeftHeaderCell : DataGridViewColumnHeaderCell
@@ -416,7 +416,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para></para>
         /// </devdoc>
         public override string ToString() 

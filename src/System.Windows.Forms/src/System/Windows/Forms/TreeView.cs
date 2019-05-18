@@ -21,7 +21,7 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Windows.Forms.VisualStyles;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Displays a hierarchical list of items, or nodes. Each
     ///       node includes a caption and an optional bitmap. The user can select a node. If
@@ -155,7 +155,7 @@ namespace System.Windows.Forms {
         private TreeNodeMouseClickEventHandler onNodeMouseClick;
         private TreeNodeMouseClickEventHandler onNodeMouseDoubleClick;
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a TreeView control
         /// </devdoc>
         public TreeView()
@@ -178,7 +178,7 @@ namespace System.Windows.Forms {
             SetStyle(ControlStyles.UseTextForAccessibility, false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The background color for this control. Specifying null for
         ///     this parameter sets the
         ///     control's background color to its parent's background color.
@@ -239,7 +239,7 @@ namespace System.Windows.Forms {
             remove => base.BackgroundImageLayoutChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The border style of the window.
         /// </devdoc>
         [
@@ -269,7 +269,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The value of the CheckBoxes property. The CheckBoxes
         ///     property determines if check boxes are shown next to node in the
         ///     tree view.
@@ -304,7 +304,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override CreateParams CreateParams {
             get {
@@ -378,7 +378,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
         /// </devdoc>
@@ -388,7 +388,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This property is overridden and hidden from statement completion
         ///     on controls that are based on Win32 Native Controls.
         /// </devdoc>
@@ -402,7 +402,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The current foreground color for this control, which is the
         ///     color the control uses to draw its text.
         /// </devdoc>
@@ -423,7 +423,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines whether the selection highlight spans across the width of the TreeView.
         ///     This property will have no effect if ShowLines is true.
         /// </devdoc>
@@ -444,7 +444,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The HideSelection property specifies whether the selected node will
         ///     be highlighted even when the TreeView loses focus.
         /// </devdoc>
@@ -468,7 +468,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The value of the HotTracking property. The HotTracking
         ///     property determines if nodes are highlighted as the mousepointer
         ///     passes over them.
@@ -493,7 +493,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The default image index for nodes in the tree view.
         /// </devdoc>
         [
@@ -539,7 +539,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The default image index for nodes in the tree view.
         /// </devdoc>
         [
@@ -570,7 +570,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the image list control that is bound to the tree view.
         /// </devdoc>
         [
@@ -641,7 +641,7 @@ namespace System.Windows.Forms {
           }
   
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the state image list control that is bound to the tree view.
         /// </devdoc>
         [
@@ -688,7 +688,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     The indentation level in pixels.
         /// </devdoc>
         [
@@ -724,7 +724,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The height of every item in the tree view, in pixels.
         /// </devdoc>
         [
@@ -776,7 +776,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The LabelEdit property determines if the label text
         ///     of nodes in the tree view is editable.
         /// </devdoc>
@@ -800,7 +800,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     This is the color of the lines that connect the nodes of the Treeview.
         /// </devdoc>
         [
@@ -827,7 +827,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The collection of nodes associated with this TreeView control
         /// </devdoc>
         [
@@ -846,7 +846,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>
         /// Indicates the drawing mode for the tree view.
         /// </para>
@@ -880,7 +880,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The delimeter string used by TreeNode.getFullPath().
         /// </devdoc>
         [
@@ -915,7 +915,7 @@ namespace System.Windows.Forms {
             add => base.PaddingChanged += value; 
             remove => base.PaddingChanged -= value; }
 
-        /// <devdoc>
+        /// <summary>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
         //      and the RightToLeft is true, mirroring will be turned on on the form, and
@@ -961,7 +961,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The image index that a node will display when selected.
         ///     The index applies to the ImageList referred to by the imageList property,
         /// </devdoc>
@@ -1005,7 +1005,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The default image index for nodes in the tree view.
         /// </devdoc>
         [
@@ -1037,7 +1037,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The currently selected tree node, or null if nothing is selected.
         /// </devdoc>
         [
@@ -1079,7 +1079,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The ShowLines property determines if lines are drawn between
         ///     nodes in the tree view.
         /// </devdoc>
@@ -1102,7 +1102,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The ShowLines property determines whether or not the tooltips willbe displayed on the nodes
         /// </devdoc>
         [
@@ -1123,7 +1123,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The ShowPlusMinus property determines if the "plus/minus"
         ///     expand button is shown next to tree nodes that have children.
         /// </devdoc>
@@ -1146,7 +1146,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines if lines are draw between nodes at the root of
         ///     the tree view.
         /// </devdoc>
@@ -1167,7 +1167,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The Sorted property determines if nodes in the tree view are sorted.
         /// </devdoc>
         [
@@ -1191,7 +1191,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     The sorting comparer for this TreeView.
         /// </devdoc>
         [
@@ -1230,7 +1230,7 @@ namespace System.Windows.Forms {
             remove => base.TextChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The first visible node in the TreeView. Initially
         ///     the first root node is at the top of the TreeView, but if the
         ///     contents have been scrolled another node may be at the top.
@@ -1267,7 +1267,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The count of fully visible nodes in the tree view.  This number
         ///     may be greater than the number of nodes in the control.
         ///     The control calculates this value by dividing the height of the
@@ -1344,7 +1344,7 @@ namespace System.Windows.Forms {
             remove => onAfterExpand -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Fires when a TreeView node needs to be drawn.</para>
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewDrawNodeEventDescr))]
@@ -1380,7 +1380,7 @@ namespace System.Windows.Forms {
             remove => onAfterSelect -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     TreeView Onpaint.
         /// </devdoc>
         /// <hideinheritance/>
@@ -1409,7 +1409,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Disables redrawing of the tree view. A call to beginUpdate() must be
         ///     balanced by a following call to endUpdate(). Following a call to
         ///     beginUpdate(), any redrawing caused by operations performed on the
@@ -1419,14 +1419,14 @@ namespace System.Windows.Forms {
             BeginUpdateInternal();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Collapses all nodes at the root level.
         /// </devdoc>
         public void CollapseAll() {
             root.Collapse();
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override void CreateHandle() {
             if (!RecreatingHandle) {
@@ -1442,7 +1442,7 @@ namespace System.Windows.Forms {
             base.CreateHandle();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Resets the imageList to null.  We wire this method up to the imageList's
         ///     Dispose event, so that we don't hang onto an imageList that's gone away.
         /// </devdoc>
@@ -1450,7 +1450,7 @@ namespace System.Windows.Forms {
             ImageList = null;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Resets the stateimageList to null.  We wire this method up to the stateimageList's
         ///     Dispose event, so that we don't hang onto an stateimageList that's gone away.
         /// </devdoc>
@@ -1460,7 +1460,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override void Dispose(bool disposing) {
             if (disposing) {
@@ -1482,7 +1482,7 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Reenables redrawing of the tree view. A call to beginUpdate() must be
         ///     balanced by a following call to endUpdate(). Following a call to
         ///     beginUpdate(), any redrawing caused by operations performed on the
@@ -1492,14 +1492,14 @@ namespace System.Windows.Forms {
             EndUpdateInternal();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Expands all nodes at the root level.
         /// </devdoc>
         public void ExpandAll() {
             root.ExpandAll();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Forces the TreeView to recalculate all its nodes widths so that it updates the
         ///     scrollbars as appropriate.
         /// </devdoc>
@@ -1521,7 +1521,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
         /// </devdoc>
         internal void SetToolTip(ToolTip toolTip, string toolTipText) {
@@ -1533,14 +1533,14 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Gives the information about which part of the treeNode is at the given point.
         /// </devdoc>
         public TreeViewHitTestInfo HitTest(Point pt) {
             return HitTest(pt.X, pt.Y);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Gives the information about which part of the treeNode is at the given x, y.
         /// </devdoc>
         public TreeViewHitTestInfo HitTest(int x, int y) {
@@ -1553,7 +1553,7 @@ namespace System.Windows.Forms {
             return (new TreeViewHitTestInfo(node, loc));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Defined so that a  tree node can use it
         ///
         /// </devdoc>
@@ -1569,21 +1569,21 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns count of nodes at root, optionally including all subtrees.
         /// </devdoc>
         public int GetNodeCount(bool includeSubTrees) {
             return root.GetNodeCount(includeSubTrees);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the TreeNode at the given location in tree view coordinates.
         /// </devdoc>
         public TreeNode GetNodeAt(Point pt) {
             return GetNodeAt(pt.X, pt.Y);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the TreeNode at the given location in tree view coordinates.
         /// </devdoc>
         public TreeNode GetNodeAt(int x, int y) {
@@ -1676,7 +1676,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Overridden to handle RETURN key.
         ///    </para>
@@ -1699,7 +1699,7 @@ namespace System.Windows.Forms {
             return base.IsInputKey(keyData);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Note this can be null - particularly if any windows messages get generated during
         ///    the insertion of a tree node (TVM_INSERTITEM)
         /// </devdoc>
@@ -1709,14 +1709,14 @@ namespace System.Windows.Forms {
             return node;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Fires the DrawNode event.
         /// </devdoc>
         protected virtual void OnDrawNode(DrawTreeNodeEventArgs e) {
         if (onDrawNode != null) onDrawNode(this, e);
     }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override void OnHandleCreated(EventArgs e) {
 
@@ -1861,7 +1861,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override void OnHandleDestroyed(EventArgs e) {
             selectedNode = SelectedNode;
@@ -1882,7 +1882,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///  We keep track of if we've hovered already so we don't fire multiple hover events
         /// </devdoc>
         protected override void OnMouseLeave(EventArgs e) {
@@ -1890,7 +1890,7 @@ namespace System.Windows.Forms {
             base.OnMouseLeave(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     In order for the MouseHover event to fire for each item in a TreeView,
         ///     the node the mouse is hovering over is found. Each time a new node is hovered
         ///     over a new event is raised.
@@ -1925,7 +1925,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the beforeLabelEdit event.
         /// </devdoc>
         protected virtual void OnBeforeLabelEdit(NodeLabelEditEventArgs e) {
@@ -1933,7 +1933,7 @@ namespace System.Windows.Forms {
             if (onBeforeLabelEdit != null) onBeforeLabelEdit(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the afterLabelEdit event.
         /// </devdoc>
         protected virtual void OnAfterLabelEdit(NodeLabelEditEventArgs e) {
@@ -1941,7 +1941,7 @@ namespace System.Windows.Forms {
             if (onAfterLabelEdit != null) onAfterLabelEdit(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the beforeCheck event.
         /// </devdoc>
         protected virtual void OnBeforeCheck(TreeViewCancelEventArgs e) {
@@ -1949,7 +1949,7 @@ namespace System.Windows.Forms {
             if (onBeforeCheck != null) onBeforeCheck(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the afterCheck event.
         /// </devdoc>
         protected virtual void OnAfterCheck(TreeViewEventArgs e) {
@@ -1957,7 +1957,7 @@ namespace System.Windows.Forms {
             if (onAfterCheck != null) onAfterCheck(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the beforeCollapse event.
         /// </devdoc>
         protected internal virtual void OnBeforeCollapse(TreeViewCancelEventArgs e) {
@@ -1965,7 +1965,7 @@ namespace System.Windows.Forms {
             if (onBeforeCollapse != null) onBeforeCollapse(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the afterCollapse event.
         /// </devdoc>
         protected internal virtual void OnAfterCollapse(TreeViewEventArgs e) {
@@ -1973,7 +1973,7 @@ namespace System.Windows.Forms {
             if (onAfterCollapse != null) onAfterCollapse(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the beforeExpand event.
         /// </devdoc>
         protected virtual void OnBeforeExpand(TreeViewCancelEventArgs e) {
@@ -1981,7 +1981,7 @@ namespace System.Windows.Forms {
             if (onBeforeExpand != null) onBeforeExpand(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the afterExpand event.
         /// </devdoc>
         protected virtual void OnAfterExpand(TreeViewEventArgs e) {
@@ -1989,7 +1989,7 @@ namespace System.Windows.Forms {
             if (onAfterExpand != null) onAfterExpand(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the ItemDrag event.
         /// </devdoc>
         protected virtual void OnItemDrag(ItemDragEventArgs e) {
@@ -1997,7 +1997,7 @@ namespace System.Windows.Forms {
             if (onItemDrag != null) onItemDrag(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the NodeMouseHover event.
         /// </devdoc>
         protected virtual void OnNodeMouseHover(TreeNodeMouseHoverEventArgs e) {
@@ -2005,7 +2005,7 @@ namespace System.Windows.Forms {
             if (onNodeMouseHover != null) onNodeMouseHover(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the beforeSelect event.
         /// </devdoc>
         protected virtual void OnBeforeSelect(TreeViewCancelEventArgs e) {
@@ -2013,7 +2013,7 @@ namespace System.Windows.Forms {
             if (onBeforeSelect != null) onBeforeSelect(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the afterSelect event.
         /// </devdoc>
         protected virtual void OnAfterSelect(TreeViewEventArgs e) {
@@ -2021,7 +2021,7 @@ namespace System.Windows.Forms {
             if (onAfterSelect != null) onAfterSelect(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the onNodeMouseClick event.
         /// </devdoc>
         protected virtual void OnNodeMouseClick(TreeNodeMouseClickEventArgs e) {
@@ -2029,7 +2029,7 @@ namespace System.Windows.Forms {
             if (onNodeMouseClick != null) onNodeMouseClick(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the onNodeMouseDoubleClick event.
         /// </devdoc>
         protected virtual void OnNodeMouseDoubleClick(TreeNodeMouseClickEventArgs e) {
@@ -2037,7 +2037,7 @@ namespace System.Windows.Forms {
             if (onNodeMouseDoubleClick != null) onNodeMouseDoubleClick(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the OnBeforeCheck / OnAfterCheck for keyboard clicks
         /// </devdoc>
         protected override void OnKeyDown(KeyEventArgs e) {
@@ -2059,7 +2059,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the OnBeforeCheck / OnAfterCheck for keyboard clicks
         /// </devdoc>
         protected override void OnKeyUp(KeyEventArgs e) {
@@ -2072,7 +2072,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the OnBeforeCheck / OnAfterCheck for keyboard clicks
         /// </devdoc>
         protected override void OnKeyPress(KeyPressEventArgs e) {
@@ -2111,7 +2111,7 @@ namespace System.Windows.Forms {
             Nodes.AddRange(nodes);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This resets the indentation to the system default.
         /// </devdoc>
         private void ResetIndent() {
@@ -2120,7 +2120,7 @@ namespace System.Windows.Forms {
             RecreateHandle();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This resets the item height to the system default.
         /// </devdoc>
         private void ResetItemHeight() {
@@ -2128,14 +2128,14 @@ namespace System.Windows.Forms {
             RecreateHandle();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves true if the indent should be persisted in code gen.
         /// </devdoc>
         private bool ShouldSerializeIndent() {
             return(indent != -1);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves true if the itemHeight should be persisted in code gen.
         /// </devdoc>
         private bool ShouldSerializeItemHeight() {
@@ -2158,7 +2158,7 @@ namespace System.Windows.Forms {
          }
 
 
-        /// <devdoc>
+        /// <summary>
         ///      Updated the sorted order
         /// </devdoc>
         public void Sort() {
@@ -2167,7 +2167,7 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <devdoc>
+        /// <summary>
         ///     Returns a string representation for this control.
         /// </devdoc>
         public override string ToString() {
@@ -2384,7 +2384,7 @@ namespace System.Windows.Forms {
 
        
 
-        /// <devdoc>
+        /// <summary>
         ///     Performs custom draw handling
         /// </devdoc>
         private void CustomDraw(ref Message m) {
@@ -2580,7 +2580,7 @@ namespace System.Windows.Forms {
                 }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Generates colors for each item. This can be overridden to provide colors on a per state/per node
         ///     basis, rather than using the ForeColor/BackColor/NodeFont properties on TreeNode.
         ///
@@ -2631,7 +2631,7 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         private void WmNeedText(ref Message m) {
             NativeMethods.TOOLTIPTEXT ttt = (NativeMethods.TOOLTIPTEXT) m.GetLParam(typeof(NativeMethods.TOOLTIPTEXT));
@@ -2761,7 +2761,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Shows the context menu for the Treenode.
         /// </devdoc>
         private void ShowContextMenu(TreeNode treeNode) {
@@ -2828,7 +2828,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {

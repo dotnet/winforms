@@ -8,55 +8,55 @@ namespace System.Windows.Forms
     {
         NotSet = 0x000,
 
-        /// <devdoc>
+        /// <summary>
         /// Content is vertically aligned at the top, and horizontally aligned
         /// on the left.
         /// </devdoc>
         TopLeft = 0x001,
         
-        /// <devdoc>
+        /// <summary>
         /// Content is vertically aligned at the top, and horizontally aligned
         /// at the center.
         /// </devdoc>
         TopCenter = 0x002,
         
-        /// <devdoc>
+        /// <summary>
         /// Content is vertically aligned at the top, and horizontally aligned
         /// on the right.
         /// </devdoc>
         TopRight = 0x004,
         
-        /// <devdoc>
+        /// <summary>
         /// Content is vertically aligned in the middle, and horizontally aligned
         /// on the left.
         /// </devdoc>
         MiddleLeft = 0x010,
         
-        /// <devdoc>
+        /// <summary>
         /// Content is vertically aligned in the middle, and horizontally aligned
         /// at the center.
         /// </devdoc>
         MiddleCenter = 0x020,
         
-        /// <devdoc>
+        /// <summary>
         /// Content is vertically aligned in the middle, and horizontally aligned
         /// on the right.
         /// </devdoc>
         MiddleRight = 0x040,
         
-        /// <devdoc>
+        /// <summary>
         /// Content is vertically aligned at the bottom, and horizontally aligned
         /// on the left.
         /// </devdoc>
         BottomLeft = 0x100,
         
-        /// <devdoc>
+        /// <summary>
         /// Content is vertically aligned at the bottom, and horizontally aligned
         /// at the center.
         /// </devdoc>
         BottomCenter = 0x200,
 
-        /// <devdoc>
+        /// <summary>
         /// Content is vertically aligned at the bottom, and horizontally aligned
         /// on the right.
         /// </devdoc>

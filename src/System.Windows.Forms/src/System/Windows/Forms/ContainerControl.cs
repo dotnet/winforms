@@ -17,7 +17,7 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Internal;
     using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>Defines a
     ///       base class for
     ///       controls that can parent other controls.</para>
@@ -47,7 +47,7 @@ namespace System.Windows.Forms {
         private static readonly int PropAxContainer            = PropertyStore.CreateKey();
         private const string fontMeasureString                 = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.ContainerControl'/>
         /// class.</para>
         /// </devdoc>
@@ -58,7 +58,7 @@ namespace System.Windows.Forms {
             SetState2(STATE2_USEPREFERREDSIZECACHE, true);  
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     AutoScaleDimensions represents the DPI or Font setting that the control has been scaled
         ///     to or designed at. Specifically, at design time this property will be set by the
         ///     designer to the value that the developer is designing at. Then, at runtime, when the
@@ -90,7 +90,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     AutoScaleFactor represents the scaling factor difference between
         ///     CurrentAutoScaleDimensions and AutoScaleDimensions. This value is
         ///     calculated on the fly. Eg: If CurrentAutoScaleDimensions is 192, 192
@@ -111,7 +111,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines the scaling mode of this control.  The default is no scaling.
         ///
         ///     Scaling by Font is useful if you wish to have a control
@@ -162,7 +162,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates whether controls in this container will be automatically validated when the focus changes.
         /// </devdoc>
         [
@@ -211,7 +211,7 @@ namespace System.Windows.Forms {
             remove => this.autoValidateChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       The binding manager for the container control.
         ///    </para>
@@ -234,7 +234,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Container controls support ImeMode only to allow child controls to inherit it from their parents.
         /// </devdoc>
         protected override bool CanEnableIme {
@@ -249,7 +249,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates the current active control on the container control.</para>
         /// </devdoc>
         [
@@ -276,7 +276,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     CurrentAutoScaleDimensions represent the actual DPI or Font settings
         ///     of the display at runtime. If the AutoScaleMode is set to 'None' then
         ///     the CurrentAutoScaleDimensions is equal to the ActualScaleDimensions
@@ -313,7 +313,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates the form that the scrollable control is assigned to. This property is read-only.</para>
         /// </devdoc>
         [
@@ -344,7 +344,7 @@ namespace System.Windows.Forms {
         }
 
         // Package scope for Control
-        /// <devdoc>
+        /// <summary>
         /// <para>Activates the specified control.</para>
         /// </devdoc>
         bool IContainerControl.ActivateControl(Control control) {
@@ -389,7 +389,7 @@ namespace System.Windows.Forms {
             return ret;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Used for UserControls - checks if the control
         ///     has a focusable control inside or not
         /// </devdoc>
@@ -408,7 +408,7 @@ namespace System.Windows.Forms {
             return ctl != null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void AdjustFormScrollbars(bool displayScrollbars) {
@@ -419,7 +419,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Cleans up form state after a control has been removed.
         ///     Package scope for Control
         /// </devdoc>
@@ -538,7 +538,7 @@ namespace System.Windows.Forms {
             return(activeControl == value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Used to notify the AxContainer that the form
         ///     has been created.  This should only be called if
         ///     there is an AX container.
@@ -547,7 +547,7 @@ namespace System.Windows.Forms {
             ((AxHost.AxContainer)Properties.GetObject(PropAxContainer)).FormCreated();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Specifies whether this control can process the mnemonic or not.
         /// </devdoc>
         internal override bool CanProcessMnemonic() {
@@ -570,7 +570,7 @@ namespace System.Windows.Forms {
             return(AxHost.AxContainer)aXContainer;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Disposes of the resources (other than memory) used by
         ///       the <see cref='System.Windows.Forms.ContainerControl'/>
         ///       .</para>
@@ -586,7 +586,7 @@ namespace System.Windows.Forms {
             unvalidatedControl = null;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Recursively enables required scaling from the given control
         /// </devdoc>
         private void EnableRequiredScaling(Control start, bool enable) {
@@ -596,7 +596,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Assigns focus to the activeControl. If there is no activeControl then
         ///     focus is given to the form.
         ///     package scope for Form
@@ -660,7 +660,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This method calcuates the auto scale dimensions based on the
         ///     control's current font.
         /// </devdoc>
@@ -719,7 +719,7 @@ namespace System.Windows.Forms {
             return retval;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This method is called when one of the auto scale properties changes, indicating
         ///     that we should scale controls on the next layout.
         /// </devdoc>
@@ -735,7 +735,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     to maintain backwards compat with AutoScale on form, we need to keep the
         ///     two models from conflicting.  This method is only here for Form to override
         ///     it and update its AutoScale property appropriately.
@@ -743,7 +743,7 @@ namespace System.Windows.Forms {
         internal virtual void OnAutoScaleModeChanged() {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Raises the AutoValidateChanged event.
         /// </devdoc>
         protected virtual void OnAutoValidateChanged(EventArgs e) {
@@ -761,7 +761,7 @@ namespace System.Windows.Forms {
           }
       }
 
-        /// <devdoc>
+        /// <summary>
         ///     Called when a child is about to resume its layout.  The default implementation
         ///     calls OnChildLayoutResuming on the parent.
         /// </devdoc>
@@ -789,7 +789,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Raises the CreateControl event.</para>
         /// </devdoc>
         protected override void OnCreateControl() {
@@ -801,7 +801,7 @@ namespace System.Windows.Forms {
             OnBindingContextChanged(EventArgs.Empty);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    We override this to clear the current autoscale cache.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -827,7 +827,7 @@ namespace System.Windows.Forms {
             base.OnFontChanged(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///   This is called by the top level form to clear the current autoscale cache.
         /// </devdoc>
         internal void FormDpiChanged(float factor) {
@@ -845,7 +845,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Container controls scale during layout.
         /// </devdoc>
         protected override void OnLayout(LayoutEventArgs e) {
@@ -853,7 +853,7 @@ namespace System.Windows.Forms {
             base.OnLayout(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Called when the last resume layout call is made.  If performLayout is true
         ///     a layout will occur as soon as this call returns.  Layout is
         ///     still suspended when this call is made.  The default implementation
@@ -864,7 +864,7 @@ namespace System.Windows.Forms {
             base.OnLayoutResuming(performLayout);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Called when the parent changes.  Container controls prefer to have their parents
         ///     scale themselves, but when a parent is first changed, and as a result the font
         ///     changes as well, a container control should scale itself.  We save off this state
@@ -877,7 +877,7 @@ namespace System.Windows.Forms {
             base.OnParentChanged(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Performs scaling of this control.  Scaling works by scaling all children of this control.
         ///     Those children that are ContainerControls will have their PerformAutoScale method called
         ///     so they can scale their children.
@@ -886,7 +886,7 @@ namespace System.Windows.Forms {
             PerformAutoScale(true, true);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Performs scaling of this control.  Scaling works by scaling all children of this control.
         ///
         ///     If includedBounds is true those controls whose bounds have changed since
@@ -937,7 +937,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Checks to see if we need to perform an autoscale in
         ///     response to a layout.
         /// </devdoc>
@@ -947,7 +947,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Recursively resumes all layout.
         /// </devdoc>
         internal void ResumeAllLayout(Control start, bool performLayout) {
@@ -964,7 +964,7 @@ namespace System.Windows.Forms {
             start.ResumeLayout(performLayout);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Recursively suspends all layout.
         /// </devdoc>
         internal void SuspendAllLayout(Control start) {
@@ -981,7 +981,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Overrides the default scaling mechanism to account for autoscaling.  This
         ///     override behaves as follows:  any unchanged controls are always scaled
         ///     according to the container control's AutoScaleFactor.  Any changed controls are
@@ -1054,7 +1054,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Process an arrowKey press by selecting the next control in the group
         ///     that the activeControl belongs to.
         /// </devdoc>
@@ -1066,7 +1066,7 @@ namespace System.Windows.Forms {
             return group.SelectNextControl(activeControl, forward, false, false, true);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Processes a dialog character. Overrides Control.processDialogChar().
         ///    This method calls the processMnemonic() method to check if the character
         ///    is a mnemonic for one of the controls on the form. If processMnemonic()
@@ -1085,7 +1085,7 @@ namespace System.Windows.Forms {
             return base.ProcessDialogChar(charCode);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Processes a dialog key. Overrides Control.processDialogKey(). This
         ///    method implements handling of the TAB, LEFT, RIGHT, UP, and DOWN
         ///    keys in dialogs.
@@ -1218,7 +1218,7 @@ namespace System.Windows.Forms {
             return processed;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Selects the next available control and makes it the active control.</para>
         /// </devdoc>
         protected virtual bool ProcessTabKey(bool forward) {
@@ -1267,7 +1267,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Implements ActiveControl property setter.
         /// </devdoc>
         internal void SetActiveControl(Control value) {
@@ -1343,7 +1343,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Updates the default button based on current selection, and the
         ///     acceptButton property.
         /// </devdoc>
@@ -1351,7 +1351,7 @@ namespace System.Windows.Forms {
             // hook for form
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Updates the focusedControl variable by walking towards the
         ///     activeControl variable, firing enter and leave events and validation
         ///     as necessary.
@@ -1478,7 +1478,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Make sure we have a valid choice of last unvalidated control if at all possible.
         /// </devdoc>
         private void EnsureUnvalidatedControl(Control candidate) {
@@ -1523,7 +1523,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Validates the last unvalidated control and its ancestors (up through the ancestor in common
         ///     with enterControl) if enterControl causes validation.
         /// </devdoc>
@@ -1559,7 +1559,7 @@ namespace System.Windows.Forms {
             ValidateThroughAncestor(commonAncestor, preventFocusChangeOnError);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         ///     Validates the last unvalidated control and its ancestors up through, but not including the current control.
         ///
@@ -1577,7 +1577,7 @@ namespace System.Windows.Forms {
             return Validate(false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         ///     Validates the last unvalidated control and its ancestors up through, but not including the current control.
         ///
@@ -1631,7 +1631,7 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Validates all selectable child controls in the container, including descendants. This is
         ///     equivalent to calling ValidateChildren(ValidationConstraints.Selectable). See <see cref='ValidationConstraints.Selectable'/>
         ///     for details of exactly which child controls will be validated.
@@ -1641,7 +1641,7 @@ namespace System.Windows.Forms {
             return ValidateChildren(ValidationConstraints.Selectable);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Validates all the child controls in the container. Exactly which controls are
         ///     validated and which controls are skipped is determined by <paramref name="flags"/>.
         /// </devdoc>
@@ -1761,7 +1761,7 @@ namespace System.Windows.Forms {
             return autoValidate != AutoValidate.Inherit;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     WM_SETFOCUS handler
         /// </devdoc>
         private void WmSetFocus(ref Message m) {
@@ -1802,7 +1802,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void WndProc(ref Message m) {

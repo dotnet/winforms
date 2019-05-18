@@ -15,7 +15,7 @@ using System.Threading;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Wraps ActiveX controls and exposes them as fully featured windows forms controls
     /// (by inheriting from Control). Some of Control's properties that don't make sense
     /// for ActiveX controls are blocked here (by setting Browsable attributes on some and
@@ -69,7 +69,7 @@ namespace System.Windows.Forms
         internal WebBrowserContainer container;
         internal object activeXInstance;
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         /// Creates a new instance of a WinForms control which wraps an ActiveX control
         /// given by the clsid parameter.
@@ -93,7 +93,7 @@ namespace System.Windows.Forms
         // Public properties:
         //
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         /// Returns the native webbrowser object that this control wraps.
         ///     </para>
@@ -123,7 +123,7 @@ namespace System.Windows.Forms
         // ActiveX wrapper controls that derive from this class should override the
         // below method and return their own WebBrowserSiteBaseBase derived object.
         //
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         /// Returns an object that will be set as the site for the native ActiveX control.
         /// Implementors of the site can derive from <see cref='System.Windows.Forms.WebBrowserSiteBase'/> class.
@@ -133,7 +133,7 @@ namespace System.Windows.Forms
             return new WebBrowserSiteBase(this);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         /// This will be called when the native ActiveX control has just been created.
         /// Inheritors of this class can override this method to cast the nativeActiveXObject
@@ -145,7 +145,7 @@ namespace System.Windows.Forms
         protected virtual void AttachInterfaces(object nativeActiveXObject) {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         /// See AttachInterfaces for a description of when to override DetachInterfaces.
         ///     </para>
@@ -153,7 +153,7 @@ namespace System.Windows.Forms
         protected virtual void DetachInterfaces() {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         /// This will be called when we are ready to start listening to events.
         /// Inheritors can override this method to hook their own connection points.
@@ -162,7 +162,7 @@ namespace System.Windows.Forms
         protected virtual void CreateSink() {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         /// This will be called when it is time to stop listening to events.
         /// This is where inheritors have to disconnect their connection points.
@@ -1282,7 +1282,7 @@ namespace System.Windows.Forms
             return true;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Inheriting classes should override this method to find out when the
         ///     handle has been created. Call base.OnHandleCreated first.
         /// </devdoc>
@@ -1349,7 +1349,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>Hide ImeMode: it doesn't make sense for this control</para>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
@@ -1715,7 +1715,7 @@ namespace System.Windows.Forms
             remove { }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Defines a window that the ActiveX window is attached to so that we can override it's wndproc.
         /// </devdoc>
         private class WebBrowserBaseNativeWindow : NativeWindow {
@@ -1725,7 +1725,7 @@ namespace System.Windows.Forms
                 this.WebBrowserBase = ax;
             }
             
-            /// <devdoc>
+            /// <summary>
             ///     Pass messages on to the NotifyIcon object's wndproc handler.
             /// </devdoc>
             protected override void WndProc(ref Message m) {

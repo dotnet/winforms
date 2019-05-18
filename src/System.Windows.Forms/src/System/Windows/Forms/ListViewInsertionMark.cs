@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace System.Windows.Forms {
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///         Encapsulates insertion-mark information    
     ///    </para>
@@ -25,7 +25,7 @@ namespace System.Windows.Forms {
             this.listView = listView;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Specifies whether the insertion mark appears
     	///     after the item - otherwise it appears
     	///     before the item (the default).
@@ -48,7 +48,7 @@ namespace System.Windows.Forms {
             }
         }
     
-        /// <devdoc>
+        /// <summary>
         ///     Returns bounds of the insertion-mark.
         /// </devdoc>
         ///
@@ -61,7 +61,7 @@ namespace System.Windows.Forms {
             }
         }
     
-        /// <devdoc>
+        /// <summary>
         ///     The color of the insertion-mark.
         /// </devdoc>
         ///
@@ -84,7 +84,7 @@ namespace System.Windows.Forms {
             }
         }
     
-        /// <devdoc>
+        /// <summary>
         ///     Item next to which the insertion-mark appears.
         /// </devdoc>
         ///
@@ -104,7 +104,7 @@ namespace System.Windows.Forms {
             }
         }        
   
-        /// <devdoc>
+        /// <summary>
         ///     Performs a hit-test at the specified insertion point
     	///     and returns the closest item.
         /// </devdoc>

@@ -17,7 +17,7 @@ namespace System.Windows.Forms {
     using System.Drawing.Printing;
     using System.Globalization;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       The raw "preview" part of print previewing, without any dialogs or buttons.
     ///       Most PrintPreviewControl's are found on PrintPreviewDialog's,
@@ -55,7 +55,7 @@ namespace System.Windows.Forms {
         bool pageInfoCalcPending;
         bool exceptionPrinting;
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.PrintPreviewControl'/> class.
         ///    </para>
@@ -83,7 +83,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value If true (the default), resizing the control or changing the number of pages shown
         ///       will automatically adjust Zoom to make everything visible.
@@ -104,7 +104,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating the document to preview.
         ///       
@@ -123,7 +123,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the number of pages
         ///       displayed horizontally across the screen.
@@ -146,7 +146,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets the CreateParams used to create the window.
         ///       If a subclass overrides this function, it must call the base implementation.
@@ -162,7 +162,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The virtual coordinate of the upper left visible pixel.
         /// </devdoc>
 
@@ -179,7 +179,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the number of pages
         ///       displayed vertically down the screen.
@@ -203,7 +203,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
         ///     control placement and text will be from right to left.
@@ -244,7 +244,7 @@ namespace System.Windows.Forms {
             remove => base.TextChanged -= value;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the page number of the upper left page.
         ///       
@@ -286,7 +286,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_STARTPAGECHANGED, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     How big the control would be if the screen was infinitely large.
         /// </devdoc>
         [
@@ -303,7 +303,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating how large the pages will appear.
         ///    </para>
@@ -442,7 +442,7 @@ namespace System.Windows.Forms {
             Invalidate();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Refreshes the preview of the document.
         ///    </para>
@@ -452,7 +452,7 @@ namespace System.Windows.Forms {
             InvalidateLayout();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Invalidate the layout, if necessary.
         ///    </para>
@@ -488,7 +488,7 @@ namespace System.Windows.Forms {
         }
             
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Paints the control.
         ///    </para>
@@ -649,7 +649,7 @@ namespace System.Windows.Forms {
                             PixelsToPhysical(pixels.Height, dpi.Y));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Resets the back color to the defaults for the PrintPreviewControl.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -657,7 +657,7 @@ namespace System.Windows.Forms {
             BackColor = SystemColors.AppWorkspace;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Resets the back color to the defaults for the PrintPreviewControl.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -665,7 +665,7 @@ namespace System.Windows.Forms {
             ForeColor = Color.White;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     WM_HSCROLL handler
         /// </devdoc>
 
@@ -726,7 +726,7 @@ namespace System.Windows.Forms {
             UnsafeNativeMethods.SetScrollInfo(new HandleRef(this, Handle), NativeMethods.SB_HORZ, info, true);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     WM_VSCROLL handler
         /// </devdoc>
 
@@ -748,7 +748,7 @@ namespace System.Windows.Forms {
             Position = locPos;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_KEYDOWN message.
         /// </devdoc>
         //added to handle keyboard events
@@ -879,7 +879,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Indicates whether the <see cref='System.Windows.Forms.Control.BackColor'/> property should be
         ///       persisted.
@@ -889,7 +889,7 @@ namespace System.Windows.Forms {
             return !BackColor.Equals(SystemColors.AppWorkspace);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Indicates whether the <see cref='System.Windows.Forms.Control.ForeColor'/> property should be
         ///       persisted.

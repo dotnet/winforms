@@ -12,7 +12,7 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Globalization;
     
-    /// <devdoc>
+    /// <summary>
     /// <para>Represents a collection of <see cref='System.Windows.Forms.DataGridTableStyle'/> objects in the <see cref='System.Windows.Forms.DataGrid'/> 
     /// control.</para>
     /// </devdoc>
@@ -107,7 +107,7 @@ namespace System.Windows.Forms {
         }
         */
 
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the DataGridTable with the specified index.
         /// </devdoc>
         public DataGridTableStyle this[int index] {
@@ -116,7 +116,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the DataGridTable with the name provided.
         /// </devdoc>
         public DataGridTableStyle this[string tableName] {
@@ -142,7 +142,7 @@ namespace System.Windows.Forms {
                     throw new ArgumentException(SR.DataGridTableStyleDuplicateMappingName, "table");
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Adds a <see cref='System.Windows.Forms.DataGridTableStyle'/> to this collection.</para>
         /// </devdoc>
         public virtual int Add(DataGridTableStyle table) {
@@ -193,7 +193,7 @@ namespace System.Windows.Forms {
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Checks to see if a DataGridTableStyle is contained in this collection.
         /// </devdoc>
         public bool Contains(DataGridTableStyle table) {
@@ -201,7 +201,7 @@ namespace System.Windows.Forms {
             return index != -1;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Checks to see if a <see cref='System.Windows.Forms.DataGridTableStyle'/> with the given name
         ///    is contained in this collection.</para>
         /// </devdoc>

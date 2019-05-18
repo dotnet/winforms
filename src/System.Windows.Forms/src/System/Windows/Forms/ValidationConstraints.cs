@@ -4,19 +4,19 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Determines which child controls in a ContainerControl will be validated
     /// by the <see cref='ContainerControl.ValidateChildren'/> method.
     /// </devdoc>
     [Flags]
     public enum ValidationConstraints
     {
-        /// <devdoc>
+        /// <summary>
         /// All child controls and their descendants are validated.
         /// </devdoc>
         None = 0x00,
 
-        /// <devdoc>
+        /// <summary>
         /// Child control must be selectable to be validated.
         ///
         /// Note: This flag allows validation of a control that has the
@@ -27,22 +27,22 @@ namespace System.Windows.Forms
         /// </devdoc>
         Selectable = 0x01,
 
-        /// <devdoc>
+        /// <summary>
         /// Child control must be enabled to be validated (Control.Enabled = true).
         /// </devdoc>
         Enabled = 0x02,
 
-        /// <devdoc>
+        /// <summary>
         /// Child control must be visible to be validated (Control.Visible = true).
         /// </devdoc>
         Visible = 0x04,
 
-        /// <devdoc>
+        /// <summary>
         /// Child control must be a tab stops to be validated (Control.TabStop = true).
         /// </devdoc>
         TabStop = 0x08,
 
-        /// <devdoc>
+        /// <summary>
         /// Only immediate children of container control are validated.
         /// Descendants are not validated.
         /// </devdoc>

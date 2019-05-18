@@ -7,7 +7,7 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.ComponentModel;
 
-    /// <devdoc>
+    /// <summary>
     ///    ApplicationContext provides contextual information about an application
     ///    thread. Specifically this allows an application author to redifine what
     ///    circurmstances cause a message loop to exit. By default the application
@@ -18,13 +18,13 @@ namespace System.Windows.Forms {
         Form mainForm;
         object userData;
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new ApplicationContext with no mainForm.
         /// </devdoc>
         public ApplicationContext() : this(null) {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new ApplicationContext with the specified mainForm.
         ///     If OnMainFormClosed is not overriden, the thread's message
         ///     loop will be terminated when mainForm is closed.
@@ -37,7 +37,7 @@ namespace System.Windows.Forms {
             Dispose(false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines the mainForm for this context. This may be changed
         ///     at anytime.
         ///     If OnMainFormClosed is not overriden, the thread's message
@@ -78,13 +78,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Is raised when the thread's message loop should be terminated.
         ///     This is raised by calling ExitThread.
         /// </devdoc>
         public event EventHandler ThreadExit;
 
-        /// <devdoc>
+        /// <summary>
         ///     Disposes the context. This should dispose the mainForm. This is
         ///     called immediately after the thread's message loop is terminated.
         ///     Application will dispose all forms on this thread by default.
@@ -105,7 +105,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Causes the thread's message loop to be terminated. This
         ///     will call ExitThreadCore.
         /// </devdoc>
@@ -113,7 +113,7 @@ namespace System.Windows.Forms {
             ExitThreadCore();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Causes the thread's message loop to be terminated.
         /// </devdoc>
         protected virtual void ExitThreadCore() {
@@ -122,7 +122,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Called when the mainForm is closed. The default implementation
         ///     of this will call ExitThreadCore.
         /// </devdoc>
@@ -130,7 +130,7 @@ namespace System.Windows.Forms {
             ExitThreadCore();
         }
     
-        /// <devdoc>
+        /// <summary>
         ///     Called when the mainForm is closed. The default implementation
         ///     of this will call ExitThreadCore.
         /// </devdoc>

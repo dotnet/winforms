@@ -10,7 +10,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       This is a rendering class for the ProgressBar control.
     ///    </para>
@@ -25,7 +25,7 @@ using Microsoft.Win32;
        private ProgressBarRenderer() {
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Returns true if this class is supported for the current OS and user/application settings, 
        ///       otherwise returns false.
@@ -37,7 +37,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a horizontal bar.
        ///    </para>
@@ -51,7 +51,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a vertical bar.
        ///    </para>
@@ -65,7 +65,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a number of constant size horizontal chunks in the given bounds.
        ///    </para>
@@ -79,7 +79,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a number of constant size vertical chunks in the given bounds.
        ///    </para>
@@ -93,7 +93,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Returns the  width/height of a single horizontal/vertical progress bar chunk.
        ///    </para>
@@ -106,7 +106,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Returns the  width/height of the space between horizontal/vertical progress bar chunks.
        ///    </para>

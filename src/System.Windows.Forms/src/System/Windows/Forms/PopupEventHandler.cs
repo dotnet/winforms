@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Handler for the Popup event of the ToolTip control.
     /// </devdoc>
     public delegate void PopupEventHandler(object sender, PopupEventArgs e);

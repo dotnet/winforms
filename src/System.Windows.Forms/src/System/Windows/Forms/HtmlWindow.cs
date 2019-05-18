@@ -109,7 +109,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Name of the NativeHtmlWindow</para>
         /// </devdoc>
         public string Name
@@ -151,7 +151,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets size for the window</para>
         /// </devdoc>
         public Size Size
@@ -228,7 +228,7 @@ namespace System.Windows.Forms
             this.NativeHtmlWindow.Focus();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Moves the Window to the position requested</para>
         /// </devdoc>
         public void MoveTo(int x, int y)
@@ -236,7 +236,7 @@ namespace System.Windows.Forms
             this.NativeHtmlWindow.MoveTo(x, y);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Moves the Window to the point requested</para>
         /// </devdoc>
         public void MoveTo(Point point)
@@ -303,7 +303,7 @@ namespace System.Windows.Forms
             this.NativeHtmlWindow.Blur();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Resize the window to the width/height requested</para>
         /// </devdoc>
         public void ResizeTo(int width, int height)
@@ -311,7 +311,7 @@ namespace System.Windows.Forms
             this.NativeHtmlWindow.ResizeTo(width, height);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Resize the window to the Size requested</para>
         /// </devdoc>
         public void ResizeTo(Size size)
@@ -319,7 +319,7 @@ namespace System.Windows.Forms
             this.NativeHtmlWindow.ResizeTo(size.Width, size.Height);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Scroll the window to the position requested</para>
         /// </devdoc>
         public void ScrollTo(int x, int y)
@@ -327,7 +327,7 @@ namespace System.Windows.Forms
             this.NativeHtmlWindow.ScrollTo(x, y);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Scroll the window to the point requested</para>
         /// </devdoc>
         public void ScrollTo(Point point)
@@ -468,7 +468,7 @@ namespace System.Windows.Forms
 
 
 
-        ///<devdoc>
+        ///<summary>
         /// HtmlWindowShim - this is the glue between the DOM eventing mechanisms
         ///                  and our CLR callbacks.  
         ///             

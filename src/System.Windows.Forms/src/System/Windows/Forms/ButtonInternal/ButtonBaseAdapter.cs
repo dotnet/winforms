@@ -16,7 +16,7 @@ namespace System.Windows.Forms.ButtonInternal {
     using System.Runtime.Versioning;
     using Runtime.CompilerServices;
 
-    /// <devdoc>
+    /// <summary>
     ///                  PLEASE READ
     ///                  -----------
     /// This class is used for more than just Button:
@@ -113,14 +113,14 @@ namespace System.Windows.Forms.ButtonInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Get StringFormat object for rendering text using GDI+ (Graphics).
         /// </devdoc>
         internal virtual StringFormat CreateStringFormat() {
             return ControlPaint.CreateStringFormat( Control, Control.TextAlign, Control.ShowToolTip, Control.UseMnemonic );
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Get TextFormatFlags flags for rendering text using GDI (TextRenderer).
         /// </devdoc>
         internal virtual TextFormatFlags CreateTextFormatFlags(){
@@ -419,7 +419,7 @@ namespace System.Windows.Forms.ButtonInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a border for the in the 3D style of the popup button.
         /// </devdoc>
         protected internal static void Draw3DLiteBorder(Graphics g, Rectangle r, ColorData colors, bool up) {
@@ -460,7 +460,7 @@ namespace System.Windows.Forms.ButtonInternal {
             ControlPaint.DrawBorder(g, r, c, ButtonBorderStyle.Solid);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Draws the flat border with specified bordersize. 
         ///       This function gets called only for Flatstyle == Flatstyle.Flat.
@@ -513,7 +513,7 @@ namespace System.Windows.Forms.ButtonInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Draws the focus rectangle if the control has focus.
         ///       
@@ -525,7 +525,7 @@ namespace System.Windows.Forms.ButtonInternal {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     Draws the button's image.
         /// </devdoc>
         void DrawImage(Graphics graphics, LayoutData layout) {
@@ -591,7 +591,7 @@ namespace System.Windows.Forms.ButtonInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws the button's text. Color c is the foreground color set with enabled/disabled state in mind.
         /// </devdoc>
         void DrawText(Graphics g, LayoutData layout, Color c, ColorData colors)
@@ -878,7 +878,7 @@ namespace System.Windows.Forms.ButtonInternal {
             internal StringAlignment gdipLineAlignment; // vertical alignment.
             private bool disableWordWrapping;
 
-            /// <devdoc>
+            /// <summary>
             ///     We don't cache the StringFormat itself because we don't have a deterministic way of disposing it, instead
             ///     we cache the flags that make it up and create it on demand so it can be disposed by calling code.
             /// </devdoc>
@@ -907,7 +907,7 @@ namespace System.Windows.Forms.ButtonInternal {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             /// </devdoc>
             public TextFormatFlags TextFormatFlags {
                 get {

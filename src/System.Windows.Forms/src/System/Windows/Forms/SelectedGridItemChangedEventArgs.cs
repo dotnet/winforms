@@ -4,12 +4,12 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// The event class that is created when the selected GridItem in the PropertyGrid is changed by the user.
     /// </devdoc>
     public class SelectedGridItemChangedEventArgs : EventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// Constructs a SelectedGridItemChangedEventArgs object.
         /// </devdoc>
         public SelectedGridItemChangedEventArgs(GridItem oldSel, GridItem newSel)
@@ -18,12 +18,12 @@ namespace System.Windows.Forms
             NewSelection = newSel;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The previously selected GridItem object. This can be null.
         /// </devdoc>
         public GridItem OldSelection { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The newly selected GridItem object
         /// </devdoc>
         public GridItem NewSelection { get; }

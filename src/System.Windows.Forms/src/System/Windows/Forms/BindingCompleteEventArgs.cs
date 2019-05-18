@@ -6,12 +6,12 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides information about a Binding Completed event.
     /// </devdoc>
     public class BindingCompleteEventArgs : CancelEventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// Constructor for BindingCompleteEventArgs.
         /// </devdoc>
         public BindingCompleteEventArgs(Binding binding,
@@ -28,7 +28,7 @@ namespace System.Windows.Forms
             Exception = exception;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Constructor for BindingCompleteEventArgs.
         /// </devdoc>
         public BindingCompleteEventArgs(Binding binding,
@@ -39,7 +39,7 @@ namespace System.Windows.Forms
         {
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Constructor for BindingCompleteEventArgs.
         /// </devdoc>
         public BindingCompleteEventArgs(Binding binding,
@@ -49,7 +49,7 @@ namespace System.Windows.Forms
         {
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Constructor for BindingCompleteEventArgs.
         /// </devdoc>
         public BindingCompleteEventArgs(Binding binding,

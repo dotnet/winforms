@@ -15,7 +15,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using Internal;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Represents a display device or
     ///       multiple display devices on a single system.
@@ -24,20 +24,20 @@ namespace System.Windows.Forms {
     public class Screen {
 
         readonly IntPtr hmonitor;
-        /// <devdoc>         
+        /// <summary>         
         ///     Bounds of the screen         
         /// </devdoc>         
         readonly Rectangle    bounds;
-        /// <devdoc>         
+        /// <summary>         
         ///     Available working area on the screen. This excludes taskbars and other         
         ///     docked windows.         
         /// </devdoc>         
         private Rectangle    workingArea = Rectangle.Empty;
-        /// <devdoc>         
+        /// <summary>         
         ///     Set to true if this screen is the primary monitor         
         /// </devdoc>         
         readonly bool         primary;
-        /// <devdoc>         
+        /// <summary>         
         ///     Device name associated with this monitor         
         /// </devdoc>         
         readonly string       deviceName;
@@ -102,7 +102,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets an array of all of the displays on the system.
         ///    </para>
@@ -138,7 +138,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets Bits per Pixel value.
         ///    </para>
@@ -149,7 +149,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets the bounds of the display.
         ///    </para>
@@ -160,7 +160,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets the device name associated with a display.
         ///    </para>
@@ -171,7 +171,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets a value indicating whether a particular display is
         ///       the primary device.
@@ -183,7 +183,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets the
         ///       primary display.
@@ -206,7 +206,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets the working area of the screen.
         ///    </para>
@@ -237,7 +237,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Screen instances call this property to determine
         ///     if their WorkingArea cache needs to be invalidated.
         /// </devdoc>
@@ -262,7 +262,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Specifies a value that indicates whether the specified object is equal to
         ///       this one.
@@ -278,7 +278,7 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Retrieves a <see cref='System.Windows.Forms.Screen'/>
         ///       for the monitor that contains the specified point.
@@ -295,7 +295,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Retrieves a <see cref='System.Windows.Forms.Screen'/>
         ///       for the monitor that contains the
@@ -313,13 +313,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieves a <see cref='System.Windows.Forms.Screen'/> for the monitor that contains
         /// the largest region of the window of the control.
         /// </devdoc>
         public static Screen FromControl(Control control) => FromHandle(control.Handle);
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieves a <see cref='System.Windows.Forms.Screen'/> for the monitor that contains
         /// the largest region of the window.
         /// </devdoc>
@@ -335,7 +335,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Retrieves the working area for the monitor that is closest to the
         ///       specified point.
@@ -345,7 +345,7 @@ namespace System.Windows.Forms {
         public static Rectangle GetWorkingArea(Point pt) {
             return Screen.FromPoint(pt).WorkingArea;
         }
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Retrieves the working area for the monitor that contains the largest region
         ///       of the specified rectangle.
@@ -355,7 +355,7 @@ namespace System.Windows.Forms {
         public static Rectangle GetWorkingArea(Rectangle rect) {
             return Screen.FromRectangle(rect).WorkingArea;
         }
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Retrieves the working area for the monitor that contains the largest
         ///       region of the specified control.
@@ -366,7 +366,7 @@ namespace System.Windows.Forms {
             return Screen.FromControl(ctl).WorkingArea;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Retrieves the bounds of the monitor that is closest to the specified
         ///       point.
@@ -375,7 +375,7 @@ namespace System.Windows.Forms {
         public static Rectangle GetBounds(Point pt) {
             return Screen.FromPoint(pt).Bounds;
         }
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Retrieves the bounds of the monitor that contains the largest region of the
         ///       specified rectangle.
@@ -384,7 +384,7 @@ namespace System.Windows.Forms {
         public static Rectangle GetBounds(Rectangle rect) {
             return Screen.FromRectangle(rect).Bounds;
         }
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Retrieves the bounds of the monitor
         ///       that contains the largest region of the specified control.
@@ -394,7 +394,7 @@ namespace System.Windows.Forms {
             return Screen.FromControl(ctl).Bounds;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Computes and retrieves a hash code for an object.
         ///    </para>
@@ -403,7 +403,7 @@ namespace System.Windows.Forms {
             return(int)hmonitor;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Called by the SystemEvents class when our display settings are
         ///     changing.  We cache screen information and at this point we must
         ///     invalidate our cache.
@@ -420,7 +420,7 @@ namespace System.Windows.Forms {
             screens = null;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Called by the SystemEvents class when our display settings have
         ///     changed.  Here, we increment a static counter that Screen instances
         ///     can check against to invalidate their cache.
@@ -432,7 +432,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Retrieves a string representing this object.
         ///    </para>
@@ -442,7 +442,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>         
+        /// <summary>         
         /// </devdoc>         
         private class MonitorEnumCallback {
             public ArrayList screens = new ArrayList();

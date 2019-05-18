@@ -9,24 +9,24 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.Control.Paint'/>
     /// event.
     /// NOTE: Please keep this class consistent with PrintPageEventArgs.
     /// </devdoc>
     public class PaintEventArgs : EventArgs, IDisposable
     {
-        /// <devdoc>
+        /// <summary>
         /// Graphics object with which painting should be done.
         /// </devdoc>
         private Graphics _graphics;
 
-        /// <devdoc>
+        /// <summary>
         /// See ResetGraphics()
         /// </devdoc>
         private GraphicsState _savedGraphicsState;
 
-        /// <devdoc>
+        /// <summary>
         /// DC (Display context) for obtaining the graphics object. Used to delay
         /// getting the graphics object until absolutely necessary (for perf reasons)
         /// </devdoc>
@@ -51,7 +51,7 @@ namespace System.Windows.Forms
         private string AllocationSite = PaintEventArgs.GetAllocationStack();
 #endif
 
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.PaintEventArgs'/>
         /// class with the specified graphics and clipping rectangle.
         /// </devdoc>
@@ -61,7 +61,7 @@ namespace System.Windows.Forms
             ClipRectangle = clipRect;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Internal version of constructor for performance
         /// We try to avoid getting the graphics object until needed
         /// </devdoc>
@@ -75,19 +75,19 @@ namespace System.Windows.Forms
 
         ~PaintEventArgs() => Dispose(false);
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the rectangle in which to paint.
         /// </devdoc>
         public Rectangle ClipRectangle { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the HDC this paint event is connected to.  If there is no associated
         /// HDC, or the GDI+ Graphics object has been created (meaning GDI+ now owns the
         /// HDC), 0 is returned.
         /// </devdoc>
         internal IntPtr HDC => _graphics == null ? _dc : IntPtr.Zero;
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the <see cref='System.Drawing.Graphics'/> object used to paint.
         /// </devdoc>
         public System.Drawing.Graphics Graphics
@@ -106,7 +106,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Disposes of the resources (other than memory) used by the
         /// <see cref='System.Windows.Forms.PaintEventArgs'/>.
         /// </devdoc>
@@ -134,7 +134,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// If ControlStyles.AllPaintingInWmPaint, we call this method
         /// after OnPaintBackground so it appears to OnPaint that it's getting a fresh
         /// Graphics.  We want to make sure AllPaintingInWmPaint is purely an optimization,

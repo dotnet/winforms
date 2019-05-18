@@ -11,13 +11,13 @@ using System.Reflection;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// ListViewGroupConverter is a class that can be used to convert  ListViewGroup objects
     /// from one data type to another. Access this class through the TypeDescriptor.
     /// </devdoc>
     internal class ListViewGroupConverter : TypeConverter
     {
-        /// <devdoc>
+        /// <summary>
         /// Determines if this converter can convert an object in the given source type to
         /// the native type of the converter.
         /// </devdoc>
@@ -31,7 +31,7 @@ namespace System.Windows.Forms
             return base.CanConvertFrom(context, sourceType);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets a value indicating whether this converter can convert an object to the given
         /// destination type using the context.</para>
         /// </devdoc>
@@ -49,7 +49,7 @@ namespace System.Windows.Forms
             return base.CanConvertTo(context, destinationType);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Converts the given object to the converter's native type.
         /// </devdoc>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
@@ -81,7 +81,7 @@ namespace System.Windows.Forms
             return base.ConvertFrom(context, culture, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Converts the given object to another type. The most common types to convert
         /// are to and from a string object. The default implementation will make a call
         /// to ToString on the object if the object is valid and if the destination
@@ -114,7 +114,7 @@ namespace System.Windows.Forms
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieves a collection containing a set of standard values for the data type this
         /// validator is designed for. This will return null if the data type does not support
         /// a standard set of values.
@@ -134,7 +134,7 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Determines if the list of standard values returned from GetStandardValues is an
         /// exclusive list.  If the list is exclusive, then no other values are valid, such as
         /// in an enum data type.  If the list is not exclusive, then there are other valid values
@@ -145,7 +145,7 @@ namespace System.Windows.Forms
             return true;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Determines if this object supports a standard set of values that can be picked
         /// from a list.
         /// </devdoc>

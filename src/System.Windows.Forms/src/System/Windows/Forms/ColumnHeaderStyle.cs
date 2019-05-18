@@ -4,23 +4,23 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies how <see cref='System.Windows.Forms.ListView'/> column headers
     /// behave.
     /// </devdoc>
     public enum ColumnHeaderStyle
     {
-        /// <devdoc>
+        /// <summary>
         /// No visible column header.
         /// </devdoc>
         None = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// Visible column header that does not respond to clicking.
         /// </devdoc>
         Nonclickable = 1,
 
-        /// <devdoc>
+        /// <summary>
         /// Visible column header that responds to clicking.
         /// </devdoc>
         Clickable = 2,

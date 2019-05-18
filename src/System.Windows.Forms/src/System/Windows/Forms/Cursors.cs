@@ -11,7 +11,7 @@ namespace System.Windows.Forms {
     using System.Drawing;
 
 
-    /// <devdoc>
+    /// <summary>
     ///     Standard cursors
     /// </devdoc>
     public sealed class Cursors {

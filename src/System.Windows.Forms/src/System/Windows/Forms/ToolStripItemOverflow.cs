@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// This enum is used to determine placement of the ToolStripItem on the ToolStrip.
     /// </devdoc>
     public enum ToolStripItemOverflow

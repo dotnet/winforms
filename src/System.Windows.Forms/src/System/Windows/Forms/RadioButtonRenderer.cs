@@ -11,7 +11,7 @@ using System.Windows.Forms.Internal;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       This is a rendering class for the RadioButton control. It works downlevel too (obviously
     ///       without visual styles applied.)
@@ -29,7 +29,7 @@ using Microsoft.Win32;
        private RadioButtonRenderer() {
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///      If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to 
        /// determine how to render.
@@ -51,7 +51,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Returns true if the background corresponding to the given state is partially transparent, else false.
        ///    </para>
@@ -67,7 +67,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       This is just a convenience wrapper for VisualStyleRenderer.DrawThemeParentBackground. For downlevel,
        ///       this isn't required and does nothing.
@@ -84,7 +84,7 @@ using Microsoft.Win32;
            }
        }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a RadioButton control.
         ///    </para>
@@ -106,7 +106,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a RadioButton control.
        ///    </para>
@@ -117,7 +117,7 @@ using Microsoft.Win32;
                       focused, state);
        }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a RadioButton control.
         ///    </para>
@@ -148,7 +148,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a RadioButton control.
        ///    </para>
@@ -161,7 +161,7 @@ using Microsoft.Win32;
 
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a RadioButton control.
         ///    </para>
@@ -195,7 +195,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Returns the size of the RadioButton glyph.
        ///    </para>

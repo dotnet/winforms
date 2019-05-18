@@ -11,7 +11,7 @@ namespace System.Windows.Forms
     [ComVisible(true)]
     public interface IWin32Window
     {
-        /// <devdoc>
+        /// <summary>
         /// Gets the handle to the window represented by the implementor.
         /// </devdoc>
         IntPtr Handle { get; }

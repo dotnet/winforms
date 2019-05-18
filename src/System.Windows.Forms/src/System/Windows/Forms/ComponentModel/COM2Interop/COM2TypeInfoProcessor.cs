@@ -16,7 +16,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.Globalization;
    
 
-    /// <devdoc>
+    /// <summary>
     /// This is the main worker class of Com2 property interop. It takes an IDispatch Object
     /// and translates it's ITypeInfo into Com2PropertyDescriptor objects that are understandable
     /// by managed code.
@@ -49,7 +49,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         private static Hashtable processedLibraries;
         
          
-        /// <devdoc>
+        /// <summary>
         /// Given an Object, this attempts to locate its type ifo
         /// </devdoc>
         public static UnsafeNativeMethods.ITypeInfo FindTypeInfo(object obj, bool wantCoClass) {
@@ -94,7 +94,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Given an Object, this attempts to locate its type info. If it implementes IProvideMultipleClassInfo
         /// all available type infos will be returned, otherwise the primary one will be alled.
         /// </devdoc>
@@ -133,7 +133,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return typeInfos;
         }
         
-        /// <devdoc>
+        /// <summary>
         /// Retrieve the dispid of the property that we are to use as the name
         /// member.  In this case, the grid will put parens around the name.
         /// </devdoc>
@@ -178,7 +178,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the properties for a given Com2 Object.  The returned Com2Properties
         /// Object contains the properties and relevant data about them.
         /// </devdoc>
@@ -285,7 +285,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Resolves a value type for a property from a TYPEDESC.  Value types can be
         /// user defined, which and may be aliased into other type infos.  This function
         /// will recusively walk the ITypeInfos to resolve the type to a clr Type.
@@ -647,7 +647,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This converts a type info that describes a IDL defined enum
         /// into one we can use
         /// </devdoc>

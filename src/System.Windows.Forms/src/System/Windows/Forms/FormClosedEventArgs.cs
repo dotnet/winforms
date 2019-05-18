@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.Form.OnClosed'/> event.
     /// </devdoc>
     public class FormClosedEventArgs : EventArgs
@@ -14,7 +14,7 @@ namespace System.Windows.Forms
             CloseReason = closeReason;                                           
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Provides the reason for the Form Close.
         /// </devdoc>
         public CloseReason CloseReason { get; }

@@ -17,28 +17,28 @@ namespace System.Windows.Forms
             Message = message;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The position where the test failed the mask constraint.
         /// </devdoc>
         public Type ValidatingType { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The exception thrown by the validating object while performing the data validation.
         /// </devdoc>
         public bool IsValidInput { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// A message about the validation operation. Intended to be populated with
         /// an exception information if any thrown.
         /// </devdoc>
         public string Message { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The value returned from the Parse method.
         /// </devdoc>
         public object ReturnValue { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Specifies whether focus should be allowed to be shifted from the control.
         /// </devdoc>
         public bool Cancel { get; set; }

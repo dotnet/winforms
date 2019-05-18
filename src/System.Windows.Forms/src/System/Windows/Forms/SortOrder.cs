@@ -4,22 +4,22 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies how items in a list are sorted.
     /// </devdoc>
     public enum SortOrder
     {
-        /// <devdoc>
+        /// <summary>
         /// The items are not sorted.
         /// </devdoc>
         None = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// The items are sorted in ascending order.
         /// </devdoc>
         Ascending = 1,
 
-        /// <devdoc>
+        /// <summary>
         /// The items are sorted in descending order.
         /// </devdoc>
         Descending = 2,

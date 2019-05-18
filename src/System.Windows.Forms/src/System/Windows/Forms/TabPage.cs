@@ -18,7 +18,7 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Windows.Forms.Layout;
 
-    /// <devdoc>
+    /// <summary>
     ///     TabPage implements a single page of a tab control.  It is essentially
     ///     a Panel with TabItem properties.
     /// </devdoc>
@@ -39,7 +39,7 @@ namespace System.Windows.Forms {
         private bool useVisualStyleBackColor = false;
 
         
-        /// <devdoc>
+        /// <summary>
         ///     Constructs an empty TabPage.
         /// </devdoc>
         public TabPage ()
@@ -48,7 +48,7 @@ namespace System.Windows.Forms {
             Text = null;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Allows the control to optionally shrink when AutoSize is true.
         /// </devdoc>
         [
@@ -65,7 +65,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>Hide AutoSize: it doesn't make sense for this control</para>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
@@ -91,7 +91,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     The background color of this control. This is an ambient property and
         ///     will always return a non-null value.
         /// </devdoc>
@@ -133,7 +133,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Constructs the new instance of the Controls collection objects. Subclasses
         ///     should not call base.CreateControlsInstance.  Our version creates a control
         ///     collection that does not support
@@ -153,7 +153,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the imageIndex for the tabPage.  This should point to an image
         ///     in the TabControl's associated imageList that will appear on the tab, or be -1.
         /// </devdoc>
@@ -186,7 +186,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the imageIndex for the tabPage.  This should point to an image
         ///     in the TabControl's associated imageList that will appear on the tab, or be -1.
         /// </devdoc>
@@ -215,7 +215,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Constructs a TabPage with text for the tab.
         /// </devdoc>
         public TabPage (string text) : this() {
@@ -332,7 +332,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// This property is required by certain controls (TabPage) to render its transparency using theming API.
         /// We dont want all controls (that are have transparent BackColor) to use theming API to render its background because it has  HUGE PERF cost.
         /// </devdoc>
@@ -385,7 +385,7 @@ namespace System.Windows.Forms {
             remove => base.TextChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The toolTipText for the tab, that will appear when the mouse hovers
         ///     over the tab and the TabControl's showToolTips property is true.
         /// </devdoc>
@@ -427,7 +427,7 @@ namespace System.Windows.Forms {
             remove => base.VisibleChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Assigns a new parent control. Sends out the appropriate property change
         ///     notifications for properties that are affected by the change of parent.
         /// </devdoc>
@@ -439,7 +439,7 @@ namespace System.Windows.Forms {
             base.AssignParent (value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Given a component, this retrieves the tab page that it's parented to, or
         /// null if it's not parented to any tab page.
         /// </devdoc>
@@ -457,7 +457,7 @@ namespace System.Windows.Forms {
             return (TabPage)c;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         internal NativeMethods.TCITEM_T GetTCITEM () {
             NativeMethods.TCITEM_T tcitem = new NativeMethods.TCITEM_T ();
@@ -521,7 +521,7 @@ namespace System.Windows.Forms {
             value = newString.ToString ();
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This is an internal method called by the TabControl to fire the Leave event when TabControl leave occurs.
         /// </devdoc>
         internal void FireLeave (EventArgs e) {
@@ -529,7 +529,7 @@ namespace System.Windows.Forms {
             OnLeave (e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This is an internal method called by the TabControl to fire the Enter event when TabControl leave occurs.
         /// </devdoc>
         internal void FireEnter (EventArgs e) {
@@ -537,7 +537,7 @@ namespace System.Windows.Forms {
             OnEnter (e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Actually goes and fires the OnEnter event.  Inheriting controls
         ///     should use this to know when the event is fired [this is preferable to
         ///     adding an event handler on yourself for this event].  They should,
@@ -560,7 +560,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Actually goes and fires the OnLeave event.  Inheriting controls
         ///     should use this to know when the event is fired [this is preferable to
         ///     adding an event handler on yourself for this event].  They should,
@@ -627,7 +627,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     overrides main setting of our bounds so that we can control our size and that of our
         ///     TabPages...
         /// </devdoc>
@@ -646,7 +646,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines if the Location property needs to be persisted.
         /// </devdoc>
         [EditorBrowsable (EditorBrowsableState.Never)]
@@ -654,14 +654,14 @@ namespace System.Windows.Forms {
             return Left != 0 || Top != 0;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The text property is what is returned for the TabPages default printing.
         /// </devdoc>
         public override string ToString () {
             return "TabPage: {" + Text + "}";
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         internal void UpdateParent () {
             TabControl parent = ParentInternal as TabControl;
@@ -671,18 +671,18 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Our control collection will throw an exception if you try to add other tab pages.
         /// </devdoc>
         [ComVisible(false)]
         public class TabPageControlCollection : Control.ControlCollection {
-            /// <devdoc>
+            /// <summary>
             ///      Creates a new TabPageControlCollection.
             /// </devdoc>
             public TabPageControlCollection (TabPage owner) : base(owner) {
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Adds a child control to this control. The control becomes the last control
             ///     in the child control list. If the control is already a child of another
             ///     control it is first removed from that control.  The tab page overrides

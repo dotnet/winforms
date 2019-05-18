@@ -8,24 +8,24 @@ namespace System.Windows.Forms
 {
     public class ToolStripGripRenderEventArgs : ToolStripRenderEventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// This class represents all the information to render the toolStrip
         /// </devdoc>
         public ToolStripGripRenderEventArgs(Graphics g, ToolStrip toolStrip) : base(g, toolStrip)
         {
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The graphics object to draw with
         /// </devdoc>
         public Rectangle GripBounds => ToolStrip.GripRectangle;
 
-        /// <devdoc>
+        /// <summary>
         /// Vertical or horizontal
         /// </devdoc>
         public ToolStripGripDisplayStyle GripDisplayStyle => ToolStrip.GripDisplayStyle;
 
-        /// <devdoc>
+        /// <summary>
         /// Visible or hidden
         /// </devdoc>
         public ToolStripGripStyle GripStyle => ToolStrip.GripStyle;

@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides information about a DpiChanged event.
     /// </devdoc>
     public sealed class DpiChangedEventArgs : CancelEventArgs

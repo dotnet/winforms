@@ -16,7 +16,7 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para> Represents a
     ///       dialog box form that contains a <see cref='System.Windows.Forms.PrintPreviewControl'/>.</para>
     /// </devdoc>
@@ -56,7 +56,7 @@ namespace System.Windows.Forms {
         private System.Windows.Forms.ToolStripLabel pageToolStripLabel;
         ImageList imageList;
         
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.PrintPreviewDialog'/> class.</para>
         /// </devdoc>
         public PrintPreviewDialog() {
@@ -73,7 +73,7 @@ namespace System.Windows.Forms {
 
         //subhag addition
         //-------------------------------------------------------------------------------------------------------------
-        /// <devdoc>
+        /// <summary>
         /// <para>Indicates the <see cref='System.Windows.Forms.Button'/> control on the form that is clicked when
         ///    the user presses the ENTER key.</para>
         /// </devdoc>
@@ -86,7 +86,7 @@ namespace System.Windows.Forms {
                 base.AcceptButton = value;
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the form will adjust its size
         ///       to fit the height of the font used on the form and scale
@@ -107,7 +107,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the form implements
         ///       autoscrolling.
@@ -124,7 +124,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Hide the property
         ///    </para>
@@ -145,7 +145,7 @@ namespace System.Windows.Forms {
             remove => base.AutoSizeChanged -= value;
         }                
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Hide the property
         ///    </para>
@@ -166,7 +166,7 @@ namespace System.Windows.Forms {
             remove => base.AutoValidateChanged -= value;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     The background color of this control. This is an ambient property and
         ///     will always return a non-null value.
         /// </devdoc>
@@ -184,7 +184,7 @@ namespace System.Windows.Forms {
             add => base.BackColorChanged += value;
             remove => base.BackColorChanged -= value;
         }
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets
         ///       or
         ///       sets the button control that will be clicked when the
@@ -199,7 +199,7 @@ namespace System.Windows.Forms {
                 base.CancelButton = value;
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets a value indicating whether a control box is displayed in the
         ///       caption bar of the form.</para>
         /// </devdoc>
@@ -213,7 +213,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Hide the property
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -232,7 +232,7 @@ namespace System.Windows.Forms {
             remove => base.ContextMenuStripChanged -= value;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the border style of the form.
         ///    </para>
@@ -246,7 +246,7 @@ namespace System.Windows.Forms {
                 base.FormBorderStyle = value;
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether a
         ///       help button should be displayed in the caption box of the form.
@@ -261,7 +261,7 @@ namespace System.Windows.Forms {
                 base.HelpButton = value;
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the icon for the form.
         ///    </para>
@@ -277,7 +277,7 @@ namespace System.Windows.Forms {
                 base.Icon = value;
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the form is a container for multiple document interface
         ///       (MDI) child forms.
@@ -292,7 +292,7 @@ namespace System.Windows.Forms {
                 base.IsMdiContainer = value;
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value
         ///       indicating whether the form will receive key events
@@ -308,7 +308,7 @@ namespace System.Windows.Forms {
                 base.KeyPreview = value;
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or Sets the maximum size the dialog can be resized to.
         ///    </para>
@@ -327,7 +327,7 @@ namespace System.Windows.Forms {
             add => base.MaximumSizeChanged += value;
             remove => base.MaximumSizeChanged -= value;
         }
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets a value indicating whether the maximize button is
         ///       displayed in the caption bar of the form.</para>
         /// </devdoc>
@@ -341,7 +341,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Hide the value
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -360,7 +360,7 @@ namespace System.Windows.Forms {
             remove => base.MarginChanged -= value;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.MainMenu'/>
         ///       that is displayed in the form.
@@ -376,7 +376,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets the minimum size the form can be resized to.
         ///    </para>
@@ -396,7 +396,7 @@ namespace System.Windows.Forms {
             remove => base.MinimumSizeChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Hide the value
         ///    </para>
@@ -417,7 +417,7 @@ namespace System.Windows.Forms {
             remove => base.PaddingChanged -= value;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the size of the form.
         ///    </para>
@@ -436,7 +436,7 @@ namespace System.Windows.Forms {
             add => base.SizeChanged += value;
             remove => base.SizeChanged -= value;
         }
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the
         ///       starting position of the form at run time.
@@ -451,7 +451,7 @@ namespace System.Windows.Forms {
                 base.StartPosition = value;
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets a value indicating whether the form should be displayed as the top-most
         ///       form of your application.</para>
         /// </devdoc>
@@ -465,7 +465,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets the color that will represent transparent areas of the form.</para>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -478,7 +478,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Hide the value</para>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -491,7 +491,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para> Gets or sets the form's window state.
         ///       </para>
         /// </devdoc>
@@ -504,7 +504,7 @@ namespace System.Windows.Forms {
                 base.WindowState = value;
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///      The accessible role of the control
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -516,7 +516,7 @@ namespace System.Windows.Forms {
                 base.AccessibleRole = value;
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///      The accessible description of the control
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -528,7 +528,7 @@ namespace System.Windows.Forms {
                 base.AccessibleDescription = value;
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///      The accessible name of the control
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -540,7 +540,7 @@ namespace System.Windows.Forms {
                 base.AccessibleName = value;
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///    <para> 
         ///       Indicates whether entering the control causes validation on the controls requiring validation.</para>
         /// </devdoc>
@@ -558,7 +558,7 @@ namespace System.Windows.Forms {
             add => base.CausesValidationChanged += value;
             remove => base.CausesValidationChanged -= value;
         }
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the bindings for this control.
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -574,7 +574,7 @@ namespace System.Windows.Forms {
         }
         
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates whether the control is currently enabled.</para>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -591,7 +591,7 @@ namespace System.Windows.Forms {
             add => base.EnabledChanged += value;
             remove => base.EnabledChanged -= value;
         }
-        /// <devdoc>
+        /// <summary>
         ///     The location of this control.
         /// </devdoc>
         [Browsable(false),
@@ -619,7 +619,7 @@ namespace System.Windows.Forms {
                 base.Tag = value;
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///     The AllowDrop property. If AllowDrop is set to true then
         ///     this control will allow drag and drop operations and events to be used.
         /// </devdoc>
@@ -632,7 +632,7 @@ namespace System.Windows.Forms {
                 base.AllowDrop = value;
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the cursor that will be displayed when the mouse is over this
         ///     control.
         /// </devdoc>
@@ -651,7 +651,7 @@ namespace System.Windows.Forms {
             remove => base.CursorChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The background image of the control.
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -669,7 +669,7 @@ namespace System.Windows.Forms {
             remove => base.BackgroundImageChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The background image layout of the control.
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -686,7 +686,7 @@ namespace System.Windows.Forms {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
         }
-        /// <devdoc>
+        /// <summary>
         ///     Specifies a value that determines the IME (Input Method Editor) status of the 
         ///     object when that object is selected.
         /// </devdoc>
@@ -705,7 +705,7 @@ namespace System.Windows.Forms {
             remove => base.ImeModeChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or
         ///       sets the size of the auto-scroll
@@ -721,7 +721,7 @@ namespace System.Windows.Forms {
                 base.AutoScrollMargin = value;
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets the mimimum size of the auto-scroll.</para>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -733,7 +733,7 @@ namespace System.Windows.Forms {
                 base.AutoScrollMinSize = value;
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///     The current value of the anchor property. The anchor property
         ///     determines which edges of the control are anchored to the container's
         ///     edges.
@@ -747,7 +747,7 @@ namespace System.Windows.Forms {
                 base.Anchor = value;
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates whether the control is visible.</para>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -764,7 +764,7 @@ namespace System.Windows.Forms {
             add => base.VisibleChanged += value;
             remove => base.VisibleChanged -= value;
         }
-        /// <devdoc>
+        /// <summary>
         ///     The foreground color of the control.
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -782,7 +782,7 @@ namespace System.Windows.Forms {
             remove => base.ForeColorChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
         ///     control placement and text will be from right to left.
@@ -797,7 +797,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
         //      and the RightToLeft is true, mirroring will be turned on on the form, and
@@ -828,7 +828,7 @@ namespace System.Windows.Forms {
         }
         
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates whether the user can give the focus to this control using the TAB 
         ///       key. This property is read-only.</para>
         /// </devdoc>
@@ -847,7 +847,7 @@ namespace System.Windows.Forms {
             remove => base.TabStopChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The current text associated with this control.
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -866,7 +866,7 @@ namespace System.Windows.Forms {
             remove => base.TextChanged -= value;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     The dock property. The dock property controls to which edge
         ///     of the container this control is docked to. For example, when docked to
         ///     the top of the container, the control will be displayed flush at the
@@ -887,7 +887,7 @@ namespace System.Windows.Forms {
             remove => base.DockChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the current font for this control. This will be the font used
         ///     by default for painting and text in the control.
         /// </devdoc>
@@ -906,7 +906,7 @@ namespace System.Windows.Forms {
             remove => base.FontChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The contextMenu associated with this control. The contextMenu
         ///     will be shown when the user right clicks the mouse on the control.
         /// </devdoc>
@@ -926,7 +926,7 @@ namespace System.Windows.Forms {
         }
 
         // DockPadding is not relevant to UpDownBase
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public DockPaddingEdges DockPadding {
@@ -951,7 +951,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       PrintPreviewDialog does not support AutoScaleBaseSize.
         ///    </para>
@@ -974,7 +974,7 @@ namespace System.Windows.Forms {
         #pragma warning restore 0809
         #pragma warning restore 618
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the document to preview.
         ///    </para>
@@ -1003,7 +1003,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets or sets a value indicating the <see cref='System.Windows.Forms.PrintPreviewControl'/> 
         /// contained in this form.</para>
         /// </devdoc>
@@ -1016,7 +1016,7 @@ namespace System.Windows.Forms {
             get { return previewControl;}
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Opacity does not apply to PrintPreviewDialogs.
         ///    </para>
@@ -1353,7 +1353,7 @@ namespace System.Windows.Forms {
         }
         
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Forces the preview to be regenerated every time the dialog comes up
         ///    </para>
@@ -1363,7 +1363,7 @@ namespace System.Windows.Forms {
             previewControl.InvalidatePreview();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Creates the handle for the PrintPreviewDialog. If a
         ///       subclass overrides this function,
         ///       it must call the base implementation.</para>
@@ -1392,7 +1392,7 @@ namespace System.Windows.Forms {
             return base.ProcessDialogKey(keyData);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       In Everett we used to TAB around the PrintPreviewDialog. Now since the PageCounter is added into the ToolStrip we dont
         ///       This is breaking from Everett.
@@ -1407,7 +1407,7 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       AutoScaleBaseSize should never be persisted for PrintPreviewDialogs.
         ///    </para>

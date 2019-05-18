@@ -4,24 +4,24 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies responsibility for drawing a control or portion of a control.
     /// </devdoc>
     public enum DrawMode
     {
-        /// <devdoc>
+        /// <summary>
         /// The operating system paints the items in the control, and the items
         /// are each the same height.
         /// </devdoc>
         Normal = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// The programmer explicitly paints the items in the control, and the
         /// items are each the same height.
         /// </devdoc>
         OwnerDrawFixed = 1,
 
-        /// <devdoc>
+        /// <summary>
         /// The programmer explicitly paints the items in the control manually,
         /// and they may be different heights.
         /// </devdoc>

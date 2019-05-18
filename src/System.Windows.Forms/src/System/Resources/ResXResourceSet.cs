@@ -17,12 +17,12 @@ namespace System.Resources {
     using System.Collections;
     using System.Resources;
 
-    /// <devdoc>
+    /// <summary>
     ///     ResX resource set.
     /// </devdoc>
     public class ResXResourceSet : ResourceSet {
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a resource set for the specified file.
         /// </devdoc>
         [
@@ -32,7 +32,7 @@ namespace System.Resources {
             ReadResources();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a resource set for the specified stream.
         /// </devdoc>
         [
@@ -42,14 +42,14 @@ namespace System.Resources {
             ReadResources();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Gets the default reader type associated with this set.
         /// </devdoc>
         public override Type GetDefaultReader() {
             return typeof(ResXResourceReader);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Gets the default writer type associated with this set.
         /// </devdoc>
         public override Type GetDefaultWriter() {

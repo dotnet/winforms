@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies what to render for the ToolStripItem
     /// </devdoc>
     public enum ToolStripItemDisplayStyle

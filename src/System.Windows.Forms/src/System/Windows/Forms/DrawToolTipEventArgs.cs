@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// This class contains the information a user needs to paint the ToolTip.
     /// </devdoc>
     public class DrawToolTipEventArgs : EventArgs
@@ -14,7 +14,7 @@ namespace System.Windows.Forms
         private readonly Color _backColor;
         private readonly Color _foreColor;
 
-        /// <devdoc>
+        /// <summary>
         /// Creates a new DrawToolTipEventArgs with the given parameters.
         /// </devdoc>
         public DrawToolTipEventArgs(Graphics graphics, IWin32Window associatedWindow, Control associatedControl, Rectangle bounds,
@@ -30,37 +30,37 @@ namespace System.Windows.Forms
             Font = font;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Graphics object with which painting should be done.
         /// </devdoc>
         public Graphics Graphics { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The window for which the tooltip is being painted.
         /// </devdoc>
         public IWin32Window AssociatedWindow { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The control for which the tooltip is being painted.
         /// </devdoc>
         public Control AssociatedControl { get; }
 
-        /// <devdoc>
+        /// <summary>
         ///  The rectangle outlining the area in which the painting should be done.
         /// </devdoc>
         public Rectangle Bounds { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The text that should be drawn.
         /// </devdoc>
         public string ToolTipText { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The font used to draw tooltip text.
         /// </devdoc>
         public Font Font { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Draws the background of the ToolTip.
         /// </devdoc>
         public void DrawBackground()
@@ -71,7 +71,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Draws the text (overloaded)
         /// </devdoc>
         public void DrawText()
@@ -80,7 +80,7 @@ namespace System.Windows.Forms
             DrawText(TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine | TextFormatFlags.HidePrefix);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Draws the text (overloaded) - takes a TextFormatFlags argument.
         /// </devdoc>
         public void DrawText(TextFormatFlags flags)
@@ -88,7 +88,7 @@ namespace System.Windows.Forms
             TextRenderer.DrawText(Graphics, ToolTipText, Font, Bounds, _foreColor, flags);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Draws a border for the ToolTip similar to the default border.
         /// </devdoc>
         public void DrawBorder()

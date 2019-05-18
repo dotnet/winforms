@@ -4,43 +4,43 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies how a <see cref='System.Windows.Forms.RichTextBox'/> control displays scroll bars.
     ///
     /// </devdoc>
     public enum RichTextBoxScrollBars
     {
-        /// <devdoc>
+        /// <summary>
         /// Never display scroll bars.
         /// </devdoc>
         None = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// Display only a horizontal scroll bar when needed.
         /// </devdoc>
         Horizontal = RichTextBoxConstants.RTB_HORIZ,
 
-        /// <devdoc>
+        /// <summary>
         /// Display only a vertical scroll bar when needed.
         /// </devdoc>
         Vertical = RichTextBoxConstants.RTB_VERT,
 
-        /// <devdoc>
+        /// <summary>
         /// Display both a horizontal and a vertical scroll bar when needed.
         /// </devdoc>
         Both = Horizontal | Vertical,
 
-        /// <devdoc>
+        /// <summary>
         /// Always display only a horizontal scroll bar.
         /// </devdoc>
         ForcedHorizontal = RichTextBoxConstants.RTB_FORCE | Horizontal,
 
-        /// <devdoc>
+        /// <summary>
         /// Always display only a vertical scroll bar.
         /// </devdoc>
         ForcedVertical = RichTextBoxConstants.RTB_FORCE | Vertical,
 
-        /// <devdoc>
+        /// <summary>
         /// Always display both a horizontal and a vertical scroll bar.
         /// </devdoc>
         ForcedBoth = ForcedHorizontal | ForcedVertical,

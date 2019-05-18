@@ -26,7 +26,7 @@ namespace System.Windows.Forms {
             this.underlyingController = underlyingController;
             this.dialogTitle = dialogTitle;
         }
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       This is new public property which notifies if this controller is used for PrintPreview.. so get the underlying Controller 
         ///       and return its IsPreview Property.
@@ -42,7 +42,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Implements StartPrint by delegating to the underlying controller.
         ///    </para>
@@ -77,7 +77,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Implements StartPage by delegating to the underlying controller.
         ///    </para>
@@ -95,7 +95,7 @@ namespace System.Windows.Forms {
             return result;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Implements EndPage by delegating to the underlying controller.
         ///    </para>
@@ -110,7 +110,7 @@ namespace System.Windows.Forms {
             base.OnEndPage(document, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Implements EndPrint by delegating to the underlying controller.
         ///    </para>
@@ -216,7 +216,7 @@ namespace System.Windows.Forms {
                 this.MinimumSize = Size;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Tells whether the current resources for this dll have been
             ///     localized for a RTL language.
             /// </devdoc>

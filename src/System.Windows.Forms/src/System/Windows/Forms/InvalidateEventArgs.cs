@@ -6,12 +6,12 @@ using System.Drawing;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.Control.Invalidate'/> event.
     /// </devdoc>
     public class InvalidateEventArgs : EventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.InvalidateEventArgs'/>
         /// class.
         /// </devdoc>
@@ -20,7 +20,7 @@ namespace System.Windows.Forms
             InvalidRect = invalidRect;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets a value indicating the <see cref='System.Drawing.Rectangle'/> that contains the
         /// invalidated window area.
         /// </devdoc>

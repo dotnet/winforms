@@ -42,7 +42,7 @@ namespace System.Windows.Forms {
         private bool addNewItemUserEnabled = true;
         private bool deleteItemUserEnabled = true;
 
-        /// <devdoc>
+        /// <summary>
         ///      Creates an empty BindingNavigator tool strip.
         ///      Call AddStandardItems() to add standard tool strip items.
         /// </devdoc>
@@ -50,14 +50,14 @@ namespace System.Windows.Forms {
         public BindingNavigator() : this(false) {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Creates a BindingNavigator strip containing standard items, bound to the specified BindingSource.
         /// </devdoc>
         public BindingNavigator(BindingSource bindingSource) : this(true) {
             BindingSource = bindingSource;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Creates an empty BindingNavigator tool strip, and adds the strip to the specified container.
         ///      Call AddStandardItems() to add standard tool strip items.
         /// </devdoc>
@@ -70,7 +70,7 @@ namespace System.Windows.Forms {
             container.Add(this);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Creates a BindingNavigator strip, optionally containing a set of standard tool strip items.
         /// </devdoc>
         public BindingNavigator(bool addStandardItems) {
@@ -79,14 +79,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     ISupportInitialize support. Disables updates to tool strip items during initialization.
         /// </devdoc>
         public void BeginInit() {
             initializing = true;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     ISupportInitialize support. Enables updates to tool strip items after initialization.
         /// </devdoc>
         public void EndInit() {
@@ -94,7 +94,7 @@ namespace System.Windows.Forms {
             RefreshItemsInternal();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Unhooks the BindingNavigator from the BindingSource.
         /// </devdoc>
         protected override void Dispose(bool disposing) {
@@ -105,7 +105,7 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Adds standard set of tool strip items to a BindingNavigator tool strip, for basic
         ///      navigation operations such as Move First, Move Next, Add New, etc.
         ///
@@ -232,7 +232,7 @@ namespace System.Windows.Forms {
                                 });
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      The BindingSource who's list we are currently navigating, or null.
         /// </devdoc>
         [
@@ -252,7 +252,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The ToolStripItem that triggers the 'Move first' action, or null.
         /// </devdoc>
         [
@@ -273,7 +273,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The ToolStripItem that triggers the 'Move previous' action, or null.
         /// </devdoc>
         [
@@ -296,7 +296,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The ToolStripItem that triggers the 'Move next' action, or null.
         /// </devdoc>
         [
@@ -317,7 +317,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The ToolStripItem that triggers the 'Move last' action, or null.
         /// </devdoc>
         [
@@ -338,7 +338,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The ToolStripItem that triggers the 'Add new' action, or null.
         /// </devdoc>
         [
@@ -363,7 +363,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The ToolStripItem that triggers the 'Delete' action, or null.
         /// </devdoc>
         [
@@ -389,7 +389,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The ToolStripItem that displays the current position, or null.
         /// </devdoc>
         [
@@ -410,7 +410,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The ToolStripItem that displays the total number of items, or null.
         /// </devdoc>
         [
@@ -431,7 +431,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Formatting to apply to count displayed in the CountItem tool strip item.
         /// </devdoc>
         [
@@ -451,7 +451,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Event raised when the state of the tool strip items needs to be
         ///     refreshed to reflect the current state of the data.
         /// </devdoc>
@@ -464,7 +464,7 @@ namespace System.Windows.Forms {
             remove => onRefreshItems -= value;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     Refreshes the state of the standard items to reflect the current state of the data.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -522,7 +522,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Called when the state of the tool strip items needs to be refreshed to reflect the current state of the data.
         ///     Calls <see cref='RefreshItemsCore'> to refresh the state of the standard items, then raises the RefreshItems event.
         /// </devdoc>
@@ -536,7 +536,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Triggers form validation. Used by the BindingNavigator's standard items when clicked. If a validation error occurs
         ///     on the form, focus remains on the active control and the standard item does not perform its standard click action.
         ///     Custom items may also use this method to trigger form validation and check for success before performing an action.
@@ -546,7 +546,7 @@ namespace System.Windows.Forms {
             return this.ValidateActiveControl(out validatedControlAllowsFocusChange);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Accept new row position entered into PositionItem.
         /// </devdoc>
         private void AcceptNewPosition() {
@@ -580,7 +580,7 @@ namespace System.Windows.Forms {
             RefreshItemsInternal();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Cancel new row position entered into PositionItem.
         /// </devdoc>
         private void CancelNewPosition() {
@@ -589,7 +589,7 @@ namespace System.Windows.Forms {
             RefreshItemsInternal();
         }
   
-        /// <devdoc>
+        /// <summary>
         ///     Navigates to first item in BindingSource's list when the MoveFirstItem is clicked.
         /// </devdoc>
         private void OnMoveFirst(object sender, EventArgs e) {
@@ -601,7 +601,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Navigates to previous item in BindingSource's list when the MovePreviousItem is clicked.
         /// </devdoc>
         private void OnMovePrevious(object sender, EventArgs e) {
@@ -613,7 +613,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Navigates to next item in BindingSource's list when the MoveNextItem is clicked.
         /// </devdoc>
         private void OnMoveNext(object sender, EventArgs e) {
@@ -625,7 +625,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Navigates to last item in BindingSource's list when the MoveLastItem is clicked.
         /// </devdoc>
         private void OnMoveLast(object sender, EventArgs e) {
@@ -637,7 +637,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Adds new item to BindingSource's list when the AddNewItem is clicked.
         /// </devdoc>
         private void OnAddNew(object sender, EventArgs e) {
@@ -649,7 +649,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Deletes current item from BindingSource's list when the DeleteItem is clicked.
         /// </devdoc>
         private void OnDelete(object sender, EventArgs e) {
@@ -661,7 +661,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Navigates to specific item in BindingSource's list when a value is entered into the PositionItem.
         /// </devdoc>
         private void OnPositionKey(object sender, KeyEventArgs e) {
@@ -675,28 +675,28 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Navigates to specific item in BindingSource's list when a value is entered into the PositionItem.
         /// </devdoc>
         private void OnPositionLostFocus(object sender, EventArgs e) {
             AcceptNewPosition();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Refresh tool strip items when something changes in the BindingSource.
         /// </devdoc>
         private void OnBindingSourceStateChanged(object sender, EventArgs e) {
             RefreshItemsInternal();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Refresh tool strip items when something changes in the BindingSource's list.
         /// </devdoc>
         private void OnBindingSourceListChanged(object sender, ListChangedEventArgs e) {
             RefreshItemsInternal();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Refresh the state of the items when the state of the data changes.
         /// </devdoc>
         private void RefreshItemsInternal() {
@@ -729,7 +729,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Wire up some member variable to the specified button item, hooking events
         ///     on the new button and unhooking them from the previous button, if required.
         /// </devdoc>
@@ -750,7 +750,7 @@ namespace System.Windows.Forms {
             RefreshItemsInternal();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Wire up some member variable to the specified text box item, hooking events
         ///     on the new text box and unhooking them from the previous text box, if required.
         /// </devdoc>
@@ -774,7 +774,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Wire up some member variable to the specified label item, hooking events
         ///     on the new label and unhooking them from the previous label, if required.
         /// </devdoc>
@@ -785,7 +785,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Wire up some member variable to the specified binding source, hooking events
         ///     on the new binding source and unhooking them from the previous one, if required.
         /// </devdoc>

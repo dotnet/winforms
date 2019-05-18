@@ -17,7 +17,7 @@ namespace System.Windows.Forms {
 
     using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     /// <para>Represents the table drawn by the <see cref='System.Windows.Forms.DataGrid'/> control at run time.</para>
     /// </devdoc>
     [
@@ -129,7 +129,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>[To be  supplied]</para>
         /// </devdoc>
         public event EventHandler AllowSortingChanged {
@@ -1040,7 +1040,7 @@ namespace System.Windows.Forms {
         public static readonly DataGridTableStyle DefaultTableStyle = new DataGridTableStyle(true);
 
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataGridTableStyle'/> class.</para>
         /// </devdoc>
         public DataGridTableStyle(bool isDefaultTableStyle) {
@@ -1052,7 +1052,7 @@ namespace System.Windows.Forms {
         public DataGridTableStyle() : this(false) {
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataGridTableStyle'/> class with the specified
         /// <see cref='System.Windows.Forms.CurrencyManager'/>.</para>
         /// </devdoc>
@@ -1172,7 +1172,7 @@ namespace System.Windows.Forms {
         // =        Properties
         // =------------------------------------------------------------------
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the name of this grid table.</para>
         /// </devdoc>
         [Editor("System.Windows.Forms.Design.DataGridTableStyleMappingNameEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor)), DefaultValue("")]
@@ -1205,7 +1205,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EventMappingName, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the
         ///       list of relation objects for the grid table.</para>
         /// </devdoc>
@@ -1215,7 +1215,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the collection of columns drawn for this table.</para>
         /// </devdoc>
         [
@@ -1228,7 +1228,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.DataGrid'/>
         ///       control displaying the table.
@@ -1249,7 +1249,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets or sets the <see cref='System.Windows.Forms.DataGrid'/> control for the drawn table.</para>
         /// </devdoc>
         [Browsable(false)]
@@ -1262,7 +1262,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets a value indicating whether columns can be
         ///       edited.</para>
         /// </devdoc>
@@ -1288,7 +1288,7 @@ namespace System.Windows.Forms {
         // =        Methods
         // =------------------------------------------------------------------
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Requests an edit operation.</para>
         /// </devdoc>
         public bool BeginEdit(DataGridColumnStyle gridColumn, int rowNumber) {
@@ -1299,7 +1299,7 @@ namespace System.Windows.Forms {
                 return grid.BeginEdit(gridColumn, rowNumber);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Requests an end to an edit
         ///       operation.</para>
         /// </devdoc>
@@ -1348,7 +1348,7 @@ namespace System.Windows.Forms {
         }
 
 #if false
-        /// <devdoc>
+        /// <summary>
         ///      The DataColumnCollection class actually wires up this
         ///      event handler to the PropertyChanged events of
         ///      a DataGridTable's columns.

@@ -6,13 +6,13 @@ using System.Drawing;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.StatusBar.OnDrawItem'/>
     /// event.
     /// </devdoc>
     public class StatusBarDrawItemEventArgs : DrawItemEventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.StatusBarDrawItemEventArgs'/>
         /// class.
         /// </devdoc>
@@ -23,7 +23,7 @@ namespace System.Windows.Forms
             Panel = panel;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.StatusBarDrawItemEventArgs'/>
         /// class using the Forecolor and Backcolor.
         /// </devdoc>
@@ -35,7 +35,7 @@ namespace System.Windows.Forms
             Panel = panel;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Specifies the <see cref='System.Windows.Forms.StatusBarPanel'/> to draw.
         /// </devdoc>
         public StatusBarPanel Panel { get; }

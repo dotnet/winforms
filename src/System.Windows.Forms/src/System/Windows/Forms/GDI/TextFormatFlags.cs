@@ -7,7 +7,7 @@ using System.Windows.Forms.Internal;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Note: This is a public enum wrapping the internal IntTextFormatFlags
     /// defined in the System.Windows.Forms.Internal namespace, we need to do this to
     /// be able to compile the internal one into different assemblies w/o
@@ -51,7 +51,7 @@ namespace System.Windows.Forms
         WordBreak                   = IntTextFormatFlags.WordBreak,
         WordEllipsis                = IntTextFormatFlags.WordEllipsis,
 
-        /// <devdoc>
+        /// <summary>
         /// The following flags are exclusive of TextRenderer (no Windows native flags)
         /// and apply to methods receiving a Graphics as the IDeviceContext object, and
         /// specify whether to reapply clipping and coordintate transformations to the hdc
@@ -60,7 +60,7 @@ namespace System.Windows.Forms
         PreserveGraphicsClipping           = 0x01000000,
         PreserveGraphicsTranslateTransform = 0x02000000,
 
-        /// <devdoc>
+        /// <summary>
         /// Adds padding related to the drawing binding box, computed according to the font size.
         /// Match the System.Internal.GDI.TextPaddingOptions.
         /// </devdoc>

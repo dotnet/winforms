@@ -35,7 +35,7 @@ namespace System.Windows.Forms
             this.Name = name;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Create a strongly typed accessor for the class
         /// </devdoc>
         /// <value></value>
@@ -74,7 +74,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Specify what size you want the item to start out at
         /// </devdoc>
         /// <value></value>
@@ -84,7 +84,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Specify how far from the edges you want to be
         /// </devdoc>
         /// <value></value>
@@ -139,7 +139,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
         //      and the RightToLeft is true, mirroring will be turned on on the form, and
@@ -162,7 +162,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Wrap some commonly used properties
         /// </devdoc>
         /// <value></value>
@@ -180,7 +180,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Wrap some commonly used properties
         /// </devdoc>
         /// <value></value>
@@ -198,7 +198,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Hide the property.
         /// </devdoc>
         [
@@ -219,7 +219,7 @@ namespace System.Windows.Forms
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Wrap some commonly used properties
         /// </devdoc>
         /// <value></value>
@@ -286,7 +286,7 @@ namespace System.Windows.Forms
 
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Hide the event.</para>
         /// </devdoc>
         [
@@ -299,7 +299,7 @@ namespace System.Windows.Forms
             remove => base.KeyDown -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Hide the event.</para>
         /// </devdoc>
         [
@@ -312,7 +312,7 @@ namespace System.Windows.Forms
             remove => base.KeyPress -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Hide the event.</para>
         /// </devdoc>
         [
@@ -324,7 +324,7 @@ namespace System.Windows.Forms
             add => base.KeyUp += value;
             remove => base.KeyUp -= value;
         }
-        /// <devdoc>
+        /// <summary>
         /// <para>Hide the event.</para>
         /// </devdoc>
         [
@@ -337,7 +337,7 @@ namespace System.Windows.Forms
             remove => base.LocationChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Hide the event.</para>
         /// </devdoc>
         [
@@ -356,7 +356,7 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EventRightToLeftLayoutChanged, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Hide the event.</para>
         /// </devdoc>
         [
@@ -370,7 +370,7 @@ namespace System.Windows.Forms
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Hide the event.</para>
         /// </devdoc>
         [
@@ -383,7 +383,7 @@ namespace System.Windows.Forms
             remove => base.Validated -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Hide the event.</para>
         /// </devdoc>
         [

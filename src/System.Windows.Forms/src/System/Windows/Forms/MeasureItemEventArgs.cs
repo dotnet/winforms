@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// This event is sent by controls such as the ListBox or ComboBox that need users
     /// to tell them how large a given item is to be.
     /// </devdoc>
@@ -24,23 +24,23 @@ namespace System.Windows.Forms
             ItemWidth = 0;
         }
         
-        /// <devdoc>
+        /// <summary>
         /// A Graphics object to measure relative to.
         /// </devdoc>
         public Graphics Graphics { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The index of item for which the height/width is needed.
         /// </devdoc>
         public int Index { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Where the recipient of the event should put the height of the item specified by
         /// the index.
         /// </devdoc>
         public int ItemHeight { get; set; }
 
-        /// <devdoc>
+        /// <summary>
         /// Where the recipient of the event should put the width of the item specified by
         /// the index.
         /// </devdoc>

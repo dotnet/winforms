@@ -7,12 +7,12 @@ using System.Globalization;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.Form.InputLanguageChanging'/> event.
     /// </devdoc>
     public class InputLanguageChangingEventArgs : CancelEventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.InputLanguageChangingEventArgs'/> class with the
         /// specified locale, character set, and acceptance.
         /// </devdoc>
@@ -23,7 +23,7 @@ namespace System.Windows.Forms
             SysCharSet = sysCharSet;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.InputLanguageChangingEventArgs'/> class with the
         /// specified input language, character set, and acceptance of a language change.
         /// </devdoc>
@@ -39,17 +39,17 @@ namespace System.Windows.Forms
             SysCharSet = sysCharSet;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the requested input language.
         /// </devdoc>
         public InputLanguage InputLanguage { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the locale of the requested input language.
         /// </devdoc>
         public CultureInfo Culture { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets a value indicating whether the system default font supports the character set
         /// required for the requested input language.
         /// </devdoc>

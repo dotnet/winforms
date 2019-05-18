@@ -95,7 +95,7 @@ namespace System.Windows.Forms {
         }
 
             
-        /// <devdoc>
+        /// <summary>
         /// Collection of child controls.
         /// </devdoc>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), SRDescription(nameof(SR.ControlControlsDescr))]
@@ -213,7 +213,7 @@ namespace System.Windows.Forms {
             }         
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves our internal property storage object. If you have a property
         ///     whose value is not always set, you should store it in here to save
         ///     space.
@@ -248,7 +248,7 @@ namespace System.Windows.Forms {
         }
 #endif
 
-        /// <devdoc>
+        /// <summary>
         /// returns true if there is enough space to "raft" the control
         /// ow returns false
         /// </devdoc>
@@ -587,7 +587,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         ArrangedElementCollection IArrangedElement.Children {
             get {
@@ -595,7 +595,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Should not be exposed as this returns an unexposed type.
         /// </devdoc>
         IArrangedElement IArrangedElement.Container {
@@ -804,7 +804,7 @@ namespace System.Windows.Forms {
                 
             }
           
-            /// <devdoc>
+            /// <summary>
             /// grows all controls after the index to be their preferred size.
             /// reports back how much space was used.
             /// </devdoc>
@@ -831,7 +831,7 @@ namespace System.Windows.Forms {
                return growBy - spaceToFree;
             }
 
-            /// <devdoc>
+            /// <summary>
             /// grows all controls before the index to be their preferred size.
             /// reports back how much space was used.
             /// </devdoc>
@@ -933,7 +933,7 @@ namespace System.Windows.Forms {
                 }
             }
             
-            /// <devdoc>
+            /// <summary>
             ///  returns true if there is enough space to "raft" the control
             ///  ow returns false
             /// </devdoc>
@@ -1444,7 +1444,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///  returns true if there is enough space to "raft" the control
             ///  ow returns false
             /// </devdoc>
@@ -1930,7 +1930,7 @@ namespace System.Windows.Forms {
       
         
 
-        /// <devdoc>
+        /// <summary>
         /// ToolStripPanelRowControlCollection
         ///
         /// this class represents the collection of controls on a particular row.
@@ -2119,7 +2119,7 @@ namespace System.Windows.Forms {
                 OnAdd(control, index);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///  Do proper cleanup of ownership, etc.
             /// </devdoc>
             private void OnAfterRemove(Control control, int index) {

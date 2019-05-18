@@ -7,12 +7,12 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.ICurrencyManagerProviderDescr))]
     public interface ICurrencyManagerProvider
     {
-        /// <devdoc>
+        /// <summary>
         /// Return the main currency manager for this data source.
         /// </devdoc>
         CurrencyManager CurrencyManager { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Return a related currency manager for specified data member on this data source.
         /// If data member is null or empty, this method returns the data source's main currency
         /// manager (ie. this method returns the same value as the CurrencyManager property).

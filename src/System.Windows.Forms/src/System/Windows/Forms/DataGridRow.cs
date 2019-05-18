@@ -15,7 +15,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Collections;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>Encapsulates the painting logic for a new row added to a 
     ///    <see cref='System.Windows.Forms.DataGrid'/> 
     ///    control.</para>
@@ -52,7 +52,7 @@ namespace System.Windows.Forms {
         protected const int xOffset = 3;
         protected const int yOffset = 2;
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of a <see cref='System.Windows.Forms.DataGridRow'/> . </para>
         /// </devdoc>
         [
@@ -115,7 +115,7 @@ namespace System.Windows.Forms {
         // =        Properties
         // =------------------------------------------------------------------
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets the <see cref='System.Windows.Forms.DataGrid'/> control the row belongs to.</para>
         /// </devdoc>
         public DataGrid DataGrid {
@@ -149,7 +149,7 @@ namespace System.Windows.Forms {
         }
         */
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets the height of the row.</para>
         /// </devdoc>
         public virtual int Height {
@@ -169,7 +169,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the row's number.</para>
         /// </devdoc>
         public int RowNumber {
@@ -178,7 +178,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets a value indicating whether the row is selected.</para>
         /// </devdoc>
         public virtual bool Selected {
@@ -195,7 +195,7 @@ namespace System.Windows.Forms {
         // =        Methods
         // =------------------------------------------------------------------
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the bitmap associated with the row.</para>
         /// </devdoc>
         protected Bitmap GetBitmap(string bitmapName) {
@@ -208,7 +208,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>When overridden in a derived class, gets the <see cref='System.Drawing.Rectangle'/> 
         /// where a cell's contents gets painted.</para>
         /// </devdoc>
@@ -231,7 +231,7 @@ namespace System.Windows.Forms {
             return cellBounds;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>When overridden in a derived class, gets the <see cref='System.Drawing.Rectangle'/> of the non-scrollable area of 
         ///    the row.</para>
         /// </devdoc>
@@ -239,7 +239,7 @@ namespace System.Windows.Forms {
             return Rectangle.Empty;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets the bitmap displayed in the row header of a new row.</para>
         /// </devdoc>
         protected Bitmap GetStarBitmap() {
@@ -248,7 +248,7 @@ namespace System.Windows.Forms {
             return starBmp;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets the bitmap displayed in the row header that indicates a row can 
         ///       be edited.</para>
         /// </devdoc>
@@ -258,7 +258,7 @@ namespace System.Windows.Forms {
             return pencilBmp;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets the bitmap displayed on a row with an error.</para>
         /// </devdoc>
         protected Bitmap GetErrorBitmap() {
@@ -287,14 +287,14 @@ namespace System.Windows.Forms {
             this.dgTable.DataGrid.InvalidateRowRect(number, r);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>When overridden in a derived class, notifies the grid that an edit will 
         ///       occur.</para>
         /// </devdoc>
         public virtual void OnEdit() {
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>When overridden in a derived class, called by the <see cref='System.Windows.Forms.DataGrid'/> control when a key press occurs on a row with focus.</para>
         /// </devdoc>
         public virtual bool OnKeyPress(Keys keyData) {
@@ -309,7 +309,7 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para> Called by the <see cref='System.Windows.Forms.DataGrid'/> when a click occurs in the row's client area 
         ///    specifed by the x and y coordinates and the specified <see cref='System.Drawing.Rectangle'/>
         ///    .</para>
@@ -319,7 +319,7 @@ namespace System.Windows.Forms {
             return OnMouseDown(x,y,rowHeaders, false);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>When overridden in a derived class, is called by the <see cref='System.Windows.Forms.DataGrid'/> when a click occurs 
         ///    in the row's
         ///    client area, specified by x and y coordinates.</para>
@@ -334,13 +334,13 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         public virtual bool OnMouseMove(int x, int y, Rectangle rowHeaders) {
             return false;
         }
         
-        /// <devdoc>
+        /// <summary>
         /// <para>When overridden in a derived class, is called by the <see cref='System.Windows.Forms.DataGrid'/> when 
         ///    the mouse moves within the row's client area.</para>
         /// </devdoc>
@@ -348,7 +348,7 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         public virtual void OnMouseLeft(Rectangle rowHeaders, bool alignToRight) {
         }
@@ -356,7 +356,7 @@ namespace System.Windows.Forms {
         public virtual void OnMouseLeft() {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>When overridden in a derived class, causes the RowEnter event to occur.</para>
         /// </devdoc>
         public virtual void OnRowEnter() {}
@@ -369,7 +369,7 @@ namespace System.Windows.Forms {
         // tells the dataGridRow that it lost the focus
         internal abstract void LoseChildFocus(Rectangle rowHeaders, bool alignToRight);
 
-        /// <devdoc>
+        /// <summary>
         ///      Paints the row.
         /// </devdoc>
         public abstract int Paint(Graphics g,
@@ -385,7 +385,7 @@ namespace System.Windows.Forms {
                                   int numVisibleColumns,
                                   bool alignToRight);
 
-        /// <devdoc>
+        /// <summary>
         ///      Draws a border on the bottom DataGrid.GridLineWidth pixels
         ///      of the bounding rectangle passed in.
         /// </devdoc>
@@ -413,7 +413,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Paints the row.
         /// </devdoc>
         public virtual int PaintData(Graphics g,
@@ -611,7 +611,7 @@ namespace System.Windows.Forms {
             return br;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Returns the BackColor and TextColor  that the Graphics object should use
         ///      for the appropriate values for a given row and column when painting the data.
         ///
@@ -786,7 +786,7 @@ namespace System.Windows.Forms {
                 return cells.Count;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Returns the currently focused child, if any.
             ///      Returns this if the object itself is focused.
             /// </devdoc>
@@ -801,7 +801,7 @@ namespace System.Windows.Forms {
                 return null;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Navigate to the next or previous grid entry.entry.
             /// </devdoc>
             public override AccessibleObject Navigate(AccessibleNavigation navdir) {
@@ -936,7 +936,7 @@ namespace System.Windows.Forms {
                 Select(AccessibleSelection.TakeFocus | AccessibleSelection.TakeSelection);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Returns the currently focused child, if any.
             ///      Returns this if the object itself is focused.
             /// </devdoc>
@@ -947,7 +947,7 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <devdoc>
+            /// <summary>
             ///      Navigate to the next or previous grid entry.
             /// </devdoc>
             public override AccessibleObject Navigate(AccessibleNavigation navdir) {

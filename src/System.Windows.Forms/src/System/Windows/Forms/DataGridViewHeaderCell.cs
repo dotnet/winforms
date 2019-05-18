@@ -12,7 +12,7 @@ namespace System.Windows.Forms
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>Identifies a cell in the dataGridView.</para>
     /// </devdoc>
     /// 
@@ -635,7 +635,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets the row Index and column Index of the cell.
         ///    </para>

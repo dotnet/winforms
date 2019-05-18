@@ -43,7 +43,7 @@ namespace System.Windows.Forms {
         private static bool isScalingInitialized = false;
         private static int scaledDropDownButtonWidth = DEFAULT_DROPDOWN_WIDTH;
        
-        /// <devdoc>
+        /// <summary>
         /// Summary of ToolStripSplitButton.
         /// </devdoc>
         public ToolStripSplitButton() {
@@ -79,7 +79,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Summary of ToolStripSplitButton.
         /// </devdoc>
         [Browsable(false)]
@@ -91,7 +91,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Summary of ButtonPressed.
         /// </devdoc>
         [Browsable(false)]
@@ -102,7 +102,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Summary of ButtonPressed.
         /// </devdoc>
         [Browsable(false)]
@@ -112,7 +112,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the button portion of a split button is clicked.</para>
         /// </devdoc>
         [
@@ -123,7 +123,7 @@ namespace System.Windows.Forms {
             add => Events.AddHandler(EventButtonClick, value); 
             remove => Events.RemoveHandler(EventButtonClick, value);
         }
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the utton portion of a split button  is double clicked.</para>
         /// </devdoc>
         [
@@ -142,7 +142,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Summary of DefaultItem.
         /// </devdoc>
         [DefaultValue(null), Browsable(false)]
@@ -159,7 +159,7 @@ namespace System.Windows.Forms {
         }
      
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the default item has changed</para>
         /// </devdoc>
         [
@@ -171,7 +171,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EventDefaultItemChanged, value);
         }
 	
-        /// <devdoc>
+        /// <summary>
         /// specifies the default behavior of these items on ToolStripDropDowns when clicked.
         /// </devdoc>
         internal protected override bool DismissWhenClicked {
@@ -185,7 +185,7 @@ namespace System.Windows.Forms {
                get { return this.DropDownButtonBounds; }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The bounds of the DropDown in ToolStrip coordinates.
         /// </devdoc>
         [Browsable(false)]
@@ -195,7 +195,7 @@ namespace System.Windows.Forms {
             }
 
         }
-        /// <devdoc>
+        /// <summary>
         /// Summary of DropDownButtonBounds.
         /// </devdoc>
         [Browsable(false)]
@@ -205,7 +205,7 @@ namespace System.Windows.Forms {
                 return DropDown.Visible; 
             }
         }
-        /// <devdoc>
+        /// <summary>
         /// Summary of DropDownButtonSelected.
         /// </devdoc>
         [Browsable(false)]
@@ -214,7 +214,7 @@ namespace System.Windows.Forms {
                 return this.Selected; 
             }
         }
-        /// <devdoc>
+        /// <summary>
         /// Summary of DropDownButtonWidth.
         /// </devdoc>
         [
@@ -239,7 +239,7 @@ namespace System.Windows.Forms {
              }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This is here for serialization purposes.
         /// </devdoc>
         private int DefaultDropDownButtonWidth {
@@ -277,7 +277,7 @@ namespace System.Windows.Forms {
                 return splitButtonButton;
             }
         }
-        /// <devdoc>
+        /// <summary>
         /// Summary of SplitButtonButtonLayout.
         /// </devdoc>	
         internal ToolStripItemInternalLayout SplitButtonButtonLayout {
@@ -293,7 +293,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// the width of the separator between the default and drop down button
         /// </devdoc>
         [
@@ -316,7 +316,7 @@ namespace System.Windows.Forms {
                 InvalidateSplitButtonLayout();
             }
         }
-        /// <devdoc>
+        /// <summary>
         /// the boundaries of the separator between the default and drop down button, exposed for custom
         /// painting purposes.
         /// </devdoc>
@@ -326,7 +326,7 @@ namespace System.Windows.Forms {
                 return splitterBounds;
             }
         }
-        /// <devdoc>
+        /// <summary>
         /// Summary of CalculateLayout.
         /// </devdoc>	
         private void CalculateLayout() {
@@ -387,7 +387,7 @@ namespace System.Windows.Forms {
             return preferredSize;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Summary of InvalidateSplitButtonLayout.
         /// </devdoc>	
         private void InvalidateSplitButtonLayout() {
@@ -415,7 +415,7 @@ namespace System.Windows.Forms {
            return true;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// called when the button portion of a split button is clicked
         /// if there is a default item, this will route the click to the default item
         /// </devdoc>
@@ -430,7 +430,7 @@ namespace System.Windows.Forms {
  
         }
         
-        /// <devdoc>
+        /// <summary>
         /// called when the button portion of a split button is double clicked
         /// if there is a default item, this will route the double click to the default item
         /// </devdoc>
@@ -444,7 +444,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
         protected virtual void OnDefaultItemChanged(EventArgs e) {
@@ -458,7 +458,7 @@ namespace System.Windows.Forms {
 
         }        
 
-        /// <devdoc>
+        /// <summary>
         /// Summary of OnMouseDown.
         /// </devdoc>
         protected override void OnMouseDown(MouseEventArgs e) {
@@ -480,7 +480,7 @@ namespace System.Windows.Forms {
         }
         
             
-        /// <devdoc>
+        /// <summary>
         /// Summary of OnMouseUp.
         /// </devdoc>
         protected override void OnMouseUp(MouseEventArgs e) {
@@ -536,14 +536,14 @@ namespace System.Windows.Forms {
             base.OnMouseLeave(e);
         }
       	
-        /// <devdoc>
+        /// <summary>
         /// Summary of OnRightToLeftChanged.
         /// </devdoc>
         protected override void OnRightToLeftChanged(EventArgs e) {
             base.OnRightToLeftChanged(e);
             InvalidateSplitButtonLayout();			
         }
-        /// <devdoc>
+        /// <summary>
         /// Summary of OnPaint.
         /// </devdoc>
         /// <param name=e></param>
@@ -573,7 +573,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Resets the RightToLeft to be the default.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -581,13 +581,13 @@ namespace System.Windows.Forms {
             DropDownButtonWidth = DefaultDropDownButtonWidth;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Summary of SetDropDownBounds.
         /// </devdoc>
         private void SetDropDownButtonBounds(Rectangle rect) {
             dropDownButtonBounds = rect; 
         }
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.ToolStripItem.Size'/> property needs to be persisted.</para>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -595,7 +595,7 @@ namespace System.Windows.Forms {
             return  (DropDownButtonWidth != DefaultDropDownButtonWidth);
         }
             
-        /// <devdoc>
+        /// <summary>
         ///  This class represents the item to the left of the dropdown [ A |v]  (e.g the "A")  
         ///  It exists so that we can use our existing methods for text and image layout
         ///  and have a place to stick certain state information like pushed and selected 
@@ -689,7 +689,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///  This class performs internal layout for the "split button button" portion of a split button.
         ///  Its main job is to make sure the inner button has the same parent as the split button, so
         ///  that layout can be performed using the correct graphics context.

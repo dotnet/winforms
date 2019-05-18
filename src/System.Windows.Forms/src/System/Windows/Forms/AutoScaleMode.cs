@@ -4,27 +4,27 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies the auto scaling mode used by a container control.
     /// </devdoc>
     public enum AutoScaleMode
     {
-        /// <devdoc>
+        /// <summary>
         /// AutoScale is turned off.
         /// </devdoc>
         None,
 
-        /// <devdoc>
+        /// <summary>
         /// Controls scale according to the dimensions of the font they are using.
         /// </devdoc>
         Font,
 
-        /// <devdoc>
+        /// <summary>
         /// Controls scale according to the display Dpi.
         /// </devdoc>
         Dpi,
 
-        /// <devdoc>
+        /// <summary>
         /// Controls scale according to their parent's scaling mode.
         /// If there is no parent, this behaves as if AutoScaleMode.None were set.
         /// </devdoc>

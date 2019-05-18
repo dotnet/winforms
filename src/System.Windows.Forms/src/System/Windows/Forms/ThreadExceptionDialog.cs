@@ -338,7 +338,7 @@ namespace System.Windows.Forms {
             detailsButton.Image = detailsVisible ? collapseImage : expandImage;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Hide the property
         /// </devdoc>
         [Browsable(false)]
@@ -357,7 +357,7 @@ namespace System.Windows.Forms {
             remove => base.AutoSizeChanged -= value;
         }                
 
-        /// <devdoc>
+        /// <summary>
         ///     Called when the details button is clicked.
         /// </devdoc>
         private void DetailsClick(object sender, EventArgs eventargs) {

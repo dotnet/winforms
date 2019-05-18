@@ -10,7 +10,7 @@ namespace System.Windows.Forms
     {
         private Color _backColor = Color.Empty;
         
-        /// <devdoc>
+        /// <summary>
         /// This class represents all the information to render the toolStrip
         /// </devdoc>        
         public ToolStripRenderEventArgs(Graphics g, ToolStrip toolStrip)
@@ -20,7 +20,7 @@ namespace System.Windows.Forms
             AffectedBounds = new Rectangle(Point.Empty, toolStrip.Size);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///  This class represents all the information to render the toolStrip
         /// </devdoc>        
         public ToolStripRenderEventArgs(Graphics g, ToolStrip toolStrip, Rectangle affectedBounds, Color backColor)
@@ -31,22 +31,22 @@ namespace System.Windows.Forms
             _backColor = backColor;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The graphics object to draw with
         /// </devdoc>
         public Graphics Graphics { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The bounds to draw in
         /// </devdoc>
         public Rectangle AffectedBounds { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Represents which toolStrip was affected by the click
         /// </devdoc>
         public ToolStrip ToolStrip { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The back color to draw with.
         /// </devdoc>
         public Color BackColor

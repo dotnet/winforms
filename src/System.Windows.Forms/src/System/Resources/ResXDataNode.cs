@@ -26,7 +26,7 @@ namespace System.Resources {
     using System.Globalization;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     ///    
     /// </devdoc>
     [Serializable]
@@ -64,7 +64,7 @@ namespace System.Resources {
         private ResXDataNode() {
         }
 
-        // <devdoc>
+        // <summary>
         // this is a deep clone
         //</devdoc>
         internal ResXDataNode DeepClone() {
@@ -85,7 +85,7 @@ namespace System.Resources {
             };
         }
             
-        /// <devdoc>
+        /// <summary>
         ///    
         /// </devdoc>        
         public ResXDataNode(string name, object value) : this(name, value, null) {
@@ -118,7 +118,7 @@ namespace System.Resources {
             this.value = value;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    
         /// </devdoc>  
         public ResXDataNode(string name, ResXFileRef fileRef) : this(name, fileRef, null) {
@@ -173,7 +173,7 @@ namespace System.Resources {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    
         /// </devdoc>
         public string Comment {
@@ -189,7 +189,7 @@ namespace System.Resources {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    
         /// </devdoc>
         public string Name {
@@ -215,7 +215,7 @@ namespace System.Resources {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    
         /// </devdoc>
         public ResXFileRef FileRef {
@@ -475,7 +475,7 @@ namespace System.Resources {
             return nodeInfo;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Might return the position in the resx file of the current node, if known
         ///    otherwise, will return Point(0,0) since point is a struct 
         /// </devdoc>
@@ -484,7 +484,7 @@ namespace System.Resources {
             return nodeInfo?.ReaderPosition ?? new Point();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Get the FQ type name for this datanode.
         ///    We return typeof(object) for ResXNullRef
         /// </devdoc>
@@ -547,14 +547,14 @@ namespace System.Resources {
             return result;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Get the FQ type name for this datanode
         /// </devdoc>
         public string GetValueTypeName(AssemblyName[] names) {
             return GetValueTypeName(new AssemblyNamesTypeResolutionService(names));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Get the value contained in this datanode
         /// </devdoc>
         public object GetValue(ITypeResolutionService typeResolver) {
@@ -591,7 +591,7 @@ namespace System.Resources {
             return result;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Get the value contained in this datanode
         /// </devdoc>
         public object GetValue(AssemblyName[] names) {
@@ -652,7 +652,7 @@ namespace System.Resources {
         }
                 
 
-        /// <devdoc>
+        /// <summary>
         ///    Get the value contained in this datanode
         /// </devdoc>        
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) {
@@ -934,7 +934,7 @@ namespace System.Resources {
             return result;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This is matching %windir%\Microsoft.NET\Framework*, so both 32bit and 64bit framework will be covered.
         /// </devdoc>
         private bool IsNetFrameworkAssembly(string assemblyPath)

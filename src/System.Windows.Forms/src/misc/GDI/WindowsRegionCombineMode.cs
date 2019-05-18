@@ -10,7 +10,7 @@ namespace System.Drawing.Internal
 namespace System.Experimental.Gdi
 #endif
 {
-    /// <devdoc>
+    /// <summary>
     /// </devdoc>
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public

@@ -17,7 +17,7 @@ namespace System.Windows.Forms {
     using System.Threading;
     using System.Windows.Forms;
     
-    /// <devdoc>
+    /// <summary>
     ///    <para> 
     ///       Summary to
     ///       Come</para>
@@ -36,7 +36,7 @@ namespace System.Windows.Forms {
         private ArrayList children = new ArrayList();
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new MdiClient.
         /// </devdoc>
         public MdiClient() : base() {
@@ -45,7 +45,7 @@ namespace System.Windows.Forms {
             Dock = DockStyle.Fill;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Use parent's BackgroundImage if our BackgroundImage isn't set.
         /// </devdoc>
         [
@@ -84,7 +84,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override CreateParams CreateParams {
             get {
@@ -119,7 +119,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The list of MDI children contained. This list
         ///     will be sorted by the order in which the children were
         ///     added to the form, not the current ZOrder.
@@ -136,7 +136,7 @@ namespace System.Windows.Forms {
             return new ControlCollection(this);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Arranges the MDI child forms according to value, which should be a
         ///     member of the MdiLayout enum.
         /// </devdoc>
@@ -161,7 +161,7 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override void OnResize(EventArgs e) {
             ISite site = (ParentInternal == null) ? null : ParentInternal.Site;
@@ -172,7 +172,7 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <devdoc>
+        /// <summary>
         ///     Performs the work of scaling the entire control and any child controls.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -195,7 +195,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Scale this form.  Form overrides this to enforce a maximum / minimum size.
         /// </devdoc>
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified) {
@@ -250,7 +250,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This code is required to set the correct window region during the resize of the Form at design time.
         /// There is case when the form contains a MainMenu and also has IsMdiContainer property set, in which, the MdiClient fails to 
         /// resize and hence draw the correct backcolor.
@@ -310,7 +310,7 @@ namespace System.Windows.Forms {
         }
         
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
@@ -356,7 +356,7 @@ namespace System.Windows.Forms {
             base.OnInvokedSetScrollPosition(sender, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Collection of controls...
         /// </devdoc>
         [ComVisible(false)]
@@ -370,7 +370,7 @@ namespace System.Windows.Forms {
                 this.owner = owner;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Adds a control to the MDI Container. This child must be
             ///     a Form that is marked as an MDI Child to be added to the
             ///     container. You should not call this directly, but rather
@@ -398,7 +398,7 @@ namespace System.Windows.Forms {
                 base.Add(value);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Removes a child control.
             /// </devdoc>
             public override void Remove(Control value) {

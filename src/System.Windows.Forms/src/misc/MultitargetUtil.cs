@@ -5,13 +5,13 @@
 namespace System.Resources {
     using System;
 
-    /// <devdoc>
+    /// <summary>
     ///     Helper class supporting Multitarget type assembly qualified name resolution for ResX API.
     ///     Note: this file is compiled into different assemblies (runtime and VSIP assemblies ...)
     /// </devdoc>
     internal static class MultitargetUtil
     {
-        /// <devdoc>
+        /// <summary>
         ///     This method gets assembly info for the corresponding type. If the delegate
         ///     is provided it is used to get this information.
         /// </devdoc>

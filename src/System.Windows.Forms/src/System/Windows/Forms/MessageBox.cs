@@ -14,7 +14,7 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;
     using System.Collections;
     
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Displays a
     ///       message box that can contain text, buttons, and symbols that
@@ -39,7 +39,7 @@ namespace System.Windows.Forms {
 
         
 
-        /// <devdoc>
+        /// <summary>
         ///     This constructor is private so people aren't tempted to try and create
         ///     instances of these -- they should just use the static show
         ///     methods.
@@ -137,7 +137,7 @@ namespace System.Windows.Forms {
         //START WHIDBEY ADDS                                                                                           //
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays a message box with specified text, caption, and style with Help Button.
         ///    </para>
@@ -149,7 +149,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays a message box with specified text, caption, style and Help file Path .
         ///    </para>
@@ -162,7 +162,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays a message box with specified text, caption, style and Help file Path for a IWin32Window.
         ///    </para>
@@ -176,7 +176,7 @@ namespace System.Windows.Forms {
 
         
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays a message box with specified text, caption, style, Help file Path and keyword.
         ///    </para>
@@ -189,7 +189,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays a message box with specified text, caption, style, Help file Path and keyword for a IWin32Window.
         ///    </para>
@@ -202,7 +202,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays a message box with specified text, caption, style, Help file Path and HelpNavigator.
         ///    </para>
@@ -214,7 +214,7 @@ namespace System.Windows.Forms {
             return ShowCore(null, text, caption, buttons, icon, defaultButton, options, hpi);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays a message box with specified text, caption, style, Help file Path and HelpNavigator for IWin32Window.
         ///    </para>
@@ -226,7 +226,7 @@ namespace System.Windows.Forms {
             return ShowCore(owner, text, caption, buttons, icon, defaultButton, options, hpi);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays a message box with specified text, caption, style, Help file Path ,HelpNavigator and object.
         ///    </para>
@@ -240,7 +240,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///      Displays a message box with specified text, caption, style, Help file Path ,HelpNavigator and object for a IWin32Window.
         ///    </para>
@@ -258,7 +258,7 @@ namespace System.Windows.Forms {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays a message box with specified text, caption, and style.
         ///    </para>
@@ -268,7 +268,7 @@ namespace System.Windows.Forms {
             return ShowCore(null, text, caption, buttons, icon, defaultButton, options, false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays a message box with specified text, caption, and style.
         ///    </para>
@@ -278,7 +278,7 @@ namespace System.Windows.Forms {
             return ShowCore(null, text, caption, buttons, icon, defaultButton, 0, false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays a message box with specified text, caption, and style.
         ///    </para>
@@ -287,7 +287,7 @@ namespace System.Windows.Forms {
             return ShowCore(null, text, caption, buttons, icon, MessageBoxDefaultButton.Button1, 0, false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays a message box with specified text, caption, and style.
         ///    </para>
@@ -296,7 +296,7 @@ namespace System.Windows.Forms {
             return ShowCore(null, text, caption, buttons, MessageBoxIcon.None, MessageBoxDefaultButton.Button1, 0, false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays a message box with specified text and caption.
         ///    </para>
@@ -305,7 +305,7 @@ namespace System.Windows.Forms {
             return ShowCore(null, text, caption, MessageBoxButtons.OK, MessageBoxIcon.None, MessageBoxDefaultButton.Button1, 0, false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays a message box with specified text.
         ///    </para>
@@ -314,7 +314,7 @@ namespace System.Windows.Forms {
             return ShowCore(null, text, string.Empty, MessageBoxButtons.OK, MessageBoxIcon.None, MessageBoxDefaultButton.Button1, 0, false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays a message box with specified text, caption, and style.
         ///    </para>
@@ -324,7 +324,7 @@ namespace System.Windows.Forms {
             return ShowCore(owner, text, caption, buttons, icon, defaultButton, options, false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays a message box with specified text, caption, and style.
         ///    </para>
@@ -334,7 +334,7 @@ namespace System.Windows.Forms {
             return ShowCore(owner, text, caption, buttons, icon, defaultButton, 0, false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays a message box with specified text, caption, and style.
         ///    </para>
@@ -343,7 +343,7 @@ namespace System.Windows.Forms {
             return ShowCore(owner, text, caption, buttons, icon, MessageBoxDefaultButton.Button1, 0, false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays a message box with specified text, caption, and style.
         ///    </para>
@@ -352,7 +352,7 @@ namespace System.Windows.Forms {
             return ShowCore(owner, text, caption, buttons, MessageBoxIcon.None, MessageBoxDefaultButton.Button1, 0, false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays a message box with specified text and caption.
         ///    </para>
@@ -361,7 +361,7 @@ namespace System.Windows.Forms {
             return ShowCore(owner, text, caption, MessageBoxButtons.OK, MessageBoxIcon.None, MessageBoxDefaultButton.Button1, 0, false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays a message box with specified text.
         ///    </para>

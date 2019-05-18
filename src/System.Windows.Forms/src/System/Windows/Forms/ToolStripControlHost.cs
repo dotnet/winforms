@@ -12,7 +12,7 @@ using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// ToolStripItem that can host Controls.
     /// </devdoc>
     public class ToolStripControlHost : ToolStripItem
@@ -33,7 +33,7 @@ namespace System.Windows.Forms
         internal static readonly object EventValidating                      = new object();
 
 
-        /// <devdoc>
+        /// <summary>
         /// Constructs a ToolStripControlHost
         /// </devdoc>
         
@@ -67,7 +67,7 @@ namespace System.Windows.Forms
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         /// <para>
         /// Gets or sets the image that is displayed on a <see cref='System.Windows.Forms.Label'/>.
         /// </para>
@@ -101,7 +101,7 @@ namespace System.Windows.Forms
               Control.BackgroundImageLayout = value;
           }
         }
-        /// <devdoc>
+        /// <summary>
         /// Overriden to return value from Control.CanSelect.
         /// </devdoc>
         public override bool CanSelect {
@@ -137,7 +137,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The control that this item is hosting.
         /// </devdoc>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -153,7 +153,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Deriving classes can override this to configure a default size for their control.
         /// This is more efficient than setting the size in the control's constructor.
         /// </devdoc>
@@ -184,7 +184,7 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EventDisplayStyleChanged, value);
         }
 
-        /// <devdoc> 
+        /// <summary> 
         //  For control hosts, this property has no effect
         /// as they get their own clicks.  Use ControlStyles.StandardClick
         /// instead. 
@@ -315,7 +315,7 @@ namespace System.Windows.Forms
              remove => Events.RemoveHandler(EventLeave, value);
          }
 
-         /// <devdoc>
+         /// <summary>
          /// <para>Occurs when the control loses focus.</para>
          /// </devdoc>
          [
@@ -330,7 +330,7 @@ namespace System.Windows.Forms
          }
 
 
-         /// <devdoc>
+         /// <summary>
          /// <para>Occurs when a key is pressed down while the control has focus.</para>
          /// </devdoc>
          [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyDownDescr))]
@@ -339,7 +339,7 @@ namespace System.Windows.Forms
              remove => Events.RemoveHandler(EventKeyDown, value);
          }
       
-         /// <devdoc>
+         /// <summary>
          /// <para> Occurs when a key is pressed while the control has focus.</para>
          /// </devdoc>
          [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyPressDescr))]
@@ -348,7 +348,7 @@ namespace System.Windows.Forms
              remove => Events.RemoveHandler(EventKeyPress, value);
          }
       
-         /// <devdoc>
+         /// <summary>
          /// <para> Occurs when a key is released while the control has focus.</para>
          /// </devdoc>
          [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyUpDescr))]
@@ -357,7 +357,7 @@ namespace System.Windows.Forms
              remove => Events.RemoveHandler(EventKeyUp, value);
          }
 
-        /// <devdoc>
+        /// <summary>
         /// This is used for international applications where the language
         /// is written from RightToLeft. When this property is true,
         /// control placement and text will be from right to left.
@@ -427,7 +427,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Overriden to set the Site for the control hosted. This is set at DesignTime when the component is added to the Container. 
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -448,7 +448,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Overriden to modify hosted control's text.
         /// </devdoc>
         [DefaultValue("")]
@@ -510,7 +510,7 @@ namespace System.Windows.Forms
             return Control.AccessibilityObject;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Cleans up and destroys the hosted control.
         /// </devdoc>
         protected override void Dispose(bool disposing) {
@@ -689,7 +689,7 @@ namespace System.Windows.Forms
         }
         
         
-        /// <devdoc>
+        /// <summary>
         /// called when the control has lost focus
         /// </devdoc>
         protected virtual void OnGotFocus(EventArgs e) {
@@ -700,7 +700,7 @@ namespace System.Windows.Forms
             RaiseEvent(EventLeave, e);
         }
         
-        /// <devdoc>
+        /// <summary>
         /// called when the control has lost focus
         /// </devdoc >
         protected virtual void OnLostFocus(EventArgs e) {         
@@ -715,7 +715,7 @@ namespace System.Windows.Forms
         protected virtual void OnKeyUp(KeyEventArgs e) {         
             RaiseKeyEvent(EventKeyUp, e);                              
         } 
-        /// <devdoc>
+        /// <summary>
         /// Called when the items bounds are changed.  Here, we update the Control's bounds.
         /// </devdoc>
         protected override void OnBoundsChanged() {
@@ -743,7 +743,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Called when the control fires its Paint event.
         /// </devdoc>
         protected override void OnPaint(PaintEventArgs e) {
@@ -755,7 +755,7 @@ namespace System.Windows.Forms
             // do nothing... called via the controls collection
         }
     
-        /// <devdoc>
+        /// <summary>
         /// Called when the item's parent has been changed.
         /// </devdoc>
         protected override void OnParentChanged(ToolStrip oldParent, ToolStrip newParent) {
@@ -778,7 +778,7 @@ namespace System.Windows.Forms
 
 
 
-        /// <devdoc>
+        /// <summary>
         /// The events from the hosted control are subscribed here.  
         /// Override to add/prevent syncing of control events.
         /// NOTE: if you override and hook up events here, you should unhook in OnUnsubscribeControlEvents.
@@ -827,7 +827,7 @@ namespace System.Windows.Forms
         }
       
 
-        /// <devdoc>
+        /// <summary>
         /// The events from the hosted control are unsubscribed here.  
         /// Override to unhook events subscribed in OnSubscribeControlEvents.
         /// </devdoc>
@@ -1009,7 +1009,7 @@ namespace System.Windows.Forms
                 owner = host as IComponent;
             }
             // The component sited by this component site.
-            /// <devdoc>
+            /// <summary>
             ///    <para>When implemented by a class, gets the component associated with the <see cref='System.ComponentModel.ISite'/>.</para>
             /// </devdoc>
             IComponent ISite.Component {
@@ -1020,7 +1020,7 @@ namespace System.Windows.Forms
             }
         
             // The container in which the component is sited.
-            /// <devdoc>
+            /// <summary>
             /// <para>When implemented by a class, gets the container associated with the <see cref='System.ComponentModel.ISite'/>.</para>
             /// </devdoc>
             IContainer ISite.Container {
@@ -1030,7 +1030,7 @@ namespace System.Windows.Forms
             }
         
             // Indicates whether the component is in design mode.
-            /// <devdoc>
+            /// <summary>
             ///    <para>When implemented by a class, determines whether the component is in design mode.</para>
             /// </devdoc>
             bool ISite.DesignMode {
@@ -1041,7 +1041,7 @@ namespace System.Windows.Forms
 
             // The name of the component.
             //
-            /// <devdoc>
+            /// <summary>
             ///    <para>When implemented by a class, gets or sets the name of
             ///       the component associated with the <see cref='System.ComponentModel.ISite'/>.</para>
             /// </devdoc>
@@ -1075,7 +1075,7 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the key corresponding to the given value.
             /// </devdoc>
             object IDictionaryService.GetKey(object value) {
@@ -1090,7 +1090,7 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the value corresponding to the given key.
             /// </devdoc>
             object IDictionaryService.GetValue(object key) {
@@ -1100,7 +1100,7 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Stores the given key-value pair in an object's site.  This key-value
             ///     pair is stored on a per-object basis, and is a handy place to save
             ///     additional information about a component.

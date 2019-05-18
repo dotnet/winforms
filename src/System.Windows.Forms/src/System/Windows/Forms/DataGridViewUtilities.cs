@@ -11,7 +11,7 @@ namespace System.Windows.Forms
     using System.Drawing.Imaging;
     using System.Windows.Forms.VisualStyles;
     
-    /// <devdoc>
+    /// <summary>
     ///    <para></para>
     /// </devdoc>
     internal class DataGridViewUtilities

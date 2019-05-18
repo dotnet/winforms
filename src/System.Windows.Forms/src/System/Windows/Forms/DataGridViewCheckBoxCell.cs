@@ -15,7 +15,7 @@ namespace System.Windows.Forms
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>Identifies a checkbox cell in the DataGridView.</para>
     /// </devdoc>
     public class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewEditingCell
@@ -1678,7 +1678,7 @@ namespace System.Windows.Forms
             return true;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets the row Index and column Index of the cell.
         ///    </para>

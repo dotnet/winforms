@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Enum defining inclusion of special characters.
     /// </devdoc>
     public enum MaskFormat

@@ -24,7 +24,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                                                                                       new ParenthesizePropertyNameAttribute(true)}, true, typeof(string), null, false) {
         }
     
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the type of the component this PropertyDescriptor is bound to.
         /// </devdoc>
         public override Type ComponentType {
@@ -34,7 +34,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
         
         
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the type converter for this property.
         /// </devdoc>
         public override TypeConverter Converter {
@@ -45,7 +45,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 return converter;
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///     Indicates whether this property is read only.
         /// </devdoc>
         public override bool IsReadOnly { 
@@ -54,7 +54,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the type of the property.
         /// </devdoc>
         public override Type PropertyType {
@@ -63,7 +63,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     Indicates whether reset will change the value of the component.  If there
         ///     is a DefaultValueAttribute, then this will return true if getValue returns
         ///     something different than the default value.  If there is a reset method and
@@ -75,7 +75,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return false;
         }
     
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves an editor of the requested type.
         /// </devdoc>
         public override object GetEditor(Type editorBaseType) {
@@ -88,7 +88,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return editor;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the current value of the property on component,
         ///     invoking the getXXX method.  An exception in the getXXX
         ///     method will pass through.
@@ -97,7 +97,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return "";
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Will reset the default value for this property on the component.  If
         ///     there was a default value passed in as a DefaultValueAttribute, that
         ///     value will be set as the value of the property on the component.  If
@@ -108,7 +108,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         public override void ResetValue(object component){
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This will set value to be the new value of this property on the
         ///     component by invoking the setXXX method on the component.  If the
         ///     value specified is invalid, the component should throw an exception
@@ -121,7 +121,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             throw new ArgumentException();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates whether the value of this property needs to be persisted. In
         ///     other words, it indicates whether the state of the property is distinct
         ///     from when the component is first instantiated. If there is a default
@@ -137,7 +137,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
         
         public class AboutBoxUITypeEditor : UITypeEditor {
-            /// <devdoc>
+            /// <summary>
             ///      Edits the given object value using the editor style provided by
             ///      GetEditorStyle.  A service provider is provided so that any
             ///      required editing services can be obtained.
@@ -163,7 +163,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                      return value;
             }
             
-            /// <devdoc>
+            /// <summary>
             ///      Retrieves the editing style of the Edit method.  If the method
             ///      is not supported, this will return None.
             /// </devdoc>

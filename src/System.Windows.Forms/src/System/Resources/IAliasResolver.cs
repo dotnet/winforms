@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace System.Resources
 {
-    /// <devdoc>
+    /// <summary>
     /// Summary of IAliasResolver.
     /// </devdoc>
     internal interface IAliasResolver

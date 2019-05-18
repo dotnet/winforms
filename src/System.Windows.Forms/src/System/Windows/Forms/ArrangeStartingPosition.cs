@@ -6,7 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies the starting position that the system uses to arrange minimized
     /// windows.
     /// </devdoc>
@@ -14,28 +14,28 @@ namespace System.Windows.Forms
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Maps to native enum.")]
     public enum ArrangeStartingPosition
     {
-        /// <devdoc>
+        /// <summary>
         /// Starts at the lower-left corner of the screen, which is the default position.
         /// </devdoc>
         BottomLeft = NativeMethods.ARW_BOTTOMLEFT,
 
-        /// <devdoc>
+        /// <summary>
         /// Starts at the lower-right corner of the screen.
         /// </devdoc>
         BottomRight = NativeMethods.ARW_BOTTOMRIGHT,
 
-        /// <devdoc>
+        /// <summary>
         /// Hides minimized windows by moving them off the visible area of the
         /// screen.
         /// </devdoc>
         Hide = NativeMethods.ARW_HIDE,
 
-        /// <devdoc>
+        /// <summary>
         /// Starts at the upper-left corner of the screen.
         /// </devdoc>
         TopLeft = NativeMethods.ARW_TOPLEFT,
 
-        /// <devdoc>
+        /// <summary>
         /// Starts at the upper-right corner of the screen.
         /// </devdoc>
         TopRight = NativeMethods.ARW_TOPRIGHT,

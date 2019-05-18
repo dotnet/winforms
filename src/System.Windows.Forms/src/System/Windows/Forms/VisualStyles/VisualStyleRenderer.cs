@@ -18,7 +18,7 @@ namespace System.Windows.Forms.VisualStyles {
     using System.Diagnostics.CodeAnalysis;
     using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       This class provides full feature parity with UxTheme API.
     ///    </para>
@@ -54,7 +54,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Returns true if visual styles are 1) supported by the OS 2) enabled in the client area 
         ///       and 3) currently applied to this application. Otherwise, it returns false. Note that
@@ -79,7 +79,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Returns true if the element is defined by the current visual style, else false. 
         ///       Note: 
@@ -143,7 +143,7 @@ namespace System.Windows.Forms.VisualStyles {
             return returnVal;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Constructor takes a VisualStyleElement.
         ///    </para>
@@ -151,7 +151,7 @@ namespace System.Windows.Forms.VisualStyles {
         public VisualStyleRenderer(VisualStyleElement element) : this(element.ClassName, element.Part, element.State) {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Constructor takes weakly typed parameters - left for extensibility (using classes, parts or states
         ///       not defined in the VisualStyleElement class.)
@@ -167,7 +167,7 @@ namespace System.Windows.Forms.VisualStyles {
             this.state = state;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Returns the current _class. Use SetParameters to set.
         ///    </para>
@@ -178,7 +178,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Returns the current part. Use SetParameters to set.
         ///    </para>
@@ -189,7 +189,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Returns the current state. Use SetParameters to set.
         ///    </para>
@@ -200,7 +200,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Returns the underlying HTheme handle.
         ///       NOTE: The handle gets invalidated when the theme changes or the user disables theming. When that
@@ -224,7 +224,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Used to set a new VisualStyleElement on this VisualStyleRenderer instance.
         ///    </para>
@@ -237,7 +237,7 @@ namespace System.Windows.Forms.VisualStyles {
             SetParameters(element.ClassName, element.Part, element.State);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Used to set the _class, part and state that the VisualStyleRenderer object references. 
         ///       These parameters cannot be set individually. 
@@ -254,7 +254,7 @@ namespace System.Windows.Forms.VisualStyles {
             this.state = state;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
@@ -284,7 +284,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
@@ -317,7 +317,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
@@ -349,7 +349,7 @@ namespace System.Windows.Forms.VisualStyles {
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///       This method uses Graphics.DrawImage as a backup if themed drawing does not work.
@@ -371,7 +371,7 @@ namespace System.Windows.Forms.VisualStyles {
             g.DrawImage(image, bounds);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.] 
         ///       This method uses Graphics.DrawImage as a backup if themed drawing does not work.
@@ -408,7 +408,7 @@ namespace System.Windows.Forms.VisualStyles {
             //}
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Given a graphics object and bounds to draw in, this method effectively asks the passed in 
         ///       control's parent to draw itself in there (it sends WM_ERASEBKGND & WM_PRINTCLIENT messages
@@ -436,7 +436,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
@@ -445,7 +445,7 @@ namespace System.Windows.Forms.VisualStyles {
             DrawText(dc, bounds, textToDraw, false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
@@ -454,7 +454,7 @@ namespace System.Windows.Forms.VisualStyles {
             DrawText(dc, bounds, textToDraw, drawDisabled, TextFormatFlags.HorizontalCenter); 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
@@ -478,7 +478,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
@@ -501,7 +501,7 @@ namespace System.Windows.Forms.VisualStyles {
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
@@ -524,7 +524,7 @@ namespace System.Windows.Forms.VisualStyles {
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Computes the region for a regular or partially transparent background that is bounded by a specified 
         ///       rectangle. Return null if the region cannot be created.
@@ -561,7 +561,7 @@ namespace System.Windows.Forms.VisualStyles {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
@@ -576,7 +576,7 @@ namespace System.Windows.Forms.VisualStyles {
             return val;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
@@ -593,7 +593,7 @@ namespace System.Windows.Forms.VisualStyles {
             return ColorTranslator.FromWin32(color);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
@@ -610,7 +610,7 @@ namespace System.Windows.Forms.VisualStyles {
             return val;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
@@ -627,7 +627,7 @@ namespace System.Windows.Forms.VisualStyles {
             return filename.ToString();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///       Returns null if the returned font was not true type, since GDI+ does not support it.
@@ -673,7 +673,7 @@ namespace System.Windows.Forms.VisualStyles {
             return font;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
@@ -690,7 +690,7 @@ namespace System.Windows.Forms.VisualStyles {
             return val;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
@@ -726,7 +726,7 @@ namespace System.Windows.Forms.VisualStyles {
             return new Size(size.cx, size.cy);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
@@ -752,7 +752,7 @@ namespace System.Windows.Forms.VisualStyles {
             return new Size(size.cx, size.cy);
         } 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
@@ -769,7 +769,7 @@ namespace System.Windows.Forms.VisualStyles {
             return new Point(point.x, point.y);
         }        
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
@@ -796,7 +796,7 @@ namespace System.Windows.Forms.VisualStyles {
         }
         
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
@@ -813,7 +813,7 @@ namespace System.Windows.Forms.VisualStyles {
             return aString.ToString();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
@@ -837,7 +837,7 @@ namespace System.Windows.Forms.VisualStyles {
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
@@ -861,7 +861,7 @@ namespace System.Windows.Forms.VisualStyles {
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
@@ -881,7 +881,7 @@ namespace System.Windows.Forms.VisualStyles {
             return tm;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
@@ -904,7 +904,7 @@ namespace System.Windows.Forms.VisualStyles {
             return (HitTestCode)htCode;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
@@ -922,7 +922,7 @@ namespace System.Windows.Forms.VisualStyles {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
@@ -945,7 +945,7 @@ namespace System.Windows.Forms.VisualStyles {
             return (HitTestCode)htCode;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
@@ -954,7 +954,7 @@ namespace System.Windows.Forms.VisualStyles {
             return (SafeNativeMethods.IsThemeBackgroundPartiallyTransparent(new HandleRef(this, Handle), part, state));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///  This is similar to GetLastError in Win32.  It returns the last HRESULT returned from a native call
         ///  into theme apis.  We eat the errors and let the user handle any errors that occurred.
         /// </devdoc>
@@ -964,7 +964,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Instantiates the ThemeHandle cache hashtable.
         ///    </para>
@@ -973,7 +973,7 @@ namespace System.Windows.Forms.VisualStyles {
             themeHandles = new Hashtable(numberOfPossibleClasses);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Handles the ThemeChanged event. Basically, we need to ensure all per-thread theme handle
         ///       caches are refreshed.
@@ -991,7 +991,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///     Refreshes this thread's theme handle cache.       
         ///    </para>
@@ -1025,7 +1025,7 @@ namespace System.Windows.Forms.VisualStyles {
             return GetHandle(className, true);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///     Retrieves a IntPtr theme handle for the given class from the themeHandle cache. If its not 
         ///     present in the cache, it creates a new ThemeHandle object and stores it there.

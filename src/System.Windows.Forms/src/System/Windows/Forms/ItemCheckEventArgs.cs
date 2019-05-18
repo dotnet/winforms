@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.CheckedListBox.ItemCheck'/> event.
     /// </devdoc>
     [ComVisible(true)]
@@ -19,17 +19,17 @@ namespace System.Windows.Forms
             CurrentValue = currentValue;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The index of the item that is about to change.
         /// </devdoc>
         public int Index { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The proposed new value of the CheckBox.
         /// </devdoc>
         public CheckState NewValue { get; set; }
 
-        /// <devdoc>
+        /// <summary>
         /// The current state of the CheckBox.
         /// </devdoc>
         public CheckState CurrentValue { get; }

@@ -6,24 +6,24 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies how an object or text in a control is horizontally aligned
     /// relative to an element of the control.
     /// </devdoc>
     [ComVisible(true)]
     public enum HorizontalAlignment
     {
-        /// <devdoc>
+        /// <summary>
         /// The object or text is aligned on the left of the control element.
         /// </devdoc>
         Left = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// The object or text is aligned on the right of the control element.
         /// </devdoc>
         Right = 1,
 
-        /// <devdoc>
+        /// <summary>
         /// The object or text is aligned in the center of the control element.
         /// </devdoc>
         Center = 2,

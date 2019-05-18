@@ -35,7 +35,7 @@ namespace System.Windows.Forms {
             SetStyle(ControlStyles.ResizeRedraw | ControlStyles.SupportsTransparentBackColor, true);
         }
 
-         /// <devdoc>
+         /// <summary>
          ///     Allows the control to optionally shrink when AutoSize is true.
          /// </devdoc>
          [

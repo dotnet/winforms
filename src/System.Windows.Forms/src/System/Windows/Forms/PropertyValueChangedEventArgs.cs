@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// The event class that is created when a property in the grid is modified by the user.
     /// </devdoc>
     [ComVisible(true)]

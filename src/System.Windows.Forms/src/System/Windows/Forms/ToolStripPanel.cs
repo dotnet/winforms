@@ -285,7 +285,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EventRendererChanged, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Collection of child controls.
         /// </devdoc>
         [
@@ -418,7 +418,7 @@ namespace System.Windows.Forms {
 
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Disposes of the resources (other than memory) used by
         ///       the <see cref='System.Windows.Forms.ContainerControl'/>
         ///       .</para>
@@ -574,7 +574,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         /// We want to Set ToolStripPanel at DesignTime when the ToolStripPanel is added to the Form,
         /// </devdoc>
         protected override void OnParentChanged(EventArgs e) {
@@ -1134,7 +1134,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Given a point within the ToolStripPanel client area -
         /// it returns the row.  If no such row exists, returns null
         /// </devdoc>
@@ -1266,7 +1266,7 @@ namespace System.Windows.Forms {
                 AddRange(value);
             }
 
-            /// <devdoc>
+            /// <summary>
             /// <para></para>
             /// </devdoc>
             public new virtual ToolStripPanelRow this[int index] {
@@ -1385,7 +1385,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///  Do proper cleanup of ownership, etc.
             /// </devdoc>
             private void OnAfterRemove(ToolStripPanelRow row) {

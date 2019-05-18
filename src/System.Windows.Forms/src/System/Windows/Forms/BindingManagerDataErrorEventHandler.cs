@@ -6,7 +6,7 @@ namespace System.Windows.Forms {
 
     using System;
 
-    /// <devdoc>
+    /// <summary>
     /// </devdoc>
     public delegate void BindingManagerDataErrorEventHandler(object sender, BindingManagerDataErrorEventArgs e);
 

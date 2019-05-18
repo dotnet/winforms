@@ -15,7 +15,7 @@ namespace System.Windows.Forms
     using System.Windows.Forms.ButtonInternal;
     using System.Globalization;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>Identifies a button cell in the dataGridView.</para>
     /// </devdoc>
     public class DataGridViewButtonCell : DataGridViewCell

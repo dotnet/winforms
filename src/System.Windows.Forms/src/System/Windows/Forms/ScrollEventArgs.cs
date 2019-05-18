@@ -6,14 +6,14 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.ScrollBar.Scroll'/>
     /// event.
     /// </devdoc>
     [ComVisible(true)]
     public class ScrollEventArgs : EventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.ScrollEventArgs'/>class.
         /// </devdoc>
         public ScrollEventArgs(ScrollEventType type, int newValue)
@@ -23,7 +23,7 @@ namespace System.Windows.Forms
             OldValue = -1;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.ScrollEventArgs'/>class.
         /// </devdoc>
         public ScrollEventArgs(ScrollEventType type, int newValue, ScrollOrientation scroll)
@@ -49,22 +49,22 @@ namespace System.Windows.Forms
             ScrollOrientation = scroll;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Specifies the type of scroll event that occurred.
         /// </devdoc>
         public ScrollEventType Type { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Specifies the new location of the scroll box within the scroll bar.
         /// </devdoc>
         public int NewValue { get; set; }
 
-       /// <devdoc>
+       /// <summary>
        /// Specifies the last position  within the scroll bar.
        /// </devdoc>
        public int OldValue { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Specifies the type of scroll event that occurred.
         /// </devdoc>
         public ScrollOrientation ScrollOrientation { get; }

@@ -10,7 +10,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       This is a rendering class for the TrackBar control.
     ///    </para>
@@ -26,7 +26,7 @@ using Microsoft.Win32;
        private TrackBarRenderer() {
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Returns true if this class is supported for the current OS and user/application settings, 
        ///       otherwise returns false.
@@ -38,7 +38,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a horizontal track.
        ///    </para>
@@ -50,7 +50,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a vertical track.
        ///    </para>
@@ -62,7 +62,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a horizontal thumb.
        ///    </para>
@@ -74,7 +74,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a vertical thumb.
        ///    </para>
@@ -86,7 +86,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a constant size left pointing thumb centered in the given bounds.
        ///    </para>
@@ -98,7 +98,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a constant size right pointing thumb centered in the given bounds.
        ///    </para>
@@ -110,7 +110,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a constant size top pointing thumb centered in the given bounds.
        ///    </para>
@@ -122,7 +122,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a constant size bottom pointing thumb centered in the given bounds.
        ///    </para>
@@ -134,7 +134,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a horizontal tick.
        ///    </para>
@@ -164,7 +164,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a vertical tick.
        ///    </para>
@@ -194,7 +194,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Returns the size of a left pointing thumb.
        ///    </para>
@@ -206,7 +206,7 @@ using Microsoft.Win32;
            return (visualStyleRenderer.GetPartSize(g, ThemeSizeType.True));
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Returns the size of a right pointing thumb.
        ///    </para>
@@ -218,7 +218,7 @@ using Microsoft.Win32;
            return (visualStyleRenderer.GetPartSize(g, ThemeSizeType.True));
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Returns the size of a top pointing thumb.
        ///    </para>
@@ -230,7 +230,7 @@ using Microsoft.Win32;
            return (visualStyleRenderer.GetPartSize(g, ThemeSizeType.True));
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Returns the size of a bottom pointing thumb.
        ///    </para>

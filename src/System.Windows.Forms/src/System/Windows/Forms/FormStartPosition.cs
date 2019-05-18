@@ -6,36 +6,36 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies the initial position of a form.
     /// </devdoc>
     [ComVisible(true)]
     public enum FormStartPosition
     {
-        /// <devdoc>
+        /// <summary>
         /// The location and size of the form will determine its starting position.
         /// </devdoc>
         Manual = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// The form is centered on the current display, and has the dimensions
         /// specified in the form's size.
         /// </devdoc>
         CenterScreen = 1,
 
-        /// <devdoc>
+        /// <summary>
         /// The form is positioned at the Windows default location and has the
         /// dimensions specified in the form's size.
         /// </devdoc>
         WindowsDefaultLocation = 2,
 
-        /// <devdoc>
+        /// <summary>
         /// The form is positioned at the Windows default location and has the
         /// bounds determined by Windows default.
         /// </devdoc>
         WindowsDefaultBounds = 3,
 
-        /// <devdoc>
+        /// <summary>
         /// The form is centered within the bounds of its parent form.
         /// </devdoc>
         CenterParent = 4

@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies the ReadyState of the WebBrowser control.
     /// Returned by the <see cref='System.Windows.Forms.WebBrowser.ReadyState'/> property.
     /// </devdoc>

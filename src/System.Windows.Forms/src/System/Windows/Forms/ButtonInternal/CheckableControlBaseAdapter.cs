@@ -11,7 +11,7 @@ namespace System.Windows.Forms.ButtonInternal {
     using System.Drawing.Text;
     using System.Windows.Forms;
 
-    /// <devdoc>
+    /// <summary>
     ///     Common class for RadioButtonBaseAdapter and CheckBoxBaseAdapter
     /// </devdoc>
     internal abstract class CheckableControlBaseAdapter   : ButtonBaseAdapter {

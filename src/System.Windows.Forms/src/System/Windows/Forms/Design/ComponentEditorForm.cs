@@ -17,7 +17,7 @@ namespace System.Windows.Forms.Design {
     using Microsoft.Win32;
     using Message = System.Windows.Forms.Message;
 
-    /// <devdoc>
+    /// <summary>
     /// <para>Provides a user interface for <see cref='System.Windows.Forms.Design.WindowsFormsComponentEditor'/>.</para>
     /// </devdoc>
     [ComVisible(true),
@@ -51,7 +51,7 @@ namespace System.Windows.Forms.Design {
         private const int SELECTOR_PADDING = 10;
         private const int STRIP_HEIGHT = 4;
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.Design.ComponentEditorForm'/> class.
         ///    </para>
@@ -79,7 +79,7 @@ namespace System.Windows.Forms.Design {
             OnConfigureUI();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Applies any changes in the set of ComponentPageControl to the actual component.
         /// </devdoc>
         internal virtual void ApplyChanges(bool lastApply) {
@@ -131,7 +131,7 @@ namespace System.Windows.Forms.Design {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Hide the property
         ///    </para>
@@ -164,7 +164,7 @@ namespace System.Windows.Forms.Design {
         }
         */
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles ok/cancel/apply/help button click events
         /// </devdoc>
         private void OnButtonClick(object sender, EventArgs e) {
@@ -183,7 +183,7 @@ namespace System.Windows.Forms.Design {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Lays out the UI of the form.
         /// </devdoc>
         private void OnConfigureUI() {
@@ -320,7 +320,7 @@ namespace System.Windows.Forms.Design {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
@@ -338,7 +338,7 @@ namespace System.Windows.Forms.Design {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
@@ -347,7 +347,7 @@ namespace System.Windows.Forms.Design {
             ShowPageHelp();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Called to initialize this form with the new component.
         /// </devdoc>
         private void OnNewObjects() {
@@ -376,7 +376,7 @@ namespace System.Windows.Forms.Design {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles switching between pages.
         /// </devdoc>
         protected virtual void OnSelChangeSelector(object source, TreeViewEventArgs e) {
@@ -404,7 +404,7 @@ namespace System.Windows.Forms.Design {
             helpButton.Enabled = pageSites[activePage].GetPageControl().SupportsHelp();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Provides a method to override in order to pre-process input messages before 
         ///       they are dispatched.</para>
         /// </devdoc>        
@@ -415,7 +415,7 @@ namespace System.Windows.Forms.Design {
             return base.PreProcessMessage(ref msg);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sets the controls of the form to dirty.  This enables the "apply"
         ///     button.
         /// </devdoc>
@@ -425,28 +425,28 @@ namespace System.Windows.Forms.Design {
             cancelButton.Text = SR.CancelCaption;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Shows the form. The form will have no owner window.</para>
         /// </devdoc>
         public virtual DialogResult ShowForm() {
             return ShowForm(null, 0);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Shows the form and the specified page. The form will have no owner window.</para>
         /// </devdoc>
         public virtual DialogResult ShowForm(int page) {
             return ShowForm(null, page);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Shows the form with the specified owner.</para>
         /// </devdoc>
         public virtual DialogResult ShowForm(IWin32Window owner) {
             return ShowForm(owner, 0);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Shows the form and the specified page with the specified owner.</para>
         /// </devdoc>
         public virtual DialogResult ShowForm(IWin32Window owner, int page) {
@@ -471,7 +471,7 @@ namespace System.Windows.Forms.Design {
             return DialogResult;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Shows help for the active page.
         /// </devdoc>
         private void ShowPageHelp() {
@@ -482,7 +482,7 @@ namespace System.Windows.Forms.Design {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Implements a standard version of ComponentEditorPageSite for use within a
         ///     ComponentEditorForm.
         /// </devdoc>
@@ -494,7 +494,7 @@ namespace System.Windows.Forms.Design {
             internal bool isDirty;
             private ComponentEditorForm form;
 
-            /// <devdoc>
+            /// <summary>
             ///     Creates the page site.
             /// </devdoc>
             internal ComponentEditorPageSite(Control parent, Type pageClass, IComponent component, ComponentEditorForm form) {
@@ -520,7 +520,7 @@ namespace System.Windows.Forms.Design {
                 pageControl.SetComponent(component);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Called by the ComponentEditorForm to activate / deactivate the page.
             /// </devdoc>
             internal bool Active {
@@ -554,21 +554,21 @@ namespace System.Windows.Forms.Design {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Called by a page to return a parenting control for itself.
             /// </devdoc>
             public Control GetControl() {
                 return parent;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Called by the ComponentEditorForm to get the actual page.
             /// </devdoc>
             internal ComponentEditorPage GetPageControl() {
                 return pageControl;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Called by a page to mark it's contents as dirty.
             /// </devdoc>
             public void SetDirty() {
@@ -578,7 +578,7 @@ namespace System.Windows.Forms.Design {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         //  This should be moved into a shared location
         //  Its a duplication of what exists in the StyleBuilder.

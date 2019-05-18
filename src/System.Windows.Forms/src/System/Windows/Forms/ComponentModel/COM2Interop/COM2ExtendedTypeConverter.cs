@@ -15,7 +15,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     
     using System.Collections;
 
-    /// <devdoc>
+    /// <summary>
     /// Base class for value editors that extend basic functionality.
     /// calls will be delegated to the "base value editor".
     /// </devdoc>
@@ -56,7 +56,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
          }
          
          
-        /// <devdoc>
+        /// <summary>
         ///      Determines if this converter can convert an object in the given source
         ///      type to the native type of the converter.
         /// </devdoc>
@@ -67,7 +67,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return base.CanConvertFrom(context, sourceType);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///      Determines if this converter can convert an object to the given destination
         ///      type.
         /// </devdoc>
@@ -78,7 +78,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return base.CanConvertTo(context, destinationType);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///      Converts the given object to the converter's native type.
         /// </devdoc>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
@@ -88,7 +88,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return base.ConvertFrom(context, culture, value);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call
         ///      to ToString on the object if the object is valid and if the destination
@@ -102,7 +102,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return base.ConvertTo(context, culture, value, destinationType);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///      Creates an instance of this type given a set of property values
         ///      for the object.  This is useful for objects that are immutable, but still
         ///      want to provide changable properties.
@@ -114,7 +114,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return base.CreateInstance(context, propertyValues);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///      Determines if changing a value on this object should require a call to
         ///      CreateInstance to create a new value.
         /// </devdoc>
@@ -125,7 +125,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return base.GetCreateInstanceSupported(context);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the set of properties for this type.  By default, a type has
         ///      does not return any properties.  An easy implementation of this method
         ///      can just call TypeDescriptor.GetProperties for the correct data type.
@@ -137,7 +137,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return base.GetProperties(context, value, attributes);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///      Determines if this object supports properties.  By default, this
         ///      is false.
         /// </devdoc>
@@ -148,7 +148,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return base.GetPropertiesSupported(context);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves a collection containing a set of standard values
         ///      for the data type this validator is designed for.  This
         ///      will return null if the data type does not support a
@@ -161,7 +161,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return base.GetStandardValues(context);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///      Determines if the list of standard values returned from
         ///      GetStandardValues is an exclusive list.  If the list
         ///      is exclusive, then no other values are valid, such as
@@ -176,7 +176,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return base.GetStandardValuesExclusive(context);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///      Determines if this object supports a standard set of values
         ///      that can be picked from a list.
         /// </devdoc>
@@ -187,7 +187,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return base.GetStandardValuesSupported(context);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///      Determines if the given object value is valid for this type.
         /// </devdoc>
         public override bool IsValid(ITypeDescriptorContext context, object value) {

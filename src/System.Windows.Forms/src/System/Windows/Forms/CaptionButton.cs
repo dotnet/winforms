@@ -4,32 +4,32 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies the type of caption button to display.
     /// </devdoc>
     public enum CaptionButton
     {
-        /// <devdoc>
+        /// <summary>
         /// A Close button.
         /// </devdoc>
         Close = NativeMethods.DFCS_CAPTIONCLOSE,
 
-        /// <devdoc>
+        /// <summary>
         /// A Help button.
         /// </devdoc>
         Help = NativeMethods.DFCS_CAPTIONHELP,
 
-        /// <devdoc>
+        /// <summary>
         /// A Maximize button.
         /// </devdoc>
         Maximize = NativeMethods.DFCS_CAPTIONMAX,
 
-        /// <devdoc>
+        /// <summary>
         /// A Minimize button.
         /// </devdoc>
         Minimize = NativeMethods.DFCS_CAPTIONMIN,
 
-        /// <devdoc>
+        /// <summary>
         /// A Restore button.
         /// </devdoc>
         Restore = NativeMethods.DFCS_CAPTIONRESTORE,

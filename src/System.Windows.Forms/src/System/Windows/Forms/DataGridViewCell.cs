@@ -17,7 +17,7 @@ namespace System.Windows.Forms
     using System.Runtime.InteropServices;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>Identifies a cell in the dataGridView.</para>
     /// </devdoc>
     [
@@ -63,7 +63,7 @@ namespace System.Windows.Forms
 
         private byte flags;  // see DATAGRIDVIEWCELL_flag* consts above
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewCell'/> class.
         ///    </para>
@@ -107,7 +107,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets or sets the Index of a column in the <see cref='System.Windows.Forms.DataGrid'/> control.</para>
         /// </devdoc>
         public int ColumnIndex
@@ -640,7 +640,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets or sets the index of a row in the <see cref='System.Windows.Forms.DataGrid'/> control.</para>
         /// </devdoc>
         [
@@ -4571,7 +4571,7 @@ namespace System.Windows.Forms
             return requiredHeight <= maxBounds.Height && !widthTruncated;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets the row Index and column Index of the cell.
         ///    </para>

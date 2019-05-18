@@ -15,7 +15,7 @@ namespace System.Windows.Forms
     using Microsoft.Win32;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Represents a common dialog box
     ///       that displays the control that allows the user to open a file. This class
@@ -26,7 +26,7 @@ namespace System.Windows.Forms
     public sealed class OpenFileDialog : FileDialog
     {
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box displays a
         ///       warning if the user specifies a file name that does not exist.
@@ -48,7 +48,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value
         ///       indicating whether the dialog box allows multiple files to be selected.
@@ -71,7 +71,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether
         ///       the read-only check box is selected.
@@ -94,7 +94,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog contains a read-only check box.
         ///    </para>
@@ -116,7 +116,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Opens the file selected by the user with read-only permission.  The file
         ///       attempted is specified by the <see cref='System.Windows.Forms.FileDialog.FileName'/> property.
@@ -134,7 +134,7 @@ namespace System.Windows.Forms
             return new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Resets all properties to their default values.
         ///    </para>
@@ -145,7 +145,7 @@ namespace System.Windows.Forms
             SetOption(NativeMethods.OFN_FILEMUSTEXIST, true);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Displays a file open dialog.
         /// </devdoc>
         private protected override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn)

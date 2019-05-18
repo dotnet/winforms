@@ -12,7 +12,7 @@ namespace System.Experimental.Gdi
 {
     using System;
 
-    /// <devdoc>
+    /// <summary>
     ///    Specifies the layout of a device context.
     /// </devdoc>
     [Flags]

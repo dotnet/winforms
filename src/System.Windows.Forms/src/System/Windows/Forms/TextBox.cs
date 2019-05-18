@@ -18,7 +18,7 @@ namespace System.Windows.Forms {
     using System.Drawing.Design;
     using System.Windows.Forms.VisualStyles;
     
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Represents a Windows text box control.
     ///    </para>
@@ -35,14 +35,14 @@ namespace System.Windows.Forms {
     
         private static readonly object EVENT_TEXTALIGNCHANGED = new object();
     
-        /// <devdoc>
+        /// <summary>
         ///     Controls whether or not the edit box consumes/respects ENTER key
         ///     presses.  While this is typically desired by multiline edits, this
         ///     can interfere with normal key processing in a dialog.
         /// </devdoc>
         private bool acceptsReturn = false;
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates what the current special password character is.  This is 
         ///     displayed instead of any other text the user might enter.
         /// </devdoc>
@@ -50,42 +50,42 @@ namespace System.Windows.Forms {
 
         private bool useSystemPasswordChar;
 
-        /// <devdoc>
+        /// <summary>
         ///     Controls whether or not the case of characters entered into the edit
         ///     box is forced to a specific case.
         /// </devdoc>
         private CharacterCasing characterCasing = System.Windows.Forms.CharacterCasing.Normal;
 
-        /// <devdoc>
+        /// <summary>
         ///     Controls which scrollbars appear by default.
         /// </devdoc>
         private ScrollBars scrollBars = System.Windows.Forms.ScrollBars.None;
 
-        /// <devdoc>
+        /// <summary>
         ///     Controls text alignment in the edit box.
         /// </devdoc>
         private HorizontalAlignment textAlign = HorizontalAlignment.Left;
         
-        /// <devdoc>
+        /// <summary>
         ///     True if the selection has been set by the user.  If the selection has
         ///     never been set and we get focus, we focus all the text in the control
         ///     so we mimic the Windows dialog manager.
         /// </devdoc>
         private bool selectionSet = false;
 
-        /// <devdoc>
+        /// <summary>
         ///     This stores the value for the autocomplete mode which can be either
         ///     None, AutoSuggest, AutoAppend or AutoSuggestAppend.
         /// </devdoc>
         private AutoCompleteMode autoCompleteMode = AutoCompleteMode.None;
         
-        /// <devdoc>
+        /// <summary>
         ///     This stores the value for the autoCompleteSource mode which can be one of the values
         ///     from AutoCompleteSource enum.
         /// </devdoc>
         private AutoCompleteSource autoCompleteSource = AutoCompleteSource.None;
 
-        /// <devdoc>
+        /// <summary>
         ///     This stores the custom StringCollection required for the autoCompleteSource when its set to CustomSource.
         /// </devdoc>
         private AutoCompleteStringCollection autoCompleteCustomSource;
@@ -97,7 +97,7 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether pressing ENTER
         ///       in a multiline <see cref='System.Windows.Forms.TextBox'/>
@@ -121,7 +121,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     This is the AutoCompleteMode which can be either
         ///     None, AutoSuggest, AutoAppend or AutoSuggestAppend. 
         ///     This property in conjunction with AutoCompleteSource enables the AutoComplete feature for TextBox.
@@ -148,7 +148,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This is the AutoCompleteSource which can be one of the 
         ///     values from AutoCompleteSource enumeration. 
         ///     This property in conjunction with AutoCompleteMode enables the AutoComplete feature for TextBox.
@@ -187,7 +187,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This is the AutoCompleteCustomSource which is custom StringCollection used when the 
         ///     AutoCompleteSource is CustomSource. 
         /// </devdoc>
@@ -223,7 +223,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets whether the TextBox control
         ///       modifies the case of characters as they are typed.
@@ -269,7 +269,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines if the control is in password protect mode.
         /// </devdoc>
         internal override bool PasswordProtect {
@@ -279,7 +279,7 @@ namespace System.Windows.Forms {
         }
 
      
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Returns the parameters needed to create the handle. Inheriting classes
         ///       can override this to provide extra functionality. They should not,
@@ -335,7 +335,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the character used to mask characters in a single-line text box
         ///       control used to enter passwords.
@@ -374,7 +374,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets which scroll bars should
         ///       appear in a multiline <see cref='System.Windows.Forms.TextBox'/>
@@ -422,7 +422,7 @@ namespace System.Windows.Forms {
             return prefSize + scrollBarPadding;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets
         ///       the current text in the text box.
@@ -438,7 +438,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets how text is
         ///       aligned in a <see cref='System.Windows.Forms.TextBox'/>
@@ -472,7 +472,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///    Indicates if the text in the edit control should appear as
         ///    the default password character. This property has precedence
@@ -531,7 +531,7 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
        
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Overridden to handle RETURN key.
         ///    </para>
@@ -570,7 +570,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Overrideen to focus the text on first focus.
         /// </devdoc>
         protected override void OnGotFocus(EventArgs e) {
@@ -587,7 +587,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Overridden to update the newly created handle with the settings of the
         ///    PasswordChar properties.
         /// </devdoc>
@@ -633,7 +633,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Process a command key.
         /// Native "EDIT" control does not support "Select All" shorcut represented by Ctrl-A keys, when in multiline mode,
         /// and historically Winforms TextBox did not support it either.
@@ -659,7 +659,7 @@ namespace System.Windows.Forms {
             return returnValue;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Replaces the portion of the text specified by startPos and length with the one passed in,
         ///     without resetting the undo buffer (if any).
         ///     This method is provided as an alternative to SelectedText which clears the undo buffer.
@@ -670,7 +670,7 @@ namespace System.Windows.Forms {
             base.SetSelectedTextInternal(text, false);
         }
      
-        /// <devdoc>
+        /// <summary>
         ///     Performs the actual select without doing arg checking.
         /// </devdoc>        
         internal override void SelectInternal(int start, int length, int textLen) {
@@ -691,7 +691,7 @@ namespace System.Windows.Forms {
 
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Sets the AutoComplete mode in TextBox.
         /// </devdoc>
         internal void SetAutoComplete(bool reset)
@@ -757,7 +757,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Resets the AutoComplete mode in TextBox.
         /// </devdoc>
         private void ResetAutoComplete(bool force) {
@@ -863,7 +863,7 @@ namespace System.Windows.Forms {
             TextRenderer.DrawText(graphics, PlaceholderText, Font, rectangle, SystemColors.GrayText, BackColor, flags);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    The edits window procedure.  Inheritng classes can override this
         ///    to add extra functionality, but should not forget to call
         ///    base.wndProc(m); to ensure the combo continues to function properly.

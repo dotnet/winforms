@@ -8,28 +8,28 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms.VisualStyles
 {
-    /// <devdoc>
+    /// <summary>
     /// Determines whether visual styles are enabled.
     /// </devdoc>
     [Flags]
     public enum VisualStyleState
     {
-        /// <devdoc>
+        /// <summary>
         ///  Visual styles are not enabled.
         /// </devdoc>
         NoneEnabled = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// Visual styles enabled only for client area.
         /// </devdoc>
         ClientAreaEnabled = NativeMethods.STAP_ALLOW_CONTROLS,
 
-        /// <devdoc>
+        /// <summary>
         /// Visual styles enabled only for non-client area.
         /// </devdoc>
         NonClientAreaEnabled = NativeMethods.STAP_ALLOW_NONCLIENT,
 
-        /// <devdoc>
+        /// <summary>
         /// Visual styles enabled only for client and non-client areas. 
         /// </devdoc>
        ClientAndNonClientAreasEnabled = NativeMethods.STAP_ALLOW_NONCLIENT | NativeMethods.STAP_ALLOW_CONTROLS

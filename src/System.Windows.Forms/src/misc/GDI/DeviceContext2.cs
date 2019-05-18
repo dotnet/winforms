@@ -14,7 +14,7 @@ namespace System.Drawing.Internal
 namespace System.Experimental.Gdi
 #endif
 {
-    /// <devdoc>
+    /// <summary>
     ///     Represents a Win32 device context.  Provides operations for setting some of the properties
     ///     of a device context.  It's the managed wrapper for an HDC.
     ///     
@@ -34,7 +34,7 @@ namespace System.Experimental.Gdi
     {
         WindowsFont selectedFont;
         
-        /// <devdoc>
+        /// <summary>
         ///     See DeviceContext.cs for information about this class.  The class has been split to be able
         ///     to compile the right set of functionalities into different assemblies.
         /// </devdoc>
@@ -46,7 +46,7 @@ namespace System.Experimental.Gdi
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     DC background color.
         /// </devdoc>  
         public Color BackgroundColor
@@ -63,7 +63,7 @@ namespace System.Experimental.Gdi
 #endif
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sets the DC background color and returns the old value.
         /// </devdoc> 
         public Color SetBackgroundColor( Color newColor )
@@ -71,7 +71,7 @@ namespace System.Experimental.Gdi
             return ColorTranslator.FromWin32(IntUnsafeNativeMethods.SetBkColor( new HandleRef( this, this.Hdc ), ColorTranslator.ToWin32(newColor)));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     DC background mode.
         /// </devdoc>  
         public DeviceContextBackgroundMode BackgroundMode 
@@ -88,7 +88,7 @@ namespace System.Experimental.Gdi
 #endif
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sets the DC background mode and returns the old value.
         /// </devdoc> 
         public DeviceContextBackgroundMode SetBackgroundMode( DeviceContextBackgroundMode newMode )
@@ -97,7 +97,7 @@ namespace System.Experimental.Gdi
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     ROP2 currently on the DC.
         /// </devdoc>
         public DeviceContextBinaryRasterOperationFlags BinaryRasterOperation
@@ -117,7 +117,7 @@ namespace System.Experimental.Gdi
             */
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sets the DC ROP2 and returns the old value.
         /// </devdoc> 
         public DeviceContextBinaryRasterOperationFlags SetRasterOperation(DeviceContextBinaryRasterOperationFlags rasterOperation )
@@ -125,7 +125,7 @@ namespace System.Experimental.Gdi
             return (DeviceContextBinaryRasterOperationFlags) IntUnsafeNativeMethods.SetROP2(new HandleRef(this, this.Hdc), (int) rasterOperation);
         }
 
-        ///<devdoc>
+        ///<summary>
         ///     Get the number of pixels per logical inch along the device axes.
         ///     In a system with multiple display monitors, this value is the same for all monitors.
         ///</devdoc>
@@ -137,7 +137,7 @@ namespace System.Experimental.Gdi
             }
         }
 
-        ///<devdoc>
+        ///<summary>
         ///     Get the number of pixels per logical inch along the device width.
         ///     In a system with multiple display monitors, this value is the same for all monitors.
         ///</devdoc>
@@ -149,7 +149,7 @@ namespace System.Experimental.Gdi
             }
         }
 
-        ///<devdoc>
+        ///<summary>
         ///     Get the number of pixels per logical inch along the device (screen) height.
         ///     In a system with multiple display monitors, this value is the same for all monitors.
         ///</devdoc>
@@ -161,7 +161,7 @@ namespace System.Experimental.Gdi
             }
         }
                        
-        /// <devdoc>
+        /// <summary>
         ///     The font selected into the device context.  
         ///     It's OK to call dispose on it, the HFONT won't be deleted since the WindowsFont did not create it,
         ///     it got it from the HDC.
@@ -208,7 +208,7 @@ namespace System.Experimental.Gdi
 #endif
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Gets a DeviceContext object initialized to refer to the primary screen device.
         ///     Consider using WindowsGraphicsCacheManager.MeasurementGraphics instead.
         /// </devdoc>
@@ -238,7 +238,7 @@ namespace System.Experimental.Gdi
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Selects the specified object into the dc.  If the specified object is the same as the one currently selected
         ///     in the dc, the object is not set and a null value is returned.
         /// </devdoc>                         
@@ -301,7 +301,7 @@ namespace System.Experimental.Gdi
             hCurrentFont = hInitialFont;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves device-specific information for this device. 
         /// </devdoc> 
         public int GetDeviceCapabilities( DeviceCapabilities capabilityIndex )
@@ -309,7 +309,7 @@ namespace System.Experimental.Gdi
             return IntUnsafeNativeMethods.GetDeviceCaps( new HandleRef( this, this.Hdc ), (int) capabilityIndex );
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     DC map mode.
         /// </devdoc>  
         public DeviceContextMapMode MapMode
@@ -341,7 +341,7 @@ namespace System.Experimental.Gdi
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sets the DC map mode and returns the old value.
         /// </devdoc>
         public DeviceContextMapMode SetMapMode( DeviceContextMapMode newMode )
@@ -349,7 +349,7 @@ namespace System.Experimental.Gdi
             return (DeviceContextMapMode) IntUnsafeNativeMethods.SetMapMode( new HandleRef(this, this.Hdc), (int) newMode );
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Selects the specified object into the dc and returns the old object.
         /// </devdoc>
         public IntPtr SelectObject(IntPtr hObj, GdiObjectType type)
@@ -369,7 +369,7 @@ namespace System.Experimental.Gdi
             return IntUnsafeNativeMethods.SelectObject(new HandleRef(this, this.Hdc), new HandleRef( null, hObj));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     DC text alignment.
         /// </devdoc>  
         public DeviceContextTextAlignment TextAlignment
@@ -386,7 +386,7 @@ namespace System.Experimental.Gdi
 #endif
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sets the DC text alignment and returns the old value.
         /// </devdoc>  
         public DeviceContextTextAlignment SetTextAlignment( DeviceContextTextAlignment newAligment )
@@ -395,7 +395,7 @@ namespace System.Experimental.Gdi
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     DC current text color.
         /// </devdoc>  
         public Color TextColor
@@ -412,7 +412,7 @@ namespace System.Experimental.Gdi
 #endif
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sets the DC text color and returns the old value.
         /// </devdoc>  
         public Color SetTextColor( Color newColor )
@@ -420,7 +420,7 @@ namespace System.Experimental.Gdi
             return ColorTranslator.FromWin32(IntUnsafeNativeMethods.SetTextColor(new HandleRef( this, this.Hdc), ColorTranslator.ToWin32(newColor)));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     DC Viewport Extent in device units.
         /// </devdoc>  
         public Size ViewportExtent
@@ -438,7 +438,7 @@ namespace System.Experimental.Gdi
              }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sets the DC Viewport extent to the specified value and returns its previous value; extent values are in device units.
         /// </devdoc> 
         public Size SetViewportExtent( Size newExtent )
@@ -450,7 +450,7 @@ namespace System.Experimental.Gdi
             return oldExtent.ToSize();
         } 
 
-        /// <devdoc>
+        /// <summary>
         ///     DC Viewport Origin in device units.
         /// </devdoc>  
         public Point ViewportOrigin
@@ -468,7 +468,7 @@ namespace System.Experimental.Gdi
              }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sets the DC Viewport origin to the specified value and returns its previous value; origin values are in device units.
         /// </devdoc> 
         public Point SetViewportOrigin( Point newOrigin )

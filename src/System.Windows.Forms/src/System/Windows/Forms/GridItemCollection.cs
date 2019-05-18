@@ -6,7 +6,7 @@ using System.Collections;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// A read-only collection of GridItem objects
     /// </devdoc>
     public class GridItemCollection : ICollection
@@ -20,7 +20,7 @@ namespace System.Windows.Forms
             _entries = entries ?? Array.Empty<GridItem>();
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieves the number of member attributes.
         /// </devdoc>
         public int Count => _entries.Length;
@@ -29,7 +29,7 @@ namespace System.Windows.Forms
 
         bool ICollection.IsSynchronized => false;
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieves the member attribute with the specified index.
         /// </devdoc>
         public GridItem this[int index] => _entries[index];
@@ -58,7 +58,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Creates and retrieves a new enumerator for this collection.
         /// </devdoc>
         public IEnumerator GetEnumerator() => _entries.GetEnumerator();

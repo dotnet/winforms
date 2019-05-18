@@ -5,7 +5,7 @@
 namespace System.Windows.Forms {
 
 
-    /// <devdoc>
+    /// <summary>
     ///      Just returns false for IncludeNoneAsStandardValue
     /// </devdoc>
     internal sealed class NoneExcludedImageIndexConverter : ImageIndexConverter {

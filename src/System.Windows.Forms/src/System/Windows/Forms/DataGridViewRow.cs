@@ -12,7 +12,7 @@ using System.Windows.Forms.VisualStyles;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Identifies a row in the dataGridView.
     /// </devdoc>
     [TypeConverterAttribute(typeof(DataGridViewRowConverter))]
@@ -28,7 +28,7 @@ namespace System.Windows.Forms
 
         private DataGridViewCellCollection _rowCells;
 
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewRow'/> class.
         /// </devdoc>
         public DataGridViewRow() : base()
@@ -1107,7 +1107,7 @@ namespace System.Windows.Forms
             SetValuesInternal(values);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Constructs the new instance of the Cells collection objects. Subclasses
         /// should not call base.CreateCellsInstance.
         /// </devdoc>

@@ -7,7 +7,7 @@ using System.Drawing.Design;
 
 namespace System.Windows.Forms.Design
 {
-    /// <devdoc>
+    /// <summary>
 	/// Associates Type with ToolStripMenuItem.
 	/// </devdoc>
 	internal class ItemTypeToolStripMenuItem : ToolStripMenuItem

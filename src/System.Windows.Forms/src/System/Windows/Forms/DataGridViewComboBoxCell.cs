@@ -16,7 +16,7 @@ namespace System.Windows.Forms
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para></para>
     /// </devdoc>
     public class DataGridViewComboBoxCell : DataGridViewCell
@@ -2656,7 +2656,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets the row Index and column Index of the cell.
         ///    </para>
@@ -2696,7 +2696,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         ///       A collection that stores objects.
         ///    </para>
@@ -2726,7 +2726,7 @@ namespace System.Windows.Forms
                 }
             }
                         
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the number of items.
             /// </devdoc>
             public int Count
@@ -2737,7 +2737,7 @@ namespace System.Windows.Forms
                 }
             }
             
-            /// <devdoc>
+            /// <summary>
             ///     Internal access to the actual data store.
             /// </devdoc>
             internal ArrayList InnerArray 
@@ -2784,7 +2784,7 @@ namespace System.Windows.Forms
                 }
             }
         
-            /// <devdoc>
+            /// <summary>
             ///     Adds an item to the collection. For an unsorted combo box, the item is
             ///     added to the end of the existing list of items. For a sorted combo box,
             ///     the item is inserted into the list according to its sorted position.
@@ -2846,7 +2846,7 @@ namespace System.Windows.Forms
                 this.owner.OnItemsCollectionChanged();
             }
             
-            /// <devdoc>
+            /// <summary>
             ///     Add range that bypasses the data source check.
             /// </devdoc>
             internal void AddRangeInternal(ICollection items) 
@@ -2877,7 +2877,7 @@ namespace System.Windows.Forms
                 this.InnerArray.Sort(this.Comparer);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the item with the specified index.
             /// </devdoc>
             public virtual object this[int index] 
@@ -2910,7 +2910,7 @@ namespace System.Windows.Forms
                 }
             }
             
-            /// <devdoc>
+            /// <summary>
             ///     Removes all items from the collection.
             /// </devdoc>
             public void Clear()
@@ -2934,7 +2934,7 @@ namespace System.Windows.Forms
                 return IndexOf(value) != -1;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Copies the DataGridViewComboBoxCell Items collection to a destination array.
             /// </devdoc>
             public void CopyTo(object[] destination, int arrayIndex) 
@@ -2955,7 +2955,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Returns an enumerator for the DataGridViewComboBoxCell Items collection.
             /// </devdoc>
             public IEnumerator GetEnumerator() 
@@ -2972,7 +2972,7 @@ namespace System.Windows.Forms
                 return this.InnerArray.IndexOf(value);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Adds an item to the collection. For an unsorted combo box, the item is
             ///     added to the end of the existing list of items. For a sorted combo box,
             ///     the item is inserted into the list according to its sorted position.
@@ -3007,7 +3007,7 @@ namespace System.Windows.Forms
                 }
             }
             
-            /// <devdoc>
+            /// <summary>
             ///     Removes the given item from the collection, provided that it is
             ///     actually in the list.
             /// </devdoc>
@@ -3021,7 +3021,7 @@ namespace System.Windows.Forms
                 }
             }
         
-            /// <devdoc>
+            /// <summary>
             ///     Removes an item from the collection at the given index.
             /// </devdoc>
             public void RemoveAt(int index) 

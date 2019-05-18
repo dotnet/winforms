@@ -14,7 +14,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Provides data for the <see cref='System.Windows.Forms.TreeView.OnBeforeCheck'/>,
     ///    <see cref='System.Windows.Forms.TreeView.OnBeforeCollapse'/>,

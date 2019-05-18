@@ -40,7 +40,7 @@ namespace System.Windows.Forms
         private bool _isDataSourceInitEventHooked;
         private bool _inSetDataConnection = false;
 
-        /// <devdoc>
+        /// <summary>
         /// The ListSource to consume as this ListBox's source of data.
         /// When set, a user can not modify the Items collection.
         /// </devdoc>
@@ -97,7 +97,7 @@ namespace System.Windows.Forms
 
         protected CurrencyManager DataManager => _dataManager;
 
-        /// <devdoc>
+        /// <summary>
         /// If the ListBox contains objects that support properties, this indicates
         /// which property of the object to show. If "", the object shows it's ToString().
         /// </devdoc>
@@ -335,7 +335,7 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(s_valueMemberChangedEvent, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Indicates whether list currently allows selection of list items.
         /// </devdoc>
         protected virtual bool AllowSelection => true;
@@ -546,7 +546,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Handling special input keys, such as PageUp, PageDown, Home, End, etc...
         /// </devdoc>
         protected override bool IsInputKey(Keys keyData)
@@ -610,7 +610,7 @@ namespace System.Windows.Forms
             eh?.Invoke(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Actually goes and fires the selectedIndexChanged event. Inheriting controls
         /// should use this to know when the event is fired [this is preferable to
         /// adding an event handler on yourself for this event]. They should,

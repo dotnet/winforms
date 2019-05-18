@@ -17,7 +17,7 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Encapsulates
     ///       a standard Windows(r) group
@@ -37,7 +37,7 @@ namespace System.Windows.Forms {
         Font cachedFont;
         FlatStyle flatStyle = FlatStyle.Standard;
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.GroupBox'/> class.
         ///    </para>
@@ -55,7 +55,7 @@ namespace System.Windows.Forms {
             TabStop = false;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the control will allow drag and
         ///       drop operations and events to be used.
@@ -71,7 +71,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Override to re-expose AutoSize.</para>
         /// </devdoc>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always),
@@ -96,7 +96,7 @@ namespace System.Windows.Forms {
             remove => base.AutoSizeChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Allows the control to optionally shrink when AutoSize is true.
         /// </devdoc>
         [
@@ -149,7 +149,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Set the default Padding to 3 so that it is consistent with Everett
         /// </devdoc>
         protected override Padding DefaultPadding {
@@ -158,7 +158,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
         /// </devdoc>
@@ -168,7 +168,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets a rectangle that represents the
         ///       dimensions of the <see cref='System.Windows.Forms.GroupBox'/>
@@ -249,7 +249,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the user may
         ///       press the TAB key to give the focus to the <see cref='System.Windows.Forms.GroupBox'/>
@@ -300,7 +300,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
         /// </devdoc>
         [
@@ -317,7 +317,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines whether the control supports rendering text using GDI+ and GDI.
         ///     This is provided for container controls to iterate through its children to set UseCompatibleTextRendering to the same
         ///     value if the child control supports it.
@@ -601,7 +601,7 @@ namespace System.Windows.Forms {
             return prefSize + totalPadding;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override void OnFontChanged(EventArgs e) {
             fontHeight = -1;
@@ -610,7 +610,7 @@ namespace System.Windows.Forms {
             base.OnFontChanged(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     We use this to process mnemonics and send them on to the first child
         ///     control.
         /// </devdoc>
@@ -636,7 +636,7 @@ namespace System.Windows.Forms {
 
         internal override bool SupportsUiaProviders => true;
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns a string representation for this control.
         /// </devdoc>
         public override string ToString() {

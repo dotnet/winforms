@@ -12,7 +12,7 @@ namespace System.Windows.Forms
     using System.Globalization;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <devdoc>
+    /// <summary>
     /// <para>Represents a collection of <see cref='System.Windows.Forms.DataGridViewCell'/> objects in the <see cref='System.Windows.Forms.DataGridView'/> 
     /// control.</para>
     /// </devdoc>
@@ -116,7 +116,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the DataGridViewCell with the specified index.
         /// </devdoc>
         public DataGridViewCell this[int index]
@@ -170,7 +170,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the DataGridViewCell with the specified column name.
         /// </devdoc>
         public DataGridViewCell this[string columnName]
@@ -209,7 +209,7 @@ namespace System.Windows.Forms
             remove => this.onCollectionChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Adds a <see cref='System.Windows.Forms.DataGridViewCell'/> to this collection.</para>
         /// </devdoc>
         public virtual int Add(DataGridViewCell dataGridViewCell)
@@ -305,7 +305,7 @@ namespace System.Windows.Forms
             this.items.CopyTo(array, index);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Checks to see if a DataGridViewCell is contained in this collection.
         /// </devdoc>
         public virtual bool Contains(DataGridViewCell dataGridViewCell)

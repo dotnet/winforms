@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// This is the overrided PaintEventArgs for painting the cell of the table
     /// It contains additional information indicating the row/column of the cell
     /// as well as the bound of the cell

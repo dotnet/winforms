@@ -4,17 +4,17 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies the orientation of controls or elements of controls.
     /// </devdoc>
     public enum Orientation
     {
-        /// <devdoc>
+        /// <summary>
         /// The control or element is oriented horizontally.
         /// </devdoc>
         Horizontal = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// The control or element is oriented vertically.
         /// </devdoc>
         Vertical = 1,

@@ -13,7 +13,7 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>Specifies a column in
     ///       which each cell contains a check box for representing
     ///       a boolean value.</para>
@@ -35,12 +35,12 @@ namespace System.Windows.Forms {
         private static readonly object  EventFalseValue     = new object();
         private static readonly object  EventAllowNull      = new object();
         
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataGridBoolColumn'/> class.</para>
         /// </devdoc>
         public DataGridBoolColumn() : base() {}
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of a <see cref='System.Windows.Forms.DataGridBoolColumn'/> with the specified <see cref='System.Data.DataColumn'/>.</para>
         /// </devdoc>
         public DataGridBoolColumn(PropertyDescriptor prop)
@@ -49,7 +49,7 @@ namespace System.Windows.Forms {
         public DataGridBoolColumn(PropertyDescriptor prop, bool isDefault)
             : base(prop, isDefault){}
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets the actual value used when setting the 
         ///       value of the column to <see langword='true'/> .</para>
         /// </devdoc>
@@ -73,7 +73,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EventTrueValue, value);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets the actual value used when setting the value of the column to 
         ///    <see langword='false'/>.</para>
         /// </devdoc>
@@ -96,7 +96,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EventFalseValue, value);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets the actual value used when setting the value of the column to 
         ///    <see langword='null'/>.</para>
         /// </devdoc>
@@ -141,7 +141,7 @@ namespace System.Windows.Forms {
                                      idealCheckSize);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the value at the specified row.</para>
         /// </devdoc>
         protected internal override object GetColumnValueAtRow(CurrencyManager lm, int row) {
@@ -166,7 +166,7 @@ namespace System.Windows.Forms {
             return ret;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Sets the value a a specified row.</para>
         /// </devdoc>
         protected internal override void SetColumnValueAtRow(CurrencyManager lm, int row, object value) {
@@ -184,7 +184,7 @@ namespace System.Windows.Forms {
             base.SetColumnValueAtRow(lm, row, baseValue);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the optimum width and height of a cell given
         ///       a specific value to contain.</para>
         /// </devdoc>
@@ -192,7 +192,7 @@ namespace System.Windows.Forms {
             return new Size(idealCheckSize+2, idealCheckSize+2);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets
         ///       the height of a cell in a column.</para>
         /// </devdoc>
@@ -200,7 +200,7 @@ namespace System.Windows.Forms {
             return idealCheckSize+2;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets the height used when resizing columns.
         ///    </para>
@@ -210,7 +210,7 @@ namespace System.Windows.Forms {
             return idealCheckSize + 2;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initiates a request to interrupt an edit procedure.
         ///    </para>
@@ -222,7 +222,7 @@ namespace System.Windows.Forms {
             return;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initiates a request to complete an editing procedure.
         ///    </para>
@@ -239,7 +239,7 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Prepares the cell for editing a value.
         ///    </para>
@@ -268,7 +268,7 @@ namespace System.Windows.Forms {
             base.Invalidate();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Provides a handler for determining which key was pressed, and whether to
         ///       process it.
@@ -285,7 +285,7 @@ namespace System.Windows.Forms {
             return base.KeyPress(rowNum, keyData);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Indicates whether the a mouse down event occurred at the specified row, at
         ///       the specified x and y coordinates.
@@ -317,7 +317,7 @@ namespace System.Windows.Forms {
                 eh(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Draws the <see cref='System.Windows.Forms.DataGridBoolColumn'/>
         /// with the given <see cref='System.Drawing.Graphics'/>,
         /// <see cref='System.Drawing.Rectangle'/> and row number.</para>
@@ -327,7 +327,7 @@ namespace System.Windows.Forms {
             Paint(g,bounds,source, rowNum, false);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Draws the <see cref='System.Windows.Forms.DataGridBoolColumn'/>
         /// with the given <see cref='System.Drawing.Graphics'/>, <see cref='System.Drawing.Rectangle'/>,
         /// row number, and alignment settings. </para>
@@ -336,7 +336,7 @@ namespace System.Windows.Forms {
             Paint(g,bounds,source, rowNum, this.DataGridTableStyle.BackBrush, this.DataGridTableStyle.ForeBrush, alignToRight);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Draws the <see cref='System.Windows.Forms.DataGridBoolColumn'/> with the given <see cref='System.Drawing.Graphics'/>, <see cref='System.Drawing.Rectangle'/>,
         ///    row number, <see cref='System.Drawing.Brush'/>, and <see cref='System.Drawing.Color'/>. </para>
         /// </devdoc>
@@ -380,7 +380,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets a value indicating whether null values are allowed.</para>
         /// </devdoc>
         [
@@ -413,7 +413,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EventAllowNull, value);
         }
         
-        /// <devdoc>
+        /// <summary>
         /// <para>Enters a <see langword='null'/> into the column.</para>
         /// </devdoc>
         protected internal override void EnterNullValue()

@@ -15,7 +15,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     internal class Com2IDispatchConverter : Com2ExtendedTypeConverter{
         Com2PropertyDescriptor propDesc;
 
-        /// <devdoc>
+        /// <summary>
         ///     What we return textually for null.
         /// </devdoc>
         protected static readonly string none = SR.toStringNone;
@@ -34,7 +34,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
              this.allowExpand = allowExpand;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///      Determines if this converter can convert an object in the given source
         ///      type to the native type of the converter.
         /// </devdoc>
@@ -42,7 +42,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return false;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///      Determines if this converter can convert an object to the given destination
         ///      type.
         /// </devdoc>
@@ -51,7 +51,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
         
         
-        /// <devdoc>
+        /// <summary>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call
         ///      to ToString on the object if the object is valid and if the destination
@@ -82,7 +82,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return TypeDescriptor.GetProperties(value, attributes);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///      Determines if this object supports properties.  By default, this
         ///      is false.
         /// </devdoc>

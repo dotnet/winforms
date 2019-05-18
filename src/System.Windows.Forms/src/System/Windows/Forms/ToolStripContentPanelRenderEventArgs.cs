@@ -8,7 +8,7 @@ namespace System.Windows.Forms
 {
     public class ToolStripContentPanelRenderEventArgs : EventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// This class represents all the information to render the toolStrip
         /// </devdoc>        
         public ToolStripContentPanelRenderEventArgs(Graphics g, ToolStripContentPanel contentPanel)
@@ -17,12 +17,12 @@ namespace System.Windows.Forms
             ToolStripContentPanel = contentPanel;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The graphics object to draw with
         /// </devdoc>
         public Graphics Graphics { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Represents which toolStrip was affected by the click
         /// </devdoc>
         public ToolStripContentPanel ToolStripContentPanel { get; }

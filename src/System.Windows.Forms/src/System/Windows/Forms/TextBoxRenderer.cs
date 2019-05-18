@@ -12,7 +12,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       This is a rendering class for the TextBox control.
     ///    </para>
@@ -28,7 +28,7 @@ namespace System.Windows.Forms {
         private TextBoxRenderer() {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Returns true if this class is supported for the current OS and user/application settings, 
         ///       otherwise returns false.
@@ -54,7 +54,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a TextBox control.
         ///    </para>
@@ -67,7 +67,7 @@ namespace System.Windows.Forms {
             DrawBackground(g, bounds, state);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a TextBox control.
         ///    </para>
@@ -76,7 +76,7 @@ namespace System.Windows.Forms {
             DrawTextBox(g, bounds, textBoxText, font, TextFormatFlags.TextBoxControl, state);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a TextBox control.
         ///    </para>
@@ -85,7 +85,7 @@ namespace System.Windows.Forms {
             DrawTextBox(g, bounds, textBoxText, font, textBounds, TextFormatFlags.TextBoxControl, state);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a TextBox control.
         ///    </para>
@@ -97,7 +97,7 @@ namespace System.Windows.Forms {
             DrawTextBox(g, bounds, textBoxText, font, textBounds, flags, state);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a TextBox control.
         ///    </para>

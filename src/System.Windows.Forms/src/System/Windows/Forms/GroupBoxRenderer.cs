@@ -13,7 +13,7 @@ using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
 
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       This is a rendering class for the GroupBox control.
     ///    </para>
@@ -31,7 +31,7 @@ using Microsoft.Win32;
         private GroupBoxRenderer() {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///      If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to 
         /// determine how to render.
@@ -53,7 +53,7 @@ using Microsoft.Win32;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Returns true if the background corresponding to the given state is partially transparent, else false.
         ///    </para>
@@ -68,7 +68,7 @@ using Microsoft.Win32;
            }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       This is just a convenience wrapper for VisualStyleRenderer.DrawThemeParentBackground. For downlevel,
         ///       this isn't required and does nothing.
@@ -84,7 +84,7 @@ using Microsoft.Win32;
            }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a GroupBox control.
         ///    </para>
@@ -96,7 +96,7 @@ using Microsoft.Win32;
                 DrawUnthemedGroupBoxNoText(g, bounds, state);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a GroupBox control. Uses the text color specified by the theme.
         ///    </para>
@@ -105,7 +105,7 @@ using Microsoft.Win32;
             DrawGroupBox(g, bounds, groupBoxText, font, TextFormatFlags.Top | TextFormatFlags.Left, state);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a GroupBox control.
         ///    </para>
@@ -114,7 +114,7 @@ using Microsoft.Win32;
             DrawGroupBox(g, bounds, groupBoxText, font, textColor, TextFormatFlags.Top | TextFormatFlags.Left, state);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a GroupBox control. Uses the text color specified by the theme.
         ///    </para>
@@ -126,7 +126,7 @@ using Microsoft.Win32;
                 DrawUnthemedGroupBoxWithText(g, bounds, groupBoxText, font, DefaultTextColor(state), flags, state);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a GroupBox control.
         ///    </para>

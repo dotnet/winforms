@@ -8,7 +8,7 @@ namespace System.Windows.Forms {
     using System;
     
     
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Specifies the return value for HITTEST on ListView.
     ///    </para>
@@ -19,7 +19,7 @@ namespace System.Windows.Forms {
         private ListViewItem item;
         private ListViewItem.ListViewSubItem subItem;
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a ListViewHitTestInfo instance.
         /// </devdoc>
         public ListViewHitTestInfo(ListViewItem hitItem, ListViewItem.ListViewSubItem hitSubItem, ListViewHitTestLocations hitLocation) {
@@ -29,7 +29,7 @@ namespace System.Windows.Forms {
         }
         
 
-        /// <devdoc>
+        /// <summary>
         ///     This gives the exact location returned by hit test on listview.
         /// </devdoc>
         public ListViewHitTestLocations Location {
@@ -38,7 +38,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     This gives the ListViewItem returned by hit test on listview.
         /// </devdoc>
         public ListViewItem Item {
@@ -47,7 +47,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     This gives the ListViewSubItem returned by hit test on listview.
         /// </devdoc>
         public ListViewItem.ListViewSubItem SubItem {

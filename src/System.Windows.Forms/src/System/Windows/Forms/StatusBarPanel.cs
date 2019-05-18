@@ -16,7 +16,7 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Stores the <see cref='System.Windows.Forms.StatusBar'/>
     ///       control panel's information.
@@ -56,7 +56,7 @@ namespace System.Windows.Forms {
 
         private object userData;
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initializes a new default instance of the <see cref='System.Windows.Forms.StatusBarPanel'/> class.
         ///    </para>
@@ -64,7 +64,7 @@ namespace System.Windows.Forms {
         public StatusBarPanel() {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.StatusBarPanel.Alignment'/>
         ///       property.
@@ -94,7 +94,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.StatusBarPanel.AutoSize'/>
         ///       property.
@@ -125,7 +125,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.StatusBarPanel.BorderStyle'/>
         ///
@@ -158,7 +158,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         internal bool Created {
             get {
@@ -166,7 +166,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.StatusBarPanel.Icon'/>
         ///       property.
@@ -208,7 +208,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Expose index internally
         ///    </para>
@@ -224,7 +224,7 @@ namespace System.Windows.Forms {
                 index = value;
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the minimum width the <see cref='System.Windows.Forms.StatusBarPanel'/> can be within the <see cref='System.Windows.Forms.StatusBar'/>
         ///       control.
@@ -258,7 +258,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the name of the panel.
         ///    </para>
@@ -280,7 +280,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Represents the <see cref='System.Windows.Forms.StatusBar'/>
         ///       control which hosts the
@@ -295,7 +295,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Expose a direct setter for parent internally
         ///    </para>
@@ -308,7 +308,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Expose right internally
         ///    </para>
@@ -325,7 +325,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the style of the panel.
         ///
@@ -370,7 +370,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the text of the panel.
         ///    </para>
@@ -409,7 +409,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets
         ///       or sets the panel's tool tip text.
@@ -451,7 +451,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the width of the <see cref='System.Windows.Forms.StatusBarPanel'/> within the <see cref='System.Windows.Forms.StatusBar'/>
         ///       control.
@@ -477,14 +477,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Handles tasks required when the control is being initialized.
         /// </devdoc>
         public void BeginInit() {
             initializing = true;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override void Dispose(bool disposing) {
             if (disposing) {
@@ -498,7 +498,7 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Called when initialization of the control is complete.
         /// </devdoc>
         public void EndInit() {
@@ -509,7 +509,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Gets the width of the contents of the panel
         /// </devdoc>
         internal int GetContentsWidth(bool newPanel) {
@@ -534,7 +534,7 @@ namespace System.Windows.Forms {
             return Math.Max(width, minWidth);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the index of the panel by making the parent control search
         ///     for it within its list.
         /// </devdoc>
@@ -542,7 +542,7 @@ namespace System.Windows.Forms {
             return index;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sets all the properties for this panel.
         /// </devdoc>
         internal void Realize() {
@@ -656,7 +656,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Retrieves a string that contains information about the
         ///       panel.

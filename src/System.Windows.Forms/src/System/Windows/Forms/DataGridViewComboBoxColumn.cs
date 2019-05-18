@@ -522,7 +522,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para></para>
         /// </devdoc>
         public override string ToString() 

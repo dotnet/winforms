@@ -11,7 +11,7 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.Runtime.InteropServices;
 
-    /// <devdoc>
+    /// <summary>
     ///     This class is used to put context menus on your form and show them for
     ///     controls at runtime.  It basically acts like a regular Menu control,
     ///     but can be set for the ContextMenu property that most controls have.
@@ -27,21 +27,21 @@ namespace System.Windows.Forms {
         
         private RightToLeft rightToLeft = System.Windows.Forms.RightToLeft.Inherit;
     
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new ContextMenu object with no items in it by default.
         /// </devdoc>
         public ContextMenu()
             : base(null) {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a ContextMenu object with the given MenuItems.
         /// </devdoc>
         public ContextMenu(MenuItem[] menuItems)
             : base(menuItems) {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The last control that was acted upon that resulted in this context
         ///     menu being displayed.
         /// </devdoc>
@@ -62,7 +62,7 @@ namespace System.Windows.Forms {
             remove => onPopup -= value;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    Fires when the context menu collapses.
         /// </devdoc>
         [SRDescription(nameof(SR.ContextMenuCollapseDescr))]
@@ -71,7 +71,7 @@ namespace System.Windows.Forms {
             remove => onCollapse -= value;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
         ///     text alignment and reading order will be from right to left.
@@ -116,7 +116,7 @@ namespace System.Windows.Forms {
                 return (rightToLeft == System.Windows.Forms.RightToLeft.Yes);
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///     Fires the popup event
         /// </devdoc>
         protected internal virtual void OnPopup(EventArgs e) {
@@ -125,7 +125,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the collapse event
         /// </devdoc>
         protected internal virtual void OnCollapse(EventArgs e) {
@@ -134,7 +134,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected internal virtual bool ProcessCmdKey(ref Message msg, Keys keyData, Control control) {
             sourceControl = control;
@@ -145,7 +145,7 @@ namespace System.Windows.Forms {
         	RightToLeft = RightToLeft.No;	
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     Returns true if the RightToLeft should be persisted in code gen.
         /// </devdoc>
         internal virtual bool ShouldSerializeRightToLeft() {
@@ -155,7 +155,7 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Displays the context menu at the specified position.  This method
         ///     doesn't return until the menu is dismissed.
         /// </devdoc>
@@ -163,7 +163,7 @@ namespace System.Windows.Forms {
             Show(control, pos, NativeMethods.TPM_VERTICAL | NativeMethods.TPM_RIGHTBUTTON);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Displays the context menu at the specified position.  This method
         ///     doesn't return until the menu is dismissed.
         /// </devdoc>

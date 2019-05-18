@@ -10,7 +10,7 @@ namespace System.Windows.Forms {
     using System.Diagnostics.CodeAnalysis;
 
     
-    /// <devdoc>
+    /// <summary>
     ///    <para> 
     ///       Represents an internal class that is used bu ComboBox and TextBox AutoCompleteCustomSoucr property.
     ///       This class is reponsible for initializing the SHAutoComplete COM object and setting options in it.
@@ -24,14 +24,14 @@ namespace System.Windows.Forms {
         private int size;
         private UnsafeNativeMethods.IAutoComplete2 autoCompleteObject2;
         
-        /// <devdoc>
+        /// <summary>
         ///    <para> 
         ///       SHAutoComplete COM object CLSID.
         ///    </para>
         /// </devdoc>
         private static Guid   autoCompleteClsid = new Guid("{00BB2763-6A77-11D0-A535-00C04FD7D062}");
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> 
         ///       Constructor.
         ///    </para>
@@ -51,7 +51,7 @@ namespace System.Windows.Forms {
             autoCompleteObject2 = (UnsafeNativeMethods.IAutoComplete2)obj;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> 
         ///       This is the method that binds the custom source with the IAutoComplete interface.The "hWndEdit" is the handle 
         ///       to the edit Control and the "options' are the options that need to be set in the AUTOCOMPLETE mode.

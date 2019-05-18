@@ -19,7 +19,7 @@ namespace System.Experimental.Gdi
     using System.Globalization;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     ///     <para>
     ///         Encapsulates a GDI Region object.
     ///     </para>
@@ -40,12 +40,12 @@ namespace System.Experimental.Gdi
         private string AllocationSite = DbgUtil.StackTrace;
 #endif
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         private WindowsRegion() {
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         
         
@@ -53,7 +53,7 @@ namespace System.Experimental.Gdi
             CreateRegion(rect);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         
         
@@ -63,7 +63,7 @@ namespace System.Experimental.Gdi
 
         // Consider implementing a constructor that calls ExtCreateRegion(XFORM lpXform, DWORD nCount, RGNDATA lpRgnData) if needed.
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a WindowsRegion from a region handle, if 'takeOwnership' is true, the handle is added to the HandleCollector
         ///     and is removed & destroyed on dispose. 
         /// </devdoc>
@@ -83,7 +83,7 @@ namespace System.Experimental.Gdi
             return wr;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a WindowsRegion from a System.Drawing.Region. 
         /// </devdoc>
         public static WindowsRegion FromRegion( Region region, Graphics g ){
@@ -102,7 +102,7 @@ namespace System.Experimental.Gdi
             return WindowsRegion.FromHregion(region.GetHrgn(g), true);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         
         
@@ -115,7 +115,7 @@ namespace System.Experimental.Gdi
                 new WindowsRegion(this.ToRectangle());
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Combines region1 & region2 into this region.   The regions cannot be null. 
         ///     The three regions need not be distinct. For example, the sourceRgn1 can equal this region. 
         /// </devdoc>
@@ -123,7 +123,7 @@ namespace System.Experimental.Gdi
             return IntUnsafeNativeMethods.CombineRgn(new HandleRef(this, this.HRegion), new HandleRef(region1, region1.HRegion), new HandleRef(region2, region2.HRegion), mode);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         
         
@@ -133,13 +133,13 @@ namespace System.Experimental.Gdi
             ownHandle = true;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         public void Dispose() {
             Dispose(true);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         public void Dispose(bool disposing) {
             if (this.nativeHandle != IntPtr.Zero) {
@@ -157,13 +157,13 @@ namespace System.Experimental.Gdi
             }
         }
 
-         /// <devdoc>
+         /// <summary>
         /// </devdoc>
        ~WindowsRegion() {
             Dispose(false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The native region handle. 
         /// </devdoc>
         public IntPtr HRegion {
@@ -172,7 +172,7 @@ namespace System.Experimental.Gdi
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         public bool IsInfinite {
             get {
@@ -180,7 +180,7 @@ namespace System.Experimental.Gdi
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     A rectangle representing the window region set with the SetWindowRgn function. 
         /// </devdoc>
         public Rectangle ToRectangle() {            

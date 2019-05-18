@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Identifies an element in the dataGridView (base class for TCell, TBand, TRow, TColumn.
     /// </devdoc>
     public class DataGridViewElement 
@@ -15,7 +15,7 @@ namespace System.Windows.Forms
         private DataGridViewElementStates _state; // enabled frozen readOnly resizable selected visible
         private DataGridView _dataGridView;
 
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewElement'/> class.
         /// </devdoc>
         public DataGridViewElement()

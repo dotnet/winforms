@@ -805,7 +805,7 @@ namespace System.Windows.Forms {
 
         }
 
-        ///<devdoc>
+        ///<summary>
         ///  This function paints with three colors, beginning, middle, and end.
         ///   it paints:
         ///     (1)the entire bounds in the middle color

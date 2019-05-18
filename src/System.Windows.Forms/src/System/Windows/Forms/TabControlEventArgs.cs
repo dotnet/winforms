@@ -4,13 +4,13 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.TabControl.Selecting'/>,<see cref='System.Windows.Forms.TabControl.Selected'/>
     /// event.
     /// </devdoc>
     public class TabControlEventArgs : EventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.TabControlEventArgs'/>class.
         /// </devdoc>
         public TabControlEventArgs(TabPage tabPage, int tabPageIndex, TabControlAction action)
@@ -20,17 +20,17 @@ namespace System.Windows.Forms
             Action = action;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Stores the referemce to the tabpage that is undergoing the TabControl event.
         /// </devdoc>
         public TabPage TabPage { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Stores the index to the tabpage that is undergoing the TabControl event.
         /// </devdoc>
         public int TabPageIndex { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Stores the TabControl action which instigated the TabControl event.
         ///    </para>
         /// </devdoc>

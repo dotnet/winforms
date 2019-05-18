@@ -6,12 +6,12 @@ using System.Globalization;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.Form.InputLanguageChanged'/> event.
     /// </devdoc>
     public class InputLanguageChangedEventArgs : EventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.InputLanguageChangedEventArgs'/> class with the
         /// specified locale and character set.
         /// </devdoc>
@@ -22,7 +22,7 @@ namespace System.Windows.Forms
             CharSet = charSet;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.InputLanguageChangedEventArgs'/>class with the specified input language and
         /// character set.
         /// </devdoc>
@@ -38,17 +38,17 @@ namespace System.Windows.Forms
             CharSet = charSet;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the input language.
         /// </devdoc>
         public InputLanguage InputLanguage { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the locale of the input language.
         /// </devdoc>
         public CultureInfo Culture { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the character set associated with the new input language.
         /// </devdoc>
         public byte CharSet { get; }

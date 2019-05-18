@@ -4,27 +4,27 @@
 
 namespace System.Windows.Forms 
 {
-    /// <devdoc>
+    /// <summary>
     /// Rich edit control's option settings for Input Method Editor (IME) and 
     /// Asian language support
     /// </devdoc>
     [Flags]
     public enum RichTextBoxLanguageOptions
 	{
-        /// <devdoc>
+        /// <summary>
         /// If this flag is set, the control automatically changes fonts when the
         /// user explicitly changes to a different keyboard layout. 
         /// </devdoc>
         AutoFont = 0x0002,
 
-        /// <devdoc>
+        /// <summary>
         /// Font-bound font sizes are scaled from insertion point size according to
         /// a script. For example, Asian fonts are slightly larger than Western.
         /// This is the default. 
         /// </devdoc>
         AutoFontSizeAdjust = 0x0010,
 
-        /// <devdoc>
+        /// <summary>
         /// If this flag is set, the control automatically changes the keyboard
         /// layout when the  user explicitly changes to a different font, or when
         /// the user explicitly changes the insertion point to a new location in
@@ -32,14 +32,14 @@ namespace System.Windows.Forms
         /// </devdoc>
         AutoKeyboard = 0x0001,
 
-        /// <devdoc>
+        /// <summary>
         /// Sets the control to dual-font mode. Used for Asian language text.
         /// The control uses an English font for ASCII text and an Asian font for
         /// Asian text. 
         /// </devdoc>
         DualFont = 0x0080,
 
-        /// <devdoc>
+        /// <summary>
         /// Controls how Rich Edit notifies the client during IME composition:
         /// 0: No EN_CHANGE or EN_SELCHANGE notifications during undetermined state. 
         ///    Send notification when final string comes in. (default)
@@ -47,7 +47,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         ImeAlwaysSendNotify = 0x0008,
 
-        /// <devdoc>
+        /// <summary>
         /// This flag determines how the control uses the composition string of an
         /// IME if the user cancels it. If this flag is set, the control discards
         /// the composition string. If this flag is not set, the control uses the
@@ -55,7 +55,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         ImeCancelComplete = 0x0004,
 
-        /// <devdoc>
+        /// <summary>
         /// Use UI default fonts. This option is turned off by default. 
         /// </devdoc>
         UIFonts = 0x0020

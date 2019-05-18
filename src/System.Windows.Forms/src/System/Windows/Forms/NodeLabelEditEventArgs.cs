@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.TreeView.OnBeforeLabelEdit'/>
     /// or <see cref='System.Windows.Forms.TreeView.OnAfterLabelEdit'/> event.
     /// </devdoc>

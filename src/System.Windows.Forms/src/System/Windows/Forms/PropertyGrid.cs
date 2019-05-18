@@ -441,7 +441,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// true if the commands pane will be can be made visible
         /// for the currently selected objects.  Objects that
         /// expose verbs can show commands.
@@ -454,7 +454,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The text used color for category headings. The background color is determined by the LineColor property.
         /// </devdoc>
         [
@@ -474,7 +474,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The background color for the hot commands region.
         /// </devdoc>
         [
@@ -491,7 +491,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The forground color for the hot commands region.
         /// </devdoc>
         [
@@ -508,7 +508,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The link color for the hot commands region.
         /// </devdoc>
         [
@@ -524,7 +524,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The active link color for the hot commands region.
         /// </devdoc>
         [
@@ -540,7 +540,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The color for the hot commands region when the link is disabled.
         /// </devdoc>
         [
@@ -556,7 +556,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>The border color for the hot commands region</para>
         /// </devdoc>
         [
@@ -573,7 +573,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns true if the commands pane is currently shown.
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -583,7 +583,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns true if the commands pane will be shown for objects
         /// that expose verbs.
         /// </devdoc>
@@ -607,7 +607,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns a default location for showing the context menu.  This
         /// location is the center of the active property label in the grid, and
         /// is used useful to position the context menu when the menu is invoked
@@ -623,7 +623,7 @@ namespace System.Windows.Forms {
             }
         }
         
-         /// <devdoc>
+         /// <summary>
         ///     Collection of child controls.
         /// </devdoc>
         [
@@ -717,7 +717,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         /// The background color for the help region.
         /// </devdoc>
         [
@@ -734,7 +734,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The forground color for the help region.
         /// </devdoc>
         [
@@ -751,7 +751,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>The border color for the help region</para>
         /// </devdoc>
         [
@@ -768,7 +768,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Sets or gets the visiblity state of the help pane.
         /// </devdoc>
         [
@@ -818,7 +818,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Background color for Highlighted text.</para>
         /// </devdoc>
         [
@@ -839,7 +839,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Foreground color for Highlighted (selected) text.</para>
         /// </devdoc>
         [
@@ -860,7 +860,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Foreground color for disabled text in the Grid View</para>
         /// </devdoc>
         [
@@ -878,7 +878,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Color for the horizontal splitter line separating property categories.</para>
         /// </devdoc>
         [
@@ -898,7 +898,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Enable/Disable use of VisualStyle glyph for PropertyGrid node expansion.</para>
         /// </devdoc>
         [
@@ -964,7 +964,7 @@ namespace System.Windows.Forms {
             add => base.PaddingChanged += value; 
             remove => base.PaddingChanged -= value; }
 
-        /// <devdoc>
+        /// <summary>
         /// Sets or gets the current property sort type, which can be
         /// PropertySort.Categorized or PropertySort.Alphabetical.
         /// </devdoc>
@@ -1026,7 +1026,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Sets a single Object into the grid to be browsed.  If multiple
         /// objects are being browsed, this property will return the first
         /// one in the list.  If no objects are selected, null is returned.
@@ -1421,7 +1421,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Sets or gets the visiblity state of the toolStrip.
         /// </devdoc>
         [
@@ -1493,7 +1493,7 @@ namespace System.Windows.Forms {
             }
         }
   
-        /// <devdoc>
+        /// <summary>
         ///    <para>Border color for the property grid view.</para>
         /// </devdoc>
         [
@@ -1584,7 +1584,7 @@ namespace System.Windows.Forms {
             remove => base.MouseLeave -= value;
         }
 
-        /// <devdoc> Event that is fired when a property value is modified.</devdoc>
+        /// <summary> Event that is fired when a property value is modified.</devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridPropertyValueChangedDescr))]
         public event PropertyValueChangedEventHandler PropertyValueChanged {
             add => Events.AddHandler(EventPropertyValueChanged, value);
@@ -1596,21 +1596,21 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EventComComponentNameChanged, value);
         }
         
-        /// <devdoc> Event that is fired when the current view tab is changed, such as changing from Properties to Events</devdoc>
+        /// <summary> Event that is fired when the current view tab is changed, such as changing from Properties to Events</devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridPropertyTabchangedDescr))]
         public event PropertyTabChangedEventHandler PropertyTabChanged {
             add => Events.AddHandler(EventPropertyTabChanged, value);
             remove => Events.RemoveHandler(EventPropertyTabChanged, value);
         }
         
-        /// <devdoc> Event that is fired when the sort mode is changed.</devdoc>
+        /// <summary> Event that is fired when the sort mode is changed.</devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridPropertySortChangedDescr))]
         public event EventHandler PropertySortChanged {
             add => Events.AddHandler(EventPropertySortChanged, value);
             remove => Events.RemoveHandler(EventPropertySortChanged, value);
         }
         
-        /// <devdoc> Event that is fired when the selected GridItem is changed</devdoc>
+        /// <summary> Event that is fired when the selected GridItem is changed</devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridSelectedGridItemChangedDescr))]
         public event SelectedGridItemChangedEventHandler SelectedGridItemChanged {
             add => Events.AddHandler(EventSelectedGridItemChanged, value);
@@ -1735,7 +1735,7 @@ namespace System.Windows.Forms {
             }
         }        
         
-        /// <devdoc> Collapses all the nodes in the PropertyGrid</devdoc>
+        /// <summary> Collapses all the nodes in the PropertyGrid</devdoc>
         public void CollapseAllGridItems() {
             gridView.RecursivelyExpand(peMain, false, false, -1);
         }
@@ -1753,7 +1753,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Clears the tabs of the given scope or smaller.
         /// tabScope must be PropertyTabScope.Component or PropertyTabScope.Document.
         /// </devdoc>
@@ -2487,7 +2487,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Called when a property on an Ole32 Object changes.
         /// See IPropertyNotifySink::OnChanged
         /// </devdoc>
@@ -2524,7 +2524,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// We forward messages from several of our children
         /// to our mouse move so we can put up the spliter over their borders
         /// </devdoc>
@@ -2537,7 +2537,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// We forward messages from several of our children
         /// to our mouse move so we can put up the spliter over their borders
         /// </devdoc>
@@ -2644,7 +2644,7 @@ namespace System.Windows.Forms {
             Refresh();
        }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         internal void OnGridViewMouseWheel(MouseEventArgs e) {
             this.OnMouseWheel(e);
@@ -2936,7 +2936,7 @@ namespace System.Windows.Forms {
             base.OnMouseUp(me);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Called when a property on an Ole32 Object that is tagged
         /// with "requestedit" is about to be edited.
         /// See IPropertyNotifySink::OnRequestEdit
@@ -3405,7 +3405,7 @@ namespace System.Windows.Forms {
 
 */
         
-        /// <devdoc>
+        /// <summary>
         /// Returns the last child control that can take focus
         /// </devdoc>
         protected override bool ProcessDialogKey(Keys keyData)
@@ -3589,7 +3589,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Refreshes the tabs of the given scope by deleting them and requerying objects and documents
         /// for them.
         /// </devdoc>
@@ -4198,7 +4198,7 @@ namespace System.Windows.Forms {
             UpdatePropertiesViewTabVisibility();            
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This 16x16 Bitmap is applied to the button which orders properties alphabetically.
         /// </devdoc>      
         [
@@ -4212,7 +4212,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This 16x16 Bitmap is applied to the button which displays properties under the assigned categories.
         /// </devdoc>
         [
@@ -4226,7 +4226,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This 16x16 Bitmap is applied to the button which displays property page in the designer pane.
         /// </devdoc>
         [
@@ -4260,7 +4260,7 @@ namespace System.Windows.Forms {
             return hotcommands.Label.ShouldSerializeDisabledLinkColor();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///  Sinks the property notify events on all the objects we are currently
         ///  browsing.
         ///
@@ -4390,7 +4390,7 @@ namespace System.Windows.Forms {
             gridView.Invalidate();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
         /// </devdoc>
         [
@@ -4415,7 +4415,7 @@ namespace System.Windows.Forms {
         /// </summary>
         internal override bool SupportsUiaProviders => true;
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines whether the control supports rendering text using GDI+ and GDI.
         ///     This is provided for container controls to iterate through its children to set UseCompatibleTextRendering to the same
         ///     value if the child control supports it.
@@ -4705,7 +4705,7 @@ namespace System.Windows.Forms {
                 this.owner = owner;
             }
             
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the number of member attributes.
             /// </devdoc>
             public int Count {
@@ -4729,7 +4729,7 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the member attribute with the specified index.
             /// </devdoc>
             public PropertyTab this[int index] {
@@ -4755,7 +4755,7 @@ namespace System.Windows.Forms {
                 owner.AddTab(propertyTabType, tabScope);
             }
             
-            /// <devdoc>
+            /// <summary>
             /// Clears the tabs of the given scope or smaller.
             /// tabScope must be PropertyTabScope.Component or PropertyTabScope.Document.
             /// </devdoc>
@@ -4775,7 +4775,7 @@ namespace System.Windows.Forms {
                     System.Array.Copy(owner.viewTabs, 0, dest, index, owner.viewTabs.Length);
                 }
             }
-            /// <devdoc>
+            /// <summary>
             ///      Creates and retrieves a new enumerator for this collection.
             /// </devdoc>
             public IEnumerator GetEnumerator() {
@@ -4795,7 +4795,7 @@ namespace System.Windows.Forms {
     
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     An unimplemented interface.  What is this?  It is an interface that nobody ever
         ///     implements, of course? Where and why would it be used?  Why, to find cross-process
         ///     remoted objects, of course!  If a well-known object comes in from a cross process
@@ -4844,7 +4844,7 @@ namespace System.Windows.Forms {
             }
         }
     
-        /// <devdoc>
+        /// <summary>
         ///     Helper class to support rendering text using either GDI or GDI+.
         /// </devdoc>
         internal static class MeasureTextHelper{

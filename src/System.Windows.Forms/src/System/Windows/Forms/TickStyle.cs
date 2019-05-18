@@ -4,30 +4,30 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies the location of tick marks in a <see cref='System.Windows.Forms.TrackBar'/>
     /// control.
     /// </devdoc>
     public enum TickStyle
     {
-        /// <devdoc>
+        /// <summary>
         /// No tick marks appear in the control.
         /// </devdoc>
         None = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// Tick marks are located on the top of horizontal control or on the
         /// left of a vertical control.
         /// </devdoc>
         TopLeft = 1,
 
-        /// <devdoc>
+        /// <summary>
         /// Tick marks are located on the bottom of a horizontal control or on the
         /// right side of a vertical control.
         /// </devdoc>
         BottomRight = 2,
 
-        /// <devdoc>
+        /// <summary>
         /// Tick marks are located on both sides of the control.
         /// </devdoc>
         Both = 3,

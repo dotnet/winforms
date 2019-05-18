@@ -13,7 +13,7 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Reflection;
 
-    /// <devdoc>
+    /// <summary>
     ///      ImageIndexConverter is a class that can be used to convert
     ///      image index values one data type to another.
     /// </devdoc>
@@ -27,7 +27,7 @@ namespace System.Windows.Forms {
             }
         }                                
 
-        /// <devdoc> 
+        /// <summary> 
         /// this is the property to look at when there is no ImageList property
         /// on the current object.  For example, in ToolBarButton - the ImageList is 
         /// on the ToolBarButton.Parent property.  In ToolStripItem, the ImageList is on 
@@ -42,7 +42,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Converts the given value object to a 32-bit signed integer object.
         ///    </para>
@@ -57,7 +57,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call
         ///      to ToString on the object if the object is valid and if the destination
@@ -76,7 +76,7 @@ namespace System.Windows.Forms {
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves a collection containing a set of standard values
         ///      for the data type this validator is designed for.  This
         ///      will return null if the data type does not support a
@@ -152,7 +152,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Determines if the list of standard values returned from
         ///      GetStandardValues is an exclusive list.  If the list
         ///      is exclusive, then no other values are valid, such as
@@ -164,7 +164,7 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Determines if this object supports a standard set of values
         ///      that can be picked from a list.
         /// </devdoc>

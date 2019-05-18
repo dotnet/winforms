@@ -16,7 +16,7 @@ namespace System.Windows.Forms
     using System.Globalization;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para></para>
     /// </devdoc>
     public class DataGridViewRowHeaderCell : DataGridViewHeaderCell
@@ -1130,7 +1130,7 @@ namespace System.Windows.Forms
             return true;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para></para>
         /// </devdoc>
         public override string ToString()

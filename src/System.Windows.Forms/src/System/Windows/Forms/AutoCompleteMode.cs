@@ -4,29 +4,29 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies the autocomplete mode for ComboBox and TextBox AutoComplete Feature.
     /// </devdoc>
     public enum AutoCompleteMode
     {
-        /// <devdoc>
+        /// <summary>
         /// Disables the AutoComplete Feature for ComboBox and TextBox.
         /// </devdoc>
         None = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// Displays the auxiliary drop-down list associated with the edit control,
         /// this drop-down is populated with one or more suggested completed strings.
         /// </devdoc>
         Suggest = 0x1,
 
-        /// <devdoc>
+        /// <summary>
         /// Appends the remainder of the most likely candidate string to the existing
         /// characters, hightlighting the appended characters.
         /// </devdoc>
         Append = 0x2,
 
-        /// <devdoc>
+        /// <summary>
         /// The AutoSuggest and AutoAppend are applied in conjuction.
         /// </devdoc>
         SuggestAppend = Suggest | Append

@@ -11,7 +11,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.Globalization;
 
 
-    /// <devdoc>
+    /// <summary>
     ///   This class performs basic operation for marshaling data passed
     ///   in from native in one of the CA*** structs (CADWORD, CAUUID, etc),
     ///   which are structs in which the first word is the number of elements
@@ -26,7 +26,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         private int count;
         private object[] itemArray;
 
-        /// <devdoc>
+        /// <summary>
         ///     Base ctor
         /// </devdoc>
         protected BaseCAMarshaler(NativeMethods.CA_STRUCT caStruct) : base() {
@@ -53,7 +53,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         protected abstract Array CreateArray();
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the type of item this marshaler will
         ///     return in the items array.
         /// </devdoc>
@@ -62,7 +62,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the count of items that will be or have been
         ///     marshaled.
         /// </devdoc>
@@ -74,7 +74,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
 
 
-        /// <devdoc>
+        /// <summary>
         ///     The marshaled items.
         /// </devdoc>
         public virtual object[] Items {
@@ -97,7 +97,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Override this member to perform marshalling of a single item
         ///     given it's native address.
         /// </devdoc>

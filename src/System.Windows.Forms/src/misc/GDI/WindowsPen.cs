@@ -19,7 +19,7 @@ namespace System.Experimental.Gdi
     using System.Globalization;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     ///     <para>
     ///         Encapsulates a GDI Pen object.
     ///     </para>

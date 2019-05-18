@@ -24,7 +24,7 @@ namespace System.Experimental.Gdi
     using System.Drawing.Drawing2D;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     ///     WindowsGraphics is a library for rendering text and drawing using GDI; it was
     ///     created to address performance and compatibility issues found in GDI+ Graphics
     ///     class.
@@ -63,7 +63,7 @@ namespace System.Experimental.Gdi
             //this.disposeDc = false; // the dc is not owned by this object.
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a WindowsGraphics from a memory DeviceContext object compatible with the primary screen device.
         ///     This object is suitable for performing text measuring but not for drawing into it because it does 
         ///     not have a backup bitmap.
@@ -79,7 +79,7 @@ namespace System.Experimental.Gdi
             return wg;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a WindowsGraphics from a memory DeviceContext object compatible with the a screen device.
         ///     This object is suitable for performing text measuring but not for drawing into it because it does 
         ///     not have a backup bitmap.
@@ -117,7 +117,7 @@ namespace System.Experimental.Gdi
             return wg;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a WindowsGraphics object from a Graphics object.  Clipping and coordinate transforms
         ///     are preserved.
         ///     

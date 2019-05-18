@@ -6,29 +6,29 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Constants that specify how the date and time picker control displays
     /// date and time information.
     /// </devdoc>    
     [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
     public enum DateTimePickerFormat
     {
-        /// <devdoc>
+        /// <summary>
         /// Long format - produces output in the form "Wednesday, April 7, 1999"
         /// </devdoc>
         Long = 0x0001,
 
-        /// <devdoc>
+        /// <summary>
         /// Short format - produces output in the form "4/7/99"
         /// </devdoc>
         Short = 0x0002,
 
-        /// <devdoc>
+        /// <summary>
         /// Time format - produces output in time format
         /// </devdoc>
         Time = 0x0004,
 
-        /// <devdoc>
+        /// <summary>
         /// Custom format - produces output in custom format.
         /// </devdoc>
         Custom = 0x0008,

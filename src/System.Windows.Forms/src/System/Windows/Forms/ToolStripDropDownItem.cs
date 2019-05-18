@@ -10,7 +10,7 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Windows.Forms.Layout;
     
-    /// <devdoc>
+    /// <summary>
     /// Base class for ToolStripItems that display DropDown windows.
     /// </devdoc>
     [Designer("System.Windows.Forms.Design.ToolStripMenuItemDesigner, " + AssemblyRef.SystemDesign)]
@@ -25,7 +25,7 @@ namespace System.Windows.Forms {
         private static readonly object EventDropDownClosed               = new object();
         private static readonly object EventDropDownItemClicked               = new object();
         
-        /// <devdoc>
+        /// <summary>
         /// Protected ctor so you can't create one of these without deriving from it.
         /// </devdoc>
         protected ToolStripDropDownItem() {
@@ -45,7 +45,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// The ToolStripDropDown that will be displayed when this item is clicked.
         /// </devdoc>
         [
@@ -163,7 +163,7 @@ namespace System.Windows.Forms {
         }
 
     
-        /// <devdoc>
+        /// <summary>
         /// Occurs when the dropdown is closed
         /// </devdoc>
         [
@@ -195,7 +195,7 @@ namespace System.Windows.Forms {
             add => Events.AddHandler(EventDropDownShow, value);
             remove => Events.RemoveHandler(EventDropDownShow, value);
         }   
-        /// <devdoc>
+        /// <summary>
         /// Occurs when the dropdown is opened
         /// </devdoc>
         [
@@ -207,7 +207,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EventDropDownOpened, value);
         }   
 
-        /// <devdoc>
+        /// <summary>
         /// Returns the DropDown's items collection.
         /// </devdoc>
         [
@@ -221,7 +221,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Occurs when the dropdown is opened
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction))]
@@ -323,7 +323,7 @@ namespace System.Windows.Forms {
         private void DropDown_ItemClicked(object sender, ToolStripItemClickedEventArgs e) {
             OnDropDownItemClicked(e);
         }
-        /// <devdoc>
+        /// <summary>
         /// Make sure we unhook dropdown events.
         /// </devdoc>
         protected override void Dispose(bool disposing)
@@ -373,7 +373,7 @@ namespace System.Windows.Forms {
         
 
         
-        /// <devdoc>
+        /// <summary>
         /// Hides the DropDown, if it is visible.  
         /// </devdoc>
         public void HideDropDown() {
@@ -426,7 +426,7 @@ namespace System.Windows.Forms {
                 DropDown.DoLayoutIfHandleCreated(new ToolStripItemEventArgs(this));
             }
         }
-        /// <devdoc>
+        /// <summary>
         /// Called as a response to HideDropDown
         /// </devdoc>
         protected virtual void OnDropDownHide(EventArgs e) {
@@ -435,7 +435,7 @@ namespace System.Windows.Forms {
             EventHandler handler = (EventHandler)Events[EventDropDownHide];
             if (handler != null) handler(this, e);
         }
-        /// <devdoc>
+        /// <summary>
         /// Last chance to stick in the DropDown before it is shown.
         /// </devdoc>
         protected virtual void OnDropDownShow(EventArgs e) {
@@ -445,7 +445,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         /// called when the default item is clicked
         /// </devdoc>
         protected internal virtual void OnDropDownOpened(System.EventArgs e) {
@@ -457,7 +457,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// called when the default item is clicked
         /// </devdoc>
         protected internal virtual void OnDropDownClosed(System.EventArgs e) {
@@ -477,7 +477,7 @@ namespace System.Windows.Forms {
 
        
 
-        /// <devdoc>
+        /// <summary>
         /// called when the default item is clicked
         /// </devdoc>
         protected internal virtual void OnDropDownItemClicked(ToolStripItemClickedEventArgs e) {
@@ -602,7 +602,7 @@ namespace System.Windows.Forms {
     
         }
         
-        /// <devdoc>
+        /// <summary>
         /// Shows the DropDown, if one is set.
         /// </devdoc>
         public void ShowDropDown() {

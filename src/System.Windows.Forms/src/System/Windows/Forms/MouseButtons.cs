@@ -6,29 +6,29 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies constants that define which mouse button was pressed.
     /// </devdoc>
     [Flags]
     [ComVisible(true)]
     public enum MouseButtons
     {
-        /// <devdoc>
+        /// <summary>
         /// The left mouse button was pressed.
         /// </devdoc>
         Left = 0x00100000,
 
-        /// <devdoc>
+        /// <summary>
         /// No mouse button was pressed.
         /// </devdoc>
         None = 0x00000000,
 
-        /// <devdoc>
+        /// <summary>
         /// The right mouse button was pressed.
         /// </devdoc>
         Right = 0x00200000,
 
-        /// <devdoc>
+        /// <summary>
         /// The middle mouse button was pressed.
         /// </devdoc>
         Middle = 0x00400000,        

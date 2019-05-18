@@ -4,22 +4,22 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies the mode to start the computer in.
     /// </devdoc>
     public enum BootMode
     {
-        /// <devdoc>
+        /// <summary>
         /// Starts the computer in standard mode.
         /// </devdoc>
         Normal = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// Starts the computer by using only the basic files and drivers.
         /// </devdoc>
         FailSafe = 1,
 
-        /// <devdoc>
+        /// <summary>
         /// Starts the computer by using the basic files, drivers and the services
         /// and drivers necessary to start networking.
         /// </devdoc>

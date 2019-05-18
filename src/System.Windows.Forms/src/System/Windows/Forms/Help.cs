@@ -15,7 +15,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Globalization;
     
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Represents the HTML 1.0 Help engine.
     ///    </para>
@@ -64,7 +64,7 @@ namespace System.Windows.Forms {
         private Help() {
         }        
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays
         ///       the contents of the Help file at located at a specified Url.
@@ -74,7 +74,7 @@ namespace System.Windows.Forms {
             ShowHelp(parent, url, HelpNavigator.TableOfContents, null);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays the contents of
         ///       the Help
@@ -85,7 +85,7 @@ namespace System.Windows.Forms {
             ShowHelp(parent, url, navigator, null);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays the contents of
         ///       the Help
@@ -101,7 +101,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays the contents of the Help file located at
         ///       the Url
@@ -122,7 +122,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays the index of the specified file.
         ///    </para>
@@ -133,7 +133,7 @@ namespace System.Windows.Forms {
             ShowHelp(parent, url, HelpNavigator.Index, null);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays a Help pop-up window.
         ///    </para>
@@ -164,7 +164,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Displays HTML 1.0 Help with the specified parameters
         /// </devdoc>
         private static void ShowHTML10Help(Control parent, string url, HelpNavigator command, object param) {
@@ -243,7 +243,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Displays HTMLFile with the specified parameters
         /// </devdoc>
         /// 
@@ -363,7 +363,7 @@ namespace System.Windows.Forms {
             return HTMLFILE;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Maps one of the COMMAND_* constants to the HTML 1.0 Help equivalent.
         /// </devdoc>
         private static int MapCommandToHTMLCommand(HelpNavigator command, string param, out object htmlParam) {

@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// The SelectEvent is fired when the user makes an explicit date selection within a
     /// month calendar control.
     /// </devdoc>

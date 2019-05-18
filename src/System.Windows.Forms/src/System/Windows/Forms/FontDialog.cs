@@ -15,7 +15,7 @@ namespace System.Windows.Forms {
     using System.Runtime.Versioning;
     using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Represents
     ///       a common dialog box that displays a list of fonts that are currently installed
@@ -42,7 +42,7 @@ namespace System.Windows.Forms {
         private bool showColor = false;
         private bool usingDefaultIndirectColor = false;
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.FontDialog'/>
         ///       class.
@@ -56,7 +56,7 @@ namespace System.Windows.Forms {
             Reset();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box allows graphics device interface
         ///       (GDI) font simulations.
@@ -77,7 +77,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box allows vector font selections.
         ///    </para>
@@ -97,7 +97,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether
         ///       the dialog box displays both vertical and horizontal fonts or only
@@ -119,7 +119,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets
         ///       or sets a value indicating whether the user can change the character set specified
@@ -142,7 +142,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating the selected font color.
         ///    </para>
@@ -173,7 +173,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets
         ///       a value indicating whether the dialog box allows only the selection of fixed-pitch fonts.
@@ -194,7 +194,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating the selected font.
         ///    </para>
@@ -224,7 +224,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box specifies an error condition if the
         ///       user attempts to select a font or style that does not exist.
@@ -245,7 +245,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the maximum
         ///       point size a user can select.
@@ -272,7 +272,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating the minimum point size a user can select.
         ///    </para>
@@ -298,7 +298,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets the value passed to CHOOSEFONT.Flags.
         ///    </para>
@@ -309,7 +309,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a
         ///       value indicating whether the dialog box allows selection of fonts for all non-OEM and Symbol character
@@ -330,7 +330,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box contains an Apply button.
         ///    </para>
@@ -349,7 +349,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box displays the color choice.
         ///    </para>
@@ -368,7 +368,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box contains controls that allow the
         ///       user to specify strikethrough, underline, and text color options.
@@ -388,7 +388,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box displays a Help button.
         ///    </para>
@@ -407,7 +407,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Occurs when the user clicks the Apply button in the font
         ///       dialog box.
@@ -419,14 +419,14 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EventApply, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the state of the given option flag.
         /// </devdoc>
         internal bool GetOption(int option) {
             return(options & option) != 0;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Specifies the common dialog box hook procedure that is overridden to add
         ///       specific functionality to a common dialog box.
@@ -473,7 +473,7 @@ namespace System.Windows.Forms {
             return base.HookProc(hWnd, msg, wparam, lparam);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.FontDialog.Apply'/> event.
         ///    </para>
@@ -483,7 +483,7 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Resets all dialog box options to their default values.
         ///    </para>
@@ -503,7 +503,7 @@ namespace System.Windows.Forms {
             font = null;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       The actual implementation of running the dialog. Inheriting classes
         ///       should override this if they want to add more functionality, and call
@@ -581,7 +581,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sets the given option to the given boolean value.
         /// </devdoc>
         internal void SetOption(int option, bool value) {
@@ -593,7 +593,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Indicates whether the <see cref='System.Windows.Forms.FontDialog.Font'/> property should be
         ///       persisted.
@@ -603,7 +603,7 @@ namespace System.Windows.Forms {
             return !Font.Equals(Control.DefaultFont);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Retrieves a string that includes the name of the current font selected in
         ///       the dialog box.
@@ -615,7 +615,7 @@ namespace System.Windows.Forms {
             return s + ",  Font: " + Font.ToString();
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         private void UpdateColor(int rgb) {
             if (ColorTranslator.ToWin32(color) != rgb) {
@@ -624,7 +624,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         private void UpdateFont(NativeMethods.LOGFONT lf) {
             IntPtr screenDC = UnsafeNativeMethods.GetDC(NativeMethods.NullHandleRef);

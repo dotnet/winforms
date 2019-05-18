@@ -99,7 +99,7 @@ namespace System.Windows.Forms {
         }
 
 
-        ///<devdoc>Static events only!!!</devdoc>
+        ///<summary>Static events only!!!</devdoc>
         private static void AddEventHandler(int key, Delegate value) {
             lock (internalSyncObject) {
                 if (staticEventHandlers == null) {
@@ -110,7 +110,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc> 
+        /// <summary> 
         /// Find a toolstrip in the weak ref arraylist, return null if nothing was found
         /// </devdoc>        
         public static ToolStrip FindToolStrip(string toolStripName) {
@@ -125,7 +125,7 @@ namespace System.Windows.Forms {
             return result;
         }
 
-        /// <devdoc> 
+        /// <summary> 
         /// Find a toolstrip in the weak ref arraylist, return null if nothing was found
         /// </devdoc>        
         internal static ToolStrip FindToolStrip(Form owningForm, string toolStripName)
@@ -253,7 +253,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc> removes dead entries from the toolstrip weak reference collection. </devdoc>
+        /// <summary> removes dead entries from the toolstrip weak reference collection. </devdoc>
         internal static void PruneToolStripList() {
             if (toolStripWeakArrayList != null) {
                 if (toolStripWeakArrayList.Count > 0) {
@@ -266,7 +266,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc> static events only!!!</devdoc>
+        /// <summary> static events only!!!</devdoc>
         private static void RemoveEventHandler(int key, Delegate value) {
             lock (internalSyncObject) {
                 if (staticEventHandlers != null) {
@@ -416,7 +416,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc> the default renderer for the thread.  When ToolStrip.RenderMode is set to manager - this
+        /// <summary> the default renderer for the thread.  When ToolStrip.RenderMode is set to manager - this
         /// is the property used.
         /// </devdoc>
 
@@ -444,7 +444,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        // <devdoc>
+        // <summary>
         // occurs when toolstripmanager.Renderer property has changed
         //
         // WARNING: When subscribing to static event handlers - make sure you unhook from them
@@ -459,7 +459,7 @@ namespace System.Windows.Forms {
 
 
 
-        /// <devdoc> returns the default toolstrip RenderMode for the thread </devdoc>
+        /// <summary> returns the default toolstrip RenderMode for the thread </devdoc>
         public static ToolStripManagerRenderMode RenderMode {
             get {
                 Type currentType = CurrentRendererType;
@@ -496,7 +496,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc> an additional layering of control.  this lets you pick whether your toolbars
+        /// <summary> an additional layering of control.  this lets you pick whether your toolbars
         /// should use visual style information (theming) to render itself.
         /// potentially you could want a themed app but an unthemed toolstrip. (e.g. Whidbey VS).
         /// </devdoc>
@@ -589,7 +589,7 @@ namespace System.Windows.Forms {
 
         #region ToolStripSettings
 
-        /// <devdoc> 
+        /// <summary> 
         ///     Loads settings for the given Form using the form type's fullname as settings key. 
         /// </devdoc>
         public static void LoadSettings(Form targetForm) {
@@ -600,7 +600,7 @@ namespace System.Windows.Forms {
             LoadSettings(targetForm, targetForm.GetType().FullName);
         }
 
-        /// <devdoc> 
+        /// <summary> 
         ///     Loads settings for the given Form with the given settings key. 
         /// </devdoc>
         public static void LoadSettings(Form targetForm, string key) {
@@ -617,7 +617,7 @@ namespace System.Windows.Forms {
             settingsManager.Load();
         }
 
-        /// <devdoc> 
+        /// <summary> 
         ///     Saves settings for the given form using the form type's fullname as settings key. 
         /// </devdoc>
         public static void SaveSettings(Form sourceForm) {
@@ -628,7 +628,7 @@ namespace System.Windows.Forms {
             SaveSettings(sourceForm, sourceForm.GetType().FullName);
         }
 
-        /// <devdoc> 
+        /// <summary> 
         ///     Saves settings for the given form with the given settings key. 
         /// </devdoc>
         public static void SaveSettings(Form sourceForm, string key) {
@@ -1400,7 +1400,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc> determines if the key combination is valid for a shortcut.  
+        /// <summary> determines if the key combination is valid for a shortcut.  
         ///          must have a modifier key + a regular key.
         /// </devdoc>
         public static bool IsValidShortcut(Keys shortcut) {
@@ -1454,7 +1454,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc> this function is called for toplevel controls to process shortcuts. 
+        /// <summary> this function is called for toplevel controls to process shortcuts. 
         ///          this function should be called from the topmost container control only.
         /// </devdoc>
         internal static bool ProcessCmdKey(ref Message m, Keys keyData) {
@@ -1478,7 +1478,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc> we're halfway to an accellerator table system here. 
+        /// <summary> we're halfway to an accellerator table system here. 
         ///          each toolstrip maintains a hash of the current shortcuts its using.
         ///          this way the search only takes O(number of toolstrips in the thread)
         ///          ToolStripMenuItem pushes itself into this table as the owner is set or the shortcut changes.
@@ -1610,7 +1610,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc> this function handles when Alt is pressed.  
+        /// <summary> this function handles when Alt is pressed.  
         ///          if it finds a menustrip to select, it returns true,
         ///          if it doesnt it returns false.
         ///          if it finds a win32 menu is already associated with the control it bails, returning false.
@@ -1776,7 +1776,7 @@ namespace System.Windows.Forms {
             return result;
         }
 
-        /// <devdoc> 
+        /// <summary> 
         /// </devdoc>
         internal static ArrayList FindMergeableToolStrips(ContainerControl container) {
             ArrayList result = new ArrayList();
@@ -1801,7 +1801,7 @@ namespace System.Windows.Forms {
             return (toolStrip is MdiControlStrip || toolStrip is MdiWindowListStrip);
         }
 
-        /// <devdoc> 
+        /// <summary> 
         /// merge two toolstrips
         /// </devdoc>
         public static bool Merge(ToolStrip sourceToolStrip, ToolStrip targetToolStrip) {
@@ -1968,7 +1968,7 @@ namespace System.Windows.Forms {
             Debug.Unindent();
         }
 
-        /// <devdoc> 
+        /// <summary> 
         /// merge two toolstrips
         /// </devdoc>
         public static bool Merge(ToolStrip sourceToolStrip, string targetName) {
@@ -1988,7 +1988,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc> 
+        /// <summary> 
         /// doesn't do a null check on source... if it's null we unmerge everything
         /// </devdoc>
         internal static bool RevertMergeInternal(ToolStrip targetToolStrip, ToolStrip sourceToolStrip, bool revertMDIControls) {
@@ -2080,14 +2080,14 @@ namespace System.Windows.Forms {
             //ToolStripMergeNode.SynchronizeFromToolStripMergeNode(targetToolStrip.Items, targetToolStrip.MergeItems);
         }
 
-        /// <devdoc> 
+        /// <summary> 
         /// unmerge two toolstrips
         /// </devdoc>
         public static bool RevertMerge(ToolStrip targetToolStrip) {
             return RevertMergeInternal(targetToolStrip, null, /*revertMDIControls*/false);
         }
 
-        /// <devdoc> 
+        /// <summary> 
         /// unmerge two toolstrips
         /// </devdoc>
         public static bool RevertMerge(ToolStrip targetToolStrip, ToolStrip sourceToolStrip) {
@@ -2097,7 +2097,7 @@ namespace System.Windows.Forms {
             return RevertMergeInternal(targetToolStrip, sourceToolStrip, /*revertMDIControls*/false);
         }
 
-        /// <devdoc> 
+        /// <summary> 
         /// unmerge two toolstrips
         /// </devdoc>
         public static bool RevertMerge(string targetName) {

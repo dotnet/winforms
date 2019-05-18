@@ -262,7 +262,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return entries;
             }
 
-            /// <devdoc>
+            /// <summary>
             /// merges an unsorted array of grid entries with a sorted array of grid entries that
             /// have already been merged.  The resulting array is the intersection of entries between the two,
             /// but in the order of baseEntries.

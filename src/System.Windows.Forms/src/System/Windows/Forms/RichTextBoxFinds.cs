@@ -4,33 +4,33 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies how the <see cref='System.Windows.Forms.RichTextBox.Find'/> method works.
     /// </devdoc>
     [Flags]
     public enum RichTextBoxFinds
     {
-        /// <devdoc>
+        /// <summary>
         /// Find the text without any special characteristics.
         /// </devdoc>
         None = 0x00000000,
 
-        /// <devdoc>
+        /// <summary>
         /// Match only a whole word.
         /// </devdoc>
         WholeWord = 0x00000002,
 
-        /// <devdoc>
+        /// <summary>
         /// Match the case exactly.
         /// </devdoc>
         MatchCase = 0x00000004,
 
-        /// <devdoc>
+        /// <summary>
         /// If the text is found, do not highlight it.
         /// </devdoc>
         NoHighlight = 0x00000008,
         
-        /// <devdoc>
+        /// <summary>
         /// Search from the end of the current selection to the beginning of the
         /// document.
         /// </devdoc>

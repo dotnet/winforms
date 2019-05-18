@@ -9,7 +9,7 @@ namespace System.Windows.Forms {
     using System;
 
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Represents the method that will handle the <see cref='System.Windows.Forms.StatusBar.OnPanelClick'/>
     ///       event of a <see cref='System.Windows.Forms.StatusBar'/>.

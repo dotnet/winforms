@@ -9,7 +9,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System;
 
 
-    /// <devdoc>
+    /// <summary>
     ///   This class performs marshaling on a CALPOLESTR struct given
     ///   from native code.
     /// </devdoc>
@@ -17,7 +17,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         public OleStrCAMarshaler(NativeMethods.CA_STRUCT caAddr) : base(caAddr) {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the type of item this marshaler will
         ///     return in the items array.  In this case, the type is string.
         /// </devdoc>
@@ -31,7 +31,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return new string[Count];
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Override this member to perform marshalling of a single item
         ///     given it's native address.
         /// </devdoc>

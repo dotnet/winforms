@@ -21,7 +21,7 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
     using System.Windows.Forms.VisualStyles;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Displays a list of items in one of four
     ///       views. Each item displays a caption and optionally an image.
@@ -215,7 +215,7 @@ namespace System.Windows.Forms {
         // We cache the NewWidth supplied by the user and use it on HDN_ENDTRACK to set the final column width.
         int newWidthForColumnWidthChangingCancelled = -1;
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates an empty ListView with default styles.
         /// </devdoc>
         public ListView() : base() {
@@ -241,7 +241,7 @@ namespace System.Windows.Forms {
             columnHeaderCollection = new ColumnHeaderCollection(this);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The activation style specifies what kind of user action is required to
         ///     activate an item.
         /// </devdoc>
@@ -272,7 +272,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The alignment style specifies which side of the window items are aligned
         ///     to by default
         /// </devdoc>
@@ -305,7 +305,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Specifies whether the user can drag column headers to
         ///     other column positions, thus changing the order of displayed columns.
         ///     This property is only meaningful in Details view.
@@ -328,7 +328,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     If AutoArrange is true items are automatically arranged according to
         ///     the alignment property.  Items are also kept snapped to grid.
         ///     This property is only meaningful in Large Icon or Small Icon views.
@@ -418,7 +418,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Describes the border style of the window.
         /// </devdoc>
         [
@@ -446,7 +446,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     If CheckBoxes is true, every item will display a checkbox next
         ///     to it.  The user can change the state of the item by clicking the checkbox.
         /// </devdoc>
@@ -570,7 +570,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The indices of the currently checked list items.
         /// </devdoc>
         [
@@ -586,7 +586,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The currently checked list items.
         /// </devdoc>
         [
@@ -616,7 +616,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Actually we are using this to indicate whether ComCtl supports
         ///     the new listview features. This is true for ComCtl 6 and above, same as
         ///     the versions that support visual styles.
@@ -631,7 +631,7 @@ namespace System.Windows.Forms {
               }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Computes the handle creation parameters for the ListView control.
         /// </devdoc>
         protected override CreateParams CreateParams {
@@ -732,7 +732,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
         /// </devdoc>
@@ -763,7 +763,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Retreives the item which currently has the user focus.  This is the
         ///     item that's drawn with the dotted focus rectangle around it.
         ///     Returns null if no item is currently focused.
@@ -825,7 +825,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Specifies whether a click on an item will select the entire row instead
         ///     of just the item itself.
         ///     This property is only meaningful in Details view
@@ -847,7 +847,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     If true, draws grid lines between items and subItems.
         ///     This property is only meaningful in Details view
         /// </devdoc>
@@ -869,7 +869,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The collection of groups belonging to this ListView
         /// </devdoc>
         [
@@ -899,7 +899,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Column headers can either be invisible, clickable, or non-clickable.
         ///     This property is only meaningful in Details view
         /// </devdoc>
@@ -933,7 +933,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     If false, selected items will still be highlighted (in a
         ///     different color) when focus is moved away from the ListView.
         /// </devdoc>
@@ -955,7 +955,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         [
         SRCategory(nameof(SR.CatBehavior)),
@@ -979,7 +979,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines whether items can be selected by hovering over them with the mouse.
         /// </devdoc>
         [
@@ -1050,7 +1050,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Tells whether the EditLabels style is currently set.
         /// </devdoc>
         [
@@ -1070,7 +1070,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Tells whether the LabelWrap style is currently set.
         /// </devdoc>
         [
@@ -1091,7 +1091,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The Currently set ImageList for Large Icon mode.
         /// </devdoc>
         [
@@ -1134,7 +1134,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns the current LISTVIEWSTATE_handleDestroyed value so that this
         /// value can be accessed from child classes.
         /// </devdoc>
@@ -1147,7 +1147,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The sorting comparer for this ListView.
         /// </devdoc>
         [
@@ -1171,7 +1171,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Tells whether the MultiSelect style is currently set.
         /// </devdoc>
         [
@@ -1191,7 +1191,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates whether the list view items (and sub-items in the Details view) will be
         ///     drawn by the system or the user. This includes the column header when item index = -1.
         /// </devdoc>
@@ -1214,7 +1214,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
         //      and the RightToLeft is true, mirroring will be turned on on the form, and
@@ -1249,7 +1249,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Tells whether the ScrollBars are visible or not.
         /// </devdoc>
         [
@@ -1269,7 +1269,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The indices of the currently selected list items.
         /// </devdoc>
         [
@@ -1285,7 +1285,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The currently selected list items.
         /// </devdoc>
         [
@@ -1322,7 +1322,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The currently set SmallIcon image list.
         /// </devdoc>
         [
@@ -1783,7 +1783,7 @@ namespace System.Windows.Forms {
             remove => onColumnClick -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Tell the user that the column headers are being rearranged
         /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ListViewColumnReorderedDscr))]
@@ -1792,7 +1792,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_COLUMNREORDERED, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Tell the user that the column width changed
         /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ListViewColumnWidthChangedDscr))]
@@ -1801,7 +1801,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_COLUMNWIDTHCHANGED, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Tell the user that the column width is being changed
         /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ListViewColumnWidthChangingDscr))]
@@ -1810,7 +1810,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_COLUMNWIDTHCHANGING, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Fires in owner draw + Details mode when a column header needs to be drawn.</para>
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewDrawColumnHeaderEventDescr))]
@@ -1819,7 +1819,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_DRAWCOLUMNHEADER, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Fires in owner draw mode when a ListView item needs to be drawn.</para>
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewDrawItemEventDescr))]
@@ -1828,7 +1828,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_DRAWITEM, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      <para>Fires in owner draw mode and Details view when a ListView sub-item needs to be drawn.</para>
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewDrawSubItemEventDescr))]
@@ -1891,7 +1891,7 @@ namespace System.Windows.Forms {
             add => base.PaddingChanged += value; 
             remove => base.PaddingChanged -= value; }
 
-        /// <devdoc>
+        /// <summary>
         ///     ListView Onpaint.
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -1906,7 +1906,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_RETRIEVEVIRTUALITEM, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewSearchForVirtualItemDescr))]
         public event SearchForVirtualItemEventHandler SearchForVirtualItem {
@@ -1927,7 +1927,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Called to add any delayed update items we have to the list view.  We do this because
         ///     we have optimnized the case where a user is only adding items within a beginupdate/endupdate
         ///     block.  If they do any other operations (get the count, remove, insert, etc.), we push in the
@@ -1949,7 +1949,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     In Large Icon or Small Icon view, arranges the items according to one
         ///     of the following behaviors:
         /// </devdoc>
@@ -1977,7 +1977,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     In Large Icon or Small Icon view, arranges items according to the ListView's
         ///     current alignment style.
         /// </devdoc>
@@ -1999,7 +1999,7 @@ namespace System.Windows.Forms {
             SetColumnWidth(columnIndex, headerAutoResize);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Prevents the ListView from redrawing itself until EndUpdate is called.
         ///     Calling this method before individually adding or removing a large number of Items
         ///     will improve performance and reduce flicker on the ListView as items are
@@ -2070,7 +2070,7 @@ namespace System.Windows.Forms {
             this.bkImgFileNamesCount = -1;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Removes all items and columns from the ListView.
         /// </devdoc>
         public void Clear() {
@@ -2078,7 +2078,7 @@ namespace System.Windows.Forms {
             Columns.Clear();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      This is the sorting callback function called by the system ListView control.
         /// </devdoc>
         private int CompareFunc(IntPtr lparam1, IntPtr lparam2, IntPtr lparamSort) {
@@ -2151,7 +2151,7 @@ namespace System.Windows.Forms {
             return 0;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override void CreateHandle() {
             if (!RecreatingHandle) {
@@ -2177,7 +2177,7 @@ namespace System.Windows.Forms {
 
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles custom drawing of list items - for individual item font/color changes.
         ///
         ///        If OwnerDraw is true, we fire the OnDrawItem and OnDrawSubItem (in Details view)
@@ -2600,7 +2600,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Resets the imageList to null.  We wire this method up to the imageList's
         ///     Dispose event, so that we don't hang onto an imageList that's gone away.
         /// </devdoc>
@@ -2629,7 +2629,7 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Disposes of the component.  Call dispose when the component is no longer needed.
         ///     This method removes the component from its container (if the component has a site)
         ///     and triggers the dispose event.
@@ -2706,7 +2706,7 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Cancels the effect of BeginUpdate.
         /// </devdoc>
         public void EndUpdate() {
@@ -2729,7 +2729,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Ensure that the item is visible, scrolling the view as necessary.
         ///     @index  Index of item to scroll into view
         /// </devdoc>
@@ -2741,7 +2741,7 @@ namespace System.Windows.Forms {
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_ENSUREVISIBLE, index, 0);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         public ListViewItem FindItemWithText(string text) {
             // if the user does not use the FindItemWithText overloads that specify a StartIndex and the listView is empty then return null
@@ -2752,13 +2752,13 @@ namespace System.Windows.Forms {
             return FindItemWithText(text, true, 0, true);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         public ListViewItem FindItemWithText(string text, bool includeSubItemsInSearch, int startIndex) {
             return FindItemWithText(text, includeSubItemsInSearch, startIndex, true);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         public ListViewItem FindItemWithText(string text, bool includeSubItemsInSearch, int startIndex, bool isPrefixSearch) {
             if (startIndex < 0 || startIndex >= this.Items.Count)
@@ -2768,13 +2768,13 @@ namespace System.Windows.Forms {
             return FindItem(true, text, isPrefixSearch, new Point(0,0), SearchDirectionHint.Down, startIndex, includeSubItemsInSearch);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         public ListViewItem FindNearestItem(SearchDirectionHint dir, Point point) {
             return FindNearestItem(dir, point.X, point.Y);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         public ListViewItem FindNearestItem(SearchDirectionHint searchDirection, int x, int y)
         {
@@ -2935,7 +2935,7 @@ namespace System.Windows.Forms {
             return result;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Gets the real index for the given item.  lastIndex is the last return
         ///     value from GetDisplayIndex, or -1 if you don't know.  If provided,
         ///     the search for the index can be greatly improved.
@@ -2978,7 +2978,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Called by ColumnHeader objects to determine their position
         ///     in the ListView
         /// </devdoc>
@@ -2994,7 +2994,7 @@ namespace System.Windows.Forms {
             return -1;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the current ListViewItem corresponding to the specific
         ///     x,y co-ordinate.
         /// </devdoc>
@@ -3064,14 +3064,14 @@ namespace System.Windows.Forms {
             return unchecked( (int) (long)SendMessage(NativeMethods.LVM_GETITEMSTATE, index, mask));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns a list item's bounding rectangle, including subitems.
         /// </devdoc>
         public Rectangle GetItemRect(int index) {
             return GetItemRect(index, 0);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns a specific portion of a list item's bounding rectangle.
         /// </devdoc>
         public Rectangle GetItemRect(int index, ItemBoundsPortion portion) {
@@ -3096,7 +3096,7 @@ namespace System.Windows.Forms {
             return Rectangle.FromLTRB(itemrect.left, itemrect.top, itemrect.right, itemrect.bottom);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Private version of GetItemRect that fails silently. We use this instead of catching
         ///     exceptions thrown by GetItemRect, to avoid first chance exceptions confusing the user.
         /// </devdoc>
@@ -3148,7 +3148,7 @@ namespace System.Windows.Forms {
             return lvgroup;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns a listview sub-item's bounding rectangle.
         /// </devdoc>
         internal Rectangle GetSubItemRect(int itemIndex, int subItemIndex) {
@@ -3189,13 +3189,13 @@ namespace System.Windows.Forms {
             return result;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         public ListViewHitTestInfo HitTest(Point point) {
             return HitTest(point.X, point.Y);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         public ListViewHitTestInfo HitTest(int x, int y) {
             if (!this.ClientRectangle.Contains(x, y)) {
@@ -3248,14 +3248,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Inserts a new Column into the ListView
         /// </devdoc>
         internal ColumnHeader InsertColumn(int index, ColumnHeader ch) {
             return InsertColumn(index, ch, true);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         internal ColumnHeader InsertColumn(int index, ColumnHeader ch, bool refreshSubItems) {
             if (ch == null)
@@ -3405,7 +3405,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Inserts a new ListViewItem into the ListView.  The item will be inserted
         ///     either in the correct sorted position, or, if no sorting is set, at the
         ///     position indicated by the index parameter.
@@ -3499,7 +3499,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Inserts a new ListViewItem into the list view itself.
         ///     This only will be called when the Handle has been created for the list view.
         ///     This method loops through the items, sets up their state then adds them.
@@ -3646,7 +3646,7 @@ namespace System.Windows.Forms {
             return actualIndex;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Handling special input keys, such as pgup, pgdown, home, end, etc...
         /// </devdoc>
         protected override bool IsInputKey(Keys keyData) {
@@ -3709,7 +3709,7 @@ namespace System.Windows.Forms {
             OnItemDrag(new ItemDragEventArgs(buttons, item));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the afterLabelEdit event.
         /// </devdoc>
         protected virtual void OnAfterLabelEdit(LabelEditEventArgs e) {
@@ -3723,7 +3723,7 @@ namespace System.Windows.Forms {
             base.OnBackgroundImageChanged(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///  We keep track of if we've hovered already so we don't fire multiple hover events
         /// </devdoc>
         protected override void OnMouseLeave(EventArgs e) {
@@ -3731,7 +3731,7 @@ namespace System.Windows.Forms {
             base.OnMouseLeave(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     In order for the MouseHover event to fire for each item in a ListView,
         ///     the item the mouse is hovering over is found. Each time a new item is hovered
         ///     over a new event is raised.
@@ -3769,14 +3769,14 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the beforeLabelEdit event.
         /// </devdoc>
         protected virtual void OnBeforeLabelEdit(LabelEditEventArgs e) {
             if (onBeforeLabelEdit != null) onBeforeLabelEdit(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected virtual void OnCacheVirtualItems(CacheVirtualItemsEventArgs e)
         {
@@ -3785,14 +3785,14 @@ namespace System.Windows.Forms {
                 handler(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the columnClick event.
         /// </devdoc>
         protected virtual void OnColumnClick(ColumnClickEventArgs e) {
             if (onColumnClick != null) onColumnClick(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the column header rearranged event.
         /// </devdoc>
         protected virtual void OnColumnReordered(ColumnReorderedEventArgs e) {
@@ -3801,7 +3801,7 @@ namespace System.Windows.Forms {
                 handler(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the column width changing event.
         /// </devdoc>
         protected virtual void OnColumnWidthChanged(ColumnWidthChangedEventArgs e) {
@@ -3811,7 +3811,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the column width changing event.
         /// </devdoc>
         protected virtual void OnColumnWidthChanging(ColumnWidthChangingEventArgs e) {
@@ -3821,7 +3821,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the DrawColumnHeader event.
         /// </devdoc>
         protected virtual void OnDrawColumnHeader(DrawListViewColumnHeaderEventArgs e) {
@@ -3831,7 +3831,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the DrawItem event.
         /// </devdoc>
         protected virtual void OnDrawItem(DrawListViewItemEventArgs e) {
@@ -3841,7 +3841,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the DrawSubItem event.
         /// </devdoc>
         protected virtual void OnDrawSubItem(DrawListViewSubItemEventArgs e) {
@@ -3873,7 +3873,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override void OnHandleCreated(EventArgs e) {
             // uncache the "ComctlSupportsVisualStyles" property on a handle creation
@@ -4039,14 +4039,14 @@ namespace System.Windows.Forms {
             base.OnHandleDestroyed(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the itemActivate event.
         /// </devdoc>
         protected virtual void OnItemActivate(EventArgs e) {
             if (onItemActivate != null) onItemActivate(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This is the code that actually fires the KeyEventArgs.  Don't
         ///     forget to call base.onItemCheck() to ensure that itemCheck vents
         ///     are correctly fired for all other keys.
@@ -4067,14 +4067,14 @@ namespace System.Windows.Forms {
             if (onItemDrag != null) onItemDrag(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the ItemMouseHover event.
         /// </devdoc>
         protected virtual void OnItemMouseHover(ListViewItemMouseHoverEventArgs e) {
             if (onItemMouseHover != null) onItemMouseHover(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the ItemSelectionChanged event.
         /// </devdoc>
         protected virtual void OnItemSelectionChanged(ListViewItemSelectionChangedEventArgs e) {
@@ -4093,7 +4093,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override void OnResize(EventArgs e) {
             // If the list view is in Details mode and it is not Scrollable, we need to reposition the column header control.
@@ -4104,7 +4104,7 @@ namespace System.Windows.Forms {
             base.OnResize(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected virtual void OnRetrieveVirtualItem(RetrieveVirtualItemEventArgs e) {
             RetrieveVirtualItemEventHandler handler = (RetrieveVirtualItemEventHandler) Events[EVENT_RETRIEVEVIRTUALITEM];
@@ -4130,7 +4130,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the search for virtual item event.
         /// </devdoc>
         protected virtual void OnSearchForVirtualItem(SearchForVirtualItemEventArgs e) {
@@ -4139,7 +4139,7 @@ namespace System.Windows.Forms {
                 handler(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Actually goes and fires the selectedIndexChanged event.  Inheriting controls
         ///     should use this to know when the event is fired [this is preferable to
         ///     adding an event handler on yourself for this event].  They should,
@@ -4223,7 +4223,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         private void RealizeAllSubItems() {
             NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM();
@@ -4235,7 +4235,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected void RealizeProperties() {
             //Realize state information
@@ -4261,7 +4261,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Forces the redraw of a range of listview items.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -4445,7 +4445,7 @@ namespace System.Windows.Forms {
             this.Refresh();
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         internal void SetColumnInfo(int mask, ColumnHeader ch) {
             if (IsHandleCreated) {
@@ -4486,7 +4486,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Setting width is a special case 'cuz LVM_SETCOLUMNWIDTH accepts more values
         ///     for width than LVM_SETCOLUMN does.
         /// </devdoc>
@@ -4561,7 +4561,7 @@ namespace System.Windows.Forms {
         }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This is a new internal method added which is used by ListView Item to set
         ///     the check state of the item in the savedCheckedItems collection
         ///     if the ListView Checkboxes is OFF.
@@ -4611,7 +4611,7 @@ namespace System.Windows.Forms {
             #endif // FALSE
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
         /// </devdoc>
         internal void SetToolTip(ToolTip toolTip, string toolTipCaption) {
@@ -4682,7 +4682,7 @@ namespace System.Windows.Forms {
             SetItemText(itemIndex, subItemIndex, text, ref lvItem);
         }
 
-        ///<devdoc>
+        ///<summary>
         /// For perf, allow a LVITEM to be passed in so we can reuse in tight loops.
         ///</devdoc>
         private void SetItemText(int itemIndex, int subItemIndex, string text, ref NativeMethods.LVITEM lvItem) {
@@ -4740,7 +4740,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Updated the sorted order
         /// </devdoc>
         public void Sort() {
@@ -4765,7 +4765,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns a string representation for this control.
         /// </devdoc>
         public override string ToString() {
@@ -5334,7 +5334,7 @@ namespace System.Windows.Forms {
 
 
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         private int GetIndexOfClickedItem(NativeMethods.LVHITTESTINFO lvhi) {
             Point pos = Cursor.Position;
@@ -5357,7 +5357,7 @@ namespace System.Windows.Forms {
             RecreateHandle();
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
         private unsafe void WmReflectNotify(ref Message m) {
@@ -5736,7 +5736,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override void WndProc(ref Message m) {
 
@@ -5907,7 +5907,7 @@ namespace System.Windows.Forms {
                 this.owner = owner;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Number of currently selected items.
             /// </devdoc>
             [Browsable(false)]
@@ -5942,7 +5942,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Selected item in the list.
             /// </devdoc>
             public int this[int index] {
@@ -6093,7 +6093,7 @@ namespace System.Windows.Forms {
                 this.owner = owner;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Number of currently selected items.
             /// </devdoc>
             [Browsable(false)]
@@ -6120,7 +6120,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Selected item in the list.
             /// </devdoc>
             public ListViewItem this[int index] {
@@ -6147,7 +6147,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-               /// <devdoc>
+               /// <summary>
                ///     <para>Retrieves the child control with the specified key.</para>
                /// </devdoc>
                public virtual ListViewItem this[string key] {
@@ -6224,7 +6224,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
             /// </devdoc>
             public virtual bool ContainsKey(string key) {
@@ -6249,7 +6249,7 @@ namespace System.Windows.Forms {
                 return -1;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
             /// </devdoc>
             public virtual int IndexOfKey(string key) {
@@ -6284,7 +6284,7 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <devdoc>
+            /// <summary>
             ///     <para>Determines if the index is valid for the collection.</para>
             /// </devdoc>
             private bool IsValidIndex(int index) {
@@ -6359,7 +6359,7 @@ namespace System.Windows.Forms {
                 this.owner = owner;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Number of currently selected items.
             /// </devdoc>
             [Browsable(false)]
@@ -6406,7 +6406,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Selected item in the list.
             /// </devdoc>
             public int this[int index] {
@@ -6670,7 +6670,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Number of currently selected items.
             /// </devdoc>
             [Browsable(false)]
@@ -6692,7 +6692,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Selected item in the list.
             /// </devdoc>
             public ListViewItem this[int index] {
@@ -6726,7 +6726,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     <para>Retrieves the child control with the specified key.</para>
             /// </devdoc>
             public virtual ListViewItem this[string key] {
@@ -6800,7 +6800,7 @@ namespace System.Windows.Forms {
                 throw new NotSupportedException();
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     <para>Determines if the index is valid for the collection.</para>
             /// </devdoc>
             private bool IsValidIndex(int index) {
@@ -6817,7 +6817,7 @@ namespace System.Windows.Forms {
                 throw new NotSupportedException();
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Unselects all items.
             /// </devdoc>
             public void Clear() {
@@ -6831,7 +6831,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
             /// </devdoc>
             public virtual bool ContainsKey(string key) {
@@ -6914,7 +6914,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
             /// </devdoc>
             public virtual int  IndexOfKey(string key) {
@@ -6958,7 +6958,7 @@ namespace System.Windows.Forms {
                 this.owner = owner ?? throw new ArgumentNullException(nameof(owner));
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Given a Zero based index, returns the ColumnHeader object
             ///     for the column at that index
             /// </devdoc>
@@ -6979,7 +6979,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     <para>Retrieves the child control with the specified key.</para>
             /// </devdoc>
             public virtual ColumnHeader this[string key] {
@@ -7001,7 +7001,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     The number of columns the ListView currently has in Details view.
             /// </devdoc>
             [Browsable(false)]
@@ -7039,7 +7039,7 @@ namespace System.Windows.Forms {
 
 
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>Removes the child control with the specified key.</para>
         /// </devdoc>
         public virtual void RemoveByKey(string key) {
@@ -7056,7 +7056,7 @@ namespace System.Windows.Forms {
         private int lastAccessedIndex = -1;
 
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
         /// </devdoc>
           public virtual int  IndexOfKey(string key) {
@@ -7087,7 +7087,7 @@ namespace System.Windows.Forms {
           }
 
 
-           /// <devdoc>
+           /// <summary>
            ///     <para>Determines if the index is valid for the collection.</para>
            /// </devdoc>
           private bool IsValidIndex(int index) {
@@ -7095,7 +7095,7 @@ namespace System.Windows.Forms {
           }
 
 
-            /// <devdoc>
+            /// <summary>
             ///     Adds a column to the end of the Column list
             /// </devdoc>
             public virtual ColumnHeader Add(string text, int width, HorizontalAlignment textAlign) {
@@ -7202,7 +7202,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Removes all columns from the list view.
             /// </devdoc>
             public virtual void Clear() {
@@ -7242,7 +7242,7 @@ namespace System.Windows.Forms {
                 return false;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
             /// </devdoc>
             public virtual bool ContainsKey(string key) {
@@ -7343,7 +7343,7 @@ namespace System.Windows.Forms {
 
             // END - NEW INSERT OVERLOADS IN WHIDBEY -->
 
-            /// <devdoc>
+            /// <summary>
             ///     removes a column from the ListView
             /// </devdoc>
             public virtual void RemoveAt(int index) {
@@ -7422,7 +7422,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Represents the collection of items in a ListView or ListViewGroup</para>
         /// </devdoc>
         [ListBindable(false)]
@@ -7473,7 +7473,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Returns the total number of items within the list view.
             /// </devdoc>
             [Browsable(false)]
@@ -7507,7 +7507,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Returns the ListViewItem at the given index.
             /// </devdoc>
             public virtual ListViewItem this[int index] {
@@ -7541,7 +7541,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     <para>Retrieves the child control with the specified key.</para>
             /// </devdoc>
             public virtual ListViewItem this[string key] {
@@ -7563,7 +7563,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Add an item to the ListView.  The item will be inserted either in
             ///     the correct sorted position, or, if no sorting is set, at the end
             ///     of the list.
@@ -7582,7 +7582,7 @@ namespace System.Windows.Forms {
                 return -1;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Add an item to the ListView.  The item will be inserted either in
             ///     the correct sorted position, or, if no sorting is set, at the end
             ///     of the list.
@@ -7593,7 +7593,7 @@ namespace System.Windows.Forms {
                 return li;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Add an item to the ListView.  The item will be inserted either in
             ///     the correct sorted position, or, if no sorting is set, at the end
             ///     of the list.
@@ -7605,7 +7605,7 @@ namespace System.Windows.Forms {
 
             // <-- NEW ADD OVERLOADS IN WHIDBEY
 
-            /// <devdoc>
+            /// <summary>
             ///     Add an item to the ListView.  The item will be inserted either in
             ///     the correct sorted position, or, if no sorting is set, at the end
             ///     of the list.
@@ -7616,7 +7616,7 @@ namespace System.Windows.Forms {
                 return li;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Add an item to the ListView.  The item will be inserted either in
             ///     the correct sorted position, or, if no sorting is set, at the end
             ///     of the list.
@@ -7628,7 +7628,7 @@ namespace System.Windows.Forms {
                 return li;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Add an item to the ListView.  The item will be inserted either in
             ///     the correct sorted position, or, if no sorting is set, at the end
             ///     of the list.
@@ -7661,7 +7661,7 @@ namespace System.Windows.Forms {
                 InnerList.AddRange(itemArray);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Removes all items from the list view.
             /// </devdoc>
             public virtual void Clear() {
@@ -7681,7 +7681,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-           /// <devdoc>
+           /// <summary>
            ///     <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
            /// </devdoc>
            public virtual bool ContainsKey(string key) {
@@ -7692,7 +7692,7 @@ namespace System.Windows.Forms {
                 InnerList.CopyTo(dest, index);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     <para>Searches for Controls by their Name property, builds up an array
             ///           of all the controls that match.
             ///     </para>
@@ -7706,7 +7706,7 @@ namespace System.Windows.Forms {
                 return stronglyTypedFoundItems;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     <para>Searches for Controls by their Name property, builds up an arraylist
             ///           of all the controls that match.
             ///     </para>
@@ -7762,7 +7762,7 @@ namespace System.Windows.Forms {
                     return -1;
                 }
             }
-            /// <devdoc>
+            /// <summary>
             ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
             /// </devdoc>
             public virtual int  IndexOfKey(string key) {
@@ -7792,7 +7792,7 @@ namespace System.Windows.Forms {
                 return -1;
            }
 
-           /// <devdoc>
+           /// <summary>
            ///     <para>Determines if the index is valid for the collection.</para>
            /// </devdoc>
            private bool IsValidIndex(int index) {
@@ -7844,14 +7844,14 @@ namespace System.Windows.Forms {
 
             // END - NEW INSERT OVERLOADS IN WHIDBEY -->
 
-            /// <devdoc>
+            /// <summary>
             ///     Removes an item from the ListView
             /// </devdoc>
             public virtual void Remove(ListViewItem item) {
                 InnerList.Remove(item);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Removes an item from the ListView
             /// </devdoc>
             public virtual void RemoveAt(int index) {
@@ -7862,7 +7862,7 @@ namespace System.Windows.Forms {
                 InnerList.RemoveAt(index);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     <para>Removes the child control with the specified key.</para>
             /// </devdoc>
             public virtual void RemoveByKey(string key) {

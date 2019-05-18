@@ -15,7 +15,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Windows.Forms.Layout;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Represents a <see cref='System.Windows.Forms.Panel'/>
     ///       control.</para>
@@ -33,7 +33,7 @@ namespace System.Windows.Forms {
 
         private BorderStyle borderStyle = System.Windows.Forms.BorderStyle.None;
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.Panel'/> class.</para>
         /// </devdoc>
         public Panel()
@@ -46,7 +46,7 @@ namespace System.Windows.Forms {
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Override to re-expose AutoSize.</para>
         /// </devdoc>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always),
@@ -71,7 +71,7 @@ namespace System.Windows.Forms {
             remove => base.AutoSizeChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Allows the control to optionally shrink when AutoSize is true.
         /// </devdoc>
         [
@@ -104,7 +104,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Indicates the
         ///       border style for the control.</para>
         /// </devdoc>
@@ -133,7 +133,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Returns the parameters needed to create the handle.  Inheriting classes
         ///    can override this to provide extra functionality.  They should not,
         ///    however, forget to call base.getCreateParams() first to get the struct
@@ -159,7 +159,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
         /// </devdoc>
@@ -199,7 +199,7 @@ namespace System.Windows.Forms {
             remove => base.KeyPress -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         [DefaultValue(false)]
         new public bool TabStop {
@@ -211,7 +211,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
         public override string Text {
@@ -229,7 +229,7 @@ namespace System.Windows.Forms {
             remove => base.TextChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Fires the event indicating that the panel has been resized.
         ///       Inheriting controls should use this in favour of actually listening to
         ///       the event, but should not forget to call base.onResize() to
@@ -253,14 +253,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         private static string StringFromBorderStyle(BorderStyle value) {      
             Type borderStyleType = typeof(BorderStyle);
             return (ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D)) ? (borderStyleType.ToString() + "." + value.ToString()) : "[Invalid BorderStyle]";
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns a string representation for this control.
         /// </devdoc>
         public override string ToString() {

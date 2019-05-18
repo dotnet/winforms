@@ -12,7 +12,7 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Reflection;
 
-    /// <devdoc>
+    /// <summary>
     ///      ListViewItemStateImageIndexConverter is a class that can be used to convert
     ///      image index values one data type to another.
     /// </devdoc>
@@ -25,7 +25,7 @@ namespace System.Windows.Forms {
         }                                
 
 
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves a collection containing a set of standard values
         ///      for the data type this validator is designed for.  This
         ///      will return null if the data type does not support a

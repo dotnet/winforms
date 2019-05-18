@@ -22,7 +22,7 @@ using System.Globalization;
         const string IEAnchorColorVisited = "Anchor Color Visited";
         const string IEAnchorColorHover = "Anchor Color Hover";
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves a named IE color from the registry. There are constants at the top
         ///     of this file of the valid names to retrieve.
         /// </devdoc>
@@ -103,7 +103,7 @@ using System.Globalization;
             return Color.FromArgb(r, g, b);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the IE settings for link behavior from the registry.
         /// </devdoc>
         public static LinkBehavior GetIELinkBehavior() {

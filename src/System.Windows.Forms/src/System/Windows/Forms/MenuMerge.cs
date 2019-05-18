@@ -4,33 +4,33 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies the behavior of a <see cref='System.Windows.Forms.MenuItem'/> when it is merged with items in another menu.
     /// </devdoc>
     public enum MenuMerge
     {
-        /// <devdoc>
+        /// <summary>
         /// The <see cref='System.Windows.Forms.MenuItem'/> is added to the
         /// existing <see cref='System.Windows.Forms.MenuItem'/> objects in a
         /// merged menu.
         /// </devdoc>
         Add = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// The <see cref='System.Windows.Forms.MenuItem'/> replaces the
         /// existing <see cref='System.Windows.Forms.MenuItem'/> at the same
         /// position in a merged menu.
         /// </devdoc>
         Replace = 1,
 
-        /// <devdoc>
+        /// <summary>
         /// Subitems of this <see cref='System.Windows.Forms.MenuItem'/> are merged
         /// with those of existing <see cref='System.Windows.Forms.MenuItem'/>
         /// objects at the same position in a merged menu.
         /// </devdoc>
         MergeItems = 2,
 
-        /// <devdoc>
+        /// <summary>
         /// The <see cref='System.Windows.Forms.MenuItem'/> is not included in a
         /// merged menu.
         /// </devdoc>

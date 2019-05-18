@@ -10,7 +10,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using Microsoft.Win32;
     using System.Globalization;
 
-    /// <devdoc>
+    /// <summary>
     /// This class mimics a clr enum that we can create at runtime.
     /// It associates an array of names with an array of values and converts
     /// between them.
@@ -25,30 +25,30 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     /// </devdoc>
     internal class Com2Enum {
 
-        /// <devdoc>
+        /// <summary>
         /// Our array of value string names
         /// </devdoc>
         private string[] names;
 
 
-        /// <devdoc>
+        /// <summary>
         /// Our values
         /// </devdoc>
         private object[] values;
 
 
 
-        /// <devdoc>
+        /// <summary>
         /// Our cached array of value.ToString()'s
         /// </devdoc>
         private string[] stringValues;
 
-        /// <devdoc>
+        /// <summary>
         /// Should we allow values besides what's in the listbox?
         /// </devdoc>
         private bool    allowUnknownValues;
 
-        /// <devdoc>
+        /// <summary>
         /// Our one and only ctor
         /// </devdoc>
         public Com2Enum(string[] names, object[] values, bool allowUnknownValues) {
@@ -65,7 +65,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             PopulateArrays(names, values);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Can this enum be values other than the strict enum?
         /// </devdoc>
         public bool IsStrictEnum {
@@ -74,7 +74,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieve a copy of the value array
         /// </devdoc>
         public virtual object[] Values {
@@ -83,7 +83,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieve a copy of the nme array.
         /// </devdoc>
         public virtual string[] Names {
@@ -92,7 +92,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Associate a string to the appropriate value.
         /// </devdoc>
         public virtual object FromString(string s) {
@@ -132,7 +132,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieves the string name of a given value.
         /// </devdoc>
         public virtual string ToString(object v) {

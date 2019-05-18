@@ -9,7 +9,7 @@ using System.Globalization;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Manages the collection of System.Windows.Forms.BindingManagerBase
     /// objects for a Win Form.
     /// </devdoc>
@@ -18,7 +18,7 @@ namespace System.Windows.Forms
     {
         private Hashtable _listManagers;
 
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the System.Windows.Forms.BindingContext class.
         /// </devdoc>
         public BindingContext()
@@ -26,7 +26,7 @@ namespace System.Windows.Forms
             _listManagers = new Hashtable();
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the total number of System.Windows.Forms.BindingManagerBases objects.
         /// </devdoc>
         int ICollection.Count
@@ -38,7 +38,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Copies the elements of the collection into a specified array, starting
         /// at the collection index.
         /// </devdoc>
@@ -48,7 +48,7 @@ namespace System.Windows.Forms
             _listManagers.CopyTo(ar, index);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets an enumerator for the collection.
         /// </devdoc>
         IEnumerator IEnumerable.GetEnumerator()
@@ -57,28 +57,28 @@ namespace System.Windows.Forms
             return _listManagers.GetEnumerator();
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets a value indicating whether the collection is read-only.
         /// </devdoc>
         public bool IsReadOnly => false;
 
-        /// <devdoc>
+        /// <summary>
         /// Gets a value indicating whether the collection is synchronized.
         /// </devdoc>
         bool ICollection.IsSynchronized => false;
 
-        /// <devdoc>
+        /// <summary>
         /// Gets an object to use for synchronization (thread safety).
         /// </devdoc>
         object ICollection.SyncRoot => null;
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the System.Windows.Forms.BindingManagerBase associated with the specified
         /// data source.
         /// </devdoc>
         public BindingManagerBase this[object dataSource] => this[dataSource, string.Empty];
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the System.Windows.Forms.BindingManagerBase associated with the specified
         /// data source and data member.
         /// </devdoc>
@@ -87,7 +87,7 @@ namespace System.Windows.Forms
             get => EnsureListManager(dataSource, dataMember);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Adds the listManager to the collection. An ArgumentNullException is thrown if this
         /// listManager is null. An exception is thrown if a listManager to the same target
         /// and Property as an existing listManager or if the listManager's column isn't a
@@ -120,7 +120,7 @@ namespace System.Windows.Forms
             _listManagers[GetKey(dataSource, string.Empty)] = new WeakReference(listManager, false);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Occurs when the collection has changed.
         /// </devdoc>
         /// <remarks>
@@ -140,7 +140,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Clears the collection of any bindings.
         /// Fires the CollectionChangedEvent.
         /// </devdoc>
@@ -153,7 +153,7 @@ namespace System.Windows.Forms
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Clears the collection.
         /// </devdoc>
         /// <remarks>
@@ -161,13 +161,13 @@ namespace System.Windows.Forms
         /// </remarks>
         protected virtual void ClearCore() => _listManagers.Clear();
 
-        /// <devdoc>
+        /// <summary>
         /// Gets a value indicating whether the System.Windows.Forms.BindingContext contains
         /// the specified data source.
         /// </devdoc>
         public bool Contains(object dataSource) => Contains(dataSource, string.Empty);
 
-        /// <devdoc>
+        /// <summary>
         /// Gets a value indicating whether the System.Windows.Forms.BindingContext
         /// contains the specified data source and data member.
         /// </devdoc>
@@ -218,7 +218,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This method is called whenever the collection changes. Overriders of this method
         /// should call the base implementation of this method.
         /// </devdoc>
@@ -226,7 +226,7 @@ namespace System.Windows.Forms
         {
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Removes the given listManager from the collection.
         /// An ArgumentNullException is thrown if this listManager is null. An ArgumentException
         /// is thrown if this listManager doesn't belong to this collection.
@@ -249,7 +249,7 @@ namespace System.Windows.Forms
             _listManagers.Remove(GetKey(dataSource, string.Empty));
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Create a suitable binding manager for the specified dataSource/dataMember combination.
         /// - If one has already been created and cached by this BindingContext, return that
         ///   instead.
@@ -398,7 +398,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Associates a Binding with a different BindingContext. Intended for use by components
         /// that support IBindableComponent, to update their Bindings when the value of
         /// IBindableComponent.BindingContext is changed.

@@ -21,7 +21,7 @@ namespace System.Experimental.Gdi
     using System.Drawing;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     ///     <para>
     ///         Encapsulates a GDI Brush object.
     ///     </para>
@@ -48,7 +48,7 @@ namespace System.Experimental.Gdi
 
         protected abstract void CreateBrush();
 
-        /// <devdoc>
+        /// <summary>
         ///     Parameterless constructor to use default color.
         ///     Notice that the actual object construction is done in the derived classes.
         /// </devdoc>
@@ -106,7 +106,7 @@ namespace System.Experimental.Gdi
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///       Gets the native Win32 brush handle. It creates it on demand.
         /// </devdoc>
         protected IntPtr NativeHandle
@@ -132,7 +132,7 @@ namespace System.Experimental.Gdi
 
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
 
-        /// <devdoc>
+        /// <summary>
         ///     Derived classes implement this method to get a native GDI brush wrapper with the same
         ///     properties as this object.
         /// </devdoc>
@@ -153,7 +153,7 @@ namespace System.Experimental.Gdi
             return null;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a WindowsBrush from the DC currently selected HBRUSH
         /// </devdoc>
         
@@ -169,7 +169,7 @@ namespace System.Experimental.Gdi
             return WindowsBrush.FromLogBrush(dc, logBrush );
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a WindowsBrush from a LOGBRUSH.
         /// </devdoc>
         
@@ -194,7 +194,7 @@ namespace System.Experimental.Gdi
         }
 #endif
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Returns the native Win32 brush handle.
         ///    </para>

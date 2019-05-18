@@ -4,17 +4,17 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Indicates the direction of a binding operation.
     /// </devdoc>
     public enum BindingCompleteContext
     {
-        /// <devdoc>
+        /// <summary>
         /// Control value is being updated from data source value.
         /// </devdoc>
         ControlUpdate = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// Data source value is being updated from control value.
         /// </devdoc>
         DataSourceUpdate = 1,

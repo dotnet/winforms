@@ -6,7 +6,7 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.Form.OnClosing'/> event.
     /// </devdoc>
     public class FormClosingEventArgs : CancelEventArgs
@@ -16,7 +16,7 @@ namespace System.Windows.Forms
             CloseReason = closeReason;                                           
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Provides the reason for the Form close.
         /// </devdoc>
         public CloseReason CloseReason { get; }

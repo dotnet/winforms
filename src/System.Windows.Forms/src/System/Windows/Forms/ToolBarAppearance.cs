@@ -4,17 +4,17 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies the type of toolbar to display.
     /// </devdoc>
     public enum ToolBarAppearance
     {
-        /// <devdoc>
+        /// <summary>
         /// The toolbar and buttons appear as standard three dimensional controls.
         /// </devdoc>
         Normal = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// The toolbar and buttons appear flat, but the buttons change to three
         /// dimensional as the mouse pointer moves over them.
         /// </devdoc>

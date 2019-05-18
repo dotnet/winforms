@@ -6,23 +6,23 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies how and if a drag-and-drop operation should continue.
     /// </devdoc>
     [ComVisible(true)]
     public enum DragAction
     {
-        /// <devdoc>
+        /// <summary>
         /// The operation will continue.
         /// </devdoc>
         Continue = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// The operation will stop with a drop.
         /// </devdoc>
         Drop = 1,
 
-        /// <devdoc>
+        /// <summary>
         /// The operation is canceled with no drop message.
         /// </devdoc>
         Cancel = 2,

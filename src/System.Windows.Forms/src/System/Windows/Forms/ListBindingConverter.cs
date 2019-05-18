@@ -17,7 +17,7 @@ namespace System.Windows.Forms {
         private static Type[] ctorTypes = null;  // the list of type of our ctor parameters.
         private static string[] ctorParamProps = null; // the name of each property to check to see if we need to init with a ctor.
 
-        /// <devdoc>
+        /// <summary>
         ///      Creates our array of types on demand.
         /// </devdoc>
         private static Type[] ConstructorParamaterTypes {
@@ -29,7 +29,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Creates our array of param names on demand.
         /// </devdoc>
 
@@ -43,7 +43,7 @@ namespace System.Windows.Forms {
         }
         
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets a value indicating whether this converter can
         ///       convert an object to the given destination type using the context.</para>
         /// </devdoc>
@@ -54,7 +54,7 @@ namespace System.Windows.Forms {
             return base.CanConvertTo(context, destinationType);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call
         ///      to ToString on the object if the object is valid and if the destination
@@ -74,7 +74,7 @@ namespace System.Windows.Forms {
             return base.ConvertTo(context, culture, value, destinationType);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///      Creates an instance of this type given a set of property values
         ///      for the object.  This is useful for objects that are immutable, but still
         ///      want to provide changable properties.
@@ -96,7 +96,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Determines if changing a value on this object should require a call to
         ///      CreateInstance to create a new value.
         /// </devdoc>
@@ -104,7 +104,7 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Gets the best matching ctor for a given binding and fills it out, based on the 
         ///      state of the Binding and the optimal ctor.
         /// </devdoc>

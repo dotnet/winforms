@@ -9,22 +9,22 @@ namespace System.Windows.Forms
     [ComVisible(true)]
     public enum SelectionMode
     {
-        /// <devdoc>
+        /// <summary>
         /// Indicates that no items can be selected.
         /// </devdoc>
         None = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// Indicates that only one item at a time can be selected.
         /// </devdoc>
         One = 1,
 
-        /// <devdoc>
+        /// <summary>
         /// Indicates that more than one item at a time can be selected.
         /// </devdoc>
         MultiSimple = 2,
 
-        /// <devdoc>
+        /// <summary>
         /// Indicates that more than one item at a time can be selected, and
         /// keyboard combinations, such as SHIFT and CTRL can be used to help
         /// in selection.

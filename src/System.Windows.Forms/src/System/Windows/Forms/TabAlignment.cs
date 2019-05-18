@@ -4,27 +4,27 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Controls where the tabs will be located in a Tab Control.
     /// </devdoc>
     public enum TabAlignment
     {
-        /// <devdoc>
+        /// <summary>
         /// Tabs will be located across the top of the control.
         /// </devdoc>
         Top = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// Tabs will be located across the bottom of the control.
         /// </devdoc>
         Bottom = 1,
 
-        /// <devdoc>
+        /// <summary>
         /// Tabs will be located along the left edge of the control.
         /// </devdoc>
         Left = 2,
 
-        /// <devdoc>
+        /// <summary>
         /// Tabs will be located along the right edge of the control.
         /// </devdoc>
         Right = 3,

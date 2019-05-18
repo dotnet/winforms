@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// BindingsCollection is a collection of bindings for a Control. It has Add/Remove capabilities,
     /// as well as an All array property, enumeration, etc.
     /// </devdoc>
@@ -16,7 +16,7 @@ namespace System.Windows.Forms
     {
         private BindingManagerBase _bindingManagerBase;
 
-        /// <devdoc>
+        /// <summary>
         /// ColumnsCollection constructor.  Used only by DataSource.
         /// </devdoc>
         internal ListManagerBindingsCollection(BindingManagerBase bindingManagerBase) : base()

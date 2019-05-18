@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Represents the method that will handle the <see cref='System.Windows.Forms.TreeView.OnBeforeCheck'/>,
     /// <see cref='System.Windows.Forms.TreeView.OnBeforeCollapse'/>, <see cref='System.Windows.Forms.TreeView.BeforeExpand'/>,
     /// or <see cref='System.Windows.Forms.TreeView.BeforeSelect'/> event of a <see cref='System.Windows.Forms.TreeView'/>

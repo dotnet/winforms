@@ -8,7 +8,7 @@ using System.Drawing;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// This is a small class that can efficiently store property values.
     /// It tries to optimize for size first, "get" access second, and
     /// "set" access third.
@@ -20,7 +20,7 @@ namespace System.Windows.Forms
         private IntegerEntry[] s_intEntries;
         private ObjectEntry[] s_objEntries;
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieves an integer value from our property list.
         /// This will set value to zero and return false if the
         /// list does not contain the given key.
@@ -31,7 +31,7 @@ namespace System.Windows.Forms
             return found;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieves an integer value from our property list.
         /// This will set value to zero and return false if the
         /// list does not contain the given key.
@@ -42,7 +42,7 @@ namespace System.Windows.Forms
             return found;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Creates a new key for this property store. This is NOT
         /// guarded by any thread safety so if you are calling it on
         /// multiple threads you should guard. For our purposes,
@@ -134,14 +134,14 @@ namespace System.Windows.Forms
             return Rectangle.Empty;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieves an integer value from our property list.
         /// This will set value to zero and return false if the
         /// list does not contain the given key.
         /// </devdoc>
         public int GetInteger(int key) =>  GetInteger(key, out _);
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieves an integer value from our property list.
         /// This will set value to zero and return false if the
         /// list does not contain the given key.
@@ -180,14 +180,14 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieves an object value from our property list.
         /// This will set value to null and return false if the
         /// list does not contain the given key.
         /// </devdoc>
         public object GetObject(int key) => GetObject(key, out _);
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieves an object value from our property list.
         /// This will set value to null and return false if the
         /// list does not contain the given key.
@@ -226,7 +226,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Locates the requested entry in our array if entries. This does
         /// not do the mask check to see if the entry is currently being used,
         /// but it does locate the entry. If the entry is found, this returns
@@ -341,7 +341,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Locates the requested entry in our array if entries. This does
         /// not do the mask check to see if the entry is currently being used,
         /// but it does locate the entry. If the entry is found, this returns
@@ -459,7 +459,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Removes the given key from the array
         /// </devdoc>
         public void RemoveInteger(int key)
@@ -524,7 +524,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Removes the given key from the array
         /// </devdoc>
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
@@ -688,7 +688,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Stores the given value in the key.
         /// </devdoc>
         public void SetInteger(int key, int value)
@@ -749,7 +749,7 @@ namespace System.Windows.Forms
             s_intEntries[index].Mask = (short)((1 << element) | (ushort)(s_intEntries[index].Mask));
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Stores the given value in the key.
         /// </devdoc>
         public void SetObject(int key, object value)
@@ -810,7 +810,7 @@ namespace System.Windows.Forms
             s_objEntries[index].Mask = (short)((ushort)(s_objEntries[index].Mask) | (1 << element));
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Takes the given key and splits it into an index and an element.
         /// </devdoc>
         private short SplitKey(int key, out short element)
@@ -888,7 +888,7 @@ namespace System.Windows.Forms
             Debug.Assert(index == idx, "GetObjEntry in property store broken. index is " + index + " while is should be " + idx + "length of the array is " + length);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Stores the relationship between a key and a value.
         /// We do not want to be so inefficient that we require
         /// four bytes for each four byte property, so use an algorithm
@@ -905,7 +905,7 @@ namespace System.Windows.Forms
             public int Value4;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Stores the relationship between a key and a value.
         /// We do not want to be so inefficient that we require
         /// four bytes for each four byte property, so use an algorithm

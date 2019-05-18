@@ -57,7 +57,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         internal SingleSelectRootGridEntry(PropertyGridView view, object value, IServiceProvider baseProvider, IDesignerHost host, PropertyTab tab, PropertySort sortType) : this(view, value,null, baseProvider, host, tab, sortType) {
         }   
 
-        /// <devdoc>
+        /// <summary>
         /// The set of attributes that will be used for browse filtering
         /// </devdoc>
         public override AttributeCollection BrowsableAttributes {
@@ -173,7 +173,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         } 
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the keyword that the VS help dynamic help window will
         ///     use when this IPE is selected.
         /// </devdoc>
@@ -208,7 +208,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
           
-        /// <devdoc>
+        /// <summary>
         /// Gets or sets the value for the property that is represented 
         /// by this GridEntry.
         /// </devdoc>
@@ -256,7 +256,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return service;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Reset the Browsable attributes to the default (BrowsableAttribute.Yes)
         /// </devdoc>
         public void ResetBrowsableAttributes() {
@@ -264,7 +264,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Sets the value of this GridEntry from text
         /// </devdoc>
         public virtual void ShowCategories(bool fCategories) {

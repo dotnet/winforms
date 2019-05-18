@@ -11,7 +11,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <devdoc>
+    /// <summary>
     /// </devdoc>
     internal sealed class MdiWindowDialog : Form {
         private System.Windows.Forms.ListBox itemList;
@@ -37,7 +37,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         private class ListItem {
             public Form form;
@@ -77,7 +77,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     NOTE: The following code is required by the Windows Forms
         ///     designer.  It can be modified using the form editor.  Do not
         ///     modify it using the code editor.

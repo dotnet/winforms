@@ -536,7 +536,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns a default location for showing the context menu.  This
         /// location is the center of the active property label in the grid, and
         /// is used useful to position the context menu when the menu is invoked
@@ -606,7 +606,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         */
 
         /*
-        /// <devdoc>
+        /// <summary>
         /// Returns the currently selected property name.
         /// If no property or a category name is selected, "" is returned.
         /// If the category is a sub property, it is concatenated onto its
@@ -679,7 +679,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
         */
         
-        /// <devdoc>
+        /// <summary>
         /// Returns or sets the IServiceProvider the PropertyGridView will use to obtain
         /// services.  This may be null.
         /// </devdoc>
@@ -892,7 +892,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             tipInfo = -1;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Closes a previously opened drop down.  This should be called by the
         ///      drop down when the user does something that should close it.
         /// </devdoc>
@@ -1061,7 +1061,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return cProps;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Constructs the new instance of the accessibility object for this control. Subclasses
         ///     should not call base.CreateAccessibilityObject.
         /// </devdoc>
@@ -1597,7 +1597,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return(int)(InternalLabelWidth * (labelRatio - 1));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Displays the provided control in a drop down.  When possible, the
         ///      current dimensions of the control will be respected.  If this is not possible
         ///      for the current screen layout the control may be resized, so it should
@@ -1933,7 +1933,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return pos;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// returns an array of IPE specifying the current heirarchy of ipes from the given
         /// gridEntry through its parents to the root.
         /// </devdoc>
@@ -2087,7 +2087,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return !ScrollBar.Visible;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns a string containing test info about a given GridEntry. Requires an offset into the top-level
         /// entry collection (ie. nested entries are not accessible). Or specify -1 to get info for the current
         /// selected entry (which can be any entry, top-level or nested).
@@ -2159,7 +2159,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
      
-        /// <devdoc>
+        /// <summary>
         ///     Overridden to handle TAB key.
         /// </devdoc>
         protected override bool IsInputKey(Keys keyData) {
@@ -4810,7 +4810,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return sbChange;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Shows the given dialog, and returns its dialog result.  You should always
         ///      use this method rather than showing the dialog directly, as this will
         ///      properly position the dialog and provide it a dialog owner.
@@ -5434,7 +5434,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             /// This gets set to true if there isn't enough space below the currently selected
             /// row for the drop down, so it appears above the row.  In this case, we make the resize
             /// grip appear at the top left.
@@ -5495,7 +5495,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             /// Get an InstanceCreationEditor for this entry.  First, we look on the property type, and if we
             /// don't find that we'll go up to the editor type itself.  That way people can associate the InstanceCreationEditor with
             /// the type of DropDown UIType Editor.
@@ -5527,7 +5527,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return editor;
             }
 
-            /// <devdoc>
+            /// <summary>
             /// Get a glyph for sizing the lower left hand grip.  The code in ControlPaint only does lower-right glyphs
             /// so we do some GDI+ magic to take that glyph and mirror it.  That way we can still share the code (in case it changes for theming, etc),
             /// not have any special cases, and possibly solve world hunger.  
@@ -5578,7 +5578,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
             }
             
-            /// <devdoc>
+            /// <summary>
             ///    General purpose method, based on Control.Contains()...
             ///
             ///    Determines whether a given window (specified using native window handle)
@@ -5662,7 +5662,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
             }
             
-            /// <devdoc>
+            /// <summary>
             /// Just figure out what kind of sizing we would do at a given drag location.
             /// </devdoc>
             private int MoveTypeFromPoint(int x, int y) 
@@ -5688,7 +5688,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return MoveTypeNone;
             }
     
-            /// <devdoc>
+            /// <summary>
             /// Decide if we're going to be sizing at the given point, and if so, Capture and safe our current state.
             /// </devdoc>
             protected override void OnMouseDown(MouseEventArgs e)
@@ -5708,7 +5708,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 base.OnMouseDown (e);
             }
     
-            /// <devdoc>
+            /// <summary>
             /// Either set the cursor or do a move, depending on what our currentMoveType is/
             /// </devdoc>
             protected override void OnMouseMove(MouseEventArgs e)
@@ -5812,7 +5812,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             /// Just paint and draw our glyph.
             /// </devdoc>
             protected override void OnPaint(PaintEventArgs pe) 
@@ -6504,7 +6504,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
     
     
 
-            /// <devdoc>
+            /// <summary>
             ///     Overridden to handle TAB key.
             /// </devdoc>
             protected override bool IsInputKey(Keys keyData) {
@@ -6522,7 +6522,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return base.IsInputKey(keyData);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Overridden to handle TAB key.
             /// </devdoc>
             protected override bool IsInputChar(char keyChar) {
@@ -6639,7 +6639,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
 
 
-            /// <devdoc>
+            /// <summary>
             ///      Overrides Control.ProcessDialogKey to handle the Escape and Return
             ///      keys.
             /// </devdoc>
@@ -6962,7 +6962,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }  
                     
 
-            /// <devdoc>
+            /// <summary>
             ///     Sets up the needed windows hooks to catch messages.
             /// </devdoc>
             
@@ -6992,7 +6992,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
             }
             
-            /// <devdoc>
+            /// <summary>
             ///     HookProc used for catch mouse messages.
             /// </devdoc>
             private IntPtr MouseHookProc(int nCode, IntPtr wparam, IntPtr lparam) {
@@ -7020,7 +7020,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return UnsafeNativeMethods.CallNextHookEx(new HandleRef(this, mouseHookHandle), nCode, wparam, lparam);
             }
             
-            /// <devdoc>
+            /// <summary>
             ///     Removes the windowshook that was installed.
             /// </devdoc>
             private void UnhookMouse() {
@@ -7105,7 +7105,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return false;
             }
             
-              /// <devdoc>
+              /// <summary>
             ///     Forwards messageHook calls to ToolTip.messageHookProc
             /// </devdoc>
             private class MouseHookObject {
@@ -7131,7 +7131,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The accessible object class for a PropertyGridView. The child accessible objects
         ///     are accessible objects corresponding to the property grid entries.        
         /// </devdoc>
@@ -7141,7 +7141,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             private PropertyGridView _owningPropertyGridView;
             private PropertyGrid _parentPropertyGrid;
 
-            /// <devdoc>
+            /// <summary>
             ///     Construct a PropertyGridViewAccessibleObject
             /// </devdoc>
             public PropertyGridViewAccessibleObject(PropertyGridView owner, PropertyGrid parentPropertyGrid) : base(owner) {
@@ -7470,7 +7470,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return null;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Get the accessible child at the given index.
             ///      The accessible children of a PropertyGridView are accessible objects
             ///      corresponding to the property grid entries.
@@ -7486,7 +7486,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Get the number of accessible children.
             ///      The accessible children of a PropertyGridView are accessible objects
             ///      corresponding to the property grid entries.
@@ -7502,7 +7502,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Get the accessible object for the currently focused grid entry.
             /// </devdoc>
             public override AccessibleObject GetFocused() {
@@ -7514,7 +7514,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return null;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Get the accessible object for the currently selected grid entry.
             /// </devdoc>
             public override AccessibleObject GetSelected() {
@@ -7527,7 +7527,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
 
 
-            /// <devdoc>
+            /// <summary>
             ///      Get the accessible child at the given screen location.
             ///      The accessible children of a PropertyGridView are accessible objects
             ///      corresponding to the property grid entries.
@@ -7557,7 +7557,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return null;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Navigate to another object.
             /// </devdoc>
             public override AccessibleObject Navigate(AccessibleNavigation navdir) {

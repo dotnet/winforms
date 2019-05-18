@@ -254,7 +254,7 @@
            }
         #endif
 
-        /// <devdoc>
+        /// <summary>
         ///   WeakRefCollection - a collection that holds onto weak references
         ///
         ///   Essentially you pass in the object as it is, and under the covers

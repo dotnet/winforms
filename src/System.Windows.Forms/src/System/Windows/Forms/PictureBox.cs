@@ -19,7 +19,7 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
     using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para> Displays an image that can be a graphic from a bitmap, 
     ///       icon, or metafile, as well as from
     ///       an enhanced metafile, JPEG, or GIF files.</para>
@@ -35,17 +35,17 @@ namespace System.Windows.Forms {
     ]
     public class PictureBox : Control, ISupportInitialize {
 
-        /// <devdoc>
+        /// <summary>
         ///     The type of border this control will have.
         /// </devdoc>
         private BorderStyle borderStyle = System.Windows.Forms.BorderStyle.None;
 
-        /// <devdoc>
+        /// <summary>
         ///     The image being displayed.
         /// </devdoc>
         private Image image;
 
-        /// <devdoc>
+        /// <summary>
         ///     Controls how the image is placed within our bounds, or how we are
         ///     sized to fit said image.
         /// </devdoc>
@@ -104,7 +104,7 @@ namespace System.Windows.Forms {
         StreamReader localImageStreamReader = null;
         Stream uriImageStream = null;
  
-        /// <devdoc>
+        /// <summary>
         ///    <para>Creates a new picture with all default properties and no 
         ///       Image. The default PictureBox.SizeMode will be PictureBoxSizeMode.NORMAL.
         ///    </para>
@@ -125,7 +125,7 @@ namespace System.Windows.Forms {
         }
         
         /// <hideinheritance/>
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override bool AllowDrop {
@@ -137,7 +137,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Indicates the
         ///       border style for the control.</para>
         /// </devdoc>
@@ -211,7 +211,7 @@ namespace System.Windows.Forms {
             remove => base.CausesValidationChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Returns the parameters needed to create the handle. Inheriting classes
         ///       can override this to provide extra functionality. They should not,
         ///       however, forget to call base.getCreateParams() first to get the struct
@@ -240,7 +240,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
         /// </devdoc>
@@ -290,7 +290,7 @@ namespace System.Windows.Forms {
         }
 
         /// <hideinheritance/>
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor {
@@ -309,7 +309,7 @@ namespace System.Windows.Forms {
         }
 
         /// <hideinheritance/>
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Font Font {
@@ -327,7 +327,7 @@ namespace System.Windows.Forms {
             remove => base.FontChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Retrieves the Image that the <see cref='System.Windows.Forms.PictureBox'/> is currently displaying.</para>
         /// </devdoc>
         [
@@ -830,7 +830,7 @@ namespace System.Windows.Forms {
         }
 
         /// <hideinheritance/>
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override RightToLeft RightToLeft {
@@ -869,7 +869,7 @@ namespace System.Windows.Forms {
                 && (Image != null);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates how the image is displayed.</para>
         /// </devdoc>
         [
@@ -917,7 +917,7 @@ namespace System.Windows.Forms {
         }
 
         /// <hideinheritance/>
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool TabStop {
@@ -936,7 +936,7 @@ namespace System.Windows.Forms {
         }
 
         /// <hideinheritance/>
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public int TabIndex {
@@ -955,7 +955,7 @@ namespace System.Windows.Forms {
         }
 
         /// <hideinheritance/>        
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]        
         public override string Text {
@@ -1005,7 +1005,7 @@ namespace System.Windows.Forms {
             remove => base.Leave -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     If the PictureBox has the SizeMode property set to AutoSize, this makes
         ///     sure that the picturebox is large enough to hold the image.
         /// </devdoc>
@@ -1043,7 +1043,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override void Dispose(bool disposing) {
             if (disposing) {
@@ -1134,7 +1134,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Overridden onPaint to make sure that the image is painted correctly.
         /// </devdoc>
         protected override void OnPaint(PaintEventArgs pe) {
@@ -1192,7 +1192,7 @@ namespace System.Windows.Forms {
             Animate();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     OnResize override to invalidate entire control in Stetch mode
         /// </devdoc>
         protected override void OnResize(EventArgs e) {
@@ -1210,7 +1210,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns a string representation for this control.
         /// </devdoc>
         public override string ToString() {

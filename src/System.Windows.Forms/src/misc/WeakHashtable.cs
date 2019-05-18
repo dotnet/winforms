@@ -7,7 +7,7 @@ namespace System.ComponentModel {
     using System;
     using System.Collections;
 
-    /// <devdoc>
+    /// <summary>
     ///     This is a hashtable that stores object keys as weak references.  
     ///     It monitors memory usage and will periodically scavenge the
     ///     hash table to clean out dead references.
@@ -23,7 +23,7 @@ namespace System.ComponentModel {
         {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Override of clear that performs a scavenge.
         /// </devdoc>
         public override void Clear()
@@ -31,7 +31,7 @@ namespace System.ComponentModel {
             base.Clear();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Override of remove that performs a scavenge.
         /// </devdoc>
         public override void Remove(object key)
@@ -39,7 +39,7 @@ namespace System.ComponentModel {
             base.Remove(key);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Override of Item that wraps a weak reference around the
         ///     key and performs a scavenge.
         /// </devdoc>
@@ -49,7 +49,7 @@ namespace System.ComponentModel {
             this[new EqualityWeakReference(key)] = value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This method checks to see if it is necessary to
         ///     scavenge keys, and if it is it performs a scan
         ///     of all keys to see which ones are no longer valid.
@@ -163,7 +163,7 @@ namespace System.ComponentModel {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     A subclass of WeakReference that overrides GetHashCode and
         ///     Equals so that the weak reference returns the same equality
         ///     semantics as the object it wraps.  This will always return
@@ -208,7 +208,7 @@ namespace System.ComponentModel {
 
         /* The folowing code has been removed to prevent FXCOP violation
            It is left here incase it needs to be resurected
-        /// <devdoc>
+        /// <summary>
         ///     Override of add that wraps a weak reference around the
         ///     key and performs a scavenge.
         /// </devdoc>

@@ -41,7 +41,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       When overridden in a derived class, gets the type of the
         ///       component this property
@@ -54,7 +54,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets the type converter for this property.
         ///    </para>
@@ -71,7 +71,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets a value
         ///       indicating whether this property should be localized, as
@@ -93,7 +93,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       When overridden in
         ///       a derived class, gets a value
@@ -116,7 +116,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
    
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       When overridden in a derived class,
         ///       gets the type of the property.
@@ -134,7 +134,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       When overridden in a derived class, indicates whether
         ///       resetting the <paramref name="component "/>will change the value of the
@@ -157,7 +157,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
              return (canReset == TriState.Yes);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This method attempts to copy the given value so unique values are
         ///     always passed to each object.  If the object cannot be copied it
         ///     will be returned.
@@ -222,7 +222,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Creates a collection of attributes using the
         ///       array of attributes that you passed to the constructor.
@@ -241,7 +241,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return propertyOwner;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets an editor of the specified type.
         ///    </para>
@@ -251,7 +251,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       When overridden in a derived class, gets the current
         ///       value
@@ -317,7 +317,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return values;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       When overridden in a derived class, resets the
         ///       value
@@ -367,7 +367,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       When overridden in a derived class, sets the value of
         ///       the component to a different value.
@@ -387,7 +387,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       When overridden in a derived class, indicates whether the
         ///       value of
@@ -415,7 +415,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                SetItems(original);
             }
             
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the number of items.
             /// </devdoc>
             public int Count {
@@ -430,7 +430,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
             
             
-            /// <devdoc>
+            /// <summary>
             ///     Prevents the contents of the collection from being re-initialized;
             /// </devdoc>
             public bool Locked {
@@ -469,7 +469,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                }
             }
             
-            /// <devdoc>
+            /// <summary>
             /// Ensures that the new collection equals the exisitng one.
             /// Otherwise, it wipes out the contents of the new collection.
             /// </devdoc>

@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies whether an object or text is aligned to
     /// the left or
     /// right of a reference point.
@@ -14,12 +14,12 @@ namespace System.Windows.Forms
     [ComVisible(true)]
     public enum LeftRightAlignment
     {
-        /// <devdoc>
+        /// <summary>
         /// The object or text is aligned to the left of the reference point.
         /// </devdoc>
         Left = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// The object or text is aligned to the right of the reference point.
         /// </devdoc>
         Right = 1,

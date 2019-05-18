@@ -12,7 +12,7 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       This is a rendering class for the ComboBox control.
     ///    </para>
@@ -29,7 +29,7 @@ namespace System.Windows.Forms {
         private ComboBoxRenderer() {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Returns true if this class is supported for the current OS and user/application settings, 
         ///       otherwise returns false.
@@ -56,7 +56,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders the textbox part of a ComboBox control.
         ///    </para>
@@ -75,7 +75,7 @@ namespace System.Windows.Forms {
             DrawBackground(g, bounds, state);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders the textbox part of a ComboBox control.
         ///    </para>
@@ -84,7 +84,7 @@ namespace System.Windows.Forms {
             DrawTextBox(g, bounds, comboBoxText, font, TextFormatFlags.TextBoxControl, state);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders the textbox part of a ComboBox control.
         ///    </para>
@@ -93,7 +93,7 @@ namespace System.Windows.Forms {
             DrawTextBox(g, bounds, comboBoxText, font, textBounds, TextFormatFlags.TextBoxControl, state);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders the textbox part of a ComboBox control.
         ///    </para>
@@ -111,7 +111,7 @@ namespace System.Windows.Forms {
             DrawTextBox(g, bounds, comboBoxText, font, textBounds, flags, state);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders the textbox part of a ComboBox control.
         ///    </para>
@@ -132,7 +132,7 @@ namespace System.Windows.Forms {
             TextRenderer.DrawText(g, comboBoxText, font, textBounds, textColor, flags);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a ComboBox drop-down button.
         ///    </para>

@@ -4,45 +4,45 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Represents the HTML 1.0 Help engine.
     /// </devdoc>
     public enum HelpNavigator
     {
-        /// <devdoc>
+        /// <summary>
         /// Displays the topic referenced by the topic referenced by the specified
         /// Url. This field is constant.
         /// </devdoc>
         Topic = unchecked((int)0x80000001),
 
-        /// <devdoc>
+        /// <summary>
         /// Displays the contents of the HTML 1.0 Help file. This field is constant.
         /// </devdoc>
         TableOfContents = unchecked((int)0x80000002),
 
-        /// <devdoc>
+        /// <summary>
         /// Displays the index of a specified Url. This field is constant.
         /// </devdoc>
         Index = unchecked((int)0x80000003),
 
-        /// <devdoc>
+        /// <summary>
         /// Displays the search page of a specified Url. This field is constant.
         /// </devdoc>
         Find = unchecked((int)0x80000004),
 
-        /// <devdoc>
+        /// <summary>
         /// Displays the topic referenced by the topic referenced by the specified
         /// Url. This field is constant.
         /// </devdoc>
         AssociateIndex = unchecked((int)0x80000005),
 
-        /// <devdoc>
+        /// <summary>
         /// Displays the topic referenced by the topic referenced by the specified
         /// Url. This field is constant.
         /// </devdoc>
         KeywordIndex = unchecked((int)0x80000006),
 
-        /// <devdoc>
+        /// <summary>
         /// Displays the topic referenced by the topic ID This field is constant.
         /// </devdoc>
         TopicId = unchecked((int)0x80000007)

@@ -10,7 +10,7 @@ using System.Windows.Forms.VisualStyles;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       This is a rendering class for the ScrollBar control.
     ///    </para>
@@ -25,7 +25,7 @@ using Microsoft.Win32;
        private ScrollBarRenderer() {
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Returns true if this class is supported for the current OS and user/application settings, 
        ///       otherwise returns false.
@@ -37,7 +37,7 @@ using Microsoft.Win32;
            }
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a ScrollBar arrow button.
        ///    </para>
@@ -49,7 +49,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a horizontal ScrollBar thumb.
        ///    </para>
@@ -61,7 +61,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a vertical ScrollBar thumb.
        ///    </para>
@@ -73,7 +73,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a horizontal ScrollBar thumb grip.
        ///    </para>
@@ -85,7 +85,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a vertical ScrollBar thumb grip.
        ///    </para>
@@ -97,7 +97,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a horizontal ScrollBar thumb.
        ///    </para>
@@ -109,7 +109,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a horizontal ScrollBar thumb.
        ///    </para>
@@ -121,7 +121,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
               
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a vertical ScrollBar thumb in the center of the given bounds.
        ///    </para>
@@ -133,7 +133,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a vertical ScrollBar thumb in the center of the given bounds.
        ///    </para>
@@ -145,7 +145,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a ScrollBar size box in the center of the given bounds.
        ///    </para>
@@ -157,7 +157,7 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Returns the size of the ScrollBar thumb grip.
        ///    </para>
@@ -169,7 +169,7 @@ using Microsoft.Win32;
            return visualStyleRenderer.GetPartSize(g, ThemeSizeType.True);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Returns the size of the ScrollBar size box.
        ///    </para>

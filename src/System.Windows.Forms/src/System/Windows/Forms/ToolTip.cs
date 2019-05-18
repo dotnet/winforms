@@ -21,7 +21,7 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using Collections.Generic;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Provides a small pop-up window containing a line of text
     ///       that describes the purpose of a tool or control (usually represented as a
@@ -86,7 +86,7 @@ namespace System.Windows.Forms {
 
         private bool cancelled = false;
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.ToolTip'/> class, given the container.
         ///    </para>
@@ -99,7 +99,7 @@ namespace System.Windows.Forms {
             cont.Add(this);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.ToolTip'/> class in its default state.
         ///    </para>
@@ -111,7 +111,7 @@ namespace System.Windows.Forms {
             AdjustBaseFromAuto();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the <see cref='System.Windows.Forms.ToolTip'/> control is currently active.
         ///    </para>
@@ -141,7 +141,7 @@ namespace System.Windows.Forms {
             this.Hide(currentTool.GetOwnerWindow());
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets
         ///       the time (in milliseconds) that passes before the <see cref='System.Windows.Forms.ToolTip'/> appears.
@@ -170,7 +170,7 @@ namespace System.Windows.Forms {
             return ((TipInfo)this.tools[tool])?.Caption;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the initial delay for the <see cref='System.Windows.Forms.ToolTip'/> control.
         ///    </para>
@@ -192,7 +192,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the BackColor for the <see cref='System.Windows.Forms.ToolTip'/> control.
         ///    </para>
@@ -214,7 +214,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The createParams to create the window.
         /// </devdoc>
         protected virtual CreateParams CreateParams {
@@ -246,7 +246,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the ForeColor for the <see cref='System.Windows.Forms.ToolTip'/> control.
         ///    </para>
@@ -282,7 +282,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the IsBalloon for the <see cref='System.Windows.Forms.ToolTip'/> control.
         ///    </para>
@@ -332,7 +332,7 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the initial delay for
         ///       the <see cref='System.Windows.Forms.ToolTip'/>
@@ -356,7 +356,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         /// Indicates whether the ToolTip will be drawn by the system or the user.
         /// </devdoc>
         [
@@ -376,7 +376,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the length of time (in milliseconds) that
         ///       it takes subsequent ToolTip instances to appear as the mouse pointer moves from
@@ -400,7 +400,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the <see cref='System.Windows.Forms.ToolTip'/>
         ///       appears even when its parent control is not active.
@@ -425,7 +425,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       When set to true, any ampersands in the Text property are not displayed.
         ///    </para>
@@ -466,7 +466,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets an Icon on the ToolTip.
         ///    </para>
@@ -502,7 +502,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the title of the ToolTip.
         ///    </para>
@@ -590,7 +590,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       When set to true, animations are used when tooltip is shown or hidden.
         ///    </para>
@@ -615,7 +615,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       When set to true, a fade effect is used when tooltips are shown or hidden.
         ///    </para>
@@ -639,7 +639,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Fires in OwnerDraw mode when the tooltip needs to be drawn.</para>
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)),SRDescription(nameof(SR.ToolTipDrawEventDescr))]
@@ -649,7 +649,7 @@ namespace System.Windows.Forms {
             remove => onDraw -= value;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>Fires when the tooltip is just about to be shown.</para>
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)),SRDescription(nameof(SR.ToolTipPopupEventDescr))]
@@ -660,7 +660,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Adjusts the other delay values based on the Automatic value.
         /// </devdoc>
         private void AdjustBaseFromAuto() {
@@ -740,7 +740,7 @@ namespace System.Windows.Forms {
             KeyboardToolTipStateMachine.Instance.Unhook(control, this);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Fires the Draw event. 
         /// </devdoc>
         private void OnDraw(DrawToolTipEventArgs e) 
@@ -752,7 +752,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Fires the Popup event. 
         /// </devdoc>
         private void OnPopup(PopupEventArgs e) 
@@ -773,7 +773,7 @@ namespace System.Windows.Forms {
             DestroyHandle();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Returns true if the tooltip can offer an extender property to the
         ///    specified target component.
         /// </devdoc>
@@ -795,7 +795,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates the handle for the control.
         /// </devdoc>
         private void CreateHandle() {
@@ -957,7 +957,7 @@ namespace System.Windows.Forms {
 
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Destroys the handle for this control.
         /// </devdoc>
         /// Required by Label to destroy the handle for the toolTip added for AutoEllipses.
@@ -993,7 +993,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Disposes of the <see cref='System.Windows.Forms.ToolTip'/>
         ///       component.
@@ -1029,7 +1029,7 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the delayTime based on the NativeMethods.TTDT_* values.
         /// </devdoc>
         internal int GetDelayTime(int type) {
@@ -1046,7 +1046,7 @@ namespace System.Windows.Forms {
             return (window != null ? window.Handle != IntPtr.Zero: false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns a new instance of the TOOLINFO_T structure with the minimum
         ///     required data to uniquely identify a region. This is used primarily
         ///     for delete operations. NOTE: This cannot force the creation of a handle.
@@ -1068,7 +1068,7 @@ namespace System.Windows.Forms {
             return ti;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns a detailed TOOLINFO_TOOLTIP structure that represents the specified
         ///     region. NOTE: This may force the creation of a handle.
         ///     If the out parameter allocatedString has been set to true, It is the responsibility of the caller
@@ -1136,7 +1136,7 @@ namespace System.Windows.Forms {
             return ti;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Retrieves the <see cref='System.Windows.Forms.ToolTip'/> text associated with the specified control.
         ///    </para>
@@ -1160,7 +1160,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the HWND of the window that is at the specified point. This
         ///     handles special cases where one Control owns multiple HWNDs (i.e. ComboBox).
         /// </devdoc>
@@ -1247,7 +1247,7 @@ namespace System.Windows.Forms {
             this.topLevelControl = TopLevelControl;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         private void RecreateHandle() {
             if (!DesignMode) {
@@ -1261,7 +1261,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Removes all of the tooltips currently associated
         ///       with the <see cref='System.Windows.Forms.ToolTip'/> control.
@@ -1289,7 +1289,7 @@ namespace System.Windows.Forms {
             KeyboardToolTipStateMachine.Instance.ResetStateMachine(this);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sets the delayTime based on the NativeMethods.TTDT_* values.
         /// </devdoc>
         private void SetDelayTime(int type, int time) {
@@ -1319,7 +1319,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Associates <see cref='System.Windows.Forms.ToolTip'/> text with the specified control.
         ///    </para>
@@ -1331,7 +1331,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Associates <see cref="System.Windows..Forms.ToolTip'/> text with the specified information
         ///    </para>
@@ -1402,7 +1402,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Returns true if the AutomaticDelay property should be persisted.
         /// </devdoc>
         private bool ShouldSerializeAutomaticDelay() {
@@ -1414,21 +1414,21 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Returns true if the AutoPopDelay property should be persisted.
         /// </devdoc>
         private bool ShouldSerializeAutoPopDelay() {
             return !auto;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Returns true if the InitialDelay property should be persisted.
         /// </devdoc>
         private bool ShouldSerializeInitialDelay() {
             return !auto;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Returns true if the ReshowDelay property should be persisted.
         /// </devdoc>
         private bool ShouldSerializeReshowDelay() {
@@ -1436,7 +1436,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    Shows a tooltip for specified text, window, and hotspot
         /// </devdoc>
         private void ShowTooltip(string text, IWin32Window win, int duration) {
@@ -1502,7 +1502,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Associates <see cref='System.Windows.Forms.ToolTip'/> with the specified control and displays it.
         ///    </para>
@@ -1515,7 +1515,7 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Associates <see cref='System.Windows.Forms.ToolTip'/> with the specified control 
         ///       and displays it for the specified duration.
@@ -1531,7 +1531,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Associates <see cref='System.Windows.Forms.ToolTip'/> with the specified control and displays it.
         ///    </para>
@@ -1553,7 +1553,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Associates <see cref='System.Windows.Forms.ToolTip'/> with the specified control and displays it.
         ///    </para>
@@ -1580,7 +1580,7 @@ namespace System.Windows.Forms {
 
 
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Associates <see cref='System.Windows.Forms.ToolTip'/> with the specified control and displays it.
         ///    </para>
@@ -1600,7 +1600,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Associates <see cref='System.Windows.Forms.ToolTip'/> with the specified control and displays it.
         ///    </para>
@@ -1801,7 +1801,7 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Private Function to encapsulate TTM_TRACKPOSITION so that this doesnt fire an extra POP event
         /// </devdoc>
         private void SetTrackPosition(int pointX, int pointY)
@@ -1817,7 +1817,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Hides <see cref='System.Windows.Forms.ToolTip'/> with the specified control.
         ///    </para>
@@ -1967,7 +1967,7 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Starts the timer hiding Positioned ToolTips
         /// </devdoc>
         private void StartTimer(IWin32Window owner, int interval) {
@@ -1981,7 +1981,7 @@ namespace System.Windows.Forms {
             timer.Start();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Stops the timer for hiding Positioned ToolTips
         /// </devdoc>
         protected void StopTimer() {
@@ -1997,14 +1997,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Generates updown events when the timer calls this function.
         /// </devdoc>
         private void TimerHandler(object source, EventArgs args) {
             Hide(((ToolTipTimer)source).Host);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Finalizes garbage collection.
         ///    </para>
@@ -2013,7 +2013,7 @@ namespace System.Windows.Forms {
             DestroyHandle();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Returns a string representation for this control.
         ///    </para>
@@ -2044,7 +2044,7 @@ namespace System.Windows.Forms {
             NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOOWNERZORDER);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_MOVE message.
         /// </devdoc>
         private void WmMove() {
@@ -2087,7 +2087,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_MOUSEACTIVATE message.
         /// </devdoc>
         private void WmMouseActivate(ref Message msg) {
@@ -2122,7 +2122,7 @@ namespace System.Windows.Forms {
 
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_WINDOWFROMPOINT message.
         /// </devdoc>
         private void WmWindowFromPoint(ref Message msg) {
@@ -2134,7 +2134,7 @@ namespace System.Windows.Forms {
 
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the TTN_SHOW message.
         /// </devdoc>
         private void WmShow() {
@@ -2218,7 +2218,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_WINDOWPOSCHANGED message.
         ///     We need to Hide the window since the native tooltip actually calls SetWindowPos in its TTN_SHOW even if we cancel showing the
         ///     tooltip : Hence we need to listen to the WindowPosChanged message can hide the window ourselves.
@@ -2234,7 +2234,7 @@ namespace System.Windows.Forms {
 
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_WINDOWPOSCHANGING message.
         /// </devdoc>
         private unsafe void WmWindowPosChanging(ref Message m) {
@@ -2329,7 +2329,7 @@ namespace System.Windows.Forms {
             m.Result = IntPtr.Zero; 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Called just before the tooltip is hidden
         /// </devdoc>
         private void WmPop() {
@@ -2387,7 +2387,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     WNDPROC
         /// </devdoc>
         private void WndProc(ref Message msg) {
@@ -2489,7 +2489,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         private class ToolTipNativeWindow : NativeWindow {
             ToolTip control;

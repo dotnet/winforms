@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// This class implements the necessary interfaces required for an ActiveX site.
     ///
     /// This class is public, but has an internal constructor so that external
@@ -39,7 +39,7 @@ namespace System.Windows.Forms
             this.host = h;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         /// Dispose(release the cookie)
         ///     </para>
@@ -49,7 +49,7 @@ namespace System.Windows.Forms
             Dispose(true);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         /// Release the cookie if we're disposing
         ///     </para>
@@ -61,7 +61,7 @@ namespace System.Windows.Forms
                 StopEvents();
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         /// Retrieves the WebBrowserBase object set in the constructor.
         ///     </para>

@@ -21,7 +21,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms.VisualStyles {
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Encapsulates the class, part and state of the "element" you wish to draw using
     ///       the VisualStyleRenderer. 

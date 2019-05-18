@@ -20,7 +20,7 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Internal;    
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     /// ToolStripMenuItem
     /// </devdoc>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.MenuStrip | ToolStripItemDesignerAvailability.ContextMenuStrip)]
@@ -96,7 +96,7 @@ namespace System.Windows.Forms {
             Properties.SetObject(PropMdiForm,mdiForm);
         }
 
-        /// <devdoc> this constructor is only used when we're trying to
+        /// <summary> this constructor is only used when we're trying to
         ///          mimic a native menu like the system menu.  In that case
         ///          we've got to go ahead and collect the command id and the
         ///          target window to send WM_COMMAND/WM_SYSCOMMAND messages to.
@@ -181,7 +181,7 @@ namespace System.Windows.Forms {
             this.SupportsDisabledHotTracking = true;
         }
     
-        /// <devdoc>
+        /// <summary>
         /// Deriving classes can override this to configure a default size for their control.
         /// This is more efficient than setting the size in the control's constructor.
         /// </devdoc>
@@ -228,7 +228,7 @@ namespace System.Windows.Forms {
            }
         }
       
-        /// <devdoc>
+        /// <summary>
         /// <para>
         /// Gets or sets a value indicating whether the item is checked.
         /// </para>
@@ -254,7 +254,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Keeps a shared copy of the checked image between all menu items
         /// Fishes out the appropriate one based on CheckState.
         /// </devdoc>
@@ -355,7 +355,7 @@ namespace System.Windows.Forms {
              }
          }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets
         /// or sets a value indicating whether the check box is checked.</para>
         /// </devdoc>
@@ -388,7 +388,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the
         /// value of the <see cref='System.Windows.Forms.CheckBox.Checked'/>
         /// property changes.</para>
@@ -398,7 +398,7 @@ namespace System.Windows.Forms {
             add => Events.AddHandler(EventCheckedChanged, value);
             remove => Events.RemoveHandler(EventCheckedChanged, value);
         }   
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the
         /// value of the <see cref='System.Windows.Forms.CheckBox.CheckState'/>
         /// property changes.</para>
@@ -410,7 +410,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Specifies whether or not the item is glued to the ToolStrip or overflow or
         /// can float between the two.</para>
         /// </devdoc>
@@ -428,7 +428,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>
         /// Gets or sets the shortcut keys associated with the menu
         /// item.
@@ -506,7 +506,7 @@ namespace System.Windows.Forms {
             }
         }
                     
-        /// <devdoc>
+        /// <summary>
         /// <para>
         /// Gets or sets a value that indicates whether the shortcut
         /// keys that are assocaited
@@ -538,7 +538,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// An item is toplevel if it is parented to anything other than a ToolStripDropDownMenu
         /// This implies that a ToolStripMenuItem in an overflow IS a toplevel item
         /// </devdoc>
@@ -562,7 +562,7 @@ namespace System.Windows.Forms {
         }
         
 
-        /// <devdoc> Tag property for internal use </devdoc>
+        /// <summary> Tag property for internal use </devdoc>
         internal Form MdiForm {
             get {
                 if (Properties.ContainsObject(PropMdiForm)) {
@@ -837,7 +837,7 @@ namespace System.Windows.Forms {
            
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.ToolStripMenuItem.CheckedChanged'/>
         /// event.</para>
         /// </devdoc>
@@ -846,7 +846,7 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this,e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.ToolStripMenuItem.CheckStateChanged'/> event.</para>
         /// </devdoc>
         protected virtual void OnCheckStateChanged(EventArgs e) {     
@@ -1082,7 +1082,7 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <devdoc>
+        /// <summary>
         /// handle shortcut keys here.
         /// </devdoc>
         protected internal override bool ProcessCmdKey(ref Message m, Keys keyData) {
@@ -1113,7 +1113,7 @@ namespace System.Windows.Forms {
              return base.ProcessMnemonic(charCode);
         }
 
-        /// <devdoc> overridden here so we scooch over when we're in the ToolStripDropDownMenu</devdoc>
+        /// <summary> overridden here so we scooch over when we're in the ToolStripDropDownMenu</devdoc>
         internal protected override void SetBounds(Rectangle rect) {
 
             ToolStripMenuItemInternalLayout internalLayout = InternalLayout as ToolStripMenuItemInternalLayout;
@@ -1132,12 +1132,12 @@ namespace System.Windows.Forms {
             base.SetBounds(rect); 
         }
 
-        /// <devdoc> this is to support routing to native menu commands </devdoc>
+        /// <summary> this is to support routing to native menu commands </devdoc>
         internal void SetNativeTargetWindow(IWin32Window window) {
             targetWindowHandle = Control.GetSafeHandle(window);
         }
         
-        /// <devdoc> this is to support routing to native menu commands </devdoc>
+        /// <summary> this is to support routing to native menu commands </devdoc>
         internal void SetNativeTargetMenu(IntPtr hMenu) {
             nativeMenuHandle = hMenu;
         }
@@ -1165,7 +1165,7 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// An implementation of AccessibleChild for use with ToolStripItems        
         /// </devdoc>
         [System.Runtime.InteropServices.ComVisible(true)]        
@@ -1297,7 +1297,7 @@ namespace System.Windows.Forms {
             CancelCore();
            
         }
-        ///<devdoc> cancels if and only if this item was the one that 
+        ///<summary> cancels if and only if this item was the one that 
         ///         requested the timer
         ///</devdoc>
         public void Cancel(ToolStripMenuItem item) {

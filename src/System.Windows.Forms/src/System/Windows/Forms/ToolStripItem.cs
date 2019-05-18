@@ -172,7 +172,7 @@ namespace System.Windows.Forms {
         
         private long lastClickTime = 0;
      
-        /// <devdoc>
+        /// <summary>
         /// Constructor
         /// </devdoc>
         [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -207,7 +207,7 @@ namespace System.Windows.Forms {
             this.Name = name;
         }
           
-        /// <devdoc>
+        /// <summary>
         /// The Accessibility Object for this Control
         /// </devdoc>
         [
@@ -227,7 +227,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The default action description of the control
         /// </devdoc>
         [
@@ -245,7 +245,7 @@ namespace System.Windows.Forms {
                 OnAccessibleDefaultActionDescriptionChanged(EventArgs.Empty);
             }
         }
-        /// <devdoc>
+        /// <summary>
         /// The accessible description of the control
         /// </devdoc>
         [
@@ -264,7 +264,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The accessible name of the control
         /// </devdoc>
         [
@@ -284,7 +284,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The accessible role of the control
         /// </devdoc>
         [
@@ -318,7 +318,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Determines if the item aligns towards the beginning or end of the ToolStrip.
         /// </devdoc>
         [
@@ -347,7 +347,7 @@ namespace System.Windows.Forms {
         }
 
        
-        /// <devdoc>
+        /// <summary>
         /// Determines if this item can be dragged.
         /// This is EXACTLY like Control.AllowDrop - setting this to true WILL call 
         /// the droptarget handlers.  The ToolStripDropTargetManager is the one that 
@@ -373,7 +373,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Determines whether we set the ToolStripItem to its preferred size
         /// </devdoc>
         [DefaultValue(true)]
@@ -395,7 +395,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc> 
+        /// <summary> 
         ///   !!!!This property ONLY works when toolStrip.ShowItemToolTips = true!!!!
         ///   if AutoToolTip is set to true we use the Text, if false, we use ToolTipText.
         ///</devdoc>
@@ -411,7 +411,7 @@ namespace System.Windows.Forms {
            }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// as opposed to Visible, which returns whether or not the item and its parent are Visible 
         /// Available returns whether or not the item will be shown.  Setting Available sets Visible and Vice/Versa
         ///</devdoc>
@@ -444,7 +444,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EventAvailableChanged, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>
         /// Gets or sets the image that is displayed on a <see cref='System.Windows.Forms.Label'/>.
         /// </para>
@@ -497,7 +497,7 @@ namespace System.Windows.Forms {
           }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The BackColor of the item
         /// </devdoc>
         [
@@ -534,7 +534,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EventBackColorChanged, value);
         }
         
-        /// <devdoc>
+        /// <summary>
         /// The bounds of the item
         /// </devdoc>
         [Browsable(false)]
@@ -562,7 +562,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Determines whether or not the item can be selected.
         /// </devdoc>
         [Browsable(false)]
@@ -579,7 +579,7 @@ namespace System.Windows.Forms {
              }
          }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the control is clicked.</para>
         /// </devdoc>
         [
@@ -615,7 +615,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc> This does not show up in the property grid because it only applies to flow and table layouts </devdoc>
+        /// <summary> This does not show up in the property grid because it only applies to flow and table layouts </devdoc>
         [
         Browsable(false), 
         DefaultValue(CommonProperties.DefaultDock)
@@ -641,13 +641,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>default setting of auto tooltip when this object is created</devdoc>
+        /// <summary>default setting of auto tooltip when this object is created</devdoc>
         protected virtual bool DefaultAutoToolTip {
             get { 
                 return false; 
             } 
         }
-        /// <devdoc>
+        /// <summary>
         /// Deriving classes can override this to configure a default size for their control.
         /// This is more efficient than setting the size in the control's constructor.
         /// </devdoc>
@@ -661,7 +661,7 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        /// <devdoc>
+        /// <summary>
         /// Deriving classes can override this to configure a default size for their control.
         /// This is more efficient than setting the size in the control's constructor.
         /// </devdoc>
@@ -670,7 +670,7 @@ namespace System.Windows.Forms {
                 return Padding.Empty;
             }
         }
-        /// <devdoc>
+        /// <summary>
         /// Deriving classes can override this to configure a default size for their control.
         /// This is more efficient than setting the size in the control's constructor.
         /// </devdoc>
@@ -686,7 +686,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// specifies the default behavior of these items on ToolStripDropDowns when clicked.
         /// </devdoc>
         internal protected virtual bool DismissWhenClicked {
@@ -695,7 +695,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// DisplayStyle specifies whether the image and text are rendered.  This is not on the base
         /// item class because different derived things will have different enumeration needs.
         /// </devdoc>
@@ -724,7 +724,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the display style has changed</para>
         /// </devdoc>
         public event EventHandler DisplayStyleChanged {
@@ -737,7 +737,7 @@ namespace System.Windows.Forms {
                   return RightToLeft.Inherit;
             }
         }
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the control is double clicked.</para>
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnDoubleClickDescr))]
@@ -803,7 +803,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EventDragLeave, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// ToolStripItem.DropSource
         ///
         /// This represents what we're actually going to drag.  If the parent has set AllowItemReorder to true,
@@ -822,7 +822,7 @@ namespace System.Windows.Forms {
             }     
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the control is clicked.</para>
         /// </devdoc>
         [
@@ -884,7 +884,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieves the current font for this item. This will be the font used
         /// by default for painting and text in the control.
         /// </devdoc>
@@ -923,7 +923,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EventForeColorChanged, value);
         }
    
-        /// <devdoc>
+        /// <summary>
         /// Retrieves the current font for this control. This will be the font used
         /// by default for painting and text in the control.
         /// </devdoc>
@@ -966,7 +966,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EventGiveFeedback, value);
         }   
   
-        /// <devdoc>
+        /// <summary>
         /// The height of this control
         /// </devdoc>
         [
@@ -984,7 +984,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// ToolStripItems do not have children.  For perf reasons always return a static empty collection.
         /// Consider creating readonly collection.
         /// </devdoc>
@@ -993,7 +993,7 @@ namespace System.Windows.Forms {
                 return ToolStripItem.EmptyChildCollection;   
             }
         }
-        /// <devdoc>
+        /// <summary>
         /// Should not be exposed as this returns an unexposed type.
         /// </devdoc>
         IArrangedElement IArrangedElement.Container { 
@@ -1040,7 +1040,7 @@ namespace System.Windows.Forms {
             return;
         }
     
-        /// <devdoc>
+        /// <summary>
         /// <para>
         /// Gets or sets the alignment of the image on the label control.
         /// </para>
@@ -1067,7 +1067,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>
         /// Gets or sets the image that is displayed on a <see cref='System.Windows.Forms.Label'/>.
         /// </para>
@@ -1143,7 +1143,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         /// Returns the ToolStripItem's currently set image index     
         /// Here for compat only - this is NOT to be visible at DT.
         /// </devdoc>
@@ -1189,7 +1189,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns the ToolStripItem's currently set image index     
         /// Here for compat only - this is NOT to be visible at DT.
         /// </devdoc>
@@ -1241,7 +1241,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       This object helps determine where the image and text should be drawn.
         ///    </para>
@@ -1271,7 +1271,7 @@ namespace System.Windows.Forms {
            }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       This is used by ToolStrip to pass on the mouseMessages for ActiveDropDown.
         ///    </para>
@@ -1315,7 +1315,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Specifies whether the control is willing to process mnemonics when hosted in an container ActiveX (Ax Sourcing).  
         /// </devdoc>
         internal virtual bool IsMnemonicsListenerAxSourced 
@@ -1325,7 +1325,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         /// Occurs when the location of the ToolStripItem has been updated -- usually by layout by its
         /// owner of ToolStrips
         /// </devdoc>
@@ -1335,7 +1335,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EventLocationChanged, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Specifies the external spacing between this item and any other item or the ToolStrip.
         /// </devdoc>
         [
@@ -1353,7 +1353,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Specifies the merge action when merging two ToolStrip.
         /// </devdoc>
         [
@@ -1384,7 +1384,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Specifies the merge action when merging two ToolStrip.
         /// </devdoc>
         [
@@ -1416,7 +1416,7 @@ namespace System.Windows.Forms {
             set { state[stateMouseDownAndUpMustBeInSameItem] = value; }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the mouse pointer is over the control and a mouse button is 
         /// pressed.</para>
         /// </devdoc>
@@ -1430,7 +1430,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// <para> Occurs when the mouse pointer enters the control.</para>
         /// </devdoc>
         [
@@ -1442,7 +1442,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EventMouseEnter, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para> Occurs when the mouse pointer leaves the control.</para>
         /// </devdoc>
         [
@@ -1455,7 +1455,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// <para> Occurs when the mouse pointer hovers over the contro.</para>
         /// </devdoc>
         [
@@ -1467,7 +1467,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EventMouseHover, value);
         }   
 
-        /// <devdoc>
+        /// <summary>
         /// <para> Occurs when the mouse pointer is moved over the control.</para>
         /// </devdoc>
         [
@@ -1479,7 +1479,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EventMouseMove, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the mouse pointer is over the control and a mouse button is released.</para>
         /// </devdoc>
         [
@@ -1491,7 +1491,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EventMouseUp, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Name of this control. The designer will set this to the same
         /// as the programatic Id "(name)" of the control.  The name can be
         /// used as a key into the ControlCollection.
@@ -1513,7 +1513,7 @@ namespace System.Windows.Forms {
             }
         }           
 
-        /// <devdoc>
+        /// <summary>
         /// The owner of this ToolStripItem.  The owner is essentially a backpointer to 
         /// the ToolStrip who contains this item in it's item collection.  Handy for getting
         /// to things such as the ImageList, which would be defined on the ToolStrip.
@@ -1539,7 +1539,7 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <devdoc> returns the "parent" item on the preceeding menu which has spawned this item.
+        /// <summary> returns the "parent" item on the preceeding menu which has spawned this item.
         /// e.g.  File->Open  the OwnerItem of Open is File. </devdoc>
         [
         Browsable(false),
@@ -1581,7 +1581,7 @@ namespace System.Windows.Forms {
             add => Events.AddHandler(EventPaint, value);
             remove => Events.RemoveHandler(EventPaint, value);
         }
-        /// <devdoc>
+        /// <summary>
         /// The parent of this ToolStripItem.  This can be distinct from the owner because
         /// the item can fall onto another window (overflow).  In this case the overflow 
         /// would be the parent but the original ToolStrip would be the Owner.  The "parent"
@@ -1605,7 +1605,7 @@ namespace System.Windows.Forms {
         }
 
       
-        /// <devdoc>
+        /// <summary>
         /// <para>Specifies whether or not the item is glued to the ToolStrip or overflow or
         /// can float between the two.</para>
         /// </devdoc>
@@ -1633,7 +1633,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Specifies the internal spacing between the contents and the edges of the item
         /// </devdoc>
         [
@@ -1650,7 +1650,7 @@ namespace System.Windows.Forms {
             }
         }            
         
-        /// <devdoc>
+        /// <summary>
         /// This is explicitly a ToolStrip, because only ToolStrips know how to manage ToolStripitems
         /// </devdoc>
         internal ToolStrip ParentInternal {
@@ -1666,7 +1666,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Where the item actually ended up.
         /// </devdoc>
         [Browsable(false)]
@@ -1707,7 +1707,7 @@ namespace System.Windows.Forms {
             }
             
         }
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves our internal property storage object. If you have a property
         ///     whose value is not always set, you should store it in here to save
         ///     space.
@@ -1722,7 +1722,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Returns true if the state of the item is pushed
         /// </devdoc>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -1768,7 +1768,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This is used for international applications where the language
         /// is written from RightToLeft. When this property is true,
         /// control placement and text will be from right to left.
@@ -1821,7 +1821,7 @@ namespace System.Windows.Forms {
         }
 
 
-        ///<devdoc>
+        ///<summary>
         /// Mirrors the image when RTL.Yes.
         /// Note we do not change what is returned back from the Image property as this would cause problems with serialization.  
         /// Instead we only change what is painted - there's an internal MirroredImage property which fills in as 
@@ -1871,7 +1871,7 @@ namespace System.Windows.Forms {
             add => Events.AddHandler(EventRightToLeft, value);
             remove => Events.RemoveHandler(EventRightToLeft, value);
         }
-        /// <devdoc>
+        /// <summary>
         ///  if the item is selected we return true. 
         ///
         ///  FAQ: Why dont we have a Hot or MouseIsOver property?
@@ -1916,7 +1916,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>The size of the item</devdoc>
+        /// <summary>The size of the item</devdoc>
         [
         SRCategory(nameof(SR.CatLayout)),
         Localizable(true),
@@ -1970,7 +1970,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>Summary for Tag</devdoc>
+        /// <summary>Summary for Tag</devdoc>
         [DefaultValue(null),
         SRCategory(nameof(SR.CatData)),
         Localizable(false),
@@ -1991,7 +1991,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>The text of the item</devdoc>
+        /// <summary>The text of the item</devdoc>
         [
         DefaultValue(""),
         SRCategory(nameof(SR.CatAppearance)),
@@ -2016,7 +2016,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>
         /// Gets or sets the alignment of the text on the label control.
         /// </para>
@@ -2104,7 +2104,7 @@ namespace System.Windows.Forms {
         }
 
       
-        /// <devdoc>
+        /// <summary>
         ///   !!!!This property ONLY works when toolStrip.ShowItemToolTips = true!!!!
         ///   if AutoToolTip is set to true we return the Text as the ToolTipText.
         /// </devdoc>
@@ -2129,7 +2129,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>Whether or not the item is visible</devdoc>
+        /// <summary>Whether or not the item is visible</devdoc>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
@@ -2152,7 +2152,7 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EventVisibleChanged, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The width of this ToolStripItem.
         /// </devdoc>
         [
@@ -2222,7 +2222,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// constructs the new instance of the accessibility object for this ToolStripItem. Subclasses
         /// should not call base.CreateAccessibilityObject.
         /// </devdoc>
@@ -2231,7 +2231,7 @@ namespace System.Windows.Forms {
             return new ToolStripItemAccessibleObject(this);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Creates an instance of the object that defines how image and text
         /// gets laid out in the ToolStripItem
         /// </devdoc>
@@ -2239,7 +2239,7 @@ namespace System.Windows.Forms {
         internal virtual ToolStripItemInternalLayout CreateInternalLayout() {
             return new ToolStripItemInternalLayout(this);
         }
-        /// <devdoc>
+        /// <summary>
         /// Disposes this ToolStrip item...
         /// </devdoc>
         protected override void Dispose(bool disposing)
@@ -2273,7 +2273,7 @@ namespace System.Windows.Forms {
             get { return SystemInformation.DoubleClickTime * 10000; }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Begins a drag operation. The allowedEffects determine which
         /// drag operations can occur. If the drag operation needs to interop
         /// with applications in another process, data should either be
@@ -2410,7 +2410,7 @@ namespace System.Windows.Forms {
             return null;
         }
         
-        /// <devdoc> we dont want a public settable property... and usually owner will work 
+        /// <summary> we dont want a public settable property... and usually owner will work 
         ///          except for things like the overflow button</devdoc>
         public ToolStrip GetCurrentParent() {
             return this.Parent;
@@ -2442,7 +2442,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Invalidates the ToolStripItem
         /// </devdoc>
         public void Invalidate() {
@@ -2452,7 +2452,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// invalidates a rectangle within the ToolStripItem's bounds
         /// </devdoc>
         public void Invalidate(Rectangle r) {
@@ -2764,12 +2764,12 @@ namespace System.Windows.Forms {
             RaiseEvent(EventAvailableChanged, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.ToolStripItem.Enter'/> event.</para>
         /// <para>Inheriting classes should override this method to handle this event.
         /// Call base.onEnter to send this event to any registered event listeners.</para>
         /// </devdoc>
-        /// <devdoc>
+        /// <summary>
         /// Inheriting classes should override this method to handle this event.
         /// Call base.onDragEnter to send this event to any registered event listeners.
         /// </devdoc>
@@ -2778,7 +2778,7 @@ namespace System.Windows.Forms {
             RaiseDragEvent(EventDragEnter, dragEvent);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Inheriting classes should override this method to handle this event.
         /// Call base.onDragOver to send this event to any registered event listeners.
         /// </devdoc>
@@ -2786,7 +2786,7 @@ namespace System.Windows.Forms {
         protected virtual void OnDragOver(DragEventArgs dragEvent) {
             RaiseDragEvent(EventDragOver, dragEvent);   
         }
-        /// <devdoc>
+        /// <summary>
         /// Inheriting classes should override this method to handle this event.
         /// Call base.onDragLeave to send this event to any registered event listeners.
         /// </devdoc>
@@ -2795,7 +2795,7 @@ namespace System.Windows.Forms {
             RaiseEvent(EventDragLeave, e);
         }
         
-        /// <devdoc>
+        /// <summary>
         /// Inheriting classes should override this method to handle this event.
         /// Call base.onDragDrop to send this event to any registered event listeners.
         /// </devdoc>
@@ -2804,7 +2804,7 @@ namespace System.Windows.Forms {
             RaiseDragEvent(EventDragDrop, dragEvent);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -2812,7 +2812,7 @@ namespace System.Windows.Forms {
             RaiseEvent(EventDisplayStyleChanged, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Inheriting classes should override this method to handle this event.
         /// Call base.onGiveFeedback to send this event to any registered event listeners.
         /// </devdoc>
@@ -2825,7 +2825,7 @@ namespace System.Windows.Forms {
 
         internal virtual void OnImageScalingSizeChanged(EventArgs e) {            
         }
-        /// <devdoc>
+        /// <summary>
         /// Inheriting classes should override this method to handle this event.
         /// Call base.onQueryContinueDrag to send this event to any registered event listeners.
         /// </devdoc>
@@ -2835,14 +2835,14 @@ namespace System.Windows.Forms {
             RaiseQueryContinueDragEvent(EventQueryContinueDrag, queryContinueDragEvent);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
         protected virtual void OnDoubleClick(System.EventArgs e) {
             RaiseEvent(EventDoubleClick, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
         protected virtual void OnEnabledChanged(System.EventArgs e) {
@@ -2877,17 +2877,17 @@ namespace System.Windows.Forms {
             RaiseEvent(EventLocationChanged, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
         protected virtual void OnMouseEnter(EventArgs e) {      
         }    
-        /// <devdoc>
+        /// <summary>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
         protected virtual void OnMouseMove(System.Windows.Forms.MouseEventArgs mea) {
         }
-        /// <devdoc>
+        /// <summary>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
         protected virtual void OnMouseHover(EventArgs e) {     
@@ -2895,7 +2895,7 @@ namespace System.Windows.Forms {
               ParentInternal.UpdateToolTip(this);
             }
         }
-        /// <devdoc>
+        /// <summary>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
         protected virtual void OnMouseLeave(EventArgs e) {       
@@ -2903,18 +2903,18 @@ namespace System.Windows.Forms {
                 ParentInternal.UpdateToolTip(null);
             }
         }
-        /// <devdoc>
+        /// <summary>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
         protected virtual void OnMouseDown(MouseEventArgs e) {  
         }
-        /// <devdoc>
+        /// <summary>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
         protected virtual void OnMouseUp(MouseEventArgs e) {
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
         protected virtual void OnPaint(System.Windows.Forms.PaintEventArgs e) {
@@ -2927,7 +2927,7 @@ namespace System.Windows.Forms {
                 OnBackColorChanged(e);
             }
         }
-        /// <devdoc>
+        /// <summary>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
         protected virtual void OnParentChanged(ToolStrip oldParent, ToolStrip newParent) {
@@ -2941,14 +2941,14 @@ namespace System.Windows.Forms {
             Animate();
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Occurs when this.Parent.Enabled changes.
         /// </devdoc>
         protected internal virtual void OnParentEnabledChanged(System.EventArgs e) {
             OnEnabledChanged(EventArgs.Empty);
         }                 
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the font property has changed on the parent - used to notify inheritors of the font property that 
         /// the font has changed
         /// </para>
@@ -2976,7 +2976,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Occurs when the owner of an item changes. 
         /// </devdoc>
         protected virtual void OnOwnerChanged(EventArgs e) {
@@ -3007,7 +3007,7 @@ namespace System.Windows.Forms {
             }
         }
             
-        /// <devdoc>
+        /// <summary>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
         protected virtual void OnRightToLeftChanged(EventArgs e) {
@@ -3028,7 +3028,7 @@ namespace System.Windows.Forms {
            RaiseEvent(EventText, e);  
         }
         
-        /// <devdoc>
+        /// <summary>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
         protected virtual void OnVisibleChanged(System.EventArgs e) {
@@ -3045,7 +3045,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Pushes the button.
         /// </devdoc>
         internal void Push(bool push) {
@@ -3060,7 +3060,7 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        /// <devdoc>
+        /// <summary>
         /// See Control.ProcessDialogKey for more info.
         /// </devdoc>
         protected internal virtual bool ProcessDialogKey(Keys keyData) {
@@ -3074,7 +3074,7 @@ namespace System.Windows.Forms {
             }
             return false;
         }
-        /// <devdoc>
+        /// <summary>
         /// See Control.ProcessCmdKey for more info.
         /// </devdoc>
         protected internal virtual bool ProcessCmdKey(ref Message m, Keys keyData) {
@@ -3130,7 +3130,7 @@ namespace System.Windows.Forms {
         }
         
        
-        /// <devdoc>
+        /// <summary>
         /// Selects the item
         /// </devdoc>
         public void Select() {
@@ -3212,7 +3212,7 @@ namespace System.Windows.Forms {
             }
         }
       
-        /// <devdoc>
+        /// <summary>
         /// Sets the bounds of the item
         /// </devdoc>
         internal protected virtual void SetBounds(Rectangle bounds) {
@@ -3233,13 +3233,13 @@ namespace System.Windows.Forms {
             }
         }
           
-        /// <devdoc>
+        /// <summary>
         ///     Sets the bounds of the item
         /// </devdoc>
         internal void SetBounds(int x, int y, int width, int height) {
             SetBounds(new Rectangle(x,y,width,height));
         }
-        /// <devdoc>
+        /// <summary>
         ///     Sets the placement of the item
         /// </devdoc>
         internal void SetPlacement(ToolStripItemPlacement placement) {
@@ -3260,7 +3260,7 @@ namespace System.Windows.Forms {
             return ImageTransparentColor != Color.Empty;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns true if the backColor should be persisted in code gen.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -3276,7 +3276,7 @@ namespace System.Windows.Forms {
         private bool ShouldSerializeToolTipText() {
             return !string.IsNullOrEmpty(toolTipText);
         }
-        /// <devdoc>
+        /// <summary>
         ///     Returns true if the foreColor should be persisted in code gen.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -3285,7 +3285,7 @@ namespace System.Windows.Forms {
             return !foreColor.IsEmpty;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns true if the font should be persisted in code gen.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -3295,49 +3295,49 @@ namespace System.Windows.Forms {
             return (found && font != null);
         }
         
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.ToolStripItem.Padding'/> property needs to be persisted.</para>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
         private bool ShouldSerializePadding() {
             return  (Padding != DefaultPadding);
         }         
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.ToolStripItem.Margin'/> property needs to be persisted.</para>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
         private bool ShouldSerializeMargin() {
             return  (Margin != DefaultMargin);
         }               
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.ToolStripItem.Visible'/> property needs to be persisted.</para>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
         private bool ShouldSerializeVisible() {
             return  !state[stateVisible]; // only serialize if someone turned off visiblilty
         }
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.ToolStripItem.Image'/> property needs to be persisted.</para>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
         private bool ShouldSerializeImage() {
             return  (Image != null) && (ImageIndexer.ActualIndex < 0);
         }    
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.ToolStripItem.Image'/> property needs to be persisted.</para>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
         private bool ShouldSerializeImageKey() {
             return  (Image != null) && (ImageIndexer.ActualIndex >= 0) && (ImageIndexer.Key != null && ImageIndexer.Key.Length != 0);
         }
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.ToolStripItem.Image'/> property needs to be persisted.</para>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
         private bool ShouldSerializeImageIndex() {
             return  (Image != null) &&  (ImageIndexer.ActualIndex >= 0) && (ImageIndexer.Index != -1);
         }
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.ToolStripItem.RightToLeft'/> property needs to be persisted.</para>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -3359,7 +3359,7 @@ namespace System.Windows.Forms {
         }
 
      
-        /// <devdoc>
+        /// <summary>
         /// Resets the back color to be based on the parent's back color.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -3372,7 +3372,7 @@ namespace System.Windows.Forms {
             DisplayStyle = DefaultDisplayStyle;
         }
         
-        /// <devdoc>
+        /// <summary>
         /// Resets the fore color to be based on the parent's fore color.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -3381,7 +3381,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Resets the Font to be based on the parent's Font.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -3389,7 +3389,7 @@ namespace System.Windows.Forms {
             Font = null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Resets the back color to be based on the parent's back color.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -3413,7 +3413,7 @@ namespace System.Windows.Forms {
         public void ResetPadding() {
             CommonProperties.ResetPadding(this);
         }
-        /// <devdoc>
+        /// <summary>
         /// Resets the RightToLeft to be the default.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -3421,7 +3421,7 @@ namespace System.Windows.Forms {
             RightToLeft = RightToLeft.Inherit;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Resets the TextDirection to be the default.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -3429,7 +3429,7 @@ namespace System.Windows.Forms {
              TextDirection = ToolStripTextDirection.Inherit;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Translates a point from one coordinate system to another
         /// </devdoc>
         internal Point TranslatePoint(Point fromPoint, ToolStripPointType fromPointType, ToolStripPointType toPointType) {          
@@ -3504,7 +3504,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// ToString support
         /// </devdoc>
         public override string ToString() {
@@ -3514,7 +3514,7 @@ namespace System.Windows.Forms {
             return base.ToString();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///   removes selection bits from item state
         /// </devdoc>
         internal void Unselect() {
@@ -3632,7 +3632,7 @@ namespace System.Windows.Forms {
             return ToolStrip.AreCommonNavigationalKeysDown();
         }
 
-        /// <devdoc>
+        /// <summary>
         /// An implementation of AccessibleChild for use with ToolStripItems        
         /// </devdoc>
         [System.Runtime.InteropServices.ComVisible(true)]        
@@ -3925,7 +3925,7 @@ namespace System.Windows.Forms {
      
             }
           
-            /// <devdoc>
+            /// <summary>
             /// <para> Gets the bounds of the accessible object, in screen coordinates.</para>
             /// </devdoc>
             public override Rectangle Bounds {
@@ -3939,7 +3939,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             /// <para>When overridden in a derived class, gets or sets the parent of an accessible object.</para>
             /// </devdoc>
             public override AccessibleObject Parent {
@@ -4105,7 +4105,7 @@ namespace System.Windows.Forms {
     
     
      
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       This class helps determine where the image and text should be drawn.
     ///    </para>

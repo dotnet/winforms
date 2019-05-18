@@ -418,7 +418,7 @@ namespace System.Windows.Forms {
 
 
        
-      /// <devdoc>
+      /// <summary>
       /// Override this function if you want to do custom table layouts for the 
       /// StatusStrip.  The default layoutstyle is tablelayout, and we need to play
       /// with the row/column styles 

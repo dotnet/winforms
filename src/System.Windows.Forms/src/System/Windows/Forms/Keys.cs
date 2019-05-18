@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies key codes and modifiers.
     /// </devdoc>
     [Flags]
@@ -19,64 +19,64 @@ namespace System.Windows.Forms
     [SuppressMessage("Microsoft.Usage", "CA2217:DoNotMarkEnumsWithFlags", Justification = "Certain members of Keys enum are actually meant to be OR'ed.")]
     public enum Keys
     {
-        /// <devdoc>
+        /// <summary>
         /// The bit mask to extract a key code from a key value.
         /// </devdoc>
         KeyCode = 0x0000FFFF,
 
-        /// <devdoc>
+        /// <summary>
         /// The bit mask to extract modifiers from a key value.
         /// </devdoc>
         Modifiers = unchecked((int)0xFFFF0000),
 
-        /// <devdoc>
+        /// <summary>
         /// No key pressed.
         /// </devdoc>
         None = 0x00,
 
-        /// <devdoc>
+        /// <summary>
         /// The left mouse button.
         /// </devdoc>
         LButton = 0x01,
 
-        /// <devdoc>
+        /// <summary>
         /// The right mouse button.
         /// </devdoc>
         RButton = 0x02,
 
-        /// <devdoc>
+        /// <summary>
         /// The CANCEL key.
         /// </devdoc>
         Cancel = 0x03,
 
-        /// <devdoc>
+        /// <summary>
         /// The middle mouse button (three-button mouse).
         /// </devdoc>
         MButton = 0x04,
 
-        /// <devdoc>
+        /// <summary>
         /// The first x mouse button (five-button mouse).
         /// </devdoc>
         XButton1 = 0x05,
 
-        /// <devdoc>
+        /// <summary>
         /// The second x mouse button (five-button mouse).
         /// </devdoc>
         XButton2 = 0x06,
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         /// The BACKSPACE key.
         ///    </para>
         /// </devdoc>
         Back = 0x08,
 
-        /// <devdoc>
+        /// <summary>
         /// The TAB key.
         /// </devdoc>
         Tab = 0x09,
 
-        /// <devdoc>
+        /// <summary>
         /// The CLEAR key.
         /// </devdoc>
         LineFeed = 0x0A,
@@ -85,911 +85,911 @@ namespace System.Windows.Forms
         /// </devdoc>
         Clear = 0x0C,
 
-        /// <devdoc>
+        /// <summary>
         /// The RETURN key.
         /// </devdoc>
         Return = 0x0D,
 
-        /// <devdoc>
+        /// <summary>
         /// The ENTER key.
         /// </devdoc>
         Enter = Return,
 
-        /// <devdoc>
+        /// <summary>
         /// The SHIFT key.
         /// </devdoc>
         ShiftKey = 0x10,
 
-        /// <devdoc>
+        /// <summary>
         /// The CTRL key.
         /// </devdoc>
         ControlKey = 0x11,
 
-        /// <devdoc>
+        /// <summary>
         /// The ALT key.
         /// </devdoc>
         Menu = 0x12,
 
-        /// <devdoc>
+        /// <summary>
         /// The PAUSE key.
         /// </devdoc>
         Pause = 0x13,
 
-        /// <devdoc>
+        /// <summary>
         /// The CAPS LOCK key.
         /// </devdoc>
         Capital = 0x14,
 
-        /// <devdoc>
+        /// <summary>
         /// The CAPS LOCK key.
         /// </devdoc>
         CapsLock = 0x14,
 
-        /// <devdoc>
+        /// <summary>
         /// The IME Kana mode key.
         /// </devdoc>
         KanaMode = 0x15,
 
-        /// <devdoc>
+        /// <summary>
         /// The IME Hanguel mode key.
         /// </devdoc>
         HanguelMode = 0x15,
 
-        /// <devdoc>
+        /// <summary>
         /// The IME Hangul mode key.
         /// </devdoc>
         HangulMode = 0x15,
 
-        /// <devdoc>
+        /// <summary>
         /// The IME Junja mode key.
         /// </devdoc>
         JunjaMode = 0x17,
 
-        /// <devdoc>
+        /// <summary>
         /// The IME Final mode key.
         /// </devdoc>
         FinalMode = 0x18,
 
-        /// <devdoc>
+        /// <summary>
         /// The IME Hanja mode key.
         /// </devdoc>
         HanjaMode = 0x19,
 
-        /// <devdoc>
+        /// <summary>
         /// The IME Kanji mode key.
         /// </devdoc>
         KanjiMode = 0x19,
 
-        /// <devdoc>
+        /// <summary>
         /// The ESC key.
         /// </devdoc>
         Escape = 0x1B,
 
-        /// <devdoc>
+        /// <summary>
         /// The IME Convert key.
         /// </devdoc>
         IMEConvert = 0x1C,
 
-        /// <devdoc>
+        /// <summary>
         /// The IME NonConvert key.
         /// </devdoc>
         IMENonconvert = 0x1D,
 	   
-        /// <devdoc>
+        /// <summary>
         /// The IME Accept key.
         /// </devdoc>
         IMEAccept = 0x1E,
 	    
-        /// <devdoc>
+        /// <summary>
         /// The IME Accept key.
         /// </devdoc>
         IMEAceept = IMEAccept,
         
-        /// <devdoc>
+        /// <summary>
         /// The IME Mode change request.
         /// </devdoc>
         IMEModeChange = 0x1F,
         
-        /// <devdoc>
+        /// <summary>
         /// The SPACEBAR key.
         /// </devdoc>
         Space = 0x20,
         
-        /// <devdoc>
+        /// <summary>
         /// The PAGE UP key.
         /// </devdoc>
         Prior = 0x21,
         
-        /// <devdoc>
+        /// <summary>
         /// The PAGE UP key.
         /// </devdoc>
         PageUp = Prior,
         
-        /// <devdoc>
+        /// <summary>
         /// The PAGE DOWN key.
         /// </devdoc>
         Next = 0x22,
         
-        /// <devdoc>
+        /// <summary>
         /// The PAGE DOWN key.
         /// </devdoc>
         PageDown = Next,
         
-        /// <devdoc>
+        /// <summary>
         /// The END key.
         /// </devdoc>
         End = 0x23,
         
-        /// <devdoc>
+        /// <summary>
         /// The HOME key.
         /// </devdoc>
         Home = 0x24,
         
-        /// <devdoc>
+        /// <summary>
         /// The LEFT ARROW key.
         /// </devdoc>
         Left = 0x25,
         
-        /// <devdoc>
+        /// <summary>
         /// The UP ARROW key.
         /// </devdoc>
         Up = 0x26,
         
-        /// <devdoc>
+        /// <summary>
         /// The RIGHT ARROW key.
         /// </devdoc>
         Right = 0x27,
         
-        /// <devdoc>
+        /// <summary>
         /// The DOWN ARROW key.
         /// </devdoc>
         Down = 0x28,
         
-        /// <devdoc>
+        /// <summary>
         /// The SELECT key.
         /// </devdoc>
         Select = 0x29,
         
-        /// <devdoc>
+        /// <summary>
         /// The PRINT key.
         /// </devdoc>
         Print = 0x2A,
         
-        /// <devdoc>
+        /// <summary>
         /// The EXECUTE key.
         /// </devdoc>
         Execute = 0x2B,
         
-        /// <devdoc>
+        /// <summary>
         /// The PRINT SCREEN key.
         /// </devdoc>
         Snapshot = 0x2C,
         
-        /// <devdoc>
+        /// <summary>
         /// The PRINT SCREEN key.
         /// </devdoc>
         PrintScreen = Snapshot,
         
-        /// <devdoc>
+        /// <summary>
         /// The INS key.
         /// </devdoc>
         Insert = 0x2D,
         
-        /// <devdoc>
+        /// <summary>
         /// The DEL key.
         /// </devdoc>
         Delete = 0x2E,
         
-        /// <devdoc>
+        /// <summary>
         /// The HELP key.
         /// </devdoc>
         Help = 0x2F,
         
-        /// <devdoc>
+        /// <summary>
         /// The 0 key.
         /// </devdoc>
         D0 = 0x30, // 0
         
-        /// <devdoc>
+        /// <summary>
         /// The 1 key.
         /// </devdoc>
         D1 = 0x31, // 1
         
-        /// <devdoc>
+        /// <summary>
         /// The 2 key.
         /// </devdoc>
         D2 = 0x32, // 2
         
-        /// <devdoc>
+        /// <summary>
         /// The 3 key.
         /// </devdoc>
         D3 = 0x33, // 3
         
-        /// <devdoc>
+        /// <summary>
         /// The 4 key.
         /// </devdoc>
         D4 = 0x34, // 4
         
-        /// <devdoc>
+        /// <summary>
         /// The 5 key.
         /// </devdoc>
         D5 = 0x35, // 5
         
-        /// <devdoc>
+        /// <summary>
         /// The 6 key.
         /// </devdoc>
         D6 = 0x36, // 6
         
-        /// <devdoc>
+        /// <summary>
         /// The 7 key.
         /// </devdoc>
         D7 = 0x37, // 7
         
-        /// <devdoc>
+        /// <summary>
         /// The 8 key.
         /// </devdoc>
         D8 = 0x38, // 8
         
-        /// <devdoc>
+        /// <summary>
         /// The 9 key.
         /// </devdoc>
         D9 = 0x39, // 9
         
-        /// <devdoc>
+        /// <summary>
         /// The A key.
         /// </devdoc>
         A = 0x41,
         
-        /// <devdoc>
+        /// <summary>
         /// The B key.
         /// </devdoc>
         B = 0x42,
         
-        /// <devdoc>
+        /// <summary>
         /// The C key.
         /// </devdoc>
         C = 0x43,
         
-        /// <devdoc>
+        /// <summary>
         /// The D key.
         /// </devdoc>
         D = 0x44,
         
-        /// <devdoc>
+        /// <summary>
         /// The E key.
         /// </devdoc>
         E = 0x45,
         
-        /// <devdoc>
+        /// <summary>
         /// The F key.
         /// </devdoc>
         F = 0x46,
         
-        /// <devdoc>
+        /// <summary>
         /// The G key.
         /// </devdoc>
         G = 0x47,
         
-        /// <devdoc>
+        /// <summary>
         /// The H key.
         /// </devdoc>
         H = 0x48,
         
-        /// <devdoc>
+        /// <summary>
         /// The I key.
         /// </devdoc>
         I = 0x49,
         
-        /// <devdoc>
+        /// <summary>
         /// The J key.
         /// </devdoc>
         J = 0x4A,
         
-        /// <devdoc>
+        /// <summary>
         /// The K key.
         /// </devdoc>
         K = 0x4B,
         
-        /// <devdoc>
+        /// <summary>
         /// The L key.
         /// </devdoc>
         L = 0x4C,
         
-        /// <devdoc>
+        /// <summary>
         /// The M key.
         /// </devdoc>
         M = 0x4D,
         
-        /// <devdoc>
+        /// <summary>
         /// The N key.
         /// </devdoc>
         N = 0x4E,
         
-        /// <devdoc>
+        /// <summary>
         /// The O key.
         /// </devdoc>
         O = 0x4F,
         
-        /// <devdoc>
+        /// <summary>
         /// The P key.
         /// </devdoc>
         P = 0x50,
         
-        /// <devdoc>
+        /// <summary>
         /// The Q key.
         /// </devdoc>
         Q = 0x51,
         
-        /// <devdoc>
+        /// <summary>
         /// The R key.
         /// </devdoc>
         R = 0x52,
         
-        /// <devdoc>
+        /// <summary>
         /// The S key.
         /// </devdoc>
         S = 0x53,
         
-        /// <devdoc>
+        /// <summary>
         /// The T key.
         /// </devdoc>
         T = 0x54,
         
-        /// <devdoc>
+        /// <summary>
         /// The U key.
         /// </devdoc>
         U = 0x55,
         
-        /// <devdoc>
+        /// <summary>
         /// The V key.
         /// </devdoc>
         V = 0x56,
         
-        /// <devdoc>
+        /// <summary>
         /// The W key.
         /// </devdoc>
         W = 0x57,
         
-        /// <devdoc>
+        /// <summary>
         /// The X key.
         /// </devdoc>
         X = 0x58,
         
-        /// <devdoc>
+        /// <summary>
         /// The Y key.
         /// </devdoc>
         Y = 0x59,
         
-        /// <devdoc>
+        /// <summary>
         /// The Z key.
         /// </devdoc>
         Z = 0x5A,
         
-        /// <devdoc>
+        /// <summary>
         /// The left Windows logo key (Microsoft Natural Keyboard).
         /// </devdoc>
         LWin = 0x5B,
         
-        /// <devdoc>
+        /// <summary>
         /// The right Windows logo key (Microsoft Natural Keyboard).
         /// </devdoc>
         RWin = 0x5C,
         
-        /// <devdoc>
+        /// <summary>
         /// The Application key (Microsoft Natural Keyboard).
         /// </devdoc>
         
         Apps = 0x5D,
         
-        /// <devdoc>
+        /// <summary>
         /// The Computer Sleep key.
         /// </devdoc>
         Sleep = 0x5F,
         
-        /// <devdoc>
+        /// <summary>
         /// The 0 key on the numeric keypad.
         /// </devdoc>
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")] // PM team has reviewed and decided on naming changes already
         NumPad0 = 0x60,
        
-        /// <devdoc>
+        /// <summary>
         /// The 1 key on the numeric keypad.
         /// </devdoc>
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")] // PM team has reviewed and decided on naming changes already
         NumPad1 = 0x61,
         
-        /// <devdoc>
+        /// <summary>
         /// The 2 key on the numeric keypad.
         /// </devdoc>
         NumPad2 = 0x62,
         
-        /// <devdoc>
+        /// <summary>
         /// The 3 key on the numeric keypad.
         /// </devdoc>
         NumPad3 = 0x63,
         
-        /// <devdoc>
+        /// <summary>
         /// The 4 key on the numeric keypad.
         /// </devdoc>
         NumPad4 = 0x64,
         
-        /// <devdoc>
+        /// <summary>
         /// The 5 key on the numeric keypad.
         /// </devdoc>
         NumPad5 = 0x65,
         
-        /// <devdoc>
+        /// <summary>
         /// The 6 key on the numeric keypad.
         /// </devdoc>
         NumPad6 = 0x66,
         
-        /// <devdoc>
+        /// <summary>
         /// The 7 key on the numeric keypad.
         /// </devdoc>
         NumPad7 = 0x67,
         
-        /// <devdoc>
+        /// <summary>
         /// The 8 key on the numeric keypad.
         /// </devdoc>
         NumPad8 = 0x68,
         
-        /// <devdoc>
+        /// <summary>
         /// The 9 key on the numeric keypad.
         /// </devdoc>
         NumPad9 = 0x69,
         
-        /// <devdoc>
+        /// <summary>
         /// The Multiply key.
         /// </devdoc>
         Multiply = 0x6A,
         
-        /// <devdoc>
+        /// <summary>
         /// The Add key.
         /// </devdoc>
         Add = 0x6B,
         
-        /// <devdoc>
+        /// <summary>
         /// The Separator key.
         /// </devdoc>
         Separator = 0x6C,
         
-        /// <devdoc>
+        /// <summary>
         /// The Subtract key.
         /// </devdoc>
         Subtract = 0x6D,
         
-        /// <devdoc>
+        /// <summary>
         /// The Decimal key.
         /// </devdoc>
         Decimal = 0x6E,
         
-        /// <devdoc>
+        /// <summary>
         /// The Divide key.
         /// </devdoc>
         Divide = 0x6F,
         
-        /// <devdoc>
+        /// <summary>
         /// The F1 key.
         /// </devdoc>
         F1 = 0x70,
         
-        /// <devdoc>
+        /// <summary>
         /// The F2 key.
         /// </devdoc>
         F2 = 0x71,
         
-        /// <devdoc>
+        /// <summary>
         /// The F3 key.
         /// </devdoc>
         F3 = 0x72,
         
-        /// <devdoc>
+        /// <summary>
         /// The F4 key.
         /// </devdoc>
         F4 = 0x73,
         
-        /// <devdoc>
+        /// <summary>
         /// The F5 key.
         /// </devdoc>
         F5 = 0x74,
         
-        /// <devdoc>
+        /// <summary>
         /// The F6 key.
         /// </devdoc>
         F6 = 0x75,
         
-        /// <devdoc>
+        /// <summary>
         /// The F7 key.
         /// </devdoc>
         F7 = 0x76,
         
-        /// <devdoc>
+        /// <summary>
         /// The F8 key.
         /// </devdoc>
         F8 = 0x77,
         
-        /// <devdoc>
+        /// <summary>
         /// The F9 key.
         /// </devdoc>
         F9 = 0x78,
         
-        /// <devdoc>
+        /// <summary>
         /// The F10 key.
         /// </devdoc>
         F10 = 0x79,
         
-        /// <devdoc>
+        /// <summary>
         /// The F11 key.
         /// </devdoc>
         F11 = 0x7A,
         
-        /// <devdoc>
+        /// <summary>
         /// The F12 key.
         /// </devdoc>
         F12 = 0x7B,
         
-        /// <devdoc>
+        /// <summary>
         /// The F13 key.
         /// </devdoc>
         F13 = 0x7C,
         
-        /// <devdoc>
+        /// <summary>
         /// The F14 key.
         /// </devdoc>
         F14 = 0x7D,
         
-        /// <devdoc>
+        /// <summary>
         /// The F15 key.
         /// </devdoc>
         F15 = 0x7E,
         
-        /// <devdoc>
+        /// <summary>
         /// The F16 key.
         /// </devdoc>
         F16 = 0x7F,
         
-        /// <devdoc>
+        /// <summary>
         /// The F17 key.
         /// </devdoc>
         F17 = 0x80,
         
-        /// <devdoc>
+        /// <summary>
         /// The F18 key.
         /// </devdoc>
         F18 = 0x81,
         
-        /// <devdoc>
+        /// <summary>
         /// The F19 key.
         /// </devdoc>
         F19 = 0x82,
         
-        /// <devdoc>
+        /// <summary>
         /// The F20 key.
         /// </devdoc>
         F20 = 0x83,
         
-        /// <devdoc>
+        /// <summary>
         /// The F21 key.
         /// </devdoc>
         F21 = 0x84,
         
-        /// <devdoc>
+        /// <summary>
         /// The F22 key.
         /// </devdoc>
         F22 = 0x85,
         
-        /// <devdoc>
+        /// <summary>
         /// The F23 key.
         /// </devdoc>
         F23 = 0x86,
         
-        /// <devdoc>
+        /// <summary>
         /// The F24 key.
         /// </devdoc>
         F24 = 0x87,
         
-        /// <devdoc>
+        /// <summary>
         /// The NUM LOCK key.
         /// </devdoc>
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")] // PM team has reviewed and decided on naming changes already
         NumLock = 0x90,
         
-        /// <devdoc>
+        /// <summary>
         /// The SCROLL LOCK key.
         /// </devdoc>
         Scroll = 0x91,
         
-        /// <devdoc>
+        /// <summary>
         /// The left SHIFT key.
         /// </devdoc>
         LShiftKey = 0xA0,
         
-        /// <devdoc>
+        /// <summary>
         /// The right SHIFT key.
         /// </devdoc>
         RShiftKey = 0xA1,
         
-        /// <devdoc>
+        /// <summary>
         /// The left CTRL key.
         /// </devdoc>
         LControlKey = 0xA2,
         
-        /// <devdoc>
+        /// <summary>
         /// The right CTRL key.
         /// </devdoc>
         RControlKey = 0xA3,
         
-        /// <devdoc>
+        /// <summary>
         /// The left ALT key.
         /// </devdoc>
         LMenu = 0xA4,
         
-        /// <devdoc>
+        /// <summary>
         /// The right ALT key.
         /// </devdoc>
         RMenu = 0xA5,
         
-        /// <devdoc>
+        /// <summary>
         /// The Browser Back key.
         /// </devdoc>
         BrowserBack = 0xA6,
         
-        /// <devdoc>
+        /// <summary>
         /// The Browser Forward key.
         /// </devdoc>
         BrowserForward= 0xA7,
         
-        /// <devdoc>
+        /// <summary>
         /// The Browser Refresh key.
         /// </devdoc>
         BrowserRefresh= 0xA8,
         
-        /// <devdoc>
+        /// <summary>
         /// The Browser Stop key.
         /// </devdoc>
         BrowserStop = 0xA9,
         
-        /// <devdoc>
+        /// <summary>
         /// The Browser Search key.
         /// </devdoc>
         BrowserSearch = 0xAA,
         
-        /// <devdoc>
+        /// <summary>
         /// The Browser Favorites key.
         /// </devdoc>
         BrowserFavorites = 0xAB,
         
-        /// <devdoc>
+        /// <summary>
         /// The Browser Home key.
         /// </devdoc>
         BrowserHome = 0xAC,
         
-        /// <devdoc>
+        /// <summary>
         /// The Volume Mute key.
         /// </devdoc>
         VolumeMute = 0xAD,
         
-        /// <devdoc>
+        /// <summary>
         /// The Volume Down key.
         /// </devdoc>
         VolumeDown = 0xAE,
         
-        /// <devdoc>
+        /// <summary>
         /// The Volume Up key.
         /// </devdoc>
         VolumeUp = 0xAF,
         
-        /// <devdoc>
+        /// <summary>
         /// The Media Next Track key.
         /// </devdoc>
         MediaNextTrack = 0xB0,
         
-        /// <devdoc>
+        /// <summary>
         /// The Media Previous Track key.
         /// </devdoc>
         MediaPreviousTrack = 0xB1,
         
-        /// <devdoc>
+        /// <summary>
         /// The Media Stop key.
         /// </devdoc>
         MediaStop = 0xB2,
         
-        /// <devdoc>
+        /// <summary>
         /// The Media Play Pause key.
         /// </devdoc>
         MediaPlayPause = 0xB3,
         
-        /// <devdoc>
+        /// <summary>
         /// The Launch Mail key.
         /// </devdoc>
         LaunchMail = 0xB4,
         
-        /// <devdoc>
+        /// <summary>
         /// The Select Media key.
         /// </devdoc>
         SelectMedia = 0xB5,
         
-        /// <devdoc>
+        /// <summary>
         /// The Launch Application1 key.
         /// </devdoc>
         LaunchApplication1 = 0xB6,
         
-        /// <devdoc>
+        /// <summary>
         /// The Launch Application2 key.
         /// </devdoc>
         LaunchApplication2 = 0xB7,
         
-        /// <devdoc>
+        /// <summary>
         /// The Oem Semicolon key.
         /// </devdoc>
         OemSemicolon = 0xBA,
         
-        /// <devdoc>
+        /// <summary>
         /// The Oem 1 key.
         /// </devdoc>
         Oem1 = OemSemicolon,
         
-        /// <devdoc>
+        /// <summary>
         /// The Oem plus key.
         /// </devdoc>
         Oemplus = 0xBB,
         
-        /// <devdoc>
+        /// <summary>
         /// The Oem comma key.
         /// </devdoc>
         Oemcomma = 0xBC,
         
-        /// <devdoc>
+        /// <summary>
         /// The Oem Minus key.
         /// </devdoc>
         OemMinus = 0xBD,
         
-        /// <devdoc>
+        /// <summary>
         /// The Oem Period key.
         /// </devdoc>
         OemPeriod = 0xBE,
         
-        /// <devdoc>
+        /// <summary>
         /// The Oem Question key.
         /// </devdoc>
         OemQuestion = 0xBF,
         
-        /// <devdoc>
+        /// <summary>
         /// The Oem 2 key.
         /// </devdoc>
         Oem2 = OemQuestion,
         
-        /// <devdoc>
+        /// <summary>
         /// The Oem tilde key.
         /// </devdoc>
         Oemtilde = 0xC0,
         
-        /// <devdoc>
+        /// <summary>
         /// The Oem 3 key.
         /// </devdoc>
         Oem3 = Oemtilde,
         
-        /// <devdoc>
+        /// <summary>
         /// The Oem Open Brackets key.
         /// </devdoc>
         OemOpenBrackets = 0xDB,
         
-        /// <devdoc>
+        /// <summary>
         /// The Oem 4 key.
         /// </devdoc>
         Oem4 = OemOpenBrackets,
         
-        /// <devdoc>
+        /// <summary>
         /// The Oem Pipe key.
         /// </devdoc>
         OemPipe = 0xDC,
         
-        /// <devdoc>
+        /// <summary>
         /// The Oem 5 key.
         /// </devdoc>
         Oem5 = OemPipe,
         
-        /// <devdoc>
+        /// <summary>
         /// The Oem Close Brackets key.
         /// </devdoc>
         OemCloseBrackets = 0xDD,
         
-        /// <devdoc>
+        /// <summary>
         /// The Oem 6 key.
         /// </devdoc>
         Oem6 = OemCloseBrackets,
         
-        /// <devdoc>
+        /// <summary>
         /// The Oem Quotes key.
         /// </devdoc>
         OemQuotes = 0xDE,
         
-        /// <devdoc>
+        /// <summary>
         /// The Oem 7 key.
         /// </devdoc>
         Oem7 = OemQuotes,
         
-        /// <devdoc>
+        /// <summary>
         /// The Oem8 key.
         /// </devdoc>
         Oem8 = 0xDF,
         
-        /// <devdoc>
+        /// <summary>
         /// The Oem Backslash key.
         /// </devdoc>
         OemBackslash = 0xE2,
         
-        /// <devdoc>
+        /// <summary>
         /// The Oem 102 key.
         /// </devdoc>
         Oem102 = OemBackslash,
         
-        /// <devdoc>
+        /// <summary>
         /// The PROCESS KEY key.
         /// </devdoc>
         ProcessKey = 0xE5,
         
-        /// <devdoc>
+        /// <summary>
         /// The Packet KEY key.
         /// </devdoc>
         Packet = 0xE7,
         
-        /// <devdoc>
+        /// <summary>
         /// The ATTN key.
         /// </devdoc>
         Attn = 0xF6,
         
-        /// <devdoc>
+        /// <summary>
         /// The CRSEL key.
         /// </devdoc>
         Crsel = 0xF7,
         
-        /// <devdoc>
+        /// <summary>
         /// The EXSEL key.
         /// </devdoc>
         Exsel = 0xF8,
         
-        /// <devdoc>
+        /// <summary>
         /// The ERASE EOF key.
         /// </devdoc>
         EraseEof = 0xF9,
         
-        /// <devdoc>
+        /// <summary>
         /// The PLAY key.
         /// </devdoc>
         Play = 0xFA,
         
-        /// <devdoc>
+        /// <summary>
         /// The ZOOM key.
         /// </devdoc>
         Zoom = 0xFB,
         
-        /// <devdoc>
+        /// <summary>
         /// A constant reserved for future use.
         /// </devdoc>
         NoName = 0xFC,
         
-        /// <devdoc>
+        /// <summary>
         /// The PA1 key.
         /// </devdoc>
         Pa1 = 0xFD,
         
-        /// <devdoc>
+        /// <summary>
         /// The CLEAR key.
         /// </devdoc>
         OemClear = 0xFE,
         
-        /// <devdoc>
+        /// <summary>
         /// The SHIFT modifier key.
         /// </devdoc>
         Shift = 0x00010000,
         
-        /// <devdoc>
+        /// <summary>
         /// The  CTRL modifier key.
         /// </devdoc>
         Control = 0x00020000,
         
-        /// <devdoc>
+        /// <summary>
         /// The ALT modifier key.
         /// </devdoc>
         Alt = 0x00040000,

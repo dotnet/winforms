@@ -6,25 +6,25 @@ namespace System.Windows.Forms
 {
     public enum ToolBarButtonStyle
     {
-        /// <devdoc>
+        /// <summary>
         /// A standard, three-dimensional button.
         /// </devdoc>
         PushButton = 1,
 
-        /// <devdoc>
+        /// <summary>
         /// A toggle button that appears sunken when clicked and retains the
         /// sunken appearance until clicked again.
         /// </devdoc>
         ToggleButton = 2,
 
-        /// <devdoc>
+        /// <summary>
         /// A space or line between toolbar buttons. The appearance depends on
         /// the value of the <see cref='System.Windows.Forms.ToolBar.Appearance'/>
         /// property.
         /// </devdoc>
         Separator = 3,
 
-        /// <devdoc>
+        /// <summary>
         /// A drop down control that displays a menu or other window when
         /// clicked.
         /// </devdoc>

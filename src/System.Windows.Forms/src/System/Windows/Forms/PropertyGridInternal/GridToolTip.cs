@@ -86,7 +86,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     The createParams to create the window.
         /// </devdoc>
         protected override  CreateParams CreateParams {

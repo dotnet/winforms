@@ -11,7 +11,7 @@ namespace System.Windows.Forms
     using System.IO;
 
 
-    /// <devdoc>
+    /// <summary>
     /// </devdoc>
     internal class DataStreamFromComStream : Stream
     {

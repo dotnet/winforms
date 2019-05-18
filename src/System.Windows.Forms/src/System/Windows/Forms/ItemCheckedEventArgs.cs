@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.CheckedListBox.ItemCheck'/> event.
     /// </devdoc>
     public class ItemCheckedEventArgs : EventArgs
@@ -14,7 +14,7 @@ namespace System.Windows.Forms
             Item = item;
         }
         
-        /// <devdoc>
+        /// <summary>
         /// The index of the item that is about to change.
         /// </devdoc>
         public ListViewItem Item { get; }

@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies if a TableLayoutPanel will gain additional rows or columns once
     /// its existing cells become full.  If the value is 'None' then the
     /// TableLayoutPanel will throw an exception when the TableLayoutPanel is
@@ -12,18 +12,18 @@ namespace System.Windows.Forms
     /// </devdoc>
     public enum TableLayoutPanelGrowStyle
     {
-        /// <devdoc>
+        /// <summary>
         /// The TableLayoutPanel will not allow additional rows or columns once
         /// it is full.
         /// </devdoc>
         FixedSize = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// The TableLayoutPanel will gain additional rows once it becomes full.
         /// </devdoc>
         AddRows = 1,
 
-        /// <devdoc>
+        /// <summary>
         /// The TableLayoutPanel will gain additional columns once it becomes full.
         /// </devdoc>
         AddColumns = 2

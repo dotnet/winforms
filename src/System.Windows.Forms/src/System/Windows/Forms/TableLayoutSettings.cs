@@ -17,7 +17,7 @@ namespace System.Windows.Forms {
     using System.Reflection;
     using System.Runtime.Serialization;
     
-    /// <devdoc>this is a wrapper class to expose interesting properties of TableLayout</devdoc>
+    /// <summary>this is a wrapper class to expose interesting properties of TableLayout</devdoc>
     [
      TypeConverter(typeof(TableLayoutSettingsTypeConverter)),
      Serializable
@@ -66,7 +66,7 @@ namespace System.Windows.Forms {
         }
         
 
-        /// <devdoc> internal as this is a TableLayoutPanel feature only </devdoc>
+        /// <summary> internal as this is a TableLayoutPanel feature only </devdoc>
         [DefaultValue(TableLayoutPanelCellBorderStyle.None), SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.TableLayoutPanelCellBorderStyleDescr))]
         internal TableLayoutPanelCellBorderStyle CellBorderStyle {
             get { return _borderStyle; }
@@ -89,7 +89,7 @@ namespace System.Windows.Forms {
             get { return TableLayout.GetContainerInfo(Owner).CellBorderWidth; }
         }
         
-        /// <devdoc>
+        /// <summary>
         /// This sets the maximum number of columns allowed on this table instead of allocating
         /// actual spaces for these columns. So it is OK to set ColumnCount to Int32.MaxValue without
         /// causing out of memory exception
@@ -116,7 +116,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This sets the maximum number of rows allowed on this table instead of allocating
         /// actual spaces for these rows. So it is OK to set RowCount to Int32.MaxValue without
         /// causing out of memory exception
@@ -173,7 +173,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///       Specifies if a TableLayoutPanel will gain additional rows or columns once its existing cells
         ///       become full.  If the value is 'FixedSize' then the TableLayoutPanel will throw an exception
         ///       when the TableLayoutPanel is over-filled.
@@ -318,7 +318,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Get the row position of the element
         /// </devdoc>
         [SRDescription(nameof(SR.GridPanelRowDescr))]
@@ -343,7 +343,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Set the row position of the element
         /// If we set the row position to -1, it will automatically switch the control from 
         /// absolutely positioned to non-absolutely positioned
@@ -362,7 +362,7 @@ namespace System.Windows.Forms {
             SetCellPosition(control, row, -1, rowSpecified: true, colSpecified: false);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Get the column position of the element
         /// </devdoc>
         [SRDescription(nameof(SR.TableLayoutSettingsGetCellPositionDescr))]
@@ -378,7 +378,7 @@ namespace System.Windows.Forms {
             return new TableLayoutPanelCellPosition(GetColumn(control), GetRow(control));
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Set the column position of the element
         /// </devdoc>
         [SRDescription(nameof(SR.TableLayoutSettingsSetCellPositionDescr))]
@@ -394,7 +394,7 @@ namespace System.Windows.Forms {
             SetCellPosition(control, cellPosition.Row, cellPosition.Column, rowSpecified: true, colSpecified: true);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Get the column position of the element
         /// </devdoc>
         [SRDescription(nameof(SR.GridPanelColumnDescr))]
@@ -419,7 +419,7 @@ namespace System.Windows.Forms {
            }
         }
         
-        /// <devdoc>
+        /// <summary>
         /// Set the column position of the element
         /// If we set the column position to -1, it will automatically switch the control from 
         /// absolutely positioned to non-absolutely positioned
@@ -480,7 +480,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        ///<devdoc>
+        ///<summary>
         /// Get the element which covers the specified row and column. return null if we can't find one
         ///</devdoc>
         internal IArrangedElement GetControlFromPosition (int column, int row)
@@ -552,7 +552,7 @@ namespace System.Windows.Forms {
             }
         }
     
-        /// <devdoc> TableLayoutSettingsStub 
+        /// <summary> TableLayoutSettingsStub 
         ///               contains information about 
         /// </devdoc>
         private class TableLayoutSettingsStub {
@@ -566,7 +566,7 @@ namespace System.Windows.Forms {
             public TableLayoutSettingsStub() {
             }
 
-            /// <devdoc> ApplySettings - applies settings from the stub into a full-fledged
+            /// <summary> ApplySettings - applies settings from the stub into a full-fledged
             ///          TableLayoutSettings.
             ///
             ///          NOTE: this is a one-time only operation - there is data loss to the stub

@@ -12,7 +12,7 @@ namespace System.Windows.Forms {
     using System.Reflection;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <devdoc>
+    /// <summary>
     /// </devdoc>
     public static class ListBindingHelper {
 
@@ -481,7 +481,7 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// 
         /// Returns info about the 'indexer' property on the specified type. The presence of an indexer is used to
         /// determine that the type represents a collection or list. The return type of that indexer is used to

@@ -12,12 +12,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.Collections;
     using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     /// This class maps an OLE_COLOR to a managed Color editor.
     /// </devdoc>
     internal class Com2ColorConverter : Com2DataTypeToManagedDataTypeConverter{
 
-         /// <devdoc>
+         /// <summary>
          ///     Returns the managed type that this editor maps the property type to.
          /// </devdoc>
          public override Type ManagedType{
@@ -26,7 +26,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
          }
 
-         /// <devdoc>
+         /// <summary>
          ///     Converts the native value into a managed value
          /// </devdoc>
          public override object ConvertNativeToManaged(object nativeValue, Com2PropertyDescriptor pd){
@@ -47,7 +47,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                return ColorTranslator.FromOle(intVal);
          }
 
-         /// <devdoc>
+         /// <summary>
          ///     Converts the managed value into a native value
          /// </devdoc>
          public override object ConvertManagedToNative(object managedValue, Com2PropertyDescriptor pd, ref bool cancelSet){

@@ -15,7 +15,7 @@ namespace System.Windows.Forms.VisualStyles {
     using System.Diagnostics.CodeAnalysis;
     
 
-    /// <devdoc>
+    /// <summary>
     ///    <para> 
     ///         Provides information about the current visual style. 
     ///         NOTE: 
@@ -31,7 +31,7 @@ namespace System.Windows.Forms.VisualStyles {
         [ThreadStatic]
         private static VisualStyleRenderer visualStyleRenderer = null;
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Used to find whether visual styles are supported by the current OS. Same as 
         ///       using the OSFeature class to see if themes are supported.
@@ -43,7 +43,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> 
         ///     Returns true if a visual style has currently been applied by the user, else false.
         ///    </para>
@@ -70,7 +70,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    The current visual style's color scheme name.
         /// </devdoc>
         public static string ColorScheme {
@@ -85,7 +85,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    The current visual style's size name.
         /// </devdoc>
         public static string Size {
@@ -100,7 +100,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    The current visual style's display name.
         /// </devdoc>
         public static string DisplayName {
@@ -115,7 +115,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    The current visual style's company.
         /// </devdoc>
         public static string Company {
@@ -130,7 +130,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    The name of the current visual style's author.
         /// </devdoc>
         public static string Author {
@@ -145,7 +145,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    The current visual style's copyright information.
         /// </devdoc>
         public static string Copyright {
@@ -160,7 +160,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    The current visual style's url.
         /// </devdoc>
         [SuppressMessage("Microsoft.Design", "CA1056:UriPropertiesShouldNotBeStrings")]
@@ -177,7 +177,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    The current visual style's version.
         /// </devdoc>
         public static string Version {
@@ -192,7 +192,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    The current visual style's description.
         /// </devdoc>
         public static string Description {
@@ -207,7 +207,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Returns true if the current theme supports flat menus, else false.
         /// </devdoc>
         public static bool SupportsFlatMenus {
@@ -227,7 +227,7 @@ namespace System.Windows.Forms.VisualStyles {
             }            
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    The minimum color depth supported by the current visual style.
         /// </devdoc>
         public static int MinimumColorDepth {
@@ -250,7 +250,7 @@ namespace System.Windows.Forms.VisualStyles {
             }            
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Border Color that Windows renders for controls like TextBox and ComboBox.
         /// </devdoc>
         public static Color TextControlBorder {
@@ -271,7 +271,7 @@ namespace System.Windows.Forms.VisualStyles {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    This is the color buttons and tab pages are highlighted with when they are moused over on themed OS.
         /// </devdoc>
         public static Color ControlHighlightHot {

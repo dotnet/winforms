@@ -7,12 +7,12 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides the base functionality for creating collections.
     /// </devdoc>
     public class BaseCollection : MarshalByRefObject, ICollection {
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the total number of elements in a collection.
         /// </devdoc>
         [Browsable(false)]
@@ -21,7 +21,7 @@ namespace System.Windows.Forms
 
         public void CopyTo(Array ar, int index) => List.CopyTo(ar, index);
 
-        /// <devdoc>
+        /// <summary>
         /// Gets an IEnumerator for the collection.
         /// </devdoc>
         public IEnumerator GetEnumerator() => List.GetEnumerator();

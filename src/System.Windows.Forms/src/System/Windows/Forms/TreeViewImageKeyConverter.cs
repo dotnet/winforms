@@ -14,13 +14,13 @@ namespace System.Windows.Forms {
     using System.Reflection;
     using System.Collections.Specialized;
 
-    /// <devdoc>
+    /// <summary>
     /// ImageIndexConverter is a class that can be used to convert
     /// image index values one data type to another.
     /// </devdoc>
     public class TreeViewImageKeyConverter : ImageKeyConverter {
 
-        /// <devdoc>
+        /// <summary>
         /// Converts the given object to another type.  The most common types to convert
         /// are to and from a string object.  The default implementation will make a call
         /// to ToString on the object if the object is valid and if the destination

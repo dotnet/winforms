@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms {
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Specifies which imagelist a property relates to. For example ImageListIndex must relate to a
     ///       specific ImageList property

@@ -17,7 +17,7 @@ namespace System.Windows.Forms {
 
     using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Represents a common dialog box that displays available colors along with
     ///       controls that allow the user to define custom colors.
@@ -31,11 +31,11 @@ namespace System.Windows.Forms {
         private int options;
         private int[] customColors;
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         private Color color;
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.ColorDialog'/>
         ///       class.
@@ -50,7 +50,7 @@ namespace System.Windows.Forms {
             Reset();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the user can use the dialog box
         ///       to define custom colors.
@@ -71,7 +71,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box displays all available colors in
         ///       the set of basic colors.
@@ -92,7 +92,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the color selected by the user.
         ///    </para>
@@ -115,7 +115,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the set of
         ///       custom colors shown in the dialog box.
@@ -135,7 +135,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the controls used to create custom
         ///       colors are visible when the dialog box is opened
@@ -156,7 +156,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Our HINSTANCE from Windows.
         ///    </para>
@@ -165,7 +165,7 @@ namespace System.Windows.Forms {
             get { return UnsafeNativeMethods.GetModuleHandle(null);}
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Returns our CHOOSECOLOR options.
         /// </devdoc>
         protected virtual int Options {
@@ -174,7 +174,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether a Help button appears
         ///       in the color dialog box.
@@ -194,7 +194,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets
         ///       or sets a value indicating
@@ -216,14 +216,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Lets us control the CHOOSECOLOR options.
         /// </devdoc>
         private bool GetOption(int option) {
             return(options & option) != 0;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Resets
         ///       all options to their
@@ -241,7 +241,7 @@ namespace System.Windows.Forms {
 		Color = Color.Black;
 	}
 
-        /// <devdoc>
+        /// <summary>
         /// </devdoc>
         protected override bool RunDialog(IntPtr hwndOwner) {
 
@@ -272,7 +272,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Allows us to manipulate the CHOOSECOLOR options
         /// </devdoc>
         private void SetOption(int option, bool value) {
@@ -284,7 +284,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Indicates whether the <see cref='System.Windows.Forms.ColorDialog.Color'/> property should be
         ///       persisted.
@@ -294,7 +294,7 @@ namespace System.Windows.Forms {
             return !Color.Equals(Color.Black);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Provides a string version of this object.
         ///    </para>
