@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
@@ -434,7 +433,6 @@ namespace System.ComponentModel.Design.Serialization
                                 if (baseType == serializerType && da.SerializerTypeName != null && da.SerializerTypeName.Length > 0)
                                 {
                                     Type type = GetRuntimeType(da.SerializerTypeName);
-                                    Debug.Assert(type != null, "Type " + objectType.FullName + " has a serializer that we couldn't bind to: " + da.SerializerTypeName);
                                     if (type != null)
                                     {
                                         serializer = Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance, null, null, null);
