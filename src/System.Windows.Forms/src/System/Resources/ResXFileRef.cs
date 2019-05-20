@@ -20,12 +20,11 @@ namespace System.Resources {
     using System.Runtime.Serialization;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///     ResX File Reference class. This allows the developer to represent
     ///     a link to an external resource. When the resource manager asks
     ///     for the value of the resource item, the external resource is loaded.
-    /// </devdoc>
+    /// </summary>
     [TypeConverterAttribute(typeof(ResXFileRef.Converter)), Serializable]
     public class ResXFileRef {
         private string fileName;
@@ -33,12 +32,11 @@ namespace System.Resources {
         [OptionalField(VersionAdded = 2)]
         private Encoding textFileEncoding;
 
-        /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.ResXFileRef"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new ResXFileRef that points to the specified file.
         ///     The type refered to by typeName must support a constructor
         ///     that accepts a System.IO.Stream as a parameter.
-        /// </devdoc>
+        /// </summary>
         public ResXFileRef(string fileName, string typeName) {
             this.fileName = fileName ?? throw new ArgumentNullException(nameof(fileName));
             this.typeName = typeName ?? throw new ArgumentNullException(nameof(typeName));
@@ -54,12 +52,11 @@ namespace System.Resources {
         private void OnDeserialized(StreamingContext ctx) {
         }
 
-        /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.ResXFileRef"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new ResXFileRef that points to the specified file.
         ///     The type refered to by typeName must support a constructor
         ///     that accepts a System.IO.Stream as a parameter.
-        /// </devdoc>
+        /// </summary>
         public ResXFileRef(string fileName, string typeName, Encoding textFileEncoding) : this(fileName, typeName)  {
             this.textFileEncoding = textFileEncoding;
         }
@@ -68,34 +65,30 @@ namespace System.Resources {
             return new ResXFileRef(fileName, typeName, textFileEncoding);
         }
 
-        /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.FileName"]/*' />
         public string FileName {
             get {
                 return fileName;
             }
         }
 
-        /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.TextFileEncoding"]/*' />
         public string TypeName {
             get {
                 return typeName;
             }
         }
 
-        /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.TextFileEncoding"]/*' />
         public Encoding TextFileEncoding {
             get {
                 return textFileEncoding;
             }
         }
 
-        /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.PathDifference"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    path1+result = path2
         ///   A string which is the relative path difference between path1 and
         ///  path2 such that if path1 and the calculated difference are used
         ///  as arguments to Combine(), path2 is returned
-        /// </devdoc>
+        /// </summary>
         private static string PathDifference(string path1, string path2, bool compareCase) {
             int i;
             int si = -1;
@@ -136,11 +129,10 @@ namespace System.Resources {
             fileName = PathDifference(basePath, fileName, false);
         }
 
-        /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.ToString"]/*' />
         public override string ToString() {
             string result = string.Empty;
             
-            if(fileName.IndexOf(";") != -1 || fileName.IndexOf("\"") != -1) {
+            if(fileName.IndexOf(';') != -1 || fileName.IndexOf('\"') != -1) {
                 result += ("\""+ fileName + "\";");
             } else {
                 result += (fileName + ";");
@@ -152,9 +144,7 @@ namespace System.Resources {
             return result;
         }
 
-        /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.Converter"]/*' />
         public class Converter : TypeConverter {
-            /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.Converter.CanConvertFrom"]/*' />
             public override bool CanConvertFrom(ITypeDescriptorContext context,
                                                 Type sourceType) {
                 if (sourceType == typeof(string)) {
@@ -163,14 +153,12 @@ namespace System.Resources {
                 return false;
             }
 
-            /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.Converter.CanConvertTo"]/*' />
             public override bool CanConvertTo(ITypeDescriptorContext context, 
                                               Type destinationType)
             {
                 return destinationType == typeof(string);
             }
 
-            /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.Converter.ConvertTo"]/*' />
             public override object ConvertTo(ITypeDescriptorContext context, 
                                              CultureInfo culture,
                                              object value, 
@@ -191,7 +179,7 @@ namespace System.Resources {
                     string fileName;
                     string remainingString;
                     if(stringValue.StartsWith("\"")) {
-                        int lastIndexOfQuote = stringValue.LastIndexOf("\"");
+                        int lastIndexOfQuote = stringValue.LastIndexOf('\"');
                         if (lastIndexOfQuote - 1 < 0)
                             throw new ArgumentException(nameof(stringValue));
                         fileName = stringValue.Substring(1, lastIndexOfQuote - 1); // remove the quotes in" ..... " 
@@ -199,7 +187,7 @@ namespace System.Resources {
                             throw new ArgumentException(nameof(stringValue));
                         remainingString = stringValue.Substring(lastIndexOfQuote + 2);
                     } else {
-                        int nextSemiColumn = stringValue.IndexOf(";");
+                        int nextSemiColumn = stringValue.IndexOf(';');
                         if(nextSemiColumn == -1)
                             throw new ArgumentException(nameof(stringValue));
                         fileName = stringValue.Substring(0, nextSemiColumn);
@@ -219,7 +207,6 @@ namespace System.Resources {
                 return result;  
             }
 
-            /// <include file='doc\ResXFileRef.uex' path='docs/doc[@for="ResXFileRef.Converter.ConvertFrom"]/*' />
             public override object ConvertFrom(ITypeDescriptorContext context, 
                                                CultureInfo culture,
                                                object value) {

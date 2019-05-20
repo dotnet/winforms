@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Windows.Forms.Layout;
     
-    /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer"]/*' />
     public abstract class ToolStripRenderer {
     
         private static readonly object EventRenderSplitButtonBackground             = new object();
@@ -101,9 +100,9 @@ namespace System.Windows.Forms {
         }
 
       
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the list of event handlers that are attached to this component.</para>
-        /// </devdoc>
+        /// </summary>
         private EventHandlerList Events {
             get {
                 if (events == null) {
@@ -131,240 +130,143 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\WinBarRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderArrow"]/*' />
         public event ToolStripArrowRenderEventHandler RenderArrow {
-            add { 
-                AddHandler(EventRenderArrow, value); 
-            }
-            remove {
-                RemoveHandler(EventRenderArrow, value);
-            }
+            add => AddHandler(EventRenderArrow, value); 
+            remove => RemoveHandler(EventRenderArrow, value);
         }
             
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderToolStripBackground"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the display style has changed</para>
-        /// </devdoc>
+        /// </summary>
         public event ToolStripRenderEventHandler RenderToolStripBackground {
-            add { 
-                AddHandler(EventRenderToolStripBackground, value); 
-            }
-            remove {
-                RemoveHandler(EventRenderToolStripBackground, value);
-            }
+            add => AddHandler(EventRenderToolStripBackground, value); 
+            remove => RemoveHandler(EventRenderToolStripBackground, value);
         }
 
         
         public event ToolStripPanelRenderEventHandler RenderToolStripPanelBackground {
-            add { 
-                AddHandler(EventRenderToolStripPanelBackground, value); 
-            }
-            remove {
-                RemoveHandler(EventRenderToolStripPanelBackground, value);
-            }
+            add => AddHandler(EventRenderToolStripPanelBackground, value); 
+            remove => RemoveHandler(EventRenderToolStripPanelBackground, value);
         }
 
         public event ToolStripContentPanelRenderEventHandler RenderToolStripContentPanelBackground {
-             add { 
-                 AddHandler(EventRenderToolStripContentPanelBackground, value); 
-             }
-             remove {
-                 RemoveHandler(EventRenderToolStripContentPanelBackground, value);
-             }
+             add => AddHandler(EventRenderToolStripContentPanelBackground, value); 
+             remove => RemoveHandler(EventRenderToolStripContentPanelBackground, value);
          }
 
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderBorder"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the display style has changed</para>
-        /// </devdoc>
+        /// </summary>
         public event ToolStripRenderEventHandler RenderToolStripBorder {
-            add { 
-                AddHandler(EventRenderBorder, value); 
-            }
-            remove {
-                RemoveHandler(EventRenderBorder, value);
-            }
+            add => AddHandler(EventRenderBorder, value); 
+            remove => RemoveHandler(EventRenderBorder, value);
         }
 
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderButtonBackground"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the display style has changed</para>
-        /// </devdoc>
+        /// </summary>
         public event ToolStripItemRenderEventHandler RenderButtonBackground {
-            add { 
-                AddHandler(EventRenderButtonBackground, value); 
-            }
-            remove {
-                RemoveHandler(EventRenderButtonBackground, value);
-            }
+            add => AddHandler(EventRenderButtonBackground, value); 
+            remove => RemoveHandler(EventRenderButtonBackground, value);
         }    
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderDropDownButtonBackground"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the display style has changed</para>
-        /// </devdoc>
+        /// </summary>
         public event ToolStripItemRenderEventHandler RenderDropDownButtonBackground {
-            add { 
-                AddHandler(EventRenderDropDownButtonBackground, value); 
-            }
-            remove {
-                RemoveHandler(EventRenderDropDownButtonBackground, value);
-            }
+            add => AddHandler(EventRenderDropDownButtonBackground, value); 
+            remove => RemoveHandler(EventRenderDropDownButtonBackground, value);
         }  
 
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderOverflowButtonBackground"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the display style has changed</para>
-        /// </devdoc>
+        /// </summary>
         public event ToolStripItemRenderEventHandler RenderOverflowButtonBackground {
-            add { 
-                AddHandler(EventRenderOverflowButtonBackground, value); 
-            }
-            remove {
-                RemoveHandler(EventRenderOverflowButtonBackground, value);
-            }
+            add => AddHandler(EventRenderOverflowButtonBackground, value); 
+            remove => RemoveHandler(EventRenderOverflowButtonBackground, value);
         }  
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderGrip"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the display style has changed</para>
-        /// </devdoc>
+        /// </summary>
         public event ToolStripGripRenderEventHandler RenderGrip {
-            add { 
-                AddHandler(EventRenderGrip, value); 
-            }
-            remove {
-                RemoveHandler(EventRenderGrip, value);
-            }
+            add => AddHandler(EventRenderGrip, value); 
+            remove => RemoveHandler(EventRenderGrip, value);
         }        
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderItem"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the display style has changed</para>
-        /// </devdoc>
+        /// </summary>
         public event ToolStripItemRenderEventHandler RenderItemBackground {
-            add { 
-                AddHandler(EventRenderItemBackground, value); 
-            }
-            remove {
-                RemoveHandler(EventRenderItemBackground, value);
-            }
+            add => AddHandler(EventRenderItemBackground, value); 
+            remove => RemoveHandler(EventRenderItemBackground, value);
         }               
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderItemImage"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draws the split button
-        /// </devdoc>
+        /// </summary>
         public event ToolStripItemImageRenderEventHandler RenderItemImage {
-            add { 
-                AddHandler(EventRenderItemImage, value); 
-            }
-            remove {
-                RemoveHandler(EventRenderItemImage, value);
-            }
+            add => AddHandler(EventRenderItemImage, value); 
+            remove => RemoveHandler(EventRenderItemImage, value);
         }        
-        /// <include file='doc\WinBarRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderItemCheck"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draws the checkmark
-        /// </devdoc>
+        /// </summary>
         public event ToolStripItemImageRenderEventHandler RenderItemCheck {
-            add { 
-                AddHandler(EventRenderItemCheck, value); 
-            }
-            remove {
-                RemoveHandler(EventRenderItemCheck, value);
-            }
+            add => AddHandler(EventRenderItemCheck, value); 
+            remove => RemoveHandler(EventRenderItemCheck, value);
         }        
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderItemText"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draws the split button
-        /// </devdoc>
+        /// </summary>
         public event ToolStripItemTextRenderEventHandler RenderItemText {
-            add { 
-                AddHandler(EventRenderItemText, value); 
-            }
-            remove {
-                RemoveHandler(EventRenderItemText, value);
-            }
+            add => AddHandler(EventRenderItemText, value); 
+            remove => RemoveHandler(EventRenderItemText, value);
         }    
 
         public event ToolStripRenderEventHandler RenderImageMargin {
-            add { 
-                AddHandler(EventRenderImageMargin, value); 
-            }
-            remove {
-                RemoveHandler(EventRenderImageMargin, value);
-            }
+            add => AddHandler(EventRenderImageMargin, value); 
+            remove => RemoveHandler(EventRenderImageMargin, value);
         }
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderLabelBackground"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the display style has changed</para>
-        /// </devdoc>
+        /// </summary>
         public event ToolStripItemRenderEventHandler RenderLabelBackground {
-            add { 
-                AddHandler(EventRenderLabelBackground, value); 
-            }
-            remove {
-                RemoveHandler(EventRenderLabelBackground, value);
-            }
+            add => AddHandler(EventRenderLabelBackground, value); 
+            remove => RemoveHandler(EventRenderLabelBackground, value);
         }   
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderMenuItemBackground"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the display style has changed</para>
-        /// </devdoc>
+        /// </summary>
         public event ToolStripItemRenderEventHandler RenderMenuItemBackground {
-            add { 
-                AddHandler(EventRenderMenuItemBackground, value); 
-            }
-            remove {
-                RemoveHandler(EventRenderMenuItemBackground, value);
-            }
+            add => AddHandler(EventRenderMenuItemBackground, value); 
+            remove => RemoveHandler(EventRenderMenuItemBackground, value);
         }   
 
-        /// <include file='doc\WinBarRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderStatusStripPanelBackground"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draws the split button
-        /// </devdoc>
+        /// </summary>
         public event ToolStripItemRenderEventHandler RenderToolStripStatusLabelBackground {
-            add { 
-                AddHandler(EventRenderToolStripStatusLabelBackground, value); 
-            }
-            remove {
-                RemoveHandler(EventRenderToolStripStatusLabelBackground, value);
-            }
+            add => AddHandler(EventRenderToolStripStatusLabelBackground, value); 
+            remove => RemoveHandler(EventRenderToolStripStatusLabelBackground, value);
         }
         
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderToolStripBackground"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the display style has changed</para>
-        /// </devdoc>
+        /// </summary>
         public event ToolStripRenderEventHandler RenderStatusStripSizingGrip {
-            add { 
-                AddHandler(EventRenderStatusStripSizingGrip, value); 
-            }
-            remove {
-                RemoveHandler(EventRenderStatusStripSizingGrip, value);
-            }
+            add => AddHandler(EventRenderStatusStripSizingGrip, value); 
+            remove => RemoveHandler(EventRenderStatusStripSizingGrip, value);
         }
             
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderSplitButtonBackground"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draws the split button
-        /// </devdoc>
+        /// </summary>
         public event ToolStripItemRenderEventHandler RenderSplitButtonBackground {
-            add { 
-                AddHandler(EventRenderSplitButtonBackground, value); 
-            }
-            remove {
-                RemoveHandler(EventRenderSplitButtonBackground, value);
-            }
+            add => AddHandler(EventRenderSplitButtonBackground, value); 
+            remove => RemoveHandler(EventRenderSplitButtonBackground, value);
         }        
       
     
-       /// <include file='doc\WinBarRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderSeparator"]/*' />
        public event ToolStripSeparatorRenderEventHandler RenderSeparator {
-           add { 
-               AddHandler(EventRenderSeparator, value); 
-           }
-           remove {
-               RemoveHandler(EventRenderSeparator, value);
-           }
+           add => AddHandler(EventRenderSeparator, value); 
+           remove => RemoveHandler(EventRenderSeparator, value);
        }     
 
 #region EventHandlerSecurity
@@ -383,12 +285,10 @@ namespace System.Windows.Forms {
        }
 #endregion
     
-       /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.CreateDisabledImage"]/*' />
        public static Image CreateDisabledImage(Image normalImage) {
             return CreateDisabledImage(normalImage, null);
        }
 
-        /// <include file='doc\WinBarRenderer.uex' path='docs/doc[@for="ToolStripRenderer.DrawArrow"]/*' />
         public void DrawArrow(ToolStripArrowRenderEventArgs e) {            
             OnRenderArrow(e);
             
@@ -398,10 +298,9 @@ namespace System.Windows.Forms {
             }        
         }
 
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.DrawBackground"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draw the background color
-        /// </devdoc>
+        /// </summary>
         public void DrawToolStripBackground(ToolStripRenderEventArgs e) {            
             OnRenderToolStripBackground(e);
             
@@ -413,10 +312,9 @@ namespace System.Windows.Forms {
 
 
         
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.DrawGrip"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draw the background color
-        /// </devdoc>
+        /// </summary>
         public void DrawGrip(ToolStripGripRenderEventArgs e) {   
             OnRenderGrip(e);
             ToolStripGripRenderEventHandler eh = Events[EventRenderGrip] as ToolStripGripRenderEventHandler;
@@ -426,10 +324,9 @@ namespace System.Windows.Forms {
         }   
 
         
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.DrawItem"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draw the item's background.
-        /// </devdoc>
+        /// </summary>
         public void DrawItemBackground(ToolStripItemRenderEventArgs e)
         {     
             OnRenderItemBackground(e);             
@@ -441,10 +338,9 @@ namespace System.Windows.Forms {
             
         }   
 
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.DrawImageMargin"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draw the background color
-        /// </devdoc>
+        /// </summary>
         public void DrawImageMargin(ToolStripRenderEventArgs e) {            
             OnRenderImageMargin(e);
             
@@ -454,10 +350,9 @@ namespace System.Windows.Forms {
             }        
         }
 
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.DrawLabel"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draw the background color
-        /// </devdoc>
+        /// </summary>
         public void DrawLabelBackground(ToolStripItemRenderEventArgs e)
         {
             OnRenderLabelBackground(e);
@@ -467,10 +362,9 @@ namespace System.Windows.Forms {
             }   
         }
 
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.DrawButton"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draw the item's background.
-        /// </devdoc>
+        /// </summary>
         public void DrawButtonBackground(ToolStripItemRenderEventArgs e)
         {     
             OnRenderButtonBackground(e);             
@@ -481,7 +375,6 @@ namespace System.Windows.Forms {
             }
         }    
 
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.DrawBorder"]/*' />
         public void DrawToolStripBorder(ToolStripRenderEventArgs e)
         {     
            OnRenderToolStripBorder(e);             
@@ -493,10 +386,9 @@ namespace System.Windows.Forms {
         }    
 
 
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.DrawDropDownButton"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draw the item's background.
-        /// </devdoc>
+        /// </summary>
         public void DrawDropDownButtonBackground(ToolStripItemRenderEventArgs e)
         {     
             OnRenderDropDownButtonBackground(e);             
@@ -507,10 +399,9 @@ namespace System.Windows.Forms {
             }
         }    
 
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.DrawOverflowButton"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draw the item's background.
-        /// </devdoc>
+        /// </summary>
         public void DrawOverflowButtonBackground(ToolStripItemRenderEventArgs e)
         {     
             OnRenderOverflowButtonBackground(e);             
@@ -521,10 +412,9 @@ namespace System.Windows.Forms {
             }
         }   
         
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.DrawItemImage"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draw image
-        /// </devdoc>
+        /// </summary>
         public void DrawItemImage(ToolStripItemImageRenderEventArgs e) {
             OnRenderItemImage(e);
             
@@ -534,10 +424,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WinBarRenderer.uex' path='docs/doc[@for="ToolStripRenderer.DrawItemCheck"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draw image
-        /// </devdoc>
+        /// </summary>
         public void DrawItemCheck(ToolStripItemImageRenderEventArgs e) {
               OnRenderItemCheck(e);
               
@@ -547,10 +436,9 @@ namespace System.Windows.Forms {
               }
         }
 
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.DrawItemText"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draw text 
-        /// </devdoc>
+        /// </summary>
         public void DrawItemText(ToolStripItemTextRenderEventArgs e) {
             OnRenderItemText(e);
             
@@ -560,10 +448,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.DrawMenuItem"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draw the item's background.
-        /// </devdoc>
+        /// </summary>
         public void DrawMenuItemBackground(ToolStripItemRenderEventArgs e)
         {     
             OnRenderMenuItemBackground(e);             
@@ -575,10 +462,9 @@ namespace System.Windows.Forms {
         }    
       
       
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.DrawSplitButton"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draw the background color
-        /// </devdoc>
+        /// </summary>
         public void DrawSplitButton(ToolStripItemRenderEventArgs e) {
            
             OnRenderSplitButtonBackground(e);             
@@ -590,10 +476,9 @@ namespace System.Windows.Forms {
                   
         }
 
-        /// <include file='doc\WinBarRenderer.uex' path='docs/doc[@for="ToolStripRenderer.DrawToolStripStatusLabel"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draw the background color
-        /// </devdoc>
+        /// </summary>
         public void DrawToolStripStatusLabelBackground(ToolStripItemRenderEventArgs e) {
            
             OnRenderToolStripStatusLabelBackground(e);             
@@ -615,10 +500,9 @@ namespace System.Windows.Forms {
                 eh(this, e);
             }
         }
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.DrawSeparator"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draw the separator
-        /// </devdoc>
+        /// </summary>
         public void DrawSeparator(ToolStripSeparatorRenderEventArgs e) {
             OnRenderSeparator(e);
             ToolStripSeparatorRenderEventHandler eh = Events[EventRenderSeparator] as ToolStripSeparatorRenderEventHandler;
@@ -649,20 +533,16 @@ namespace System.Windows.Forms {
         }
 
       
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.Initialize"]/*' />
         protected internal virtual void Initialize(ToolStrip toolStrip){
         }
 
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.Initialize"]/*' />
         protected internal virtual void InitializePanel(ToolStripPanel toolStripPanel){
         }
 
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.Initialize"]/*' />
         protected internal virtual void InitializeContentPanel(ToolStripContentPanel contentPanel){
         }
 
 
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.InitializeItem"]/*' />
         protected internal virtual void InitializeItem (ToolStripItem item){
         }
 
@@ -681,7 +561,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\WinBarRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderArrow"]/*' />
         protected virtual void OnRenderArrow(ToolStripArrowRenderEventArgs e){
 
             if (RendererOverride != null) {
@@ -738,10 +617,9 @@ namespace System.Windows.Forms {
             }
         }
          
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderToolStripBackground"]/*' />
-        /// <devdoc>
-        /// Draw the winbar background.  ToolStrip users should override this if they want to draw differently.
-        /// </devdoc>
+        /// <summary>
+        /// Draw the ToolStrip background.  ToolStrip users should override this if they want to draw differently.
+        /// </summary>
         protected virtual void OnRenderToolStripBackground(ToolStripRenderEventArgs e) {         
             if (RendererOverride != null) {
                RendererOverride.OnRenderToolStripBackground(e);
@@ -749,10 +627,9 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderBorder"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draw the border around the ToolStrip.  This should be done as the last step.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnRenderToolStripBorder(ToolStripRenderEventArgs e) {  
             if (RendererOverride != null) {
                 RendererOverride.OnRenderToolStripBorder(e);
@@ -760,10 +637,9 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderGrip"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draw the grip.  ToolStrip users should override this if they want to draw differently.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnRenderGrip(ToolStripGripRenderEventArgs e) {
             if (RendererOverride != null) {
                 RendererOverride.OnRenderGrip(e);
@@ -771,10 +647,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderItem"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draw the items background
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnRenderItemBackground(ToolStripItemRenderEventArgs e) {
             if (RendererOverride != null) {
                 RendererOverride.OnRenderItemBackground(e);
@@ -783,10 +658,9 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderImageMargin"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draw the items background
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnRenderImageMargin(ToolStripRenderEventArgs e) {
             if (RendererOverride != null) {
                 RendererOverride.OnRenderImageMargin(e);
@@ -794,10 +668,9 @@ namespace System.Windows.Forms {
             }
 
         }
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderButtonBackground"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draw the button background
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnRenderButtonBackground(ToolStripItemRenderEventArgs e) {
             if (RendererOverride != null) {
                 RendererOverride.OnRenderButtonBackground(e);
@@ -806,10 +679,9 @@ namespace System.Windows.Forms {
 
         }
    
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderDropDownButtonBackground"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draw the button background
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnRenderDropDownButtonBackground(ToolStripItemRenderEventArgs e) {
             if (RendererOverride != null) {
                 RendererOverride.OnRenderDropDownButtonBackground(e);
@@ -818,21 +690,19 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderOverflowButtonBackground"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draw the button background
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnRenderOverflowButtonBackground(ToolStripItemRenderEventArgs e) {
             if (RendererOverride != null) {
                 RendererOverride.OnRenderOverflowButtonBackground(e);
                 return;
             }
         }
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderItemImage"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draw the item'si mage.  ToolStrip users should override this function to change the 
         /// drawing of all images.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnRenderItemImage(ToolStripItemImageRenderEventArgs e)  {
             if (RendererOverride != null) {
                 RendererOverride.OnRenderItemImage(e);
@@ -866,7 +736,6 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <include file='doc\WinBarRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderItemCheck"]/*' />
         protected virtual void OnRenderItemCheck(ToolStripItemImageRenderEventArgs e)  {
             if (RendererOverride != null) {
                 RendererOverride.OnRenderItemCheck(e);
@@ -887,11 +756,10 @@ namespace System.Windows.Forms {
        }
 
   
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderItemText"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draw the item's text.  ToolStrip users should override this function to change the 
         /// drawing of all text.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnRenderItemText(ToolStripItemTextRenderEventArgs e) {
             if (RendererOverride != null) {
                 RendererOverride.OnRenderItemText(e);
@@ -927,10 +795,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderLabelBackground"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draw the button background
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnRenderLabelBackground(ToolStripItemRenderEventArgs e) {
             if (RendererOverride != null) {
                 RendererOverride.OnRenderLabelBackground(e);
@@ -939,10 +806,9 @@ namespace System.Windows.Forms {
        
 
         }
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderMenuItemBackground"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draw the items background
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e) {
              if (RendererOverride != null) {
                  RendererOverride.OnRenderMenuItemBackground(e);
@@ -950,11 +816,10 @@ namespace System.Windows.Forms {
              }
         }
         
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderSeparator"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draws a toolbar separator. ToolStrip users should override this function to change the 
         /// drawing of all separators.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e) {
             if (RendererOverride != null) {
                 RendererOverride.OnRenderSeparator(e);
@@ -977,7 +842,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WinBarRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderStatusStripPanelBackground"]/*' />
         protected virtual void OnRenderToolStripStatusLabelBackground(ToolStripItemRenderEventArgs e) {
             if (RendererOverride != null) {
                 RendererOverride.OnRenderToolStripStatusLabelBackground(e);
@@ -1028,10 +892,9 @@ namespace System.Windows.Forms {
             }
      
         }
-        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderSplitButtonBackground"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Draw the item's background.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnRenderSplitButtonBackground(ToolStripItemRenderEventArgs e) {
             if (RendererOverride != null) {
                 RendererOverride.OnRenderSplitButtonBackground(e);

@@ -5,7 +5,6 @@
 
 namespace System.Windows.Forms {
     using System.Runtime.Serialization.Formatters;
-    using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
 
     using System.Diagnostics;
@@ -20,11 +19,10 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Internal;
     using Microsoft.Win32;
 
-    /// <include file='doc\Button.uex' path='docs/doc[@for="Button"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para>Represents a
     ///       Windows button.</para>
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true),
      ClassInterface(ClassInterfaceType.AutoDispatch),
      SRDescription(nameof(SR.DescriptionButton)),
@@ -32,29 +30,26 @@ namespace System.Windows.Forms {
     ]
     public class Button : ButtonBase, IButtonControl {
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.dialogResult"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The dialog result that will be sent to the parent dialog form when
         ///     we are clicked.
-        /// </devdoc>
+        /// </summary>
         private DialogResult dialogResult;
 
         private const int InvalidDimensionValue = int.MinValue;
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.dialogResult"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     For buttons whose FaltStyle = FlatStyle.Flat, this property specifies the size, in pixels  
         ///     of the border around the button.
-        /// </devdoc>
+        /// </summary>
         private Size systemSize = new Size(InvalidDimensionValue, InvalidDimensionValue);
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.Button"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.Button'/>
         ///       class.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public Button() : base() {
             // Buttons shouldn't respond to right clicks, so we need to do all our own click logic
             SetStyle(ControlStyles.StandardClick |
@@ -62,9 +57,9 @@ namespace System.Windows.Forms {
                      false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Allows the control to optionally shrink when AutoSize is true.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
         Browsable(true),
@@ -133,9 +128,7 @@ namespace System.Windows.Forms {
             return AutoSizeMode == AutoSizeMode.GrowAndShrink ? paddedSize : LayoutUtils.UnionSizes(paddedSize, Size);
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.CreateParams"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       This is called when creating a window. Inheriting classes can overide
         ///       this to add extra functionality, but should not forget to first call
@@ -143,7 +136,7 @@ namespace System.Windows.Forms {
         ///       correctly.
         ///
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override CreateParams CreateParams {
             get {
                 CreateParams cp = base.CreateParams;
@@ -161,14 +154,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.DialogResult"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value that is returned to the
         ///       parent form when the button
         ///       is clicked.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(DialogResult.None),
@@ -187,70 +179,53 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.OnMouseEnter"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseEnter'/> event.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnMouseEnter(EventArgs e) {
             base.OnMouseEnter(e);
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.OnMouseLeave"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseLeave'/> event.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnMouseLeave(EventArgs e) {
             base.OnMouseLeave(e);
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.DoubleClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler DoubleClick {
-            add {
-                base.DoubleClick += value;
-            }
-            remove {
-                base.DoubleClick -= value;
-            }
+            add => base.DoubleClick += value;
+            remove => base.DoubleClick -= value;
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.MouseDoubleClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseDoubleClick {
-            add {
-                base.MouseDoubleClick += value;
-            }
-            remove {
-                base.MouseDoubleClick -= value;
-            }
+            add => base.MouseDoubleClick += value;
+            remove => base.MouseDoubleClick -= value;
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.NotifyDefault"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Notifies the <see cref='System.Windows.Forms.Button'/>
         ///       whether it is the default button so that it can adjust its appearance
         ///       accordingly.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public virtual void NotifyDefault(bool value) {
             if (IsDefault != value) {
                 IsDefault = value;                
             }
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.OnClick"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       This method actually raises the Click event. Inheriting classes should
         ///       override this if they wish to be notified of a Click event. (This is far
@@ -259,9 +234,9 @@ namespace System.Windows.Forms {
         ///       other recipients do actually get the event.
         ///
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnClick(EventArgs e) {
-            Form form = FindFormInternal();
+            Form form = FindForm();
             if (form != null) form.DialogResult = dialogResult;
 
 
@@ -278,14 +253,12 @@ namespace System.Windows.Forms {
             base.OnFontChanged(e);
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.OnMouseUp"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnMouseUp'/> event.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent) {
             if (mevent.Button == MouseButtons.Left && MouseIsPressed) {
                 bool isMouseDown = base.MouseIsDown;
@@ -329,13 +302,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.PerformClick"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Generates a <see cref='System.Windows.Forms.Control.Click'/> event for a
         ///       button.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void PerformClick() {
             if (CanSelect) {
                 bool validatedControlAllowsFocusChange;
@@ -350,9 +322,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.ProcessMnemonic"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Lets a control process mnmemonic characters. Inheriting classes can
         ///       override this to add extra functionality, but should not forget to call
@@ -360,7 +330,7 @@ namespace System.Windows.Forms {
         ///       remains unchanged.
         ///
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected internal override bool ProcessMnemonic(char charCode) {
             if (UseMnemonic && CanProcessMnemonic() && IsMnemonic(charCode, Text)) {
                 PerformClick();
@@ -369,30 +339,26 @@ namespace System.Windows.Forms {
             return base.ProcessMnemonic(charCode);
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.ToString"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Provides some interesting information for the Button control in
         ///       String form.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override string ToString() {
 
             string s = base.ToString();
             return s + ", Text: " + Text;
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.WndProc"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The button's window procedure.  Inheriting classes can override this
         ///     to add extra functionality, but should not forget to call
         ///     base.wndProc(m); to ensure the button continues to function properly.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_COMMAND:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_COMMAND:
                     if (NativeMethods.Util.HIWORD(m.WParam) == NativeMethods.BN_CLICKED) {
                         Debug.Assert(!GetStyle(ControlStyles.UserPaint), "Shouldn't get BN_CLICKED when UserPaint");
                         if (!ValidationCancelled) {
@@ -400,7 +366,7 @@ namespace System.Windows.Forms {
                         }                        
                     }
                     break;
-                case NativeMethods.WM_ERASEBKGND:
+                case Interop.WindowMessages.WM_ERASEBKGND:
                     DefWndProc(ref m);
                     break;
                 default:

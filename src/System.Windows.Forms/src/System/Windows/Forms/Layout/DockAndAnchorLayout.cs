@@ -528,11 +528,11 @@ namespace System.Windows.Forms.Layout {
             return CommonProperties.GetAutoSize(container);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Updates the Anchor information based on the controls current bounds.
         ///     This should only be called when the parent control changes or the
         ///     anchor mode changes.
-        /// </devdoc>
+        /// </summary>
         private static void UpdateAnchorInfo(IArrangedElement element) {
             Debug.Assert(!HasCachedBounds(element.Container),
                 "Do not call this method with an active cached bounds list.");
@@ -967,7 +967,7 @@ namespace System.Windows.Forms.Layout {
              return info;
          }
          internal static string Debug_GetIndents(int indents) {
-             string str = "";
+             string str = string.Empty;
              for (int i = 0; i < indents; i++) {
                  str += "\t";
              }

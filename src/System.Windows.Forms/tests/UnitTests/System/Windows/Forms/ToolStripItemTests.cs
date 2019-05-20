@@ -75,7 +75,7 @@ namespace System.Windows.Forms.Tests
             EventHandler onClick = (sender, e) => {};
 
             yield return new object[] { null, null, null };
-            yield return new object[] { "", new Bitmap(10, 10), onClick };
+            yield return new object[] { string.Empty, new Bitmap(10, 10), onClick };
             yield return new object[] { "text", new Bitmap(10, 10), onClick };
         }
 
@@ -140,14 +140,14 @@ namespace System.Windows.Forms.Tests
         {
             EventHandler onClick = (sender, e) => {};
 
-            yield return new object[] { null, null, null, null };
-            yield return new object[] { "", new Bitmap(10, 10), onClick, "" };
-            yield return new object[] { "text", new Bitmap(10, 10), onClick, "name" };
+            yield return new object[] { null, null, null, null, string.Empty };
+            yield return new object[] { string.Empty, new Bitmap(10, 10), onClick, string.Empty, string.Empty };
+            yield return new object[] { "text", new Bitmap(10, 10), onClick, "name", "name" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_String_Image_EventHandler_String_TestData))]
-        public void ToolStripItem_Ctor_String_Image_EventHandler_String(string text, Image image, EventHandler onClick, string name)
+        public void ToolStripItem_Ctor_String_Image_EventHandler_String(string text, Image image, EventHandler onClick, string name, string expectedName)
         {
             var item = new SubToolStripItem(text, image, onClick, name);
             Assert.NotNull(item.AccessibilityObject);
@@ -187,7 +187,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Padding(0, 1, 0, 2), item.Margin);
             Assert.Equal(MergeAction.Append, item.MergeAction);
             Assert.Equal(-1, item.MergeIndex);
-            Assert.Equal(name ?? string.Empty, item.Name);
+            Assert.Equal(expectedName, item.Name);
             Assert.Equal(ToolStripItemOverflow.AsNeeded, item.Overflow);
             Assert.Equal(Padding.Empty, item.Padding);
             Assert.Null(item.Parent);
@@ -828,7 +828,7 @@ namespace System.Windows.Forms.Tests
             EventHandler handler = (sender, e) =>
             {
                 Assert.Same(item, sender);
-                Assert.NotEqual(EventArgs.Empty, e);
+                Assert.Same(EventArgs.Empty, e);
                 callCount++;
             };
             item.DisplayStyleChanged += handler;
@@ -2004,37 +2004,37 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ToolStripItem_Tag_Set_GetReturnsExpected(string value)
         {
             var item = new SubToolStripItem
             {
                 Tag = value
             };
-            Assert.Equal(value, item.Tag);
+            Assert.Same(value, item.Tag);
 
             // Set same.
             item.Tag = value;
-            Assert.Equal(value, item.Tag);
+            Assert.Same(value, item.Tag);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ToolStripItem_Text_Set_GetReturnsExpected(string value)
         {
             var item = new SubToolStripItem
             {
                 Text = value
             };
-            Assert.Equal(value ?? string.Empty, item.Text);
+            Assert.Same(value, item.Text);
 
             // Set same.
             item.Text = value;
-            Assert.Equal(value ?? string.Empty, item.Text);
+            Assert.Same(value, item.Text);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ToolStripItem_Text_SetWithOwner_GetReturnsExpected(string value)
         {
             var owner = new ToolStrip();
@@ -2042,11 +2042,11 @@ namespace System.Windows.Forms.Tests
             owner.Items.Add(item);
 
             item.Text = value;
-            Assert.Equal(value ?? string.Empty, item.Text);
+            Assert.Same(value, item.Text);
 
             // Set same.
             item.Text = value;
-            Assert.Equal(value ?? string.Empty, item.Text);
+            Assert.Same(value, item.Text);
         }
 
         [Fact]
@@ -2238,6 +2238,10 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TextImageRelation))]
+        [InlineData((TextImageRelation)3)]
+        [InlineData((TextImageRelation)5)]
+        [InlineData((TextImageRelation)6)]
+        [InlineData((TextImageRelation)7)]
         public void ToolStripItem_TextImageRelation_SetInvalid_ThrowsInvalidEnumArgumentException(TextImageRelation value)
         {
             var item = new SubToolStripItem();
@@ -3938,8 +3942,7 @@ namespace System.Windows.Forms.Tests
             EventHandler handler = (sender, e) =>
             {
                 Assert.Same(item, sender);
-                Assert.NotNull(e);
-                Assert.NotSame(EventArgs.Empty, e);
+                Assert.Same(EventArgs.Empty, e);
                 Assert.True(item.Pressed);
                 callCount++;
             };
@@ -3961,8 +3964,7 @@ namespace System.Windows.Forms.Tests
             EventHandler handler = (sender, e) =>
             {
                 Assert.Same(item, sender);
-                Assert.NotNull(e);
-                Assert.NotSame(EventArgs.Empty, e);
+                Assert.Same(EventArgs.Empty, e);
                 Assert.True(item.Pressed);
                 callCount++;
             };

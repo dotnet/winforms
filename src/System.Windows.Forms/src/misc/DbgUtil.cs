@@ -3,22 +3,17 @@
 // See the LICENSE file in the project root for more information.
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters", Scope="member", Target="System.Windows.Forms.Internal.DbgUtil.AssertFinalization(System.Object,System.Boolean):System.Void")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts", Scope="member", Target="System.Windows.Forms.Internal.DbgUtil.AssertFinalization(System.Object,System.Boolean):System.Void")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts", Scope="member", Target="System.Windows.Forms.Internal.DbgUtil.FormatMessage(System.Int32,System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Text.StringBuilder,System.Int32,System.Runtime.InteropServices.HandleRef):System.Int32")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA902:MovePInvokesToNativeMethodsClass", Scope="member", Target="System.Windows.Forms.Internal.DbgUtil.FormatMessage(System.Int32,System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Text.StringBuilder,System.Int32,System.Runtime.InteropServices.HandleRef):System.Int32")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2101:SpecifyMarshalingForPInvokeStringArguments", Scope="member", Target="System.Windows.Forms.Internal.DbgUtil.FormatMessage(System.Int32,System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Text.StringBuilder,System.Int32,System.Runtime.InteropServices.HandleRef):System.Int32")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts", Scope="member", Target="System.Windows.Forms.Internal.DbgUtil.GetLastErrorStr():System.String")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope="member", Target="System.Windows.Forms.Internal.DbgUtil.GetLastErrorStr():System.String")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts", Scope="member", Target="System.Windows.Forms.Internal.DbgUtil.GetUserDefaultLCID():System.Int32")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA902:MovePInvokesToNativeMethodsClass", Scope="member", Target="System.Windows.Forms.Internal.DbgUtil.GetUserDefaultLCID():System.Int32")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2205:UseManagedEquivalentsOfWin32Api", Scope="member", Target="System.Windows.Forms.Internal.DbgUtil.GetUserDefaultLCID():System.Int32")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts", Scope="member", Target="System.Windows.Forms.Internal.DbgUtil.IsCriticalException(System.Exception):System.Boolean")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope="member", Target="System.Windows.Forms.Internal.DbgUtil.StackFramesToStr(System.Int32):System.String")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1818:DoNotConcatenateStringsInsideLoops", Scope="member", Target="System.Windows.Forms.Internal.DbgUtil.StackFramesToStr(System.Int32):System.String")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Interoperability", "CA1404:CallGetLastErrorImmediatelyAfterPInvoke", Scope="member", Target="System.Windows.Forms.Internal.DbgUtil.GetLastErrorStr():System.String")]
 
 
-#if WINFORMS_NAMESPACE
+#if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
 #elif DRAWING_NAMESPACE
 namespace System.Drawing.Internal
@@ -36,10 +31,9 @@ namespace System.Internal
     using System.Globalization;
 
 
-    /// <include file='doc\DbgUtil.uex' path='docs/doc[@for="DbgUtil"]/*' />
-    /// <devdoc>
+    /// <summary>
     /// Debug help utility.
-    /// </devdoc>
+    /// </summary>
     internal sealed class DbgUtil
     {
         public const int 
@@ -63,9 +57,9 @@ namespace System.Internal
         // Methods
 
 
-        /// <devdoc>
+        /// <summary>
         ///   Call this method from your Dispose(bool) to assert that unmanaged resources has been explicitly disposed.
-        /// </devdoc>
+        /// </summary>
         [Conditional("DEBUG")] // This code will be compiled into the assembly anyways, it is up to the compiler to ignore the call.
         public static void AssertFinalization(object obj, bool disposing)
         {
@@ -103,8 +97,8 @@ namespace System.Internal
 #endif
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [Conditional("DEBUG")]
         public static void AssertWin32(bool expression, string message)
         {
@@ -116,8 +110,8 @@ namespace System.Internal
 #endif
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [Conditional("DEBUG")]
         public static void AssertWin32(bool expression, string format, object arg1)
         {
@@ -130,8 +124,8 @@ namespace System.Internal
 #endif
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [Conditional("DEBUG")]
         public static void AssertWin32(bool expression, string format, object arg1, object arg2)
         {
@@ -144,8 +138,8 @@ namespace System.Internal
 #endif
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [Conditional("DEBUG")]
         public static void AssertWin32(bool expression, string format, object arg1, object arg2, object arg3)
         {
@@ -158,8 +152,8 @@ namespace System.Internal
 #endif
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [Conditional("DEBUG")]
         public static void AssertWin32(bool expression, string format, object arg1, object arg2, object arg3, object arg4)
         {
@@ -172,8 +166,8 @@ namespace System.Internal
 #endif
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [Conditional("DEBUG")]
         public static void AssertWin32(bool expression, string format, object arg1, object arg2, object arg3, object arg4, object arg5)
         {
@@ -186,8 +180,8 @@ namespace System.Internal
 #endif
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [Conditional("DEBUG")] // This code will be compiled into the assembly anyways, it is up to the compiler to ignore the call.
         private static void AssertWin32Impl(bool expression, string format, object[] args)
         {
@@ -247,10 +241,10 @@ namespace System.Internal
             return string.Format( CultureInfo.CurrentCulture, "0x{0:x8} - {1}", err, message);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///   Duplicated here from ClientUtils not to depend on that code because this class is to be
         ///   compiled into System.Drawing and System.Windows.Forms.
-        /// </devdoc>
+        /// </summary>
         private static bool IsCriticalException( Exception ex )
         {
             return		
@@ -260,8 +254,8 @@ namespace System.Internal
                 ex is System.Threading.ThreadAbortException;
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         public static string StackTrace
         {
             get
@@ -270,10 +264,10 @@ namespace System.Internal
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///   Returns information about the top stack frames in a string format.  The input param determines the number of
         ///   frames to include.
-        /// </devdoc>
+        /// </summary>
         public static string StackFramesToStr( int maxFrameCount )
         {
             string trace = string.Empty;
@@ -357,26 +351,26 @@ namespace System.Internal
             return trace.ToString();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///   Returns information about the top stack frames in a string format.
-        /// </devdoc>
+        /// </summary>
         public static string StackFramesToStr()
         {
             return StackFramesToStr( DbgUtil.gdipInitMaxFrameCount );
         }
 
-        /// <devdoc>
+        /// <summary>
         ///   Returns information about the top stack frames in a string format.  The input param determines the number of
         ///   frames to include.  The 'message' parameter is used as the header of the returned string.
-        /// </devdoc>
+        /// </summary>
         public static string StackTraceToStr( string message, int frameCount )
         {
             return string.Format( CultureInfo.CurrentCulture, "{0}\r\nTop Stack Trace:\r\n{1}", message, DbgUtil.StackFramesToStr(frameCount));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///   Returns information about the top stack frames in a string format. The 'message' parameter is used as the header of the returned string.
-        /// </devdoc>
+        /// </summary>
         public static string StackTraceToStr( string message )
         {
             return StackTraceToStr(message, DbgUtil.gdipInitMaxFrameCount );

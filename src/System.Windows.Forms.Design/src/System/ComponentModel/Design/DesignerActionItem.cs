@@ -15,61 +15,25 @@ namespace System.ComponentModel.Design
     /// </summary>
     public abstract class DesignerActionItem
     {
-        private bool _allowAssociate;
-        private readonly string _displayName;
-        private readonly string _description;
-        private readonly string _category;
         private IDictionary _properties;
-        private bool _showInSourceView = true;
 
         public DesignerActionItem(string displayName, string category, string description)
         {
-            _category = category;
-            _description = description;
-            _displayName = displayName == null ? null : Regex.Replace(displayName, @"\(\&.\)", ""); // VSWHIDBEY 485835
+            DisplayName = displayName == null ? null : Regex.Replace(displayName, @"\(\&.\)", "");
+            Category = category;
+            Description = description;
         }
 
-        internal DesignerActionItem()
-        {
-        }
+        public bool AllowAssociate { get; set; }
 
-        public bool AllowAssociate
-        {
-            get => _allowAssociate;
-            set => _allowAssociate = value;
-        }
+        public virtual string Category { get; }
 
-        public virtual string Category
-        {
-            get => _category;
-        }
+        public virtual string Description { get; }
 
-        public virtual string Description
-        {
-            get => _description;
-        }
+        public virtual string DisplayName { get; }
 
-        public virtual string DisplayName
-        {
-            get => _displayName;
-        }
+        public IDictionary Properties => _properties ?? (_properties = new HybridDictionary());
 
-        public IDictionary Properties
-        {
-            get
-            {
-                if (_properties == null)
-                {
-                    _properties = new HybridDictionary();
-                }
-                return _properties;
-            }
-        }
-
-        public bool ShowInSourceView
-        {
-            get => _showInSourceView;
-            set => _showInSourceView = value;
-        }
+        public bool ShowInSourceView { get; set; } = true;
     }
 }

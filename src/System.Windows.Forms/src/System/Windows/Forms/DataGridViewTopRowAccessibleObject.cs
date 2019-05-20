@@ -10,7 +10,6 @@ namespace System.Windows.Forms
 {
     public partial class DataGridView
     {
-        /// <include file='doc\DataGridViewTopRowAccessibleObject.uex' path='docs/doc[@for="DataGridView.DataGridViewTopRowAccessibleObject"]/*' />
         [
             System.Runtime.InteropServices.ComVisible(true)
         ]
@@ -19,18 +18,15 @@ namespace System.Windows.Forms
             private int[] runtimeId;
             DataGridView owner;
 
-            /// <include file='doc\DataGridViewTopRowAccessibleObject.uex' path='docs/doc[@for="DataGridViewTopRowAccessibleObject.DataGridViewTopRowAccessibleObject1"]/*' />
             public DataGridViewTopRowAccessibleObject() : base()
             {
             }
 
-            /// <include file='doc\DataGridViewTopRowAccessibleObject.uex' path='docs/doc[@for="DataGridViewTopRowAccessibleObject.DataGridViewTopRowAccessibleObject2"]/*' />
             public DataGridViewTopRowAccessibleObject(DataGridView owner) : base()
             {
                 this.owner = owner;
             }
 
-            /// <include file='doc\DataGridViewTopRowAccessibleObject.uex' path='docs/doc[@for="DataGridViewTopRowAccessibleObject.Bounds"]/*' />
             public override Rectangle Bounds
             {
                 get
@@ -51,7 +47,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewTopRowAccessibleObject.uex' path='docs/doc[@for="DataGridViewTopRowAccessibleObject.Name"]/*' />
             public override string Name
             {
                 get
@@ -60,7 +55,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewTopRowAccessibleObject.uex' path='docs/doc[@for="DataGridViewTopRowAccessibleObject.Owner"]/*' />
             public DataGridView Owner
             {
                 get
@@ -77,7 +71,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewTopRowAccessibleObject.uex' path='docs/doc[@for="DataGridViewTopRowAccessibleObject.Parent"]/*' />
             public override AccessibleObject Parent
             {
                 get
@@ -90,7 +83,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewTopRowAccessibleObject.uex' path='docs/doc[@for="DataGridViewTopRowAccessibleObject.Role"]/*' />
             public override AccessibleRole Role
             {
                 get
@@ -103,7 +95,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (AccessibilityImprovements.Level3 && runtimeId == null)
+                    if (runtimeId == null)
                     {
                         runtimeId = new int[3];
                         runtimeId[0] = RuntimeIDFirstItem; // first item is static - 0x2a
@@ -115,7 +107,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewTopRowAccessibleObject.uex' path='docs/doc[@for="DataGridViewTopRowAccessibleObject.Value"]/*' />
             public override string Value
             {
                 get
@@ -124,7 +115,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewTopRowAccessibleObject.uex' path='docs/doc[@for="DataGridViewTopRowAccessibleObject.GetChild"]/*' />
             public override AccessibleObject GetChild(int index)
             {
                 if (this.owner == null)
@@ -161,7 +151,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewTopRowAccessibleObject.uex' path='docs/doc[@for="DataGridViewTopRowAccessibleObject.GetChildCount"]/*' />
             public override int GetChildCount()
             {
                 if (this.owner == null)
@@ -178,7 +167,6 @@ namespace System.Windows.Forms
                 return result;
             }
 
-            /// <include file='doc\DataGridViewTopRowAccessibleObject.uex' path='docs/doc[@for="DataGridViewTopRowAccessibleObject.Navigate"]/*' />
             public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
             {
                 if (this.owner == null)
@@ -260,7 +248,7 @@ namespace System.Windows.Forms
 
             internal override bool IsPatternSupported(int patternId)
             {
-                if (AccessibilityImprovements.Level3 && patternId.Equals(NativeMethods.UIA_LegacyIAccessiblePatternId))
+                if (patternId.Equals(NativeMethods.UIA_LegacyIAccessiblePatternId))
                 {
                     return true;
                 }
@@ -270,29 +258,26 @@ namespace System.Windows.Forms
 
             internal override object GetPropertyValue(int propertyId)
             {
-                if (AccessibilityImprovements.Level3)
+                switch (propertyId)
                 {
-                    switch (propertyId)
-                    {
-                        case NativeMethods.UIA_NamePropertyId:
-                            return string.Format(SR.DataGridView_AccTopRow);
-                        case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
-                        case NativeMethods.UIA_HasKeyboardFocusPropertyId:
-                            return false;
-                        case NativeMethods.UIA_IsEnabledPropertyId:
-                            return owner.Enabled;
-                        case NativeMethods.UIA_IsOffscreenPropertyId:
-                            return false;
-                        case NativeMethods.UIA_IsContentElementPropertyId:
-                            return true;
-                        case NativeMethods.UIA_IsPasswordPropertyId:
-                            return false;
-                        case NativeMethods.UIA_AccessKeyPropertyId:
-                        case NativeMethods.UIA_HelpTextPropertyId:
-                            return string.Empty;
-                        case NativeMethods.UIA_IsLegacyIAccessiblePatternAvailablePropertyId:
-                            return true;
-                    }
+                    case NativeMethods.UIA_NamePropertyId:
+                        return string.Format(SR.DataGridView_AccTopRow);
+                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                        return false;
+                    case NativeMethods.UIA_IsEnabledPropertyId:
+                        return owner.Enabled;
+                    case NativeMethods.UIA_IsOffscreenPropertyId:
+                        return false;
+                    case NativeMethods.UIA_IsContentElementPropertyId:
+                        return true;
+                    case NativeMethods.UIA_IsPasswordPropertyId:
+                        return false;
+                    case NativeMethods.UIA_AccessKeyPropertyId:
+                    case NativeMethods.UIA_HelpTextPropertyId:
+                        return string.Empty;
+                    case NativeMethods.UIA_IsLegacyIAccessiblePatternAvailablePropertyId:
+                        return true;
                 }
 
                 return base.GetPropertyValue(propertyId);

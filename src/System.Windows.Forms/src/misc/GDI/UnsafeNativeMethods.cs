@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if WINFORMS_NAMESPACE
+#if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
 #elif DRAWING_NAMESPACE
 namespace System.Drawing.Internal
@@ -11,7 +11,6 @@ namespace System.Experimental.Gdi
 #endif
 {
     using System;
-    using System.Internal;
     using System.Runtime.InteropServices;
     using System.Collections;
     using System.IO;
@@ -33,26 +32,26 @@ namespace System.Experimental.Gdi
         
         
         public static IntPtr GetDC(HandleRef hWnd) {
-            IntPtr hdc = System.Internal.HandleCollector.Add(IntGetDC(hWnd), IntSafeNativeMethods.CommonHandles.HDC);
+            IntPtr hdc = Interop.HandleCollector.Add(IntGetDC(hWnd), Interop.CommonHandles.HDC);
             DbgUtil.AssertWin32(hdc != IntPtr.Zero, "GetHdc([hWnd=0x{0:X8}]) failed.", hWnd);
             return hdc;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     NOTE: DeleteDC is to be used to delete the hdc created from CreateCompatibleDC ONLY.  All other hdcs should be
         ///     deleted with DeleteHDC.
-        /// </devdoc>
+        /// </summary>
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "DeleteDC", CharSet = CharSet.Auto)]
         
         public static extern bool IntDeleteDC(HandleRef hDC);
         public static bool DeleteDC(HandleRef hDC) {
-            System.Internal.HandleCollector.Remove((IntPtr)hDC, IntSafeNativeMethods.CommonHandles.GDI);
+            Interop.HandleCollector.Remove((IntPtr)hDC, Interop.CommonHandles.GDI);
             bool retVal = IntDeleteDC(hDC);
             DbgUtil.AssertWin32(retVal, "DeleteDC([hdc=0x{0:X8}]) failed.", hDC.Handle);
             return retVal;
         }
         public static bool DeleteHDC(HandleRef hDC) {
-            System.Internal.HandleCollector.Remove((IntPtr)hDC, IntSafeNativeMethods.CommonHandles.HDC);
+            Interop.HandleCollector.Remove((IntPtr)hDC, Interop.CommonHandles.HDC);
             bool retVal = IntDeleteDC(hDC);
             DbgUtil.AssertWin32(retVal, "DeleteHDC([hdc=0x{0:X8}]) failed.", hDC.Handle);
             return retVal;
@@ -62,7 +61,7 @@ namespace System.Experimental.Gdi
         
         public static extern int IntReleaseDC(HandleRef hWnd, HandleRef hDC);
         public static int ReleaseDC(HandleRef hWnd, HandleRef hDC) {
-            System.Internal.HandleCollector.Remove((IntPtr)hDC, IntSafeNativeMethods.CommonHandles.HDC);
+            Interop.HandleCollector.Remove((IntPtr)hDC, Interop.CommonHandles.HDC);
             // Note: retVal == 0 means it was not released but doesn't necessarily means an error; class or private DCs are never released.
             return IntReleaseDC(hWnd, hDC);
         }
@@ -75,7 +74,7 @@ namespace System.Experimental.Gdi
         
         public static IntPtr CreateDC(string lpszDriverName, string lpszDeviceName, string lpszOutput, HandleRef /*DEVMODE*/ lpInitData) 
         {
-            IntPtr hdc = System.Internal.HandleCollector.Add(IntCreateDC(lpszDriverName, lpszDeviceName, lpszOutput, lpInitData), IntSafeNativeMethods.CommonHandles.HDC);
+            IntPtr hdc = Interop.HandleCollector.Add(IntCreateDC(lpszDriverName, lpszDeviceName, lpszOutput, lpInitData), Interop.CommonHandles.HDC);
             DbgUtil.AssertWin32(hdc != IntPtr.Zero, "CreateDC([driverName={0}], [deviceName={1}], [fileName={2}], [devMode={3}]) failed.", lpszDriverName, lpszDeviceName, lpszOutput, lpInitData.Handle);
             return hdc;
         }
@@ -88,15 +87,15 @@ namespace System.Experimental.Gdi
         
         public static IntPtr CreateIC(string lpszDriverName, string lpszDeviceName, string lpszOutput, HandleRef /*DEVMODE*/ lpInitData) 
         {
-            IntPtr hdc = System.Internal.HandleCollector.Add(IntCreateIC(lpszDriverName, lpszDeviceName, lpszOutput, lpInitData), IntSafeNativeMethods.CommonHandles.HDC);
+            IntPtr hdc = Interop.HandleCollector.Add(IntCreateIC(lpszDriverName, lpszDeviceName, lpszOutput, lpInitData), Interop.CommonHandles.HDC);
             DbgUtil.AssertWin32(hdc != IntPtr.Zero, "CreateIC([driverName={0}], [deviceName={1}], [fileName={2}], [devMode={3}]) failed.", lpszDriverName, lpszDeviceName, lpszOutput, lpInitData.Handle);
             return hdc;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     CreateCompatibleDC requires to add a GDI handle instead of an HDC handle to avoid perf penalty in HandleCollector.
         ///     The hdc obtained from this method needs to be deleted with DeleteDC instead of DeleteHDC.
-        /// </devdoc>
+        /// </summary>
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "CreateCompatibleDC", CharSet = CharSet.Auto)]
         
         public static extern IntPtr IntCreateCompatibleDC(HandleRef hDC);
@@ -104,7 +103,7 @@ namespace System.Experimental.Gdi
         
         public static IntPtr CreateCompatibleDC(HandleRef hDC)
         {
-            IntPtr compatibleDc = System.Internal.HandleCollector.Add(IntCreateCompatibleDC(hDC), IntSafeNativeMethods.CommonHandles.GDI);
+            IntPtr compatibleDc = Interop.HandleCollector.Add(IntCreateCompatibleDC(hDC), Interop.CommonHandles.GDI);
             DbgUtil.AssertWin32(compatibleDc != IntPtr.Zero, "CreateCompatibleDC([hdc=0x{0:X8}]) failed", hDC.Handle);
             return compatibleDc;
         }
@@ -225,7 +224,7 @@ namespace System.Experimental.Gdi
         
         public static IntPtr CreateFontIndirect(/*IntNativeMethods.LOGFONT*/ object lf) 
         {
-            IntPtr hFont = System.Internal.HandleCollector.Add(IntCreateFontIndirect(lf), IntSafeNativeMethods.CommonHandles.GDI);
+            IntPtr hFont = Interop.HandleCollector.Add(IntCreateFontIndirect(lf), Interop.CommonHandles.GDI);
             DbgUtil.AssertWin32(hFont != IntPtr.Zero, "CreateFontIndirect(logFont) failed.");
             return hFont;
         }
@@ -236,7 +235,7 @@ namespace System.Experimental.Gdi
         public static extern bool IntDeleteObject(HandleRef hObject);
         public static bool DeleteObject(HandleRef hObject)
         {
-            System.Internal.HandleCollector.Remove((IntPtr)hObject, IntSafeNativeMethods.CommonHandles.GDI);
+            Interop.HandleCollector.Remove((IntPtr)hObject, Interop.CommonHandles.GDI);
             bool retVal = IntDeleteObject(hObject);
             DbgUtil.AssertWin32(retVal, "DeleteObject(hObj=[0x{0:X8}]) failed.", hObject.Handle);
             return retVal;
@@ -247,7 +246,7 @@ namespace System.Experimental.Gdi
         public static extern int IntGetObject(HandleRef hBrush, int nSize, [In, Out] IntNativeMethods.LOGBRUSH lb);
         public static int GetObject(HandleRef hBrush, IntNativeMethods.LOGBRUSH lb) 
         {
-            int retVal = IntGetObject(hBrush, System.Runtime.InteropServices.Marshal.SizeOf(typeof(IntNativeMethods.LOGBRUSH)), lb);
+            int retVal = IntGetObject(hBrush, System.Runtime.InteropServices.Marshal.SizeOf<IntNativeMethods.LOGBRUSH>(), lb);
             DbgUtil.AssertWin32(retVal != 0, "GetObject(hObj=[0x{0:X8}], [LOGBRUSH]) failed.", hBrush.Handle);
             return retVal;
         }
@@ -258,7 +257,7 @@ namespace System.Experimental.Gdi
         public static extern int IntGetObject(HandleRef hFont, int nSize, [In, Out] IntNativeMethods.LOGFONT lf);
         public static int GetObject(HandleRef hFont, IntNativeMethods.LOGFONT lp) 
         {
-            int retVal = IntGetObject(hFont, System.Runtime.InteropServices.Marshal.SizeOf(typeof(IntNativeMethods.LOGFONT)), lp);
+            int retVal = IntGetObject(hFont, System.Runtime.InteropServices.Marshal.SizeOf<IntNativeMethods.LOGFONT>(), lp);
             DbgUtil.AssertWin32(retVal != 0, "GetObject(hObj=[0x{0:X8}], [LOGFONT]) failed.", hFont.Handle);
             return retVal;
         }
@@ -399,12 +398,15 @@ namespace System.Experimental.Gdi
             return retVal;
         }
 
-        // WARNING: This method is currently used just for drawing the text background (ComponentEditorForm.cs) and not for rendering text.
-        //          Prefer using DrawText over this method if possible, it handles Win9x issues properly.  Ideally, we should remove this method
-        //          but to avoid issues at this point I'm leaving it here.
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2101:SpecifyMarshalingForPInvokeStringArguments")]
+        /// <remarks>
+        /// This method is currently used just for drawing the text background
+        /// (ComponentEditorForm.cs) and not for rendering text.
+        /// Prefer using DrawText over this method if possible, it handles issues on older
+        /// platforms properly. Ideally, we should remove this method but to avoid issues at this
+        /// point I'm leaving it here.
+        /// </remarks>
+        [SuppressMessage("Microsoft.Security", "CA2101:SpecifyMarshalingForPInvokeStringArguments")]
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=false, CharSet=CharSet.Auto)]
-        
         internal static extern bool ExtTextOut(HandleRef hdc, int x, int y, int options, ref IntNativeMethods.RECT rect, string str, int length, int[] spacing);
         
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling = true, EntryPoint="LineTo", CharSet = CharSet.Auto)]

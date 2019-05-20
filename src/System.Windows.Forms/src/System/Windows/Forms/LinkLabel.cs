@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using System.Drawing.Text;
     using System.Drawing;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
     using System.Runtime.Serialization.Formatters;
     using System.Text;
     using System.Windows.Forms.ComponentModel;
@@ -23,12 +22,11 @@ namespace System.Windows.Forms {
     using System;
     using System.Runtime.Versioning;
     
-    /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel"]/*' />
-    /// <devdoc>
-    ///    <para>
-    ///       Displays text that can contain a hyperlink.
-    ///    </para>
-    /// </devdoc>
+    /// <summary>
+    ///   <para>
+    ///      Displays text that can contain a hyperlink.
+    ///   </para>
+    /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -43,11 +41,10 @@ namespace System.Windows.Forms {
 
         static LinkComparer linkComparer = new LinkComparer();
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.dialogResult"]/*' />
-        /// <devdoc>
-        ///     The dialog result that will be sent to the parent dialog form when
-        ///     we are clicked.
-        /// </devdoc>
+        /// <summary>
+        ///    The dialog result that will be sent to the parent dialog form when
+        ///    we are clicked.
+        /// </summary>
         DialogResult dialogResult;
 
         Color linkColor = Color.Empty;
@@ -72,12 +69,11 @@ namespace System.Windows.Forms {
         
         LinkBehavior linkBehavior = System.Windows.Forms.LinkBehavior.SystemDefault; 
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkLabel"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Initializes a new default instance of the <see cref='System.Windows.Forms.LinkLabel'/> class.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///   <para>
+        ///      Initializes a new default instance of the <see cref='System.Windows.Forms.LinkLabel'/> class.
+        ///   </para>
+        /// </summary>
         public LinkLabel() : base() {
             SetStyle(ControlStyles.AllPaintingInWmPaint
                      | ControlStyles.OptimizedDoubleBuffer
@@ -88,12 +84,11 @@ namespace System.Windows.Forms {
             ResetLinkArea();
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.ActiveLinkColor"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets the color used to display active links.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///   <para>
+        ///      Gets or sets the color used to display active links.
+        ///   </para>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.LinkLabelActiveLinkColorDescr))
@@ -115,12 +110,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.DisabledLinkColor"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets the color used to display disabled links.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///   <para>
+        ///      Gets or sets the color used to display disabled links.
+        ///   </para>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.LinkLabelDisabledLinkColorDescr))
@@ -196,7 +190,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.FlatStyle"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new FlatStyle FlatStyle
         {
@@ -210,12 +203,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkArea"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets the range in the text that is treated as a link.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///   <para>
+        ///      Gets or sets the range in the text that is treated as a link.
+        ///   </para>
+        /// </summary>
         [
         Editor("System.Windows.Forms.Design.LinkAreaEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         RefreshProperties(RefreshProperties.Repaint),
@@ -264,12 +256,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkBehavior"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets ir sets a value that represents how the link will be underlined.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///   <para>
+        ///      Gets ir sets a value that represents how the link will be underlined.
+        ///   </para>
+        /// </summary>
         [
         DefaultValue(LinkBehavior.SystemDefault),
         SRCategory(nameof(SR.CatBehavior)),
@@ -292,12 +283,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkColor"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets the color used to display links in normal cases.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///   <para>
+        ///      Gets or sets the color used to display links in normal cases.
+        ///   </para>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.LinkLabelLinkColorDescr))
@@ -322,12 +312,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.Links"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the collection of links used in a <see cref='System.Windows.Forms.LinkLabel'/>.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///   <para>
+        ///      Gets the collection of links used in a <see cref='System.Windows.Forms.LinkLabel'/>.
+        ///   </para>
+        /// </summary>
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -341,12 +330,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkVisited"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the link should be displayed as if it was visited.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///   <para>
+        ///      Gets or sets a value indicating whether the link should be displayed as if it was visited.
+        ///   </para>
+        /// </summary>
         [
         DefaultValue(false),
         SRCategory(nameof(SR.CatAppearance)),
@@ -381,7 +369,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.OverrideCursor"]/*' />
         protected Cursor OverrideCursor {
             get {
                 return overrideCursor;
@@ -400,26 +387,19 @@ namespace System.Windows.Forms {
 
                         // 
                         if ((r.left <= p.x && p.x < r.right && r.top <= p.y && p.y < r.bottom) || UnsafeNativeMethods.GetCapture() == Handle)
-                            SendMessage(NativeMethods.WM_SETCURSOR, Handle, NativeMethods.HTCLIENT);
+                            SendMessage(Interop.WindowMessages.WM_SETCURSOR, Handle, NativeMethods.HTCLIENT);
                     }
                 }
             }
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.TabStopChanged"]/*' />
-        /// <internalonly/>
         // Make this event visible through the property browser.
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler TabStopChanged {
-            add {
-                base.TabStopChanged += value;
-            }
-            remove {
-                base.TabStopChanged -= value;
-            }
+            add => base.TabStopChanged += value;
+            remove => base.TabStopChanged -= value;
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.TabIndex"]/*' />
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public bool TabStop {
             get {
@@ -430,7 +410,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.Text"]/*' />
         [RefreshProperties(RefreshProperties.Repaint)]
         public override string Text {
             get {
@@ -441,19 +420,17 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.Padding"]/*' />
         [RefreshProperties(RefreshProperties.Repaint)]
         public new Padding Padding {
             get {return base.Padding;}
             set { base.Padding = value;}
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.VisitedLinkColor"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets the color used to display the link once it has been visited.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///   <para>
+        ///      Gets or sets the color used to display the link once it has been visited.
+        ///   </para>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.LinkLabelVisitedLinkColorDescr))
@@ -478,20 +455,15 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkClicked"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Occurs when the link is clicked.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///   <para>
+        ///      Occurs when the link is clicked.
+        ///   </para>
+        /// </summary>
         [WinCategory("Action"), SRDescription(nameof(SR.LinkLabelLinkClickedDescr))]
         public event LinkLabelLinkClickedEventHandler LinkClicked {
-            add {
-                Events.AddHandler(EventLinkClicked, value);
-            }
-            remove {
-                Events.RemoveHandler(EventLinkClicked, value);
-            }
+            add => Events.AddHandler(EventLinkClicked, value);
+            remove => Events.RemoveHandler(EventLinkClicked, value);
         }
 
         internal static Rectangle CalcTextRenderBounds(Rectangle textRect, Rectangle clientRect, ContentAlignment align) {
@@ -531,36 +503,33 @@ namespace System.Windows.Forms {
             return new Rectangle(xLoc, yLoc, width, height);
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.CreateAccessibilityInstance"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
-        ///    Constructs the new instance of the accessibility object for this control. Subclasses
-        ///    should not call base.CreateAccessibilityObject.
-        /// </devdoc>
+        /// <summary>
+        ///   Constructs the new instance of the accessibility object for this control. Subclasses
+        ///   should not call base.CreateAccessibilityObject.
+        /// </summary>
         protected override AccessibleObject CreateAccessibilityInstance() {
             return new LinkLabelAccessibleObject(this);
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.CreateHandle"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Creates a handle for this control. This method is called by the .NET Framework,
-        ///       this should not be called. Inheriting classes should always call
-        ///       base.createHandle when overriding this method.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///   <para>
+        ///      Creates a handle for this control. This method is called by the .NET Framework,
+        ///      this should not be called. Inheriting classes should always call
+        ///      base.createHandle when overriding this method.
+        ///   </para>
+        /// </summary>
         protected override void CreateHandle() {
             base.CreateHandle();
             InvalidateTextLayout();
         }
 
         /// <summary>
-        ///     Determines whether the current state of the control allows for rendering text using 
-        ///     TextRenderer (GDI).
-        ///     The Gdi library doesn't currently have a way to calculate character ranges so we cannot 
-        ///     use it for painting link(s) within the text, but if the link are is null or covers the
-        ///     entire text we are ok since it is just one area with the same size of the text binding
-        ///     area.
+        ///    Determines whether the current state of the control allows for rendering text using 
+        ///    TextRenderer (GDI).
+        ///    The Gdi library doesn't currently have a way to calculate character ranges so we cannot 
+        ///    use it for painting link(s) within the text, but if the link are is null or covers the
+        ///    entire text we are ok since it is just one area with the same size of the text binding
+        ///    area.
         /// </summary>
         internal override bool CanUseTextRenderer {
             get{
@@ -575,15 +544,15 @@ namespace System.Windows.Forms {
             return !UseCompatibleTextRendering;
         }
         
-        /// <devdoc>
-        ///     Converts the character index into char index of the string
-        ///     This method is copied in LinkCollectionEditor.cs. Update the other
-        ///     one as well if you change this method.
-        ///     This method mainly deal with surrogate. Suppose we 
-        ///     have a string consisting of 3 surrogates, and we want the
-        ///     second character, then the index we need should be 2 instead of
-        ///     1, and this method returns the correct index.
-        /// </devdoc>
+        /// <summary>
+        ///    Converts the character index into char index of the string
+        ///    This method is copied in LinkCollectionEditor.cs. Update the other
+        ///    one as well if you change this method.
+        ///    This method mainly deal with surrogate. Suppose we 
+        ///    have a string consisting of 3 surrogates, and we want the
+        ///    second character, then the index we need should be 2 instead of
+        ///    1, and this method returns the correct index.
+        /// </summary>
         private static int ConvertToCharIndex(int index, string text) {
             if (index <= 0) {
                 return 0;
@@ -610,11 +579,10 @@ namespace System.Windows.Forms {
         }
         
         
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.EnsureRun1"]/*' />
-        /// <devdoc>
-        ///     Ensures that we have analyzed the text run so that we can render each segment
-        ///     and link.
-        /// </devdoc>
+        /// <summary>
+        ///    Ensures that we have analyzed the text run so that we can render each segment
+        ///    and link.
+        /// </summary>
         private void EnsureRun(Graphics g) {
 
             // bail early if everything is valid!
@@ -737,9 +705,9 @@ namespace System.Windows.Forms {
             return stringFormat;
         }
 
-        /// <devdoc>
-        ///     Calculate character ranges taking into account the locale.  Provided for surrogate chars support.
-        /// </devdoc>
+        /// <summary>
+        ///    Calculate character ranges taking into account the locale.  Provided for surrogate chars support.
+        /// </summary>
         private CharacterRange[] AdjustCharacterRangesForSurrogateChars(){
             string text = Text;
 
@@ -767,10 +735,10 @@ namespace System.Windows.Forms {
             return regions;
         }
 
-        /// <devdoc>
-        ///     Determines whether the whole link label contains only one link,
-        ///     and the link runs from the beginning of the label to the end of it
-        /// </devdoc>
+        /// <summary>
+        ///    Determines whether the whole link label contains only one link,
+        ///    and the link runs from the beginning of the label to the end of it
+        /// </summary>
         private bool IsOneLink() {
             if (links == null || links.Count != 1 || Text == null) {
                 return false;
@@ -782,11 +750,10 @@ namespace System.Windows.Forms {
             return false;
         }
         
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.PointInLink"]/*' />
-        /// <devdoc>
-        ///     Determines if the given client coordinates is contained within a portion
-        ///     of a link area.
-        /// </devdoc>
+        /// <summary>
+        ///    Determines if the given client coordinates is contained within a portion
+        ///    of a link area.
+        /// </summary>
         protected Link PointInLink(int x, int y) {
             Graphics g = CreateGraphicsInternal();
             Link hit = null;
@@ -806,12 +773,11 @@ namespace System.Windows.Forms {
             return hit;
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.InvalidateLink"]/*' />
-        /// <devdoc>
-        ///     Invalidates only the portions of the text that is linked to
-        ///     the specified link. If link is null, then all linked text
-        ///     is invalidated.
-        /// </devdoc>
+        /// <summary>
+        ///    Invalidates only the portions of the text that is linked to
+        ///    the specified link. If link is null, then all linked text
+        ///    is invalidated.
+        /// </summary>
         private void InvalidateLink(Link link) {
             if (IsHandleCreated) {
                 if (link == null || link.VisualRegion == null || IsOneLink()) {
@@ -823,11 +789,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.InvalidateLinkFonts"]/*' />
-        /// <devdoc>
-        ///     Invalidates the current set of fonts we use when painting
-        ///     links.  The fonts will be recreated when needed.
-        /// </devdoc>
+        /// <summary>
+        ///    Invalidates the current set of fonts we use when painting
+        ///    links.  The fonts will be recreated when needed.
+        /// </summary>
         private void InvalidateLinkFonts() {
 
             if (linkFont != null) {
@@ -850,15 +815,13 @@ namespace System.Windows.Forms {
             return(0 <= start && start < Text.Length && 0 < length);
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.IButtonControl.DialogResult"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         /// <para>
         /// Gets or sets a value that is returned to the
         /// parent form when the link label.
         /// is clicked.
         /// </para>
-        /// </devdoc>
+        /// </summary>
         DialogResult IButtonControl.DialogResult {
             get {
                 return dialogResult;
@@ -875,19 +838,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.IButtonControl.NotifyDefault"]/*' />
-        /// <internalonly/>
         void IButtonControl.NotifyDefault(bool value) {
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.OnGotFocus"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Raises the <see cref='System.Windows.Forms.Control.GotFocus'/>
-        ///       event.
-        ///    </para>
-        /// </devdoc>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts")]
+        /// <summary>
+        /// Raises the <see cref='System.Windows.Forms.Control.GotFocus'/> event.
+        /// </summary>
         protected override void OnGotFocus(EventArgs e) {
             if (!this.processingOnGotFocus) {
                 base.OnGotFocus(e);
@@ -913,13 +869,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.OnLostFocus"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Raises the <see cref='System.Windows.Forms.Control.LostFocus'/>
-        ///       event.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///   <para>
+        ///      Raises the <see cref='System.Windows.Forms.Control.LostFocus'/>
+        ///      event.
+        ///   </para>
+        /// </summary>
         protected override void OnLostFocus(EventArgs e) {
             base.OnLostFocus(e);
 
@@ -928,13 +883,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.OnKeyDown"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Raises the <see cref='System.Windows.Forms.Control.OnKeyDown'/>
-        ///       event.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///   <para>
+        ///      Raises the <see cref='System.Windows.Forms.Control.OnKeyDown'/>
+        ///      event.
+        ///   </para>
+        /// </summary>
         protected override void OnKeyDown(KeyEventArgs e) {
             base.OnKeyDown(e);
 
@@ -945,13 +899,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.OnMouseLeave"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseLeave'/>
-        ///       event.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///   <para>
+        ///      Raises the <see cref='System.Windows.Forms.Control.OnMouseLeave'/>
+        ///      event.
+        ///   </para>
+        /// </summary>
         protected override void OnMouseLeave(EventArgs e) {
             base.OnMouseLeave(e);
             if (!Enabled) {
@@ -973,13 +926,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.OnMouseDown"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseDown'/>
-        ///       event.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///   <para>
+        ///      Raises the <see cref='System.Windows.Forms.Control.OnMouseDown'/>
+        ///      event.
+        ///   </para>
+        /// </summary>
         protected override void OnMouseDown(MouseEventArgs e) {
             base.OnMouseDown(e);
 
@@ -992,7 +944,7 @@ namespace System.Windows.Forms {
                 if ((((Link)links[i]).State & LinkState.Hover) == LinkState.Hover) {
                     ((Link)links[i]).State |= LinkState.Active;
 
-                    FocusInternal();
+                    Focus();
                     if (((Link)links[i]).Enabled) {
                         FocusLink = (Link)links[i];
                         InvalidateLink(FocusLink);
@@ -1003,13 +955,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.OnMouseUp"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseUp'/>
-        ///       event.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///   <para>
+        ///      Raises the <see cref='System.Windows.Forms.Control.OnMouseUp'/>
+        ///      event.
+        ///   </para>
+        /// </summary>
         protected override void OnMouseUp(MouseEventArgs e) {
 
             base.OnMouseUp(e);
@@ -1039,13 +990,12 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.OnMouseMove"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseMove'/>
-        ///       event.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///   <para>
+        ///      Raises the <see cref='System.Windows.Forms.Control.OnMouseMove'/>
+        ///      event.
+        ///   </para>
+        /// </summary>
         protected override void OnMouseMove(MouseEventArgs e) {
             base.OnMouseMove(e);
 
@@ -1088,12 +1038,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.OnLinkClicked"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Raises the <see cref='System.Windows.Forms.LinkLabel.OnLinkClicked'/> event.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///   <para>
+        ///      Raises the <see cref='System.Windows.Forms.LinkLabel.OnLinkClicked'/> event.
+        ///   </para>
+        /// </summary>
         protected virtual void OnLinkClicked(LinkLabelLinkClickedEventArgs e) {
             LinkLabelLinkClickedEventHandler handler = (LinkLabelLinkClickedEventHandler)Events[EventLinkClicked];
             if (handler != null) {
@@ -1106,13 +1055,12 @@ namespace System.Windows.Forms {
             InvalidateTextLayout();
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.OnPaint"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Raises the <see cref='System.Windows.Forms.Control.OnPaint'/>
-        ///       event.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///   <para>
+        ///      Raises the <see cref='System.Windows.Forms.Control.OnPaint'/>
+        ///      event.
+        ///   </para>
+        /// </summary>
         protected override void OnPaint(PaintEventArgs e) {
             RectangleF finalrect = RectangleF.Empty;   //the focus rectangle if there is only one link
             Animate();
@@ -1263,7 +1211,6 @@ namespace System.Windows.Forms {
             RaisePaintEvent(this, e);
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.OnPaintBackground"]/*' />
         protected override void OnPaintBackground(PaintEventArgs e) {
             Image i = this.Image;
 
@@ -1293,7 +1240,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.OnFontChanged"]/*' />
         protected override void OnFontChanged(EventArgs e) {
             base.OnFontChanged(e);
             InvalidateTextLayout();
@@ -1301,22 +1247,21 @@ namespace System.Windows.Forms {
             Invalidate();
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         protected override void OnAutoSizeChanged(EventArgs e) {
             base.OnAutoSizeChanged(e);
             InvalidateTextLayout();
         }
 
-        /// <devdoc>
-        ///     Overriden by LinkLabel.
-        /// </devdoc>
+        /// <summary>
+        ///    Overriden by LinkLabel.
+        /// </summary>
         internal override void OnAutoEllipsisChanged(/*EventArgs e*/) {
             base.OnAutoEllipsisChanged(/*e*/);
             InvalidateTextLayout();
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.OnEnabledChanged"]/*' />
         protected override void OnEnabledChanged(EventArgs e) {
             base.OnEnabledChanged(e);
             
@@ -1330,14 +1275,12 @@ namespace System.Windows.Forms {
             Invalidate();
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.OnTextChanged"]/*' />
         protected override void OnTextChanged(EventArgs e) {
             base.OnTextChanged(e);
             InvalidateTextLayout();
             UpdateSelectability();
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.OnTextAlignChanged"]/*' />
         protected override void OnTextAlignChanged(EventArgs e) {
             base.OnTextAlignChanged(e);
             InvalidateTextLayout();
@@ -1479,8 +1422,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.IButtonControl.PerformClick"]/*' />
-        /// <internalonly/>
         void IButtonControl.PerformClick() {
 
             // If a link is not currently focused, focus on the first link
@@ -1504,21 +1445,20 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.ProcessDialogKey"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Processes a dialog key. This method is called during message pre-processing
-        ///       to handle dialog characters, such as TAB, RETURN, ESCAPE, and arrow keys. This
-        ///       method is called only if the isInputKey() method indicates that the control
-        ///       isn't interested in the key. processDialogKey() simply sends the character to
-        ///       the parent's processDialogKey() method, or returns false if the control has no
-        ///       parent. The Form class overrides this method to perform actual processing
-        ///       of dialog keys. When overriding processDialogKey(), a control should return true
-        ///       to indicate that it has processed the key. For keys that aren't processed by the
-        ///       control, the result of "base.processDialogChar()" should be returned. Controls
-        ///       will seldom, if ever, need to override this method.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///   <para>
+        ///      Processes a dialog key. This method is called during message pre-processing
+        ///      to handle dialog characters, such as TAB, RETURN, ESCAPE, and arrow keys. This
+        ///      method is called only if the isInputKey() method indicates that the control
+        ///      isn't interested in the key. processDialogKey() simply sends the character to
+        ///      the parent's processDialogKey() method, or returns false if the control has no
+        ///      parent. The Form class overrides this method to perform actual processing
+        ///      of dialog keys. When overriding processDialogKey(), a control should return true
+        ///      to indicate that it has processed the key. For keys that aren't processed by the
+        ///      control, the result of "base.processDialogChar()" should be returned. Controls
+        ///      will seldom, if ever, need to override this method.
+        ///   </para>
+        /// </summary>
         protected override bool ProcessDialogKey(Keys keyData) {
             if ((keyData & (Keys.Alt | Keys.Control)) != Keys.Alt) {
                 Keys keyCode = keyData & Keys.KeyCode;
@@ -1639,14 +1579,13 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.SetBoundsCore"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Performs the work of setting the bounds of this control. Inheriting classes
-        ///       can overide this function to add size restrictions. Inheriting classes must call
-        ///       base.setBoundsCore to actually cause the bounds of the control to change.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///   <para>
+        ///      Performs the work of setting the bounds of this control. Inheriting classes
+        ///      can overide this function to add size restrictions. Inheriting classes must call
+        ///      base.setBoundsCore to actually cause the bounds of the control to change.
+        ///   </para>
+        /// </summary>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
 
             // we cache too much state to try and optimize this (regions, etc)... it is best 
@@ -1669,7 +1608,6 @@ namespace System.Windows.Forms {
             base.SetBoundsCore(x, y, width, height, specified);
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.Select"]/*' />
         protected override void Select(bool directed, bool forward) {
 
             if (directed) {
@@ -1707,78 +1645,73 @@ namespace System.Windows.Forms {
             base.Select(directed, forward);
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.ShouldSerializeActiveLinkColor"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Determines if the color for active links should remain the same.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///   <para>
+        ///      Determines if the color for active links should remain the same.
+        ///   </para>
+        /// </summary>
         internal bool ShouldSerializeActiveLinkColor() {
             return !activeLinkColor.IsEmpty;
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.ShouldSerializeDisabledLinkColor"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Determines if the color for disabled links should remain the same.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///   <para>
+        ///      Determines if the color for disabled links should remain the same.
+        ///   </para>
+        /// </summary>
         internal bool ShouldSerializeDisabledLinkColor() {
             return !disabledLinkColor.IsEmpty;
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.ShouldSerializeLinkArea"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Determines if the range in text that is treated as a
-        ///       link should remain the same.      
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///   <para>
+        ///      Determines if the range in text that is treated as a
+        ///      link should remain the same.      
+        ///   </para>
+        /// </summary>
         private bool ShouldSerializeLinkArea() {
             if (links.Count == 1) {
                 // use field access to find out if "length" is really -1
-                return Links[0].Start != 0 || Links[0].length != -1;
+                return Links[0].Start != 0 || Links[0]._length != -1;
             }
             return true;
 
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.ShouldSerializeLinkColor"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Determines if the color of links in normal cases should remain the same.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///   <para>
+        ///      Determines if the color of links in normal cases should remain the same.
+        ///   </para>
+        /// </summary>
         internal bool ShouldSerializeLinkColor() {
             return !linkColor.IsEmpty;
         }
 
-        /// <devdoc>
-        ///     Determines whether designer should generate code for setting the UseCompatibleTextRendering or not.
-        ///     DefaultValue(false)
-        /// </devdoc>
+        /// <summary>
+        ///    Determines whether designer should generate code for setting the UseCompatibleTextRendering or not.
+        ///    DefaultValue(false)
+        /// </summary>
         private bool ShouldSerializeUseCompatibleTextRendering() {
             // Serialize code if LinkLabel cannot support the feature or the property's value is  not the default.
             return !CanUseTextRenderer || UseCompatibleTextRendering != Control.UseCompatibleTextRenderingDefault; 
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.ShouldSerializeVisitedLinkColor"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Determines if the color of links that have been visited should remain the same.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///   <para>
+        ///      Determines if the color of links that have been visited should remain the same.
+        ///   </para>
+        /// </summary>
         private bool ShouldSerializeVisitedLinkColor() {
             return !visitedLinkColor.IsEmpty;
         }
 
 
 
-        /// <devdoc>
-        ///    <para>
-        ///       Update accessibility with the currently focused link.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///   <para>
+        ///      Update accessibility with the currently focused link.
+        ///   </para>
+        /// </summary>
         private void UpdateAccessibilityLink(Link focusLink) {
 
             if (!IsHandleCreated) {
@@ -1795,11 +1728,10 @@ namespace System.Windows.Forms {
             AccessibilityNotifyClients(AccessibleEvents.Focus, focusIndex);            
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.ValidateNoOverlappingLinks"]/*' />
-        /// <devdoc>
-        ///     Validates that no links overlap. This will throw an exception if
-        ///     they do.
-        /// </devdoc>
+        /// <summary>
+        ///    Validates that no links overlap. This will throw an exception if
+        ///    they do.
+        /// </summary>
         private void ValidateNoOverlappingLinks() {
             for (int x=0; x<links.Count; x++) {
 
@@ -1821,12 +1753,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.UpdateSelectability"]/*' />
-        /// <devdoc>
-        ///     Updates the label's ability to get focus. If there are
-        ///     any links in the label, then the label can get focus,
-        ///     else it can't.
-        /// </devdoc>
+        /// <summary>
+        ///    Updates the label's ability to get focus. If there are
+        ///    any links in the label, then the label can get focus,
+        ///    else it can't.
+        /// </summary>
         private void UpdateSelectability() {
             LinkArea pt = LinkArea;
             bool selectable = false;
@@ -1850,9 +1781,9 @@ namespace System.Windows.Forms {
             SetStyle(ControlStyles.Selectable, selectable);
         }
 
-        /// <devdoc>
-        ///     Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
-        /// </devdoc>
+        /// <summary>
+        ///    Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
+        /// </summary>
         [
         // DefaultValue(false), - // See ShouldSerailizeUseCompatibleTextRendering method.
         RefreshProperties(RefreshProperties.Repaint),
@@ -1873,17 +1804,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        internal override bool SupportsUiaProviders {
-            get {
-                return false;
-            }
-        }
+        internal override bool SupportsUiaProviders => false;
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.WmSetCursor"]/*' />
-        /// <devdoc>
-        ///     Handles the WM_SETCURSOR message
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        ///    Handles the WM_SETCURSOR message
+        /// </summary>
         private void WmSetCursor(ref Message m) {
 
             // Accessing through the Handle property has side effects that break this
@@ -1903,13 +1828,11 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.WndProc"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         protected override void WndProc(ref Message msg) {
             switch (msg.Msg) {
-                case NativeMethods.WM_SETCURSOR:
+                case Interop.WindowMessages.WM_SETCURSOR:
                     WmSetCursor(ref msg);
                     break;
                 default:
@@ -1918,7 +1841,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection"]/*' />
         public class LinkCollection : IList {
             private LinkLabel owner;
             private bool linksAdded = false;   //whether we should serialize the linkCollection
@@ -1929,14 +1851,12 @@ namespace System.Windows.Forms {
             /// Note this is not Thread Safe - but WinForms has to be run in a STA anyways.
             private int lastAccessedIndex = -1;
 
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.LinkCollection"]/*' />
             public LinkCollection(LinkLabel owner) {
                 if (owner == null)
                     throw new ArgumentNullException(nameof(owner));
                 this.owner = owner;
             }
 
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.this"]/*' />
             public virtual Link this[int index] {
                 get {
                     return(Link)owner.links[index];
@@ -1951,8 +1871,6 @@ namespace System.Windows.Forms {
                 }
             }
             
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkCollection.IList.this"]/*' />
-            /// <internalonly/>
             object IList.this[int index] {
                 get {
                     return this[index];
@@ -1967,10 +1885,9 @@ namespace System.Windows.Forms {
                 }
             }
            
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.this"]/*' />
-            /// <devdoc>
-            ///     <para>Retrieves the child control with the specified key.</para>
-            /// </devdoc>
+            /// <summary>
+            ///    <para>Retrieves the child control with the specified key.</para>
+            /// </summary>
             public virtual Link this[string key] {
                 get {
                     // We do not support null and empty string as valid keys.
@@ -1991,7 +1908,6 @@ namespace System.Windows.Forms {
             }
   
 
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.Count"]/*' />
             [Browsable(false)]
             public int Count {
                 get {
@@ -1999,9 +1915,9 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
-            ///    <para>whether we have added a non-trivial link to the collection</para>
-            /// </devdoc>
+            /// <summary>
+            ///   <para>whether we have added a non-trivial link to the collection</para>
+            /// </summary>
             
             public bool LinksAdded {
                 get {
@@ -2009,38 +1925,30 @@ namespace System.Windows.Forms {
                 }
             }
             
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkCollection.ICollection.SyncRoot"]/*' />
-            /// <internalonly/>
             object ICollection.SyncRoot {
                 get {
                     return this;
                 }
             }
 
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkCollection.ICollection.IsSynchronized"]/*' />
-            /// <internalonly/>
             bool ICollection.IsSynchronized {
                 get {
                     return false;
                 }
             }
             
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkCollection.IList.IsFixedSize"]/*' />
-            /// <internalonly/>
             bool IList.IsFixedSize {
                 get {
                     return false;
                 }
             }
            
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.IsReadOnly"]/*' />
             public bool IsReadOnly {
                 get {
                     return false;
                 }
             }
             
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.Add"]/*' />
             public Link Add(int start, int length) {
                 if (length != 0) {
                     linksAdded = true;
@@ -2048,7 +1956,6 @@ namespace System.Windows.Forms {
                 return Add(start, length, null);
             }
 
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.Add1"]/*' />
             public Link Add(int start, int length, object linkData) {
                 if (length != 0) {
                     linksAdded = true;
@@ -2059,7 +1966,7 @@ namespace System.Windows.Forms {
                 //
                 if (owner.links.Count == 1 
                     && this[0].Start == 0
-                    && this[0].length == -1) {
+                    && this[0]._length == -1) {
 
                     owner.links.Clear();
                     owner.FocusLink = null;
@@ -2073,7 +1980,6 @@ namespace System.Windows.Forms {
                 return l;
             }
 
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.Add2"]/*' />
             public int Add(Link value) {
                 if (value != null && value.Length != 0) {
                     linksAdded = true;
@@ -2084,7 +1990,7 @@ namespace System.Windows.Forms {
                 //
                 if (owner.links.Count == 1 
                     && this[0].Start == 0
-                    && this[0].length == -1) {
+                    && this[0]._length == -1) {
 
                     owner.links.Clear();
                     owner.FocusLink = null;
@@ -2118,8 +2024,6 @@ namespace System.Windows.Forms {
                 }
             }
             
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkCollection.IList.Add"]/*' />
-            /// <internalonly/>
             int IList.Add(object value) {
                 if (value is Link) {
                     return Add((Link)value);
@@ -2129,8 +2033,6 @@ namespace System.Windows.Forms {
                 }
             }
             
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkCollection.IList.Insert"]/*' />
-            /// <internalonly/>
             void IList.Insert(int index, object value) {
                 if (value is Link) {
                     Add((Link)value);
@@ -2140,21 +2042,17 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.Contains"]/*' />
             public bool Contains(Link link) {
                 return owner.links.Contains(link);
             }
 
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.ContainsKey"]/*' />
-            /// <devdoc>
-            ///     <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
-            /// </devdoc>
+            /// <summary>
+            ///    <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
+            /// </summary>
             public virtual bool ContainsKey(string key) {
                return IsValidIndex(IndexOfKey(key)); 
             }
         
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkCollection.IList.Contains"]/*' />
-            /// <internalonly/>
             bool IList.Contains(object link) {
                 if (link is Link) {
                     return Contains((Link)link);
@@ -2164,13 +2062,10 @@ namespace System.Windows.Forms {
                 }
             }
             
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.IndexOf"]/*' />
             public int IndexOf(Link link) {
                 return owner.links.IndexOf(link);
             }
             
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkCollection.IList.IndexOf"]/*' />
-            /// <internalonly/>
             int IList.IndexOf(object link) {
                 if (link is Link) {
                     return IndexOf((Link)link);
@@ -2180,10 +2075,9 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.this"]/*' />
-            /// <devdoc>
-            ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
-            /// </devdoc>
+            /// <summary>
+            ///    <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
+            /// </summary>
             public virtual int  IndexOfKey(string key) {
                 // Step 0 - Arg validation
                 if (string.IsNullOrEmpty(key)){
@@ -2211,20 +2105,17 @@ namespace System.Windows.Forms {
                 return -1;
             }
 
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.IsValidIndex"]/*' />
-            /// <devdoc>
-            ///     <para>Determines if the index is valid for the collection.</para>
-            /// </devdoc>
-            /// <internalonly/> 
+            /// <summary>
+            ///    <para>Determines if the index is valid for the collection.</para>
+            /// </summary>
             private bool IsValidIndex(int index) {
                 return ((index >= 0) && (index < this.Count));
             }
 
             
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.Clear"]/*' />
-            /// <devdoc>
-            ///    Remove all links from the linkLabel.
-            /// </devdoc>
+            /// <summary>
+            ///   Remove all links from the linkLabel.
+            /// </summary>
             public virtual void Clear() {
                 bool doLayout = this.owner.links.Count > 0 && this.owner.AutoSize;
                 owner.links.Clear();
@@ -2240,13 +2131,10 @@ namespace System.Windows.Forms {
                 owner.Invalidate();
             }
 
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkCollection.ICollection.CopyTo"]/*' />
-            /// <internalonly/>
             void ICollection.CopyTo(Array dest, int index) {
                 owner.links.CopyTo(dest, index);
             }
 
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.GetEnumerator"]/*' />
             public IEnumerator GetEnumerator() {
                 if (owner.links != null) {
                     return owner.links.GetEnumerator();
@@ -2256,7 +2144,6 @@ namespace System.Windows.Forms {
                 }
             }
             
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.Remove"]/*' />
             public void Remove(Link value) {
 
                 if (value.Owner != this.owner) {
@@ -2283,15 +2170,13 @@ namespace System.Windows.Forms {
                 }
             }
             
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.RemoveAt"]/*' />
             public void RemoveAt(int index) {
                 Remove(this[index]);
             }
   
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="Control.ControlCollection.RemoveByKey"]/*' />
-            /// <devdoc>
-            ///     <para>Removes the child control with the specified key.</para>
-            /// </devdoc>
+            /// <summary>
+            ///    <para>Removes the child control with the specified key.</para>
+            /// </summary>
             public virtual void RemoveByKey(string key) {
                     int index = IndexOfKey(key);
                     if (IsValidIndex(index)) {
@@ -2299,8 +2184,6 @@ namespace System.Windows.Forms {
                      }
                }
             
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkCollection.IList.Remove"]/*' />
-            /// <internalonly/>
             void IList.Remove(object value) {
                 if (value is Link) {
                     Remove((Link)value);
@@ -2308,259 +2191,196 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.Link"]/*' />
-        [
-        TypeConverter(typeof(LinkConverter))
-        ]
-        public class Link {
-            private int start = 0;  
-            private object linkData = null;
-            private LinkState state = LinkState.Normal;
-            private bool enabled = true;
-            private Region visualRegion;
-            internal int length = 0;  
-            private LinkLabel owner = null;
-            private string name = null;
-            private string description = null;
+        [TypeConverter(typeof(LinkConverter))]
+        public class Link
+        {
+            private int _start = 0;
+            private bool _enabled = true;
+            internal int _length = 0;
+            private string _name = null;
 
-            private object userData;
-
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="Link.Link"]/*' />
-            public Link() {
+            public Link()
+            {
             }
 
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="Link.Link1"]/*' />
-            public Link(int start, int length) {
-                this.start = start;
-                this.length = length;
+            public Link(int start, int length)
+            {
+                _start = start;
+                _length = length;
             }
 
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="Link.Link2"]/*' />
-            public Link(int start, int length, object linkData) {
-                this.start = start;
-                this.length = length;
-                this.linkData = linkData;
+            public Link(int start, int length, object linkData)
+            {
+                _start = start;
+                _length = length;
+                LinkData = linkData;
             }
 
-            internal Link(LinkLabel owner) {
-                this.owner = owner;
+            internal Link(LinkLabel owner)
+            {
+                Owner = owner;
             }
 
-            /// <devdoc>
-            ///    <para>Description for accessibility</para>
-            /// </devdoc>
-            public string Description {
-                get {
-                    return description;
-                }
-                set {
-                    description = value;
-                }
-            }
+            /// <summary>
+            /// Description for accessibility
+            /// </summary>
+            public string Description { get; set; }
 
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.Link.Enabled"]/*' />
             [DefaultValue(true)]
-            public bool Enabled {
-                get {
-                    return enabled;
-                }
-                set {
-                    if (enabled != value) {
-                        enabled = value;
+            public bool Enabled
+            {
+                get => _enabled;
+                set
+                {
+                    if (_enabled != value)
+                    {
+                        _enabled = value;
 
-                        if ((int)(state & (LinkState.Hover | LinkState.Active)) != 0) {
-                            state &= ~(LinkState.Hover | LinkState.Active);
-                            if (owner != null) {
-                                owner.OverrideCursor = null;
+                        if ((int)(State & (LinkState.Hover | LinkState.Active)) != 0)
+                        {
+                            State &= ~(LinkState.Hover | LinkState.Active);
+                            if (Owner != null)
+                            {
+                                Owner.OverrideCursor = null;
                             }
                         }
 
-                        if (owner != null) {
-                            owner.InvalidateLink(this);
-                        }
+                        Owner?.InvalidateLink(this);
                     }
                 }
             }
 
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.Link.Length"]/*' />
-            public int Length {
-                get { 
-                    if (length == -1) {
-                        if (owner != null && !string.IsNullOrEmpty(owner.Text)) {
-                            StringInfo stringInfo = new StringInfo(owner.Text);
+            public int Length
+            {
+                get
+                {
+                    if (_length == -1)
+                    {
+                        if (Owner != null && !string.IsNullOrEmpty(Owner.Text))
+                        {
+                            StringInfo stringInfo = new StringInfo(Owner.Text);
                             return stringInfo.LengthInTextElements - Start;
                         }
-                        else {
+                        else
+                        {
                             return 0;
                         }
                     }
-                    return length;
+
+                    return _length;
                 }
-                set {
-                    if (length != value) {
-                        length = value;
-                        if (owner != null) {
-                            owner.InvalidateTextLayout();
-                            owner.Invalidate();
+                set
+                {
+                    if (_length != value)
+                    {
+                        _length = value;
+                        if (Owner != null)
+                        {
+                            Owner.InvalidateTextLayout();
+                            Owner.Invalidate();
                         }
                     }
                 }
             }
 
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.Link.LinkData"]/*' />
             [DefaultValue(null)]
-            public object LinkData {
-                get {
-                    return linkData;
-                }
-                set {
-                    linkData = value;
-                }
+            public object LinkData { get; set; }
+
+            /// <summary>
+            /// The LinkLabel object that owns this link.
+            /// </summary>
+            internal LinkLabel Owner { get; set; }
+
+            internal LinkState State { get; set; } = LinkState.Normal;
+
+            /// <summary>
+            /// The name for the link - useful for indexing by key.
+            /// </summary>
+            [DefaultValue("")]
+            [SRCategory(nameof(SR.CatAppearance))]
+            [SRDescription(nameof(SR.TreeNodeNodeNameDescr))]
+            public string Name
+            {
+                get => _name ?? string.Empty;
+                set => _name = value;
             }
 
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.Link.Owner"]/*' />
-            /// <devdoc>
-            ///    <para>The LinkLabel object that owns this link.</para>
-            /// </devdoc>
-            internal LinkLabel Owner {
-                get {
-                    return owner;
-                }
-                set {
-                    owner = value;
-                }
-            }
+            public int Start
+            {
+                get => _start;
+                set
+                {
+                    if (_start != value)
+                    {
+                        _start = value;
 
-            internal LinkState State {
-                get {
-                    return state;
-                }
-                set {
-                    state = value;
-                }
-            }
-            /// <include file='doc\TreeNode.uex' path='docs/doc[@for="LinkLabel.Link.Name"]/*' />
-            /// <devdoc>
-            ///     The name for the link - useful for indexing by key.
-            /// </devdoc>
-            [
-            DefaultValue(""),
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.TreeNodeNodeNameDescr))
-            ]
-            public string Name {
-                get {
-                    return name == null ? "" : name;
-                }
-                set {
-                    this.name = value;
-                }
-            }
-
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.Link.Start"]/*' />
-            public int Start { 
-                get {
-                    return start;
-                }
-                set {
-                    if (start != value) {
-                        start = value;
-
-                        if (owner != null) {
-                            owner.links.Sort(LinkLabel.linkComparer);
-                            owner.InvalidateTextLayout();
-                            owner.Invalidate();
+                        if (Owner != null)
+                        {
+                            Owner.links.Sort(LinkLabel.linkComparer);
+                            Owner.InvalidateTextLayout();
+                            Owner.Invalidate();
                         }
                     }
                 }
             }
 
-            /// <include file='doc\ColumnHeader.uex' path='docs/doc[@for="ColumnHeader.Tag"]/*' />
-            [
-            SRCategory(nameof(SR.CatData)),
-            Localizable(false),
-            Bindable(true),
-            SRDescription(nameof(SR.ControlTagDescr)),
-            DefaultValue(null),
-            TypeConverter(typeof(StringConverter)),
-            ]
-            public object Tag {
-                get {
-                    return userData;
-                }
-                set {
-                    userData = value;
-                }
-            }
+            [SRCategory(nameof(SR.CatData))]
+            [Localizable(false)]
+            [Bindable(true)]
+            [SRDescription(nameof(SR.ControlTagDescr))]
+            [DefaultValue(null)]
+            [TypeConverter(typeof(StringConverter))]
+            public object Tag { get; set; }
 
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.Link.Visited"]/*' />
             [DefaultValue(false)]
-            public bool Visited {
-                get {
-                    return(State & LinkState.Visited) == LinkState.Visited;
-                }
-                set {
-                    bool old = Visited;
+            public bool Visited
+            {
+                get => (State & LinkState.Visited) == LinkState.Visited;
+                set
+                {
+                    if (value != Visited)
+                    {
+                        if (value)
+                        {
+                            State |= LinkState.Visited;
+                        }
+                        else
+                        {
+                            State &= ~LinkState.Visited;
+                        }
 
-                    if (value) {
-                        State |= LinkState.Visited;
-                    }
-                    else {
-                        State &= ~LinkState.Visited;
-                    }
-
-                    if (old != Visited && owner != null) {
-                        owner.InvalidateLink(this);
+                        Owner?.InvalidateLink(this);
                     }
                 }
             }
 
-            internal Region VisualRegion {
-                get {
-                    return visualRegion;
-                }
-                set {
-                    visualRegion = value;
-                }
-            }
+            internal Region VisualRegion { get; set; }
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkComparer"]/*' />
-        private class LinkComparer : IComparer {
-            int IComparer.Compare(object link1, object link2) {
-
+        private class LinkComparer : IComparer
+        {
+            int IComparer.Compare(object link1, object link2)
+            {
                 Debug.Assert(link1 != null && link2 != null, "Null objects sent for comparison");
 
                 int pos1 = ((Link)link1).Start;
                 int pos2 = ((Link)link2).Start;
 
-                return pos1 - pos2;                                       
+                return pos1 - pos2;
             }
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkLabelAccessibleObject"]/*' />
-        /// <internalonly/>        
-        /// <devdoc>
-        /// </devdoc>
-        [System.Runtime.InteropServices.ComVisible(true)]
+        [ComVisible(true)]
         internal class LinkLabelAccessibleObject : LabelAccessibleObject {
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkLabelAccessibleObject.LinkLabelAccessibleObject"]/*' />
-            /// <devdoc>
-            /// </devdoc>
+            /// <summary>
+            /// </summary>
             public LinkLabelAccessibleObject(LinkLabel owner) : base(owner) {
             }
 
-            internal override bool IsIAccessibleExSupported() {
-                if (AccessibilityImprovements.Level3) {
-                    return true;
-                }
+            internal override bool IsIAccessibleExSupported() => true;
 
-                return base.IsIAccessibleExSupported();
-            }
-
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkLabelAccessibleObject.GetChild"]/*' />
-            /// <devdoc>
-            /// </devdoc>
+            /// <summary>
+            /// </summary>
             public override AccessibleObject GetChild(int index) {
                 if (index >= 0 && index < ((LinkLabel)Owner).Links.Count) {
                     return new LinkAccessibleObject(((LinkLabel)Owner).Links[index]);
@@ -2592,18 +2412,15 @@ namespace System.Windows.Forms {
                 return null;
             }
 
-            /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkLabelAccessibleObject.GetChildCount"]/*' />
-            /// <devdoc>
-            /// </devdoc>
+            /// <summary>
+            /// </summary>
             public override int GetChildCount() {
                 return((LinkLabel)Owner).Links.Count;
             }
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkAccessibleObject"]/*' />
-        /// <internalonly/>        
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [System.Runtime.InteropServices.ComVisible(true)]        
         internal class LinkAccessibleObject : AccessibleObject {
 
@@ -2660,22 +2477,13 @@ namespace System.Windows.Forms {
                 get {          
                     string text = link.Owner.Text;
                     string name;
-                    if (AccessibilityImprovements.Level3) {
-                        // return the full name of the link label for AI.Level3 
-                        // as sometimes the link name in isolation is unusable
-                        // to a customer using a screen reader
-                        name = text;
-                        if (link.Owner.UseMnemonic) {
-                            name = WindowsFormsUtils.TextWithoutMnemonics(name);
-                        }
-                    } else {
-                        int charStart = LinkLabel.ConvertToCharIndex(link.Start, text);
-                        int charEnd = LinkLabel.ConvertToCharIndex(link.Start + link.Length, text);
-                        name = text.Substring(charStart, charEnd - charStart);
-                        if (AccessibilityImprovements.Level1 && link.Owner.UseMnemonic) {
-                            // return the same value as the tooltip shows.
-                            name = WindowsFormsUtils.TextWithoutMnemonics(name);
-                        }
+
+                    // return the full name of the link label
+                    // as sometimes the link name in isolation
+                    // is unusable when using a screen reader
+                    name = text;
+                    if (link.Owner.UseMnemonic) {
+                        name = WindowsFormsUtils.TextWithoutMnemonics(name);
                     }
 
                     return name;
@@ -2714,12 +2522,9 @@ namespace System.Windows.Forms {
 
             public override string Value {
                 get {
-                    if (AccessibilityImprovements.Level1) {
-                        // Narrator announces Link's text twice, once as a Name property and once as a Value, thus removing value.
-                        // Value is optional for this role (Link).
-                        return string.Empty;
-                    } 
-                    return Name;
+                    // Narrator announces Link's text twice, once as a Name property and once as a Value, thus removing value.
+                    // Value is optional for this role (Link).
+                    return string.Empty;
                 }
             }
 
@@ -2727,13 +2532,7 @@ namespace System.Windows.Forms {
                 link.Owner.OnLinkClicked(new LinkLabelLinkClickedEventArgs(link));
             }
 
-            internal override bool IsIAccessibleExSupported() {
-                if (AccessibilityImprovements.Level3) {
-                    return true;
-                }
-
-                return base.IsIAccessibleExSupported();
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             internal override object GetPropertyValue(int propertyID) {
                 if (propertyID == NativeMethods.UIA_IsEnabledPropertyId) {

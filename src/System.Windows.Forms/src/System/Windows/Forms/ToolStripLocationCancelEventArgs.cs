@@ -7,22 +7,22 @@ using System.Drawing;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides Arguments for the Cancelable LocationChanging Event.
-    /// </devdoc>
+    /// </summary>
     internal class ToolStripLocationCancelEventArgs : CancelEventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the ToolStripLocationCancelEventArgs with cancel value.
-        /// </devdoc>
+        /// </summary>
         public ToolStripLocationCancelEventArgs(Point newLocation, bool value) : base(value)
         {
             NewLocation = newLocation;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns the New Location of the ToolStrip.
-        /// </devdoc>
+        /// </summary>
         public Point NewLocation { get; }
     }
 }

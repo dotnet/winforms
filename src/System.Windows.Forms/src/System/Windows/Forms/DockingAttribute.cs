@@ -4,61 +4,54 @@
 
 namespace System.Windows.Forms {
 
-    /// <include file='doc\DockingAttribute.uex' path='docs/doc[@for="DockingAttribute"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Specifies how a control should be docked by default when added through the designer.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class DockingAttribute : Attribute {
         private DockingBehavior dockingBehavior;
 
-        /// <include file='doc\DockingAttribute.uex' path='docs/doc[@for="DockingAttribute.DockingAttribute"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Default constructor.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public DockingAttribute() {
             this.dockingBehavior = DockingBehavior.Never;
         }
         
-        /// <include file='doc\DockingAttribute.uex' path='docs/doc[@for="DockingAttribute.DockingAttribute1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Constructor.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public DockingAttribute(DockingBehavior dockingBehavior) {
             this.dockingBehavior = dockingBehavior;
         }
 
-        /// <include file='doc\DockingAttribute.uex' path='docs/doc[@for="DockingAttribute.Default"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>
         ///    Specifies the default value for the <see cref='System.ComponentModel.DockingAttribute'/>.
         ///    This <see langword='static '/>field is read-only.
         /// </para>
-        /// </devdoc>
+        /// </summary>
         public static readonly DockingAttribute Default = new DockingAttribute();
 
-        /// <include file='doc\DockingAttribute.uex' path='docs/doc[@for="DockingAttribute.DockingBehavior"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       DockingBehavior property.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public DockingBehavior DockingBehavior {
             get {
                 return dockingBehavior;
             }
         }
 
-        /// <include file='doc\DockingAttribute.uex' path='docs/doc[@for="DockingAttribute.Equals"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         public override bool Equals(object obj) {
             if (obj == this) {
                 return true;
@@ -69,15 +62,12 @@ namespace System.Windows.Forms {
             return (other != null) && other.DockingBehavior == this.dockingBehavior;
         }
 
-        /// <include file='doc\DockingAttribute.uex' path='docs/doc[@for="DockingAttribute.GetHashCode"]/*' />
         public override int GetHashCode() {
             return dockingBehavior.GetHashCode();
         }
 
-        /// <include file='doc\DockingAttribute.uex' path='docs/doc[@for="DockingAttribute.IsDefaultAttribute"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         public override bool IsDefaultAttribute() {
             return (this.Equals(Default));
         }

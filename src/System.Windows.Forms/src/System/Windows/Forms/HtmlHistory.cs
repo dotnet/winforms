@@ -15,7 +15,6 @@ using System.Net;
 using System.Globalization;
 
 namespace System.Windows.Forms {
-    /// <include file='doc\HtmlHistory.uex' path='docs/doc[@for="HtmlHistory"]/*' />
     public sealed class HtmlHistory : IDisposable
     {
         private UnsafeNativeMethods.IOmHistory htmlHistory;
@@ -36,24 +35,21 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlHistory.uex' path='docs/doc[@for="HtmlHistory.Dispose"]/*' />
         public void Dispose() {
             this.htmlHistory = null;
             this.disposed = true;
             GC.SuppressFinalize(this);
         }
 
-        /// <include file='doc\HtmlHistory.uex' path='docs/doc[@for="HtmlHistory.Length"]/*' />
         public int Length {
             get {
                 return (int)this.NativeOmHistory.GetLength();
             }
         }
 
-        /// <include file='doc\HtmlHistory.uex' path='docs/doc[@for="HtmlHistory.Back"]/*' />
         public void Back(int numberBack) {
             if (numberBack < 0) {
-                throw new ArgumentOutOfRangeException(nameof(numberBack), string.Format(SR.InvalidLowBoundArgumentEx, "numberBack", numberBack.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(numberBack), numberBack, string.Format(SR.InvalidLowBoundArgumentEx, nameof(numberBack), numberBack, 0));
             }
             else if (numberBack > 0) {
                 object oNumForward = (object)(-numberBack);
@@ -61,10 +57,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlHistory.uex' path='docs/doc[@for="HtmlHistory.Forward"]/*' />
         public void Forward(int numberForward) {
             if (numberForward < 0) {
-                throw new ArgumentOutOfRangeException(nameof(numberForward), string.Format(SR.InvalidLowBoundArgumentEx, "numberForward", numberForward.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(numberForward), numberForward, string.Format(SR.InvalidLowBoundArgumentEx, nameof(numberForward), numberForward, 0));
             }
             else if (numberForward > 0) {
                 object oNumForward = (object)numberForward;
@@ -72,20 +67,18 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlHistory.uex' path='docs/doc[@for="HtmlHistory.Go1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Go to a specific Uri in the history</para>
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings")]
         public void Go(Uri url)
         {
             Go(url.ToString());
         }
 
-        /// <include file='doc\HtmlHistory.uex' path='docs/doc[@for="HtmlHistory.Go1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Go to a specific url(string) in the history</para>
-        /// </devdoc>
+        /// </summary>
         /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have 
         /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified 
         /// (things like "www.microsoft.com") that the underlying objects support and we don't want to 
@@ -97,16 +90,14 @@ namespace System.Windows.Forms {
             this.NativeOmHistory.Go(ref loc);
         }
 
-        /// <include file='doc\HtmlHistory.uex' path='docs/doc[@for="HtmlHistory.Go2"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Go to the specified position in the history list</para>
-        /// </devdoc>
+        /// </summary>
         public void Go(int relativePosition) {
             object loc = (object)relativePosition;
             this.NativeOmHistory.Go(ref loc);
         }
 
-        /// <include file='doc\HtmlHistory.uex' path='docs/doc[@for="HtmlHistory.DomHistory"]/*' />
         public object DomHistory {
             get {
                 return this.NativeOmHistory;

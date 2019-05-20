@@ -4,10 +4,10 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Represents the method that will handle the <see cref='System.Windows.Forms.TreeView.OnBeforeLabelEdit'/>
     /// or <see cref='System.Windows.Forms.TreeView.OnAfterLabelEdit'/> event of
     /// a <see cref='System.Windows.Forms.TreeView'/>.
-    /// </devdoc>
+    /// </summary>
     public delegate void NodeLabelEditEventHandler(object sender, NodeLabelEditEventArgs e);
 }

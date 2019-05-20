@@ -6,7 +6,6 @@
 namespace System.Windows.Forms {
     using System.Runtime.Serialization.Formatters;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
     using System.ComponentModel;
     using System.ComponentModel.Design;
     using System.Diagnostics;
@@ -20,11 +19,10 @@ namespace System.Windows.Forms {
     using System.Globalization;
 
 
-    /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para> 
     ///       Represents a Windows toolbar button.</para>
-    /// </devdoc>
+    /// </summary>
     [
     Designer("System.Windows.Forms.Design.ToolBarButtonDesigner, " + AssemblyRef.SystemDesign),
     DefaultProperty(nameof(Text)),
@@ -50,36 +48,29 @@ namespace System.Windows.Forms {
         // These variables below are used by the ToolBar control to help
         // it manage some information about us.
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.stringIndex"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     If this button has a string, what it's index is in the ToolBar's
         ///     internal list of strings.  Needs to be package protected.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         internal IntPtr stringIndex = (IntPtr)(-1);
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.parent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Our parent ToolBar control.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         internal ToolBar parent;
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.dropDownMenu"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     For DropDown buttons, we can optionally show a
         ///     context menu when the button is dropped down.
-        /// </devdoc>
+        /// </summary>
         internal Menu dropDownMenu = null;
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.ToolBarButton"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.ToolBarButton'/> class.</para>
-        /// </devdoc>
+        /// </summary>
         public ToolBarButton() {
         }
         
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.ToolBarButton1"]/*' />
         public ToolBarButton(string text) : base() {
             this.Text = text;
         }
@@ -118,12 +109,11 @@ namespace System.Windows.Forms {
             }
         }
  
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.DropDownMenu"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> 
         ///       Indicates the menu to be displayed in
         ///       the drop-down toolbar button.</para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(null),
         TypeConverterAttribute(typeof(ReferenceConverter)),
@@ -144,10 +134,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.Enabled"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates whether the button is enabled or not.</para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(true),
         Localizable(true),
@@ -171,11 +160,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.ImageIndex"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> Indicates the index
         ///       value of the image assigned to the button.</para>
-        /// </devdoc>
+        /// </summary>
         [
         TypeConverterAttribute(typeof(ImageIndexConverter)),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
@@ -191,7 +179,7 @@ namespace System.Windows.Forms {
             set {
                 if (ImageIndexer.Index != value) {
                     if (value < -1)
-                        throw new ArgumentOutOfRangeException(nameof(ImageIndex), string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", (value).ToString(CultureInfo.CurrentCulture), -1));
+                        throw new ArgumentOutOfRangeException(nameof(ImageIndex), string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, -1));
 
                     ImageIndexer.Index = value;
                     UpdateButton(false);
@@ -199,11 +187,10 @@ namespace System.Windows.Forms {
             }
         }
 
-                /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.ImageIndex"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> Indicates the index
         ///       value of the image assigned to the button.</para>
-        /// </devdoc>
+        /// </summary>
         [
         TypeConverterAttribute(typeof(ImageKeyConverter)),
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
@@ -223,12 +210,11 @@ namespace System.Windows.Forms {
                 }
             }
         }
-	    /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.Name"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Name of this control. The designer will set this to the same
         ///     as the programatic Id "(name)" of the control - however this
         ///     property has no bearing on the runtime aspects of this control.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
         public string Name {
             get {
@@ -248,11 +234,10 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.Parent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates the toolbar control that the toolbar button is assigned to. This property is 
         ///       read-only.</para>
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(false),
         ]
@@ -262,12 +247,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.PartialPush"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> 
         ///       Indicates whether a toggle-style toolbar button
         ///       is partially pushed.</para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(false),
         SRDescription(nameof(SR.ToolBarButtonPartialPushDescr))
@@ -293,10 +277,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.Pushed"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates whether a toggle-style toolbar button is currently in the pushed state.</para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(false),
         SRDescription(nameof(SR.ToolBarButtonPushedDescr))
@@ -317,11 +300,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.Rectangle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates the bounding rectangle for a toolbar button. This property is 
         ///       read-only.</para>
-        /// </devdoc>
+        /// </summary>
         public Rectangle Rectangle {
             get {
                 if (parent != null) {
@@ -333,11 +315,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.Style"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> Indicates the style of the
         ///       toolbar button.</para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(ToolBarButtonStyle.PushButton),
         SRDescription(nameof(SR.ToolBarButtonStyleDescr)),
@@ -358,7 +339,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.Tag"]/*' />
         [
         SRCategory(nameof(SR.CatData)),
         Localizable(false),
@@ -376,10 +356,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.Text"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> Indicates the text that is displayed on the toolbar button.</para>
-        /// </devdoc>
+        /// </summary>
         [
         Localizable(true),
         DefaultValue(""),
@@ -405,12 +384,11 @@ namespace System.Windows.Forms {
 
          
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.ToolTipText"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> 
         ///       Indicates
         ///       the text that appears as a tool tip for a control.</para>
-        /// </devdoc>
+        /// </summary>
         [
         Localizable(true),
         DefaultValue(""),
@@ -425,12 +403,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.Visible"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> 
         ///       Indicates whether the toolbar button
         ///       is visible.</para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(true),
         Localizable(true),
@@ -448,14 +425,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.Width"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This is somewhat nasty -- by default, the windows ToolBar isn't very
         ///     clever about setting the width of buttons, and has a very primitive
         ///     algorithm that doesn't include for things like drop down arrows, etc.
         ///     We need to do a bunch of work here to get all the widths correct. Ugh.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         internal short Width {
             get {
                 Debug.Assert(parent != null, "Parent should be non-null when button width is requested");
@@ -508,10 +483,8 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.Dispose"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 if (parent != null) {
@@ -524,11 +497,9 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.FindButtonIndex"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Finds out index in the parent.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private int FindButtonIndex() {
             for (int x = 0; x < parent.Buttons.Count; x++) {
                 if (parent.Buttons[x] == this) {
@@ -547,7 +518,7 @@ namespace System.Windows.Forms {
             int buttonWidth = Parent.ButtonSize.Width;
             
             NativeMethods.TBBUTTONINFO button = new NativeMethods.TBBUTTONINFO();
-            button.cbSize = Marshal.SizeOf(typeof(NativeMethods.TBBUTTONINFO));
+            button.cbSize = Marshal.SizeOf<NativeMethods.TBBUTTONINFO>();
             button.dwMask = NativeMethods.TBIF_SIZE;
             
             int buttonID = (int)UnsafeNativeMethods.SendMessage(new HandleRef(Parent, Parent.Handle), NativeMethods.TB_GETBUTTONINFO, commandId, ref button);
@@ -570,10 +541,9 @@ namespace System.Windows.Forms {
             return pushed;
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.GetTBBUTTON"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns a TBBUTTON object that represents this ToolBarButton.
-        /// </devdoc>
+        /// </summary>
         internal NativeMethods.TBBUTTON GetTBBUTTON(int commandId) {
 
             NativeMethods.TBBUTTON button = new NativeMethods.TBBUTTON();
@@ -614,20 +584,19 @@ namespace System.Windows.Forms {
             return button;
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.GetTBBUTTONINFO"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns a TBBUTTONINFO object that represents this ToolBarButton.
-        /// </devdoc>
+        /// </summary>
         internal NativeMethods.TBBUTTONINFO GetTBBUTTONINFO(bool updateText, int newCommandId) {
 
             NativeMethods.TBBUTTONINFO button = new NativeMethods.TBBUTTONINFO();
-            button.cbSize = Marshal.SizeOf(typeof(NativeMethods.TBBUTTONINFO));
+            button.cbSize = Marshal.SizeOf<NativeMethods.TBBUTTONINFO>();
             button.dwMask = NativeMethods.TBIF_IMAGE
                             | NativeMethods.TBIF_STATE | NativeMethods.TBIF_STYLE;
 
-            // Comctl on Win98 interprets null strings as empty strings, which forces
-            // the button to leave space for text.  The only workaround is to avoid having comctl 
-            // update the text.
+            // Older platforms interpret null strings as empty, which forces the button to
+            // leave space for text.
+            // The only workaround is to avoid having comctl update the text.
             if (updateText) {
                 button.dwMask |= NativeMethods.TBIF_TEXT;
             }
@@ -712,29 +681,25 @@ namespace System.Windows.Forms {
             value = newString.ToString();
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.ToString"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         public override string ToString() {
             return "ToolBarButton: " + Text + ", Style: " + Style.ToString("G");
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.UpdateButton"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     When a button property changes and the parent control is created,
         ///     we need to make sure it gets the new button information.
         ///     If Text was changed, call the next overload.
-        /// </devdoc>
+        /// </summary>
         internal void UpdateButton(bool recreate) {
             UpdateButton(recreate, false, true);        
         }
 
-        /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.UpdateButton1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     When a button property changes and the parent control is created,
         ///     we need to make sure it gets the new button information.
-        /// </devdoc>
+        /// </summary>
         private void UpdateButton(bool recreate, bool updateText, bool updatePushedState) {
             // It looks like ToolBarButtons with a DropDownButton tend to
             // lose the DropDownButton very easily - so we need to recreate

@@ -5,7 +5,6 @@
 
 namespace System.Windows.Forms {
     using System.Runtime.Serialization.Formatters;
-    using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
     using System.ComponentModel;
     using System.ComponentModel.Design;
@@ -17,13 +16,12 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Stores the <see cref='System.Windows.Forms.StatusBar'/>
     ///       control panel's information.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     [
     ToolboxItem(false),
     DesignTimeVisible(false),
@@ -36,9 +34,9 @@ namespace System.Windows.Forms {
         private const int PANELTEXTINSET = 3;
         private const int PANELGAP = 2;
 
-        private string          text          = "";
-        private string          name          = "";
-        private string          toolTipText   = "";
+        private string          text          = string.Empty;
+        private string          name          = string.Empty;
+        private string          toolTipText   = string.Empty;
         private Icon            icon          = null;
 
         private HorizontalAlignment        alignment     = HorizontalAlignment.Left;
@@ -58,23 +56,21 @@ namespace System.Windows.Forms {
 
         private object userData;
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.StatusBarPanel"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initializes a new default instance of the <see cref='System.Windows.Forms.StatusBarPanel'/> class.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public StatusBarPanel() {
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Alignment"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.StatusBarPanel.Alignment'/>
         ///       property.
         ///
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(HorizontalAlignment.Left),
@@ -98,14 +94,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.AutoSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.StatusBarPanel.AutoSize'/>
         ///       property.
         ///
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(StatusBarPanelAutoSize.None),
@@ -130,15 +125,14 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.BorderStyle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.StatusBarPanel.BorderStyle'/>
         ///
         ///       property.
         ///
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(System.Windows.Forms.StatusBarPanelBorderStyle.Sunken),
@@ -164,24 +158,21 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Created"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         internal bool Created {
             get {
                 return this.parent != null && this.parent.ArePanelsRealized();
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Icon"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.StatusBarPanel.Icon'/>
         ///       property.
         ///
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(null),
@@ -217,12 +208,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Index"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Expose index internally
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         internal int Index
         {
             get
@@ -234,14 +224,13 @@ namespace System.Windows.Forms {
                 index = value;
             }
         }
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.MinWidth"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the minimum width the <see cref='System.Windows.Forms.StatusBarPanel'/> can be within the <see cref='System.Windows.Forms.StatusBar'/>
         ///       control.
         ///
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(DEFAULTMINWIDTH),
@@ -255,7 +244,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException(nameof(MinWidth), string.Format(SR.InvalidLowBoundArgumentEx, "MinWidth", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(MinWidth), value, 0));
                 }
 
                 if (value != this.minWidth) {
@@ -269,12 +258,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Name"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the name of the panel.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
 	[
         SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
@@ -292,15 +280,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Parent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Represents the <see cref='System.Windows.Forms.StatusBar'/>
         ///       control which hosts the
         ///       panel.
         ///
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
         public StatusBar Parent {
             get {
@@ -308,12 +295,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.ParentInternal"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Expose a direct setter for parent internally
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         internal StatusBar ParentInternal
         {
             set
@@ -322,12 +308,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Right"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Expose right internally
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         internal int Right
         {
             get
@@ -340,13 +325,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Style"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the style of the panel.
         ///
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(StatusBarPanelStyle.Text),
@@ -369,7 +353,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Tag"]/*' />
         [
         SRCategory(nameof(SR.CatData)),
         Localizable(false),
@@ -387,12 +370,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Text"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the text of the panel.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
@@ -410,7 +392,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value == null) {
-                    value = "";
+                    value = string.Empty;
                 }
 
                 if (!Text.Equals(value)) {
@@ -427,13 +409,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.ToolTipText"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets
         ///       or sets the panel's tool tip text.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
@@ -451,7 +432,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value == null) {
-                    value = "";
+                    value = string.Empty;
                 }
 
                 if (!ToolTipText.Equals(value)) {
@@ -470,14 +451,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Width"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the width of the <see cref='System.Windows.Forms.StatusBarPanel'/> within the <see cref='System.Windows.Forms.StatusBar'/>
         ///       control.
         ///
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         Localizable(true),
         SRCategory(nameof(SR.CatAppearance)),
@@ -497,18 +477,15 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.BeginInit"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Handles tasks required when the control is being initialized.
-        /// </devdoc>
+        /// </summary>
         public void BeginInit() {
             initializing = true;
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Dispose"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 if (parent != null) {
@@ -521,10 +498,9 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.EndInit"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Called when initialization of the control is complete.
-        /// </devdoc>
+        /// </summary>
         public void EndInit() {
             initializing = false;
 
@@ -533,16 +509,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.GetContentsWidth"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///     Gets the width of the contents of the panel
-        /// </devdoc>
+        /// </summary>
         internal int GetContentsWidth(bool newPanel) {
             string text;
             if (newPanel) {
                 if (this.text == null)
-                    text = "";
+                    text = string.Empty;
                 else
                     text = this.text;
             }
@@ -560,21 +534,17 @@ namespace System.Windows.Forms {
             return Math.Max(width, minWidth);
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.GetIndex"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///     Returns the index of the panel by making the parent control search
         ///     for it within its list.
-        /// </devdoc>
+        /// </summary>
         private int GetIndex() {
             return index;
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Realize"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///     Sets all the properties for this panel.
-        /// </devdoc>
+        /// </summary>
         internal void Realize() {
             if (Created) {
                 string text;
@@ -582,7 +552,7 @@ namespace System.Windows.Forms {
                 int     border = 0;
 
                 if (this.text == null) {
-                    text = "";
+                    text = string.Empty;
                 }
                 else {
                     text = this.text;
@@ -686,13 +656,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.ToString"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Retrieves a string that contains information about the
         ///       panel.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override string ToString() {
             return "StatusBarPanel: {" + Text + "}";
         }

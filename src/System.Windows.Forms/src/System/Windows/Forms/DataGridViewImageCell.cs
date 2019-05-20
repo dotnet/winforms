@@ -14,7 +14,6 @@ namespace System.Windows.Forms
     using System.Globalization;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell"]/*' />
     public class DataGridViewImageCell : DataGridViewCell
     {
         private static ColorMap[] colorMap = new ColorMap[] { new ColorMap() };
@@ -30,12 +29,10 @@ namespace System.Windows.Forms
 
         private byte flags;  // see DATAGRIDVIEWIMAGECELL_ consts above
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.DataGridViewImageCell1"]/*' />
         public DataGridViewImageCell() : this(false /*valueIsIcon*/)
         {
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.DataGridViewImageCell2"]/*' />
         public DataGridViewImageCell(bool valueIsIcon)
         {
             if (valueIsIcon)
@@ -44,7 +41,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.DefaultNewRowValue"]/*' />
         public override object DefaultNewRowValue
         {
             get
@@ -64,7 +60,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.Description"]/*' />
         [
             DefaultValue("")
         ]
@@ -89,7 +84,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.EditType"]/*' />
         public override Type EditType
         {
             get
@@ -105,7 +99,7 @@ namespace System.Windows.Forms
             {
                 if (errorBmp == null)
                 {
-                    errorBmp = new Bitmap(typeof(DataGridView), "ImageInError.bmp");
+                    errorBmp = DpiHelper.GetBitmapFromIcon(typeof(DataGridView), "ImageInError");
                 }
                 return errorBmp;
             }
@@ -117,13 +111,12 @@ namespace System.Windows.Forms
             {
                 if (errorIco == null)
                 {
-                    errorIco = new Icon(typeof(DataGridView), "IconInError.ico");
+                    errorIco = new Icon(typeof(DataGridView), "IconInError");
                 }
                 return errorIco;
             }
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.FormattedValueType"]/*' />
         public override Type FormattedValueType
         {
             get
@@ -139,7 +132,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.ImageLayout"]/*' />
         [
             DefaultValue(DataGridViewImageCellLayout.NotSet)
         ]
@@ -182,7 +174,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.ValueIsIcon"]/*' />
         [
             DefaultValue(false)
         ]
@@ -242,7 +233,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.ValueType"]/*' />
         public override Type ValueType
         {
             get
@@ -270,7 +260,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.Clone"]/*' />
         public override object Clone()
         {
             DataGridViewImageCell dataGridViewCell;
@@ -293,13 +282,11 @@ namespace System.Windows.Forms
             return dataGridViewCell;
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.CreateAccessibilityInstance"]/*' />
         protected override AccessibleObject CreateAccessibilityInstance()
         {
             return new DataGridViewImageCellAccessibleObject(this);
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.GetContentBounds"]/*' />
         protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
             if (cellStyle == null)
@@ -355,7 +342,6 @@ namespace System.Windows.Forms
             return imgBounds;
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.GetErrorIconBounds"]/*' />
         protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
             if (cellStyle == null)
@@ -415,7 +401,6 @@ namespace System.Windows.Forms
             return errBounds;
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.GetFormattedValue"]/*' />
         
         
         protected override object GetFormattedValue(object value,
@@ -455,7 +440,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.GetPreferredSize"]/*' />
         protected override Size GetPreferredSize(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex, Size constraintSize)
         {
             if (this.DataGridView == null)
@@ -596,7 +580,6 @@ namespace System.Windows.Forms
             return preferredSize;
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.GetValue"]/*' />
         protected override object GetValue(int rowIndex)
         {
             object valueBase = base.GetValue(rowIndex);
@@ -742,7 +725,6 @@ namespace System.Windows.Forms
             return imgBounds;
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.Paint"]/*' />
         protected override void Paint(Graphics graphics, 
             Rectangle clipBounds,
             Rectangle cellBounds, 
@@ -974,22 +956,18 @@ namespace System.Windows.Forms
             return resultBounds;
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.ToString"]/*' />
         public override string ToString()
         {
             return "DataGridViewImageCell { ColumnIndex=" + ColumnIndex.ToString(CultureInfo.CurrentCulture) + ", RowIndex=" + RowIndex.ToString(CultureInfo.CurrentCulture) + " }";
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCellAccessibleObject"]/*' />
         protected class DataGridViewImageCellAccessibleObject : DataGridViewCellAccessibleObject
         {
 
-            /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCellAccessibleObject.DataGridViewImageCellAccessibleObject"]/*' />
             public DataGridViewImageCellAccessibleObject(DataGridViewCell owner) : base (owner)
             {
             }
 
-            /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCellAccessibleObject.DefaultAction"]/*' />
             public override string DefaultAction
             {
                 get
@@ -998,7 +976,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCellAccessibleObject.Description"]/*' />
             public override string Description
             {
                 get
@@ -1015,7 +992,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCellAccessibleObject.Value"]/*' />
             public override string Value
             {
                 get 
@@ -1029,39 +1005,24 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCellAccessibleObject.DoDefaultAction"]/*' />
             public override void DoDefaultAction()
             {
-                // do nothing if Level < 3
+                DataGridViewImageCell dataGridViewCell = (DataGridViewImageCell)this.Owner;
+                DataGridView dataGridView = dataGridViewCell.DataGridView;
 
-                if (AccessibilityImprovements.Level3)
+                if (dataGridView != null && dataGridViewCell.RowIndex != -1 &&
+                    dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningRow != null)
                 {
-                    DataGridViewImageCell dataGridViewCell = (DataGridViewImageCell)this.Owner;
-                    DataGridView dataGridView = dataGridViewCell.DataGridView;
-
-                    if (dataGridView != null && dataGridViewCell.RowIndex != -1 &&
-                        dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningRow != null)
-                    {
-                        dataGridView.OnCellContentClickInternal(new DataGridViewCellEventArgs(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex));
-                    }
+                    dataGridView.OnCellContentClickInternal(new DataGridViewCellEventArgs(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex));
                 }
             }
 
-            /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCellAccessibleObject.GetChildCount"]/*' />
             public override int GetChildCount()
             {
                 return 0;
             }
 
-            internal override bool IsIAccessibleExSupported()
-            {
-                if (AccessibilityImprovements.Level2)
-                {
-                    return true;
-                }
-
-                return base.IsIAccessibleExSupported();
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             internal override object GetPropertyValue(int propertyID)
             {
@@ -1070,7 +1031,7 @@ namespace System.Windows.Forms
                     return NativeMethods.UIA_ImageControlTypeId;
                 }
 
-                if (AccessibilityImprovements.Level3 && propertyID == NativeMethods.UIA_IsInvokePatternAvailablePropertyId)
+                if (propertyID == NativeMethods.UIA_IsInvokePatternAvailablePropertyId)
                 {
                     return true;
                 }
@@ -1080,7 +1041,7 @@ namespace System.Windows.Forms
 
             internal override bool IsPatternSupported(int patternId)
             {
-                if (AccessibilityImprovements.Level3 && patternId == NativeMethods.UIA_InvokePatternId)
+                if (patternId == NativeMethods.UIA_InvokePatternId)
                 {
                     return true;
                 }

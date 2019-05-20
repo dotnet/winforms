@@ -5,7 +5,6 @@
 
 namespace System.Windows.Forms.PropertyGridInternal {
     using System.Runtime.Serialization.Formatters;
-    using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -74,11 +73,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
         
         
-        /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.AllowMerge"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// specify that this grid entry should be allowed to be merged for.
         /// multi-select.
-        /// </devdoc>
+        /// </summary>
         public override bool AllowMerge {
             get {
                MergablePropertyAttribute mpa = (MergablePropertyAttribute)propertyInfo.Attributes[typeof(MergablePropertyAttribute)];
@@ -92,11 +90,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.HelpKeyword"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the keyword that the VS help dynamic help window will
         ///     use when this IPE is selected.
-        /// </devdoc>
+        /// </summary>
         public override string HelpKeyword {
             get {
                 if (this.helpKeyword == null) {
@@ -129,7 +126,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                    }
                    else {
 
-                        string typeName = "";
+                        string typeName = string.Empty;
 
                         Type componentType = propertyInfo.ComponentType;
                         
@@ -242,10 +239,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
         
-        /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.PropertyDescriptor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the PropertyDescriptor that is surfacing the given object/
-        /// </devdoc>
+        /// </summary>
         public override PropertyDescriptor PropertyDescriptor {
             get {
                 return propertyInfo;
@@ -269,10 +265,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.PropertyName"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Returns non-localized name of this property.
-        /// </devdoc>
+        /// </summary>
         public override string PropertyName {
             get {
                 if (propertyInfo != null) {
@@ -291,11 +286,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
 
-        /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.PropertyValue"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Gets or sets the value for the property that is represented
         /// by this GridEntry.
-        /// </devdoc>
+        /// </summary>
         public override object PropertyValue{
             get {
                 try
@@ -371,10 +365,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.TypeConverter"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Returns the type converter for this entry.
-        /// </devdoc>
+        /// </summary>
         internal override TypeConverter TypeConverter {
             get {
                 if (exceptionConverter != null) {
@@ -388,11 +381,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.UITypeEditor"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Returns the type editor for this entry.  This may return null if there
         /// is no type editor.
-        /// </devdoc>
+        /// </summary>
         internal override UITypeEditor UITypeEditor {
             get {
                 if (exceptionEditor != null) {
@@ -406,10 +398,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
         
         
-        /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.EditPropertyValue"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Invokes the type editor for editing this item.
-        /// </devdoc>
+        /// </summary>
         internal override void EditPropertyValue(PropertyGridView iva) {            
             base.EditPropertyValue(iva);
             
@@ -860,10 +851,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.ViewEvent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Navigates code to the given event.
-        /// </devdoc>
+        /// </summary>
         protected bool ViewEvent(object obj, string newHandler, EventDescriptor eventdesc, bool alwaysNavigate) {
 
             object value = GetPropertyValueCore(obj);
@@ -994,11 +984,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return true;
         }
 
-        /// <include file='doc\CodeDomLoader.uex' path='docs/doc[@for="CodeDomLoader.IEventBindingService.ShowCode2"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Displays the user code for the given event.  This will return true if the user
         ///     code could be displayed, or false otherwise.
-        /// </devdoc>
+        /// </summary>
         static private void ShowCodeIdle(object sender, EventArgs e) {
             Application.Idle -= new EventHandler(PropertyDescriptorGridEntry.ShowCodeIdle);
             if (targetBindingService != null) {
@@ -1019,11 +1008,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// AccessibleObject for this PropertyDescriptorGridEntry instance.
         /// </returns>
         protected override GridEntryAccessibleObject GetAccessibilityObject() {
-            if (AccessibilityImprovements.Level2) {
-                return new PropertyDescriptorGridEntryAccessibleObject(this);
-            }
-
-            return base.GetAccessibilityObject();
+            return new PropertyDescriptorGridEntryAccessibleObject(this);
         }
 
         [ComVisible(true)]
@@ -1035,9 +1020,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 _owningPropertyDescriptorGridEntry = owner;
             }
 
-            internal override bool IsIAccessibleExSupported() {
-                return true;
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             /// <summary>
             /// Returns the element in the specified direction.
@@ -1045,23 +1028,21 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
             internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
-                if (AccessibilityImprovements.Level3) {
-                    switch (direction) {
-                        case UnsafeNativeMethods.NavigateDirection.NextSibling:
-                            var propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
-                            var propertyGridView = propertyGridViewAccessibleObject.Owner as PropertyGridView;
-                            bool currentGridEntryFound = false;
-                            return propertyGridViewAccessibleObject.GetNextGridEntry(_owningPropertyDescriptorGridEntry, propertyGridView.TopLevelGridEntries, out currentGridEntryFound);
-                        case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
-                            propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
-                            propertyGridView = propertyGridViewAccessibleObject.Owner as PropertyGridView;
-                            currentGridEntryFound = false;
-                            return propertyGridViewAccessibleObject.GetPreviousGridEntry(_owningPropertyDescriptorGridEntry, propertyGridView.TopLevelGridEntries, out currentGridEntryFound);
-                        case UnsafeNativeMethods.NavigateDirection.FirstChild:
-                            return GetFirstChild();
-                        case UnsafeNativeMethods.NavigateDirection.LastChild:
-                            return GetLastChild();
-                    }
+                switch (direction) {
+                    case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                        var propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
+                        var propertyGridView = propertyGridViewAccessibleObject.Owner as PropertyGridView;
+                        bool currentGridEntryFound = false;
+                        return propertyGridViewAccessibleObject.GetNextGridEntry(_owningPropertyDescriptorGridEntry, propertyGridView.TopLevelGridEntries, out currentGridEntryFound);
+                    case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                        propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
+                        propertyGridView = propertyGridViewAccessibleObject.Owner as PropertyGridView;
+                        currentGridEntryFound = false;
+                        return propertyGridViewAccessibleObject.GetPreviousGridEntry(_owningPropertyDescriptorGridEntry, propertyGridView.TopLevelGridEntries, out currentGridEntryFound);
+                    case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                        return GetFirstChild();
+                    case UnsafeNativeMethods.NavigateDirection.LastChild:
+                        return GetLastChild();
                 }
 
                 return base.FragmentNavigate(direction);
@@ -1105,7 +1086,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
 
             internal override bool IsPatternSupported(int patternId) {
-                if (AccessibilityImprovements.Level3 && patternId == NativeMethods.UIA_ValuePatternId) {
+                if (patternId == NativeMethods.UIA_ValuePatternId) {
                     return true;
                 }
 
@@ -1116,34 +1097,29 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 if (propertyID == NativeMethods.UIA_IsEnabledPropertyId) {
                     return !((PropertyDescriptorGridEntry)owner).IsPropertyReadOnly;
                 }
-
-                if (AccessibilityImprovements.Level3) {
-                    if (propertyID == NativeMethods.UIA_LegacyIAccessibleDefaultActionPropertyId) {
-                        return string.Empty;
-                    }
-                    else if (propertyID == NativeMethods.UIA_IsValuePatternAvailablePropertyId) {
-                        return true;
-                    }
+                else if (propertyID == NativeMethods.UIA_LegacyIAccessibleDefaultActionPropertyId) {
+                    return string.Empty;
+                }
+                else if (propertyID == NativeMethods.UIA_IsValuePatternAvailablePropertyId) {
+                    return true;
                 }
 
                 return base.GetPropertyValue(propertyID);
             }
         }
 
-        /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.ExceptionConverter"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      The exception converter is a type converter that displays an exception to the user.
-        /// </devdoc>
+        /// </summary>
         private class ExceptionConverter : TypeConverter {
 
-            /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.ExceptionConverter.ConvertTo"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Converts the given object to another type.  The most common types to convert
             ///      are to and from a string object.  The default implementation will make a call
             ///      to ToString on the object if the object is valid and if the destination
             ///      type is string.  If this cannot convert to the desitnation type, this will
             ///      throw a NotSupportedException.
-            /// </devdoc>
+            /// </summary>
             public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
                 if (destinationType == typeof(string)) {
                     if (value is Exception) {
@@ -1159,18 +1135,16 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.ExceptionEditor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      The exception editor displays a message to the user.
-        /// </devdoc>
+        /// </summary>
         private class ExceptionEditor : UITypeEditor {
 
-            /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.ExceptionEditor.EditValue"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Edits the given object value using the editor style provided by
             ///      GetEditorStyle.  A service provider is provided so that any
             ///      required editing services can be obtained.
-            /// </devdoc>
+            /// </summary>
             public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value) {
                 Exception except = value as Exception;
 
@@ -1195,11 +1169,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return value;
             }
 
-            /// <include file='doc\PropertyDescriptorGridEntry.uex' path='docs/doc[@for="PropertyDescriptorGridEntry.ExceptionEditor.GetEditStyle"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Retrieves the editing style of the Edit method.  If the method
             ///      is not supported, this will return None.
-            /// </devdoc>
+            /// </summary>
             public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) {
                 return UITypeEditorEditStyle.Modal;
             }

@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Drawing.Printing;
 
-    /// <include file='doc\PrintControllerWithStatusDialog.uex' path='docs/doc[@for="PrintControllerWithStatusDialog"]/*' />
     public class PrintControllerWithStatusDialog : PrintController {
         private PrintController underlyingController;
         private PrintDocument document;
@@ -19,23 +18,20 @@ namespace System.Windows.Forms {
         private int pageNumber;
         private string dialogTitle;
 
-        /// <include file='doc\PrintControllerWithStatusDialog.uex' path='docs/doc[@for="PrintControllerWithStatusDialog.PrintControllerWithStatusDialog"]/*' />
         public PrintControllerWithStatusDialog(PrintController underlyingController) 
         : this(underlyingController, string.Format(SR.PrintControllerWithStatusDialog_DialogTitlePrint)) {
         }
 
-        /// <include file='doc\PrintControllerWithStatusDialog.uex' path='docs/doc[@for="PrintControllerWithStatusDialog.PrintControllerWithStatusDialog1"]/*' />
         public PrintControllerWithStatusDialog(PrintController underlyingController, string dialogTitle) {
             this.underlyingController = underlyingController;
             this.dialogTitle = dialogTitle;
         }
-        /// <include file='doc\PreviewPrintController.uex' path='docs/doc[@for="PreviewPrintController.IsPreview"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       This is new public property which notifies if this controller is used for PrintPreview.. so get the underlying Controller 
         ///       and return its IsPreview Property.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override bool IsPreview {
             get {
                 if (underlyingController != null)
@@ -46,13 +42,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintControllerWithStatusDialog.uex' path='docs/doc[@for="PrintControllerWithStatusDialog.OnStartPrint"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Implements StartPrint by delegating to the underlying controller.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override void OnStartPrint(PrintDocument document, PrintEventArgs e) {
             base.OnStartPrint(document, e);
 
@@ -83,13 +77,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintControllerWithStatusDialog.uex' path='docs/doc[@for="PrintControllerWithStatusDialog.OnStartPage"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Implements StartPage by delegating to the underlying controller.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override Graphics OnStartPage(PrintDocument document, PrintPageEventArgs e) {
             base.OnStartPage(document, e);
 
@@ -103,13 +95,11 @@ namespace System.Windows.Forms {
             return result;
         }
 
-        /// <include file='doc\PrintControllerWithStatusDialog.uex' path='docs/doc[@for="PrintControllerWithStatusDialog.OnEndPage"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Implements EndPage by delegating to the underlying controller.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override void OnEndPage(PrintDocument document, PrintPageEventArgs e) {
             underlyingController.OnEndPage(document, e);
             if (backgroundThread != null && backgroundThread.canceled) {
@@ -120,13 +110,11 @@ namespace System.Windows.Forms {
             base.OnEndPage(document, e);
         }
 
-        /// <include file='doc\PrintControllerWithStatusDialog.uex' path='docs/doc[@for="PrintControllerWithStatusDialog.OnEndPrint"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Implements EndPrint by delegating to the underlying controller.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override void OnEndPrint(PrintDocument document, PrintEventArgs e) {
             underlyingController.OnEndPrint(document, e);
             if (backgroundThread != null && backgroundThread.canceled) {
@@ -228,10 +216,10 @@ namespace System.Windows.Forms {
                 this.MinimumSize = Size;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Tells whether the current resources for this dll have been
             ///     localized for a RTL language.
-            /// </devdoc>
+            /// </summary>
             private static bool IsRTLResources {
                 get {
                     return SR.RTL != "RTL_False";

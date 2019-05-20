@@ -12,11 +12,10 @@ namespace System.Windows.Forms {
     using System.Drawing.Printing;
     using System.Runtime.InteropServices;
 
-    /// <include file='doc\PrintDialog.uex' path='docs/doc[@for="PrintDialog"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para> Allows users to select a printer and choose which
     ///       portions of the document to print.</para>
-    /// </devdoc>
+    /// </summary>
     [DefaultProperty(nameof(Document))]
     [SRDescription(nameof(SR.DescriptionPrintDialog))]
     [Designer("System.Windows.Forms.Design.PrintDialogDesigner, " + AssemblyRef.SystemDesign)]
@@ -39,12 +38,9 @@ namespace System.Windows.Forms {
         private bool showHelp;
         private bool showNetwork;
 
-        private bool useEXDialog = false;
-
-        /// <include file='doc\PrintDialog.uex' path='docs/doc[@for="PrintDialog.PrintDialog"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.PrintDialog'/> class.</para>
-        /// </devdoc>
+        /// </summary>
         public PrintDialog() {
             Reset();
         }
@@ -65,12 +61,11 @@ namespace System.Windows.Forms {
         }
         
 
-        /// <include file='doc\PrintDialog.uex' path='docs/doc[@for="PrintDialog.AllowSomePages"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the Pages option button is enabled.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -81,10 +76,9 @@ namespace System.Windows.Forms {
             set { allowPages = value;}
         }
 
-        /// <include file='doc\PrintDialog.uex' path='docs/doc[@for="PrintDialog.AllowPrintToFile"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets a value indicating whether the Print to file check box is enabled.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
@@ -95,12 +89,11 @@ namespace System.Windows.Forms {
             set { allowPrintToFile = value;}
         }
 
-        /// <include file='doc\PrintDialog.uex' path='docs/doc[@for="PrintDialog.AllowSelection"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the From... To... Page option button is enabled.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -111,12 +104,11 @@ namespace System.Windows.Forms {
             set { allowSelection = value;}
         }
 
-        /// <include file='doc\PrintDialog.uex' path='docs/doc[@for="PrintDialog.Document"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating the <see cref='System.Drawing.Printing.PrintDocument'/> used to obtain <see cref='System.Drawing.Printing.PrinterSettings'/>.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatData)), 
         DefaultValue(null),
@@ -142,13 +134,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintDialog.uex' path='docs/doc[@for="PrintDialog.PrinterSettings"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the <see cref='System.Drawing.Printing.PrinterSettings'/> the
         ///       dialog box will be modifying.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatData)), 
         DefaultValue(null),
@@ -174,10 +165,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintDialog.uex' path='docs/doc[@for="PrintDialog.PrintToFile"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets a value indicating whether the Print to file check box is checked.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -188,12 +178,11 @@ namespace System.Windows.Forms {
             set { printToFile = value;}
         }
 
-        /// <include file='doc\PrintDialog.uex' path='docs/doc[@for="PrintDialog.ShowHelp"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the Help button is displayed.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -204,12 +193,11 @@ namespace System.Windows.Forms {
             set { showHelp = value;}
         }
 
-        /// <include file='doc\PrintDialog.uex' path='docs/doc[@for="PrintDialog.ShowNetwork"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the Network button is displayed.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
@@ -222,52 +210,71 @@ namespace System.Windows.Forms {
 
 
         /// <summary>
-        ///    <para>
-        ///      UseEXDialog = true means to use the EX versions of the dialogs when running on XP or above, and to ignore the ShowHelp & ShowNetwork properties. 
-        ///      If running below XP then UseEXDialog is ignored and the non-EX dialogs are used & ShowHelp & ShowNetwork are respected.       
-        ///      UseEXDialog = false means to never use the EX versions of the dialog regardless of which O/S app is running on. ShowHelp & ShowNetwork will work in this case.
-        ///    </para>
+        /// UseEXDialog = true means to use the EX versions of the dialogs and to ignore the
+        /// ShowHelp & ShowNetwork properties. 
+        /// UseEXDialog = false means to never use the EX versions of the dialog.
+        /// ShowHelp & ShowNetwork will work in this case.
         /// </summary>
-        [
-        DefaultValue(false),
-        SRDescription(nameof(SR.PDuseEXDialog))
-        ]
-        public bool UseEXDialog {
-            get { return useEXDialog;}
-            set { useEXDialog = value;}
-        }
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.PDuseEXDialog))]
+        public bool UseEXDialog { get; set; }
 
-        private int GetFlags() {
+        private int GetFlags()
+        {
             int flags = 0;
 
             // Only set this flag when using PRINTDLG and PrintDlg,
             // and not when using PrintDlgEx and PRINTDLGEX.
-            if (!UseEXDialog || (Environment.OSVersion.Platform != System.PlatformID.Win32NT ||
-                Environment.OSVersion.Version.Major < 5)) {
+            if (!UseEXDialog)
+            {
                 flags |= NativeMethods.PD_ENABLEPRINTHOOK;
             }
 
-            if (!allowCurrentPage) flags |= NativeMethods.PD_NOCURRENTPAGE;
-            if (!allowPages) flags |= NativeMethods.PD_NOPAGENUMS;
-            if (!allowPrintToFile) flags |= NativeMethods.PD_DISABLEPRINTTOFILE;
-            if (!allowSelection) flags |= NativeMethods.PD_NOSELECTION;
+            if (!allowCurrentPage)
+            {
+                flags |= NativeMethods.PD_NOCURRENTPAGE;
+            }
+            if (!allowPages)
+            {
+                flags |= NativeMethods.PD_NOPAGENUMS;
+            }
+            if (!allowPrintToFile)
+            {
+                flags |= NativeMethods.PD_DISABLEPRINTTOFILE;
+            }
+            if (!allowSelection)
+            {
+                flags |= NativeMethods.PD_NOSELECTION;
+            }
 
-            flags |= (int) PrinterSettings.PrintRange;
+            flags |= (int)PrinterSettings.PrintRange;
 
-            if (printToFile) flags |= NativeMethods.PD_PRINTTOFILE;
-            if (showHelp) flags |= NativeMethods.PD_SHOWHELP;
-            if (!showNetwork) flags |= NativeMethods.PD_NONETWORKBUTTON;
-            if (PrinterSettings.Collate) flags |= NativeMethods.PD_COLLATE;
+            if (printToFile)
+            {
+                flags |= NativeMethods.PD_PRINTTOFILE;
+            }
+            if (showHelp)
+            {
+                flags |= NativeMethods.PD_SHOWHELP;
+            }
+            if (!showNetwork)
+            {
+                flags |= NativeMethods.PD_NONETWORKBUTTON;
+            }
+            if (PrinterSettings.Collate)
+            {
+                flags |= NativeMethods.PD_COLLATE;
+            }
+
             return flags;
         }
 
-        /// <include file='doc\PrintDialog.uex' path='docs/doc[@for="PrintDialog.Reset"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Resets all options, the last selected printer, and the page
         ///       settings to their default values.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override void Reset() {
             allowCurrentPage = false;
             allowPages = false;
@@ -311,9 +318,6 @@ namespace System.Windows.Forms {
             return data;
         }
 
-        // Use PRINTDLGEX on Win2k and newer OS'. Note that at the time of this
-        // fix, PrinterSettings did not support multiple page ranges.
-        // Create a PRINTDLGEX with a few useful defaults.
         internal static NativeMethods.PRINTDLGEX CreatePRINTDLGEX() {
             NativeMethods.PRINTDLGEX data = new NativeMethods.PRINTDLGEX();
             data.lStructSize = Marshal.SizeOf(data);
@@ -327,7 +331,7 @@ namespace System.Windows.Forms {
             data.nPageRanges = 0;
             data.nMaxPageRanges = 1;
             data.pageRanges = UnsafeNativeMethods.GlobalAlloc(NativeMethods.GPTR,
-                                                              data.nMaxPageRanges * Marshal.SizeOf(typeof(NativeMethods.PRINTPAGERANGE)));
+                                                              data.nMaxPageRanges * Marshal.SizeOf<NativeMethods.PRINTPAGERANGE>());
             data.nMinPage = 0;
             data.nMaxPage = 9999;
             data.nCopies = 1;
@@ -340,33 +344,24 @@ namespace System.Windows.Forms {
             return data;
         }
 
-        /// <include file='doc\PrintDialog.uex' path='docs/doc[@for="PrintDialog.RunDialog"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
-        // Use PrintDlgEx and PRINTDLGEX on Win2k and newer OS'.
-        protected override bool RunDialog(IntPtr hwndOwner) {
-            bool returnValue = false;
+        protected override bool RunDialog(IntPtr hwndOwner)
+        {
+            var hookProcPtr = new NativeMethods.WndProc(this.HookProc);
 
-            NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(this.HookProc);
-
-            if (!UseEXDialog || (Environment.OSVersion.Platform != System.PlatformID.Win32NT ||
-                Environment.OSVersion.Version.Major < 5)) {
+            if (!UseEXDialog)
+            {
                 NativeMethods.PRINTDLG data = CreatePRINTDLG();
-                returnValue = ShowPrintDialog(hwndOwner, hookProcPtr, data);
+                return ShowPrintDialog(hwndOwner, hookProcPtr, data);
             }
-            else {
+            else
+            {
                 NativeMethods.PRINTDLGEX data = CreatePRINTDLGEX();
-                returnValue = ShowPrintDialog(hwndOwner, data);
+                return ShowPrintDialog(hwndOwner, data);
             }
-
-            return returnValue;
         }
 
-        // Due to the nature of PRINTDLGEX vs PRINTDLG, separate but similar methods
-        // are required for showing the print dialog on Win2k and newer OS'.
         private bool ShowPrintDialog(IntPtr hwndOwner, NativeMethods.WndProc hookProcPtr, NativeMethods.PRINTDLG data) {
-           
+
             data.Flags = GetFlags();
             data.nCopies = (short) PrinterSettings.Copies;
             data.hwndOwner = hwndOwner;
@@ -421,11 +416,10 @@ namespace System.Windows.Forms {
                 // PRINTDLG.nCopies or PRINTDLG.nCopies indicates the number of copies the user wants
                 // to print, and the PD_COLLATE flag in the Flags member indicates 
                 // whether the user wants to print them collated.
-                if ((data.Flags & NativeMethods.PD_USEDEVMODECOPIESANDCOLLATE) == 0) {
-                    if (Environment.OSVersion.Version.Major >= 6) {
-                        PrinterSettings.Copies = data.nCopies;
-                        PrinterSettings.Collate = ((data.Flags & NativeMethods.PD_COLLATE) == NativeMethods.PD_COLLATE);
-                    }
+                if ((data.Flags & NativeMethods.PD_USEDEVMODECOPIESANDCOLLATE) == 0)
+                {
+                    PrinterSettings.Copies = data.nCopies;
+                    PrinterSettings.Collate = ((data.Flags & NativeMethods.PD_COLLATE) == NativeMethods.PD_COLLATE);
                 }
 
                 return true;
@@ -509,11 +503,10 @@ namespace System.Windows.Forms {
                 // PRINTDLG.nCopies or PRINTDLG.nCopies indicates the number of copies the user wants
                 // to print, and the PD_COLLATE flag in the Flags member indicates 
                 // whether the user wants to print them collated.
-                if ((data.Flags & NativeMethods.PD_USEDEVMODECOPIESANDCOLLATE) == 0) {
-                    if(Environment.OSVersion.Version.Major >= 6) {
-                        PrinterSettings.Copies = (short)(data.nCopies);
-                        PrinterSettings.Collate = ((data.Flags & NativeMethods.PD_COLLATE) == NativeMethods.PD_COLLATE);
-                    }
+                if ((data.Flags & NativeMethods.PD_USEDEVMODECOPIESANDCOLLATE) == 0)
+                {
+                    PrinterSettings.Copies = (short)(data.nCopies);
+                    PrinterSettings.Collate = ((data.Flags & NativeMethods.PD_COLLATE) == NativeMethods.PD_COLLATE);
                 }
 
                 // We should return true only if the user pressed the "Print" button while dismissing the dialog.

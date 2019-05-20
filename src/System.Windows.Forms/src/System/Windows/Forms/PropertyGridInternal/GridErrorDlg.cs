@@ -6,7 +6,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
     using System.Runtime.Serialization.Formatters;
     using System.Threading;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
@@ -23,14 +22,13 @@ namespace System.Windows.Forms.PropertyGridInternal {
     using Message = System.Windows.Forms.Message;
     using System.Drawing.Drawing2D;    
 
-    /// <include file='doc\GridErrorDlg.uex' path='docs/doc[@for="GridErrorDlg"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///     Implements a dialog that is displayed when an unhandled exception occurs in
     ///     a thread. This dialog's width is defined by the summary message
     ///     in the top pane. We don't restrict dialog width in any way.  
     ///     Use caution and check at all DPI scaling factors if adding a new message
     ///     to be displayed in the top pane.
-    /// </devdoc>
+    /// </summary>
     internal class GridErrorDlg : Form {
         private TableLayoutPanel overarchingTableLayoutPanel;
         private TableLayoutPanel buttonTableLayoutPanel;
@@ -73,13 +71,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
         ]
         public GridErrorDlg(PropertyGrid owner) {
             ownerGrid = owner;
-            expandImage = new Bitmap(typeof(ThreadExceptionDialog), "down.bmp");
-            expandImage.MakeTransparent();
+            expandImage = DpiHelper.GetBitmapFromIcon(typeof(ThreadExceptionDialog), "down");
             if (DpiHelper.IsScalingRequired) {
                 DpiHelper.ScaleBitmapLogicalToDevice(ref expandImage);
             }
-            collapseImage = new Bitmap(typeof(ThreadExceptionDialog), "up.bmp");
-            collapseImage.MakeTransparent();
+            collapseImage = DpiHelper.GetBitmapFromIcon(typeof(ThreadExceptionDialog), "up");
             if (DpiHelper.IsScalingRequired) {
                 DpiHelper.ScaleBitmapLogicalToDevice(ref collapseImage);
             }
@@ -102,10 +98,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             detailsBtn.Image = expandImage;
         }
 
-        /// <include file='doc\GridErrorDlg.uex' path='docs/doc[@for="GridErrorDlg.DetailsClick"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Called when the details button is clicked.
-        /// </devdoc>
+        /// </summary>
         private void DetailsClick(object sender, EventArgs devent) {
             int delta = details.Height + 8;
 
@@ -123,21 +118,19 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
             details.Visible = !details.Visible;
 
-            if (AccessibilityImprovements.Level1) {
-                AccessibilityNotifyClients(AccessibleEvents.StateChange, -1);
-                AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
-                details.TabStop = !details.TabStop;
+            AccessibilityNotifyClients(AccessibleEvents.StateChange, -1);
+            AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
+            details.TabStop = !details.TabStop;
 
-                if (details.Visible) {
-                    details.Focus();
-                }
+            if (details.Visible) {
+                details.Focus();
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Tells whether the current resources for this dll have been
         ///     localized for a RTL language.
-        /// </devdoc>
+        /// </summary>
         private static bool IsRTLResources {
             get {
                 return SR.RTL != "RTL_False";
@@ -358,12 +351,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             } 
         }
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level1) {
-                return new DetailsButtonAccessibleObject(this);
-            }
-            else {
-                return base.CreateAccessibilityInstance();
-            }
+            return new DetailsButtonAccessibleObject(this);
         }
     }
 

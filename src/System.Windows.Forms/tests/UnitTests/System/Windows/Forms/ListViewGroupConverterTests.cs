@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -14,12 +14,13 @@ namespace System.Windows.Forms.Tests
 {
     public class ListViewGroupConverterTests
     {
+        public static TheoryData<Type, bool> CanConvertFromData =>
+            CommonTestHelper.GetConvertFromTheoryData();
+
         [Theory]
-        [InlineData(typeof(string), false)]
-        [InlineData(typeof(InstanceDescriptor), false)]
+        [MemberData(nameof(CanConvertFromData))]
         [InlineData(typeof(ListViewGroup), false)]
-        [InlineData(typeof(int), false)]
-        [InlineData(null, false)]
+        [InlineData(typeof(string), false)]
         public void ListViewGroupConverter_CanConvertFrom_Invoke_ReturnsExpected(Type sourceType, bool expected)
         {
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(ListViewGroup));

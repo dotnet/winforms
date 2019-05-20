@@ -13,13 +13,11 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Internal;
     using System.Globalization;
     using System.Runtime.InteropServices;
-    using System.Security.Permissions;
     using System.Windows.Forms.Layout;
 
-    /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para>Represents a Windows up-down control that displays numeric values.</para>
-    /// </devdoc>
+    /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -44,14 +42,14 @@ namespace System.Windows.Forms {
         //
         //////////////////////////////////////////////////////////////
 
-        /// <devdoc>
+        /// <summary>
         ///     The number of decimal places to display.
-        /// </devdoc>
+        /// </summary>
         private int decimalPlaces = DefaultDecimalPlaces;
 
-        /// <devdoc>
+        /// <summary>
         ///     The amount to increment by.
-        /// </devdoc>
+        /// </summary>
         private decimal increment = DefaultIncrement;
 
         // Display the thousands separator?
@@ -84,7 +82,6 @@ namespace System.Windows.Forms {
         // to know when to get the next entry in the accelaration table.
         private long buttonPressedStartTime;
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.NumericUpDown"]/*' />
         [
             SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // "0" is the default value for numeric up down.
                                                                                                         // So we don't have to localize it.
@@ -102,9 +99,9 @@ namespace System.Windows.Forms {
         //////////////////////////////////////////////////////////////
 
 		
-        /// <devdoc>
+        /// <summary>
         ///     Specifies the acceleration information.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -118,10 +115,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.DecimalPlaces"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets the number of decimal places to display in the up-down control.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatData)),
         DefaultValue(NumericUpDown.DefaultDecimalPlaces),
@@ -135,19 +131,18 @@ namespace System.Windows.Forms {
 
             set {
                 if (value < 0 || value > 99) {
-                    throw new ArgumentOutOfRangeException(nameof(DecimalPlaces), string.Format(SR.InvalidBoundArgument, "DecimalPlaces", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture), "99"));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(DecimalPlaces), value, 0, 99));
                 }
                 decimalPlaces = value;
                 UpdateEditText();
             }
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.Hexadecimal"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or
         ///       sets a value indicating whether the up-down control should
         ///       display the value it contains in hexadecimal format.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(NumericUpDown.DefaultHexadecimal),
@@ -165,12 +160,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.Increment"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets the value
         ///       to increment or
         ///       decrement the up-down control when the up or down buttons are clicked.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatData)),
         SRDescription(nameof(SR.NumericUpDownIncrementDescr))
@@ -186,8 +180,8 @@ namespace System.Windows.Forms {
             }
 
             set {
-                if (value < (decimal)0.0) {
-                    throw new ArgumentOutOfRangeException(nameof(Increment), string.Format(SR.InvalidArgument, "Increment", value.ToString(CultureInfo.CurrentCulture)));
+                if (value < 0.0m) {
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(Increment), value));
                 }
                 else {
                     this.increment = value;
@@ -196,10 +190,9 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.Maximum"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets the maximum value for the up-down control.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatData)),
         RefreshProperties(RefreshProperties.All),
@@ -223,10 +216,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.Minimum"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets the minimum allowed value for the up-down control.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatData)),
         RefreshProperties(RefreshProperties.All),
@@ -250,7 +242,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.Padding"]/*' />
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -266,26 +257,23 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         new public event EventHandler PaddingChanged {
-            add { base.PaddingChanged += value; }
-            remove { base.PaddingChanged -= value; }
-        }
+            add => base.PaddingChanged += value; 
+            remove => base.PaddingChanged -= value; }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines whether the UpDownButtons have been pressed for enough time to activate acceleration.
-        /// </devdoc>
+        /// </summary>
         private bool Spinning {
             get{
                 return this.accelerations != null && this.buttonPressedStartTime != InvalidValue;
             }
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.Text"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       The text displayed in the control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         Bindable(false), 
@@ -301,23 +289,16 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.TextChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
-            remove {
-                base.TextChanged -= value;
-            }
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
         
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.ThousandsSeparator"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets a value indicating whether a thousands
         ///       separator is displayed in the up-down control when appropriate.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatData)),
         DefaultValue(NumericUpDown.DefaultThousandsSeparator),
@@ -339,11 +320,10 @@ namespace System.Windows.Forms {
         /*
          * The current value of the control
          */
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.Value"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets the value
         ///       assigned to the up-down control.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Bindable(true),
@@ -362,7 +342,7 @@ namespace System.Windows.Forms {
                 if (value != currentValue) {
                 
                     if (!initializing && ((value < minimum) || (value > maximum))) {
-                        throw new ArgumentOutOfRangeException(nameof(Value), string.Format(SR.InvalidBoundArgument, "Value", value.ToString(CultureInfo.CurrentCulture), "'Minimum'", "'Maximum'"));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(Value), value, $"'{nameof(Minimum)}'", $"'{nameof(Maximum)}'"));
                     }
                     else {
                         currentValue = value;                       
@@ -381,27 +361,20 @@ namespace System.Windows.Forms {
         //
         //////////////////////////////////////////////////////////////
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.ValueChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Occurs when the <see cref='System.Windows.Forms.NumericUpDown.Value'/> property has been changed in some way.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NumericUpDownOnValueChangedDescr))]
         public event EventHandler ValueChanged {
-            add {
-                onValueChanged += value;
-            }
-            remove {
-                onValueChanged -= value;
-            }
+            add => onValueChanged += value;
+            remove => onValueChanged -= value;
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.BeginInit"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    Handles tasks required when the control is being initialized.
-        /// </devdoc>
+        /// </summary>
         public void BeginInit() {
             initializing = true;
         }
@@ -425,17 +398,15 @@ namespace System.Windows.Forms {
             return value;
         }
         
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.CreateAccessibilityInstance"]/*' />
         protected override AccessibleObject CreateAccessibilityInstance() {
             return new NumericUpDownAccessibleObject(this);
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.DownButton"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Decrements the value of the up-down control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override void DownButton() {
             SetNextAcceleration();
 
@@ -464,22 +435,20 @@ namespace System.Windows.Forms {
             Value = newValue;
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.EndInit"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Called when initialization of the control is complete.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void EndInit() {
             initializing = false;
             Value = Constrain(currentValue);
             UpdateEditText();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Overridden to set/reset acceleration variables.
-        /// </devdoc>
+        /// </summary>
         protected override void OnKeyDown(KeyEventArgs e) {
             if (base.InterceptArrowKeys && (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down) && !this.Spinning) {
                 StartAcceleration();  
@@ -488,9 +457,9 @@ namespace System.Windows.Forms {
             base.OnKeyDown(e);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     Overridden to set/reset acceleration variables.
-        /// </devdoc>
+        /// </summary>
         protected override void OnKeyUp(KeyEventArgs e) {
             if (base.InterceptArrowKeys && (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down)) {
                 StopAcceleration();  
@@ -499,14 +468,12 @@ namespace System.Windows.Forms {
             base.OnKeyUp(e);
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.OnTextBoxKeyPress"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Restricts the entry of characters to digits (including hex), the negative sign,
         ///       the decimal point, and editing keystrokes (backspace).
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnTextBoxKeyPress(object source, KeyPressEventArgs e) {
 
             base.OnTextBoxKeyPress(source, e);
@@ -541,10 +508,9 @@ namespace System.Windows.Forms {
             }
         }
                                   
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.OnValueChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.NumericUpDown.OnValueChanged'/> event.</para>
-        /// </devdoc>        
+        /// </summary>        
         protected virtual void OnValueChanged(EventArgs e) {
 
             // Call the event handler
@@ -553,7 +519,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.OnLostFocus"]/*' />
         protected override void OnLostFocus(EventArgs e) 
         {
             base.OnLostFocus(e);
@@ -563,27 +528,26 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///   Overridden to start/end acceleration.
-        /// </devdoc>
+        /// </summary>
         internal override void OnStartTimer() {
             StartAcceleration();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///   Overridden to start/end acceleration.
-        /// </devdoc>
+        /// </summary>
         internal override void OnStopTimer() {
             StopAcceleration();
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.ParseEditText"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Converts the text displayed in the up-down control to a
         ///       numeric value and evaluates it.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected void ParseEditText() {
 
             Debug.Assert(UserEdit == true, "ParseEditText() - UserEdit == false");
@@ -610,9 +574,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Updates the index of the UpDownNumericAcceleration entry to use (if needed).
-        /// </devdoc>
+        /// </summary>
         private void SetNextAcceleration() {
             // Spinning will check if accelerations is null.
             if(this.Spinning && this.accelerationsCurrentIndex < (this.accelerations.Count - 1))  { // if index not the last entry ...
@@ -646,56 +610,54 @@ namespace System.Windows.Forms {
             Value = DefaultValue;
         }
         
-        /// <devdoc>
+        /// <summary>
         /// <para>Indicates whether the <see cref='System.Windows.Forms.NumericUpDown.Increment'/> property should be
         ///    persisted.</para>
-        /// </devdoc>
+        /// </summary>
         private bool ShouldSerializeIncrement() {
             return !Increment.Equals(NumericUpDown.DefaultIncrement);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Indicates whether the <see cref='System.Windows.Forms.NumericUpDown.Maximum'/> property should be persisted.</para>
-        /// </devdoc>
+        /// </summary>
         private bool ShouldSerializeMaximum() {
             return !Maximum.Equals(NumericUpDown.DefaultMaximum);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Indicates whether the <see cref='System.Windows.Forms.NumericUpDown.Minimum'/> property should be persisted.</para>
-        /// </devdoc>
+        /// </summary>
         private bool ShouldSerializeMinimum() {
             return !Minimum.Equals(NumericUpDown.DefaultMinimum);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Indicates whether the <see cref='System.Windows.Forms.NumericUpDown.Value'/> property should be persisted.</para>
-        /// </devdoc>
+        /// </summary>
         private bool ShouldSerializeValue() {
             return !Value.Equals(NumericUpDown.DefaultValue);
         }
 
         
-        /// <devdoc>
+        /// <summary>
         ///     Records when UpDownButtons are pressed to enable acceleration.
-        /// </devdoc>
+        /// </summary>
         private void StartAcceleration() {
             this.buttonPressedStartTime = DateTime.Now.Ticks;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Reset when UpDownButtons are pressed.
-        /// </devdoc>
+        /// </summary>
         private void StopAcceleration() {
             this.accelerationsCurrentIndex = InvalidValue;
             this.buttonPressedStartTime        = InvalidValue;
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.ToString"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Provides some interesting info about this control in String form.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         public override string ToString() {
 
             string s = base.ToString();
@@ -703,12 +665,11 @@ namespace System.Windows.Forms {
             return s;
         }
         
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.UpButton"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Increments the value of the up-down control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override void UpButton() {
             SetNextAcceleration();
 
@@ -750,12 +711,11 @@ namespace System.Windows.Forms {
             return text;
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.UpdateEditText"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays the current value of the up-down control in the appropriate format.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void UpdateEditText() {
             // If we're initializing, we don't want to update the edit text yet,
             // just in case the value is invalid.
@@ -786,13 +746,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.ValidateEditText"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Validates and updates
         ///       the text displayed in the up-down control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void ValidateEditText() {
 
             // See if the edit text parses to a valid decimal
@@ -912,12 +871,7 @@ namespace System.Windows.Forms {
                         return role;
                     }
                     else {
-                        if (AccessibilityImprovements.Level1) {
-                            return AccessibleRole.SpinButton;
-                        }
-                        else {
-                            return AccessibleRole.ComboBox;
-                        }
+                        return AccessibleRole.SpinButton;
                     }
                 }
             }

@@ -12,7 +12,6 @@ namespace System.Windows.Forms
         [
             System.Runtime.InteropServices.ComVisible(true)
         ]
-        /// <include file='doc\DataGridViewAccessibleObject.uex' path='docs/doc[@for="DataGridView.DataGridViewAccessibleObject"]/*' />
         protected class DataGridViewAccessibleObject : ControlAccessibleObject
         {
             private int[] runtimeId = null; // Used by UIAutomation
@@ -21,14 +20,12 @@ namespace System.Windows.Forms
             DataGridViewTopRowAccessibleObject topRowAccessibilityObject = null;
             DataGridViewSelectedCellsAccessibleObject selectedCellsAccessibilityObject = null;
 
-            /// <include file='doc\DataGridViewAccessibleObject.uex' path='docs/doc[@for="DataGridViewAccessibleObject.DataGridViewAccessibleObject"]/*' />
             public DataGridViewAccessibleObject(DataGridView owner)
                 : base(owner)
             {
                 this.owner = owner;
             }
 
-            /// <include file='doc\DataGridViewAccessibleObject.uex' path='docs/doc[@for="DataGridViewAccessibleObject.Name"]/*' />
             public override string Name
             {
                 [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")] // Don't localize string "DataGridView".
@@ -47,7 +44,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewAccessibleObject.uex' path='docs/doc[@for="DataGridViewAccessibleObject.Role"]/*' />
             public override AccessibleRole Role
             {
                 get
@@ -89,7 +85,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewAccessibleObject.uex' path='docs/doc[@for="DataGridViewAccessibleObject.GetChild"]/*' />
             public override AccessibleObject GetChild(int index)
             {
                 if (this.owner.Columns.Count == 0)
@@ -139,7 +134,6 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            /// <include file='doc\DataGridViewAccessibleObject.uex' path='docs/doc[@for="DataGridViewAccessibleObject.GetChildCount"]/*' />
             public override int GetChildCount()
             {
                 if (this.owner.Columns.Count == 0)
@@ -168,7 +162,6 @@ namespace System.Windows.Forms
                 return childCount;
             }
 
-            /// <include file='doc\DataGridViewAccessibleObject.uex' path='docs/doc[@for="DataGridViewAccessibleObject.GetFocused"]/*' />
             public override AccessibleObject GetFocused()
             {
                 if (this.owner.Focused && this.owner.CurrentCell != null)
@@ -181,13 +174,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewAccessibleObject.uex' path='docs/doc[@for="DataGridViewAccessibleObject.GetSelected"]/*' />
             public override AccessibleObject GetSelected()
             {
                 return this.SelectedCellsAccessibilityObject;
             }
 
-            /// <include file='doc\DataGridViewAccessibleObject.uex' path='docs/doc[@for="DataGridViewAccessibleObject.HitTest"]/*' />
             public override AccessibleObject HitTest(int x, int y)
             {
                 Point pt = this.owner.PointToClient(new Point(x, y));
@@ -222,7 +213,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewAccessibleObject.uex' path='docs/doc[@for="DataGridViewAccessibleObject.Navigate"]/*' />
             public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
             {
                 switch (navigationDirection)
@@ -260,75 +250,57 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override bool IsIAccessibleExSupported()
-            {
-                if (AccessibilityImprovements.Level2)
-                {
-                    return true;
-                }
-
-                return base.IsIAccessibleExSupported();
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             internal override object GetPropertyValue(int propertyID)
             {
-                if (AccessibilityImprovements.Level3)
+                switch (propertyID)
                 {
-                    switch (propertyID)
-                    {
-                        case NativeMethods.UIA_NamePropertyId:
-                            return this.Name;
-                        case NativeMethods.UIA_HasKeyboardFocusPropertyId:
-                            return false; // Only inner cell should be announced as focused by Narrator but not entire DGV.
-                        case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
-                            return owner.CanFocus;
-                        case NativeMethods.UIA_IsEnabledPropertyId:
-                            return owner.Enabled;
-                        case NativeMethods.UIA_IsControlElementPropertyId:
-                            return true;
-                        case NativeMethods.UIA_IsTablePatternAvailablePropertyId:
-                        case NativeMethods.UIA_IsGridPatternAvailablePropertyId:
-                            return true;
-                        case NativeMethods.UIA_ControlTypePropertyId:
-                            return NativeMethods.UIA_TableControlTypeId;
-                        case NativeMethods.UIA_ItemStatusPropertyId:
-                            // Whether the owner DataGridView can be sorted by some column.
-                            // If so, provide not-sorted/sorted-by item status.
-                            bool canSort = false;
-                            for (int i = 0; i < owner.Columns.Count; i++)
+                    case NativeMethods.UIA_NamePropertyId:
+                        return this.Name;
+                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                        return false; // Only inner cell should be announced as focused by Narrator but not entire DGV.
+                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                        return owner.CanFocus;
+                    case NativeMethods.UIA_IsEnabledPropertyId:
+                        return owner.Enabled;
+                    case NativeMethods.UIA_IsControlElementPropertyId:
+                        return true;
+                    case NativeMethods.UIA_IsTablePatternAvailablePropertyId:
+                        return IsPatternSupported(NativeMethods.UIA_TablePatternId);
+                    case NativeMethods.UIA_IsGridPatternAvailablePropertyId:
+                        return IsPatternSupported(NativeMethods.UIA_GridPatternId);
+                    case NativeMethods.UIA_ControlTypePropertyId:
+                        return NativeMethods.UIA_TableControlTypeId;
+                    case NativeMethods.UIA_ItemStatusPropertyId:
+                        // Whether the owner DataGridView can be sorted by some column.
+                        // If so, provide not-sorted/sorted-by item status.
+                        bool canSort = false;
+                        for (int i = 0; i < owner.Columns.Count; i++)
+                        {
+                            if (owner.CanSort(owner.Columns[i]))
                             {
-                                if (owner.CanSort(owner.Columns[i]))
-                                {
-                                    canSort = true;
-                                    break;
-                                }
+                                canSort = true;
+                                break;
                             }
+                        }
 
-                            if (canSort)
+                        if (canSort)
+                        {
+                            switch (owner.SortOrder)
                             {
-                                switch (owner.SortOrder)
-                                {
-                                    case SortOrder.None:
-                                        return SR.NotSortedAccessibleStatus;
-                                    case SortOrder.Ascending:
-                                        return string.Format(SR.DataGridViewSortedAscendingAccessibleStatusFormat, owner.SortedColumn?.HeaderText);
-                                    case SortOrder.Descending:
-                                        return string.Format(SR.DataGridViewSortedDescendingAccessibleStatusFormat, owner.SortedColumn?.HeaderText);
-                                }
+                                case SortOrder.None:
+                                    return SR.NotSortedAccessibleStatus;
+                                case SortOrder.Ascending:
+                                    return string.Format(SR.DataGridViewSortedAscendingAccessibleStatusFormat, owner.SortedColumn?.HeaderText);
+                                case SortOrder.Descending:
+                                    return string.Format(SR.DataGridViewSortedDescendingAccessibleStatusFormat, owner.SortedColumn?.HeaderText);
                             }
+                        }
 
-                            break;
-                    }
+                        break;
                 }
-
-                if (propertyID == NativeMethods.UIA_IsTablePatternAvailablePropertyId)
-                {
-                    return IsPatternSupported(NativeMethods.UIA_TablePatternId);
-                }
-                else if (propertyID == NativeMethods.UIA_IsGridPatternAvailablePropertyId)
-                {
-                    return IsPatternSupported(NativeMethods.UIA_GridPatternId);
-                }
+                
 
                 return base.GetPropertyValue(propertyID);
             }

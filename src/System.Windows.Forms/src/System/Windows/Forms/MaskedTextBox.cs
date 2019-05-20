@@ -17,11 +17,11 @@ namespace System.Windows.Forms
     using System.Windows.Forms.Layout;
     using System.Windows.Forms.VisualStyles;
 
-    /// <devdoc>
+    /// <summary>
     ///     MaskedTextBox control definition class.  
     ///     Uses the services from the System.ComponentModel.MaskedTextBoxProvider class.
     ///     See spec at http://dotnetclient/whidbey/Specs/MaskEdit.doc
-    /// </devdoc>
+    /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -114,9 +114,9 @@ namespace System.Windows.Forms
         // Bit vector to represent bool variables.
         private BitVector32 flagState;
 
-        /// <devdoc>
+        /// <summary>
         ///     Constructs the MaskedTextBox with the specified MaskedTextProvider object.
-        /// </devdoc>
+        /// </summary>
         public MaskedTextBox()
         {
             MaskedTextProvider maskedTextProvider = new MaskedTextProvider(nullMask, CultureInfo.CurrentCulture);
@@ -124,9 +124,9 @@ namespace System.Windows.Forms
             Initialize(maskedTextProvider);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Constructs the MaskedTextBox with the specified MaskedTextProvider object.
-        /// </devdoc>
+        /// </summary>
         public MaskedTextBox(string mask)
         {
             if (mask == null)
@@ -139,9 +139,9 @@ namespace System.Windows.Forms
             Initialize(maskedTextProvider);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Constructs the MaskedTextBox with the specified MaskedTextProvider object.
-        /// </devdoc>
+        /// </summary>
         public MaskedTextBox(MaskedTextProvider maskedTextProvider)
         {
             if (maskedTextProvider == null)
@@ -153,10 +153,10 @@ namespace System.Windows.Forms
             Initialize(maskedTextProvider);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Initializes the object with the specified MaskedTextProvider object and default
         ///     property values.
-        /// </devdoc>
+        /// </summary>
         private void Initialize(MaskedTextProvider maskedTextProvider)
         {
             Debug.Assert(maskedTextProvider != null, "Initializing from a null MaskProvider ref.");
@@ -192,9 +192,9 @@ namespace System.Windows.Forms
         /////////////////// Properties
         ///
    
-        /// <devdoc>
+        /// <summary>
         ///     Unsupported method/property.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false), 
         EditorBrowsable(EditorBrowsableState.Never), 
@@ -206,12 +206,12 @@ namespace System.Windows.Forms
             set {}
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Specifies whether the prompt character should be treated as a valid input character or not.
         ///     The setter resets the underlying MaskedTextProvider object and attempts
         ///     to add the existing input text (if any) using the new mask, failure is ignored.
         ///     This property has no particular effect if no mask has been set.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         SRDescription(nameof(SR.MaskedTextBoxAllowPromptAsInputDescr)), 
@@ -241,9 +241,9 @@ namespace System.Windows.Forms
             }
         }
      
-        /// <devdoc>
+        /// <summary>
         ///     Unsupported method/property.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false), 
         EditorBrowsable(EditorBrowsableState.Never), 
@@ -255,10 +255,10 @@ namespace System.Windows.Forms
             remove { }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Specifies whether only ASCII characters are accepted as valid input.
         ///     This property has no particular effect if no mask has been set.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         SRDescription(nameof(SR.MaskedTextBoxAsciiOnlyDescr)), 
@@ -290,9 +290,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Specifies whether to play a beep when the input is not valid according to the mask.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         SRDescription(nameof(SR.MaskedTextBoxBeepOnErrorDescr)), 
@@ -310,11 +310,11 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///       Gets a value indicating whether the user can undo the previous operation in a text box control.
         ///       Unsupported method/property.
         ///       WndProc ignores EM_CANUNDO.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false), 
         EditorBrowsable(EditorBrowsableState.Never),
@@ -328,12 +328,12 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the parameters needed to create the handle. Inheriting classes
         ///     can override this to provide extra functionality. They should not,
         ///     however, forget to call base.getCreateParams() first to get the struct
         ///     filled up with the basic info.
-        /// </devdoc>
+        /// </summary>
         protected override CreateParams CreateParams 
         {
             get 
@@ -361,9 +361,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The culture that determines the value of the localizable mask language separators and placeholders.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.MaskedTextBoxCultureDescr)),
@@ -399,11 +399,11 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Specifies the formatting options for text cut/copited to the clipboard (Whether the mask returned from the Text 
         ///    property includes Literals and/or prompt characters).  
         ///    When prompt characters are excluded, theyare returned as spaces in the string returned.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         SRDescription(nameof(SR.MaskedTextBoxCutCopyMaskFormat)), 
@@ -459,9 +459,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Specifies the IFormatProvider to be used when parsing the string to the ValidatingType.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -479,9 +479,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Specifies whether the PromptCharacter is displayed when the control loses focus.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         SRDescription(nameof(SR.MaskedTextBoxHidePromptOnLeaveDescr)),
@@ -510,9 +510,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Specifies whether to include mask literal characters when formatting the text.
-        /// </devdoc>
+        /// </summary>
         private bool IncludeLiterals
         {
             get
@@ -525,10 +525,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Specifies whether to include the mask prompt character when formatting the text in places
         ///     where an edit char has not being assigned.
-        /// </devdoc>
+        /// </summary>
         private bool IncludePrompt
         {
             get
@@ -541,11 +541,11 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Specifies the text insertion mode of the text box.  This can be used to simulated the Access masked text
         ///     control behavior where insertion is set to TextInsertionMode.AlwaysOverwrite
         ///     This property has no particular effect if no mask has been set.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         SRDescription(nameof(SR.MaskedTextBoxInsertKeyModeDescr)), 
@@ -578,9 +578,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Overridden to handle unsupported RETURN key.
-        /// </devdoc>
+        /// </summary>
         protected override bool IsInputKey(Keys keyData) 
         {
             if ((keyData & Keys.KeyCode) == Keys.Return)
@@ -590,9 +590,9 @@ namespace System.Windows.Forms
             return base.IsInputKey(keyData);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Specifies whether text insertion mode in 'on' or not.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false)
         ]
@@ -629,28 +629,22 @@ namespace System.Windows.Forms
         }
 
         
-        /// <devdoc>
+        /// <summary>
         ///   Event to notify when the insert mode has changed.  This is required for data binding. 
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatPropertyChanged)),
         SRDescription(nameof(SR.MaskedTextBoxIsOverwriteModeChangedDescr))
         ]
         public event EventHandler IsOverwriteModeChanged
         {
-            add
-            {
-                Events.AddHandler(EVENT_ISOVERWRITEMODECHANGED, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(EVENT_ISOVERWRITEMODECHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_ISOVERWRITEMODECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_ISOVERWRITEMODECHANGED, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Unsupported method/property.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false), 
         EditorBrowsable(EditorBrowsableState.Never), 
@@ -678,10 +672,10 @@ namespace System.Windows.Forms
             set {}
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The mask applied to this control.  The setter resets the underlying MaskedTextProvider object and attempts
         ///     to add the existing input text (if any) using the new mask, failure is ignored.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         SRDescription(nameof(SR.MaskedTextBoxMaskDescr)), 
@@ -780,29 +774,23 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///   Event to notify when the mask has changed.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatPropertyChanged)),
         SRDescription(nameof(SR.MaskedTextBoxMaskChangedDescr))
         ]
         public event EventHandler MaskChanged
         {
-            add
-            {
-                Events.AddHandler(EVENT_MASKCHANGED, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(EVENT_MASKCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_MASKCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_MASKCHANGED, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Specifies whether the test string required input positions, as specified by the mask, have 
         ///     all been assigned.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false)
         ]
@@ -814,9 +802,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Specifies whether all inputs (required and optional) have been provided into the mask successfully.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false)
         ]
@@ -828,11 +816,11 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns a copy of the control's internal MaskedTextProvider.  This is useful for user's to provide
         ///     cloning semantics for the control (we don't want to do it) w/o incurring in any perf penalty since 
         ///     some of the properties require recreating the underlying provider when they are changed.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false), 
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -845,29 +833,23 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Event to notify when an input has been rejected according to the mask.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         SRDescription(nameof(SR.MaskedTextBoxMaskInputRejectedDescr))
         ]
         public event MaskInputRejectedEventHandler MaskInputRejected
         {
-            add
-            {
-                Events.AddHandler(EVENT_MASKINPUTREJECTED, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(EVENT_MASKINPUTREJECTED, value);
-            }
+            add => Events.AddHandler(EVENT_MASKINPUTREJECTED, value);
+            remove => Events.RemoveHandler(EVENT_MASKINPUTREJECTED, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Unsupported method/property.
         ///     WndProc ignores EM_LIMITTEXT & this is a virtual method.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false), 
         EditorBrowsable(EditorBrowsableState.Never), 
@@ -879,10 +861,10 @@ namespace System.Windows.Forms
             set{}
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Unsupported method/property.
         ///     virtual method.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false), 
         EditorBrowsable(EditorBrowsableState.Never), 
@@ -894,9 +876,9 @@ namespace System.Windows.Forms
             set {}
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Unsupported method/property.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false), 
         EditorBrowsable(EditorBrowsableState.Never),
@@ -908,11 +890,11 @@ namespace System.Windows.Forms
             remove { }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Specifies the character to be used in the formatted string in place of editable characters, if
         ///     set to any printable character, the text box becomes a password text box, to reset it use the null
         ///     character.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         SRDescription(nameof(SR.MaskedTextBoxPasswordCharDescr)), 
@@ -965,9 +947,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines if the control is in password protect mode.
-        /// </devdoc>
+        /// </summary>
         internal override bool PasswordProtect 
         {
             get 
@@ -980,9 +962,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Specifies the prompt character to be used in the formatted string for unsupplied characters.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)), 
         SRDescription(nameof(SR.MaskedTextBoxPromptCharDescr)), 
@@ -1027,9 +1009,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Overwrite base class' property.
-        /// </devdoc>
+        /// </summary>
         public new bool ReadOnly 
         {
             get 
@@ -1053,10 +1035,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Specifies whether to include the mask prompt character when formatting the text in places
         ///     where an edit char has not being assigned.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         SRDescription(nameof(SR.MaskedTextBoxRejectInputOnFirstFailureDescr)), 
@@ -1074,9 +1056,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Designe time support for resetting the Culture property.
-        /// </devdoc>
+        /// </summary>
         /* No longer needed since Culture has been removed from the property browser - Left here for documentation.
         [EditorBrowsable(EditorBrowsableState.Never)]
         private void ResetCulture()
@@ -1085,10 +1067,10 @@ namespace System.Windows.Forms
         }*/
 
               
-        /// <devdoc>
+        /// <summary>
         ///     Specifies whether to reset and skip the current position if editable, when the input character
         ///     has the same value as the prompt.  This property takes precedence over AllowPromptAsInput.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         SRDescription(nameof(SR.MaskedTextBoxResetOnPrompt)), 
@@ -1106,10 +1088,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Specifies whether to reset and skip the current position if editable, when the input 
         ///     is the space character.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         SRDescription(nameof(SR.MaskedTextBoxResetOnSpace)), 
@@ -1127,10 +1109,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Specifies whether to skip the current position if non-editable and the input character has 
         ///     the same value as the literal at that position.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         SRDescription(nameof(SR.MaskedTextBoxSkipLiterals)), 
@@ -1148,9 +1130,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///       The currently selected text (if any) in the control.
-        /// </devdoc>
+        /// </summary>
         public override string SelectedText
         {
             get
@@ -1179,18 +1161,18 @@ namespace System.Windows.Forms
             PasteInt( value );
         }
        
-        /// <devdoc>
+        /// <summary>
         ///     Set the composition string as the result string.
-        /// </devdoc>
+        /// </summary>
         private void ImeComplete()
         {
             this.flagState[IME_COMPLETING] = true;
             ImeNotify(NativeMethods.CPS_COMPLETE);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     Notifies the IMM about changes to the status of the IME input context.
-        /// </devdoc>
+        /// </summary>
         private void ImeNotify(int action)
         {
             HandleRef handle    = new HandleRef(this, this.Handle);
@@ -1213,64 +1195,29 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sets the underlying edit control's password char to the one obtained from this.PasswordChar.
         ///     This is used when the control is passworded and this.flagState[IS_NULL_MASK].
-        /// </devdoc>
+        /// </summary>
         private void SetEditControlPasswordChar( char pwdChar )
         {
             if (this.IsHandleCreated) 
             {
                 // This message does not return a value.
-                SendMessage(NativeMethods.EM_SETPASSWORDCHAR, pwdChar, 0);
+                SendMessage(Interop.EditMessages.EM_SETPASSWORDCHAR, pwdChar, 0);
                 Invalidate();
             }
         }
 
-        /// <devdoc>
-        ///     The value of the Edit control default password char.
-        /// </devdoc>
+        /// <summary>
+        /// The value of the Edit control default password char.
+        /// </summary>
         private char SystemPasswordChar
         {
             get
             {
                 if (MaskedTextBox.systemPwdChar == '\0')
                 {
-                    // This is the hard way to get the password char - left here for information.
-                    // It is picked up from Comctl32.dll. If VisualStyles is enabled it will get the dot char. 
-                    /*                
-                    StringBuilder charVal = new StringBuilder(20);  // it could be 0x0000000000009999 format.
-                    bool foundRsc         = false;
-                    int IDS_PASSWORDCHAR  = 0x1076; // %ntsdx%\shell\comctrl32\v6\rcids.h
-                                                    // defined in en.rc as: IDS_PASSWORDCHAR "9679" // 0x25cf - Black Circle
-
-                    IntSecurity.UnmanagedCode.Assert();
-
-                    try
-                    {   
-                        // The GetModuleHandle function returns a handle to a mapped module without incrementing its reference count. 
-                        // @"C:\windows\winsxs\x86_Microsoft.Windows.Common-Controls_6595b64144ccf1df_6.0.10.0_x-ww_f7fb5805\comctl32.dll if VisulaStyles enabled.
-
-                        IntPtr hModule = UnsafeNativeMethods.GetModuleHandle("comctl32.dll");
-                        Debug.Assert(hModule != IntPtr.Zero, String.Format("Could not get a handle to comctl32.dll - Error: 0x{0:X8}", Marshal.GetLastWin32Error()));
-
-                        foundRsc = UnsafeNativeMethods.LoadString(new HandleRef(null, hModule), IDS_PASSWORDCHAR, charVal, charVal.Capacity);
-                    }
-                    catch( Exception ex )
-                    {
-                        if( ClientUtils.IsSecurityOrCriticalException( ex ) )
-                        {
-                            throw;
-                        }
-                    }
-                    finally
-                    {
-                        CodeAccessPermission.RevertAssert();
-                    }
-
-                    MaskedTextBox.systemPwdChar = foundRsc ? (char) int.Parse(charVal.ToString()) : MaskedTextProvider.DefaultPasswordChar;
-                    */
-
                     // We need to temporarily create an edit control to get the default password character.  
                     // We cannot use this control because we would have to reset the native control's password char to use
                     // the defult one so we can get it; this would change the text displayed in the box (even for a short time)
@@ -1288,10 +1235,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The Text setter validates the input char by char, raising the MaskInputRejected event for invalid chars.
         ///     The Text getter returns the formatted text according to the IncludeLiterals and IncludePrompt properties.
-        /// </devdoc>
+        /// </summary>
         [
         Editor("System.Windows.Forms.Design.MaskedTextBoxTextEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         SRCategory(nameof(SR.CatAppearance)), 
@@ -1352,9 +1299,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the length of the displayed text.
-        /// </devdoc>
+        /// </summary>
         [Browsable( false )]
         public override int TextLength
         {
@@ -1365,18 +1312,20 @@ namespace System.Windows.Forms
                     return base.TextLength;
                 }
 
-                // In Win9x systems TextBoxBase.TextLength calls Text.Length directly and does not query the window for the actual text length.  
-                // If TextMaskFormat is set to a anything different from IncludePromptAndLiterals or HidePromptOnLeave is true the return value 
-                // may be incorrect because the Text property value and the display text may be different.  We need to handle this here.
-
+                // On older platforms TextBoxBase.TextLength calls Text.Length directly and
+                // does not query the window for the actual text length.  
+                // If TextMaskFormat is set to a anything different from IncludePromptAndLiterals
+                // or HidePromptOnLeave is true the return value may be incorrect because the
+                // Text property value and the display text may be different.
+                // We need to handle this here.
                 return GetFormattedDisplayString().Length;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The formatted text, it is what the Text getter returns when a mask has been applied to the control.
         ///     The text format follows the IncludeLiterals and IncludePrompt properties (See MaskedTextProvider.ToString()).
-        /// </devdoc>
+        /// </summary>
         private string TextOutput
         {
             get
@@ -1386,10 +1335,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Gets or sets how text is aligned in the control.
         ///     Note: This code is duplicated in TextBox for simplicity.
-        /// </devdoc>
+        /// </summary>
         [
         Localizable(true),
         SRCategory(nameof(SR.CatAppearance)),
@@ -1420,31 +1369,25 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Event to notify the text alignment has changed.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatPropertyChanged)), 
         SRDescription(nameof(SR.RadioButtonOnTextAlignChangedDescr))
         ]
         public event EventHandler TextAlignChanged 
         {
-            add 
-            {
-                Events.AddHandler(EVENT_TEXTALIGNCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_TEXTALIGNCHANGED, value);
 
-            remove 
-            {
-                Events.RemoveHandler(EVENT_TEXTALIGNCHANGED, value);
-            }
+            remove => Events.RemoveHandler(EVENT_TEXTALIGNCHANGED, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Specifies the formatting options for text output (Whether the mask returned from the Text 
         ///    property includes Literals and/or prompt characters).  
         ///    When prompt characters are excluded, theyare returned as spaces in the string returned.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         SRDescription(nameof(SR.MaskedTextBoxTextMaskFormat)), 
@@ -1514,10 +1457,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Provides some interesting information for the TextBox control in String form.
         ///    Returns the test string (no password, including literals and prompt).
-        /// </devdoc>
+        /// </summary>
         public override string ToString() 
         {
             if( this.flagState[IS_NULL_MASK] )
@@ -1543,29 +1486,23 @@ namespace System.Windows.Forms
             return str;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Event to notify when the validating object completes parsing the formatted text.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatFocus)), 
         SRDescription(nameof(SR.MaskedTextBoxTypeValidationCompletedDescr))
         ]
         public event TypeValidationEventHandler TypeValidationCompleted
         {
-            add
-            {
-                Events.AddHandler(EVENT_VALIDATIONCOMPLETED, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(EVENT_VALIDATIONCOMPLETED, value);
-            }
+            add => Events.AddHandler(EVENT_VALIDATIONCOMPLETED, value);
+            remove => Events.RemoveHandler(EVENT_VALIDATIONCOMPLETED, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Indicates if the text in the edit control should appear as the default password character. 
         ///    This property has precedence over the PasswordChar property.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         SRDescription(nameof(SR.MaskedTextBoxUseSystemPasswordCharDescr)),
@@ -1614,13 +1551,13 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Type of the object to be used to parse the text when the user leaves the control. 
         ///     A ValidatingType object must implement a method with one fo the following signature:
         ///         public static Object Parse(string)
         ///         public static Object Parse(string, IFormatProvider)
         ///     See DateTime.Parse(...) for an example.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         DefaultValue(null)
@@ -1640,9 +1577,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Unsupported method/property.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false), 
         EditorBrowsable(EditorBrowsableState.Never),
@@ -1657,10 +1594,10 @@ namespace System.Windows.Forms
 
         ////////////// Methods
 
-        /// <devdoc>
+        /// <summary>
         ///     Clears information about the most recent operation from the undo buffer of the control.
         ///     Unsupported property/method.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never)
         ]
@@ -1668,12 +1605,12 @@ namespace System.Windows.Forms
         {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a handle for this control. This method is called by the .NET Framework, this should
         ///     not be called. Inheriting classes should always call base.createHandle when overriding this method.
         ///     Overridden to be able to set the control text with the masked (passworded) value when recreating
         ///     handle, since the underlying native edit control is not aware of it.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Advanced),
         ]
@@ -1689,10 +1626,10 @@ namespace System.Windows.Forms
         }
 
         /// 
-        /// <devdoc>
+        /// <summary>
         ///     Deletes characters from the control's text according to the key pressed (Delete/Backspace).
         ///     Returns true if something gets actually deleted, false otherwise.
-        /// </devdoc>
+        /// </summary>
         private void Delete(Keys keyCode, int startPosition, int selectionLen)
         {
             Debug.Assert( !this.flagState[IS_NULL_MASK], "This method must be called when a Mask is provided." );
@@ -1808,9 +1745,9 @@ namespace System.Windows.Forms
             return;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the character nearest to the given point.
-        /// </devdoc>
+        /// </summary>
         public override char GetCharFromPosition(Point pt) 
         {
             char ch;
@@ -1828,9 +1765,9 @@ namespace System.Windows.Forms
         }
 
         
-        /// <devdoc>
+        /// <summary>
         ///     Returns the index of the character nearest to the given point.
-        /// </devdoc>
+        /// </summary>
         public override int GetCharIndexFromPosition(Point pt) 
         {
             int index;
@@ -1847,10 +1784,10 @@ namespace System.Windows.Forms
             return index;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the position of the last input character (or if available, the next edit position). 
         ///     This is used by base.AppendText.
-        /// </devdoc>
+        /// </summary>
         internal override int GetEndPosition()
         {
             if( this.flagState[IS_NULL_MASK])
@@ -1868,9 +1805,9 @@ namespace System.Windows.Forms
             return pos;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     Unsupported method/property.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never)
         ]
@@ -1879,9 +1816,9 @@ namespace System.Windows.Forms
             return 0;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Unsupported method/property.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never)
         ]
@@ -1890,10 +1827,10 @@ namespace System.Windows.Forms
             return 0;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Gets the string in the text box following the formatting parameters includePrompt and includeLiterals and
         ///     honoring the PasswordChar property.
-        /// </devdoc>
+        /// </summary>
         private string GetFormattedDisplayString()
         {
             Debug.Assert( !this.flagState[IS_NULL_MASK], "This method must be called when a Mask is provided." );
@@ -1916,10 +1853,10 @@ namespace System.Windows.Forms
             return this.maskedTextProvider.ToString(/*ignorePwdChar */ false, includePrompt, /*includeLiterals*/ true, 0, this.maskedTextProvider.Length);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Unsupported method/property.
         ///     virtual method.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never)
         ]
@@ -1928,9 +1865,9 @@ namespace System.Windows.Forms
             return 0;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the location of the character at the given index.
-        /// </devdoc>
+        /// </summary>
         public override Point GetPositionFromCharIndex(int index) 
         {
             Point pos;
@@ -1947,10 +1884,10 @@ namespace System.Windows.Forms
             return pos;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Need to override this method so when get_Text is called we return the text that is actually
         ///     painted in the control so measuring text works on the actual text and not the formatted one.
-        /// </devdoc>
+        /// </summary>
         internal override Size GetPreferredSizeCore(Size proposedConstraints)
         {
             Size size;
@@ -1967,11 +1904,11 @@ namespace System.Windows.Forms
             return size;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The selected text in the control according to the CutCopyMaskFormat properties (IncludePrompt/IncludeLiterals).
         ///     This is used in Cut/Copy operations (SelectedText).
         ///     The prompt character is always replaced with a blank character.
-        /// </devdoc>
+        /// </summary>
         private string GetSelectedText()
         {
             Debug.Assert( !this.flagState[IS_NULL_MASK], "This method must be called when a Mask is provided." );
@@ -1991,7 +1928,6 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\MaskedTextBox.uex' path='docs/doc[@for="MaskedTextBox.OnBackColorChanged"]/*' />
         protected override void OnBackColorChanged(EventArgs e)
         {
             base.OnBackColorChanged(e);
@@ -2002,10 +1938,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Overridden to update the newly created handle with the settings of the PasswordChar properties 
         ///    if no mask has been set.
-        /// </devdoc>
+        /// </summary>
         protected override void OnHandleCreated(EventArgs e) 
         {
             base.OnHandleCreated(e);
@@ -2017,9 +1953,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Raises the IsOverwriteModeChanged event.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Advanced)
         ]
@@ -2033,9 +1969,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Raises the <see cref='System.Windows.Forms.Control.KeyDown'/> event.
-        /// </devdoc>
+        /// </summary>
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
@@ -2166,9 +2102,9 @@ namespace System.Windows.Forms
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Raises the <see cref='System.Windows.Forms.Control.KeyPress'/> event.
-        /// </devdoc>
+        /// </summary>
         protected override void OnKeyPress(KeyPressEventArgs e)
         {
             base.OnKeyPress(e);
@@ -2241,9 +2177,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.KeyUp'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnKeyUp(KeyEventArgs e)
         {
             base.OnKeyUp(e);
@@ -2261,9 +2197,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Raises the MaskChanged event.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Advanced)
         ]
@@ -2277,9 +2213,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Raises the MaskInputRejected event.
-        /// </devdoc>
+        /// </summary>
         private void OnMaskInputRejected(MaskInputRejectedEventArgs e)
         {
             Debug.Assert( !this.flagState[IS_NULL_MASK], "This method must be called when a Mask is provided." );
@@ -2298,10 +2234,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Unsupported method/property.
         ///     virtual method.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never)
         ]
@@ -2309,9 +2245,9 @@ namespace System.Windows.Forms
         {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Raises the TextAlignChanged event.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnTextAlignChanged(EventArgs e) 
         {
             EventHandler eh = Events[EVENT_TEXTALIGNCHANGED] as EventHandler;
@@ -2322,9 +2258,9 @@ namespace System.Windows.Forms
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Raises the TypeValidationCompleted event.
-        /// </devdoc>
+        /// </summary>
         private void OnTypeValidationCompleted(TypeValidationEventArgs e)
         {
             TypeValidationEventHandler eh = Events[EVENT_VALIDATIONCOMPLETED] as TypeValidationEventHandler;
@@ -2334,11 +2270,11 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Raises the  System.Windows.Forms.Control.Validating event.
         ///     Overridden here to be able to control the order validating events are
         ///     raised [TypeValidationCompleted - Validating - Validated - Leave - KillFocus]
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnValidating(CancelEventArgs e) 
         {
@@ -2349,10 +2285,10 @@ namespace System.Windows.Forms
             base.OnValidating(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Raises the TextChanged event and related Input/Output text events when mask is null.
         ///    Overriden here to be able to control order of text changed events.
-        /// </devdoc>
+        /// </summary>
         protected override void OnTextChanged(EventArgs e) 
         {
             // A text changed event handler will most likely query for the Text value, we need to return the
@@ -2368,10 +2304,10 @@ namespace System.Windows.Forms
                 this.flagState[QUERY_BASE_TEXT] = queryBaseText;
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///     Replaces the current selection in the text box specified by the startPosition and selectionLen parameters
         ///     with the contents of the supplied string.
-        /// </devdoc>
+        /// </summary>
         private void Replace(string text, int startPosition, int selectionLen)
         {
             Debug.Assert( !this.flagState[IS_NULL_MASK], "This method must be called when a Mask is provided." );
@@ -2497,11 +2433,11 @@ namespace System.Windows.Forms
             return;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Pastes specified text over the currently selected text (if any) shifting upper characters if
         ///     input is longer than selected text, and/or removing remaining characters from the selection if
         ///     input contains less characters.
-        /// </devdoc>
+        /// </summary>
         private void PasteInt( string text )
         {
             Debug.Assert( !this.flagState[IS_NULL_MASK], "This method must be called when a Mask is provided." );
@@ -2519,7 +2455,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Performs validation of the input string using the provided ValidatingType object (if any).
         ///     Returns an object created from the formatted text.
         ///     If the CancelEventArgs param is not null, it is assumed the control is leaving focus and
@@ -2527,7 +2463,7 @@ namespace System.Windows.Forms
         ///     the value of the CancelEventArgs.Cancel property is the same as the TypeValidationEventArgs.Cancel
         ///     on output (Cancel provides proper handling of focus shifting at the Control class level).
         ///     Note: The text being validated does not include prompt chars.
-        /// </devdoc>
+        /// </summary>
         private object PerformTypeValidation(CancelEventArgs e)
         {
             object parseRetVal = null;
@@ -2600,19 +2536,19 @@ namespace System.Windows.Forms
             return parseRetVal;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Insert or replaces the specified character into the control's text and updates the caret position.  
         ///     If overwrite is true, it replaces the character at the selection start position.
-        /// </devdoc>
+        /// </summary>
         private bool PlaceChar(char ch, int startPosition, int length, bool overwrite,
             out MaskedTextResultHint hint)
         {
             return PlaceChar(this.maskedTextProvider, ch, startPosition, length, overwrite, out hint );
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Override version to be able to perform the operation on a cloned provider.
-        /// </devdoc>
+        /// </summary>
         private bool PlaceChar(MaskedTextProvider provider, char ch, int startPosition, int length, bool overwrite, 
             out MaskedTextResultHint hint)
         {
@@ -2645,7 +2581,7 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     <From Control.cs>:
         ///     Processes a command key. This method is called during message
         ///     pre-processing to handle command keys. Command keys are keys that always
@@ -2668,7 +2604,7 @@ namespace System.Windows.Forms
         ///     </From Control.cs>
         /// 
         ///     Implements the handling of Ctrl+A (select all). Note: Code copied from TextBox.
-        /// </devdoc>
+        /// </summary>
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             //
@@ -2689,12 +2625,12 @@ namespace System.Windows.Forms
             return msgProcessed;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     We need to override this method so we can handle input language changes properly.  Control
         ///     doesn't handle the WM_CHAR messages generated after WM_IME_CHAR messages, it passes them
         ///     to DefWndProc (the characters would be displayed in the text box always).
         ///     
-        /// </devdoc>
+        /// </summary>
         protected internal override bool ProcessKeyMessage(ref Message m)
         {
             // call base's method so the WM_CHAR and other messages are processed; this gives Control the 
@@ -2710,7 +2646,7 @@ namespace System.Windows.Forms
             // If this WM_CHAR message is sent after WM_IME_CHAR, we ignore it since we already processed 
             // the corresponding WM_IME_CHAR message.  
 
-            if( m.Msg == NativeMethods.WM_CHAR && base.ImeWmCharsToIgnore > 0 ) {
+            if( m.Msg == Interop.WindowMessages.WM_CHAR && base.ImeWmCharsToIgnore > 0 ) {
                 return true;    // meaning, we handled the message so it is not passed to the default WndProc.
             }
 
@@ -2718,17 +2654,17 @@ namespace System.Windows.Forms
         }
 
         
-        /// <devdoc>
+        /// <summary>
         ///     Designe time support for resetting Culture property..
-        /// </devdoc>
+        /// </summary>
         private void ResetCulture()
         {
             this.Culture = CultureInfo.CurrentCulture;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Unsupported method/property.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never)
         ]
@@ -2736,20 +2672,20 @@ namespace System.Windows.Forms
         {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sets the underlying MaskedTextProvider object.  Used when the control is initialized
         ///     and one of its properties, backed up by the MaskedTextProvider, changes; this requires
         ///     recreating the provider because it is immutable.
-        /// </devdoc>
+        /// </summary>
         private void SetMaskedTextProvider( MaskedTextProvider newProvider )
         {
             SetMaskedTextProvider( newProvider, null);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Overload to allow for passing the text when the mask is being changed from null,
         ///     in this case the maskedTextProvider holds backend info only (not the text).
-        /// </devdoc>
+        /// </summary>
         private void SetMaskedTextProvider( MaskedTextProvider newProvider, string textOnInitializingMask )
         {
             Debug.Assert( newProvider != null, "Initializing from a null MaskProvider ref." );
@@ -2870,33 +2806,33 @@ namespace System.Windows.Forms
             SetWindowText(GetFormattedDisplayString(), oldText != TextOutput, preserveCharPos);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sets the control's text to the formatted text obtained from the underlying MaskedTextProvider.
         ///     TextChanged is raised always, this assumes the display or the output text changed.
         ///     The caret position is lost (unless cached somewhere else like when lossing the focus).
         ///     This is the common way of changing the text in the control.
-        /// </devdoc>
+        /// </summary>
         private void SetText()
         {
             SetWindowText(GetFormattedDisplayString(), true, false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sets the control's text to the formatted text obtained from the underlying MaskedTextProvider.
         ///     TextChanged is not raised. [PasswordChar]
         ///     The caret position is preserved.
-        /// </devdoc>
+        /// </summary>
         private void SetWindowText()
         {
             SetWindowText(GetFormattedDisplayString(), false, true);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sets the text directly in the underlying edit control to the value specified.
         ///     The 'raiseTextChangedEvent' param determines whether TextChanged event is raised or not.
         ///     The 'preserveCaret' param determines whether an attempt to preserve the caret position should be made or not
         ///     after the call to SetWindowText (WindowText) is performed.
-        /// </devdoc>
+        /// </summary>
         private void SetWindowText(string text, bool raiseTextChangedEvent, bool preserveCaret)
         {
             this.flagState[QUERY_BASE_TEXT] = true;
@@ -2926,19 +2862,19 @@ namespace System.Windows.Forms
             }        
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Designe time support for checking if Culture value in the designer should be serialized.
-        /// </devdoc>
+        /// </summary>
         private bool ShouldSerializeCulture()
         {
             return !CultureInfo.CurrentCulture.Equals(this.Culture);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///       Undoes the last edit operation in the text box.
         ///       Unsupported property/method.
         ///       WndProc ignores EM_UNDO.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never)
         ]
@@ -2946,17 +2882,17 @@ namespace System.Windows.Forms
         {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///       Forces type validation.  Returns the validated text value.
-        /// </devdoc>
+        /// </summary>
         public object ValidateText()
         {
             return PerformTypeValidation(null);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Deletes all input characters in the current selection.
-        /// </devdoc>
+        /// </summary>
         private bool WmClear()
         {
             Debug.Assert( !this.flagState[IS_NULL_MASK], "This method must be called when a Mask is provided." );
@@ -2972,11 +2908,11 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Copies current selection text to the clipboard, formatted according to the IncludeLiterals properties but
         ///     ignoring the prompt character.
         ///     Returns true if the operation succeeded, false otherwise.
-        /// </devdoc>
+        /// </summary>
         private bool WmCopy()
         {
             Debug.Assert( !this.flagState[IS_NULL_MASK], "This method must be called when a Mask is provided." );
@@ -3012,12 +2948,12 @@ namespace System.Windows.Forms
             return true;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Processes the WM_IME_COMPOSITION message when using Korean IME.
         ///     Korean IME uses the control's caret as the composition string (it processes only one character at a time), 
         ///     we need to have special message handling for it.
         ///     Returns true if the message is handled, false otherwise.
-        /// </devdoc>
+        /// </summary>
         private bool WmImeComposition(ref Message m)
         {
             Debug.Assert( !this.flagState[IS_NULL_MASK], "This method must be called when a Mask is provided." );
@@ -3063,10 +2999,10 @@ namespace System.Windows.Forms
             return false; //message not handled.
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Processes the WM_IME_STARTCOMPOSITION message.
         ///     Returns true if the message is handled, false otherwise.
-        /// </devdoc>
+        /// </summary>
         private bool WmImeStartComposition()
         {
             Debug.Assert( !this.flagState[IS_NULL_MASK], "This method must be called when a Mask is provided." );
@@ -3121,11 +3057,11 @@ namespace System.Windows.Forms
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Processes the WM_PASTE message. Copies the text from the clipboard, if is valid,
         ///     formatted according to the mask applied to this control.
         ///     Returns true if the operation succeeded, false otherwise.
-        /// </devdoc>
+        /// </summary>
         private void WmPaste()
         {
             Debug.Assert( !this.flagState[IS_NULL_MASK], "This method must be called when a Mask is provided." );
@@ -3170,28 +3106,28 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     We need to override the WndProc method to have full control over what characters can be
         ///     displayed in the text box; particularly, we have special handling when IME is turned on.
-        /// </devdoc>
+        /// </summary>
         protected override void WndProc(ref Message m)
         {
             // Handle messages for special cases (unsupported operations or cases where mask doesn not matter).
             switch (m.Msg)
             {
-                case NativeMethods.WM_PRINT:
+                case Interop.WindowMessages.WM_PRINT:
                     WmPrint(ref m);
                     return;
-                case NativeMethods.WM_CONTEXTMENU:
-                case NativeMethods.EM_CANUNDO:
+                case Interop.WindowMessages.WM_CONTEXTMENU:
+                case Interop.EditMessages.EM_CANUNDO:
                     base.ClearUndo(); // resets undo buffer.
                     base.WndProc(ref m);
                     return;
 
-                case NativeMethods.EM_SCROLLCARET:  // No scroll for single-line control.
-                case NativeMethods.EM_LIMITTEXT:    // Max/Min text is defined by the mask.
-                case NativeMethods.EM_UNDO:
-                case NativeMethods.WM_UNDO:
+                case Interop.EditMessages.EM_SCROLLCARET:  // No scroll for single-line control.
+                case Interop.EditMessages.EM_LIMITTEXT:    // Max/Min text is defined by the mask.
+                case Interop.EditMessages.EM_UNDO:
+                case Interop.WindowMessages.WM_UNDO:
                     return;
 
                 default:
@@ -3206,49 +3142,49 @@ namespace System.Windows.Forms
 
             switch (m.Msg)
             {
-                case NativeMethods.WM_IME_STARTCOMPOSITION:
+                case Interop.WindowMessages.WM_IME_STARTCOMPOSITION:
                     if( WmImeStartComposition() )
                     {
                         break;
                     }
                     goto default;
 
-                case NativeMethods.WM_IME_ENDCOMPOSITION:
+                case Interop.WindowMessages.WM_IME_ENDCOMPOSITION:
                     this.flagState[IME_ENDING_COMPOSITION] = true;
                     goto default;
 
-                case NativeMethods.WM_IME_COMPOSITION:
+                case Interop.WindowMessages.WM_IME_COMPOSITION:
                     if( WmImeComposition( ref m ) )
                     {
                         break;
                     }
                     goto default;
 
-                case NativeMethods.WM_CUT:
+                case Interop.WindowMessages.WM_CUT:
                     if (!this.ReadOnly && WmCopy())
                     {
                         WmClear();
                     }
                     break;
 
-                case NativeMethods.WM_COPY:
+                case Interop.WindowMessages.WM_COPY:
                     WmCopy();
                     break;
 
-                case NativeMethods.WM_PASTE:
+                case Interop.WindowMessages.WM_PASTE:
                     WmPaste();
                     break;
 
-                case NativeMethods.WM_CLEAR:
+                case Interop.WindowMessages.WM_CLEAR:
                     WmClear();
                     break;
 
-                case NativeMethods.WM_KILLFOCUS:
+                case Interop.WindowMessages.WM_KILLFOCUS:
                     base.WndProc(ref m);
                     WmKillFocus();
                     break;
 
-                case NativeMethods.WM_SETFOCUS:
+                case Interop.WindowMessages.WM_SETFOCUS:
                     WmSetFocus();
                     base.WndProc(ref m);
                     break;
@@ -3259,9 +3195,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Processes the WM_KILLFOCUS message. Updates control's text replacing promp chars with space.
-        /// </devdoc>
+        /// </summary>
         private void WmKillFocus()
         {
             Debug.Assert( !this.flagState[IS_NULL_MASK], "This method must be called when a Mask is provided." );
@@ -3277,10 +3213,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Processes the WM_SETFOCUS message. Updates control's text with formatted text according to 
         ///     the include prompt property.
-        /// </devdoc>
+        /// </summary>
         private void WmSetFocus()
         {
             Debug.Assert( !this.flagState[IS_NULL_MASK], "This method must be called when a Mask is provided." );

@@ -15,25 +15,23 @@ namespace System.Windows.Forms
     using Microsoft.Win32;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\OpenFileDialog.uex' path='docs/doc[@for="OpenFileDialog"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Represents a common dialog box
     ///       that displays the control that allows the user to open a file. This class
     ///       cannot be inherited.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     [SRDescription(nameof(SR.DescriptionOpenFileDialog))]
     public sealed class OpenFileDialog : FileDialog
     {
 
-        /// <include file='doc\OpenFileDialog.uex' path='docs/doc[@for="OpenFileDialog.CheckFileExists"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box displays a
         ///       warning if the user specifies a file name that does not exist.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(true),
         SRDescription(nameof(SR.OFDcheckFileExistsDescr))
@@ -50,13 +48,12 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\OpenFileDialog.uex' path='docs/doc[@for="OpenFileDialog.Multiselect"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value
         ///       indicating whether the dialog box allows multiple files to be selected.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -74,13 +71,12 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\OpenFileDialog.uex' path='docs/doc[@for="OpenFileDialog.ReadOnlyChecked"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether
         ///       the read-only check box is selected.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -98,12 +94,11 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\OpenFileDialog.uex' path='docs/doc[@for="OpenFileDialog.ShowReadOnly"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog contains a read-only check box.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -121,48 +116,39 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\OpenFileDialog.uex' path='docs/doc[@for="OpenFileDialog.OpenFile"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Opens the file selected by the user with read-only permission.  The file
         ///       attempted is specified by the <see cref='System.Windows.Forms.FileDialog.FileName'/> property.
         ///    </para>
-        /// </devdoc>        
+        /// </summary>        
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
-        /// 
-
-
-        [SuppressMessage("Microsoft.Security", "CA2103:ReviewImperativeSecurity")]
-        
-        
         public Stream OpenFile()
         {
-            string filename = FileNamesInternal[0];
-
-            if (filename == null || (filename.Length == 0))
+            string filename = FileNames[0];
+            if (string.IsNullOrEmpty(filename))
+            {
                 throw new ArgumentNullException(nameof(FileName));
+            }
 
             return new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
         }
 
-        /// <include file='doc\OpenFileDialog.uex' path='docs/doc[@for="OpenFileDialog.Reset"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Resets all properties to their default values.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override void Reset()
         {
             base.Reset();
             SetOption(NativeMethods.OFN_FILEMUSTEXIST, true);
         }
 
-        /// <include file='doc\OpenFileDialog.uex' path='docs/doc[@for="OpenFileDialog.RunFileDialog"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Displays a file open dialog.
-        /// </devdoc>
-        /// <internalonly/>
-        internal override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn)
+        /// </summary>
+        private protected override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn)
         {
             bool result = UnsafeNativeMethods.GetOpenFileName(ofn);
             if (!result)
@@ -185,7 +171,7 @@ namespace System.Windows.Forms
             return result;
         }
 
-        internal override string[] ProcessVistaFiles(FileDialogNative.IFileDialog dialog)
+        private protected override string[] ProcessVistaFiles(FileDialogNative.IFileDialog dialog)
         {
             FileDialogNative.IFileOpenDialog openDialog = (FileDialogNative.IFileOpenDialog)dialog;
             if (Multiselect)
@@ -211,16 +197,13 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override FileDialogNative.IFileDialog CreateVistaDialog()
+        private protected override FileDialogNative.IFileDialog CreateVistaDialog()
         {
             return new FileDialogNative.NativeFileOpenDialog();
         }
 
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts")
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string SafeFileName
         {
             get
@@ -241,12 +224,9 @@ namespace System.Windows.Forms
             return System.IO.Path.GetFileName(fullPath);
         }
 
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays"),
-            SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts")
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")]
         public string[] SafeFileNames
         {
             get
@@ -263,12 +243,9 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override bool SettingsSupportVistaDialog
+        private protected override bool SettingsSupportVistaDialog
         { 
-            get
-            {
-                return base.SettingsSupportVistaDialog && !this.ShowReadOnly;
-            }
+            get => base.SettingsSupportVistaDialog && !ShowReadOnly;
         }
     }
 }

@@ -14,7 +14,6 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow"]/*' />
     public sealed class HtmlWindow
     {
         internal static readonly object EventError = new object();
@@ -67,7 +66,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Document"]/*' />
         public HtmlDocument Document
         {
             get
@@ -77,7 +75,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.DomWindow"]/*' />
         public object DomWindow
         {
             get
@@ -86,7 +83,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Frames"]/*' />
         public HtmlWindowCollection Frames
         {
             get
@@ -96,7 +92,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.History"]/*' />
         public HtmlHistory History
         {
             get
@@ -106,7 +101,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.IsClosed"]/*' />
         public bool IsClosed
         {
             get
@@ -115,10 +109,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Name"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Name of the NativeHtmlWindow</para>
-        /// </devdoc>
+        /// </summary>
         public string Name
         {
             get
@@ -131,7 +124,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Opener"]/*' />
         public HtmlWindow Opener
         {
             get
@@ -141,7 +133,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Parent"]/*' />
         public HtmlWindow Parent
         {
             get
@@ -151,7 +142,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Position"]/*' />
         public Point Position
         {
             get
@@ -161,10 +151,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Size"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets size for the window</para>
-        /// </devdoc>
+        /// </summary>
         public Size Size
         {
             get
@@ -178,7 +167,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.StatusBarText"]/*' />
         public string StatusBarText
         {
             get
@@ -191,7 +179,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Url"]/*' />
         public Uri Url
         {
             get 
@@ -202,7 +189,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.WindowFrameElement"]/*' />
         public HtmlElement WindowFrameElement
         {
             get
@@ -212,67 +198,57 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Alert"]/*' />
         public void Alert(string message)
         {
             this.NativeHtmlWindow.Alert(message);
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.AttachEventHandler"]/*' />
         public void AttachEventHandler(string eventName, EventHandler eventHandler)
         {
             WindowShim.AttachEventHandler(eventName, eventHandler);
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Close"]/*' />
         public void Close()
         {
             this.NativeHtmlWindow.Close();
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Confirm"]/*' />
         public bool Confirm(string message)
         {
             return this.NativeHtmlWindow.Confirm(message);
         }
 
-        /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.DetachEventHandler"]/*' />
         public void DetachEventHandler(string eventName, EventHandler eventHandler)
         {
             WindowShim.DetachEventHandler(eventName, eventHandler);
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Focus"]/*' />
         public void Focus()
         {
             this.NativeHtmlWindow.Focus();
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.MoveTo"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Moves the Window to the position requested</para>
-        /// </devdoc>
+        /// </summary>
         public void MoveTo(int x, int y)
         {
             this.NativeHtmlWindow.MoveTo(x, y);
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.MoveTo2"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Moves the Window to the point requested</para>
-        /// </devdoc>
+        /// </summary>
         public void MoveTo(Point point)
         {
             this.NativeHtmlWindow.MoveTo(point.X, point.Y);
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Navigate"]/*' />
         public void Navigate(Uri url)
         {
             this.NativeHtmlWindow.Navigate(url.ToString());
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Navigate"]/*' />
         /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have 
         /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified 
         /// (things like "www.microsoft.com") that the underlying objects support and we don't want to 
@@ -283,7 +259,6 @@ namespace System.Windows.Forms
             this.NativeHtmlWindow.Navigate(urlString);
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Open"]/*' />
         /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have 
         /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified 
         /// (things like "www.microsoft.com") that the underlying objects support and we don't want to 
@@ -295,14 +270,12 @@ namespace System.Windows.Forms
             return (iHTMLWindow2 != null) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Open"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings")]
         public HtmlWindow Open(Uri url, string target, string windowOptions, bool replaceEntry)
         {
             return Open(url.ToString(), target, windowOptions, replaceEntry);
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.OpenNew"]/*' />
         /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have 
         /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified 
         /// (things like "www.microsoft.com") that the underlying objects support and we don't want to 
@@ -314,55 +287,49 @@ namespace System.Windows.Forms
             return (iHTMLWindow2 != null) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.OpenNew"]/*' />
         [SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings")]
         public HtmlWindow OpenNew(Uri url, string windowOptions)
         {
             return OpenNew(url.ToString(), windowOptions);
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Prompt"]/*' />
         public string Prompt(string message, string defaultInputValue)
         {
             return this.NativeHtmlWindow.Prompt(message, defaultInputValue).ToString();
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.RemoveFocus"]/*' />
         public void RemoveFocus()
         {
             this.NativeHtmlWindow.Blur();
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.ResizeTo"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Resize the window to the width/height requested</para>
-        /// </devdoc>
+        /// </summary>
         public void ResizeTo(int width, int height)
         {
             this.NativeHtmlWindow.ResizeTo(width, height);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Resize the window to the Size requested</para>
-        /// </devdoc>
+        /// </summary>
         public void ResizeTo(Size size)
         {
             this.NativeHtmlWindow.ResizeTo(size.Width, size.Height);
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.ScrollTo"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Scroll the window to the position requested</para>
-        /// </devdoc>
+        /// </summary>
         public void ScrollTo(int x, int y)
         {
             this.NativeHtmlWindow.ScrollTo(x, y);
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.ScrollTo2"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Scroll the window to the point requested</para>
-        /// </devdoc>
+        /// </summary>
         public void ScrollTo(Point point)
         {
             this.NativeHtmlWindow.ScrollTo(point.X, point.Y);
@@ -372,95 +339,46 @@ namespace System.Windows.Forms
         // Events
         //
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Error"]/*' />
         public event HtmlElementErrorEventHandler Error
         {
-            add
-            {
-                WindowShim.AddHandler(EventError, value);
-            }
-            remove
-            {
-                WindowShim.RemoveHandler(EventError, value);
-            }
+            add => WindowShim.AddHandler(EventError, value);
+            remove => WindowShim.RemoveHandler(EventError, value);
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.GotFocus"]/*' />
         public event HtmlElementEventHandler GotFocus
         {
-            add
-            {
-                WindowShim.AddHandler(EventGotFocus, value);
-            }
-            remove
-            {
-                WindowShim.RemoveHandler(EventGotFocus, value);
-            }
+            add => WindowShim.AddHandler(EventGotFocus, value);
+            remove => WindowShim.RemoveHandler(EventGotFocus, value);
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Load"]/*' />
         public event HtmlElementEventHandler Load
         {
-            add
-            {
-                WindowShim.AddHandler(EventLoad, value);
-            }
-            remove
-            {
-                WindowShim.RemoveHandler(EventLoad, value);
-            }
+            add => WindowShim.AddHandler(EventLoad, value);
+            remove => WindowShim.RemoveHandler(EventLoad, value);
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.LostFocus"]/*' />
         public event HtmlElementEventHandler LostFocus
         {
-            add
-            {
-                WindowShim.AddHandler(EventLostFocus, value);
-            }
-            remove
-            {
-                WindowShim.RemoveHandler(EventLostFocus, value);
-            }
+            add => WindowShim.AddHandler(EventLostFocus, value);
+            remove => WindowShim.RemoveHandler(EventLostFocus, value);
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Resize"]/*' />
         public event HtmlElementEventHandler Resize
         {
-            add
-            {
-                WindowShim.AddHandler(EventResize, value);
-            }
-            remove
-            {
-                WindowShim.RemoveHandler(EventResize, value);
-            }
+            add => WindowShim.AddHandler(EventResize, value);
+            remove => WindowShim.RemoveHandler(EventResize, value);
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Scroll"]/*' />
         public event HtmlElementEventHandler Scroll
         {
-            add
-            {
-                WindowShim.AddHandler(EventScroll, value);
-            }
-            remove
-            {
-                WindowShim.RemoveHandler(EventScroll, value);
-            }
+            add => WindowShim.AddHandler(EventScroll, value);
+            remove => WindowShim.RemoveHandler(EventScroll, value);
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Unload"]/*' />
         public event HtmlElementEventHandler Unload
         {
-            add
-            {
-                WindowShim.AddHandler(EventUnload, value);
-            }
-            remove
-            {
-                WindowShim.RemoveHandler(EventUnload, value);
-            }
+            add => WindowShim.AddHandler(EventUnload, value);
+            remove => WindowShim.RemoveHandler(EventUnload, value);
         }
 
 
@@ -550,7 +468,7 @@ namespace System.Windows.Forms
 
 
 
-        ///<devdoc>
+        ///<summary>
         /// HtmlWindowShim - this is the glue between the DOM eventing mechanisms
         ///                  and our CLR callbacks.  
         ///             
@@ -562,7 +480,7 @@ namespace System.Windows.Forms
         ///                                 for a method named DISPID=0.  For each event that's subscribed, we create 
         ///                                 a new HtmlToClrEventProxy, detect the callback and fire the corresponding
         ///                                 CLR event.
-        ///</devdoc>
+        ///</summary>
         internal class HtmlWindowShim : HtmlShim
         {
             private AxHost.ConnectionPointCookie cookie;
@@ -660,7 +578,6 @@ namespace System.Windows.Forms
 
             #region operators
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlElement.operatorEQ"]/*' />
         [SuppressMessage("Microsoft.Design", "CA1046:DoNotOverrideOperatorEqualsOnReferenceTypes")]
         public static bool operator ==(HtmlWindow left, HtmlWindow right)
         {
@@ -698,19 +615,16 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.operatorNE"]/*' />
         public static bool operator !=(HtmlWindow left, HtmlWindow right)
         {
             return !(left == right);
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.GetHashCode"]/*' />
         public override int GetHashCode()
         {
             return htmlWindow2 == null ? 0 : htmlWindow2.GetHashCode();
         }
 
-        /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Equals"]/*' />
         public override bool Equals(object obj)
         {
             return (this == (HtmlWindow)obj);

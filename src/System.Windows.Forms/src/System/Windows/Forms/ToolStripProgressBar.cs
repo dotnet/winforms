@@ -2,19 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+using System.ComponentModel;
+using System.Drawing;
 
-    using System;
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Security;
-    using System.Security.Permissions;
-
-    /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar"]/*' />
+namespace System.Windows.Forms
+{
     [DefaultProperty(nameof(Value))]
-    public class ToolStripProgressBar : ToolStripControlHost {
-
+    public class ToolStripProgressBar : ToolStripControlHost
+    {
         internal static readonly object EventRightToLeftLayoutChanged = new object();
 
         private static readonly Padding defaultMargin = new Padding(1, 2, 1, 1);
@@ -23,7 +18,6 @@ namespace System.Windows.Forms {
         private Padding scaledDefaultStatusStripMargin = defaultStatusStripMargin;
 
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.ToolStripProgressBar"]/*' />
         public ToolStripProgressBar()
             : base(CreateControlInstance()) {
             ToolStripProgressBarControl toolStripProgressBarControl = Control as ToolStripProgressBarControl;
@@ -41,10 +35,9 @@ namespace System.Windows.Forms {
             this.Name = name;
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.ProgressBar"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Create a strongly typed accessor for the class
-        /// </devdoc>
+        /// </summary>
         /// <value></value>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ProgressBar ProgressBar {
@@ -81,10 +74,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.DefaultSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Specify what size you want the item to start out at
-        /// </devdoc>
+        /// </summary>
         /// <value></value>
         protected override System.Drawing.Size DefaultSize {
             get {              
@@ -92,10 +84,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.DefaultMargin"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Specify how far from the edges you want to be
-        /// </devdoc>
+        /// </summary>
         /// <value></value>
         protected internal override Padding DefaultMargin {
             get {
@@ -148,13 +139,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.RightToLeftLayout"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
         //      and the RightToLeft is true, mirroring will be turned on on the form, and
         ///     control placement and text will be from right to left.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
@@ -172,10 +162,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Step"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Wrap some commonly used properties
-        /// </devdoc>
+        /// </summary>
         /// <value></value>
         [
         DefaultValue(10),
@@ -191,10 +180,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Style"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Wrap some commonly used properties
-        /// </devdoc>
+        /// </summary>
         /// <value></value>
         [
         DefaultValue(ProgressBarStyle.Blocks),
@@ -210,10 +198,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.Text"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Hide the property.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false), 
         EditorBrowsable(EditorBrowsableState.Never), 
@@ -232,10 +219,9 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Value"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Wrap some commonly used properties
-        /// </devdoc>
+        /// </summary>
         /// <value></value>
         [
         DefaultValue(0),
@@ -260,15 +246,11 @@ namespace System.Windows.Forms {
         /// </returns>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level3) {
-                return new ToolStripProgressBarAccessibleObject(this);
-            }
-
-            return base.CreateAccessibilityInstance();
+            return new ToolStripProgressBarAccessibleObject(this);
         }
 
         private static Control CreateControlInstance() {
-            ProgressBar progressBar = AccessibilityImprovements.Level3 ? new ToolStripProgressBarControl() : new ProgressBar();
+            ProgressBar progressBar = new ToolStripProgressBarControl();
             progressBar.Size = new Size(100,15);
             return progressBar;
         }
@@ -277,12 +259,10 @@ namespace System.Windows.Forms {
             OnRightToLeftLayoutChanged(e);
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.OnRightToLeftLayoutChanged"]/*' />
         protected virtual void OnRightToLeftLayoutChanged(EventArgs e) {
             RaiseEvent(EventRightToLeftLayoutChanged, e);
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.OnSubscribeControlEvents"]/*' />
         protected override void OnSubscribeControlEvents(Control control) {
             ProgressBar bar = control as ProgressBar;
             if (bar != null) {
@@ -294,7 +274,6 @@ namespace System.Windows.Forms {
             base.OnSubscribeControlEvents(control);
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.OnUnsubscribeControlEvents"]/*' />
         protected override void OnUnsubscribeControlEvents(Control control) {
 
             ProgressBar bar = control as ProgressBar;
@@ -307,175 +286,114 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Paint"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Hide the event.</para>
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         new public event KeyEventHandler KeyDown
         {
-            add
-            {
-                base.KeyDown += value;
-            }
-            remove
-            {
-                base.KeyDown -= value;
-            }
+            add => base.KeyDown += value;
+            remove => base.KeyDown -= value;
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Paint"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Hide the event.</para>
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         new public event KeyPressEventHandler KeyPress
         {
-            add
-            {
-                base.KeyPress += value;
-            }
-            remove
-            {
-                base.KeyPress -= value;
-            }
+            add => base.KeyPress += value;
+            remove => base.KeyPress -= value;
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Paint"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Hide the event.</para>
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         new public event KeyEventHandler KeyUp
         {
-            add
-            {
-                base.KeyUp += value;
-            }
-            remove
-            {
-                base.KeyUp -= value;
-            }
+            add => base.KeyUp += value;
+            remove => base.KeyUp -= value;
         }
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Paint"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Hide the event.</para>
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         new public event EventHandler LocationChanged
         {
-            add
-            {
-                base.LocationChanged += value;
-            }
-            remove
-            {
-                base.LocationChanged -= value;
-            }
+            add => base.LocationChanged += value;
+            remove => base.LocationChanged -= value;
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Paint"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Hide the event.</para>
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         new public event EventHandler OwnerChanged
         {
-            add
-            {
-                base.OwnerChanged += value;
-            }
-            remove
-            {
-                base.OwnerChanged -= value;
-            }
+            add => base.OwnerChanged += value;
+            remove => base.OwnerChanged -= value;
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.RightToLeftLayoutChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
-            add {
-                Events.AddHandler(EventRightToLeftLayoutChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventRightToLeftLayoutChanged, value);
-            }
+            add => Events.AddHandler(EventRightToLeftLayoutChanged, value);
+            remove => Events.RemoveHandler(EventRightToLeftLayoutChanged, value);
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Paint"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Hide the event.</para>
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         new public event EventHandler TextChanged
         {
-            add
-            {
-                base.TextChanged += value;
-            }
-            remove
-            {
-                base.TextChanged -= value;
-            }
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
 
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Paint"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Hide the event.</para>
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         new public event EventHandler Validated
         {
-            add
-            {
-                base.Validated += value;
-            }
-            remove
-            {
-                base.Validated -= value;
-            }
+            add => base.Validated += value;
+            remove => base.Validated -= value;
         }
 
-        /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Paint"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Hide the event.</para>
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         new public event CancelEventHandler Validating
         {
-            add
-            {
-                base.Validating += value;
-            }
-            remove
-            {
-                base.Validating -= value;
-            }
+            add => base.Validating += value;
+            remove => base.Validating -= value;
         }
         public void Increment(int value) {
             ProgressBar.Increment(value);
@@ -524,18 +442,10 @@ namespace System.Windows.Forms {
                 set { ownerItem = value; }
             }
 
-            internal override bool SupportsUiaProviders {
-                get {
-                    return AccessibilityImprovements.Level3;
-                }
-            }
+            internal override bool SupportsUiaProviders => true;
 
             protected override AccessibleObject CreateAccessibilityInstance() {
-                if (AccessibilityImprovements.Level3) {
-                    return new ToolStripProgressBarControlAccessibleObject(this);
-                }
-
-                return base.CreateAccessibilityInstance();
+                return new ToolStripProgressBarControlAccessibleObject(this);
             }
         }
 

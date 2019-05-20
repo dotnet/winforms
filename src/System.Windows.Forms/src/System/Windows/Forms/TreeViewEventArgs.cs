@@ -14,38 +14,33 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\TreeViewEvent.uex' path='docs/doc[@for="TreeViewEventArgs"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Provides data for the <see cref='System.Windows.Forms.TreeView.OnAfterCheck'/>, <see cref='System.Windows.Forms.TreeView.AfterCollapse'/>, <see cref='System.Windows.Forms.TreeView.AfterExpand'/>, or <see cref='System.Windows.Forms.TreeView.AfterSelect'/> event.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     public class TreeViewEventArgs : EventArgs {
         TreeNode node;
         TreeViewAction action = TreeViewAction.Unknown;
         
-        /// <include file='doc\TreeViewEvent.uex' path='docs/doc[@for="TreeViewEventArgs.TreeViewEventArgs"]/*' />
         public TreeViewEventArgs(TreeNode node) {
             this.node = node;
         }
         
-        /// <include file='doc\TreeViewEvent.uex' path='docs/doc[@for="TreeViewEventArgs.TreeViewEventArgs1"]/*' />
         public TreeViewEventArgs(TreeNode node, TreeViewAction action) {
             this.node = node;                                           
             this.action = action;
         }
         
-        /// <include file='doc\TreeViewEvent.uex' path='docs/doc[@for="TreeViewEventArgs.Node"]/*' />
         public TreeNode Node {
             get {
                 return node;
             }
         }
 
-        /// <include file='doc\TreeViewEvent.uex' path='docs/doc[@for="TreeViewEventArgs.Action"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      An event specific action-flag.
-        /// </devdoc>
+        /// </summary>
         public TreeViewAction Action {
             get {
                 return action;

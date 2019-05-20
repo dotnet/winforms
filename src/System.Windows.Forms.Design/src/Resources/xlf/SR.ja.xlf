@@ -2,119 +2,360 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="ja" original="../SR.resx">
     <body>
+      <trans-unit id="BehaviorServiceCopyControl">
+        <source>Copy and move {0}</source>
+        <target state="translated">{0} のコピーおよび移動</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BehaviorServiceCopyControls">
+        <source>Copy and move {0} Controls</source>
+        <target state="translated">{0} コントロールのコピーおよび移動</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BehaviorServiceMoveControl">
+        <source>Move {0}</source>
+        <target state="translated">{0} の移動</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BehaviorServiceMoveControls">
+        <source>Move {0} Controls</source>
+        <target state="translated">{0} コントロールの移動</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BehaviorServiceResizeControl">
+        <source>Resize {0}</source>
+        <target state="translated">{0} のサイズ変更</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BehaviorServiceResizeControls">
+        <source>Resize {0} Controls</source>
+        <target state="translated">{0} コントロールのサイズの変更</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomComponentSerializationServiceClosedStore">
+        <source>The serialization store is closed.  New objects cannot be added to a closed store.</source>
+        <target state="translated">シリアル化ストアは閉じられています。  閉じられたストアに新しいオブジェクトを追加することはできません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomComponentSerializationServiceDeserializationError">
+        <source>Complete deserialization of {0} failed.</source>
+        <target state="translated">{0} の完全なシリアル化解除ができませんでした。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomComponentSerializationServiceUnknownStore">
+        <source>This type of serialization store is not supported.  Use a store returned by the CreateStore method.</source>
+        <target state="translated">シリアル化ストアのこの型はサポートされていません。  CreateStore メソッドによって返されたストアを使用してください。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetAlignByPrimary">
+        <source>Format {0} components (alignment)</source>
+        <target state="translated">{0} コンポーネントを設定する (配置)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetAlignToGrid">
+        <source>Align {0} components to grid</source>
+        <target state="translated">{0} コンポーネントをグリッドに合わせる</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetCutMultiple">
+        <source>Cut {0} Components</source>
+        <target state="translated">{0} コンポーネントを切り取る</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetDelete">
+        <source>Delete {0} components</source>
+        <target state="translated">{0} コンポーネントを削除する</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetError">
+        <source>An error occurred while processing this command.
+      {0}</source>
+        <target state="translated">このコマンドの処理中にエラーが発生しました。
+      {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetFormatSpacing">
+        <source>Format {0} components (spacing)</source>
+        <target state="translated">{0} コンポーネントのフォーマット (スペース)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetPaste">
+        <source>Paste components</source>
+        <target state="translated">コンポーネントの貼り付け</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetSize">
+        <source>Size {0} components</source>
+        <target state="translated">{0} コンポーネントのサイズを変更</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetSizeToGrid">
+        <source>Size {0} components to grid</source>
+        <target state="translated">{0} コンポーネントのサイズをグリッドに合わせて変更</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetUnknownSpacingCommand">
+        <source>Unknown spacing command</source>
+        <target state="translated">不明なスペース コマンド</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ComponentDesignerAddEvent">
         <source>Adding event '{0}'</source>
-        <target state="new">Adding event '{0}'</target>
+        <target state="translated">イベント '{0}' の追加</target>
         <note />
       </trans-unit>
       <trans-unit id="COM2UnhandledVT">
         <source>Unhandled VT: {0}.</source>
-        <target state="new">Unhandled VT: {0}.</target>
+        <target state="translated">ハンドルされていない VT: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="CannotConvertDoubleToDate">
         <source>Double cannot be converted to a date.</source>
-        <target state="new">Double cannot be converted to a date.</target>
+        <target state="translated">double を date に変換できません。</target>
         <note />
       </trans-unit>
       <trans-unit id="CannotConvertIntToFloat">
         <source>Integer cannot be converted to a float.</source>
-        <target state="new">Integer cannot be converted to a float.</target>
+        <target state="translated">integer を float に変換できません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuAlignToGrid">
+        <source>Align To &amp;Grid</source>
+        <target state="translated">グリッドに配置(&amp;G)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuBringToFront">
+        <source>&amp;Bring To Front</source>
+        <target state="translated">最前面へ移動(&amp;B)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuCopy">
+        <source>C&amp;opy</source>
+        <target state="translated">コピー(&amp;O)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuCut">
+        <source>&amp;Cut</source>
+        <target state="translated">切り取り(&amp;C)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuDelete">
+        <source>&amp;Delete</source>
+        <target state="translated">削除(&amp;D)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuDocumentOutline">
+        <source>&amp;Document Outline</source>
+        <target state="translated">ドキュメント アウトライン(&amp;T)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuLockControls">
+        <source>&amp;Lock Controls</source>
+        <target state="translated">コントロールのロック(&amp;L)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuPaste">
+        <source>&amp;Paste</source>
+        <target state="translated">貼り付け(&amp;P)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuProperties">
+        <source>&amp;Properties</source>
+        <target state="translated">プロパティ(&amp;P)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuSelect">
+        <source>&amp;Select</source>
+        <target state="translated">選択(&amp;S)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuSendToBack">
+        <source>&amp;Send To Back</source>
+        <target state="translated">最背面へ移動(&amp;S)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuStripActionList_ShowCheckMargin">
+        <source>ShowCheckMargin</source>
+        <target state="translated">ShowCheckMargin</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuStripActionList_ShowCheckMarginDesc">
+        <source>Toggles the ShowCheckMargin property</source>
+        <target state="translated">ShowCheckMargin プロパティの切り替え</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuStripActionList_ShowImageMargin">
+        <source>ShowImageMargin</source>
+        <target state="translated">ShowImageMargin</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuStripActionList_ShowImageMarginDesc">
+        <source>Toggles the ShowImageMargin property</source>
+        <target state="translated">ShowImageMargin プロパティの切り替え</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuViewCode">
+        <source>View &amp;Code</source>
+        <target state="translated">コードの表示(&amp;C)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlDesigner_WndProcException">
+        <source>The control {0} has thrown an unhandled exception in the designer and has been disabled.
+
+      Exception:
+      {1}
+
+      Stack trace:{2}</source>
+        <target state="translated">コントロール {0} がデザイナーでハンドルされていない例外をスローして、無効になりました。
+
+      例外:
+      {1}
+
+      スタック トレース:{2}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_CouldNotConvertValue">
+        <source>Could not convert value '{0}' to the type '{1}'.</source>
+        <target state="translated">値 '{0}' を型 '{1}' に変換できませんでした。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_CouldNotFindMethod">
+        <source>Could not find method '{0}'.</source>
+        <target state="translated">メソッド '{0}' が見つかりませんでした。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_CouldNotFindProperty">
+        <source>Could not find property '{0}' on '{1}'.</source>
+        <target state="translated">'{1}' 上にプロパティ '{0}' が見つかりませんでした。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_DefaultPanelTitle">
+        <source>{0} Tasks</source>
+        <target state="translated">{0} タスク</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_ErrorActivatingDropDown">
+        <source>Error using the dropdown: {0}</source>
+        <target state="translated">ドロップダウンの使用時にエラーが発生しました:{0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_ErrorInvokingAction">
+        <source>Error invoking '{0}'.  Details: {1}</source>
+        <target state="translated">'{0}' の呼び出し中にエラーが発生しました。  詳細:{1}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_ErrorSettingValue">
+        <source>Error setting value '{0}' to property '{1}'.  Details: {2}</source>
+        <target state="translated">値 '{0}' をプロパティ '{1}' に設定中にエラーが発生しました。  詳細情報:{2}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerBeginDragNotCalled">
+        <source>Call to BeginDrag must succeed before calling drag functions.</source>
+        <target state="translated">ドラッグ関数を呼び出す前に BeginDrag への呼び出しを完了しなければなりません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerInherited">
+        <source>Inherited control</source>
+        <target state="translated">継承されたコントロール</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerInheritedReadOnly">
+        <source>Inherited control (Private)</source>
+        <target state="translated">継承コントロール (プライベート)</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceContainerDispose">
         <source>The container cannot be disposed at design time.</source>
-        <target state="new">The container cannot be disposed at design time.</target>
+        <target state="translated">デザイン時に、コンテナーを破棄することはできません。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceDesignerNotLoaded">
         <source>Cannot create a view for this design surface because the designer is not loaded.</source>
-        <target state="new">Cannot create a view for this design surface because the designer is not loaded.</target>
+        <target state="translated">デザイナーが読み込まれていないため、このデザイン サーフェイスにビューを作成することはできません。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceFatalError">
-        <source>An error occurred while loading the document.  Fix the error, and then try loading the document again.  The error message follows:\r\n\r\n{0}</source>
-        <target state="new">An error occurred while loading the document.  Fix the error, and then try loading the document again.  The error message follows:\r\n\r\n{0}</target>
+        <source>An error occurred while loading the document.  Fix the error, and then try loading the document again. The error message follows:
+
+      {0}</source>
+        <target state="translated">ドキュメントを読み込み中にエラーが発生しました。このエラーを修正してから、再度ドキュメントを読み込んでください。エラー メッセージは以下のとおりです。
+
+      {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceNoRootComponent">
         <source>The designer loader did not provide a root component but has not indicated why.</source>
-        <target state="new">The designer loader did not provide a root component but has not indicated why.</target>
+        <target state="translated">デザイナー ローダーはルート コンポーネントを指定しませんでしたが、その理由を提示しませんでした。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceNoSupportedTechnology">
         <source>The designer loaded, but it does not offer a view compatible with this design surface.</source>
-        <target state="new">The designer loaded, but it does not offer a view compatible with this design surface.</target>
+        <target state="translated">デザイナーは読み込まれましたが、このデザイン サーフェイスと互換性のあるビューを提供しません。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceServiceIsFixed">
         <source>The service {0} cannot be removed from the service container.</source>
-        <target state="new">The service {0} cannot be removed from the service container.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DesignerActionPanel_CouldNotFindMethod">
-        <source>Could not find method '{0}'</source>
-        <target state="new">Could not find method '{0}'</target>
+        <target state="translated">サービス {0} をサービス コンテナーから削除できません。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostCantDestroyInheritedComponent">
         <source>Cannot remove or destroy inherited component '{0}'.</source>
-        <target state="new">Cannot remove or destroy inherited component '{0}'.</target>
+        <target state="translated">継承コンポーネント '{0}' を削除または破棄できません。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostCyclicAdd">
         <source>Cannot add an instance of {0} to the designer because it would create a circular dependency.  Make sure that the type does not have the same namespace and type name as the root component {1}.</source>
-        <target state="new">Cannot add an instance of {0} to the designer because it would create a circular dependency.  Make sure that the type does not have the same namespace and type name as the root component {1}.</target>
+        <target state="translated">循環依存の関係を生じるため、{0} のインスタンスをデザイナーに追加できません。  型が、ルート コンポーネント {1} と同じ名前空間および型名を指定していないことを確認してください。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostDesignerNeedsComponent">
         <source>Failure initializing the designer.  It has no Component member.</source>
-        <target state="new">Failure initializing the designer.  It has no Component member.</target>
+        <target state="translated">デザイナーを初期化できませんでした。  コンポーネント メンバーがありません。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostDestroyComponentTransaction">
         <source>Deleting '{0}'.</source>
-        <target state="new">Deleting '{0}'.</target>
+        <target state="translated">'{0}' を削除しています。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostDuplicateName">
         <source>The name {0} is already in use by another component.</source>
-        <target state="new">The name {0} is already in use by another component.</target>
+        <target state="translated">名前 {0} は別のコンポーネントによって既に使用されています。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostFailedComponentCreate">
         <source>Component of type {0} could not be created.  Make sure the type implements IComponent and provides an appropriate public constructor.  Appropriate constructors either take no parameters or take a single IContainer parameter.</source>
-        <target state="new">Component of type {0} could not be created.  Make sure the type implements IComponent and provides an appropriate public constructor.  Appropriate constructors either take no parameters or take a single IContainer parameter.</target>
+        <target state="translated">型 {0} のコンポーネントを作成できませんでした。  型が IComponent を実装していて適切なパブリック コンストラクターを指定していることを確認してください。  適切なコンストラクターには、パラメーターがまったく指定されていないか、または IContainer パラメーターが 1 つだけ指定されています。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostGenericTransactionName">
         <source>No Description Available</source>
-        <target state="new">No Description Available</target>
+        <target state="translated">説明はありません。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostLoaderSpecified">
         <source>A designer loader has already been configured for this design surface.</source>
-        <target state="new">A designer loader has already been configured for this design surface.</target>
+        <target state="translated">デザイナー ローダーは既にこのデザイン サーフェイスに構成されました。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostNestedTransaction">
         <source>The designer transaction '{0}' cannot be committed or canceled because nested transaction '{1}' is still active.  Commit or cancel the nested transaction first.</source>
-        <target state="new">The designer transaction '{0}' cannot be committed or canceled because nested transaction '{1}' is still active.  Commit or cancel the nested transaction first.</target>
+        <target state="translated">デザイナー トランザクション '{0}' は、入れ子にされたトランザクション '{1}' がアクティブであるため、コミットまたは取り消しできません。  入れ子にされたトランザクションを最初にコミットまたは取り消してください。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostNoBaseClass">
         <source>Cannot open a designer for the file because the class within it does not inherit from a class that can be visually designed.</source>
-        <target state="new">Cannot open a designer for the file because the class within it does not inherit from a class that can be visually designed.</target>
+        <target state="translated">ファイル内のクラスが視覚的にデザインできるクラスから継承されていないため、このファイル用にデザイナーを開くことはできません。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostNoTopLevelDesigner">
         <source>There is no designer for the class {0}.</source>
-        <target state="new">There is no designer for the class {0}.</target>
+        <target state="translated">クラス {0} にはデザイナーがありません。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostUnloading">
         <source>New components cannot be added while a designer is unloading.</source>
-        <target state="new">New components cannot be added while a designer is unloading.</target>
+        <target state="translated">デザイナーのアンロード中は、新しいコンポーネントを追加できません。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_CodeGenDisplay">
@@ -207,9 +448,34 @@
         <target state="translated">デザイナーでスナップ線を使用するかどうかを制御します。  true の場合、スナップ線がガイドとして使用されます。  false の場合、グリッド線が使用されます。</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignerShortcutDockInParent">
+        <source>Dock in Parent Container</source>
+        <target state="translated">親コンテナーにドッキングする</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerShortcutUndockInParent">
+        <source>Undock in Parent Container</source>
+        <target state="translated">親コンテナーでドッキングを解除する</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DotNET_ComponentType">
         <source>.NET Component</source>
-        <target state="new">.NET Component</target>
+        <target state="translated">.NET コンポーネント</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DragDropDragComponents">
+        <source>Drag {0} components</source>
+        <target state="translated">{0} 個のコンポーネントをドラッグする</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DragDropMoveComponent">
+        <source>Move {0}</source>
+        <target state="translated">{0} の移動</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DragDropMoveComponents">
+        <source>Move {0} components</source>
+        <target state="translated">{0} 個のコンポーネントを移動</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropSetDataError">
@@ -217,14 +483,34 @@
         <target state="translated">この IDataObject は SetData をサポートしていません。</target>
         <note />
       </trans-unit>
+      <trans-unit id="DragDropSizeComponent">
+        <source>Size {0}</source>
+        <target state="translated">サイズ {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DragDropSizeComponents">
+        <source>Size {0} components</source>
+        <target state="translated">{0} コンポーネントのサイズを変更</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ExtenderProviderServiceDuplicateProvider">
         <source>The extender provider {0} has already been added as an extender.  Adding another would result in duplicate properties.</source>
-        <target state="new">The extender provider {0} has already been added as an extender.  Adding another would result in duplicate properties.</target>
+        <target state="translated">拡張プロバイダー {0} はエクステンダーとして既に追加されています。  もう 1 つ追加すると、プロパティが重複します。</target>
         <note />
       </trans-unit>
       <trans-unit id="InheritanceServiceReadOnlyCollection">
         <source>Read-Only</source>
-        <target state="new">Read-Only</target>
+        <target state="translated">読み取り専用</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InvalidArgument">
+        <source>'{1}' is not a valid value for '{0}'.</source>
+        <target state="translated">'{1}' は '{0}' に有効な値ではありません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InvalidBoundArgument">
+        <source>'{1}' is not a valid value for '{0}'. '{0}' should be between {2} and {3}.</source>
+        <target state="translated">'{1}' は '{0}' に有効な値ではありません。'{0}' は {2} と {3} の間でなければなりません。</target>
         <note />
       </trans-unit>
       <trans-unit id="NotImplementedByDesign">
@@ -237,74 +523,534 @@
         <target state="translated">Windows フォーム デザイナーは、このプラットフォームではサポートされていません。</target>
         <note />
       </trans-unit>
+      <trans-unit id="RTL">
+        <source>RTL_False</source>
+        <target state="translated">RTL_False</target>
+        <note>RTL_False in Left-to-right languages and anything else (RTL_True) for right to left.</note>
+      </trans-unit>
+      <trans-unit id="SerializationManagerAreadyInSession">
+        <source>You cannot create a new session because this serialization manager already has an active serialization session.</source>
+        <target state="translated">このシリアル化マネージャーにはアクティブなシリアル化セッションが既に存在するため、新しいセッションを作成できません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializationManagerDuplicateComponentDecl">
+        <source>Duplicate declaration of member '{0}'</source>
+        <target state="translated">メンバー '{0}' の宣言が重複しています。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializationManagerNameInUse">
+        <source>The name '{0}' is already used by another object.</source>
+        <target state="translated">名前 '{0}' は、既に他のオブジェクトにより使用されています。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializationManagerNoMatchingCtor">
+        <source>Type '{0}' does not have a constructor with parameters of types {1}.</source>
+        <target state="translated">型 '{0}' に、{1} 型のパラメーターを含むコンストラクターがありません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializationManagerNoSession">
+        <source>This method cannot be invoked because the serialization manager does not have an active serialization session.</source>
+        <target state="translated">シリアル化マネージャーにアクティブなシリアル化セッションが存在しないため、このメソッドを呼び出せません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializationManagerObjectHasName">
+        <source>Cannot name the object '{0}' because it is already named '{1}'.</source>
+        <target state="translated">既に '{1}' という名前があるため、オブジェクト '{0}' に名前を付けられません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializationManagerWithinSession">
+        <source>This method cannot be invoked because the serialization manager has an active serialization session.</source>
+        <target state="translated">シリアル化マネージャーにアクティブなシリアル化セッションが存在するため、このメソッドを呼び出せません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerBadElementTypes">
+        <source>Elements of type {0} are not supported.  The serializer expects the element to be one of the following: {1}.</source>
+        <target state="translated">型 {0} の要素はサポートされていません。シリアライザーでは要素に次のうちの 1 つが指定されている必要があります: {1}。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerFieldTargetEvalFailed">
+        <source>The field '{0}' could not be found on the target object.  Make sure that the field is defined as an instance variable on the target object and has the correct scope.</source>
+        <target state="translated">フィールド '{0}' がターゲット オブジェクトで見つかりませんでした。  フィールドがターゲット オブジェクトのインスタンス変数として定義され、また正しいスコープを含んでいることを確認してください。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerInvalidArrayRank">
+        <source>Array rank '{0}' is too high.  Visual Studio can only save and load arrays with a rank of 1.</source>
+        <target state="translated">配列ランク '{0}' が高すぎます。  Visual Studio は、ランク 1 の配列の保存、読み込みのみ行えます。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerLostStatements">
+        <source>Code statements for the object '{0}' were lost during serialization.  This may have been a result of another object misbehaving during serialization.</source>
+        <target state="translated">シリアル化を実行中にオブジェクト '{0}' のコード ステートメントが失われました。  シリアル化の実行中に別のオブジェクトが適切に動作しなかったことが原因である可能性があります。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerMemberTypeNotSerializable">
+        <source>Members of type '{0}' cannot be serialized.</source>
+        <target state="translated">型 '{0}' のメンバーをシリアル化できません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerNoRootExpression">
+        <source>The source code contains a reference to the class definition, but the class definition cannot be found.</source>
+        <target state="translated">ソース コードはクラス定義への参照を含んでいますが、そのクラス定義が見つかりません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerNoSerializerForComponent">
+        <source>The object '{0}' failed to serialize itself.  It may not support code generation.</source>
+        <target state="translated">オブジェクト '{0}' はそれ自体のシリアル化に失敗しました。  コード生成をサポートしていない可能性があります。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerNoSuchEvent">
+        <source>The type '{0}' has no event named '{1}'.</source>
+        <target state="translated">型 '{0}' に '{1}' という名前のイベントはありません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerNoSuchField">
+        <source>The type '{0}' has no field named '{1}'.</source>
+        <target state="translated">型 '{0}' に '{1}' という名前のフィールドはありません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerNoSuchProperty">
+        <source>The type '{0}' has no property named '{1}'.</source>
+        <target state="translated">型 '{0}' に '{1}' という名前のプロパティはありません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerNullNestedProperty">
+        <source>The object '{0}' returned null for the property '{1}' but this is not allowed.</source>
+        <target state="translated">オブジェクト '{0}' は、プロパティ '{1}' に対して null を返しました。正しくありません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerPropertyGenFailed">
+        <source>Code generation for property '{0}' failed.  Error was: '{1}'</source>
+        <target state="translated">プロパティ '{0}' のコード生成に失敗しました。  エラー:'{1}'</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerResourceException">
+        <source>Error reading resources from the resource file for the culture {0}: {1}</source>
+        <target state="translated">カルチャ {0} のリソース ファイルからリソースを読み取り中にエラーが発生しました:{1}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerResourceExceptionInvariant">
+        <source>Error reading resources from the resource file for the default culture: {0}</source>
+        <target state="translated">既定カルチャのリソース ファイルからリソースを読み取り中にエラーが発生しました:{0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerTypeAbstract">
+        <source>The designer must create an instance of type '{0}' but it cannot because the type is declared as abstract.</source>
+        <target state="translated">デザイナーは型 '{0}' のインスタンスを作成しなければなりませんが、型が abstract として宣言されているため、作成できませんでした。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerTypeNotFound">
+        <source>Could not find type '{0}'.  Please make sure that the assembly that contains this type is referenced.  If this type is a part of your development project, make sure that the project has been successfully built using settings for your current platform or Any CPU.</source>
+        <target state="translated">型 '{0}' が見つかりませんでした。  この型を含むアセンブリが参照されていることを確認してください。  この型が開発プロジェクトの一部である場合は、現在のプラットフォームまたは Any CPU の設定を使用して、プロジェクトが正常にビルドされていることを確認してください。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerUndeclaredName">
+        <source>The variable '{0}' is either undeclared or was never assigned.</source>
+        <target state="translated">変数 '{0}' は宣言されていないか、または割り当てられていません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuAbout">
+        <source>&amp;About...</source>
+        <target state="translated">バージョン情報(&amp;A)...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuContents">
+        <source>&amp;Contents</source>
+        <target state="translated">内容(&amp;C)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuCopy">
+        <source>&amp;Copy</source>
+        <target state="translated">コピー(&amp;C)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuCreateDesc">
+        <source>Create Standard Menu</source>
+        <target state="translated">標準メニューの作成</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuCustomize">
+        <source>&amp;Customize</source>
+        <target state="translated">カスタマイズ(&amp;C)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuCut">
+        <source>Cu&amp;t</source>
+        <target state="translated">切り取り(&amp;T)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuEdit">
+        <source>&amp;Edit</source>
+        <target state="translated">編集(&amp;E)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuExit">
+        <source>E&amp;xit</source>
+        <target state="translated">終了(&amp;X)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuFile">
+        <source>&amp;File</source>
+        <target state="translated">ファイル(&amp;F)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuHelp">
+        <source>&amp;Help</source>
+        <target state="translated">ヘルプ(&amp;H)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuIndex">
+        <source>&amp;Index</source>
+        <target state="translated">インデックス(&amp;I)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuNew">
+        <source>&amp;New</source>
+        <target state="translated">新規作成(&amp;N)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuOpen">
+        <source>&amp;Open</source>
+        <target state="translated">開く(&amp;O)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuOptions">
+        <source>&amp;Options</source>
+        <target state="translated">オプション(&amp;O)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuPaste">
+        <source>&amp;Paste</source>
+        <target state="translated">貼り付け(&amp;P)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuPrint">
+        <source>&amp;Print</source>
+        <target state="translated">印刷(&amp;P)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuPrintPreview">
+        <source>Print Pre&amp;view</source>
+        <target state="translated">印刷プレビュー(&amp;V)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuRedo">
+        <source>&amp;Redo</source>
+        <target state="translated">やり直し(&amp;R)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuSave">
+        <source>&amp;Save</source>
+        <target state="translated">保存(&amp;S)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuSaveAs">
+        <source>Save &amp;As</source>
+        <target state="translated">名前を付けて保存(&amp;A)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuSearch">
+        <source>&amp;Search</source>
+        <target state="translated">検索(&amp;S)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuSelectAll">
+        <source>Select &amp;All</source>
+        <target state="translated">すべて選択(&amp;A)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuTools">
+        <source>&amp;Tools</source>
+        <target state="translated">ツール(&amp;T)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuUndo">
+        <source>&amp;Undo</source>
+        <target state="translated">元に戻す(&amp;U)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardToolCut">
+        <source>C&amp;ut</source>
+        <target state="translated">切り取り(&amp;U)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardToolHelp">
+        <source>He&amp;lp</source>
+        <target state="translated">ヘルプ(&amp;L)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_Dock">
+        <source>Dock:</source>
+        <target state="translated">ドッキング:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_DockDesc">
+        <source>Changes the Dock property</source>
+        <target state="translated">Dock プロパティを変更します</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_GripStyle">
+        <source>GripStyle:</source>
+        <target state="translated">GripStyle:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_GripStyleDesc">
+        <source>Changes the GripStyle property</source>
+        <target state="translated">GripStyle プロパティを変更します</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_Layout">
+        <source>Layout &amp;&amp; Appearance</source>
+        <target state="translated">レイアウトおよび表示</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_RenderMode">
+        <source>RenderMode:</source>
+        <target state="translated">RenderMode:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_RenderModeDesc">
+        <source>Changes the RenderMode property</source>
+        <target state="translated">RenderMode プロパティを変更します</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripAddingItem">
+        <source>Adding {0} Item</source>
+        <target state="translated">{0} 項目を追加しています</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">
+        <source>AllowItemReorder and AllowDrop cannot both be true.</source>
+        <target state="translated">AllowItemReorder と AllowDrop の両方を true にすることはできません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripCreatingNewItemTransaction">
+        <source>ToolStrip New Item create Transaction.</source>
+        <target state="translated">ToolStrip の新しいアイテムの作成トランザクションです。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerEmbedVerb">
+        <source>Embed in ToolStripContainer</source>
+        <target state="translated">ToolStripContainer に埋め込む</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerEmbedVerbDesc">
+        <source>Embeds the current ToolStrip in ToolStripContainer</source>
+        <target state="translated">現在の ToolStrip を ToolStripContainer に埋め込みます。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerStandardItemsVerb">
+        <source>&amp;Insert Standard Items</source>
+        <target state="translated">標準項目の挿入(&amp;I)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerStandardItemsVerbDesc">
+        <source>Inserts standard items in the current ToolStrip</source>
+        <target state="translated">現在の ToolStrip に標準項目を挿入します。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTemplateNodeEnterText">
+        <source>Type Here</source>
+        <target state="translated">ここに入力</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTemplateNodeLabelToolTip">
+        <source>Type Text for ToolStripMenuItem</source>
+        <target state="translated">ToolStripMenuItem のテキストの入力</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTemplateNodeSplitButtonStatusStripAccessibleName">
+        <source>Add Menu Item</source>
+        <target state="translated">メニュー項目の追加</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTemplateNodeSplitButtonStatusStripToolTip">
+        <source>Add ToolStripStatusLabel</source>
+        <target state="translated">ToolStripStatusLabel の追加</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTemplateNodeSplitButtonToolTip">
+        <source>Add ToolStripButton</source>
+        <target state="translated">ToolStripButton の追加</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerToolStripAccessibleName">
+        <source>New item selection</source>
+        <target state="translated">新しい項目の選択</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTransactionAddingItem">
+        <source>Adding Item</source>
+        <target state="translated">追加項目</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTransactionRemovingItem">
+        <source>Removing Item</source>
+        <target state="translated">削除項目</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDropDownItemCollectionEditorVerb">
+        <source>&amp;Edit DropDownItems...</source>
+        <target state="translated">DropDownItems の編集(&amp;E)...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripInsertingIntoDropDownTransaction">
+        <source>ToolStrip MenuItem Insert in DropDown Transaction.</source>
+        <target state="translated">DropDown での ToolStrip MenuItem の挿入トランザクションです。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemCollectionEditorVerb">
+        <source>&amp;Edit Items...</source>
+        <target state="translated">項目の編集(&amp;E)...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemContextMenuConvertTo">
+        <source>Con&amp;vert To</source>
+        <target state="translated">変換後(&amp;V)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemContextMenuInsert">
+        <source>&amp;Insert</source>
+        <target state="translated">挿入(&amp;I)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemContextMenuSetImage">
+        <source>Set I&amp;mage...</source>
+        <target state="translated">イメージの設定(&amp;M)...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemPropertyChangeTransaction">
+        <source>ToolStripItem Property Change Transaction.</source>
+        <target state="translated">ToolStripItem プロパティ変更のトランザクションです。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripMorphingItemTransaction">
+        <source>ToolStripItem Morphing Transaction.</source>
+        <target state="translated">ToolStripItem モーフィング のトランザクションです。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripSelectMenuItem">
+        <source>'{0}'</source>
+        <target state="translated">'{0}'</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripSeparatorError">
+        <source>Cannot add ToolStripSeparator to MenuStrip.</source>
+        <target state="translated">ToolStripSeparator を MenuStrip に追加できません。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolboxItemInvalidKey">
         <source>Argument should be a non-empty string.</source>
-        <target state="new">Argument should be a non-empty string.</target>
+        <target state="translated">引数には空ではない文字列を指定してください。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolboxItemInvalidPropertyType">
         <source>Property {0} requires an argument of type {1}.</source>
-        <target state="new">Property {0} requires an argument of type {1}.</target>
+        <target state="translated">プロパティ {0} には型 {1} の引数が 1 つ必要です。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolboxItemLocked">
         <source>Toolbox item cannot be modified.</source>
-        <target state="new">Toolbox item cannot be modified.</target>
+        <target state="translated">ツールボックス アイテムを変更できません。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolboxItemValueNotSerializable">
         <source>Data type {0} is not serializable. Items added to a property dictionary must be serializable.</source>
-        <target state="new">Data type {0} is not serializable. Items added to a property dictionary must be serializable.</target>
+        <target state="translated">データ型 {0} はシリアル化可能ではありません。プロパティ辞書に追加される項目はシリアル化可能でなければなりません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrayAutoArrange">
+        <source>Auto Arrange Tray Icons</source>
+        <target state="translated">トレイ アイコンの自動整列</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrayLineUpIcons">
+        <source>Line Up Tray Icons</source>
+        <target state="translated">トレイ アイコンを等間隔に整列</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrayShowLargeIcons">
+        <source>Show Large or Small Icons</source>
+        <target state="translated">大きいアイコンおよび小さいアイコンの表示</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TypeNotFoundInTargetFramework">
+        <source>Type '{0}' is not available in the target framework.</source>
+        <target state="translated">型 '{0}' は、ターゲット フレームワークでは使用できません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UIServiceHelper_ErrorCaption">
+        <source>Error</source>
+        <target state="translated">エラー</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentAdd0">
         <source>Add Component</source>
-        <target state="new">Add Component</target>
+        <target state="translated">コンポーネントの追加</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentAdd1">
         <source>Add {0}</source>
-        <target state="new">Add {0}</target>
+        <target state="translated">{0} の追加</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentChange0">
         <source>Change Component</source>
-        <target state="new">Change Component</target>
+        <target state="translated">コンポーネントの変更</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentChange1">
         <source>Change {0}</source>
-        <target state="new">Change {0}</target>
+        <target state="translated">{0} の変更</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentChange2">
         <source>Change {0}.{1}</source>
-        <target state="new">Change {0}.{1}</target>
+        <target state="translated">{0}.{1} の変更</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentRemove0">
         <source>Remove Component</source>
-        <target state="new">Remove Component</target>
+        <target state="translated">コンポーネントの削除</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentRemove1">
         <source>Remove {0}</source>
-        <target state="new">Remove {0}</target>
+        <target state="translated">{0} の削除</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentRename">
         <source>Rename {0} to {1}</source>
-        <target state="new">Rename {0} to {1}</target>
+        <target state="translated">{0} の名前を {1} に変更</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineMissingService">
         <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
-        <target state="new">The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</target>
+        <target state="translated">サービス {0} が必要ですが、見つかりませんでした。  このサービスを削除した場合、必ず置換したサービスを指定してください。</target>
         <note />
       </trans-unit>
       <trans-unit id="UnsafeNativeMethodsNotImplemented">
         <source>Not implemented.</source>
-        <target state="new">Not implemented.</target>
+        <target state="translated">実装されていません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WindowsFormsAddEvent">
+        <source>&lt;couldn't find resource string "WindowsFormsAddEvent"&gt;</source>
+        <target state="translated">&lt;リソース文字列 "WindowsFormsAddEvent" が見つかりませんでした&gt;</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WindowsFormsCommandCenterX">
+        <source>Horizontal center of {0} component(s)</source>
+        <target state="translated">{0} コンポーネントの左右方向の中心</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WindowsFormsCommandCenterY">
+        <source>Vertical center of {0} component(s)</source>
+        <target state="translated">{0} コンポーネントの上下方向の中心</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lockedDescr">
+        <source>The Locked property determines if we can move or resize the control.</source>
+        <target state="translated">Locked プロパティは、コントロールを移動できるか、またはサイズを変更できるかどうかを判断します。</target>
         <note />
       </trans-unit>
     </body>

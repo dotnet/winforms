@@ -21,14 +21,13 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms.VisualStyles {
 
-    /// <include file='doc\VisualStyleElement.uex' path='docs/doc[@for="VisualStyleElement"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Encapsulates the class, part and state of the "element" you wish to draw using
     ///       the VisualStyleRenderer. 
     ///       Usage pattern is something like this: new VisualStyleRenderer(VisualStyleElement.Window.Caption.Active);
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     public class VisualStyleElement {
         internal static readonly int Count = 25; //UPDATE THIS WHEN CLASSES ARE ADDED/REMOVED!
         private string className;
@@ -486,7 +485,6 @@ namespace System.Windows.Forms.VisualStyles {
                 }
             }
 
-            // Following parts exist on Vista and later releases only
             internal static class Border
             {
                 // Paints a rectangle with a 1 pixel edge + round corners, 

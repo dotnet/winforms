@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 namespace System.Windows.Forms {
-    using System.Runtime.Remoting;
 
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
@@ -15,11 +14,10 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Globalization;
 
-    /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection"]/*' />
-    /// <devdoc>
+    /// <summary>
     /// <para>Represents a collection of System.Windows.Forms.DataGridColumnStyle objects in the <see cref='System.Windows.Forms.DataGrid'/>
     /// control.</para>
-    /// </devdoc>
+    /// </summary>
     [
     Editor("System.Windows.Forms.Design.DataGridColumnCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
     ListBindable(false)
@@ -32,93 +30,63 @@ namespace System.Windows.Forms {
 
         // we have to implement IList for the Collection editor to work
         //
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.IList.Add"]/*' />
-        /// <internalonly/>
         int IList.Add(object value) {
             return this.Add((DataGridColumnStyle) value);            
         }
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.IList.Clear"]/*' />
-        /// <internalonly/>
         void IList.Clear() {
             this.Clear();
         }
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.IList.Contains"]/*' />
-        /// <internalonly/>
         bool IList.Contains(object value) {
             return items.Contains(value);
         }
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.IList.IndexOf"]/*' />
-        /// <internalonly/>
         int IList.IndexOf(object value) {
             return items.IndexOf(value);
         }
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.IList.Insert"]/*' />
-        /// <internalonly/>
         void IList.Insert(int index, object value) {
             throw new NotSupportedException();
         }
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.IList.Remove"]/*' />
-        /// <internalonly/>
         void IList.Remove(object value) {
             this.Remove((DataGridColumnStyle)value);
         }
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.IList.RemoveAt"]/*' />
-        /// <internalonly/>
         void IList.RemoveAt(int index) {
             this.RemoveAt(index);
         }
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.IList.IsFixedSize"]/*' />
-        /// <internalonly/>
         bool IList.IsFixedSize {
             get {return false;}
         }
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.IList.IsReadOnly"]/*' />
-        /// <internalonly/>
         bool IList.IsReadOnly {
             get {return false;}
         }
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.IList.this"]/*' />
-        /// <internalonly/>
         object IList.this[int index] {
             get { return items[index]; }
             set { throw new NotSupportedException(); }
         }
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.ICollection.CopyTo"]/*' />
-        /// <internalonly/>
         void ICollection.CopyTo(Array array, int index) {
             this.items.CopyTo(array, index);
         }
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.ICollection.Count"]/*' />
-        /// <internalonly/>
         int ICollection.Count {
             get {return this.items.Count;}
         }
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.ICollection.IsSynchronized"]/*' />
-        /// <internalonly/>
         bool ICollection.IsSynchronized {
             get {return false;}
         }
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.ICollection.SyncRoot"]/*' />
-        /// <internalonly/>
         object ICollection.SyncRoot {
             get {return this;}
         }
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.IEnumerable.GetEnumerator"]/*' />
-        /// <internalonly/>
         IEnumerator IEnumerable.GetEnumerator() {
             return items.GetEnumerator();
         }
@@ -131,10 +99,9 @@ namespace System.Windows.Forms {
             this.isDefault = isDefault;
         }
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.List"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the list of items in the collection.</para>
-        /// </devdoc>
+        /// </summary>
         protected override ArrayList List {
             get {
                 return items;
@@ -178,21 +145,19 @@ namespace System.Windows.Forms {
         }
         */
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.this"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets the System.Windows.Forms.DataGridColumnStyle at a specified index.</para>
-        /// </devdoc>
+        /// </summary>
         public DataGridColumnStyle this[int index] {
             get {
                 return (DataGridColumnStyle)items[index];
             }
         }
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.this1"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets the System.Windows.Forms.DataGridColumnStyle
         /// with the specified name.</para>
-        /// </devdoc>
+        /// </summary>
         public DataGridColumnStyle this[string columnName] {
             // PM team has reviewed and decided on naming changes already
             [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
@@ -219,11 +184,10 @@ namespace System.Windows.Forms {
             return null;
         }
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.this2"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets the System.Windows.Forms.DataGridColumnStyle associated with the
         ///    specified <see cref='System.Data.DataColumn'/>.</para>
-        /// </devdoc>
+        /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1043:UseIntegralOrStringArgumentForIndexers")]
         public DataGridColumnStyle this[PropertyDescriptor propertyDesciptor] {
             [
@@ -246,9 +210,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Adds a System.Windows.Forms.DataGridColumnStyle to the System.Windows.Forms.GridColumnStylesCollection</para>
-        /// </devdoc>
+        /// </summary>
 
         internal void CheckForMappingNameDuplicates(DataGridColumnStyle column) {
             if (string.IsNullOrEmpty(column.MappingName))
@@ -266,7 +230,6 @@ namespace System.Windows.Forms {
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, (DataGridColumnStyle) sender));
         }
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.Add"]/*' />
         public virtual int Add(DataGridColumnStyle column) {
             if (this.isDefault) {
                 throw new ArgumentException(SR.DataGridDefaultColumnCollectionChanged);
@@ -281,7 +244,7 @@ namespace System.Windows.Forms {
             // columns which are not the default should have a default
             // width of DataGrid.PreferredColumnWidth
             if (this.DataGridTableStyle != null && column.Width == -1)
-                column.width = this.DataGridTableStyle.PreferredColumnWidth;
+                column._width = this.DataGridTableStyle.PreferredColumnWidth;
 #if false
             column.AddOnPropertyChanged(owner.OnColumnChanged);
 #endif
@@ -290,7 +253,6 @@ namespace System.Windows.Forms {
             return index;
         }
         
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.AddRange"]/*' />
         public void AddRange(DataGridColumnStyle[] columns) {
             if (columns == null) {
                 throw new ArgumentNullException(nameof(columns));
@@ -322,20 +284,14 @@ namespace System.Windows.Forms {
             items.Clear();
         }
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.CollectionChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when a change is made to the System.Windows.Forms.GridColumnStylesCollection.</para>
-        /// </devdoc>
+        /// </summary>
         public event CollectionChangeEventHandler CollectionChanged {
-            add {
-                onCollectionChanged += value;
-            }
-            remove {
-                onCollectionChanged -= value;
-            }
+            add => onCollectionChanged += value;
+            remove => onCollectionChanged -= value;
         }
         
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.Clear"]/*' />
         public void Clear() {
             for (int i = 0; i < Count; i ++) {
                 this[i].ReleaseHostedControl();
@@ -344,34 +300,31 @@ namespace System.Windows.Forms {
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));
         }
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.Contains"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets a value indicating whether the System.Windows.Forms.GridColumnStylesCollection contains a System.Windows.Forms.DataGridColumnStyle associated with the
         ///       specified <see cref='System.Data.DataColumn'/>.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public bool Contains(PropertyDescriptor propertyDescriptor) {
             return this[propertyDescriptor] != null;
         }
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.Contains1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets a value indicating whether the System.Windows.Forms.GridColumnsStyleCollection contains the specified System.Windows.Forms.DataGridColumnStyle.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public bool Contains(DataGridColumnStyle column) {
             int index = items.IndexOf(column);
             return index != -1;
         }
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.Contains2"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets a value indicating whether the System.Windows.Forms.GridColumnsStyleCollection contains the System.Windows.Forms.DataGridColumnStyle with the specified name.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public bool Contains(string name) {
             IEnumerator e = items.GetEnumerator();
             while (e.MoveNext()) {
@@ -483,10 +436,9 @@ namespace System.Windows.Forms {
         }
         */
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.IndexOf"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets the index of a specified System.Windows.Forms.DataGridColumnStyle.</para>
-        /// </devdoc>
+        /// </summary>
         public int IndexOf(DataGridColumnStyle element) {
             int itemCount = items.Count;
             for (int i = 0; i < itemCount; ++i) {
@@ -497,10 +449,9 @@ namespace System.Windows.Forms {
             return -1;
         }
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.OnCollectionChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the System.Windows.Forms.GridColumnsCollection.CollectionChanged event.</para>
-        /// </devdoc>
+        /// </summary>
         protected void OnCollectionChanged(CollectionChangeEventArgs e) {
             if (onCollectionChanged != null)
                 onCollectionChanged(this, e);
@@ -511,10 +462,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.Remove"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Removes the specified System.Windows.Forms.DataGridColumnStyle from the System.Windows.Forms.GridColumnsStyleCollection.</para>
-        /// </devdoc>
+        /// </summary>
         public void Remove(DataGridColumnStyle column) {
             if (this.isDefault) {
                 throw new ArgumentException(SR.DataGridDefaultColumnCollectionChanged);
@@ -533,10 +483,9 @@ namespace System.Windows.Forms {
                 RemoveAt(columnIndex);
         }
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.RemoveAt"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Removes the System.Windows.Forms.DataGridColumnStyle with the specified index from the System.Windows.Forms.GridColumnsStyleCollection.</para>
-        /// </devdoc>
+        /// </summary>
         public void RemoveAt(int index) {
             if (this.isDefault) {
                 throw new ArgumentException(SR.DataGridDefaultColumnCollectionChanged);
@@ -553,7 +502,6 @@ namespace System.Windows.Forms {
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Remove, toRemove));
         }
 
-        /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.ResetPropertyDescriptors"]/*' />
         public void ResetPropertyDescriptors() {
             for (int i = 0; i < this.Count; i++) {
                 this[i].PropertyDescriptor = null;

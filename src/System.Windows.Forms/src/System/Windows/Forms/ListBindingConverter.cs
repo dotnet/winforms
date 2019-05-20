@@ -12,15 +12,14 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Reflection;
     
-    /// <include file='doc\ListBindingConverter.uex' path='docs/doc[@for="ListBindingConverter"]/*' />
     public class ListBindingConverter : TypeConverter {
                                             
         private static Type[] ctorTypes = null;  // the list of type of our ctor parameters.
         private static string[] ctorParamProps = null; // the name of each property to check to see if we need to init with a ctor.
 
-        /// <devdoc>
+        /// <summary>
         ///      Creates our array of types on demand.
-        /// </devdoc>
+        /// </summary>
         private static Type[] ConstructorParamaterTypes {
             get {
                 if (ctorTypes == null) {
@@ -30,9 +29,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Creates our array of param names on demand.
-        /// </devdoc>
+        /// </summary>
 
         private static string[] ConstructorParameterProperties {
             get {
@@ -44,11 +43,10 @@ namespace System.Windows.Forms {
         }
         
         
-        /// <include file='doc\ListBindingConverter.uex' path='docs/doc[@for="ListBindingConverter.CanConvertTo"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets a value indicating whether this converter can
         ///       convert an object to the given destination type using the context.</para>
-        /// </devdoc>
+        /// </summary>
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType) {
             if (destinationType == typeof(InstanceDescriptor)) {
                 return true;
@@ -56,14 +54,13 @@ namespace System.Windows.Forms {
             return base.CanConvertTo(context, destinationType);
         }
         
-        /// <include file='doc\ListBindingConverter.uex' path='docs/doc[@for="ListBindingConverter.ConvertTo"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call
         ///      to ToString on the object if the object is valid and if the destination
         ///      type is string.  If this cannot convert to the desitnation type, this will
         ///      throw a NotSupportedException.
-        /// </devdoc>
+        /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
             if (destinationType == null) {
                 throw new ArgumentNullException(nameof(destinationType));
@@ -77,12 +74,11 @@ namespace System.Windows.Forms {
             return base.ConvertTo(context, culture, value, destinationType);
         }
         
-        /// <include file='doc\ListBindingConverter.uex' path='docs/doc[@for="ListBindingConverter.CreateInstance"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Creates an instance of this type given a set of property values
         ///      for the object.  This is useful for objects that are immutable, but still
         ///      want to provide changable properties.
-        /// </devdoc>
+        /// </summary>
         public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues) {
             try
             {
@@ -100,19 +96,18 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListBindingConverter.uex' path='docs/doc[@for="ListBindingConverter.GetCreateInstanceSupported"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Determines if changing a value on this object should require a call to
         ///      CreateInstance to create a new value.
-        /// </devdoc>
+        /// </summary>
         public override bool GetCreateInstanceSupported(ITypeDescriptorContext context) {
             return true;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Gets the best matching ctor for a given binding and fills it out, based on the 
         ///      state of the Binding and the optimal ctor.
-        /// </devdoc>
+        /// </summary>
         private InstanceDescriptor GetInstanceDescriptorFromValues(Binding b) {
 
             // The BindingFormattingDialog turns on Binding::FormattingEnabled property.
@@ -168,10 +163,10 @@ namespace System.Windows.Forms {
                         val = b.PropertyName;
                         break;
                     case 1:
-                        val = b.BindToObject.DataSource;
+                        val = b.DataSource;
                         break;
                     case 2:
-                        val = b.BindToObject.BindingMemberInfo.BindingMember;
+                        val = b.BindingMemberInfo.BindingMember;
                         break;
                     default:
                         val = TypeDescriptor.GetProperties(b)[ConstructorParameterProperties[i]].GetValue(b);

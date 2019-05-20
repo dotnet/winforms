@@ -15,7 +15,6 @@ namespace System.Windows.Forms {
     using System.Reflection;
     using System.Runtime.InteropServices;
 
-    /// <include file='doc\GridPanel.uex' path='docs/doc[@for="GridPanel"]/*' />
     [ProvideProperty("ColumnSpan", typeof(Control))]
     [ProvideProperty("RowSpan", typeof(Control))]
     [ProvideProperty("Row", typeof(Control))]
@@ -32,12 +31,10 @@ namespace System.Windows.Forms {
         private TableLayoutSettings _tableLayoutSettings;
         private static readonly object EventCellPaint = new object();
 
-        /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.TableLayoutPanel"]/*' />
         public TableLayoutPanel() {
             _tableLayoutSettings = TableLayout.CreateSettings(this);
         }
         
-        /// <include file='doc\GridPanel.uex' path='docs/doc[@for="GridPanel.LayoutEngine"]/*' />
         public override LayoutEngine LayoutEngine {
             get { return TableLayout.Instance; }
         }
@@ -70,7 +67,6 @@ namespace System.Windows.Forms {
 
     
         
-        /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.BorderStyle"]/*' />
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -85,7 +81,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.CellBorderStyle"]/*' />
         [
         DefaultValue(TableLayoutPanelCellBorderStyle.None), 
         SRCategory(nameof(SR.CatAppearance)), 
@@ -110,7 +105,6 @@ namespace System.Windows.Forms {
             get { return _tableLayoutSettings.CellBorderWidth; }
         }
 
-        /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.Controls"]/*' />
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [SRDescription(nameof(SR.ControlControlsDescr))]
@@ -118,12 +112,11 @@ namespace System.Windows.Forms {
             get { return (TableLayoutControlCollection)base.Controls; }
         }
         
-        /// <include file='doc\GridPanel.uex' path='docs/doc[@for="GridPanel.ColumnCount"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// This sets the maximum number of columns allowed on this table instead of allocating
         /// actual spaces for these columns. So it is OK to set ColumnCount to Int32.MaxValue without
         /// causing out of memory exception
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.GridPanelColumnsDescr))]
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(0)]
@@ -136,12 +129,11 @@ namespace System.Windows.Forms {
             }
         }
  
-        /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.GrowStyle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///       Specifies if a TableLayoutPanel will gain additional rows or columns once its existing cells
         ///       become full.  If the value is 'FixedSize' then the TableLayoutPanel will throw an exception
         ///       when the TableLayoutPanel is over-filled.
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.TableLayoutPanelGrowStyleDescr))]
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(TableLayoutPanelGrowStyle.AddRows)]
@@ -154,12 +146,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\GridPanel.uex' path='docs/doc[@for="GridPanel.RowCount"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// This sets the maximum number of rows allowed on this table instead of allocating
         /// actual spaces for these rows. So it is OK to set RowCount to Int32.MaxValue without
         /// causing out of memory exception
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.GridPanelRowsDescr))]
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(0)]
@@ -169,7 +160,6 @@ namespace System.Windows.Forms {
             set { _tableLayoutSettings.RowCount = value; }
         }
 
-        /// <include file='doc\GridPanel.uex' path='docs/doc[@for="GridPanel.RowStyles"]/*' />
         [SRDescription(nameof(SR.GridPanelRowStylesDescr))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [SRCategory(nameof(SR.CatLayout))]
@@ -180,7 +170,6 @@ namespace System.Windows.Forms {
             get { return _tableLayoutSettings.RowStyles; }
         }
 
-        /// <include file='doc\GridPanel.uex' path='docs/doc[@for="GridPanel.ColumnStyles"]/*' />
         [SRDescription(nameof(SR.GridPanelColumnStylesDescr))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [SRCategory(nameof(SR.CatLayout))]
@@ -191,10 +180,8 @@ namespace System.Windows.Forms {
             get { return _tableLayoutSettings.ColumnStyles; }
         }
 
-        /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.CreateControlsInstance"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override Control.ControlCollection CreateControlsInstance() {
             return new TableLayoutControlCollection(this);
@@ -206,14 +193,11 @@ namespace System.Windows.Forms {
         }
         
         #region Extended Properties
-        /// <include file='doc\GridPanel.uex' path='docs/doc[@for="GridPanel.IExtenderProvider.CanExtend"]/*' />
-        /// <internalonly/>
         bool IExtenderProvider.CanExtend(object obj) {
             Control control = obj as Control;
             return control != null && control.Parent == this;
         }
 
-        /// <include file='doc\GridPanel.uex' path='docs/doc[@for="GridPanel.GetColumnSpan"]/*' />
         [SRDescription(nameof(SR.GridPanelGetColumnSpanDescr))]
         [DefaultValue(1)]
         [SRCategory(nameof(SR.CatLayout))]
@@ -222,14 +206,12 @@ namespace System.Windows.Forms {
             return _tableLayoutSettings.GetColumnSpan(control);
         }
 
-        /// <include file='doc\GridPanel.uex' path='docs/doc[@for="GridPanel.SetColumnSpan"]/*' />
         public void SetColumnSpan(Control control, int value) {
             // layout.SetColumnSpan() throws ArgumentException if out of range.
             _tableLayoutSettings.SetColumnSpan(control, value);
             Debug.Assert(GetColumnSpan(control) == value, "GetColumnSpan should be the same as we set it");
         }
 
-        /// <include file='doc\GridPanel.uex' path='docs/doc[@for="GridPanel.GetRowSpan"]/*' />
         [SRDescription(nameof(SR.GridPanelGetRowSpanDescr))]
         [DefaultValue(1)]
         [SRCategory(nameof(SR.CatLayout))]
@@ -238,7 +220,6 @@ namespace System.Windows.Forms {
             return _tableLayoutSettings.GetRowSpan(control);
         }
         
-        /// <include file='doc\GridPanel.uex' path='docs/doc[@for="GridPanel.SetRowSpan"]/*' />
         public void SetRowSpan(Control control, int value) {
             // layout.SetRowSpan() throws ArgumentException if out of range.
             _tableLayoutSettings.SetRowSpan(control, value);
@@ -246,7 +227,6 @@ namespace System.Windows.Forms {
         }
 
         //get the row position of the control
-        /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.GetRow"]/*' />
         [DefaultValue(-1)]  //if change this value, also change the SerializeViaAdd in TableLayoutControlCollectionCodeDomSerializer
         [SRDescription(nameof(SR.GridPanelRowDescr))]
         [SRCategory(nameof(SR.CatLayout))]
@@ -257,14 +237,12 @@ namespace System.Windows.Forms {
         }
 
         //set the row position of the control
-        /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.SetRow"]/*' />
         public void SetRow(Control control, int row) {
             _tableLayoutSettings.SetRow(control, row);
             Debug.Assert(GetRow(control) == row, "GetRow should be the same as we set it");
         }
 
         //get the row and column position of the control
-        /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.GetRow"]/*' />
         [DefaultValue(typeof(TableLayoutPanelCellPosition), "-1,-1")]  //if change this value, also change the SerializeViaAdd in TableLayoutControlCollectionCodeDomSerializer
         [SRDescription(nameof(SR.GridPanelCellPositionDescr))]
         [SRCategory(nameof(SR.CatLayout))]
@@ -275,7 +253,6 @@ namespace System.Windows.Forms {
         }
 
         //set the row and column of the control
-        /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.SetRow"]/*' />
         public void SetCellPosition(Control control, TableLayoutPanelCellPosition position) {
             _tableLayoutSettings.SetCellPosition(control, position);
         }
@@ -283,7 +260,6 @@ namespace System.Windows.Forms {
         
 
         //get the column position of the control
-        /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.GetColumn"]/*' />
         [DefaultValue(-1)]  //if change this value, also change the SerializeViaAdd in TableLayoutControlCollectionCodeDomSerializer
         [SRDescription(nameof(SR.GridPanelColumnDescr))]
         [SRCategory(nameof(SR.CatLayout))]
@@ -294,16 +270,14 @@ namespace System.Windows.Forms {
         }
         
         //set the column position of the control
-        /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.SetColumn"]/*' />
         public void SetColumn(Control control, int column) {
             _tableLayoutSettings.SetColumn(control, column);
             Debug.Assert(GetColumn(control) == column, "GetColumn should be the same as we set it");
         }
         
-        /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.GetControlFromPosition"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// get the control which covers the specified row and column. return null if we can't find one
-        /// </devdoc>
+        /// </summary>
         public Control GetControlFromPosition (int column, int row) {
             return (Control)_tableLayoutSettings.GetControlFromPosition(column, row);
         }
@@ -313,10 +287,9 @@ namespace System.Windows.Forms {
             return _tableLayoutSettings.GetPositionFromControl(control);
         }
         
-        /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.ColumnWidths"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// This returns an array representing the widths (in pixels) of the columns in the TableLayoutPanel.
-        /// </devdoc>        
+        /// </summary>        
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public int[] GetColumnWidths() {
              TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(this);
@@ -331,10 +304,9 @@ namespace System.Windows.Forms {
              return cw;
         }      
         
-        /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.RowWidths"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// This returns an array representing the heights (in pixels) of the rows in the TableLayoutPanel.
-        /// </devdoc>        
+        /// </summary>        
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public int[] GetRowHeights() {
             TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(this);
@@ -354,23 +326,16 @@ namespace System.Windows.Forms {
 
         #region PaintCode
 
-        /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.CellPaint"]/*' />
         [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.TableLayoutPanelOnPaintCellDescr))]
         public event TableLayoutCellPaintEventHandler CellPaint {
-            add {
-                Events.AddHandler(EventCellPaint, value);
-            }
-            remove {
-                Events.RemoveHandler(EventCellPaint, value);
-            }
+            add => Events.AddHandler(EventCellPaint, value);
+            remove => Events.RemoveHandler(EventCellPaint, value);
         }
 
-        /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.OnLayout"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    When a layout fires, make sure we're painting all of our
         ///    cell borders.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnLayout(LayoutEventArgs levent) {
             base.OnLayout(levent);
@@ -378,7 +343,6 @@ namespace System.Windows.Forms {
         }
         
 
-        /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.OnCellPaint"]/*' />
         protected virtual void OnCellPaint(TableLayoutCellPaintEventArgs e) {
             TableLayoutCellPaintEventHandler handler = (TableLayoutCellPaintEventHandler)Events[EventCellPaint];
             if (handler != null) {
@@ -386,7 +350,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.OnPaint"]/*' />
         protected override void OnPaintBackground(PaintEventArgs e) {
             base.OnPaintBackground(e);
             
@@ -491,10 +454,9 @@ namespace System.Windows.Forms {
             ScaleAbsoluteStyles(new SizeF(dx,dy));
         }
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.ScaleControl"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Scale this form.  Form overrides this to enforce a maximum / minimum size.
-        /// </devdoc>
+        /// </summary>
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified) {
             base.ScaleControl(factor, specified);
             ScaleAbsoluteStyles(factor);           
@@ -552,9 +514,9 @@ namespace System.Windows.Forms {
         #endregion 
     }
 
-    /// <devdoc>
+    /// <summary>
     /// Represents a collection of controls on the TableLayoutPanel.
-    /// </devdoc>
+    /// </summary>
     [ListBindable(false)]
     [DesignerSerializer("System.Windows.Forms.Design.TableLayoutControlCollectionCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign)]
     public class TableLayoutControlCollection : Control.ControlCollection
@@ -565,7 +527,6 @@ namespace System.Windows.Forms {
         }
 
         //the container of this TableLayoutControlCollection
-        /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutControlCollection.Container"]/*' />
         public TableLayoutPanel Container { get; }
 
         /// <summary>

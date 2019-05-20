@@ -136,7 +136,7 @@ namespace System.Windows.Forms {
                     return tool;
                 }
 
-                return Control.FromHandleInternal(UnsafeNativeMethods.GetFocus());
+                return Control.FromHandle(UnsafeNativeMethods.GetFocus());
             }
         }
 
@@ -307,10 +307,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        private sealed class InternalStateMachineTimer : Timer {
-            public void ClearTimerTickHandlers() {
-                this.onTimer = null;
-            }
+        private sealed class InternalStateMachineTimer : Timer
+        {
+            public void ClearTimerTickHandlers() => _onTimer = null;
         }
 
         private sealed class ToolToTipDictionary {

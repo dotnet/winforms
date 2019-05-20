@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if WINFORMS_NAMESPACE
+#if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
 #elif DRAWING_NAMESPACE
 namespace System.Drawing.Internal
@@ -241,16 +241,16 @@ namespace System.Experimental.Gdi
         [StructLayout(LayoutKind.Sequential)]
         public class DRAWTEXTPARAMS 
         { 
-            private int cbSize = Marshal.SizeOf(typeof(DRAWTEXTPARAMS));
+            private int cbSize = Marshal.SizeOf<DRAWTEXTPARAMS>();
             public int iTabLength;
             public int iLeftMargin;
             public int iRightMargin;
 
-            /// <devdoc>
+            /// <summary>
             ///     Receives the number of characters processed by DrawTextEx, including white-space characters. 
             ///     The number can be the length of the string or the index of the first line that falls below the drawing area. 
             ///     Note that DrawTextEx always processes the entire string if the DT_NOCLIP formatting flag is specified. 
-            /// </devdoc>
+            /// </summary>
             public int uiLengthDrawn;
 
             public DRAWTEXTPARAMS()

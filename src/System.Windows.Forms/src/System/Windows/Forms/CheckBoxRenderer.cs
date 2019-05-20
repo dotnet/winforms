@@ -12,13 +12,12 @@ using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
 
 
-    /// <include file='doc\CheckBoxRenderer.uex' path='docs/doc[@for="CheckBoxRenderer"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       This is a rendering class for the CheckBox control. It works downlevel too (obviously
     ///       without visual styles applied.)
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     public sealed class CheckBoxRenderer {
 
        //Make this per-thread, so that different threads can safely use these methods.
@@ -31,14 +30,13 @@ using Microsoft.Win32;
        private CheckBoxRenderer() {
        }
 
-       /// <include file='doc\ButtonRenderer.uex' path='docs/doc[@for="ButtonRenderer.RenderMatchingApplicationState"]/*' />
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///      If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to 
        /// determine how to render.
        ///      If this property is false, the renderer will always render with visualstyles.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        public static bool RenderMatchingApplicationState {
            get {
                return renderMatchingApplicationState;
@@ -54,12 +52,11 @@ using Microsoft.Win32;
            }
        }
 
-       /// <include file='doc\CheckBoxRenderer.uex' path='docs/doc[@for="CheckBoxRenderer.IsBackgroundPartiallyTransparent"]/*' />
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Returns true if the background corresponding to the given state is partially transparent, else false.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        public static bool IsBackgroundPartiallyTransparent(CheckBoxState state) {
            if (RenderWithVisualStyles) {
                InitializeRenderer((int)state);
@@ -71,13 +68,12 @@ using Microsoft.Win32;
            }
        }
 
-       /// <include file='doc\CheckBoxRenderer.uex' path='docs/doc[@for="CheckBoxRenderer.DrawParentBackground"]/*' />
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       This is just a convenience wrapper for VisualStyleRenderer.DrawThemeParentBackground. For downlevel,
        ///       this isn't required and does nothing.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        [
            SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // Using Graphics instead of IDeviceContext intentionally
        ]
@@ -89,12 +85,11 @@ using Microsoft.Win32;
            }
        }
 
-        /// <include file='doc\CheckBoxRenderer.uex' path='docs/doc[@for="CheckBoxRenderer.DrawCheckBox1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a CheckBox control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void DrawCheckBox(Graphics g, Point glyphLocation, CheckBoxState state) {
             DrawCheckBox(g, glyphLocation, state, IntPtr.Zero);
         }
@@ -118,24 +113,22 @@ using Microsoft.Win32;
            
        }
 
-       /// <include file='doc\CheckBoxRenderer.uex' path='docs/doc[@for="CheckBoxRenderer.DrawCheckBox2"]/*' />
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a CheckBox control.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        public static void DrawCheckBox(Graphics g, Point glyphLocation, Rectangle textBounds, string checkBoxText, Font font, bool focused, CheckBoxState state) {
            DrawCheckBox(g, glyphLocation, textBounds, checkBoxText, font,
                       TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine, 
                       focused, state);
        }
 
-        /// <include file='doc\CheckBoxRenderer.uex' path='docs/doc[@for="CheckBoxRenderer.DrawCheckBox3"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a CheckBox control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void DrawCheckBox(Graphics g, Point glyphLocation, Rectangle textBounds, string checkBoxText, Font font, TextFormatFlags flags, bool focused, CheckBoxState state) {
             DrawCheckBox(g, glyphLocation, textBounds, checkBoxText, font, flags, focused, state, IntPtr.Zero);
         }
@@ -168,24 +161,22 @@ using Microsoft.Win32;
            }
        }
 
-       /// <include file='doc\CheckBoxRenderer.uex' path='docs/doc[@for="CheckBoxRenderer.DrawCheckBox4"]/*' />
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a CheckBox control.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        public static void DrawCheckBox(Graphics g, Point glyphLocation, Rectangle textBounds, string checkBoxText, Font font, Image image, Rectangle imageBounds, bool focused, CheckBoxState state) {
            DrawCheckBox(g, glyphLocation, textBounds, checkBoxText, font,
                       TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine, 
                       image, imageBounds, focused, state);
        }
 
-       /// <include file='doc\CheckBoxRenderer.uex' path='docs/doc[@for="CheckBoxRenderer.DrawCheckBox5"]/*' />
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a CheckBox control.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        public static void DrawCheckBox(Graphics g, Point glyphLocation, Rectangle textBounds, string checkBoxText, Font font, TextFormatFlags flags, Image image, Rectangle imageBounds, bool focused, CheckBoxState state) {
            Rectangle glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(g, state));
            Color textColor;
@@ -217,12 +208,11 @@ using Microsoft.Win32;
            }
        }
 
-        /// <include file='doc\CheckBoxRenderer.uex' path='docs/doc[@for="CheckBoxRenderer.GetGlyphSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Returns the size of the CheckBox glyph.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // Using Graphics instead of IDeviceContext intentionally
         ]
@@ -340,8 +330,7 @@ using Microsoft.Win32;
 
         private static void InitializeRenderer(int state) {
             int part = CheckBoxElement.Part;
-            if (AccessibilityImprovements.Level2
-                && SystemInformation.HighContrast
+            if (SystemInformation.HighContrast
                 && IsDisabled((CheckBoxState)state)
                 && VisualStyleRenderer.IsCombinationDefined(CheckBoxElement.ClassName, VisualStyleElement.Button.CheckBox.HighContrastDisabledPart)) {
                     part = VisualStyleElement.Button.CheckBox.HighContrastDisabledPart;

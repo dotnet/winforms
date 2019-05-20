@@ -6,24 +6,24 @@ namespace System.Windows.Forms
 {
     public enum ToolTipIcon
     {
-        /// <devdoc>
+        /// <summary>
         /// No Icon.
-        /// </devdoc>
+        /// </summary>
         None = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// A Information Icon.
-        /// </devdoc>
+        /// </summary>
         Info = 1,
 
-        /// <devdoc>
+        /// <summary>
         /// A Warning Icon.
-        /// </devdoc>
+        /// </summary>
         Warning = 2,
 
-        /// <devdoc>
+        /// <summary>
         /// A Error Icon.
-        /// </devdoc>
+        /// </summary>
         Error = 3
     }
 }

@@ -12,9 +12,8 @@ namespace System.Windows.Forms {
     using System.Reflection;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper"]/*' />
-    /// <devdoc>
-    /// </devdoc>
+    /// <summary>
+    /// </summary>
     public static class ListBindingHelper {
 
         private static Attribute[] browsableAttribute;
@@ -29,7 +28,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper.GetList"]/*' />
         public static object GetList(object list) {
             if (list is IListSource) {
                 return (list as IListSource).GetList();
@@ -39,7 +37,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper.GetList2"]/*' />
         public static object GetList(object dataSource, string dataMember) {
             //
             // The purpose of this method is to find a list, given a 'data source' object and a
@@ -84,7 +81,6 @@ namespace System.Windows.Forms {
             return (currentItem == null) ? null : dmProp.GetValue(currentItem);
         }
 
-        /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper.GetListName"]/*' />
         public static string GetListName(object list, PropertyDescriptor[] listAccessors) {
             string name;
 
@@ -120,7 +116,6 @@ namespace System.Windows.Forms {
             return name;
         }
 
-        /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper.GetListItemProperties"]/*' />
         public static PropertyDescriptorCollection GetListItemProperties(object list) {
             PropertyDescriptorCollection pdc;
 
@@ -169,7 +164,6 @@ namespace System.Windows.Forms {
             return GetListItemPropertiesByInstance(target, listAccessors, 0);
         }
 
-        /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper.GetListItemProperties2"]/*' />
         public static PropertyDescriptorCollection GetListItemProperties(object dataSource, string dataMember, PropertyDescriptor[] listAccessors) {
             dataSource = GetList(dataSource);
 
@@ -264,7 +258,6 @@ namespace System.Windows.Forms {
             return instancedObject;
         }
 
-        /// <include file='doc\ListBindingHelper.uex' path='docs/doc[@for="ListBindingHelper.GetListItemType2"]/*' />
         public static Type GetListItemType(object dataSource, string dataMember) {
             // No data source
             if (dataSource == null) {
@@ -488,7 +481,7 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// 
         /// Returns info about the 'indexer' property on the specified type. The presence of an indexer is used to
         /// determine that the type represents a collection or list. The return type of that indexer is used to
@@ -502,7 +495,7 @@ namespace System.Windows.Forms {
         /// NOTE: A special rule is also enforced here - we only want to consider using the typed indexer on list
         /// based types, ie. types we already know are supposed to be treated as lists (rather than list items).
         ///
-        /// </devdoc>
+        /// </summary>
         private static PropertyInfo GetTypedIndexer(Type type)
         {
             PropertyInfo indexer = null;

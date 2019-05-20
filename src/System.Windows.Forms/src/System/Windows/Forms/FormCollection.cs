@@ -8,24 +8,22 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Globalization;
     
-    /// <include file='doc\FormCollection.uex' path='docs/doc[@for="FormCollection"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       This is a read only collection of Forms exposed as a static property of the 
     ///       Application class. This is used to store all the currently loaded forms in an app.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     public class FormCollection : ReadOnlyCollectionBase {
 
         internal static object CollectionSyncRoot = new object();
         
-        /// <include file='doc\FormCollection.uex' path='docs/doc[@for="FormCollection.this"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets a form specified by name, if present, else returns null. If there are multiple
         ///       forms with matching names, the first form found is returned.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public virtual Form this[string name] {
             get {
                 if (name != null) {
@@ -41,12 +39,11 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\FormCollection.uex' path='docs/doc[@for="FormCollection.this1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets a form specified by index.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public virtual Form this[int index] {
             get {
                 Form f = null;
@@ -58,18 +55,18 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    Used internally to add a Form to the FormCollection
-        /// </devdoc>
+        /// </summary>
         internal void Add(Form form) {
             lock (CollectionSyncRoot) {
                 InnerList.Add(form);
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Used internally to check if a Form is in the FormCollection
-        /// </devdoc>
+        /// </summary>
         internal bool Contains(Form form)
         {
             bool inCollection = false;
@@ -80,9 +77,9 @@ namespace System.Windows.Forms {
             return inCollection;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Used internally to add a Form to the FormCollection
-        /// </devdoc>
+        /// </summary>
         internal void Remove(Form form) {
             lock (CollectionSyncRoot) {
                 InnerList.Remove(form);

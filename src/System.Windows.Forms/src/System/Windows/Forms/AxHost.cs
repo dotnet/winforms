@@ -21,7 +21,6 @@ namespace System.Windows.Forms {
     using System.IO;
     using System.Reflection;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
     using System.Runtime.Serialization.Formatters.Binary;
     using System.Runtime.Serialization;
     using System.Threading;
@@ -30,14 +29,13 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Design;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///
     ///       Wraps ActiveX controls and exposes them as
     ///       fully featured windows forms controls.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -54,19 +52,19 @@ namespace System.Windows.Forms {
         private static BooleanSwitch AxIgnoreTMSwitch = new BooleanSwitch("AxIgnoreTM", "ActiveX switch to ignore thread models");
         private static BooleanSwitch AxAlwaysSaveSwitch = new BooleanSwitch("AxAlwaysSave", "ActiveX to save all controls regardless of their IsDirty function return value");
 
-        /// <devdoc>
+        /// <summary>
         ///     Flags which may be passed to the AxHost constructor
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
         internal class AxFlags {
-            /// <devdoc>
+            /// <summary>
             ///     Indicates that the context menu for the control should not contain an
             ///     "Edit" verb unless the activeX controls itself decides to proffer it.
             ///     By default, all wrapped activeX controls will contain an edit verb.
-            /// </devdoc>
+            /// </summary>
             internal const int PreventEditMode  = 0x1;
 
-            /// <devdoc>
+            /// <summary>
             ///     Indicated that the context menu for the control should contain
             ///     a "Properties..." verb which may be used to show the property
             ///     pages for the control.  Note that even if this flag is
@@ -75,12 +73,11 @@ namespace System.Windows.Forms {
             ///     [Since most activeX controls alreay have their own properties verb
             ///     on the context menu, the default is not to include one specified by
             ///     this flag.]
-            /// </devdoc>
+            /// </summary>
             internal const int IncludePropertiesVerb = 0x2;
         
-            /// <devdoc>
-            /// </devdoc>
-            /// <internalonly/>
+            /// <summary>
+            /// </summary>
             internal const int IgnoreThreadModel     = 0x10000000;
         }
 
@@ -182,7 +179,7 @@ namespace System.Windows.Forms {
         private IntPtr wndprocAddr = IntPtr.Zero;
 
         private Guid   clsid;
-        private string text = "";
+        private string text = string.Empty;
         private string licenseKey = null;
 
         private readonly OleInterfaces oleSite;
@@ -260,19 +257,17 @@ namespace System.Windows.Forms {
         }
 #endif 
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxHost1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new instance of a control which wraps an activeX control given by the
         ///     clsid parameter and flags of 0.
-        /// </devdoc>
+        /// </summary>
         protected AxHost(string clsid) : this(clsid, 0) {
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxHost2"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Creates a new instance of a control which wraps an activeX control given by the
         ///       clsid and flags parameters.</para>
-        /// </devdoc>
+        /// </summary>
         protected AxHost(string clsid, int flags) : base() {
             if (Application.OleRequired() != ApartmentState.STA) {
                 throw new ThreadStateException(string.Format(SR.AXMTAThread, clsid));
@@ -297,10 +292,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.CreateParams"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the CreateParams used to create the handle for this control.
-        /// </devdoc>
+        /// </summary>
         protected override CreateParams CreateParams {
             get {
                 CreateParams cp = base.CreateParams;
@@ -319,13 +313,12 @@ namespace System.Windows.Forms {
             this.axState[mask] = value;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AttachInterfaces"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     AxHost will call this when it is ready to create the underlying ActiveX object.
         ///     Wrappers will override this and cast the pointer obtained by calling getOcx() to
         ///     their own interfaces.  getOcx() should not usually be called before this function.
         ///     Note: calling begin will result in a call to this function.
-        /// </devdoc>
+        /// </summary>
         protected virtual void AttachInterfaces() {
         }
 
@@ -341,7 +334,6 @@ namespace System.Windows.Forms {
 
         // Control overrides:
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BackColor"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color BackColor {
             get {
@@ -353,7 +345,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BackgroundImage"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Image BackgroundImage {
@@ -366,7 +357,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BackgroundImageLayout"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override ImageLayout BackgroundImageLayout {
@@ -379,9 +369,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>Hide ImeMode: it doesn't make sense for this control</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         new public ImeMode ImeMode
@@ -396,27 +386,18 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseClick"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseClick {
-            add { 
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseClick"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseClick"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseDoubleClick"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseDoubleClick {
-            add { 
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseDoubleClick"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseDoubleClick"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Cursor"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Cursor Cursor {
             get {
@@ -428,7 +409,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ContextMenu"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ContextMenu ContextMenu {
             get {
@@ -440,18 +420,16 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DefaultSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
+        /// </summary>
         protected override Size DefaultSize {
             get {
                 return new Size(75, 23);
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Enabled"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public virtual new bool Enabled {
             get {
@@ -463,7 +441,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Font"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Font Font {
             get {
@@ -475,7 +452,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ForeColor"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor {
             get {
@@ -487,7 +463,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RightToLeft"]/*' />
         [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -505,7 +480,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Text"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override string Text {
             get {
@@ -526,25 +500,22 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.PropsValid"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected bool PropsValid() {
             return CanAccessProperties;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BeginInit"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public void BeginInit() {
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.EndInit"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Signals the object that loading of all peer components and property
         ///     sets are complete.
         ///     It should be possible to invoke any property get or set after calling this method.
         ///     Note that a sideeffect of this method is the creation of the parent control's
         ///     handle, therefore, this control must be parented before begin is called
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public void EndInit() {
             if (ParentInternal != null) {
@@ -573,10 +544,9 @@ namespace System.Windows.Forms {
         }
 
         //
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.EditMode"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Determines if the control is in edit mode.
-        /// </devdoc>
+        /// </summary>
         [   Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
@@ -586,10 +556,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.HasAboutBox"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Determines if this control has an about box.
-        /// </devdoc>
+        /// </summary>
         [   Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
@@ -610,10 +579,9 @@ namespace System.Windows.Forms {
         }
 
         //
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ShowAboutBox"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Shows the about box for this control.
-        /// </devdoc>
+        /// </summary>
         public void ShowAboutBox() {
             if (aboutBoxDelegate != null) {
                 aboutBoxDelegate();
@@ -621,9 +589,9 @@ namespace System.Windows.Forms {
         }
 
         //
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the OCX control flags.
-        /// </devdoc>
+        /// </summary>
 #if false
         // FxCop: Currently not used
         [   Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
@@ -636,427 +604,280 @@ namespace System.Windows.Forms {
         }
 #endif
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BackColorChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackColorChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackColorChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackColorChanged"));
+            remove { }
         }
         
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BackgroundImageChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackgroundImageChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackgroundImageChanged"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BackgroundImageLayoutChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackgroundImageLayoutChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackgroundImageLayoutChanged"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BindingContextChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BindingContextChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BindingContextChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BindingContextChanged"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ContextMenuChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ContextMenuChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ContextMenuChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ContextMenuChanged"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.CursorChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler CursorChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "CursorChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "CursorChanged"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.EnabledChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the control is enabled.</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler EnabledChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "EnabledChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "EnabledChanged"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.FontChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler FontChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "FontChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "FontChanged"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ForeColorChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ForeColorChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ForeColorChanged"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RightToLeftChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler RightToLeftChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "RightToLeftChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "RightToLeftChanged"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.TextChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "TextChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "TextChanged"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Click"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the control is clicked.</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler Click {
-            add { 
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Click"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Click"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DragDrop"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event DragEventHandler DragDrop {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragDrop"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragDrop"));
+            remove { }
         }
 
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DragEnter"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event DragEventHandler DragEnter {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragEnter"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragEnter"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DragOver"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event DragEventHandler DragOver {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragOver"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragOver"));
+            remove { }
         }
 
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DragLeave"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DragLeave {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragLeave"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragLeave"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GiveFeedback"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event GiveFeedbackEventHandler GiveFeedback {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "GiveFeedback"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "GiveFeedback"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.HelpRequested"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event HelpEventHandler HelpRequested {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "HelpRequested"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "HelpRequested"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Paint"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event PaintEventHandler Paint {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Paint"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Paint"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.QueryContinueDrag"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event QueryContinueDragEventHandler QueryContinueDrag {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "QueryContinueDrag"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "QueryContinueDrag"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.QueryAccessibilityHelp"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "QueryAccessibilityHelp"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "QueryAccessibilityHelp"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DoubleClick"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the control is double clicked.</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DoubleClick {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DoubleClick"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DoubleClick"));
+            remove { }
         }
         
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ImeModeChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ImeModeChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ImeModeChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ImeModeChanged"));
+            remove { }
         }
 
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.KeyDown"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when a key is pressed down while the control has focus.</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event KeyEventHandler KeyDown {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyDown"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyDown"));
+            remove { }
         }
 
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.KeyPress"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> Occurs when a key is pressed while the control has focus.</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event KeyPressEventHandler KeyPress {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyPress"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyPress"));
+            remove { }
         }
 
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.KeyUp"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> Occurs when a key is released while the control has focus.</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event KeyEventHandler KeyUp {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyUp"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyUp"));
+            remove { }
         }
 
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Layout"]/*' />
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event LayoutEventHandler Layout {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Layout"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Layout"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseDown"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the mouse pointer is over the control and a mouse button is 
         ///       pressed.</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseDown {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseDown"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseDown"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseEnter"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> Occurs when the mouse pointer enters the AxHost.</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseEnter {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseEnter"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseEnter"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseLeave"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> Occurs when the mouse pointer leaves the AxHost.</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseLeave {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseLeave"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseLeave"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseHover"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> Occurs when the mouse pointer hovers over the contro.</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseHover {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseHover"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseHover"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseMove"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> Occurs when the mouse pointer is moved over the AxHost.</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseMove {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseMove"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseMove"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseUp"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the mouse pointer is over the control and a mouse button is released.</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseUp {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseUp"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseUp"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseWheel"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> Occurs when the mouse wheel moves while the control has focus.</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseWheel {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseWheel"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseWheel"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ChangeUICues"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event UICuesEventHandler ChangeUICues {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ChangeUICues"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ChangeUICues"));
+            remove { }
         }
         
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.StyleChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler StyleChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "StyleChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "StyleChanged"));
+            remove { }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.OnFontChanged"]/*' />
         protected override void OnFontChanged(EventArgs e) {
             base.OnFontChanged(e);
             AmbientChanged(NativeMethods.ActiveX.DISPID_AMBIENT_FONT);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.OnForeColorChanged"]/*' />
         protected override void OnForeColorChanged(EventArgs e) {
             base.OnForeColorChanged(e);
             AmbientChanged(NativeMethods.ActiveX.DISPID_AMBIENT_FORECOLOR);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.OnBackColorChanged"]/*' />
         protected override void OnBackColorChanged(EventArgs e) {
             base.OnBackColorChanged(e);
             AmbientChanged(NativeMethods.ActiveX.DISPID_AMBIENT_BACKCOLOR);
@@ -1156,12 +977,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Site"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Sets the site of this component. A non-null value indicates that the
         ///     component has been added to a container, and a null value indicates that
         ///     the component is being removed from a container.
-        /// </devdoc>
+        /// </summary>
         public override ISite Site {
             set {
                 // If we are disposed then just return.
@@ -1206,10 +1026,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.OnLostFocus"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.LostFocus'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnLostFocus(EventArgs e) {
             // Office WebControl and MS DDS control create a child window that gains
@@ -1278,11 +1097,10 @@ namespace System.Windows.Forms {
             base.DrawToBitmap(bitmap, targetBounds);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.CreateHandle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Creates a handle for this control. This method is called by the .NET framework, this should
         ///     not be called.
-        /// </devdoc>
+        /// </summary>
         protected override void CreateHandle() {
             if (!IsHandleCreated) {
 
@@ -1410,11 +1228,10 @@ namespace System.Windows.Forms {
             return new Size(sz.cx, sz.cy);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="AxHost.GetScaledBounds"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     ActiveX controls scale themselves, so GetScaledBounds simply returns their
         ///     original unscaled bounds.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override Rectangle GetScaledBounds(Rectangle bounds, SizeF factor, BoundsSpecified specified) {
             return bounds;
@@ -1425,11 +1242,10 @@ namespace System.Windows.Forms {
             GetInPlaceObject().SetObjectRects(FillInRect(new NativeMethods.COMRECT(), bounds), GetClipRect(new NativeMethods.COMRECT()));
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.SetBoundsCore"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Performs the work of setting the bounds of this control.
         ///     User code should usually not call this function.
-        /// </devdoc>
+        /// </summary>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
             // We have already been in this Code so please avoid re-entering this CODE PATH or else the 
             // IOleObject will "give a Catastrophic error" in SetObjectRects( ).
@@ -1506,13 +1322,10 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DestroyHandle"]/*' />
-        /// <devdoc>
-        ///     Destroys the handle associated with this control.
-        ///     User code should in general not call this function.
-        /// </devdoc>        
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
-        // security review: this is a breaking change, but should it be fixed?
+        /// <summary>
+        /// Destroys the handle associated with this control.
+        /// User code should in general not call this function.
+        /// </summary>        
         protected override void DestroyHandle() {
             if (axState[fOwnWindow]) {
                 base.DestroyHandle();
@@ -1679,8 +1492,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.OnInPlaceActive"]/*' />
-        /// <internalonly/>
         protected virtual void OnInPlaceActive() {
         }
 
@@ -1754,7 +1565,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.SetVisibleCore"]/*' />
         protected override void SetVisibleCore(bool value) {
             if (GetState(STATE_VISIBLE) != value) {
                 bool oldVisible = Visible;
@@ -1841,8 +1651,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.IsInputChar"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Determines if charCode is an input character that the control
         ///     wants. This method is called during window message pre-processing to
         ///     determine whether the given input character should be pre-processed or
@@ -1852,20 +1661,22 @@ namespace System.Windows.Forms {
         ///     control if it is not consumed by the pre-processing phase. The
         ///     pre-processing of a character includes checking whether the character
         ///     is a mnemonic of another control.
-        /// </devdoc>
+        /// </summary>
         protected override bool IsInputChar(char charCode) {
             return true;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ProcessDialogKey"]/*' />
-        [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
         protected override bool ProcessDialogKey(Keys keyData) 
         {
-            return ignoreDialogKeys ? false : base.ProcessDialogKey(keyData);
+            if (ignoreDialogKeys)
+            {
+                return false;
+            }
+
+            return base.ProcessDialogKey(keyData);
         }
         
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.PreProcessMessage"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This method is called by the application's message loop to pre-process
         ///     input messages before they are dispatched. Possible values for the
         ///     msg.message field are WM_KEYDOWN, WM_SYSKEYDOWN, WM_CHAR, and WM_SYSCHAR.
@@ -1887,7 +1698,7 @@ namespace System.Windows.Forms {
         ///            forcing us to not do any more processing or dispatch the message.
         ///         -- If this returns S_FALSE, then it means that the control did not process this message,
         ///            but we did, and so we should route it through our PreProcessMessage().
-        /// </devdoc>
+        /// </summary>
         public override bool PreProcessMessage(ref Message msg) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "AxHost.PreProcessMessage " + msg.ToString());
             
@@ -1955,13 +1766,11 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ProcessMnemonic"]/*' />
-        /// <devdoc>
-        ///     Process a mnemonic character.
-        ///     This is done by manufacturing a WM_SYSKEYDOWN message and passing it
-        ///     to the ActiveX control.
-        /// </devdoc>
-        [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
+        /// <summary>
+        /// Process a mnemonic character.
+        /// This is done by manufacturing a WM_SYSKEYDOWN message and passing it to the
+        /// ActiveX control.
+        /// </summary>
         protected internal override bool ProcessMnemonic(char charCode) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "In AxHost.ProcessMnemonic: " + (int)charCode);
             if (CanSelect) {
@@ -1976,7 +1785,7 @@ namespace System.Windows.Forms {
                     // A bit of ugliness here (a bit?  more like a bucket...)
                     // The message we are faking is a WM_SYSKEYDOWN w/ the right alt key setting...
                     msg.hwnd = (ContainingControl == null) ? IntPtr.Zero : ContainingControl.Handle;
-                    msg.message = NativeMethods.WM_SYSKEYDOWN;
+                    msg.message = Interop.WindowMessages.WM_SYSKEYDOWN;
                     msg.wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture);
                     msg.lParam = (IntPtr) 0x20180001;
                     msg.time = SafeNativeMethods.GetTickCount();
@@ -2002,17 +1811,15 @@ namespace System.Windows.Forms {
 
         // misc methods:
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.SetAboutBoxDelegate"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Sets the delegate which will be called when the user selects the "About..."
         ///     entry on the context menu.
-        /// </devdoc>
+        /// </summary>
         protected void SetAboutBoxDelegate(AboutBoxDelegate d) {
             aboutBoxDelegate += d;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.OcxState"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Sets the persisted state of the control.
         ///     This should either be null, obtained from getOcxState, or
         ///     read from a resource.  The value of this property will
@@ -2022,7 +1829,7 @@ namespace System.Windows.Forms {
         ///     returns it in the encapsulated State object.
         ///     If the control has been modified since it was last saved to a
         ///     persisted state, it will be asked to save itself.
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(null),
         RefreshProperties(RefreshProperties.All),
@@ -2121,8 +1928,7 @@ namespace System.Windows.Forms {
             return null;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ContainerControl"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns this control's logicaly containing form.
         ///     At design time this is always the form being designed.
         ///     At runtime it is either the form set with setContainingForm or,
@@ -2135,7 +1941,7 @@ namespace System.Windows.Forms {
         ///     In general this property exists only to enable some speficic
         ///     behaviours of ActiveX controls and should in general not be set
         ///     by the user.
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -2155,10 +1961,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ShouldSerializeText"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the Text property needs to be persisted.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal override bool ShouldSerializeText() {
             bool ret = false;
@@ -2170,9 +1975,9 @@ namespace System.Windows.Forms {
             return ret;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines whether to persist the ContainingControl property.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         private bool ShouldSerializeContainingControl() {
             return ContainingControl != ParentInternal;
@@ -2298,7 +2103,7 @@ namespace System.Windows.Forms {
                     return null;
                 case NativeMethods.ActiveX.DISPID_AMBIENT_DISPLAYNAME:
                     string rval = GetParentContainer().GetNameForControl(this);
-                    if (rval == null) rval = "";
+                    if (rval == null) rval = string.Empty;
                     return rval;
                 case NativeMethods.ActiveX.DISPID_AMBIENT_LOCALEID:
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "asked for localeid");
@@ -2322,7 +2127,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DoVerb"]/*' />
         public void DoVerb(int verb) {
             Control parent = ParentInternal;
             GetOleObject().DoVerb(verb, IntPtr.Zero, oleSite, -1, parent != null ? parent.Handle : IntPtr.Zero, FillInRect(new NativeMethods.COMRECT(), Bounds));
@@ -2463,10 +2267,10 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    Called to create the ActiveX control.  Override this member to perform your own creation logic
         ///    or call base to do the default creation logic.
-        /// </devdoc>        
+        /// </summary>        
         protected virtual object CreateInstanceCore(Guid clsid) {
             if (IsUserMode()) {
                 CreateWithLicense(licenseKey, clsid);
@@ -2533,7 +2337,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.InvokeEditMode"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public void InvokeEditMode() {
             Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "invoking EditMode for "+this.ToString());
@@ -2565,8 +2368,6 @@ namespace System.Windows.Forms {
         // ICustomTypeDescriptor implementation.
         //
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetAttributes"]/*' />
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         AttributeCollection ICustomTypeDescriptor.GetAttributes() {
             if (!axState[editorRefresh] && HasPropertyPages()) {
@@ -2576,57 +2377,45 @@ namespace System.Windows.Forms {
             return TypeDescriptor.GetAttributes(this, true);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetClassName"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         /// Retrieves the class name for this object.  If null is returned,
         /// the type name is used.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         string ICustomTypeDescriptor.GetClassName() {
             return null;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetComponentName"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         /// Retrieves the name for this object.  If null is returned,
         /// the default is used.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         string ICustomTypeDescriptor.GetComponentName() {
             return null;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetConverter"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         /// Retrieves the type converter for this object.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         TypeConverter ICustomTypeDescriptor.GetConverter() {
             return null;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetDefaultEvent"]/*' />
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         EventDescriptor ICustomTypeDescriptor.GetDefaultEvent() {
             return TypeDescriptor.GetDefaultEvent(this, true);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetDefaultProperty"]/*' />
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         PropertyDescriptor ICustomTypeDescriptor.GetDefaultProperty() {
             return TypeDescriptor.GetDefaultProperty(this, true);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetEditor"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         /// Retrieves the an editor for this object.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         object ICustomTypeDescriptor.GetEditor(Type editorBaseType) {
             if (editorBaseType != typeof(ComponentEditor))
@@ -2641,15 +2430,11 @@ namespace System.Windows.Forms {
             return editor;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetEvents"]/*' />
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         EventDescriptorCollection ICustomTypeDescriptor.GetEvents() {
             return TypeDescriptor.GetEvents(this, true);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ICustomTypeDescriptor.GetEvents(Attribute"]/*' />
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[] attributes) {
             return TypeDescriptor.GetEvents(this, attributes, true);
@@ -2814,22 +2599,16 @@ namespace System.Windows.Forms {
             return propsStash;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetProperties"]/*' />
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties() {
             return FillProperties(null);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetProperties1"]/*' />
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[] attributes) {
             return FillProperties(attributes);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ICustomTypeDescriptor.GetPropertyOwner"]/*' />
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor pd) {
             return this;
@@ -3028,10 +2807,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetOcx"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the IUnknown pointer to the enclosed ActiveX control.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         public object GetOcx() {
@@ -3076,14 +2854,12 @@ namespace System.Windows.Forms {
             oleSite.StopEvents();
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.CreateSink"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void CreateSink() {
                 // nop...  windows forms wrapper will override...
         }
 
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DetachSink"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void DetachSink() {
                 // nop...  windows forms wrapper will override...
@@ -3094,7 +2870,6 @@ namespace System.Windows.Forms {
             return(GetOcx() is NativeMethods.ISpecifyPropertyPages);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.HasPropertyPages"]/*' />
         public bool HasPropertyPages() {
             if (!CanShowPropertyPages()) return false;
             NativeMethods.ISpecifyPropertyPages ispp = (NativeMethods.ISpecifyPropertyPages) GetOcx();
@@ -3132,7 +2907,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MakeDirty"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public void MakeDirty() {
             ISite isite = Site;
@@ -3148,14 +2922,12 @@ namespace System.Windows.Forms {
             ccs.OnComponentChanged(this, null, null, null);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ShowPropertyPages"]/*' />
         public void ShowPropertyPages() {
             if (ParentInternal == null) return;
             if (!ParentInternal.IsHandleCreated) return;
             ShowPropertyPages(ParentInternal);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ShowPropertyPages1"]/*' />
         public void ShowPropertyPages(Control control) {
             try {
                 if (!CanShowPropertyPages()) return;
@@ -3212,13 +2984,12 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.WndProc"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     AxHost wndProc. All messages are sent to wndProc after getting filtered
         ///     through the preProcessMessage function.
         ///     Certain messages are forwarder directly to the ActiveX control,
         ///     others are first processed by the wndProc of Control
-        /// </devdoc>
+        /// </summary>
 
         protected override void WndProc(ref Message m) {
 
@@ -3232,38 +3003,38 @@ namespace System.Windows.Forms {
 
             switch (m.Msg) {
                 // Things we explicitly ignore and pass to the ocx's windproc
-                case NativeMethods.WM_ERASEBKGND:
+                case Interop.WindowMessages.WM_ERASEBKGND:
                 
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFYFORMAT:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFYFORMAT:
 
-                case NativeMethods.WM_SETCURSOR:
-                case NativeMethods.WM_SYSCOLORCHANGE:
+                case Interop.WindowMessages.WM_SETCURSOR:
+                case Interop.WindowMessages.WM_SYSCOLORCHANGE:
 
                 // Some of the MSComCtl controls respond to this message
                 // to do some custom painting. So, we should just pass this message
                 // through.
                 //
-                case NativeMethods.WM_DRAWITEM:
+                case Interop.WindowMessages.WM_DRAWITEM:
                 
-                case NativeMethods.WM_LBUTTONDBLCLK:
-                case NativeMethods.WM_LBUTTONUP:
-                case NativeMethods.WM_MBUTTONDBLCLK:
-                case NativeMethods.WM_MBUTTONUP:
-                case NativeMethods.WM_RBUTTONDBLCLK:
-                case NativeMethods.WM_RBUTTONUP:
+                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_LBUTTONUP:
+                case Interop.WindowMessages.WM_MBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_MBUTTONUP:
+                case Interop.WindowMessages.WM_RBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_RBUTTONUP:
                     DefWndProc(ref m);
                     break;
 
-                case NativeMethods.WM_LBUTTONDOWN:
-                case NativeMethods.WM_MBUTTONDOWN:
-                case NativeMethods.WM_RBUTTONDOWN:
+                case Interop.WindowMessages.WM_LBUTTONDOWN:
+                case Interop.WindowMessages.WM_MBUTTONDOWN:
+                case Interop.WindowMessages.WM_RBUTTONDOWN:
                     if (IsUserMode()) {
                         Focus();
                     }
                     DefWndProc(ref m);
                     break;
 
-                case NativeMethods.WM_KILLFOCUS:
+                case Interop.WindowMessages.WM_KILLFOCUS:
                 {
                     hwndFocus = m.WParam;
                     try {
@@ -3275,16 +3046,18 @@ namespace System.Windows.Forms {
                     break;    
                 }
 
-                case NativeMethods.WM_COMMAND:
-                    if (!ReflectMessageInternal(m.LParam, ref m))
+                case Interop.WindowMessages.WM_COMMAND:
+                    if (!ReflectMessage(m.LParam, ref m))
+                    {
                         DefWndProc(ref m);
+                    }
                     break;
                 
-                case NativeMethods.WM_CONTEXTMENU:
+                case Interop.WindowMessages.WM_CONTEXTMENU:
                     DefWndProc(ref m);
                     break;
 
-                case NativeMethods.WM_DESTROY:
+                case Interop.WindowMessages.WM_DESTROY:
 #if DEBUG
                     if (!OwnWindow()) {
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "WM_DESTROY naughty control is destroying the window from under us..." + GetType().ToString());
@@ -3315,13 +3088,13 @@ namespace System.Windows.Forms {
                     }
 
                     break;
-                case NativeMethods.WM_HELP:
+                case Interop.WindowMessages.WM_HELP:
                     // We want to both fire the event, and let the ocx have the message...
                     base.WndProc(ref m);
                     DefWndProc(ref m);
                     break;
 
-                case NativeMethods.WM_KEYUP:
+                case Interop.WindowMessages.WM_KEYUP:
                     if (axState[processingKeyUp])
                         break;
                     
@@ -3336,7 +3109,7 @@ namespace System.Windows.Forms {
 
                     break;
 
-                case NativeMethods.WM_NCDESTROY:
+                case Interop.WindowMessages.WM_NCDESTROY:
 #if DEBUG
                     if (!OwnWindow()) {
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "WM_NCDESTROY naughty control is destroying the window from under us..." + GetType().ToString());
@@ -3429,12 +3202,11 @@ namespace System.Windows.Forms {
             InformOfNewHandle();
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.OnHandleCreated"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Inheriting classes should override this method to find out when the
         ///     handle has been created.
         ///     Call base.OnHandleCreated first.
-        /// </devdoc>
+        /// </summary>
         protected override void OnHandleCreated(EventArgs e) {
             // This is needed to prevent some controls (for e.g. Office Web Components) from 
             // failing to InPlaceActivate() when they call RegisterDragDrop() but do not call 
@@ -3449,17 +3221,14 @@ namespace System.Windows.Forms {
             RaiseCreateHandleEvent(e);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ClsidAttribute"]/*' />
         [AttributeUsage(AttributeTargets.Class, Inherited = false)] 
         public sealed class ClsidAttribute : Attribute {
             private string val;
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ClsidAttribute.ClsidAttribute"]/*' />
             public ClsidAttribute(string clsid) {
                 val = clsid;
             }
             
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ClsidAttribute.Value"]/*' />
             public string Value {
                 get {
                     return val;
@@ -3467,17 +3236,14 @@ namespace System.Windows.Forms {
             }
         }       
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="TypeLibraryTimeStampAttribute"]/*' />
         [AttributeUsage(AttributeTargets.Assembly, Inherited = false)] 
         public sealed class TypeLibraryTimeStampAttribute : Attribute {
             private DateTime val;
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxImporter.TypeLibraryTimeStampAttribute.TypeLibraryTimeStampAttribute"]/*' />
             public TypeLibraryTimeStampAttribute(string timestamp) {
                 val = DateTime.Parse(timestamp, CultureInfo.InvariantCulture);
             }
             
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxImporter.TypeLibraryTimeStampAttribute.Value"]/*' />
             public DateTime Value {
                 get {
                     return val;
@@ -3485,7 +3251,6 @@ namespace System.Windows.Forms {
             }   
         }       
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ConnectionPointCookie"]/*' />
         public class ConnectionPointCookie {
             private UnsafeNativeMethods.IConnectionPoint connectionPoint;
             private int cookie;
@@ -3493,11 +3258,10 @@ namespace System.Windows.Forms {
 #if DEBUG
             private string callStack;
 #endif
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ConnectionPointCookie.ConnectionPointCookie"]/*' />
-            /// <devdoc>
+            /// <summary>
             /// Creates a connection point to of the given interface type.
             /// which will call on a managed code sink that implements that interface.
-            /// </devdoc>
+            /// </summary>
             public ConnectionPointCookie(object source, object sink, Type eventInterface) 
                 : this(source, sink, eventInterface, true) {
             }
@@ -3561,11 +3325,10 @@ namespace System.Windows.Forms {
 #endif
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ConnectionPointCookie.Disconnect"]/*' />
-            /// <devdoc>
+            /// <summary>
             /// Disconnect the current connection point.  If the object is not connected,
             /// this method will do nothing.
-            /// </devdoc>
+            /// </summary>
             public void Disconnect() {
                 if (connectionPoint != null && cookie != 0) {
                     try {
@@ -3594,8 +3357,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ConnectionPointCookie.Finalize"]/*' />
-            /// <internalonly/>
             ~ConnectionPointCookie(){
                 if (connectionPoint != null && cookie != 0) {
                     if (!AppDomain.CurrentDomain.IsFinalizingForUnload()) {
@@ -3633,22 +3394,18 @@ namespace System.Windows.Forms {
             PropertySet
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="InvalidActiveXStateException"]/*' />
         public class InvalidActiveXStateException : Exception {
             private string name;
             private ActiveXInvokeKind kind;
             
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="InvalidActiveXStateException.InvalidActiveXStateException"]/*' />
             public InvalidActiveXStateException(string name, ActiveXInvokeKind kind) {
                 this.name = name;
                 this.kind = kind;
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="InvalidActiveXStateException.InvalidActiveXStateException2"]/*' />
             public InvalidActiveXStateException() {
             }
             
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="InvalidActiveXStateException.ToString"]/*' />
             public override string ToString() {
                 switch (kind) {
                     case ActiveXInvokeKind.MethodInvoke:
@@ -3666,8 +3423,8 @@ namespace System.Windows.Forms {
         // This private class encapsulates all of the ole interfaces so that users
         // will not be able to access and call them directly...
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         private class OleInterfaces
             : UnsafeNativeMethods.IOleControlSite, UnsafeNativeMethods.IOleClientSite, UnsafeNativeMethods.IOleInPlaceSite, UnsafeNativeMethods.ISimpleFrameSite, UnsafeNativeMethods.IVBGetControl, UnsafeNativeMethods.IGetVBAObject, UnsafeNativeMethods.IPropertyNotifySink, IReflect, IDisposable {
 
@@ -3822,7 +3579,7 @@ namespace System.Windows.Forms {
             object IReflect.InvokeMember(string name, BindingFlags invokeAttr, Binder binder,
                                                     object target, object[] args, ParameterModifier[] modifiers, CultureInfo culture, string[] namedParameters) {
                 if (name.StartsWith("[DISPID=")) {
-                    int endIndex = name.IndexOf("]");
+                    int endIndex = name.IndexOf(']');
                     int dispid = int.Parse(name.Substring(8, endIndex - 8), CultureInfo.InvariantCulture);
                     object ambient = host.GetAmbientProperty(dispid);
                     if (ambient != null) return ambient;
@@ -3999,7 +3756,6 @@ namespace System.Windows.Forms {
 
             // IOleInPlaceSite methods:
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.OleInterfaces.GetWindow"]/*' />
             IntPtr UnsafeNativeMethods.IOleInPlaceSite.GetWindow() {
                 try {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in GetWindow");
@@ -4044,7 +3800,7 @@ namespace System.Windows.Forms {
                 FillInRect(lprcPosRect, host.Bounds);
                 host.GetClipRect(lprcClipRect);
                 if (lpFrameInfo != null) {
-                    lpFrameInfo.cb = Marshal.SizeOf(typeof(NativeMethods.tagOIFI));
+                    lpFrameInfo.cb = Marshal.SizeOf<NativeMethods.tagOIFI>();
                     lpFrameInfo.fMDIApp = false;
                     lpFrameInfo.hAccel = IntPtr.Zero;
                     lpFrameInfo.cAccelEntries = 0;
@@ -4275,13 +4031,12 @@ namespace System.Windows.Forms {
             return base.CanSelectCore();
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Dispose"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Frees all resources assocaited with this control. This method may not be
         ///     called at runtime. Any resources used by the control should be setup to
         ///     be released when the control is garbage collected. Inheriting classes should always
         ///     call base.dispose.
-        /// </devdoc>
+        /// </summary>
         protected override void Dispose(bool disposing) {
 			
             if (disposing) {
@@ -4523,10 +4278,9 @@ namespace System.Windows.Forms {
             throw new ArgumentException(SR.AXUnknownImage, "image");
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetIPictureFromPicture"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Maps from a System.Drawing.Image to an OLE IPicture
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static object GetIPictureFromPicture(Image image) {
             if (image == null) return null;
@@ -4534,10 +4288,9 @@ namespace System.Windows.Forms {
             return UnsafeNativeMethods.OleCreateIPictureIndirect(pictdesc, ref ipicture_Guid, true);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetIPictureFromCursor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Maps from a System.Drawing.Cursor to an OLE IPicture
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static object GetIPictureFromCursor(Cursor cursor) {
             if (cursor == null) return null;
@@ -4545,10 +4298,9 @@ namespace System.Windows.Forms {
             return UnsafeNativeMethods.OleCreateIPictureIndirect(pictdesc, ref ipicture_Guid, true);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetIPictureDispFromPicture"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Maps from a System.Drawing.Image to an OLE IPictureDisp
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static object GetIPictureDispFromPicture(Image image) {
             if (image == null) return null;
@@ -4556,10 +4308,9 @@ namespace System.Windows.Forms {
             return UnsafeNativeMethods.OleCreateIPictureDispIndirect(pictdesc, ref ipictureDisp_Guid, true);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetPictureFromIPicture"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Maps from an OLE IPicture to a System.Drawing.Image
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static Image GetPictureFromIPicture(object picture) {
             if (picture == null) return null;
@@ -4576,10 +4327,9 @@ namespace System.Windows.Forms {
             return GetPictureFromParams(pict, pict.GetHandle(), type, hPal, pict.GetWidth(), pict.GetHeight());
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetPictureFromIPictureDisp"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Maps from an OLE IPictureDisp to a System.Drawing.Image
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static Image GetPictureFromIPictureDisp(object picture) {
             if (picture == null) return null;
@@ -4648,30 +4398,27 @@ namespace System.Windows.Forms {
             return fdesc;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetColorFromOleColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Maps from an OLE COLOR to a System.Drawing.Color
-        /// </devdoc>
+        /// </summary>
         [CLSCompliantAttribute(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static Color GetColorFromOleColor(uint color) {
             return ColorTranslator.FromOle((int)color);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetOleColorFromColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Maps from an System.Drawing.Color to an OLE COLOR
-        /// </devdoc>
+        /// </summary>
         [CLSCompliantAttribute(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static uint GetOleColorFromColor(Color color) {
             return (uint)ColorTranslator.ToOle(color);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetIFontFromFont"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Maps from a System.Drawing.Font object to an OLE IFont
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static object GetIFontFromFont(Font font) {
             if (font == null) return null;
@@ -4689,10 +4436,9 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetFontFromIFont"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Maps from an OLE IFont to a System.Drawing.Font object
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static Font GetFontFromIFont(object font) {
             if (font == null) return null;
@@ -4713,10 +4459,9 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetIFontDispFromFont"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Maps from a System.Drawing.Font object to an OLE IFontDisp
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static object GetIFontDispFromFont(Font font) {
             if (font == null) return null;
@@ -4728,10 +4473,9 @@ namespace System.Windows.Forms {
             return rval;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetFontFromIFontDisp"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Maps from an IFontDisp to a System.Drawing.Font object
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static Font GetFontFromIFontDisp(object font) {
             if (font == null)
@@ -4775,27 +4519,24 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetOADateFromTime"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Maps from a DateTime object to an OLE DATE (expressed as a double)
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static double GetOADateFromTime(DateTime time) {
             return time.ToOADate();
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetTimeFromOADate"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Maps from an OLE DATE (expressed as a double) to a DateTime object
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static DateTime GetTimeFromOADate(double date) {
             return DateTime.FromOADate(date);
         }
 
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         private int Convert2int(object o, bool xDirection) {
             o = ((Array)o).GetValue(0);
             // yacky yacky yacky...
@@ -4807,97 +4548,78 @@ namespace System.Windows.Forms {
             return Convert.ToInt32(o, CultureInfo.InvariantCulture);
         }
 
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         private short Convert2short(object o) {
             o = ((Array)o).GetValue(0);
             return Convert.ToInt16(o, CultureInfo.InvariantCulture);
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseMove"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced), SuppressMessage("Microsoft.Design", "CA1025:ReplaceRepetitiveArgumentsWithParamsArray")]
         protected void RaiseOnMouseMove(object o1, object o2, object o3, object o4) {
             RaiseOnMouseMove(Convert2short(o1), Convert2short(o2), Convert2int(o3, true), Convert2int(o4, false));
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseMove1"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseOnMouseMove(short button, short shift, float x, float y) {
             RaiseOnMouseMove(button, shift, Twip2Pixel((int) x, true), Twip2Pixel((int) y, false));
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseMove2"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseOnMouseMove(short button, short shift, int x, int y) {
             base.OnMouseMove(new MouseEventArgs( (MouseButtons)(((int)button) << 20), 1, x, y, 0));
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseUp"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced), SuppressMessage("Microsoft.Design", "CA1025:ReplaceRepetitiveArgumentsWithParamsArray")]
         protected void RaiseOnMouseUp(object o1, object o2, object o3, object o4) {
             RaiseOnMouseUp(Convert2short(o1), Convert2short(o2), Convert2int(o3, true), Convert2int(o4, false));
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseUp1"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseOnMouseUp(short button, short shift, float x, float y) {
             RaiseOnMouseUp(button, shift, Twip2Pixel((int) x, true), Twip2Pixel((int) y, false));
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseUp2"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseOnMouseUp(short button, short shift, int x, int y) {
             base.OnMouseUp(new MouseEventArgs((MouseButtons)(((int)button) << 20), 1, x, y, 0));
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseDown"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced), SuppressMessage("Microsoft.Design", "CA1025:ReplaceRepetitiveArgumentsWithParamsArray")]        
         protected void RaiseOnMouseDown(object o1, object o2, object o3, object o4) {
             RaiseOnMouseDown(Convert2short(o1), Convert2short(o2), Convert2int(o3, true), Convert2int(o4, false));
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseDown1"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseOnMouseDown(short button, short shift, float x, float y) {
             RaiseOnMouseDown(button, shift, Twip2Pixel((int) x,true), Twip2Pixel((int) y, false));
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseDown2"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseOnMouseDown(short button, short shift, int x, int y) {
             base.OnMouseDown(new MouseEventArgs((MouseButtons)(((int)button) << 20), 1, x, y, 0));
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         private class VBFormat : UnsafeNativeMethods.IVBFormat {
 
             // IVBFormat methods:
@@ -4934,8 +4656,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         internal class EnumUnknown : UnsafeNativeMethods.IEnumUnknown {
             private object[] arr;
             private int loc;
@@ -5000,8 +4722,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         internal class AxContainer : UnsafeNativeMethods.IOleContainer, UnsafeNativeMethods.IOleInPlaceFrame, IReflect {
             internal ContainerControl parent;
             private IContainer assocContainer; // associated IContainer...
@@ -5595,7 +5317,6 @@ namespace System.Windows.Forms {
 
             // IOleContainer methods:
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.ParseDisplayName"]/*' />
             int UnsafeNativeMethods.IOleContainer.ParseDisplayName(object pbc, string pszDisplayName, int[] pchEaten, object[] ppmkOut) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in ParseDisplayName");
                 if (ppmkOut != null)
@@ -5603,7 +5324,6 @@ namespace System.Windows.Forms {
                  return NativeMethods.E_NOTIMPL;
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.EnumObjects"]/*' />
             int UnsafeNativeMethods.IOleContainer.EnumObjects(int grfFlags, out UnsafeNativeMethods.IEnumUnknown ppenum) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in EnumObjects");
                 ppenum = null;
@@ -5622,7 +5342,6 @@ namespace System.Windows.Forms {
                 return NativeMethods.S_OK;
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.LockContainer"]/*' />
             int UnsafeNativeMethods.IOleContainer.LockContainer(bool fLock) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in LockContainer");
                 return NativeMethods.E_NOTIMPL;
@@ -5640,19 +5359,16 @@ namespace System.Windows.Forms {
                 return NativeMethods.S_OK;
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.GetBorder"]/*' />
             int UnsafeNativeMethods.IOleInPlaceFrame.GetBorder(NativeMethods.COMRECT lprectBorder) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in GetBorder");
                 return NativeMethods.E_NOTIMPL;
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.RequestBorderSpace"]/*' />
             int UnsafeNativeMethods.IOleInPlaceFrame.RequestBorderSpace(NativeMethods.COMRECT pborderwidths) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in RequestBorderSpace");
                 return NativeMethods.E_NOTIMPL;
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.SetBorderSpace"]/*' />
             int UnsafeNativeMethods.IOleInPlaceFrame.SetBorderSpace(NativeMethods.COMRECT pborderwidths) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in SetBorderSpace");
                 return NativeMethods.E_NOTIMPL;
@@ -5664,7 +5380,6 @@ namespace System.Windows.Forms {
                 ctlInEditMode = null;
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.SetActiveObject"]/*' />
             int UnsafeNativeMethods.IOleInPlaceFrame.SetActiveObject(UnsafeNativeMethods.IOleInPlaceActiveObject pActiveObject, string pszObjName) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in SetActiveObject " + ((pszObjName == null) ? "<null>" : pszObjName));
                 if (siteUIActive != null) {
@@ -5718,36 +5433,30 @@ namespace System.Windows.Forms {
                 return NativeMethods.S_OK;
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.InsertMenus"]/*' />
             int UnsafeNativeMethods.IOleInPlaceFrame.InsertMenus(IntPtr hmenuShared, NativeMethods.tagOleMenuGroupWidths lpMenuWidths) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in InsertMenus");
                 return NativeMethods.S_OK;
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.SetMenu"]/*' />
             int UnsafeNativeMethods.IOleInPlaceFrame.SetMenu(IntPtr hmenuShared, IntPtr holemenu, IntPtr hwndActiveObject) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in SetMenu");
                 return NativeMethods.E_NOTIMPL;
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.RemoveMenus"]/*' />
             int UnsafeNativeMethods.IOleInPlaceFrame.RemoveMenus(IntPtr hmenuShared) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in RemoveMenus");
                 return NativeMethods.E_NOTIMPL;
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.SetStatusText"]/*' />
             int UnsafeNativeMethods.IOleInPlaceFrame.SetStatusText(string pszStatusText) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in SetStatusText");
                 return NativeMethods.E_NOTIMPL;
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.EnableModeless"]/*' />
             int UnsafeNativeMethods.IOleInPlaceFrame.EnableModeless(bool fEnable) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in EnableModeless");
                 return NativeMethods.E_NOTIMPL;
             }
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxContainer.TranslateAccelerator"]/*' />
             int UnsafeNativeMethods.IOleInPlaceFrame.TranslateAccelerator(ref NativeMethods.MSG lpmsg, short wID) {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in IOleInPlaceFrame.TranslateAccelerator");
                 return NativeMethods.S_FALSE;
@@ -5755,8 +5464,8 @@ namespace System.Windows.Forms {
 
             // EXPOSED
 
-            /// <devdoc>
-            /// </devdoc>
+            /// <summary>
+            /// </summary>
             private class ExtenderProxy : UnsafeNativeMethods.IExtender, UnsafeNativeMethods.IVBGetControl, UnsafeNativeMethods.IGetVBAObject, UnsafeNativeMethods.IGetOleObject, IReflect {
                 private WeakReference pRef;
                 private WeakReference pContainer;
@@ -6106,22 +5815,18 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="StateConverter"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      StateConverter is a class that can be used to convert
         ///      State from one data type to another.  Access this
         ///      class through the TypeDescriptor.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         public class StateConverter : TypeConverter {
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.StateConverter.CanConvertFrom"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///    <para>Gets a value indicating whether this converter can
             ///       convert an object in the given source type to the native type of the converter
             ///       using the context.</para>
-            /// </devdoc>
-            /// <internalonly/>
+            /// </summary>
             public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) {
                 if (sourceType == typeof(byte[])) {
                     return true;
@@ -6130,12 +5835,10 @@ namespace System.Windows.Forms {
                 return base.CanConvertFrom(context, sourceType);
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.StateConverter.CanConvertTo"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///    <para>Gets a value indicating whether this converter can
             ///       convert an object to the given destination type using the context.</para>
-            /// </devdoc>
-            /// <internalonly/>
+            /// </summary>
             public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType) {
                 if (destinationType == typeof(byte[])) {
                     return true;
@@ -6144,11 +5847,9 @@ namespace System.Windows.Forms {
                 return base.CanConvertTo(context, destinationType);
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.StateConverter.ConvertFrom"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///    <para>Converts the given object to the converter's native type.</para>
-            /// </devdoc>
-            /// <internalonly/>
+            /// </summary>
             public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
                 if (value is byte[]) {
                     MemoryStream ms = new MemoryStream((byte[])value);
@@ -6158,15 +5859,13 @@ namespace System.Windows.Forms {
                 return base.ConvertFrom(context, culture, value);
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.StateConverter.ConvertTo"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Converts the given object to another type.  The most common types to convert
             ///      are to and from a string object.  The default implementation will make a call
             ///      to ToString on the object if the object is valid and if the destination
             ///      type is string.  If this cannot convert to the desitnation type, this will
             ///      throw a NotSupportedException.
-            /// </devdoc>
-            /// <internalonly/>
+            /// </summary>
             public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
                 if (destinationType == null) {
                     throw new ArgumentNullException(nameof(destinationType));
@@ -6188,12 +5887,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.State"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>The class which encapsulates the persisted state of the underlying activeX control
         ///       An instance of this class my be obtained either by calling getOcxState on an
         ///       AxHost object, or by reading in from a stream.</para>
-        /// </devdoc>
+        /// </summary>
         [
             TypeConverterAttribute(typeof(TypeConverter)),
             Serializable
@@ -6240,7 +5938,6 @@ namespace System.Windows.Forms {
                 type = STG_STORAGE;
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.State.State2"]/*' />
             public State(Stream ms, int storageType, bool manualUpdate, string licKey) {
                 type = storageType;
                 // dangerous?
@@ -6460,11 +6157,9 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="State.ISerializable.GetObjectData"]/*' />
-            /// <devdoc>
+            /// <summary>
             /// ISerializable private implementation
-            /// </devdoc>
-            /// <internalonly/>
+            /// </summary>
             void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) {
                 MemoryStream stream = new MemoryStream();
                 Save(stream);
@@ -6532,13 +6227,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AboutBoxDelegate"]/*' />
         protected delegate void AboutBoxDelegate();
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxComponentEditor"]/*' />
         [ComVisible(false)]
         public class AxComponentEditor : WindowsFormsComponentEditor {
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.AxComponentEditor.EditComponent"]/*' />
             public override bool EditComponent(ITypeDescriptorContext context, object obj, IWin32Window parent) {
                 AxHost host = obj as AxHost;
                 if (host != null)
@@ -6557,8 +6249,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         internal class AxPropertyDescriptor : PropertyDescriptor {
             private  PropertyDescriptor baseProp;
             internal AxHost            owner;
@@ -6790,11 +6482,11 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <devdoc>
+            /// <summary>
             /// Called externally to update the editor or type converter.
             /// This simply sets flags so this will happen, it doesn't actually to the update...
             /// we wait and do that on-demand for perf.
-            /// </devdoc>
+            /// </summary>
             internal void UpdateTypeConverterAndTypeEditor(bool force) {
                 // if this is an external request, flip the flag to false so we do the update on demand.
                 // 
@@ -6803,11 +6495,11 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             /// Called externally to update the editor or type converter.
             /// This simply sets flags so this will happen, it doesn't actually to the update...
             /// we wait and do that on-demand for perf.
-            /// </devdoc>
+            /// </summary>
             internal void UpdateTypeConverterAndTypeEditorInternal(bool force, int dispid) {
 
                 // check to see if we're being forced here or if the work really
@@ -6920,14 +6612,13 @@ namespace System.Windows.Forms {
                 this.guid = guid;
             }
 
-            /// <include file='doc\AxPropertyTypeEditor.uex' path='docs/doc[@for="AxPropertyTypeEditor.EditValue"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     Takes the value returned from valueAccess.getValue() and modifies or replaces
             ///     the value, passing the result into valueAccess.setValue().  This is where
             ///     an editor can launch a modal dialog or create a drop down editor to allow
             ///     the user to modify the value.  Host assistance in presenting UI to the user
             ///     can be found through the valueAccess.getService function.
-            /// </devdoc>
+            /// </summary>
             public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value) {
                 try {
                     object instance = context.Instance;
@@ -6944,19 +6635,19 @@ namespace System.Windows.Forms {
                 return value;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Retrieves the editing style of the Edit method.  If the method
             ///      is not supported, this will return None.
-            /// </devdoc>
+            /// </summary>
             public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) {
                 return UITypeEditorEditStyle.Modal;
             }
         }
 
-        /// <devdoc> 
+        /// <summary> 
         /// simple derivation of the com2enumconverter that allows us to intercept
         /// the call to GetStandardValues so we can on-demand update the enum values.
-        /// </devdoc>
+        /// </summary>
         private class AxEnumConverter : Com2EnumConverter {
             private AxPropertyDescriptor target;
 
@@ -6995,10 +6686,9 @@ namespace System.Windows.Forms {
                 this.arraysFetched = false;
             }
         
-            /// <include file='doc\AxPerPropertyBrowsingEnum.uex' path='docs/doc[@for="AxHost.AxPerPropertyBrowsingEnum.Values"]/*' />
-            /// <devdoc>
+            /// <summary>
             /// Retrieve a copy of the value array
-            /// </devdoc>
+            /// </summary>
             public override object[] Values {
                 get {
                     EnsureArrays();
@@ -7006,9 +6696,9 @@ namespace System.Windows.Forms {
                 }
             }
         
-            /// <devdoc>
+            /// <summary>
             /// Retrieve a copy of the nme array.
-            /// </devdoc>
+            /// </summary>
             public override string[] Names {
                 get {
                     EnsureArrays();

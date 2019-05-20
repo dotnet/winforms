@@ -9,9 +9,8 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Windows.Forms.Layout;
 
-    /// <include file='doc\FlatButtonAppearance.uex' path='docs/doc[@for="FlatButtonAppearance"]/*' />
-    /// <devdoc>
-    /// </devdoc>
+    /// <summary>
+    /// </summary>
     [TypeConverter(typeof(FlatButtonAppearanceConverter))]
     public class FlatButtonAppearance {
 
@@ -27,10 +26,9 @@ namespace System.Windows.Forms {
             this.owner = owner;
         }
 
-        /// <include file='doc\FlatButtonAppearance.uex' path='docs/doc[@for="FlatButtonAppearance.BorderSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the size, in pixels of the border around the button.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(true),
         ApplicableToButton(),
@@ -46,7 +44,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0)
-                    throw new ArgumentOutOfRangeException(nameof(BorderSize), value, string.Format(SR.InvalidLowBoundArgumentEx, "BorderSize", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(BorderSize), value, 0));
 
                 if (borderSize != value) {
                     borderSize = value;
@@ -58,10 +56,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FlatButtonAppearance.uex' path='docs/doc[@for="FlatButtonAppearance.BorderColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the border around the button.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(true),
         ApplicableToButton(),
@@ -87,11 +84,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FlatButtonAppearance.uex' path='docs/doc[@for="FlatButtonAppearance.CheckedBackColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the client area
         ///     of the button when the button state is checked and the mouse cursor is NOT within the bounds of the control.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(true),
         NotifyParentProperty(true),
@@ -112,11 +108,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FlatButtonAppearance.uex' path='docs/doc[@for="FlatButtonAppearance.MouseDownBackColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the client area
         ///     of the button when the mouse cursor is within the bounds of the control and the left button is pressed.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(true),
         ApplicableToButton(),
@@ -138,11 +133,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FlatButtonAppearance.uex' path='docs/doc[@for="FlatButtonAppearance.MouseOverBackColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the client
         ///     area of the button when the mouse cursor is within the bounds of the control.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(true),
         ApplicableToButton(),

@@ -2,51 +2,50 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Buffers;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
+using Microsoft.Win32.SafeHandles;
 
 namespace System.Windows.Forms.Design
 {
     /// <summary>>
-    ///         Provides an editor
-    ///         for choosing a folder from the filesystem.
+    /// Provides an editor for choosing a folder from the filesystem.
     /// </summary>
     [CLSCompliant(false)]
     public class FolderNameEditor : UITypeEditor
     {
-        private FolderBrowser folderBrowser;
+        private FolderBrowser _folderBrowser;
 
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (folderBrowser == null)
+            if (_folderBrowser == null)
             {
-                folderBrowser = new FolderBrowser();
-                InitializeDialog(folderBrowser);
+                _folderBrowser = new FolderBrowser();
+                InitializeDialog(_folderBrowser);
             }
 
-            if (folderBrowser.ShowDialog() != DialogResult.OK) return value;
+            if (_folderBrowser.ShowDialog() == DialogResult.OK)
+            {
+                return _folderBrowser.DirectoryPath;
+            }
 
-            return folderBrowser.DirectoryPath;
+            return value;
         }
 
         /// <summary>
-        ///     Retrieves the editing style of the Edit method.  If the method
-        ///     is not supported, this will return None.
+        /// Retrieves the editing style of the Edit method.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
-        // everything in this assembly is full trust.
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
             return UITypeEditorEditStyle.Modal;
         }
 
         /// <summary>
-        ///     Initializes the folder browser dialog when it is created.  This gives you
-        ///     an opportunity to configure the dialog as you please.  The default
-        ///     implementation provides a generic folder browser.
+        /// Initializes the folder browser dialog when it is created. This gives you an opportunity
+        /// to configure the dialog as you please. The default implementation provides a generic folder browser.
         /// </summary>
         protected virtual void InitializeDialog(FolderBrowser folderBrowser)
         {
@@ -54,128 +53,100 @@ namespace System.Windows.Forms.Design
 
         protected sealed class FolderBrowser : Component
         {
-            private static readonly int MAX_PATH = 260;
-
             // Description text to show.
-            private string descriptionText = string.Empty;
-
-            // Folder picked by the user.
-            private readonly UnsafeNativeMethods.BrowseInfos privateOptions =
-                UnsafeNativeMethods.BrowseInfos.NewDialogStyle;
+            private string _descriptionText = string.Empty;
 
             /// <summary>
-            ///     The styles the folder browser will use when browsing
-            ///     folders.  This should be a combination of flags from
-            ///     the FolderBrowserStyles enum.
+            /// The styles the folder browser will use when browsing
+            /// folders. This should be a combination of flags from
+            /// the FolderBrowserStyles enum.
             /// </summary>
             public FolderBrowserStyles Style { get; set; } = FolderBrowserStyles.RestrictToFilesystem;
 
             /// <summary>
-            ///     Gets the directory path of the folder the user picked.
+            /// Gets the directory path of the folder the user picked.
             /// </summary>
             public string DirectoryPath { get; private set; } = string.Empty;
 
             /// <summary>
-            ///     Gets/sets the start location of the root node.
+            /// Gets/sets the start location of the root node.
             /// </summary>
             public FolderBrowserFolder StartLocation { get; set; } = FolderBrowserFolder.Desktop;
 
             /// <summary>>
-            ///         Gets or sets a description to show above the folders. Here you can provide instructions for
-            ///         selecting a folder.
+            /// Gets or sets a description to show above the folders. Here you can provide instructions for
+            /// selecting a folder.
             /// </summary>
             public string Description
             {
-                get => descriptionText;
-                set => descriptionText = value == null ? string.Empty : value;
+                get => _descriptionText;
+                set => _descriptionText = value ?? string.Empty;
             }
 
             /// <summary>
-            ///     Helper function that returns the IMalloc interface used by the shell.
+            /// Shows the folder browser dialog.
             /// </summary>
-            private static UnsafeNativeMethods.IMalloc GetSHMalloc()
-            {
-                UnsafeNativeMethods.IMalloc[] malloc = new UnsafeNativeMethods.IMalloc[1];
-
-                UnsafeNativeMethods.Shell32.SHGetMalloc(malloc);
-
-                return malloc[0];
-            }
+            public DialogResult ShowDialog() => ShowDialog(null);
 
             /// <summary>
-            ///     Shows the folder browser dialog.
+            /// Shows the folder browser dialog with the specified owner.
             /// </summary>
-            public DialogResult ShowDialog()
+            public unsafe DialogResult ShowDialog(IWin32Window owner)
             {
-                return ShowDialog(null);
-            }
-
-            /// <summary>
-            ///     Shows the folder browser dialog with the specified owner.
-            /// </summary>
-            public DialogResult ShowDialog(IWin32Window owner)
-            {
-                IntPtr pidlRoot = IntPtr.Zero;
-
                 // Get/find an owner HWND for this dialog
-                IntPtr hWndOwner;
-
-                if (owner != null)
-                    hWndOwner = owner.Handle;
-                else
-                    hWndOwner = UnsafeNativeMethods.GetActiveWindow();
+                IntPtr hWndOwner = owner == null ? owner.Handle : UnsafeNativeMethods.GetActiveWindow();
 
                 // Get the IDL for the specific startLocation
-                UnsafeNativeMethods.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)StartLocation, ref pidlRoot);
-
-                if (pidlRoot == IntPtr.Zero) return DialogResult.Cancel;
-
-                int mergedOptions = (int)Style | (int)privateOptions;
-
-                if ((mergedOptions & (int)UnsafeNativeMethods.BrowseInfos.NewDialogStyle) != 0)
-                    Application.OleRequired();
-
-                IntPtr pidlRet = IntPtr.Zero;
-
-                try
+                CoTaskMemSafeHandle listHandle;
+                Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)StartLocation, out listHandle);
+                if (listHandle.IsInvalid)
                 {
-                    // Construct a BROWSEINFO
-                    UnsafeNativeMethods.BROWSEINFO bi = new UnsafeNativeMethods.BROWSEINFO();
-
-                    IntPtr buffer = Marshal.AllocHGlobal(MAX_PATH);
-
-                    bi.pidlRoot = pidlRoot;
-                    bi.hwndOwner = hWndOwner;
-                    bi.pszDisplayName = buffer;
-                    bi.lpszTitle = descriptionText;
-                    bi.ulFlags = mergedOptions;
-                    bi.lpfn = IntPtr.Zero;
-                    bi.lParam = IntPtr.Zero;
-                    bi.iImage = 0;
-
-                    // And show the dialog
-                    pidlRet = UnsafeNativeMethods.Shell32.SHBrowseForFolder(bi);
-
-                    if (pidlRet == IntPtr.Zero) return DialogResult.Cancel;
-
-                    // Then retrieve the path from the IDList
-                    UnsafeNativeMethods.Shell32.SHGetPathFromIDList(pidlRet, buffer);
-
-                    // Convert to a string
-                    DirectoryPath = Marshal.PtrToStringAuto(buffer);
-
-                    // Then free all the stuff we've allocated or the SH API gave us
-                    Marshal.FreeHGlobal(buffer);
-                }
-                finally
-                {
-                    UnsafeNativeMethods.IMalloc malloc = GetSHMalloc();
-                    malloc.Free(pidlRoot);
-
-                    if (pidlRet != IntPtr.Zero) malloc.Free(pidlRet);
+                    return DialogResult.Cancel;
                 }
 
-                return DialogResult.OK;
+                using (listHandle)
+                {
+                    uint mergedOptions = (uint)Style | Interop.Shell32.BrowseInfoFlags.BIF_NEWDIALOGSTYLE;
+                    if ((mergedOptions & (int)Interop.Shell32.BrowseInfoFlags.BIF_NEWDIALOGSTYLE) != 0)
+                    {
+                        Application.OleRequired();
+                    }
+
+                    char[] displayName = ArrayPool<char>.Shared.Rent(Interop.Kernel32.MAX_PATH + 1);
+                    try
+                    {
+                        fixed (char *pDisplayName = displayName)
+                        {
+                            var bi = new Interop.Shell32.BROWSEINFO();
+                            bi.pidlRoot = listHandle;
+                            bi.hwndOwner = hWndOwner;
+                            bi.pszDisplayName = pDisplayName;
+                            bi.lpszTitle = _descriptionText;
+                            bi.ulFlags = mergedOptions;
+                            bi.lpfn = null;
+                            bi.lParam = IntPtr.Zero;
+                            bi.iImage = 0;
+
+                            // Show the dialog.
+                            using (CoTaskMemSafeHandle browseHandle = Interop.Shell32.SHBrowseForFolderW(ref bi))
+                            {
+                                if (browseHandle.IsInvalid)
+                                {
+                                    return DialogResult.Cancel;
+                                }
+
+                                // Retrieve the path from the IDList.
+                                Interop.Shell32.SHGetPathFromIDListLongPath(browseHandle.DangerousGetHandle(), out string selectedPath);
+                                DirectoryPath = selectedPath;
+                                return DialogResult.OK;
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        ArrayPool<char>.Shared.Return(displayName);
+                    }
+                }
             }
         }
 
@@ -209,19 +180,19 @@ namespace System.Windows.Forms.Design
         [Flags]
         protected enum FolderBrowserStyles
         {
-            BrowseForComputer = UnsafeNativeMethods.BrowseInfos.BrowseForComputer,
+            BrowseForComputer = unchecked((int)Interop.Shell32.BrowseInfoFlags.BIF_BROWSEFORCOMPUTER),
 
-            BrowseForEverything = UnsafeNativeMethods.BrowseInfos.BrowseForEverything,
+            BrowseForEverything = unchecked((int)Interop.Shell32.BrowseInfoFlags.BIF_BROWSEFOREVERYTHING),
 
-            BrowseForPrinter = UnsafeNativeMethods.BrowseInfos.BrowseForPrinter,
+            BrowseForPrinter = unchecked((int)Interop.Shell32.BrowseInfoFlags.BIF_BROWSEFORPRINTER),
 
-            RestrictToDomain = UnsafeNativeMethods.BrowseInfos.DontGoBelowDomain,
+            RestrictToDomain = unchecked((int)Interop.Shell32.BrowseInfoFlags.BIF_DONTGOBELOWDOMAIN),
 
-            RestrictToFilesystem = UnsafeNativeMethods.BrowseInfos.ReturnOnlyFSDirs,
+            RestrictToFilesystem = unchecked((int)Interop.Shell32.BrowseInfoFlags.BIF_RETURNONLYFSDIRS),
 
-            RestrictToSubfolders = UnsafeNativeMethods.BrowseInfos.ReturnFSAncestors,
+            RestrictToSubfolders = unchecked((int)Interop.Shell32.BrowseInfoFlags.BIF_RETURNFSANCESTORS),
 
-            ShowTextBox = UnsafeNativeMethods.BrowseInfos.EditBox
+            ShowTextBox = unchecked((int)Interop.Shell32.BrowseInfoFlags.BIF_EDITBOX)
         }
     }
 }

@@ -245,23 +245,33 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> DefaultCellStyle_Set_TestData()
         {
-            yield return new object[] { new DataGridViewRow(), null, new DataGridViewCellStyle() };
-
             var style = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.BottomRight };
-            var dataGridView = new DataGridView { ColumnCount = 1 };
-            dataGridView.Rows.Add(new DataGridViewRow());
-            yield return new object[] { dataGridView.Rows[0], style, style };
+
+            yield return new object[] { new DataGridViewRow(), null, new DataGridViewCellStyle() };
+            yield return new object[] { new DataGridViewRow(), style, style };
+
+            var dataGridView1 = new DataGridView { ColumnCount = 1 };
+            dataGridView1.Rows.Add(new DataGridViewRow());
+            var dataGridView2 = new DataGridView { ColumnCount = 1 };
+            dataGridView2.Rows.Add(new DataGridViewRow());
+            yield return new object[] { dataGridView1.Rows[0], null, new DataGridViewCellStyle() };
+            yield return new object[] { dataGridView2.Rows[0], style, style };
+
+            var templateDataGridView1 = new DataGridView();
+            var templateDataGridView2 = new DataGridView();
+            yield return new object[] { templateDataGridView1.RowTemplate, null, new DataGridViewCellStyle() };
+            yield return new object[] { templateDataGridView2.RowTemplate, style, style };
         }
 
         [Theory]
         [MemberData(nameof(DefaultCellStyle_Set_TestData))]
-        public void DataGridViewRow_DefaultCellStyle_Set_GetReturnsExpected(DataGridViewRow row, DataGridViewCellStyle value, DataGridViewCellStyle expected)
+        public void DataGridViewRow_DefaultCellStyle_SetWithNullOldValue_GetReturnsExpected(DataGridViewRow row, DataGridViewCellStyle value, DataGridViewCellStyle expected)
         {
             row.DefaultCellStyle = value;
             Assert.Equal(expected, row.DefaultCellStyle);
             Assert.True(row.HasDefaultCellStyle);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.DefaultCellStyle = value;
             Assert.Equal(expected, row.DefaultCellStyle);
             Assert.True(row.HasDefaultCellStyle);
@@ -276,7 +286,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, row.DefaultCellStyle);
             Assert.True(row.HasDefaultCellStyle);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.DefaultCellStyle = value;
             Assert.Equal(expected, row.DefaultCellStyle);
             Assert.True(row.HasDefaultCellStyle);
@@ -377,7 +387,7 @@ namespace System.Windows.Forms.Tests
             row.DefaultHeaderCellType = value;
             Assert.Equal(expected, row.DefaultHeaderCellType);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.DefaultHeaderCellType = value;
             Assert.Equal(expected, row.DefaultHeaderCellType);
         }
@@ -395,7 +405,7 @@ namespace System.Windows.Forms.Tests
             row.DefaultHeaderCellType = value;
             Assert.Equal(value, row.DefaultHeaderCellType);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.DefaultHeaderCellType = value;
             Assert.Equal(value, row.DefaultHeaderCellType);
         }
@@ -405,7 +415,7 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewRow_DefaultHeaderCellType_SetInvalidWithNullOldValue_GetReturnsExpected(Type value)
         {
             var row = new SubDataGridViewRow();
-            Assert.Throws<ArgumentException>(null, () => row.DefaultHeaderCellType = value);
+            Assert.Throws<ArgumentException>("value", () => row.DefaultHeaderCellType = value);
         }
 
         [Theory]
@@ -417,7 +427,7 @@ namespace System.Windows.Forms.Tests
             {
                 DefaultHeaderCellType = typeof(DataGridViewRowHeaderCell)
             };
-            Assert.Throws<ArgumentException>(null, () => row.DefaultHeaderCellType = value);
+            Assert.Throws<ArgumentException>("value", () => row.DefaultHeaderCellType = value);
         }
 
         public static IEnumerable<object[]> Displayed_Get_TestData()
@@ -479,7 +489,7 @@ namespace System.Windows.Forms.Tests
             row.DividerHeight = value;
             Assert.Equal(value, row.DividerHeight);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.DividerHeight = value;
             Assert.Equal(value, row.DividerHeight);
         }
@@ -528,7 +538,7 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewRow_DividerHeight_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
         {
             var row = new DataGridViewRow();
-            Assert.Throws<ArgumentOutOfRangeException>("DividerHeight", () => row.DividerHeight = value);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => row.DividerHeight = value);
         }
 
         [Theory]
@@ -602,37 +612,37 @@ namespace System.Windows.Forms.Tests
         {
             foreach (string value in new string[] { null, string.Empty, "reasonable" })
             {
-                yield return new object[] { new DataGridViewRow(), value };
+                yield return new object[] { new DataGridViewRow(), value, value ?? string.Empty };
 
                 var dataGridView = new DataGridView { ColumnCount = 1 };
                 dataGridView.Rows.Add(new DataGridViewRow());
-                yield return new object[] { dataGridView.Rows[0], value };
+                yield return new object[] { dataGridView.Rows[0], value, value ?? string.Empty };
             }
         }
 
         [Theory]
         [MemberData(nameof(ErrorText_Set_TestData))]
-        public void DataGridViewRow_ErrorText_Set_GetReturnsExpected(DataGridViewRow row, string value)
+        public void DataGridViewRow_ErrorText_Set_GetReturnsExpected(DataGridViewRow row, string value, string expected)
         {
             row.ErrorText = value;
-            Assert.Equal(value ?? string.Empty, row.ErrorText);
+            Assert.Same(expected, row.ErrorText);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.ErrorText = value;
-            Assert.Equal(value ?? string.Empty, row.ErrorText);
+            Assert.Same(expected, row.ErrorText);
         }
 
         [Theory]
         [MemberData(nameof(ErrorText_Set_TestData))]
-        public void DataGridViewRow_ErrorText_SetWithNonNullOldValue_GetReturnsExpected(DataGridViewRow row, string value)
+        public void DataGridViewRow_ErrorText_SetWithNonNullOldValue_GetReturnsExpected(DataGridViewRow row, string value, string expected)
         {
             row.ErrorText = "value";
             row.ErrorText = value;
-            Assert.Equal(value ?? string.Empty, row.ErrorText);
+            Assert.Same(expected, row.ErrorText);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.ErrorText = value;
-            Assert.Equal(value ?? string.Empty, row.ErrorText);
+            Assert.Same(expected, row.ErrorText);
         }
 
         [Fact]
@@ -725,7 +735,7 @@ namespace System.Windows.Forms.Tests
             row.Frozen = true;
             Assert.True(row.Frozen);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.Frozen = true;
             Assert.True(row.Frozen);
 
@@ -826,7 +836,7 @@ namespace System.Windows.Forms.Tests
             }
             Assert.Equal(row, row.HeaderCell.OwningRow);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.HeaderCell = value;
             if (value != null)
             {
@@ -854,7 +864,7 @@ namespace System.Windows.Forms.Tests
                 Assert.NotNull(row.HeaderCell);
             }
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.HeaderCell = value;
             if (value != null)
             {
@@ -1004,7 +1014,7 @@ namespace System.Windows.Forms.Tests
             row.Height = value;
             Assert.Equal(expected, row.Height);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.Height = value;
             Assert.Equal(expected, row.Height);
         }
@@ -1052,7 +1062,7 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewRow_Height_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
         {
             var row = new DataGridViewRow();
-            Assert.Throws<ArgumentOutOfRangeException>("Height", () => row.Height = value);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => row.Height = value);
         }
 
         [Theory]
@@ -1308,7 +1318,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, row.MinimumHeight);
             Assert.Equal(expectedHeight, row.Height);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.MinimumHeight = value;
             Assert.Equal(value, row.MinimumHeight);
             Assert.Equal(expectedHeight, row.Height);
@@ -1353,14 +1363,14 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [InlineData(-1, "MinimumHeight")]
-        [InlineData(0, "MinimumHeight")]
-        [InlineData(1, "MinimumHeight")]
-        [InlineData(65537, "Height")]
-        public void DataGridViewRow_MinimumHeight_SetInvalid_ThrowsArgumentOutOfRangeException(int value, string paramName)
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(65537)]
+        public void DataGridViewRow_MinimumHeight_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
         {
             var row = new DataGridViewRow();
-            Assert.Throws<ArgumentOutOfRangeException>(paramName, () => row.MinimumHeight = value);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => row.MinimumHeight = value);
             Assert.Equal(3, row.MinimumHeight);
             Assert.Equal(Control.DefaultFont.Height + 9, row.Height);
         }
@@ -1420,7 +1430,7 @@ namespace System.Windows.Forms.Tests
             row.ReadOnly = true;
             Assert.True(row.ReadOnly);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.ReadOnly = true;
             Assert.True(row.ReadOnly);
 
@@ -1530,7 +1540,7 @@ namespace System.Windows.Forms.Tests
             row.Resizable = value;
             Assert.Equal(expected, row.Resizable);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.Resizable = value;
             Assert.Equal(expected, row.Resizable);
         }
@@ -1646,7 +1656,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(selected, (dataGridView.SelectedRows).Contains(row));
             Assert.Equal(selected, row.Selected);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.Selected = true;
             Assert.Equal(selected, (dataGridView.SelectedRows).Contains(row));
             Assert.Equal(selected, row.Selected);
@@ -1790,7 +1800,7 @@ namespace System.Windows.Forms.Tests
             row.Tag = value;
             Assert.Equal(value, row.Tag);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.Tag = value;
             Assert.Equal(value, row.Tag);
         }
@@ -1803,7 +1813,7 @@ namespace System.Windows.Forms.Tests
             row.Tag = value;
             Assert.Equal(value, row.Tag);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.Tag = value;
             Assert.Equal(value, row.Tag);
         }
@@ -1848,7 +1858,7 @@ namespace System.Windows.Forms.Tests
             row.Visible = false;
             Assert.False(row.Visible);
 
-            // Set again to test caching behaviour.
+            // Set same.
             row.Visible = false;
             Assert.False(row.Visible);
 
@@ -2889,7 +2899,7 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewRow_GetState_NoDataGridViewInvalidRowIndex_ThrowsArgumentException(int rowIndex)
         {
             var row = new DataGridViewRow();
-            Assert.Throws<ArgumentException>(null, () => row.GetState(rowIndex));
+            Assert.Throws<ArgumentException>("rowIndex", () => row.GetState(rowIndex));
         }
 
         [Theory]

@@ -36,10 +36,8 @@ namespace System.ComponentModel.Design
         }
         
         /// <summary>
-        ///     Edits the given object value using the editor style
-        ///     provided by ObjectSelectorEditor.GetEditStyle.
+        /// Edits the given object value using the editor style provided by ObjectSelectorEditor.GetEditStyle.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
             if (null != provider)
@@ -79,7 +77,7 @@ namespace System.ComponentModel.Design
         {
             if (treeView == null)
             {
-                throw new ArgumentNullException("treeView");
+                throw new ArgumentNullException(nameof(treeView));
             }
 
             treeView.HotTracking = true;
@@ -101,7 +99,6 @@ namespace System.ComponentModel.Design
             NativeMethods.SendMessage(handle, NativeMethods.TVM_SETEXTENDEDSTYLE, new IntPtr(mask), new IntPtr(extendedStyle));
         }
         
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
             return UITypeEditorEditStyle.DropDown;
@@ -309,22 +306,21 @@ namespace System.ComponentModel.Design
                 _edSvc = null;
             }
             
-            [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
             protected override void WndProc(ref Message m)
             {
                 switch (m.Msg)
                 {
-                    case NativeMethods.WM_GETDLGCODE:
+                    case Interop.WindowMessages.WM_GETDLGCODE:
                         m.Result = (IntPtr)((long)m.Result | NativeMethods.DLGC_WANTALLKEYS);
                         return;
-                    case NativeMethods.WM_MOUSEMOVE:
+                    case Interop.WindowMessages.WM_MOUSEMOVE:
                         if (clickSeen)
                         {
                             clickSeen = false;
                         }
                         break;
-                    case NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFY:
-                        NativeMethods.NMTREEVIEW nmtv = (NativeMethods.NMTREEVIEW)Marshal.PtrToStructure(m.LParam, typeof(NativeMethods.NMTREEVIEW));
+                    case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY:
+                        NativeMethods.NMTREEVIEW nmtv = Marshal.PtrToStructure<NativeMethods.NMTREEVIEW>(m.LParam);
                         if (nmtv.nmhdr.code == NativeMethods.NM_CLICK)
                         {
                             clickSeen = true;

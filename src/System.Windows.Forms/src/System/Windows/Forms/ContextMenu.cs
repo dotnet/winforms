@@ -10,14 +10,12 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Drawing;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
 
-    /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///     This class is used to put context menus on your form and show them for
     ///     controls at runtime.  It basically acts like a regular Menu control,
     ///     but can be set for the ContextMenu property that most controls have.
-    /// </devdoc>
+    /// </summary>
     [
     DefaultEvent(nameof(Popup)),
     ]
@@ -29,27 +27,24 @@ namespace System.Windows.Forms {
         
         private RightToLeft rightToLeft = System.Windows.Forms.RightToLeft.Inherit;
     
-        /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.ContextMenu"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new ContextMenu object with no items in it by default.
-        /// </devdoc>
+        /// </summary>
         public ContextMenu()
             : base(null) {
         }
 
-        /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.ContextMenu1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Creates a ContextMenu object with the given MenuItems.
-        /// </devdoc>
+        /// </summary>
         public ContextMenu(MenuItem[] menuItems)
             : base(menuItems) {
         }
 
-        /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.SourceControl"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The last control that was acted upon that resulted in this context
         ///     menu being displayed.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -61,37 +56,26 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.Popup"]/*' />
         [SRDescription(nameof(SR.MenuItemOnInitDescr))]
         public event EventHandler Popup {
-            add {
-                onPopup += value;
-            }
-            remove {
-                onPopup -= value;
-            }
+            add => onPopup += value;
+            remove => onPopup -= value;
         }
         
-        /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.Collapse"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    Fires when the context menu collapses.
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.ContextMenuCollapseDescr))]
         public event EventHandler Collapse {
-            add {
-                onCollapse += value;
-            }
-            remove {
-                onCollapse -= value;
-            }
+            add => onCollapse += value;
+            remove => onCollapse -= value;
         }
         
-        /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.RightToLeft"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
         ///     text alignment and reading order will be from right to left.
-        /// </devdoc>
+        /// </summary>
         // Add a DefaultValue attribute so that the Reset context menu becomes
         // available in the Property Grid but the default value remains No.
         [
@@ -132,30 +116,26 @@ namespace System.Windows.Forms {
                 return (rightToLeft == System.Windows.Forms.RightToLeft.Yes);
             }
         }
-        /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.OnPopup"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Fires the popup event
-        /// </devdoc>
+        /// </summary>
         protected internal virtual void OnPopup(EventArgs e) {
             if (onPopup != null) {
                 onPopup(this, e);
             }
         }
 
-        /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.OnCollapse"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Fires the collapse event
-        /// </devdoc>
+        /// </summary>
         protected internal virtual void OnCollapse(EventArgs e) {
             if (onCollapse != null) {
                 onCollapse(this, e);
             }
         }
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="ContextMenu.ProcessCmdKey"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         protected internal virtual bool ProcessCmdKey(ref Message msg, Keys keyData, Control control) {
             sourceControl = control;
             return ProcessCmdKey(ref msg, keyData);
@@ -165,10 +145,9 @@ namespace System.Windows.Forms {
         	RightToLeft = RightToLeft.No;	
         }
         
-        /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.ShouldSerializeRightToLeft"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns true if the RightToLeft should be persisted in code gen.
-        /// </devdoc>
+        /// </summary>
         internal virtual bool ShouldSerializeRightToLeft() {
             if (System.Windows.Forms.RightToLeft.Inherit == rightToLeft) {
                 return false;
@@ -176,20 +155,18 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.Show"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Displays the context menu at the specified position.  This method
         ///     doesn't return until the menu is dismissed.
-        /// </devdoc>
+        /// </summary>
         public void Show(Control control, Point pos) {
             Show(control, pos, NativeMethods.TPM_VERTICAL | NativeMethods.TPM_RIGHTBUTTON);
         }
 
-        /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.Show2"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Displays the context menu at the specified position.  This method
         ///     doesn't return until the menu is dismissed.
-        /// </devdoc>
+        /// </summary>
         public void Show(Control control, Point pos, LeftRightAlignment alignment)  {
 
             // This code below looks wrong but it's correct. 

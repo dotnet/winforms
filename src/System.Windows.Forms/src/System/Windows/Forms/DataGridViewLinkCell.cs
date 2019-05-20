@@ -14,7 +14,6 @@ namespace System.Windows.Forms
     using System.Globalization;
     using Runtime.CompilerServices;
 
-    /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell"]/*' />
     public class DataGridViewLinkCell : DataGridViewCell
     {
         private static readonly DataGridViewContentAlignment anyLeft = DataGridViewContentAlignment.TopLeft | DataGridViewContentAlignment.MiddleLeft | DataGridViewContentAlignment.BottomLeft;
@@ -44,12 +43,10 @@ namespace System.Windows.Forms
 
         private static Cursor dataGridViewCursor = null;
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.DataGridViewLinkCell"]/*' />
         public DataGridViewLinkCell()
         {
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.ActiveLinkColor"]/*' />
         public Color ActiveLinkColor
         {
             [
@@ -61,7 +58,7 @@ namespace System.Windows.Forms
                 {
                     return (Color)this.Properties.GetObject(PropLinkCellActiveLinkColor);
                 }
-                else if (SystemInformation.HighContrast && AccessibilityImprovements.Level2)
+                else if (SystemInformation.HighContrast)
                 {
                     return this.HighContrastLinkColor;
                 }
@@ -104,7 +101,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeActiveLinkColor()
         {
-            if (SystemInformation.HighContrast && AccessibilityImprovements.Level2)
+            if (SystemInformation.HighContrast)
             {
                 return !this.ActiveLinkColor.Equals(SystemColors.HotTrack);
             }
@@ -112,7 +109,6 @@ namespace System.Windows.Forms
             return !this.ActiveLinkColor.Equals(LinkUtilities.IEActiveLinkColor);
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.EditType"]/*' />
         public override Type EditType
         {
             get
@@ -122,7 +118,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.FormattedValueType"]/*' />
         public override Type FormattedValueType
         {
             get
@@ -131,7 +126,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.LinkBehavior"]/*' />
         [DefaultValue(LinkBehavior.SystemDefault)]
         public LinkBehavior LinkBehavior
         {
@@ -182,7 +176,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.LinkColor"]/*' />
         public Color LinkColor
         {
             [
@@ -194,7 +187,7 @@ namespace System.Windows.Forms
                 {
                     return (Color)this.Properties.GetObject(PropLinkCellLinkColor);
                 }
-                else if (SystemInformation.HighContrast && AccessibilityImprovements.Level2)
+                else if (SystemInformation.HighContrast)
                 {
                     return this.HighContrastLinkColor;
                 }
@@ -237,7 +230,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeLinkColor()
         {
-            if (SystemInformation.HighContrast && AccessibilityImprovements.Level2)
+            if (SystemInformation.HighContrast)
             {
                 return !this.LinkColor.Equals(SystemColors.HotTrack);
             }
@@ -266,7 +259,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.LinkVisited"]/*' />
         public bool LinkVisited
         {
             get
@@ -305,7 +297,6 @@ namespace System.Windows.Forms
             return this.linkVisitedSet = true;
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.TrackVisitedState"]/*' />
         [DefaultValue(true)]
         public bool TrackVisitedState
         {
@@ -350,7 +341,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.UseColumnTextForLinkValue"]/*' />
         [DefaultValue(false)]
         public bool UseColumnTextForLinkValue
         {
@@ -386,7 +376,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.VisitedLinkColor"]/*' />
         public Color VisitedLinkColor
         {
             [
@@ -398,7 +387,7 @@ namespace System.Windows.Forms
                 {
                     return (Color)this.Properties.GetObject(PropLinkCellVisitedLinkColor);
                 }
-                else if (SystemInformation.HighContrast && AccessibilityImprovements.Level2)
+                else if (SystemInformation.HighContrast)
                 {
                     return this.Selected ? SystemColors.HighlightText : LinkUtilities.GetVisitedLinkColor();
                 }
@@ -441,7 +430,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeVisitedLinkColor()
         {
-            if (SystemInformation.HighContrast && AccessibilityImprovements.Level2)
+            if (SystemInformation.HighContrast)
             {
                 return !this.VisitedLinkColor.Equals(SystemColors.HotTrack);
             }
@@ -460,7 +449,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.ValueType"]/*' />
         public override Type ValueType
         {
             get
@@ -474,7 +462,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.Clone"]/*' />
         public override object Clone()
         {
             DataGridViewLinkCell dataGridViewCell;
@@ -537,13 +524,11 @@ namespace System.Windows.Forms
             return linkBounds.Contains(x, y);
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.CreateAccessibilityInstance"]/*' />
         protected override AccessibleObject CreateAccessibilityInstance()
         {
             return new DataGridViewLinkCellAccessibleObject(this);
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.GetContentBounds"]/*' />
         protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
             if (cellStyle == null)
@@ -599,7 +584,6 @@ namespace System.Windows.Forms
             return linkBounds;
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.GetErrorIconBounds"]/*' />
         protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
             if (cellStyle == null)
@@ -642,7 +626,6 @@ namespace System.Windows.Forms
             return errorIconBounds;
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.GetPreferredSize"]/*' />
         protected override Size GetPreferredSize(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex, Size constraintSize)
         {
             if (this.DataGridView == null)
@@ -756,7 +739,6 @@ namespace System.Windows.Forms
             return preferredSize;
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.GetValue"]/*' />
         protected override object GetValue(int rowIndex)
         {
             if (this.UseColumnTextForLinkValue &&
@@ -770,7 +752,6 @@ namespace System.Windows.Forms
             return base.GetValue(rowIndex);
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.KeyUpUnsharesRow"]/*' />
         protected override bool KeyUpUnsharesRow(KeyEventArgs e, int rowIndex)
         {
             if (e.KeyCode == Keys.Space && !e.Alt && !e.Control && !e.Shift)
@@ -783,19 +764,16 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.MouseDownUnsharesRow"]/*' />
         protected override bool MouseDownUnsharesRow(DataGridViewCellMouseEventArgs e)
         {
             return LinkBoundsContainPoint(e.X, e.Y, e.RowIndex);
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.MouseLeaveUnsharesRow"]/*' />
         protected override bool MouseLeaveUnsharesRow(int rowIndex)
         {
             return this.LinkState != LinkState.Normal;
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.MouseMoveUnsharesRow"]/*' />
         protected override bool MouseMoveUnsharesRow(DataGridViewCellMouseEventArgs e)
         {
             if (LinkBoundsContainPoint(e.X, e.Y, e.RowIndex))
@@ -815,13 +793,11 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.MouseUpUnsharesRow"]/*' />
         protected override bool MouseUpUnsharesRow(DataGridViewCellMouseEventArgs e)
         {
             return this.TrackVisitedState && LinkBoundsContainPoint(e.X, e.Y, e.RowIndex);
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.OnKeyUp"]/*' />
         protected override void OnKeyUp(KeyEventArgs e, int rowIndex)
         {
             if (this.DataGridView == null)
@@ -845,7 +821,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.OnMouseDown"]/*' />
         protected override void OnMouseDown(DataGridViewCellMouseEventArgs e)
         {
             if (this.DataGridView == null)
@@ -861,7 +836,6 @@ namespace System.Windows.Forms
             base.OnMouseDown(e);
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.OnMouseLeave"]/*' />
         protected override void OnMouseLeave(int rowIndex)
         {
             if (this.DataGridView == null)
@@ -882,7 +856,6 @@ namespace System.Windows.Forms
             base.OnMouseLeave(rowIndex);
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.OnMouseMove"]/*' />
         protected override void OnMouseMove(DataGridViewCellMouseEventArgs e)
         {
             if (this.DataGridView == null)
@@ -920,7 +893,6 @@ namespace System.Windows.Forms
             base.OnMouseMove(e);
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.OnMouseUp"]/*' />
         protected override void OnMouseUp(DataGridViewCellMouseEventArgs e)
         {
             if (this.DataGridView == null)
@@ -933,7 +905,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.Paint"]/*' />
         protected override void Paint(Graphics graphics, 
             Rectangle clipBounds,
             Rectangle cellBounds, 
@@ -1160,22 +1131,18 @@ namespace System.Windows.Forms
             return resultBounds;
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCell.ToString"]/*' />
         public override string ToString()
         {
             return "DataGridViewLinkCell { ColumnIndex=" + ColumnIndex.ToString(CultureInfo.CurrentCulture) + ", RowIndex=" + RowIndex.ToString(CultureInfo.CurrentCulture) + " }";
         }
 
-        /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCellAccessibleObject"]/*' />
         protected class DataGridViewLinkCellAccessibleObject : DataGridViewCellAccessibleObject
         {
 
-            /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCellAccessibleObject.DataGridViewLinkCellAccessibleObject"]/*' />
             public DataGridViewLinkCellAccessibleObject(DataGridViewCell owner) : base (owner)
             {
             }
 
-            /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCellAccessibleObject.DefaultAction"]/*' />
             public override string DefaultAction
             {
                 get
@@ -1184,7 +1151,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCellAccessibleObject.DoDefaultAction"]/*' />
             public override void DoDefaultAction()
             {
                 DataGridViewLinkCell dataGridViewCell = (DataGridViewLinkCell)this.Owner;
@@ -1201,21 +1167,12 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewLinkCell.uex' path='docs/doc[@for="DataGridViewLinkCellAccessibleObject.GetChildCount"]/*' />
             public override int GetChildCount()
             {
                 return 0;
             }
 
-            internal override bool IsIAccessibleExSupported()
-            {
-                if (AccessibilityImprovements.Level2)
-                {
-                    return true;
-                }
-
-                return base.IsIAccessibleExSupported();
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             internal override object GetPropertyValue(int propertyID)
             {

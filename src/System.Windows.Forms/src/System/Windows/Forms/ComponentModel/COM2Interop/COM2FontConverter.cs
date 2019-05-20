@@ -13,10 +13,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using Microsoft.Win32;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\COM2FontConverter.uex' path='docs/doc[@for="Com2FontConverter"]/*' />
-    /// <devdoc>
+    /// <summary>
     /// This class maps an OLE_COLOR to a managed Color editor.
-    /// </devdoc>
+    /// </summary>
     internal class Com2FontConverter : Com2DataTypeToManagedDataTypeConverter {
 
         private IntPtr lastHandle = IntPtr.Zero;
@@ -28,20 +27,18 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
              }
          }
 
-        /// <include file='doc\COM2FontConverter.uex' path='docs/doc[@for="Com2FontConverter.ManagedType"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the managed type that this editor maps the property type to.
-        /// </devdoc>
+        /// </summary>
         public override Type ManagedType {
             get {
                 return typeof(Font);
             }
         }
 
-        /// <include file='doc\COM2FontConverter.uex' path='docs/doc[@for="Com2FontConverter.ConvertNativeToManaged"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Converts the native value into a managed value
-        /// </devdoc>
+        /// </summary>
         public override object ConvertNativeToManaged(object nativeValue, Com2PropertyDescriptor pd) {
             // we're getting an IFont thing here
             UnsafeNativeMethods.IFont nativeFont = nativeValue as UnsafeNativeMethods.IFont;
@@ -82,10 +79,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return lastFont;
         }
 
-        /// <include file='doc\COM2FontConverter.uex' path='docs/doc[@for="Com2FontConverter.ConvertManagedToNative"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Converts the managed value into a native value
-        /// </devdoc>
+        /// </summary>
         public override object ConvertManagedToNative(object managedValue, Com2PropertyDescriptor pd, ref bool cancelSet) {
 
             // we default to black.

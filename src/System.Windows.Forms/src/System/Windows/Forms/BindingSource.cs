@@ -179,7 +179,7 @@ namespace System.Windows.Forms
             // Today, this particular implementation of ICurrencyManagerProvider doesn't support the use of 'dot notation'
             // to specify chains of related data members. We don't have any scenarios for this which involve binding sources.
             // Return 'null' to force the binding context to fall back on its default related currency manager behavior.
-            if (dataMember.IndexOf(".") != -1)
+            if (dataMember.IndexOf('.') != -1)
             {
                 return null;
             }
@@ -426,126 +426,72 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.BindingSourceAddingNewEventHandlerDescr))]
         public event AddingNewEventHandler AddingNew
         {
-            add
-            {
-                Events.AddHandler(s_eventAddingNew, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(s_eventAddingNew, value);
-            }
+            add => Events.AddHandler(s_eventAddingNew, value);
+            remove => Events.RemoveHandler(s_eventAddingNew, value);
         }
 
         [SRCategory(nameof(SR.CatData))]
         [SRDescription(nameof(SR.BindingSourceBindingCompleteEventHandlerDescr))]
         public event BindingCompleteEventHandler BindingComplete
         {
-            add
-            {
-                Events.AddHandler(s_eventBindingComplete, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(s_eventBindingComplete, value);
-            }
+            add => Events.AddHandler(s_eventBindingComplete, value);
+            remove => Events.RemoveHandler(s_eventBindingComplete, value);
         }
 
         [SRCategory(nameof(SR.CatData))]
         [SRDescription(nameof(SR.BindingSourceDataErrorEventHandlerDescr))]
         public event BindingManagerDataErrorEventHandler DataError
         {
-            add
-            {
-                Events.AddHandler(s_eventDataErrror, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(s_eventDataErrror, value);
-            }
+            add => Events.AddHandler(s_eventDataErrror, value);
+            remove => Events.RemoveHandler(s_eventDataErrror, value);
         }
 
         [SRCategory(nameof(SR.CatData))]
         [SRDescription(nameof(SR.BindingSourceDataSourceChangedEventHandlerDescr))]
         public event EventHandler DataSourceChanged
         {
-            add
-            {
-                Events.AddHandler(s_eventDataSourceChanged, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(s_eventDataSourceChanged, value);
-            }
+            add => Events.AddHandler(s_eventDataSourceChanged, value);
+            remove => Events.RemoveHandler(s_eventDataSourceChanged, value);
         }
 
         [SRCategory(nameof(SR.CatData))]
         [SRDescription(nameof(SR.BindingSourceDataMemberChangedEventHandlerDescr))]
         public event EventHandler DataMemberChanged
         {
-            add
-            {
-                Events.AddHandler(s_eventDataMemberChanged, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(s_eventDataMemberChanged, value);
-            }
+            add => Events.AddHandler(s_eventDataMemberChanged, value);
+            remove => Events.RemoveHandler(s_eventDataMemberChanged, value);
         }
 
         [SRCategory(nameof(SR.CatData))]
         [SRDescription(nameof(SR.BindingSourceCurrentChangedEventHandlerDescr))]
         public event EventHandler CurrentChanged
         {
-            add
-            {
-                Events.AddHandler(s_eventCurrentChanged, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(s_eventCurrentChanged, value);
-            }
+            add => Events.AddHandler(s_eventCurrentChanged, value);
+            remove => Events.RemoveHandler(s_eventCurrentChanged, value);
         }
 
         [SRCategory(nameof(SR.CatData))]
         [SRDescription(nameof(SR.BindingSourceCurrentItemChangedEventHandlerDescr))]
         public event EventHandler CurrentItemChanged
         {
-            add
-            {
-                Events.AddHandler(s_eventCurrentItemChanged, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(s_eventCurrentItemChanged, value);
-            }
+            add => Events.AddHandler(s_eventCurrentItemChanged, value);
+            remove => Events.RemoveHandler(s_eventCurrentItemChanged, value);
         }
 
         [SRCategory(nameof(SR.CatData))]
         [SRDescription(nameof(SR.BindingSourceListChangedEventHandlerDescr))]
         public event ListChangedEventHandler ListChanged
         {
-            add
-            {
-                Events.AddHandler(s_eventListChanged, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(s_eventListChanged, value);
-            }
+            add => Events.AddHandler(s_eventListChanged, value);
+            remove => Events.RemoveHandler(s_eventListChanged, value);
         }
 
         [SRCategory(nameof(SR.CatData))]
         [SRDescription(nameof(SR.BindingSourcePositionChangedEventHandlerDescr))]
         public event EventHandler PositionChanged
         {
-            add
-            {
-                Events.AddHandler(s_eventPositionChanged, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(s_eventPositionChanged, value);
-            }
+            add => Events.AddHandler(s_eventPositionChanged, value);
+            remove => Events.RemoveHandler(s_eventPositionChanged, value);
         }
 
         private static string BuildSortString(ListSortDescriptionCollection sortsColln)
@@ -592,7 +538,7 @@ namespace System.Windows.Forms
         {
             if (!IsDataMemberValid())
             {
-                _dataMember = "";
+                _dataMember = string.Empty;
                 OnDataMemberChanged(EventArgs.Empty);
             }
         }
@@ -668,13 +614,13 @@ namespace System.Windows.Forms
             OnDataError(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Unhook BindingSource from its data source, since the data source could be some
         /// global object who's lifetime exceeds the lifetime of the parent form. Otherwise
         /// the BindingSource (and any components bound through it) will end up in limbo,
         /// still processing list change events, etc. And when unhooking from the data source,
         /// take care not to trigger any events that could confuse compoents bound to us.
-        /// </devdoc>
+        /// </summary>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -1473,12 +1419,12 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Respond to late completion of the DataSource's initialization, by completing our
         /// own initialization. This situation can arise if the call to the DataSource's
         /// EndInit() method comes after the call to the BindingSource's EndInit() method
         /// (since code-generated ordering of these calls is non-deterministic).
-        /// </devdoc>
+        /// </summary>
         private void DataSource_Initialized(object sender, EventArgs e)
         {
             if (DataSource is ISupportInitializeNotification dsInit)
@@ -1500,14 +1446,8 @@ namespace System.Windows.Forms
         /// </summary>
         event EventHandler ISupportInitializeNotification.Initialized
         {
-            add
-            {
-                Events.AddHandler(s_eventInitialized, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(s_eventInitialized, value);
-            }
+            add => Events.AddHandler(s_eventInitialized, value);
+            remove => Events.RemoveHandler(s_eventInitialized, value);
         }
 
         private void OnInitialized()

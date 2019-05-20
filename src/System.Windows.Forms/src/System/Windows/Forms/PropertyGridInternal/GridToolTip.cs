@@ -67,7 +67,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                      //
                      if (value == null || value.Length == 0){
                         dontShow = true;
-                        value = "";
+                        value = string.Empty;
                      }
                      else{
                         dontShow = false;
@@ -86,11 +86,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
 
-        /// <include file='doc\GridToolTip.uex' path='docs/doc[@for="GridToolTip.CreateParams"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The createParams to create the window.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected override  CreateParams CreateParams {
             get {
                 NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX();
@@ -114,7 +112,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             
             if (toolInfos[index] == null){
                toolInfos[index] = new NativeMethods.TOOLINFO_T();
-               toolInfos[index].cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_T));
+               toolInfos[index].cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_T>();
                toolInfos[index].uFlags |= NativeMethods.TTF_IDISHWND | NativeMethods.TTF_TRANSPARENT | NativeMethods.TTF_SUBCLASS;
             }
             toolInfos[index].lpszText = this.toolTipText;
@@ -184,7 +182,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             // thinks it's back in the regular state again
             //
             string oldText = this.ToolTip;
-            this.toolTipText = "";
+            this.toolTipText = string.Empty;
             for (int i = 0; i < controls.Length; i++) {
                if (0 == (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_UPDATETIPTEXT, 0, GetTOOLINFO(controls[i]))) {
                     //Debug.Fail("TTM_UPDATETIPTEXT failed for " + controls[i].GetType().Name);
@@ -196,12 +194,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         protected override void WndProc(ref Message msg) {
             switch (msg.Msg) {
-               case NativeMethods.WM_SHOWWINDOW:
+               case Interop.WindowMessages.WM_SHOWWINDOW:
                   if (unchecked( (int) (long)msg.WParam) != 0 && dontShow){
                      msg.WParam = IntPtr.Zero;
                   }
                   break;
-               case NativeMethods.WM_NCHITTEST:
+               case Interop.WindowMessages.WM_NCHITTEST:
                   // When using v6 common controls, the native
                   // tooltip does not end up returning HTTRANSPARENT all the time, so its TTF_TRANSPARENT
                   // behavior does not work, ie. mouse events do not fall thru to controls underneath. This

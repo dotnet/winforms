@@ -14,14 +14,12 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
     using System.Reflection;
 
-    /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="Style"]/*' />
     [TypeConverterAttribute(typeof(TableLayoutSettings.StyleConverter))]
     public abstract class TableLayoutStyle {
         private IArrangedElement _owner;
         private SizeType _sizeType = SizeType.AutoSize;
         private float _size;
         
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="Style.SizeType"]/*' />
         [DefaultValue(SizeType.AutoSize)]
         public SizeType SizeType {
             get { return _sizeType; }
@@ -43,7 +41,7 @@ namespace System.Windows.Forms {
             get { return _size; }
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException(nameof(Size), string.Format(SR.InvalidLowBoundArgumentEx, "Size", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Size), value, 0));
                 }
                 if (_size != value) {
                     _size = value;

@@ -16,9 +16,8 @@ namespace System.Windows.Forms {
       
       internal abstract class ArrangedElement : Component, IArrangedElement {
 
-          /// <devdoc>
-          /// </devdoc>
-          /// <internalonly/>
+          /// <summary>
+          /// </summary>
 
           private Rectangle bounds = Rectangle.Empty;
           private IArrangedElement parent = null;

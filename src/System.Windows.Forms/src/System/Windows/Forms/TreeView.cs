@@ -4,7 +4,6 @@
 
 
 namespace System.Windows.Forms {
-    using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
@@ -22,15 +21,14 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Windows.Forms.VisualStyles;
 
-    /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Displays a hierarchical list of items, or nodes. Each
     ///       node includes a caption and an optional bitmap. The user can select a node. If
     ///       it has sub-nodes, the user can collapse or expand the node.
     ///
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -107,8 +105,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.ImageIndexer"]/*' />
-        /// <internalonly/>
         internal ImageList.Indexer ImageIndexer {
              get {
                 if (imageIndexer == null) {
@@ -119,8 +115,6 @@ namespace System.Windows.Forms {
              }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.SelectedImageIndexer"]/*' />
-        /// <internalonly/>
         internal ImageList.Indexer SelectedImageIndexer {
              get {
                    if (selectedImageIndexer == null) {
@@ -161,10 +155,9 @@ namespace System.Windows.Forms {
         private TreeNodeMouseClickEventHandler onNodeMouseClick;
         private TreeNodeMouseClickEventHandler onNodeMouseDoubleClick;
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.TreeView"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Creates a TreeView control
-        /// </devdoc>
+        /// </summary>
         public TreeView()
         : base() {
 
@@ -185,12 +178,11 @@ namespace System.Windows.Forms {
             SetStyle(ControlStyles.UseTextForAccessibility, false);
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BackColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The background color for this control. Specifying null for
         ///     this parameter sets the
         ///     control's background color to its parent's background color.
-        /// </devdoc>
+        /// </summary>
         public override Color BackColor {
             get {
                 if (ShouldSerializeBackColor()) {
@@ -214,8 +206,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BackgroundImage"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
             get {
@@ -226,21 +216,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BackgroundImageChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
-            remove {
-                base.BackgroundImageChanged -= value;
-            }
+            add => base.BackgroundImageChanged += value;
+            remove => base.BackgroundImageChanged -= value;
         }
 
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BackgroundImageLayout"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -251,22 +233,15 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BackgroundImageLayoutChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
-            remove {
-                base.BackgroundImageLayoutChanged -= value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
+            remove => base.BackgroundImageLayoutChanged -= value;
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BorderStyle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The border style of the window.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(BorderStyle.Fixed3D),
@@ -294,12 +269,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.CheckBoxes"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The value of the CheckBoxes property. The CheckBoxes
         ///     property determines if check boxes are shown next to node in the
         ///     tree view.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(false),
@@ -330,10 +304,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.CreateParams"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         protected override CreateParams CreateParams {
             get {
                 CreateParams cp = base.CreateParams;
@@ -406,22 +378,20 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.DefaultSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
+        /// </summary>
         protected override Size DefaultSize {
             get {
                 return new Size(121, 97);
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.DoubleBuffered"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This property is overridden and hidden from statement completion
         ///     on controls that are based on Win32 Native Controls.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override bool DoubleBuffered {
             get {
@@ -432,11 +402,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.ForeColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The current foreground color for this control, which is the
         ///     color the control uses to draw its text.
-        /// </devdoc>
+        /// </summary>
         public override Color ForeColor {
             get {
                 if (ShouldSerializeForeColor()) {
@@ -454,11 +423,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.FullRowSelect"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Determines whether the selection highlight spans across the width of the TreeView.
         ///     This property will have no effect if ShowLines is true.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -476,11 +444,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.HideSelection"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The HideSelection property specifies whether the selected node will
         ///     be highlighted even when the TreeView loses focus.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
@@ -501,12 +468,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.HotTracking"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The value of the HotTracking property. The HotTracking
         ///     property determines if nodes are highlighted as the mousepointer
         ///     passes over them.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -527,10 +493,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.ImageIndex"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The default image index for nodes in the tree view.
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(-1),
         SRCategory(nameof(SR.CatBehavior)),
@@ -562,7 +527,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException(nameof(ImageIndex), string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(ImageIndex), string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, 0));
                 }
 
                 if (ImageIndexer.Index != value) {
@@ -574,10 +539,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.ImageKey"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The default image index for nodes in the tree view.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
@@ -606,10 +570,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.ImageList"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the image list control that is bound to the tree view.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(null),
@@ -678,10 +641,9 @@ namespace System.Windows.Forms {
           }
   
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.StateImageList"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the state image list control that is bound to the tree view.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(null),
@@ -726,10 +688,9 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.Indent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The indentation level in pixels.
-        /// </devdoc>
+        /// </summary>
         [
         Localizable(true),
         SRCategory(nameof(SR.CatBehavior)),
@@ -749,10 +710,10 @@ namespace System.Windows.Forms {
             set {
                 if (indent != value) {
                     if (value < 0) {
-                        throw new ArgumentOutOfRangeException(nameof(Indent), string.Format(SR.InvalidLowBoundArgumentEx, "Indent", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Indent), value, 0));
                     }
                     if (value > MaxIndent) {
-                        throw new ArgumentOutOfRangeException(nameof(Indent), string.Format(SR.InvalidHighBoundArgumentEx, "Indent", (value).ToString(CultureInfo.CurrentCulture), (MaxIndent).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(Indent), value, MaxIndent));
                     }
                     indent = value;
                     if (IsHandleCreated) {
@@ -763,10 +724,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.ItemHeight"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The height of every item in the tree view, in pixels.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.TreeViewItemHeightDescr))
@@ -791,11 +751,12 @@ namespace System.Windows.Forms {
             set {
                 if (itemHeight != value) {
                     if (value < 1) {
-                        throw new ArgumentOutOfRangeException(nameof(ItemHeight), string.Format(SR.InvalidLowBoundArgumentEx, "ItemHeight", (value).ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ItemHeight), value, 1));
                     }
                     if (value >= short.MaxValue) {
-                        throw new ArgumentOutOfRangeException(nameof(ItemHeight), string.Format(SR.InvalidHighBoundArgument, "ItemHeight", (value).ToString(CultureInfo.CurrentCulture), short.MaxValue.ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgument, nameof(ItemHeight), value, short.MaxValue));
                     }
+
                     itemHeight = value;
                     if (IsHandleCreated) {
                         if (itemHeight % 2 != 0) {
@@ -815,11 +776,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.LabelEdit"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The LabelEdit property determines if the label text
         ///     of nodes in the tree view is editable.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -840,10 +800,9 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.LineColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This is the color of the lines that connect the nodes of the Treeview.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.TreeViewLineColorDescr)),
@@ -868,10 +827,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.Nodes"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The collection of nodes associated with this TreeView control
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
@@ -888,12 +846,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.DrawMode"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>
         /// Indicates the drawing mode for the tree view.
         /// </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(TreeViewDrawMode.Normal),
@@ -923,10 +880,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.PathSeparator"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The delimeter string used by TreeNode.getFullPath().
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue("\\"),
@@ -941,7 +897,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.Padding"]/*' />
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -957,17 +912,15 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add { base.PaddingChanged += value; }
-            remove { base.PaddingChanged -= value; }
-        }
+            add => base.PaddingChanged += value; 
+            remove => base.PaddingChanged -= value; }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.RightToLeftLayout"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
         //      and the RightToLeft is true, mirroring will be turned on on the form, and
         ///     control placement and text will be from right to left.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
@@ -991,7 +944,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.Scrollable"]/*' />
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
@@ -1009,11 +961,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.SelectedImageIndex"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The image index that a node will display when selected.
         ///     The index applies to the ImageList referred to by the imageList property,
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(-1),
         SRCategory(nameof(SR.CatBehavior)),
@@ -1043,7 +994,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException(nameof(SelectedImageIndex), string.Format(SR.InvalidLowBoundArgumentEx, "SelectedImageIndex", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectedImageIndex), value, 0));
                 }
                 if (SelectedImageIndexer.Index != value) {
                     SelectedImageIndexer.Index = value;
@@ -1054,10 +1005,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.SelectedImageKey"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The default image index for nodes in the tree view.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
@@ -1087,10 +1037,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.SelectedNode"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The currently selected tree node, or null if nothing is selected.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
@@ -1130,11 +1079,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.ShowLines"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The ShowLines property determines if lines are drawn between
         ///     nodes in the tree view.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
@@ -1154,10 +1102,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.ShowNodeToolTips"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The ShowLines property determines whether or not the tooltips willbe displayed on the nodes
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -1176,11 +1123,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.ShowPlusMinus"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The ShowPlusMinus property determines if the "plus/minus"
         ///     expand button is shown next to tree nodes that have children.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
@@ -1200,11 +1146,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.ShowRootLines"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Determines if lines are draw between nodes at the root of
         ///     the tree view.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
@@ -1222,10 +1167,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.Sorted"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The Sorted property determines if nodes in the tree view are sorted.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -1247,10 +1191,9 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.TreeViewItemSorter"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The sorting comparer for this TreeView.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Browsable(false),
@@ -1271,7 +1214,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.Text"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
         public override string Text {
             get {
@@ -1282,24 +1224,17 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.TextChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
-            remove {
-                base.TextChanged -= value;
-            }
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.TopNode"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The first visible node in the TreeView. Initially
         ///     the first root node is at the top of the TreeView, but if the
         ///     contents have been scrolled another node may be at the top.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
@@ -1332,13 +1267,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.VisibleCount"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The count of fully visible nodes in the tree view.  This number
         ///     may be greater than the number of nodes in the control.
         ///     The control calculates this value by dividing the height of the
         ///     client window by the height of an item
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
@@ -1355,234 +1289,145 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BeforeLabelEdit"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewBeforeEditDescr))]
         public event NodeLabelEditEventHandler BeforeLabelEdit {
-            add {
-                onBeforeLabelEdit += value;
-            }
-            remove {
-                onBeforeLabelEdit -= value;
-            }
+            add => onBeforeLabelEdit += value;
+            remove => onBeforeLabelEdit -= value;
         }
 
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.AfterLabelEdit"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewAfterEditDescr))]
         public event NodeLabelEditEventHandler AfterLabelEdit {
-            add {
-                onAfterLabelEdit += value;
-            }
-            remove {
-                onAfterLabelEdit -= value;
-            }
+            add => onAfterLabelEdit += value;
+            remove => onAfterLabelEdit -= value;
         }
 
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BeforeCheck"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewBeforeCheckDescr))]
         public event TreeViewCancelEventHandler BeforeCheck {
-            add {
-                onBeforeCheck += value;
-            }
-            remove {
-                onBeforeCheck -= value;
-            }
+            add => onBeforeCheck += value;
+            remove => onBeforeCheck -= value;
         }
 
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.AfterCheck"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewAfterCheckDescr))]
         public event TreeViewEventHandler AfterCheck {
-            add {
-                onAfterCheck += value;
-            }
-            remove {
-                onAfterCheck -= value;
-            }
+            add => onAfterCheck += value;
+            remove => onAfterCheck -= value;
         }
 
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BeforeCollapse"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewBeforeCollapseDescr))]
         public event TreeViewCancelEventHandler BeforeCollapse {
-            add {
-                onBeforeCollapse += value;
-            }
-            remove {
-                onBeforeCollapse -= value;
-            }
+            add => onBeforeCollapse += value;
+            remove => onBeforeCollapse -= value;
         }
 
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.AfterCollapse"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewAfterCollapseDescr))]
         public event TreeViewEventHandler AfterCollapse {
-            add {
-                onAfterCollapse += value;
-            }
-            remove {
-                onAfterCollapse -= value;
-            }
+            add => onAfterCollapse += value;
+            remove => onAfterCollapse -= value;
         }
 
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BeforeExpand"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewBeforeExpandDescr))]
         public event TreeViewCancelEventHandler BeforeExpand {
-            add {
-                onBeforeExpand += value;
-            }
-            remove {
-                onBeforeExpand -= value;
-            }
+            add => onBeforeExpand += value;
+            remove => onBeforeExpand -= value;
         }
 
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.AfterExpand"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewAfterExpandDescr))]
         public event TreeViewEventHandler AfterExpand {
-            add {
-                onAfterExpand += value;
-            }
-            remove {
-                onAfterExpand -= value;
-            }
+            add => onAfterExpand += value;
+            remove => onAfterExpand -= value;
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.DrawNode"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Fires when a TreeView node needs to be drawn.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewDrawNodeEventDescr))]
         public event DrawTreeNodeEventHandler DrawNode {
-            add {
-                onDrawNode += value;
-            }
-            remove {
-                onDrawNode -= value;
-            }
+            add => onDrawNode += value;
+            remove => onDrawNode -= value;
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.ItemDrag"]/*' />
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewItemDragDescr))]
         public event ItemDragEventHandler ItemDrag {
-            add {
-                onItemDrag += value;
-            }
-            remove {
-                onItemDrag -= value;
-            }
+            add => onItemDrag += value;
+            remove => onItemDrag -= value;
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.NodeMouseHover"]/*' />
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.TreeViewNodeMouseHoverDescr))]
         public event TreeNodeMouseHoverEventHandler NodeMouseHover  {
-            add {
-                onNodeMouseHover += value;
-            }
-            remove {
-                onNodeMouseHover -= value;
-            }
+            add => onNodeMouseHover += value;
+            remove => onNodeMouseHover -= value;
         }
 
 
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BeforeSelect"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewBeforeSelectDescr))]
         public event TreeViewCancelEventHandler BeforeSelect {
-            add {
-                onBeforeSelect += value;
-            }
-            remove {
-                onBeforeSelect -= value;
-            }
+            add => onBeforeSelect += value;
+            remove => onBeforeSelect -= value;
         }
 
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.AfterSelect"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewAfterSelectDescr))]
         public event TreeViewEventHandler AfterSelect {
-            add {
-                onAfterSelect += value;
-            }
-            remove {
-                onAfterSelect -= value;
-            }
+            add => onAfterSelect += value;
+            remove => onAfterSelect -= value;
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.OnPaint"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     TreeView Onpaint.
-        /// </devdoc>
-        /// <internalonly/><hideinheritance/>
+        /// </summary>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
-            add {
-                base.Paint += value;
-            }
-            remove {
-                base.Paint -= value;
-            }
+            add => base.Paint += value;
+            remove => base.Paint -= value;
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.NodeMouseClick"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewNodeMouseClickDescr))]
         public event TreeNodeMouseClickEventHandler NodeMouseClick {
-            add {
-                onNodeMouseClick += value;
-            }
-            remove {
-                onNodeMouseClick -= value;
-            }
+            add => onNodeMouseClick += value;
+            remove => onNodeMouseClick -= value;
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.NodeMouseDoubleClick"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewNodeMouseDoubleClickDescr))]
         public event TreeNodeMouseClickEventHandler NodeMouseDoubleClick {
-            add {
-                onNodeMouseDoubleClick += value;
-            }
-            remove {
-                onNodeMouseDoubleClick -= value;
-            }
+            add => onNodeMouseDoubleClick += value;
+            remove => onNodeMouseDoubleClick -= value;
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.RightToLeftLayoutChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
-            add {
-                onRightToLeftLayoutChanged += value;
-            }
-            remove {
-                onRightToLeftLayoutChanged -= value;
-            }
+            add => onRightToLeftLayoutChanged += value;
+            remove => onRightToLeftLayoutChanged -= value;
         }
 
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BeginUpdate"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Disables redrawing of the tree view. A call to beginUpdate() must be
         ///     balanced by a following call to endUpdate(). Following a call to
         ///     beginUpdate(), any redrawing caused by operations performed on the
         ///     tree view is deferred until the call to endUpdate().
-        /// </devdoc>
+        /// </summary>
         public void BeginUpdate() {
             BeginUpdateInternal();
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.CollapseAll"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Collapses all nodes at the root level.
-        /// </devdoc>
+        /// </summary>
         public void CollapseAll() {
             root.Collapse();
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.CreateHandle"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         protected override void CreateHandle() {
             if (!RecreatingHandle) {
                 IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
@@ -1597,32 +1442,26 @@ namespace System.Windows.Forms {
             base.CreateHandle();
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.DetachImageList"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Resets the imageList to null.  We wire this method up to the imageList's
         ///     Dispose event, so that we don't hang onto an imageList that's gone away.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void DetachImageList(object sender, EventArgs e) {
             ImageList = null;
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.DetachStateImageList"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Resets the stateimageList to null.  We wire this method up to the stateimageList's
         ///     Dispose event, so that we don't hang onto an stateimageList that's gone away.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void DetachStateImageList(object sender, EventArgs e) {
             internalStateImageList = null;
             StateImageList = null;
 
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.Dispose"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         protected override void Dispose(bool disposing) {
             if (disposing) {
 
@@ -1643,31 +1482,27 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.EndUpdate"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Reenables redrawing of the tree view. A call to beginUpdate() must be
         ///     balanced by a following call to endUpdate(). Following a call to
         ///     beginUpdate(), any redrawing caused by operations performed on the
         ///     combo box is deferred until the call to endUpdate().
-        /// </devdoc>
+        /// </summary>
         public void EndUpdate() {
             EndUpdateInternal();
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.ExpandAll"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Expands all nodes at the root level.
-        /// </devdoc>
+        /// </summary>
         public void ExpandAll() {
             root.ExpandAll();
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.ForceScrollbarUpdate"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Forces the TreeView to recalculate all its nodes widths so that it updates the
         ///     scrollbars as appropriate.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         internal void ForceScrollbarUpdate(bool delayed) {
 
             // ForceScrollbarUpdate call WM_SETREDRAW( FALSE ) followed by WM_SETREDRAW( TRUE )
@@ -1677,20 +1512,18 @@ namespace System.Windows.Forms {
             if (!IsUpdating())
             {
                 if (IsHandleCreated) {
-                    SendMessage(NativeMethods.WM_SETREDRAW, 0, 0);
+                    SendMessage(Interop.WindowMessages.WM_SETREDRAW, 0, 0);
                     if (delayed)
-                        UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), NativeMethods.WM_SETREDRAW, (IntPtr)1, IntPtr.Zero);
+                        UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_SETREDRAW, (IntPtr)1, IntPtr.Zero);
                     else
-                        SendMessage(NativeMethods.WM_SETREDRAW, 1, 0);
+                        SendMessage(Interop.WindowMessages.WM_SETREDRAW, 1, 0);
                 }
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.SetToolTip"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         internal void SetToolTip(ToolTip toolTip, string toolTipText) {
             if (toolTip != null) {
                 UnsafeNativeMethods.SendMessage(new HandleRef(toolTip, toolTip.Handle), NativeMethods.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
@@ -1700,18 +1533,16 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.HitTest"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Gives the information about which part of the treeNode is at the given point.
-        /// </devdoc>
+        /// </summary>
         public TreeViewHitTestInfo HitTest(Point pt) {
             return HitTest(pt.X, pt.Y);
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.HitTest"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Gives the information about which part of the treeNode is at the given x, y.
-        /// </devdoc>
+        /// </summary>
         public TreeViewHitTestInfo HitTest(int x, int y) {
             NativeMethods.TV_HITTESTINFO tvhi = new NativeMethods.TV_HITTESTINFO();
             tvhi.pt_x = x;
@@ -1722,12 +1553,10 @@ namespace System.Windows.Forms {
             return (new TreeViewHitTestInfo(node, loc));
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.TreeViewBeforeAfterCheck"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Defined so that a  tree node can use it
         ///
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
 
         internal bool TreeViewBeforeCheck(TreeNode node, TreeViewAction actionTaken) {
             TreeViewCancelEventArgs tvce = new TreeViewCancelEventArgs(node, false, actionTaken);
@@ -1740,26 +1569,23 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.GetNodeCount"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns count of nodes at root, optionally including all subtrees.
-        /// </devdoc>
+        /// </summary>
         public int GetNodeCount(bool includeSubTrees) {
             return root.GetNodeCount(includeSubTrees);
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.GetNodeAt"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the TreeNode at the given location in tree view coordinates.
-        /// </devdoc>
+        /// </summary>
         public TreeNode GetNodeAt(Point pt) {
             return GetNodeAt(pt.X, pt.Y);
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.GetNodeAt1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the TreeNode at the given location in tree view coordinates.
-        /// </devdoc>
+        /// </summary>
         public TreeNode GetNodeAt(int x, int y) {
             NativeMethods.TV_HITTESTINFO tvhi = new NativeMethods.TV_HITTESTINFO();
 
@@ -1850,13 +1676,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.IsInputKey"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Overridden to handle RETURN key.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override bool IsInputKey(Keys keyData) {
             // If in edit mode, treat Return as an input key, so the form doesn't grab it
             // and treat it as clicking the Form.AcceptButton.  Similarly for Escape
@@ -1875,30 +1699,25 @@ namespace System.Windows.Forms {
             return base.IsInputKey(keyData);
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.NodeFromHandle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    Note this can be null - particularly if any windows messages get generated during
         ///    the insertion of a tree node (TVM_INSERTITEM)
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         internal TreeNode NodeFromHandle(IntPtr handle) {
             TreeNode node = (TreeNode)nodeTable[handle];
 
             return node;
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.OnDrawNode"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Fires the DrawNode event.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnDrawNode(DrawTreeNodeEventArgs e) {
         if (onDrawNode != null) onDrawNode(this, e);
     }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.OnHandleCreated"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         protected override void OnHandleCreated(EventArgs e) {
 
             TreeNode savedSelectedNode = this.selectedNode;
@@ -2042,10 +1861,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.OnHandleDestroyed"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         protected override void OnHandleDestroyed(EventArgs e) {
             selectedNode = SelectedNode;
 
@@ -2065,22 +1882,19 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.OnMouseHover"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///  We keep track of if we've hovered already so we don't fire multiple hover events
-        /// </devdoc>
-        /// <internalonly>
+        /// </summary>
         protected override void OnMouseLeave(EventArgs e) {
             hoveredAlready = false;
             base.OnMouseLeave(e);
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.OnMouseHover"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     In order for the MouseHover event to fire for each item in a TreeView,
         ///     the node the mouse is hovering over is found. Each time a new node is hovered
         ///     over a new event is raised.
-        /// </devdoc>
+        /// </summary>
         protected override void OnMouseHover(EventArgs e)  {
 
             /// Hover events need to be caught for each node
@@ -2089,7 +1903,7 @@ namespace System.Windows.Forms {
 
             NativeMethods.TV_HITTESTINFO tvhip = new NativeMethods.TV_HITTESTINFO();
             Point pos = Cursor.Position;
-            pos = PointToClientInternal(pos);
+            pos = PointToClient(pos);
             tvhip.pt_x = pos.X;
             tvhip.pt_y = pos.Y;
             IntPtr hnode = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhip);
@@ -2111,137 +1925,121 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.OnBeforeLabelEdit"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Fires the beforeLabelEdit event.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnBeforeLabelEdit(NodeLabelEditEventArgs e) {
             Contract.Requires(e != null);
             if (onBeforeLabelEdit != null) onBeforeLabelEdit(this, e);
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.OnAfterLabelEdit"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Fires the afterLabelEdit event.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnAfterLabelEdit(NodeLabelEditEventArgs e) {
             Contract.Requires(e != null);
             if (onAfterLabelEdit != null) onAfterLabelEdit(this, e);
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.OnBeforeCheck"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Fires the beforeCheck event.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnBeforeCheck(TreeViewCancelEventArgs e) {
             Contract.Requires(e != null);
             if (onBeforeCheck != null) onBeforeCheck(this, e);
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.OnAfterCheck"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Fires the afterCheck event.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnAfterCheck(TreeViewEventArgs e) {
             Contract.Requires(e != null);
             if (onAfterCheck != null) onAfterCheck(this, e);
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.OnBeforeCollapse"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Fires the beforeCollapse event.
-        /// </devdoc>
+        /// </summary>
         protected internal virtual void OnBeforeCollapse(TreeViewCancelEventArgs e) {
             Contract.Requires(e != null);
             if (onBeforeCollapse != null) onBeforeCollapse(this, e);
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.OnAfterCollapse"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Fires the afterCollapse event.
-        /// </devdoc>
+        /// </summary>
         protected internal virtual void OnAfterCollapse(TreeViewEventArgs e) {
             Contract.Requires(e != null);
             if (onAfterCollapse != null) onAfterCollapse(this, e);
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.OnBeforeExpand"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Fires the beforeExpand event.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnBeforeExpand(TreeViewCancelEventArgs e) {
             Contract.Requires(e != null);
             if (onBeforeExpand != null) onBeforeExpand(this, e);
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.OnAfterExpand"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Fires the afterExpand event.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnAfterExpand(TreeViewEventArgs e) {
             Contract.Requires(e != null);
             if (onAfterExpand != null) onAfterExpand(this, e);
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.OnItemDrag"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Fires the ItemDrag event.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnItemDrag(ItemDragEventArgs e) {
             Contract.Requires(e != null);
             if (onItemDrag != null) onItemDrag(this, e);
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.OnNodeMouseHover"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Fires the NodeMouseHover event.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnNodeMouseHover(TreeNodeMouseHoverEventArgs e) {
             Contract.Requires(e != null);
             if (onNodeMouseHover != null) onNodeMouseHover(this, e);
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.OnBeforeSelect"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Fires the beforeSelect event.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnBeforeSelect(TreeViewCancelEventArgs e) {
             Contract.Requires(e != null);
             if (onBeforeSelect != null) onBeforeSelect(this, e);
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.OnAfterSelect"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Fires the afterSelect event.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnAfterSelect(TreeViewEventArgs e) {
             Contract.Requires(e != null);
             if (onAfterSelect != null) onAfterSelect(this, e);
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.onNodeMouseClick"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Fires the onNodeMouseClick event.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnNodeMouseClick(TreeNodeMouseClickEventArgs e) {
             Contract.Requires(e != null);
             if (onNodeMouseClick != null) onNodeMouseClick(this, e);
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.onNodeMouseDoubleClick"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Fires the onNodeMouseDoubleClick event.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnNodeMouseDoubleClick(TreeNodeMouseClickEventArgs e) {
             Contract.Requires(e != null);
             if (onNodeMouseDoubleClick != null) onNodeMouseDoubleClick(this, e);
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.OnKeyDown"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Handles the OnBeforeCheck / OnAfterCheck for keyboard clicks
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected override void OnKeyDown(KeyEventArgs e) {
             base.OnKeyDown(e);
             if (e.Handled) return;
@@ -2261,11 +2059,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.OnKeyUp"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Handles the OnBeforeCheck / OnAfterCheck for keyboard clicks
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected override void OnKeyUp(KeyEventArgs e) {
             base.OnKeyUp(e);
             if (e.Handled) return;
@@ -2276,11 +2072,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.OnKeyPress"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Handles the OnBeforeCheck / OnAfterCheck for keyboard clicks
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected override void OnKeyPress(KeyPressEventArgs e) {
             base.OnKeyPress(e);
             if (e.Handled) return;
@@ -2289,7 +2083,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnRightToLeftLayoutChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRightToLeftLayoutChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -2318,37 +2111,33 @@ namespace System.Windows.Forms {
             Nodes.AddRange(nodes);
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.ResetIndent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This resets the indentation to the system default.
-        /// </devdoc>
+        /// </summary>
         private void ResetIndent() {
             indent = -1;
             // is this overkill?
             RecreateHandle();
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.ResetItemHeight"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This resets the item height to the system default.
-        /// </devdoc>
+        /// </summary>
         private void ResetItemHeight() {
             itemHeight = -1;
             RecreateHandle();
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.ShouldSerializeIndent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves true if the indent should be persisted in code gen.
-        /// </devdoc>
+        /// </summary>
         private bool ShouldSerializeIndent() {
             return(indent != -1);
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.ShouldSerializeItemHeight"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves true if the itemHeight should be persisted in code gen.
-        /// </devdoc>
+        /// </summary>
         private bool ShouldSerializeItemHeight() {
             return(itemHeight != -1);
         }
@@ -2369,21 +2158,18 @@ namespace System.Windows.Forms {
          }
 
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.Sort"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Updated the sorted order
-        /// </devdoc>
+        /// </summary>
         public void Sort() {
             Sorted = true;
             RefreshNodes();
         }
 
         
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.ToString"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns a string representation for this control.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         public override string ToString() {
 
             string s = base.ToString();
@@ -2598,11 +2384,9 @@ namespace System.Windows.Forms {
 
        
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.CustomDraw"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Performs custom draw handling
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void CustomDraw(ref Message m) {
             NativeMethods.NMTVCUSTOMDRAW nmcd = (NativeMethods.NMTVCUSTOMDRAW)m.GetLParam(typeof(NativeMethods.NMTVCUSTOMDRAW));
 
@@ -2651,7 +2435,7 @@ namespace System.Windows.Forms {
                             Rectangle bounds = node.RowBounds;
                             
                             NativeMethods.SCROLLINFO si = new NativeMethods.SCROLLINFO();
-                            si.cbSize = Marshal.SizeOf(typeof(NativeMethods.SCROLLINFO));
+                            si.cbSize = Marshal.SizeOf<NativeMethods.SCROLLINFO>();
                             si.fMask = NativeMethods.SIF_POS;
                             if (UnsafeNativeMethods.GetScrollInfo(new HandleRef(this, Handle), NativeMethods.SB_HORZ,si) != false) {
 
@@ -2796,13 +2580,11 @@ namespace System.Windows.Forms {
                 }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.GetItemRenderStyles"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Generates colors for each item. This can be overridden to provide colors on a per state/per node
         ///     basis, rather than using the ForeColor/BackColor/NodeFont properties on TreeNode.
         ///
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected OwnerDrawPropertyBag GetItemRenderStyles(TreeNode node, int state) {
             OwnerDrawPropertyBag retval = new OwnerDrawPropertyBag();
             if (node == null || node.propBag == null) return retval;
@@ -2824,7 +2606,7 @@ namespace System.Windows.Forms {
                 
             NativeMethods.TV_HITTESTINFO tvhip = new NativeMethods.TV_HITTESTINFO();
             Point pos = Cursor.Position;
-            pos = PointToClientInternal(pos);
+            pos = PointToClient(pos);
             tvhip.pt_x = pos.X;
             tvhip.pt_y = pos.Y;
             IntPtr hnode = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhip);
@@ -2849,17 +2631,15 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.WmNeedText"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         private void WmNeedText(ref Message m) {
             NativeMethods.TOOLTIPTEXT ttt = (NativeMethods.TOOLTIPTEXT) m.GetLParam(typeof(NativeMethods.TOOLTIPTEXT));
             string tipText = controlToolTipText;
             
             NativeMethods.TV_HITTESTINFO tvhip = new NativeMethods.TV_HITTESTINFO();
             Point pos = Cursor.Position;
-            pos = PointToClientInternal(pos);
+            pos = PointToClient(pos);
             tvhip.pt_x = pos.X;
             tvhip.pt_y = pos.Y;
             IntPtr hnode = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhip);
@@ -2930,7 +2710,7 @@ namespace System.Windows.Forms {
 
                         NativeMethods.TV_HITTESTINFO tvhip = new NativeMethods.TV_HITTESTINFO();
                         Point pos = Cursor.Position;
-                        pos = PointToClientInternal(pos);
+                        pos = PointToClient(pos);
                         tvhip.pt_x = pos.X;
                         tvhip.pt_y = pos.Y;
                         IntPtr hnode = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhip);
@@ -2959,7 +2739,7 @@ namespace System.Windows.Forms {
                             }
                             else {
                                 treeViewState[TREEVIEWSTATE_showTreeViewContextMenu] = true;
-                                SendMessage(NativeMethods.WM_CONTEXTMENU, Handle, SafeNativeMethods.GetMessagePos());
+                                SendMessage(Interop.WindowMessages.WM_CONTEXTMENU, Handle, SafeNativeMethods.GetMessagePos());
                             }
                             m.Result = (IntPtr)1;
 
@@ -2981,11 +2761,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Treenode.uex' path='docs/doc[@for="Treenode.ShowContextMenu"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Shows the context menu for the Treenode.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void ShowContextMenu(TreeNode treeNode) {
 
             if (treeNode.ContextMenu != null || treeNode.ContextMenuStrip != null) {
@@ -3016,7 +2794,7 @@ namespace System.Windows.Forms {
                                              null);
 
                     // Force task switch (see above)
-                    UnsafeNativeMethods.PostMessage(new HandleRef(this, this.Handle), NativeMethods.WM_NULL, IntPtr.Zero, IntPtr.Zero);
+                    UnsafeNativeMethods.PostMessage(new HandleRef(this, this.Handle), Interop.WindowMessages.WM_NULL, IntPtr.Zero, IntPtr.Zero);
                 }
                 // Need to send TVM_SELECTITEM to highlight the node while the contextMenuStrip is being shown.
                 else if (menu != null)
@@ -3050,16 +2828,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.WndProc"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case NativeMethods.WM_WINDOWPOSCHANGING:
-                case NativeMethods.WM_NCCALCSIZE:
-                case NativeMethods.WM_WINDOWPOSCHANGED:
-                case NativeMethods.WM_SIZE:
+                case Interop.WindowMessages.WM_WINDOWPOSCHANGING:
+                case Interop.WindowMessages.WM_NCCALCSIZE:
+                case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
+                case Interop.WindowMessages.WM_SIZE:
                     // While we are changing size of treeView to avoid the scrollbar; dont respond to the window-sizing messages.
                     if (treeViewState[TREEVIEWSTATE_stopResizeWindowMsgs])
                     {
@@ -3071,7 +2847,7 @@ namespace System.Windows.Forms {
                         base.WndProc(ref m);
                     }
                     break;                        
-               case NativeMethods.WM_HSCROLL:
+               case Interop.WindowMessages.WM_HSCROLL:
                     base.WndProc(ref m);
                     if (DrawMode == TreeViewDrawMode.OwnerDrawAll)
                     {
@@ -3079,7 +2855,7 @@ namespace System.Windows.Forms {
                     }
                     break;
 
-        case NativeMethods.WM_PRINT:
+        case Interop.WindowMessages.WM_PRINT:
             WmPrint(ref m);
             break;
                 case NativeMethods.TVM_SETITEM:
@@ -3099,7 +2875,7 @@ namespace System.Windows.Forms {
                         }
                     }
                     break;
-                case NativeMethods.WM_NOTIFY:
+                case Interop.WindowMessages.WM_NOTIFY:
                     NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR) m.GetLParam(typeof(NativeMethods.NMHDR));
                     switch (nmhdr.code) {
                         case NativeMethods.TTN_GETDISPINFO:
@@ -3128,10 +2904,10 @@ namespace System.Windows.Forms {
                              break;
                     }
                     break;
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFY:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY:
                         WmNotify(ref m);
                         break;
-                case NativeMethods.WM_LBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Left, 2);
                     //just maintain state and fire double click.. in final mouseUp...
                     treeViewState[TREEVIEWSTATE_doubleclickFired] = true;
@@ -3141,11 +2917,11 @@ namespace System.Windows.Forms {
                     //
                     CaptureInternal = true;
                     break;
-                case NativeMethods.WM_LBUTTONDOWN:
+                case Interop.WindowMessages.WM_LBUTTONDOWN:
                     try
                     {
                         treeViewState[TREEVIEWSTATE_ignoreSelects] = true;
-                        FocusInternal();
+                        Focus();
                     }
                     finally
                     {
@@ -3179,8 +2955,8 @@ namespace System.Windows.Forms {
                     }
                     downButton = MouseButtons.Left;
                     break;
-                case NativeMethods.WM_LBUTTONUP:
-                case NativeMethods.WM_RBUTTONUP:
+                case Interop.WindowMessages.WM_LBUTTONUP:
+                case Interop.WindowMessages.WM_RBUTTONUP:
                     NativeMethods.TV_HITTESTINFO tvhi = new NativeMethods.TV_HITTESTINFO();
                     tvhi.pt_x = NativeMethods.Util.SignedLOWORD(m.LParam);
                     tvhi.pt_y = NativeMethods.Util.SignedHIWORD(m.LParam);
@@ -3220,24 +2996,24 @@ namespace System.Windows.Forms {
                     //always clear our hit-tested node we cached on mouse down
                     hNodeMouseDown = IntPtr.Zero;
                     break;
-                case NativeMethods.WM_MBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_MBUTTONDBLCLK:
                     //fire Up in the Wndproc !!
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
                     WmMouseDown(ref m, MouseButtons.Middle, 2);
                     break;
-                case NativeMethods.WM_MBUTTONDOWN:
+                case Interop.WindowMessages.WM_MBUTTONDOWN:
                     //Always Reset the MouseupFired....
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
                     WmMouseDown(ref m, MouseButtons.Middle, 1);
                     downButton = MouseButtons.Middle;
                     break;
-                case NativeMethods.WM_MOUSELEAVE:
+                case Interop.WindowMessages.WM_MOUSELEAVE:
                     // if the mouse leaves and then reenters the TreeView
                     // NodeHovered events should be raised.
                     prevHoveredNode = null;
                     base.WndProc(ref m);
                     break;
-                case NativeMethods.WM_RBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_RBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Right, 2);
                     //just maintain state and fire double click.. in final mouseUp...
                     treeViewState[TREEVIEWSTATE_doubleclickFired] = true;
@@ -3247,7 +3023,7 @@ namespace System.Windows.Forms {
                     //
                     CaptureInternal = true;
                     break;
-                case NativeMethods.WM_RBUTTONDOWN:
+                case Interop.WindowMessages.WM_RBUTTONDOWN:
                     //Always Reset the MouseupFired....
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
                     //Cache the hit-tested node for verification when mouse up is fired
@@ -3259,11 +3035,11 @@ namespace System.Windows.Forms {
                     WmMouseDown(ref m, MouseButtons.Right, 1);
                     downButton = MouseButtons.Right;
                     break;
-                case NativeMethods.WM_SYSCOLORCHANGE:
+                case Interop.WindowMessages.WM_SYSCOLORCHANGE:
                     SendMessage(NativeMethods.TVM_SETINDENT, Indent, 0);
                     base.WndProc(ref m);
                     break;
-                case NativeMethods.WM_SETFOCUS:
+                case Interop.WindowMessages.WM_SETFOCUS:
                      // If we get focus through the LBUttonDown .. we might have done the validation...
                      // so skip it..
                      if (treeViewState[TREEVIEWSTATE_lastControlValidated])
@@ -3278,7 +3054,7 @@ namespace System.Windows.Forms {
                         base.WndProc(ref m);
                      }
                      break;
-                case NativeMethods.WM_CONTEXTMENU:
+                case Interop.WindowMessages.WM_CONTEXTMENU:
                     if (treeViewState[TREEVIEWSTATE_showTreeViewContextMenu]) {
                         treeViewState[TREEVIEWSTATE_showTreeViewContextMenu] = false;
                         base.WndProc(ref m);

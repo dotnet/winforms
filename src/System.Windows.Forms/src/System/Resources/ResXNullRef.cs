@@ -16,12 +16,11 @@ namespace System.Resources {
     using System.Resources;
     using System.Globalization;
 
-    /// <include file='doc\ResXNullRef.uex' path='docs/doc[@for="ResXNullRef"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///     ResX Null Reference class.  This class allows ResX to store null values.
     ///     It is a placeholder that is written into the file.  On read, it is replaced
     ///     with null.
-    /// </devdoc>
+    /// </summary>
     [Serializable]
     internal sealed class ResXNullRef {
     }

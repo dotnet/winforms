@@ -29,11 +29,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <include file='doc\COM2IManagedPerPropertyBrowsingHandler.uex' path='docs/doc[@for="Com2IManagedPerPropertyBrowsingHandler.OnGetAttributes"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing.   HideProperty
         /// such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
-        /// </devdoc>
+        /// </summary>
         private void OnGetAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent) {
             object target = sender.TargetObject;
 
@@ -87,7 +86,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
                     // check for an assembly name.
                     //
-                    string assemblyName = "";
+                    string assemblyName = string.Empty;
 
                     int comma = attrName.LastIndexOf(',');
 
@@ -204,7 +203,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                             SafeNativeMethods.SysFreeString(new HandleRef(null, bstr));
                         }
                         else {
-                            strs[i] = "";
+                            strs[i] = string.Empty;
                         }
                     }
                     catch (Exception ex) {

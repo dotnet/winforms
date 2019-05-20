@@ -26,10 +26,9 @@ namespace System.Resources {
     using System.Globalization;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    
-    /// </devdoc>
+    /// </summary>
     [Serializable]
     public sealed class ResXDataNode : ISerializable {
 
@@ -65,9 +64,9 @@ namespace System.Resources {
         private ResXDataNode() {
         }
 
-        // <devdoc>
+        // <summary>
         // this is a deep clone
-        //</devdoc>
+        //</summary>
         internal ResXDataNode DeepClone() {
             return new ResXDataNode
             {
@@ -86,10 +85,9 @@ namespace System.Resources {
             };
         }
             
-        /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode.ResXDataNode"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    
-        /// </devdoc>        
+        /// </summary>        
         public ResXDataNode(string name, object value) : this(name, value, null) {
         }
 
@@ -120,10 +118,9 @@ namespace System.Resources {
             this.value = value;
         }
         
-        /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode.ResXDataNode2"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    
-        /// </devdoc>  
+        /// </summary>  
         public ResXDataNode(string name, ResXFileRef fileRef) : this(name, fileRef, null) {
         }
 
@@ -176,10 +173,9 @@ namespace System.Resources {
         }
 
 
-        /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode.Comment"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    
-        /// </devdoc>
+        /// </summary>
         public string Comment {
             get {
                 string result = comment;
@@ -193,10 +189,9 @@ namespace System.Resources {
             }
         }
 
-        /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode.Name"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    
-        /// </devdoc>
+        /// </summary>
         public string Name {
             get {
                 string result = name;
@@ -220,10 +215,9 @@ namespace System.Resources {
             }
         }
         
-        /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode.FileRef"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    
-        /// </devdoc>
+        /// </summary>
         public ResXFileRef FileRef {
             get {
                 if(FileRefFullPath == null) {
@@ -481,21 +475,19 @@ namespace System.Resources {
             return nodeInfo;
         }
 
-        /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode.GetNodePosition"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    Might return the position in the resx file of the current node, if known
         ///    otherwise, will return Point(0,0) since point is a struct 
-        /// </devdoc>
+        /// </summary>
         public Point GetNodePosition()
         {
             return nodeInfo?.ReaderPosition ?? new Point();
         }
 
-        /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode.GetValueTypeName"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    Get the FQ type name for this datanode.
         ///    We return typeof(object) for ResXNullRef
-        /// </devdoc>
+        /// </summary>
         public string GetValueTypeName(ITypeResolutionService typeResolver) {
             // the type name here is always a FQN
             if(!string.IsNullOrEmpty(typeName))
@@ -555,18 +547,16 @@ namespace System.Resources {
             return result;
         }
 
-        /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode.GetValueTypeName1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    Get the FQ type name for this datanode
-        /// </devdoc>
+        /// </summary>
         public string GetValueTypeName(AssemblyName[] names) {
             return GetValueTypeName(new AssemblyNamesTypeResolutionService(names));
         }
 
-        /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode.GetValue"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    Get the value contained in this datanode
-        /// </devdoc>
+        /// </summary>
         public object GetValue(ITypeResolutionService typeResolver) {
 
             if(value != null) {
@@ -601,10 +591,9 @@ namespace System.Resources {
             return result;
         }
 
-        /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode.GetValue1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    Get the value contained in this datanode
-        /// </devdoc>
+        /// </summary>
         public object GetValue(AssemblyName[] names) {
             return GetValue(new AssemblyNamesTypeResolutionService(names));
         }
@@ -663,10 +652,9 @@ namespace System.Resources {
         }
                 
 
-        /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode.GetObjectData"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    Get the value contained in this datanode
-        /// </devdoc>        
+        /// </summary>        
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) {
             DataNodeInfo nodeInfo = GetDataNodeInfo();
             si.AddValue("Name", nodeInfo.Name, typeof(string));
@@ -825,13 +813,7 @@ namespace System.Resources {
             }
             
             if (result == null) {
-                // try to load it first from the gac
-#pragma warning disable 0618
-                //Although LoadWithPartialName is obsolete, we still have to call it: changing 
-                //this would be breaking in cases where people edited their resource files by
-                //hand.
-                result = Assembly.LoadWithPartialName(name.FullName);
-#pragma warning restore 0618                            
+                result = Assembly.Load(name.FullName);
                 if(result != null) {
                     cachedAssemblies[name] = result;
                 } 
@@ -882,13 +864,11 @@ namespace System.Resources {
                 return result;
             }
 
-            // Missed in cache, try to resolve the type. First try to resolve in the GAC
+            // Missed in cache, try to resolve the type from the reference assemblies.
             if(name.IndexOf(',') != -1) {
                 result = Type.GetType(name, false, ignoreCase);
             }
 
-            //
-            // Did not find it in the GAC, check the reference assemblies
             if(result == null && names != null) {
                 //
                 // If the type is assembly qualified name, we sort the assembly names
@@ -926,7 +906,7 @@ namespace System.Resources {
                     if (asm != null) {
                         result = asm.GetType(name, false, ignoreCase);
                         if(result == null) {
-                            int indexOfComma = name.IndexOf(",");
+                            int indexOfComma = name.IndexOf(',');
                             if(indexOfComma != -1) {
                                 string shortName = name.Substring(0, indexOfComma );
                                 result = asm.GetType(shortName, false, ignoreCase);
@@ -944,9 +924,9 @@ namespace System.Resources {
             }
 
             if(result != null) {
-                // Only cache types from .Net framework or GAC because they don't need to update.
+                // Only cache types from .Net framework  because they don't need to update.
                 // For simplicity, don't cache custom types
-                if (result.Assembly.GlobalAssemblyCache || IsNetFrameworkAssembly(result.Assembly.Location)) {
+                if (IsNetFrameworkAssembly(result.Assembly.Location)) {
                     cachedTypes[name] = result;
                 }
             }
@@ -954,9 +934,9 @@ namespace System.Resources {
             return result;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This is matching %windir%\Microsoft.NET\Framework*, so both 32bit and 64bit framework will be covered.
-        /// </devdoc>
+        /// </summary>
         private bool IsNetFrameworkAssembly(string assemblyPath)
         {
             return assemblyPath != null && assemblyPath.StartsWith(NetFrameworkPath, StringComparison.OrdinalIgnoreCase);

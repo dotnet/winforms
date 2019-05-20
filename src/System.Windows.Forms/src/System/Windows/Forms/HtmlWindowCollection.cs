@@ -2,22 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Drawing;
-using System.Drawing.Printing;
-using System.Windows.Forms;
-using System.Security.Permissions;
-using System.Security;
-using System.Runtime.InteropServices;
-using System.Net;
 using System.Collections;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
-namespace System.Windows.Forms {
-    /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection"]/*' />
-    public class HtmlWindowCollection : ICollection {
+namespace System.Windows.Forms
+{
+    public class HtmlWindowCollection : ICollection
+    {
         private UnsafeNativeMethods.IHTMLFramesCollection2 htmlFramesCollection2;
         private HtmlShimManager shimManager;
         
@@ -35,11 +27,10 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.this]/*' />
         public HtmlWindow this[int index] {
             get {
-                if (index < 0 || index >= this.Count) {
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidBoundArgument, "index", index, 0, this.Count - 1));
+                if (index < 0 || index >= Count) {
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidBoundArgument, nameof(index), index, 0, Count - 1));
                 }
 
                 object oIndex = (object)index;
@@ -49,7 +40,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.this1]/*' />
         public HtmlWindow this[string windowId] {
             get {
                 object oWindowId = (object)windowId;
@@ -59,40 +49,33 @@ namespace System.Windows.Forms {
                             as UnsafeNativeMethods.IHTMLWindow2;
                 }
                 catch (COMException) {
-                    throw new ArgumentException(string.Format(SR.InvalidArgument, "windowId", windowId));
+                    throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(windowId), windowId), nameof(windowId));
                 }
                 return (htmlWindow2 != null) ? new HtmlWindow(shimManager, htmlWindow2) : null;
             }
         }
 
-        /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.Count"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the total number of elements in the collection.
-        /// </devdoc>
+        /// </summary>
         public int Count {
             get {
                 return this.NativeHTMLFramesCollection2.GetLength();
             }
         }
 
-        /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.ICollection.IsSynchronized"]/*' />
-        /// <internalonly/>
         bool ICollection.IsSynchronized {
             get {
                 return false;
             }
         }
         
-        /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.ICollection.SyncRoot"]/*' />
-        /// <internalonly/>
         object ICollection.SyncRoot {
             get {
                 return this;
             }
         }
 
-        /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.ICollection.CopyTo"]/*' />
-        /// <internalonly/>
         void ICollection.CopyTo(Array dest, int index) {
             int count = this.Count;
             for (int i = 0; i < count; i++) {
@@ -100,8 +83,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.GetEnumerator"]/*' />
-        /// <internalonly/>
         public IEnumerator GetEnumerator() {
             HtmlWindow[] htmlWindows = new HtmlWindow[this.Count];
             ((ICollection)this).CopyTo(htmlWindows, 0);

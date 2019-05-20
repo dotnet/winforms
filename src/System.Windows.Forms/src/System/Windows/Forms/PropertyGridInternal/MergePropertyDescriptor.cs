@@ -41,26 +41,24 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
 
-        /// <include file='doc\PropertyDescriptor.uex' path='docs/doc[@for="PropertyDescriptor.ComponentType"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       When overridden in a derived class, gets the type of the
         ///       component this property
         ///       is bound to.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override Type ComponentType {
                 get {
                     return descriptors[0].ComponentType;
                 }
         }
 
-        /// <include file='doc\PropertyDescriptor.uex' path='docs/doc[@for="PropertyDescriptor.Converter"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets the type converter for this property.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override TypeConverter Converter {
             get {
                 return descriptors[0].Converter;
@@ -73,14 +71,13 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\PropertyDescriptor.uex' path='docs/doc[@for="PropertyDescriptor.IsLocalizable"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets a value
         ///       indicating whether this property should be localized, as
         ///       specified in the <see cref='System.ComponentModel.LocalizableAttribute'/>.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override bool IsLocalizable {
             get {
                 if (localizable == TriState.Unknown) {
@@ -96,14 +93,13 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\PropertyDescriptor.uex' path='docs/doc[@for="PropertyDescriptor.IsReadOnly"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       When overridden in
         ///       a derived class, gets a value
         ///       indicating whether this property is read-only.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override bool IsReadOnly { 
             get {
                 if (readOnly == TriState.Unknown) {
@@ -120,13 +116,12 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
    
-        /// <include file='doc\PropertyDescriptor.uex' path='docs/doc[@for="PropertyDescriptor.PropertyType"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       When overridden in a derived class,
         ///       gets the type of the property.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override Type PropertyType { 
             get {
                 return descriptors[0].PropertyType;
@@ -139,14 +134,13 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\PropertyDescriptor.uex' path='docs/doc[@for="PropertyDescriptor.CanResetValue"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       When overridden in a derived class, indicates whether
         ///       resetting the <paramref name="component "/>will change the value of the
         ///    <paramref name="component"/>.
         /// </para>
-        /// </devdoc>
+        /// </summary>
         public override bool CanResetValue(object component) {
             Debug.Assert(component is Array, "MergePropertyDescriptor::CanResetValue called with non-array value");
             if (canReset == TriState.Unknown) {
@@ -163,11 +157,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
              return (canReset == TriState.Yes);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This method attempts to copy the given value so unique values are
         ///     always passed to each object.  If the object cannot be copied it
         ///     will be returned.
-        /// </devdoc>
+        /// </summary>
         private object CopyValue(object value) {
 
             // null is always OK
@@ -228,13 +222,12 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return value;
         }
 
-         /// <include file='doc\MemberDescriptor.uex' path='docs/doc[@for="MemberDescriptor.CreateAttributeCollection"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Creates a collection of attributes using the
         ///       array of attributes that you passed to the constructor.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override AttributeCollection CreateAttributeCollection() {
             return new MergedAttributeCollection(this);
         }
@@ -248,26 +241,24 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return propertyOwner;
         }
 
-        /// <include file='doc\PropertyDescriptor.uex' path='docs/doc[@for="PropertyDescriptor.GetEditor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets an editor of the specified type.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override object GetEditor(Type editorBaseType) {
             return descriptors[0].GetEditor(editorBaseType);
         }
 
 
-        /// <include file='doc\PropertyDescriptor.uex' path='docs/doc[@for="PropertyDescriptor.GetValue"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       When overridden in a derived class, gets the current
         ///       value
         ///       of the
         ///       property on a component.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override object GetValue(object component) {
             Debug.Assert(component is Array, "MergePropertyDescriptor::GetValue called with non-array value");
             bool temp;
@@ -326,15 +317,14 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return values;
         }
 
-        /// <include file='doc\PropertyDescriptor.uex' path='docs/doc[@for="PropertyDescriptor.ResetValue"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       When overridden in a derived class, resets the
         ///       value
         ///       for this property
         ///       of the component.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override void ResetValue(object component) {
 
             Debug.Assert(component is Array, "MergePropertyDescriptor::ResetValue called with non-array value");
@@ -377,13 +367,12 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         }
 
-        /// <include file='doc\PropertyDescriptor.uex' path='docs/doc[@for="PropertyDescriptor.SetValue"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       When overridden in a derived class, sets the value of
         ///       the component to a different value.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override void SetValue(object component, object value) {
             Debug.Assert(component is Array, "MergePropertyDescriptor::SetValue called with non-array value");
             Array a = (Array)component;
@@ -398,14 +387,13 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\PropertyDescriptor.uex' path='docs/doc[@for="PropertyDescriptor.ShouldSerializeValue"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       When overridden in a derived class, indicates whether the
         ///       value of
         ///       this property needs to be persisted.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
 
         public override bool ShouldSerializeValue(object component) {
             Debug.Assert(component is Array, "MergePropertyDescriptor::ShouldSerializeValue called with non-array value");
@@ -427,10 +415,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
                SetItems(original);
             }
             
-            /// <include file='doc\MultiSelectPropertyGridEntry.uex' path='docs/doc[@for="MultiSelectPropertyGridEntry.MultiMergeCollection.Count"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the number of items.
-            /// </devdoc>
+            /// </summary>
             public int Count {
                 get {
                     if (items != null) {
@@ -443,10 +430,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
             
             
-            /// <include file='doc\MultiSelectPropertyGridEntry.uex' path='docs/doc[@for="MultiSelectPropertyGridEntry.MultiMergeCollection.Locked"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     Prevents the contents of the collection from being re-initialized;
-            /// </devdoc>
+            /// </summary>
             public bool Locked {
                get {
                   return locked;
@@ -483,11 +469,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
                }
             }
             
-            /// <include file='doc\MultiSelectPropertyGridEntry.uex' path='docs/doc[@for="MultiSelectPropertyGridEntry.MultiMergeCollection.MergeCollection"]/*' />
-            /// <devdoc>
+            /// <summary>
             /// Ensures that the new collection equals the exisitng one.
             /// Otherwise, it wipes out the contents of the new collection.
-            /// </devdoc>
+            /// </summary>
             public bool MergeCollection(ICollection newCollection) {
                 
                 if (locked) {

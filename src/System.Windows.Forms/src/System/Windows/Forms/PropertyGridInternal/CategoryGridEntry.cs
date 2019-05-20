@@ -64,10 +64,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
         
           
-        /// <include file='doc\CategoryGridEntry.uex' path='docs/doc[@for="CategoryGridEntry.HasValue"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Returns true if this GridEntry has a value field in the right hand column.
-        /// </devdoc>
+        /// </summary>
         internal override bool HasValue {
             get {
                return false;
@@ -108,11 +107,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// </summary>
         /// <returns></returns>
         protected override GridEntryAccessibleObject GetAccessibilityObject() {
-            if (AccessibilityImprovements.Level3) {
-                return new CategoryGridEntryAccessibleObject(this);
-            }
-
-            return base.GetAccessibilityObject();
+            return new CategoryGridEntryAccessibleObject(this);
         }
 
         protected override Brush GetBackgroundBrush(Graphics g) {
@@ -178,11 +173,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <include file='doc\CategoryGridEntry.uex' path='docs/doc[@for="CategoryGridEntry.GetChildValueOwner"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Gets the owner of the current value.  This is usually the value of the
         /// root entry, which is the object being browsed
-        /// </devdoc>
+        /// </summary>
         public override object GetChildValueOwner(GridEntry childEntry) {
             return ParentGridEntry.GetChildValueOwner(childEntry);
         }
@@ -210,7 +204,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
                 int indent = PropertyLabelIndent-2;
                 Rectangle focusRect = new Rectangle(indent, rect.Y, labelWidth+3, rect.Height-1);
-                if (SystemInformation.HighContrast && !OwnerGrid.developerOverride && AccessibilityImprovements.Level1) {
+                if (SystemInformation.HighContrast && !OwnerGrid.developerOverride) {
                     // we changed line color to SystemColors.ControlDarkDark in high contrast mode
                     ControlPaint.DrawFocusRectangle(g, focusRect, SystemColors.ControlText, OwnerGrid.LineColor);
                 }

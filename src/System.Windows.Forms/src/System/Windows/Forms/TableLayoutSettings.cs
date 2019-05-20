@@ -17,8 +17,7 @@ namespace System.Windows.Forms {
     using System.Reflection;
     using System.Runtime.Serialization;
     
-    /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="TableLayoutSettings"]/*' />
-    /// <devdoc>this is a wrapper class to expose interesting properties of TableLayout</devdoc>
+    /// <summary>this is a wrapper class to expose interesting properties of TableLayout</summary>
     [
      TypeConverter(typeof(TableLayoutSettingsTypeConverter)),
      Serializable
@@ -58,7 +57,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="TableLayoutSettings.LayoutEngine"]/*' />
         public override LayoutEngine LayoutEngine {
             get { return TableLayout.Instance; }
         }
@@ -68,15 +66,14 @@ namespace System.Windows.Forms {
         }
         
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="TableLayoutSettings.CellBorderStyle"]/*' />
-        /// <devdoc> internal as this is a TableLayoutPanel feature only </devdoc>
+        /// <summary> internal as this is a TableLayoutPanel feature only </summary>
         [DefaultValue(TableLayoutPanelCellBorderStyle.None), SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.TableLayoutPanelCellBorderStyleDescr))]
         internal TableLayoutPanelCellBorderStyle CellBorderStyle {
             get { return _borderStyle; }
             set { 
                 //valid values are 0x0 to 0x6
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)TableLayoutPanelCellBorderStyle.None, (int)TableLayoutPanelCellBorderStyle.OutsetPartial)){
-                    throw new ArgumentException(string.Format(SR.InvalidArgument, "CellBorderStyle", value.ToString()));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(CellBorderStyle), value));
                 }
                 _borderStyle = value;   
                 //set the CellBorderWidth according to the current CellBorderStyle.
@@ -92,12 +89,11 @@ namespace System.Windows.Forms {
             get { return TableLayout.GetContainerInfo(Owner).CellBorderWidth; }
         }
         
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="TableLayoutSettings.ColumnCount"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// This sets the maximum number of columns allowed on this table instead of allocating
         /// actual spaces for these columns. So it is OK to set ColumnCount to Int32.MaxValue without
         /// causing out of memory exception
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.GridPanelColumnsDescr))]
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(0)]
@@ -107,9 +103,11 @@ namespace System.Windows.Forms {
                 return containerInfo.MaxColumns;
             }
             set { 
-                if (value < 0) {                    
-                     throw new ArgumentOutOfRangeException(nameof(ColumnCount), value, string.Format (SR.InvalidLowBoundArgumentEx, "ColumnCount", value.ToString (CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ColumnCount), value, 0));
                 }
+
                 TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);         
                 containerInfo.MaxColumns = value;
                 LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.Columns);
@@ -118,12 +116,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="TableLayoutSettings.RowCount"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// This sets the maximum number of rows allowed on this table instead of allocating
         /// actual spaces for these rows. So it is OK to set RowCount to Int32.MaxValue without
         /// causing out of memory exception
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.GridPanelRowsDescr))]
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(0)]
@@ -133,9 +130,11 @@ namespace System.Windows.Forms {
                 return containerInfo.MaxRows;
             }
             set { 
-                if (value < 0) {                    
-                     throw new ArgumentOutOfRangeException(nameof(RowCount), value, string.Format (SR.InvalidLowBoundArgumentEx, "RowCount", value.ToString (CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(RowCount), value, 0));
                 }
+
                 TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
                 containerInfo.MaxRows = value;
                 LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.Rows);
@@ -144,7 +143,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="TableLayoutSettings.RowStyles"]/*' />
         [SRDescription(nameof(SR.GridPanelRowStylesDescr))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [SRCategory(nameof(SR.CatLayout))]
@@ -160,7 +158,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="TableLayoutSettings.ColumnStyles"]/*' />
         [SRDescription(nameof(SR.GridPanelColumnStylesDescr))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [SRCategory(nameof(SR.CatLayout))]
@@ -176,12 +173,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="TableLayoutSettings.GrowStyle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///       Specifies if a TableLayoutPanel will gain additional rows or columns once its existing cells
         ///       become full.  If the value is 'FixedSize' then the TableLayoutPanel will throw an exception
         ///       when the TableLayoutPanel is over-filled.
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.TableLayoutPanelGrowStyleDescr))]
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(TableLayoutPanelGrowStyle.AddRows)]
@@ -193,7 +189,7 @@ namespace System.Windows.Forms {
             set { 
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)TableLayoutPanelGrowStyle.FixedSize, (int)TableLayoutPanelGrowStyle.AddColumns)){
-                    throw new ArgumentException(string.Format(SR.InvalidArgument, "GrowStyle", value.ToString()));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(GrowStyle), value));
                 }            
                
                 TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
@@ -255,7 +251,7 @@ namespace System.Windows.Forms {
             }
             if (value < 1)
             {
-                throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidArgument, "ColumnSpan", value));
+                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(value), value));
             }
 
             if (IsStub)
@@ -302,7 +298,7 @@ namespace System.Windows.Forms {
             }
             if (value < 1)
             {
-                throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidArgument, "RowSpan", value));
+                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(value), value));
             }
 
             if (IsStub)
@@ -322,9 +318,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Get the row position of the element
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.GridPanelRowDescr))]
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(-1)]
@@ -347,11 +343,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Set the row position of the element
         /// If we set the row position to -1, it will automatically switch the control from 
         /// absolutely positioned to non-absolutely positioned
-        /// </devdoc>
+        /// </summary>
         public void SetRow(object control, int row)
         {
             if (control == null)
@@ -360,15 +356,15 @@ namespace System.Windows.Forms {
             }
             if (row < -1)
             {
-                throw new ArgumentOutOfRangeException(nameof(row), string.Format(SR.InvalidArgument, "Row", row));
+                throw new ArgumentOutOfRangeException(nameof(row), row, string.Format(SR.InvalidArgument, nameof(row), row));
             }
 
             SetCellPosition(control, row, -1, rowSpecified: true, colSpecified: false);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Get the column position of the element
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.TableLayoutSettingsGetCellPositionDescr))]
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(-1)]
@@ -382,9 +378,9 @@ namespace System.Windows.Forms {
             return new TableLayoutPanelCellPosition(GetColumn(control), GetRow(control));
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Set the column position of the element
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.TableLayoutSettingsSetCellPositionDescr))]
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(-1)]
@@ -398,9 +394,9 @@ namespace System.Windows.Forms {
             SetCellPosition(control, cellPosition.Row, cellPosition.Column, rowSpecified: true, colSpecified: true);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Get the column position of the element
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.GridPanelColumnDescr))]
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(-1)]
@@ -423,11 +419,11 @@ namespace System.Windows.Forms {
            }
         }
         
-        /// <devdoc>
+        /// <summary>
         /// Set the column position of the element
         /// If we set the column position to -1, it will automatically switch the control from 
         /// absolutely positioned to non-absolutely positioned
-        /// </devdoc>
+        /// </summary>
         public void SetColumn(object control, int column)
         {
             if (control == null)
@@ -436,7 +432,7 @@ namespace System.Windows.Forms {
             }
             if (column < -1)
             {
-                throw new ArgumentException(string.Format(SR.InvalidArgument, "Column", column));
+                throw new ArgumentOutOfRangeException(nameof(column), column, string.Format(SR.InvalidArgument, nameof(column), column));
             }
 
             if (IsStub)
@@ -484,9 +480,9 @@ namespace System.Windows.Forms {
             }
         }
         
-        ///<devdoc>
+        ///<summary>
         /// Get the element which covers the specified row and column. return null if we can't find one
-        ///</devdoc>
+        ///</summary>
         internal IArrangedElement GetControlFromPosition (int column, int row)
         {
             return TableLayout.GetControlFromPosition(Owner, column, row);
@@ -556,9 +552,9 @@ namespace System.Windows.Forms {
             }
         }
     
-        /// <devdoc> TableLayoutSettingsStub 
+        /// <summary> TableLayoutSettingsStub 
         ///               contains information about 
-        /// </devdoc>
+        /// </summary>
         private class TableLayoutSettingsStub {
        
             private static ControlInformation DefaultControlInfo = new ControlInformation(null, -1, -1, 1, 1); 
@@ -570,13 +566,13 @@ namespace System.Windows.Forms {
             public TableLayoutSettingsStub() {
             }
 
-            /// <devdoc> ApplySettings - applies settings from the stub into a full-fledged
+            /// <summary> ApplySettings - applies settings from the stub into a full-fledged
             ///          TableLayoutSettings.
             ///
             ///          NOTE: this is a one-time only operation - there is data loss to the stub
             ///          as a result of calling this function. we hand as much over to the other guy
             ///          so we dont have to reallocate anything
-            /// </devdoc>
+            /// </summary>
             internal void ApplySettings(TableLayoutSettings settings) {
                 //
                 // apply row,column,rowspan,colspan
@@ -767,28 +763,23 @@ namespace System.Windows.Forms {
         }    
     }
 
-    /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="ColumnStyle"]/*' />
     public class ColumnStyle : TableLayoutStyle {
 
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="ColumnStyle.ColumnStyle"]/*' />
         public ColumnStyle() {}
 
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="ColumnStyle.ColumnStyle1"]/*' />
         public ColumnStyle(SizeType sizeType) {
             this.SizeType = sizeType;
         }
 
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="ColumnStyle.ColumnStyle2"]/*' />
         public ColumnStyle(SizeType sizeType, float width) {
             this.SizeType = sizeType;
             this.Width = width;
         }
         
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="ColumnStyle.Width"]/*' />
         public float Width {
             get { return base.Size; }
             set { base.Size = value; }
@@ -796,27 +787,22 @@ namespace System.Windows.Forms {
     }
 
 
-    /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="RowStyle"]/*' />
     public class RowStyle : TableLayoutStyle {
 
 
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="RowStyle.RowStyle"]/*' />
         public RowStyle() {}
         
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="RowStyle.RowStyle1"]/*' />
         public RowStyle(SizeType sizeType) {
             this.SizeType = sizeType;
         }
         
     
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="RowStyle.RowStyle2"]/*' />
         public RowStyle(SizeType sizeType, float height) {
             this.SizeType = sizeType;
             this.Height = height;
         }
 
  
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="RowStyle.Height"]/*' />
         public float Height {
             get { return base.Size; }
             set { base.Size = value; }

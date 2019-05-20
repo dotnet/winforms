@@ -6,16 +6,16 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.Control.DragDrop'/>, <see cref='System.Windows.Forms.Control.DragEnter'/>,
     /// or <see cref='System.Windows.Forms.Control.DragOver'/> event.
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
     public class DragEventArgs : EventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.DragEventArgs'/> class.
-        /// </devdoc>
+        /// </summary>
         public DragEventArgs(IDataObject data, int keyState, int x, int y, DragDropEffects allowedEffect, DragDropEffects effect) {
             Data = data;
             KeyState = keyState;
@@ -25,36 +25,36 @@ namespace System.Windows.Forms
             Effect = effect;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The <see cref='System.Windows.Forms.IDataObject'/> that contains the data associated
         /// with this event.
-        /// </devdoc>
+        /// </summary>
         public IDataObject Data { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the current state of the SHIFT, CTRL, and ALT keys.
-        /// </devdoc>
+        /// </summary>
         public int KeyState { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the x-coordinate of the mouse pointer.
-        /// </devdoc>
+        /// </summary>
         public int X { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the y-coordinate of the mouse pointer.
-        /// </devdoc>
+        /// </summary>
         public int Y { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets which drag-and-drop operations are allowed by the originator (or source)
         /// of the drag event.
-        /// </devdoc>
+        /// </summary>
         public DragDropEffects AllowedEffect { get; }
         
-        /// <devdoc>
+        /// <summary>
         /// Gets or sets which drag-and-drop operations are allowed by the target of the drag event.
-        /// </devdoc>
+        /// </summary>
         public DragDropEffects Effect { get; set; }
     }
 }

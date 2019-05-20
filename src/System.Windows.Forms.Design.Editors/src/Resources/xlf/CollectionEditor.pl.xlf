@@ -4,47 +4,47 @@
     <body>
       <trans-unit id="$this.Text">
         <source>{0} Collection Editor</source>
-        <target state="new">{0} Collection Editor</target>
+        <target state="translated">Edytor kolekcji {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="addButton.Text">
         <source>&amp;Add</source>
-        <target state="new">&amp;Add</target>
+        <target state="translated">&amp;Dodaj</target>
         <note />
       </trans-unit>
       <trans-unit id="cancelButton.Text">
         <source>Cancel</source>
-        <target state="new">Cancel</target>
+        <target state="translated">Anuluj</target>
         <note />
       </trans-unit>
       <trans-unit id="downButton.AccessibleName">
         <source>Move Down</source>
-        <target state="new">Move Down</target>
+        <target state="translated">Przenieś w dół</target>
         <note />
       </trans-unit>
       <trans-unit id="membersLabel.Text">
         <source>&amp;Members:</source>
-        <target state="new">&amp;Members:</target>
+        <target state="translated">&amp;Składowe:</target>
         <note />
       </trans-unit>
       <trans-unit id="okButton.Text">
         <source>OK</source>
-        <target state="new">OK</target>
+        <target state="translated">OK</target>
         <note />
       </trans-unit>
       <trans-unit id="propertiesLabel.Text">
         <source>&amp;Properties:</source>
-        <target state="new">&amp;Properties:</target>
+        <target state="translated">&amp;Właściwości:</target>
         <note />
       </trans-unit>
       <trans-unit id="removeButton.Text">
         <source>&amp;Remove</source>
-        <target state="new">&amp;Remove</target>
+        <target state="translated">&amp;Usuń</target>
         <note />
       </trans-unit>
       <trans-unit id="upButton.AccessibleName">
         <source>Move Up</source>
-        <target state="new">Move Up</target>
+        <target state="translated">Przenieś w górę</target>
         <note />
       </trans-unit>
     </body>

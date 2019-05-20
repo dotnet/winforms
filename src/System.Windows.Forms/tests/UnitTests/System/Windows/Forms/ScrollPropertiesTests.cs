@@ -101,7 +101,7 @@ namespace System.Windows.Forms.Tests
         {
             var control = new ScrollableControl();
             var properties = new SubScrollProperties(control);
-            Assert.Throws<ArgumentOutOfRangeException>("LargeChange", () => properties.LargeChange = -1);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => properties.LargeChange = -1);
             Assert.Equal(10, properties.LargeChange);
         }
 
@@ -150,7 +150,7 @@ namespace System.Windows.Forms.Tests
         {
             var control = new ScrollableControl();
             var properties = new SubScrollProperties(control);
-            Assert.Throws<ArgumentOutOfRangeException>("SmallChange", () => properties.SmallChange = -1);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => properties.SmallChange = -1);
             Assert.Equal(1, properties.SmallChange);
         }
 
@@ -301,7 +301,7 @@ namespace System.Windows.Forms.Tests
         {
             var control = new ScrollableControl();
             var properties = new SubScrollProperties(control);
-            Assert.Throws<ArgumentOutOfRangeException>("Minimum", () => properties.Minimum = -1);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => properties.Minimum = -1);
             Assert.Equal(0, properties.Minimum);
         }
 
@@ -359,7 +359,7 @@ namespace System.Windows.Forms.Tests
         {
             var control = new ScrollableControl();
             var properties = new SubScrollProperties(control);
-            Assert.Throws<ArgumentOutOfRangeException>("Value", () => properties.Value = value);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => properties.Value = value);
             Assert.Equal(0, properties.Value);
         }
 

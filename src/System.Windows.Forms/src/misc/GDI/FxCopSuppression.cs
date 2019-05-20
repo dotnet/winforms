@@ -11,19 +11,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-#if WINFORMS_NAMESPACE ////////////////////////////////// FxCop suppressions for System.Windows.Forms.dll //////////////////////////////////
-
-//// SECURITY
-
-
-[assembly: SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts", Scope="member", Target="System.Windows.Forms.Internal.WindowsFont.FromFont(System.Drawing.Font):System.Windows.Forms.Internal.WindowsFont")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts", Scope="member", Target="System.Windows.Forms.Internal.DbgUtil.AssertWin32(System.Boolean,System.String):System.Void")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts", Scope="member", Target="System.Windows.Forms.Internal.DbgUtil.AssertWin32(System.Boolean,System.String,System.Object):System.Void")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts", Scope="member", Target="System.Windows.Forms.Internal.DbgUtil.AssertWin32(System.Boolean,System.String,System.Object,System.Object):System.Void")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts", Scope="member", Target="System.Windows.Forms.Internal.DbgUtil.AssertWin32(System.Boolean,System.String,System.Object,System.Object,System.Object):System.Void")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts", Scope="member", Target="System.Windows.Forms.Internal.DbgUtil.AssertWin32(System.Boolean,System.String,System.Object,System.Object,System.Object,System.Object):System.Void")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts", Scope="member", Target="System.Windows.Forms.Internal.DbgUtil.AssertWin32(System.Boolean,System.String,System.Object,System.Object,System.Object,System.Object,System.Object):System.Void")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts", Scope="member", Target="System.Windows.Forms.Internal.DbgUtil.AssertWin32Impl(System.Boolean,System.String,System.Object[]):System.Void")]
+#if DRAWING_DESIGN_NAMESPACE ////////////////////////////////// FxCop suppressions for System.Windows.Forms.dll //////////////////////////////////
 
 [assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="System.Windows.Forms.Internal.DeviceContext.CreateDC(System.String,System.String,System.String,System.Runtime.InteropServices.HandleRef):System.Windows.Forms.Internal.DeviceContext")]
 [assembly: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="System.Windows.Forms.Internal.DeviceContext.CreateIC(System.String,System.String,System.String,System.Runtime.InteropServices.HandleRef):System.Windows.Forms.Internal.DeviceContext")]
@@ -112,19 +100,6 @@ namespace System.Windows.Forms.Internal
 //// SECURITY
 
 [assembly: SuppressMessage("Microsoft.Security", "CA2101:SpecifyMarshalingForPInvokeStringArguments", Scope="member", Target="System.Drawing.Internal.DbgUtil.FormatMessage(System.Int32,System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Text.StringBuilder,System.Int32,System.Runtime.InteropServices.HandleRef):System.Int32")]
-
-[assembly: SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts", Scope="member", Target="System.Drawing.Internal.DbgUtil.AssertFinalization(System.Object,System.Boolean):System.Void")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts", Scope="member", Target="System.Drawing.Internal.DbgUtil.FormatMessage(System.Int32,System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Text.StringBuilder,System.Int32,System.Runtime.InteropServices.HandleRef):System.Int32")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts", Scope="member", Target="System.Drawing.Internal.DbgUtil.GetLastErrorStr():System.String")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts", Scope="member", Target="System.Drawing.Internal.DbgUtil.GetUserDefaultLCID():System.Int32")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts", Scope="member", Target="System.Drawing.Internal.DbgUtil.IsCriticalException(System.Exception):System.Boolean")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts", Scope="member", Target="System.Drawing.Internal.DbgUtil.AssertWin32Impl(System.Boolean,System.String,System.Object[]):System.Void")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts", Scope="member", Target="System.Drawing.Internal.DbgUtil.AssertWin32(System.Boolean,System.String,System.Object,System.Object,System.Object,System.Object):System.Void")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts", Scope="member", Target="System.Drawing.Internal.DbgUtil.AssertWin32(System.Boolean,System.String,System.Object,System.Object,System.Object):System.Void")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts", Scope="member", Target="System.Drawing.Internal.DbgUtil.AssertWin32(System.Boolean,System.String,System.Object,System.Object):System.Void")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts", Scope="member", Target="System.Drawing.Internal.DbgUtil.AssertWin32(System.Boolean,System.String,System.Object):System.Void")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts", Scope="member", Target="System.Drawing.Internal.DbgUtil.AssertWin32(System.Boolean,System.String):System.Void")]
-[assembly: SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts", Scope="member", Target="System.Drawing.Internal.DbgUtil.AssertWin32(System.Boolean,System.String,System.Object,System.Object,System.Object,System.Object,System.Object):System.Void")]
 
 // FxCop...
 //

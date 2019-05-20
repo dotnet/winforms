@@ -11,9 +11,9 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Runtime.Versioning;
 
-    /// <devdoc> this is the toolstrip used for merging the [:)]    [_][#][X] buttons onto an 
+    /// <summary> this is the toolstrip used for merging the [:)]    [_][#][X] buttons onto an 
     ///          mdi parent when an MDI child is maximized.
-    /// </devdoc>
+    /// </summary>
     internal class MdiControlStrip : MenuStrip {
 
             private ToolStripMenuItem system;
@@ -24,10 +24,10 @@ namespace System.Windows.Forms {
             
             private IWin32Window target;
 
-            /// <devdoc> target is ideally the MDI Child to send the system commands to.
+            /// <summary> target is ideally the MDI Child to send the system commands to.
             ///          although there's nothing MDI child specific to it... you could have this
             ///          a toplevel window.
-            /// </devdoc>
+            /// </summary>
             public MdiControlStrip(IWin32Window target) {
                 IntPtr hMenu= UnsafeNativeMethods.GetSystemMenu(new HandleRef(this, Control.GetSafeHandle(target)), /*bRevert=*/false);
                 this.target = target;
@@ -119,12 +119,9 @@ namespace System.Windows.Forms {
 #endregion
 */
 
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts")]
-            
-            
             private Image GetTargetWindowIcon() {
                 Image systemIcon = null;
-                IntPtr hIcon = UnsafeNativeMethods.SendMessage(new HandleRef(this, Control.GetSafeHandle(target)), NativeMethods.WM_GETICON, NativeMethods.ICON_SMALL, 0);
+                IntPtr hIcon = UnsafeNativeMethods.SendMessage(new HandleRef(this, Control.GetSafeHandle(target)), Interop.WindowMessages.WM_GETICON, NativeMethods.ICON_SMALL, 0);
                 Icon icon =  (hIcon != IntPtr.Zero) ? Icon.FromHandle(hIcon) : Form.DefaultIcon;
                 Icon smallIcon = new Icon(icon, SystemInformation.SmallIconSize);
 
@@ -219,9 +216,7 @@ namespace System.Windows.Forms {
             // when the system menu item shortcut is evaluated - pop the dropdown          
             internal class SystemMenuItem : ToolStripMenuItem {
                    public SystemMenuItem(){
-                       if (AccessibilityImprovements.Level1) {
-                           AccessibleName = SR.MDIChildSystemMenuItemAccessibleName;
-                       }
+                       AccessibleName = SR.MDIChildSystemMenuItemAccessibleName;
                    }
                    protected internal override bool ProcessCmdKey(ref Message m, Keys keyData) {
                         if (Visible && ShortcutKeys == keyData) {

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <VersionPrefix>4.8.0</VersionPrefix>
     <!-- version in our package name #.#.#-below.#####.## -->
-    <PreReleaseVersionLabel>preview4</PreReleaseVersionLabel>
+    <PreReleaseVersionLabel>preview6</PreReleaseVersionLabel>
     <!-- Use the compiler in the CLI instead of in the sdk, since the sdk one doesn't work with netcoreapp3.0 yet -->
     <UsingToolMicrosoftNetCompilers>false</UsingToolMicrosoftNetCompilers>
     <!-- Additional sources required for restore of PackageReferences -->
@@ -12,28 +12,35 @@
       https://dotnetfeed.blob.core.windows.net/dotnet-coreclr/index.json
     </RestoreSources>
   </PropertyGroup>
-  <!-- Corefx-updated dependencies -->
+  <!-- Below have corresponding entries in Versions.Details.XML because they are updated via Maestro -->
+  <!-- Core Setup for coherency -->
   <PropertyGroup>
-    <MicrosoftWin32RegistryPackageVersion>4.6.0-preview4.19164.7</MicrosoftWin32RegistryPackageVersion>
-    <SystemConfigurationConfigurationManagerPackageVersion>4.6.0-preview4.19164.7</SystemConfigurationConfigurationManagerPackageVersion>
-    <SystemDrawingCommonPackageVersion>4.6.0-preview4.19164.7</SystemDrawingCommonPackageVersion>
-    <MicrosoftWin32SystemEventsPackageVersion>4.6.0-preview4.19164.7</MicrosoftWin32SystemEventsPackageVersion>
-    <SystemSecurityCryptographyCngPackageVersion>4.6.0-preview4.19164.7</SystemSecurityCryptographyCngPackageVersion>
-    <SystemCodeDomPackageVersion>4.6.0-preview4.19164.7</SystemCodeDomPackageVersion>
-    <SystemSecurityPermissionsPackageVersion>4.6.0-preview4.19164.7</SystemSecurityPermissionsPackageVersion>
-    <SystemWindowsExtensionsPackageVersion>4.6.0-preview4.19164.7</SystemWindowsExtensionsPackageVersion>
-    <MicrosoftNETCorePlatformsPackageVersion>3.0.0-preview4.19164.7</MicrosoftNETCorePlatformsPackageVersion>
+    <MicrosoftNETCoreAppPackageVersion>3.0.0-preview6-27720-04</MicrosoftNETCoreAppPackageVersion>
   </PropertyGroup>
-  <!-- CoreCLR-updated dependencies -->
+  <!-- CoreFX via Core Setup -->
   <PropertyGroup>
-    <MicrosoftNETCoreILAsmPackageVersion>3.0.0-preview4-27521-73</MicrosoftNETCoreILAsmPackageVersion>
+    <MicrosoftNETCorePlatformsPackageVersion>3.0.0-preview6.19270.2</MicrosoftNETCorePlatformsPackageVersion>
+    <MicrosoftWin32RegistryPackageVersion>4.6.0-preview6.19270.2</MicrosoftWin32RegistryPackageVersion>
+    <MicrosoftWin32SystemEventsPackageVersion>4.6.0-preview6.19270.2</MicrosoftWin32SystemEventsPackageVersion>
+    <SystemCodeDomPackageVersion>4.6.0-preview6.19270.2</SystemCodeDomPackageVersion>
+    <SystemConfigurationConfigurationManagerPackageVersion>4.6.0-preview6.19270.2</SystemConfigurationConfigurationManagerPackageVersion>
+    <SystemDrawingCommonPackageVersion>4.6.0-preview6.19270.2</SystemDrawingCommonPackageVersion>
+    <SystemSecurityCryptographyCngPackageVersion>4.6.0-preview6.19270.2</SystemSecurityCryptographyCngPackageVersion>
+    <SystemSecurityPermissionsPackageVersion>4.6.0-preview6.19270.2</SystemSecurityPermissionsPackageVersion>
+    <SystemWindowsExtensionsPackageVersion>4.6.0-preview6.19270.2</SystemWindowsExtensionsPackageVersion>
   </PropertyGroup>
-  <!-- Arcade-updated dependencies -->
+  <!-- CoreCLR via Core Setup -->
   <PropertyGroup>
-    <MicrosoftDotNetGenFacadesPackageVersion>1.0.0-beta.19162.7</MicrosoftDotNetGenFacadesPackageVersion>
-    <MicrosoftDotNetXUnitExtensionsPackageVersion>2.4.0-beta.19162.7</MicrosoftDotNetXUnitExtensionsPackageVersion>
+    <MicrosoftNETCoreILPackageVersion>3.0.0-preview5-27616-73</MicrosoftNETCoreILPackageVersion>
+    <MicrosoftNETCoreILAsmPackageVersion>3.0.0-preview6-27720-71</MicrosoftNETCoreILAsmPackageVersion>
   </PropertyGroup>
-  <!-- XUnit-related unchanging dependencies -->
+  <!-- Arcade -->
+  <PropertyGroup>
+    <MicrosoftDotNetGenFacadesPackageVersion>1.0.0-beta.19262.1</MicrosoftDotNetGenFacadesPackageVersion>
+    <MicrosoftDotNetXUnitExtensionsPackageVersion>2.4.0-beta.19262.1</MicrosoftDotNetXUnitExtensionsPackageVersion>
+  </PropertyGroup>
+  <!-- Below have no corresponding entries in Versions.Details.XML because they are not updated via Maestro -->
+  <!-- XUnit-related (not extensions) -->
   <PropertyGroup>
     <XUnitVersion>2.4.1-pre.build.4059</XUnitVersion>
     <XUnitAssertVersion>$(XUnitVersion)</XUnitAssertVersion>

@@ -16,12 +16,10 @@ namespace System.Drawing.Design {
     using System.Drawing;
     using System.Drawing.Design;
 
-    /// <include file='doc\COM2ExtendedUITypeEditor.uex' path='docs/doc[@for="Com2ExtendedUITypeEditor"]/*' />
-    /// <internalonly/>
-    /// <devdoc>
+    /// <summary>
     ///    <para>Provides an editor that provides a way to visually edit the values of a COM2 
     ///       type.</para>
-    /// </devdoc>
+    /// </summary>
     internal class Com2ExtendedUITypeEditor : UITypeEditor {
     
         private UITypeEditor innerEditor;
@@ -40,12 +38,11 @@ namespace System.Drawing.Design {
             }
         }
   
-        /// <include file='doc\COM2ExtendedUITypeEditor.uex' path='docs/doc[@for="Com2ExtendedUITypeEditor.EditValue"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Edits the given object value using the editor style provided by
         ///      GetEditorStyle.  A service provider is provided so that any
         ///      required editing services can be obtained.
-        /// </devdoc>
+        /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value) {
             if (innerEditor != null)  {
                return innerEditor.EditValue(context, provider, value);
@@ -55,11 +52,10 @@ namespace System.Drawing.Design {
             }
         }
   
-        /// <include file='doc\COM2ExtendedUITypeEditor.uex' path='docs/doc[@for="Com2ExtendedUITypeEditor.GetPaintValueSupported"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Determines if this editor supports the painting of a representation
         ///      of an object's value.
-        /// </devdoc>
+        /// </summary>
         public override bool GetPaintValueSupported(ITypeDescriptorContext context) {
             if (innerEditor != null) {
                return innerEditor.GetPaintValueSupported(context);
@@ -67,11 +63,10 @@ namespace System.Drawing.Design {
             return base.GetPaintValueSupported(context);
         }
 
-        /// <include file='doc\COM2ExtendedUITypeEditor.uex' path='docs/doc[@for="Com2ExtendedUITypeEditor.GetEditStyle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the editing style of the Edit method.  If the method
         ///      is not supported, this will return None.
-        /// </devdoc>
+        /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) {
             if (innerEditor != null) {
                return innerEditor.GetEditStyle(context);
@@ -79,12 +74,11 @@ namespace System.Drawing.Design {
             return base.GetEditStyle(context);
         }
 
-        /// <include file='doc\COM2ExtendedUITypeEditor.uex' path='docs/doc[@for="Com2ExtendedUITypeEditor.PaintValue"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Paints a representative value of the given object to the provided
         ///      canvas.  Painting should be done within the boundaries of the
         ///      provided rectangle.
-        /// </devdoc>
+        /// </summary>
         public override void PaintValue(PaintValueEventArgs e) {
             if (innerEditor != null) {
                innerEditor.PaintValue(e);

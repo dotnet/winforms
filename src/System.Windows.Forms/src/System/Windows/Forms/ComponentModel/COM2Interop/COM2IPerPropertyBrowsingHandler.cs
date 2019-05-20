@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop {
-    using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -56,11 +55,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return null;
         }
 
-        /// <include file='doc\COM2IPerPropertyBrowsingHandler.uex' path='docs/doc[@for="Com2IPerPropertyBrowsingHandler.OnGetAttributes"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing.   HideProperty
         /// such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
-        /// </devdoc>
+        /// </summary>
         private void OnGetBaseAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent) {
             NativeMethods.IPerPropertyBrowsing target = sender.TargetObject as NativeMethods.IPerPropertyBrowsing;
             if (target != null) {
@@ -216,10 +214,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 this.arraysFetched = false;
              }
 
-             /// <include file='doc\COM2IPerPropertyBrowsingHandler.uex' path='docs/doc[@for="Com2IPerPropertyBrowsingHandler.Com2IPerPropertyBrowsingEnum.Values"]/*' />
-             /// <devdoc>
+             /// <summary>
              /// Retrieve a copy of the value array
-             /// </devdoc>
+             /// </summary>
              public override object[] Values {
                 get {
                     EnsureArrays();
@@ -227,10 +224,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 }
              }
     
-             /// <include file='doc\COM2IPerPropertyBrowsingHandler.uex' path='docs/doc[@for="Com2IPerPropertyBrowsingHandler.Com2IPerPropertyBrowsingEnum.Names"]/*' />
-             /// <devdoc>
+             /// <summary>
              /// Retrieve a copy of the nme array.
-             /// </devdoc>
+             /// </summary>
              public override string[] Names {
                 get {
                     EnsureArrays();

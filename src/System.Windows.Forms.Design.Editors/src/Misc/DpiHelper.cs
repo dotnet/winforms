@@ -7,14 +7,11 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 
-#if WINFORMS_NAMESPACE
+#if DRAWING_DESIGN_NAMESPACE
 using System.Windows.Forms.Internal;
 using CAPS = System.Windows.Forms.NativeMethods;
 #elif DRAWING_NAMESPACE
 using CAPS = System.Drawing.SafeNativeMethods;
-#elif DRAWINGDESIGN_NAMESPACE
-using System.Drawing.Design;
-using CAPS = System.Drawing.Design.NativeMethods;
 #else
 using System.Windows.Forms.Design;
 using CAPS = System.Windows.Forms.Design.NativeMethods;
@@ -85,7 +82,7 @@ namespace System.Windows.Forms
 
             if (enableHighDpi)
             {
-#if WINFORMS_NAMESPACE
+#if DRAWING_DESIGN_NAMESPACE
                 try
                 {
                     if (!DpiHelper.SetWinformsApplicationDpiAwareness())
@@ -162,8 +159,7 @@ namespace System.Windows.Forms
             try
             {
                 // Redstone 2 or greater, where all APIs required by this feature are available
-                if ((Environment.OSVersion.Platform == System.PlatformID.Win32NT) &&
-                        (Environment.OSVersion.Version.CompareTo(ConfigurationOptions.RS2Version) >= 0) &&
+                if ((Environment.OSVersion.Version.CompareTo(ConfigurationOptions.RS2Version) >= 0) &&
                         (IsExpectedConfigValue(ConfigurationStringConstants.DisableDpiChangedMessageHandlingKeyName, false)) &&
                         (IsDpiAwarenessValueSet()) &&
                         // The dynamic scaling features are implemented only in comclt32 v6, no point to
@@ -557,7 +553,7 @@ namespace System.Windows.Forms
         // This method is used only in System.Design, thus excluding the rest.
         // This is particularly important for System.Drawing, which should not depend 
         // on System.Windows.Forms assembly, where "Button" type is defined. 
-#if (!DRAWING_NAMESPACE && !DRAWINGDESIGN_NAMESPACE && !WINFORMS_NAMESPACE)
+#if (!DRAWING_NAMESPACE && !DRAWING_DESIGN_NAMESPACE)
         /// <summary>
         /// Create a new button bitmap scaled for the device units. 
         /// Note: original image might be disposed.

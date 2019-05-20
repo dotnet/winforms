@@ -18,12 +18,11 @@ namespace System.Windows.Forms.VisualStyles {
     using System.Diagnostics.CodeAnalysis;
     using Microsoft.Win32;
 
-    /// <include file='doc\visualStyleRenderer.uex' path='docs/doc[@for="visualStyleRenderer"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       This class provides full feature parity with UxTheme API.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     public sealed class VisualStyleRenderer {
         private const TextFormatFlags AllGraphicsProperties = TextFormatFlags.PreserveGraphicsClipping | TextFormatFlags.PreserveGraphicsTranslateTransform;
 
@@ -55,15 +54,14 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.IsSupported"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Returns true if visual styles are 1) supported by the OS 2) enabled in the client area 
         ///       and 3) currently applied to this application. Otherwise, it returns false. Note that
         ///       if it returns false, attempting to instantiate/use objects of this class 
         ///       will result in exceptions being thrown.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static bool IsSupported {
             get {
                 bool supported = AreClientAreaVisualStylesSupported;
@@ -81,8 +79,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.IsCombinationDefined"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Returns true if the element is defined by the current visual style, else false. 
         ///       Note: 
@@ -91,7 +88,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///             we might still return true. When you use an invalid state to render, you get the default
         ///             state instead.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static bool IsElementDefined(VisualStyleElement element) {
             if (element == null) {
                 throw new ArgumentNullException(nameof(element));
@@ -146,22 +143,20 @@ namespace System.Windows.Forms.VisualStyles {
             return returnVal;
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.VisualStyleRenderer"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Constructor takes a VisualStyleElement.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public VisualStyleRenderer(VisualStyleElement element) : this(element.ClassName, element.Part, element.State) {
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.VisualStyleRenderer1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Constructor takes weakly typed parameters - left for extensibility (using classes, parts or states
         ///       not defined in the VisualStyleElement class.)
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public VisualStyleRenderer(string className, int part, int state) {
             if (!IsCombinationDefined(className, part)) { //internally this call takes care of IsSupported. 
                 throw new ArgumentException(SR.VisualStylesInvalidCombination);
@@ -172,44 +167,40 @@ namespace System.Windows.Forms.VisualStyles {
             this.state = state;
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.Class"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Returns the current _class. Use SetParameters to set.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public string Class {
             get {
                 return _class;
             }
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.Part"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Returns the current part. Use SetParameters to set.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public int Part {
             get {
                 return part;
             }
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.State"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Returns the current state. Use SetParameters to set.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public int State {
             get {
                 return state;
             }
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.Handle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Returns the underlying HTheme handle.
         ///       NOTE: The handle gets invalidated when the theme changes or the user disables theming. When that
@@ -217,7 +208,7 @@ namespace System.Windows.Forms.VisualStyles {
         ///             theme changed, hook on to SystemEvents.UserPreferenceChanged and look for ThemeChanged 
         ///             category.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public IntPtr Handle {
             get {
                 if (!IsSupported) {
@@ -233,12 +224,11 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.SetParameters"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Used to set a new VisualStyleElement on this VisualStyleRenderer instance.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void SetParameters(VisualStyleElement element) {
             if (element == null) {
                 throw new ArgumentNullException(nameof(element));
@@ -247,14 +237,13 @@ namespace System.Windows.Forms.VisualStyles {
             SetParameters(element.ClassName, element.Part, element.State);
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.SetParameters"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Used to set the _class, part and state that the VisualStyleRenderer object references. 
         ///       These parameters cannot be set individually. 
         ///       This method is present for extensibility.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void SetParameters(string className, int part, int state) {
             if (!IsCombinationDefined(className, part)) { //internally this call takes care of IsSupported.
                 throw new ArgumentException(SR.VisualStylesInvalidCombination); 
@@ -265,12 +254,11 @@ namespace System.Windows.Forms.VisualStyles {
             this.state = state;
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.DrawBackground"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void DrawBackground(IDeviceContext dc, Rectangle bounds) {
             DrawBackground(dc, bounds, IntPtr.Zero);
         }
@@ -296,12 +284,11 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.DrawBackground1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void DrawBackground(IDeviceContext dc, Rectangle bounds, Rectangle clipRectangle) {
             DrawBackground(dc, bounds, clipRectangle, IntPtr.Zero);
         }
@@ -330,12 +317,11 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.DrawEdge"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public Rectangle DrawEdge(IDeviceContext dc, Rectangle bounds, Edges edges, EdgeStyle style, EdgeEffects effects) {
             if (dc == null) {
                 throw new ArgumentNullException(nameof(dc));
@@ -363,13 +349,12 @@ namespace System.Windows.Forms.VisualStyles {
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.DrawImage"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///       This method uses Graphics.DrawImage as a backup if themed drawing does not work.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void DrawImage(Graphics g, Rectangle bounds, Image image) {
             if (g == null) {
                 throw new ArgumentNullException(nameof(g));
@@ -386,13 +371,12 @@ namespace System.Windows.Forms.VisualStyles {
             g.DrawImage(image, bounds);
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.DrawImage1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.] 
         ///       This method uses Graphics.DrawImage as a backup if themed drawing does not work.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void DrawImage(Graphics g, Rectangle bounds, ImageList imageList, int imageIndex) {
             if (g == null) {
                 throw new ArgumentNullException(nameof(g));
@@ -403,7 +387,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
             
             if (imageIndex < 0 || imageIndex >= imageList.Images.Count) {
-                throw new ArgumentOutOfRangeException(nameof(imageIndex), string.Format(SR.InvalidArgument, "imageIndex", imageIndex.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(imageIndex), imageIndex, string.Format(SR.InvalidArgument, nameof(imageIndex), imageIndex));
             }
 
             if (bounds.Width < 0 || bounds.Height < 0) {
@@ -424,14 +408,13 @@ namespace System.Windows.Forms.VisualStyles {
             //}
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.DrawParentBackground"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Given a graphics object and bounds to draw in, this method effectively asks the passed in 
         ///       control's parent to draw itself in there (it sends WM_ERASEBKGND & WM_PRINTCLIENT messages
         ///       to the parent).
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void DrawParentBackground(IDeviceContext dc, Rectangle bounds, Control childControl) {
             if (dc == null) {
                 throw new ArgumentNullException(nameof(dc));
@@ -453,32 +436,29 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.DrawText"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void DrawText(IDeviceContext dc, Rectangle bounds, string textToDraw) {
             DrawText(dc, bounds, textToDraw, false);
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.DrawText1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void DrawText(IDeviceContext dc, Rectangle bounds, string textToDraw, bool drawDisabled) {
             DrawText(dc, bounds, textToDraw, drawDisabled, TextFormatFlags.HorizontalCenter); 
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.DrawText2"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void DrawText(IDeviceContext dc, Rectangle bounds, string textToDraw, bool drawDisabled, TextFormatFlags flags) {
             if( dc == null ){
                 throw new ArgumentNullException(nameof(dc));
@@ -498,12 +478,11 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetBackgroundContentRectangle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public Rectangle GetBackgroundContentRectangle(IDeviceContext dc, Rectangle bounds) {
             if( dc == null ){
                 throw new ArgumentNullException(nameof(dc));
@@ -522,12 +501,11 @@ namespace System.Windows.Forms.VisualStyles {
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetBackgroundExtent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public Rectangle GetBackgroundExtent(IDeviceContext dc, Rectangle contentBounds) {
             if( dc == null ){
                 throw new ArgumentNullException(nameof(dc));
@@ -546,14 +524,13 @@ namespace System.Windows.Forms.VisualStyles {
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetBackgroundRegion"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Computes the region for a regular or partially transparent background that is bounded by a specified 
         ///       rectangle. Return null if the region cannot be created.
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public Region GetBackgroundRegion(IDeviceContext dc, Rectangle bounds) {
             if (dc == null) {
                 throw new ArgumentNullException(nameof(dc));
@@ -584,12 +561,11 @@ namespace System.Windows.Forms.VisualStyles {
 
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetBoolean"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public bool GetBoolean(BooleanProperty prop) {
             if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)BooleanProperty.Transparent, (int)BooleanProperty.SourceShrink)){
                 throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(BooleanProperty));
@@ -600,12 +576,11 @@ namespace System.Windows.Forms.VisualStyles {
             return val;
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public Color GetColor(ColorProperty prop) {
             //valid values are 0xed9 to 0xeef
             if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)ColorProperty.BorderColor, (int)ColorProperty.AccentColorHint))
@@ -618,12 +593,11 @@ namespace System.Windows.Forms.VisualStyles {
             return ColorTranslator.FromWin32(color);
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetEnumValue"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public int GetEnumValue(EnumProperty prop) {
             //valid values are 0xfa1 to 0xfaf
             if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)EnumProperty.BackgroundType, (int)EnumProperty.TrueSizeScalingType))
@@ -636,12 +610,11 @@ namespace System.Windows.Forms.VisualStyles {
             return val;
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetFilename"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public string GetFilename(FilenameProperty prop) {
             //valid values are 0xbb9 to 0xbc0
             if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)FilenameProperty.ImageFile, (int)FilenameProperty.GlyphImageFile))
@@ -654,13 +627,12 @@ namespace System.Windows.Forms.VisualStyles {
             return filename.ToString();
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetFont"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///       Returns null if the returned font was not true type, since GDI+ does not support it.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         public Font GetFont(IDeviceContext dc, FontProperty prop)
         {
@@ -701,12 +673,11 @@ namespace System.Windows.Forms.VisualStyles {
             return font;
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetInteger"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public int GetInteger(IntegerProperty prop) {
             //valid values are 0x961 to 0x978
             if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)IntegerProperty.ImageCount, (int)IntegerProperty.MinDpi5))
@@ -719,12 +690,11 @@ namespace System.Windows.Forms.VisualStyles {
             return val;
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetPartSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public Size GetPartSize(IDeviceContext dc, ThemeSizeType type) {
             return GetPartSize(dc, type, IntPtr.Zero);
         }
@@ -756,12 +726,11 @@ namespace System.Windows.Forms.VisualStyles {
             return new Size(size.cx, size.cy);
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetPartSize1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public Size GetPartSize(IDeviceContext dc, Rectangle bounds, ThemeSizeType type) {
             if( dc == null ){
                 throw new ArgumentNullException(nameof(dc));
@@ -783,12 +752,11 @@ namespace System.Windows.Forms.VisualStyles {
             return new Size(size.cx, size.cy);
         } 
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetPoint"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public Point GetPoint(PointProperty prop) {
             //valid values are 0xd49 to 0xd50
             if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)PointProperty.Offset, (int)PointProperty.MinSize5))
@@ -801,12 +769,11 @@ namespace System.Windows.Forms.VisualStyles {
             return new Point(point.x, point.y);
         }        
         
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetMargins"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public Padding GetMargins(IDeviceContext dc, MarginProperty prop) {
             if( dc == null ){
                 throw new ArgumentNullException(nameof(dc));
@@ -822,19 +789,18 @@ namespace System.Windows.Forms.VisualStyles {
 
             using( WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper( dc, AllGraphicsProperties ) ) {
                 HandleRef hdc = new HandleRef( wgr, wgr.WindowsGraphics.DeviceContext.Hdc );
-                lastHResult = SafeNativeMethods.GetThemeMargins( new HandleRef( this, Handle ), hdc, part, state, (int) prop, ref margins );
+                lastHResult = SafeNativeMethods.GetThemeMargins( new HandleRef( this, Handle ), hdc, part, state, (int) prop, prc: null, ref margins );
             }
 
             return new Padding(margins.cxLeftWidth, margins.cyTopHeight, margins.cxRightWidth, margins.cyBottomHeight);
         }
         
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetString"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public string GetString(StringProperty prop) {
             //valid values are 0xc81 to 0xc81
             if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)StringProperty.Text, (int)StringProperty.Text))
@@ -847,12 +813,11 @@ namespace System.Windows.Forms.VisualStyles {
             return aString.ToString();
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetTextExtent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public Rectangle GetTextExtent(IDeviceContext dc, string textToDraw, TextFormatFlags flags) {
             if( dc == null ){
                 throw new ArgumentNullException(nameof(dc));
@@ -872,12 +837,11 @@ namespace System.Windows.Forms.VisualStyles {
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetTextExtent1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public Rectangle GetTextExtent(IDeviceContext dc, Rectangle bounds, string textToDraw, TextFormatFlags flags) {
             if( dc == null ){
                 throw new ArgumentNullException(nameof(dc));
@@ -897,12 +861,11 @@ namespace System.Windows.Forms.VisualStyles {
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetTextMetric"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public TextMetrics GetTextMetrics(IDeviceContext dc) {
             if( dc == null ){
                 throw new ArgumentNullException(nameof(dc));
@@ -918,12 +881,11 @@ namespace System.Windows.Forms.VisualStyles {
             return tm;
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.HitTestBackground"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         // PM team has reviewed and decided on naming changes already
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         public HitTestCode HitTestBackground(IDeviceContext dc, Rectangle backgroundRectangle, Point pt, HitTestOptions options) {
@@ -942,12 +904,11 @@ namespace System.Windows.Forms.VisualStyles {
             return (HitTestCode)htCode;
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.HitTestBackground1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         // PM team has reviewed and decided on naming changes already
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         public HitTestCode HitTestBackground(Graphics g, Rectangle backgroundRectangle, Region region, Point pt, HitTestOptions options) {
@@ -961,12 +922,11 @@ namespace System.Windows.Forms.VisualStyles {
         }
 
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.HitTestBackground1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         // PM team has reviewed and decided on naming changes already
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         public HitTestCode HitTestBackground(IDeviceContext dc, Rectangle backgroundRectangle, IntPtr hRgn, Point pt, HitTestOptions options) {
@@ -985,44 +945,40 @@ namespace System.Windows.Forms.VisualStyles {
             return (HitTestCode)htCode;
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.IsBackgroundPartiallyTransparent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       [See win32 equivalent.]
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public bool IsBackgroundPartiallyTransparent() {
             return (SafeNativeMethods.IsThemeBackgroundPartiallyTransparent(new HandleRef(this, Handle), part, state));
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetLastHResult"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///  This is similar to GetLastError in Win32.  It returns the last HRESULT returned from a native call
         ///  into theme apis.  We eat the errors and let the user handle any errors that occurred.
-        /// </devdoc>
+        /// </summary>
         public int LastHResult {
             get {
                 return lastHResult;
             }
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.CreateThemeHandleHashTable"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Instantiates the ThemeHandle cache hashtable.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         private static void CreateThemeHandleHashtable() {
             themeHandles = new Hashtable(numberOfPossibleClasses);
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.OnThemeChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Handles the ThemeChanged event. Basically, we need to ensure all per-thread theme handle
         ///       caches are refreshed.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         private static void OnUserPreferenceChanging(object sender, UserPreferenceChangingEventArgs ea) {
             if (ea.Category == UserPreferenceCategory.VisualStyle) {
                 // Let all threads know their cached handles are no longer valid; 
@@ -1035,12 +991,11 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.RefreshCache"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///     Refreshes this thread's theme handle cache.       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         private static void RefreshCache() {
             ThemeHandle tHandle = null;
 
@@ -1070,13 +1025,12 @@ namespace System.Windows.Forms.VisualStyles {
             return GetHandle(className, true);
         }
 
-        /// <include file='doc\VisualStyleRenderer.uex' path='docs/doc[@for="VisualStyleRenderer.GetHandle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///     Retrieves a IntPtr theme handle for the given class from the themeHandle cache. If its not 
         ///     present in the cache, it creates a new ThemeHandle object and stores it there.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         private static IntPtr GetHandle(string className, bool throwExceptionOnFail) {
             ThemeHandle tHandle;
 

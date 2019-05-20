@@ -2,119 +2,360 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="tr" original="../SR.resx">
     <body>
+      <trans-unit id="BehaviorServiceCopyControl">
+        <source>Copy and move {0}</source>
+        <target state="translated">{0} kopyala ve taşı</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BehaviorServiceCopyControls">
+        <source>Copy and move {0} Controls</source>
+        <target state="translated">{0} Denetimi kopyala ve taşı</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BehaviorServiceMoveControl">
+        <source>Move {0}</source>
+        <target state="translated">{0} öğesini taşı</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BehaviorServiceMoveControls">
+        <source>Move {0} Controls</source>
+        <target state="translated">{0} Denetimi taşı</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BehaviorServiceResizeControl">
+        <source>Resize {0}</source>
+        <target state="translated">{0} Yeniden boyutlandır</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BehaviorServiceResizeControls">
+        <source>Resize {0} Controls</source>
+        <target state="translated">{0} Denetimi yeniden boyutlandır</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomComponentSerializationServiceClosedStore">
+        <source>The serialization store is closed.  New objects cannot be added to a closed store.</source>
+        <target state="translated">Serileştirme deposu kapalı. Kapalı depoya yeni nesneler eklenemez.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomComponentSerializationServiceDeserializationError">
+        <source>Complete deserialization of {0} failed.</source>
+        <target state="translated">{0} serileştirme işlemi tamamlanamadı.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomComponentSerializationServiceUnknownStore">
+        <source>This type of serialization store is not supported.  Use a store returned by the CreateStore method.</source>
+        <target state="translated">Bu tür serileştirme deposu desteklenmiyor. CreateStore metodu tarafından döndürülen bir depo kullanın.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetAlignByPrimary">
+        <source>Format {0} components (alignment)</source>
+        <target state="translated">{0} bileşen biçimlendir (hizalama)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetAlignToGrid">
+        <source>Align {0} components to grid</source>
+        <target state="translated">{0} bileşeni kılavuza göre hizala</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetCutMultiple">
+        <source>Cut {0} Components</source>
+        <target state="translated">{0} bileşeni kes</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetDelete">
+        <source>Delete {0} components</source>
+        <target state="translated">{0} bileşeni sil</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetError">
+        <source>An error occurred while processing this command.
+      {0}</source>
+        <target state="translated">Bu komut işlenirken bir hata oluştu.
+      {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetFormatSpacing">
+        <source>Format {0} components (spacing)</source>
+        <target state="translated">{0} bileşeni biçimlendir (aralık)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetPaste">
+        <source>Paste components</source>
+        <target state="translated">Bileşenleri yapıştır</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetSize">
+        <source>Size {0} components</source>
+        <target state="translated">{0} bileşeni boyutlandır</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetSizeToGrid">
+        <source>Size {0} components to grid</source>
+        <target state="translated">{0} bileşeni kılavuza göre boyutlandır</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetUnknownSpacingCommand">
+        <source>Unknown spacing command</source>
+        <target state="translated">Geçersiz aralık komutu</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ComponentDesignerAddEvent">
         <source>Adding event '{0}'</source>
-        <target state="new">Adding event '{0}'</target>
+        <target state="translated">'{0}' olayı ekleniyor</target>
         <note />
       </trans-unit>
       <trans-unit id="COM2UnhandledVT">
         <source>Unhandled VT: {0}.</source>
-        <target state="new">Unhandled VT: {0}.</target>
+        <target state="translated">İşlenmemiş VT: {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="CannotConvertDoubleToDate">
         <source>Double cannot be converted to a date.</source>
-        <target state="new">Double cannot be converted to a date.</target>
+        <target state="translated">Double tarihe dönüştürülemez.</target>
         <note />
       </trans-unit>
       <trans-unit id="CannotConvertIntToFloat">
         <source>Integer cannot be converted to a float.</source>
-        <target state="new">Integer cannot be converted to a float.</target>
+        <target state="translated">Tam sayı kayan noktalıya dönüştürülemez.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuAlignToGrid">
+        <source>Align To &amp;Grid</source>
+        <target state="translated">Kılavuza &amp;Hizala</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuBringToFront">
+        <source>&amp;Bring To Front</source>
+        <target state="translated">&amp;Öne Getir</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuCopy">
+        <source>C&amp;opy</source>
+        <target state="translated">K&amp;opyala</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuCut">
+        <source>&amp;Cut</source>
+        <target state="translated">&amp;Kes</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuDelete">
+        <source>&amp;Delete</source>
+        <target state="translated">&amp;Sil</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuDocumentOutline">
+        <source>&amp;Document Outline</source>
+        <target state="translated">&amp;Belge Ana Hattı</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuLockControls">
+        <source>&amp;Lock Controls</source>
+        <target state="translated">&amp;Denetimleri Kilitle</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuPaste">
+        <source>&amp;Paste</source>
+        <target state="translated">&amp;Yapıştır</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuProperties">
+        <source>&amp;Properties</source>
+        <target state="translated">Ö&amp;zellikler</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuSelect">
+        <source>&amp;Select</source>
+        <target state="translated">&amp;Seç</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuSendToBack">
+        <source>&amp;Send To Back</source>
+        <target state="translated">&amp;Arkaya Gönder</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuStripActionList_ShowCheckMargin">
+        <source>ShowCheckMargin</source>
+        <target state="translated">ShowCheckMargin</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuStripActionList_ShowCheckMarginDesc">
+        <source>Toggles the ShowCheckMargin property</source>
+        <target state="translated">ShowCheckMargin özelliğinde geçiş yapar</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuStripActionList_ShowImageMargin">
+        <source>ShowImageMargin</source>
+        <target state="translated">ShowImageMargin</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuStripActionList_ShowImageMarginDesc">
+        <source>Toggles the ShowImageMargin property</source>
+        <target state="translated">ShowImageMargin özelliğinde geçiş yapar</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuViewCode">
+        <source>View &amp;Code</source>
+        <target state="translated">Kod&amp;u Görüntüle</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlDesigner_WndProcException">
+        <source>The control {0} has thrown an unhandled exception in the designer and has been disabled.
+
+      Exception:
+      {1}
+
+      Stack trace:{2}</source>
+        <target state="translated">{0} denetimi tasarımcıda işlenmemiş bir özel durum oluşturduğundan devre dışı bırakıldı.
+
+      Özel durum:
+      {1}
+
+      Yığın izleme:{2}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_CouldNotConvertValue">
+        <source>Could not convert value '{0}' to the type '{1}'.</source>
+        <target state="translated">'{0}' değeri '{1}' türüne dönüştürülemedi.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_CouldNotFindMethod">
+        <source>Could not find method '{0}'.</source>
+        <target state="translated">'{0}' metodu bulunamadı.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_CouldNotFindProperty">
+        <source>Could not find property '{0}' on '{1}'.</source>
+        <target state="translated">'{1}' üzerinde '{0}' özelliği bulunamadı.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_DefaultPanelTitle">
+        <source>{0} Tasks</source>
+        <target state="translated">{0} Görevler</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_ErrorActivatingDropDown">
+        <source>Error using the dropdown: {0}</source>
+        <target state="translated">Açılan menüyü kullanma hatası: {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_ErrorInvokingAction">
+        <source>Error invoking '{0}'.  Details: {1}</source>
+        <target state="translated">'{0}' başlatma hatası. Ayrıntılar: {1}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_ErrorSettingValue">
+        <source>Error setting value '{0}' to property '{1}'.  Details: {2}</source>
+        <target state="translated">'{0}' değerini '{1}' özelliğine ayarlama hatası. Ayrıntılar: {2}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerBeginDragNotCalled">
+        <source>Call to BeginDrag must succeed before calling drag functions.</source>
+        <target state="translated">Sürükleme işlevleri çağrılmadan önce Call to BeginDrag başarıyla tamamlanmalıdır.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerInherited">
+        <source>Inherited control</source>
+        <target state="translated">Devralınan denetim</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerInheritedReadOnly">
+        <source>Inherited control (Private)</source>
+        <target state="translated">Devralınan denetim (Özel)</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceContainerDispose">
         <source>The container cannot be disposed at design time.</source>
-        <target state="new">The container cannot be disposed at design time.</target>
+        <target state="translated">Kapsayıcı tasarım sırasında atılamaz.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceDesignerNotLoaded">
         <source>Cannot create a view for this design surface because the designer is not loaded.</source>
-        <target state="new">Cannot create a view for this design surface because the designer is not loaded.</target>
+        <target state="translated">Tasarımcı yüklenmediğinden bu tasarım yüzeyi için görünüm oluşturulamıyor.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceFatalError">
-        <source>An error occurred while loading the document.  Fix the error, and then try loading the document again.  The error message follows:\r\n\r\n{0}</source>
-        <target state="new">An error occurred while loading the document.  Fix the error, and then try loading the document again.  The error message follows:\r\n\r\n{0}</target>
+        <source>An error occurred while loading the document.  Fix the error, and then try loading the document again. The error message follows:
+
+      {0}</source>
+        <target state="translated">Belge yüklenirken bir hata oluştu. Hatayı düzeltin ve belgeyi yüklemeyi yeniden deneyin. Hata iletisi şöyledir:
+
+      {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceNoRootComponent">
         <source>The designer loader did not provide a root component but has not indicated why.</source>
-        <target state="new">The designer loader did not provide a root component but has not indicated why.</target>
+        <target state="translated">Tasarımcı yükleyicisi kök bileşeni sağlamadı ve bunun nedenini de belirtmedi.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceNoSupportedTechnology">
         <source>The designer loaded, but it does not offer a view compatible with this design surface.</source>
-        <target state="new">The designer loaded, but it does not offer a view compatible with this design surface.</target>
+        <target state="translated">Tasarımcı yüklendi ancak bu tasarım yüzeyiyle uyumlu bir görünüm sağlamıyor.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceServiceIsFixed">
         <source>The service {0} cannot be removed from the service container.</source>
-        <target state="new">The service {0} cannot be removed from the service container.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DesignerActionPanel_CouldNotFindMethod">
-        <source>Could not find method '{0}'</source>
-        <target state="new">Could not find method '{0}'</target>
+        <target state="translated">{0} hizmeti, hizmet kapsayıcısından kaldırılamıyor.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostCantDestroyInheritedComponent">
         <source>Cannot remove or destroy inherited component '{0}'.</source>
-        <target state="new">Cannot remove or destroy inherited component '{0}'.</target>
+        <target state="translated">Devralınan '{0}' bileşeni kaldırılamaz veya yok edilemez.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostCyclicAdd">
         <source>Cannot add an instance of {0} to the designer because it would create a circular dependency.  Make sure that the type does not have the same namespace and type name as the root component {1}.</source>
-        <target state="new">Cannot add an instance of {0} to the designer because it would create a circular dependency.  Make sure that the type does not have the same namespace and type name as the root component {1}.</target>
+        <target state="translated">Döngüsel bağımlılık oluşturabileceğinden tasarımcıya {0} örneği eklenemiyor. Türün ad alanının ve tür adının kök {1} bileşeniyle aynı olmadığından emin olun.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostDesignerNeedsComponent">
         <source>Failure initializing the designer.  It has no Component member.</source>
-        <target state="new">Failure initializing the designer.  It has no Component member.</target>
+        <target state="translated">Tasarımcı başlatılamadı. Tasarımcının Bileşen üyesi yok.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostDestroyComponentTransaction">
         <source>Deleting '{0}'.</source>
-        <target state="new">Deleting '{0}'.</target>
+        <target state="translated">'{0}' siliniyor.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostDuplicateName">
         <source>The name {0} is already in use by another component.</source>
-        <target state="new">The name {0} is already in use by another component.</target>
+        <target state="translated">{0} adı zaten başka bir bileşen tarafından kullanılıyor.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostFailedComponentCreate">
         <source>Component of type {0} could not be created.  Make sure the type implements IComponent and provides an appropriate public constructor.  Appropriate constructors either take no parameters or take a single IContainer parameter.</source>
-        <target state="new">Component of type {0} could not be created.  Make sure the type implements IComponent and provides an appropriate public constructor.  Appropriate constructors either take no parameters or take a single IContainer parameter.</target>
+        <target state="translated">{0} türündeki bileşen oluşturulamadı. Türün IComponent uyguladığından ve uygun bir ortak oluşturucu sağladığından emin olun. Uygun oluşturucular hiç parametre almaz veya tek bir IContainer parametresi alır.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostGenericTransactionName">
         <source>No Description Available</source>
-        <target state="new">No Description Available</target>
+        <target state="translated">Açıklama Yok</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostLoaderSpecified">
         <source>A designer loader has already been configured for this design surface.</source>
-        <target state="new">A designer loader has already been configured for this design surface.</target>
+        <target state="translated">Bu tasarım yüzeyi için zaten bir tasarımcı yükleyicisi yapılandırılmıştı.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostNestedTransaction">
         <source>The designer transaction '{0}' cannot be committed or canceled because nested transaction '{1}' is still active.  Commit or cancel the nested transaction first.</source>
-        <target state="new">The designer transaction '{0}' cannot be committed or canceled because nested transaction '{1}' is still active.  Commit or cancel the nested transaction first.</target>
+        <target state="translated">İç içe geçmiş '{1}' işlemi hala etkin olduğundan '{0}' tasarımcı işlemi tamamlanamadı veya iptal edildi. Önce iç içe geçmiş işlemi tamamlayın veya iptal edin.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostNoBaseClass">
         <source>Cannot open a designer for the file because the class within it does not inherit from a class that can be visually designed.</source>
-        <target state="new">Cannot open a designer for the file because the class within it does not inherit from a class that can be visually designed.</target>
+        <target state="translated">Dosyanın içindeki sınıf görsel olarak tasarlanabilen bir sınıftan devralınmadığından, dosya için tasarımcı açılamıyor.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostNoTopLevelDesigner">
         <source>There is no designer for the class {0}.</source>
-        <target state="new">There is no designer for the class {0}.</target>
+        <target state="translated">{0} sınıfı için tasarımcı yok.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostUnloading">
         <source>New components cannot be added while a designer is unloading.</source>
-        <target state="new">New components cannot be added while a designer is unloading.</target>
+        <target state="translated">Tasarımcının yüklemesi kaldırılırken yeni bileşenler eklenemez.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_CodeGenDisplay">
@@ -207,9 +448,34 @@
         <target state="translated">Tasarımcıların dayama çizgileri kullanıp kullanmayacağını denetler. True ise, dayama çizgileri kılavuz olarak kullanılır. False ise, kılavuz çizgileri kullanılır.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignerShortcutDockInParent">
+        <source>Dock in Parent Container</source>
+        <target state="translated">Ana Kapsayıcıda Yerleştir</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerShortcutUndockInParent">
+        <source>Undock in Parent Container</source>
+        <target state="translated">Ana Kapsayıcıda Yerinden Çıkar</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DotNET_ComponentType">
         <source>.NET Component</source>
-        <target state="new">.NET Component</target>
+        <target state="translated">.NET Bileşeni</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DragDropDragComponents">
+        <source>Drag {0} components</source>
+        <target state="translated">{0} bileşeni sürükle</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DragDropMoveComponent">
+        <source>Move {0}</source>
+        <target state="translated">{0} öğesini taşı</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DragDropMoveComponents">
+        <source>Move {0} components</source>
+        <target state="translated">{0} bileşeni taşı</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropSetDataError">
@@ -217,14 +483,34 @@
         <target state="translated">IDataObject SetData'yı desteklemiyor.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DragDropSizeComponent">
+        <source>Size {0}</source>
+        <target state="translated">{0} öğesini boyutlandır</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DragDropSizeComponents">
+        <source>Size {0} components</source>
+        <target state="translated">{0} bileşeni boyutlandır</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ExtenderProviderServiceDuplicateProvider">
         <source>The extender provider {0} has already been added as an extender.  Adding another would result in duplicate properties.</source>
-        <target state="new">The extender provider {0} has already been added as an extender.  Adding another would result in duplicate properties.</target>
+        <target state="translated">{0} uzatma sağlayıcısı zaten bir uzatma olarak eklendi. Bir uzatma daha eklemek yinelenen özelliklere neden olabilir.</target>
         <note />
       </trans-unit>
       <trans-unit id="InheritanceServiceReadOnlyCollection">
         <source>Read-Only</source>
-        <target state="new">Read-Only</target>
+        <target state="translated">Salt Okunur</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InvalidArgument">
+        <source>'{1}' is not a valid value for '{0}'.</source>
+        <target state="translated">'{1}' değeri '{0}' öğesi için geçerli değil.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InvalidBoundArgument">
+        <source>'{1}' is not a valid value for '{0}'. '{0}' should be between {2} and {3}.</source>
+        <target state="translated">'{1}' değeri '{0}' öğesi için geçerli değil. '{0}' değeri {2} ile {3} arasında olmalıdır.</target>
         <note />
       </trans-unit>
       <trans-unit id="NotImplementedByDesign">
@@ -237,74 +523,534 @@
         <target state="translated">Winforms Tasarımcısı bu platformda desteklenmiyor.</target>
         <note />
       </trans-unit>
+      <trans-unit id="RTL">
+        <source>RTL_False</source>
+        <target state="translated">RTL_False</target>
+        <note>RTL_False in Left-to-right languages and anything else (RTL_True) for right to left.</note>
+      </trans-unit>
+      <trans-unit id="SerializationManagerAreadyInSession">
+        <source>You cannot create a new session because this serialization manager already has an active serialization session.</source>
+        <target state="translated">Bu serileştirme yöneticisinin zaten etkin bir serileştirme oturumu bulunduğundan yeni oturum oluşturamazsınız.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializationManagerDuplicateComponentDecl">
+        <source>Duplicate declaration of member '{0}'</source>
+        <target state="translated">'{0}' üyesinin yinelenen bildirimi</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializationManagerNameInUse">
+        <source>The name '{0}' is already used by another object.</source>
+        <target state="translated">'{0}' adı zaten başka bir nesne tarafından kullanılıyor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializationManagerNoMatchingCtor">
+        <source>Type '{0}' does not have a constructor with parameters of types {1}.</source>
+        <target state="translated">'{0}' türünün, {1} türünde parametreleri olan bir oluşturucusu yok.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializationManagerNoSession">
+        <source>This method cannot be invoked because the serialization manager does not have an active serialization session.</source>
+        <target state="translated">Serileştirme yöneticisinin etkin bir serileştirme oturumu olmadığından bu metot başlatılamıyor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializationManagerObjectHasName">
+        <source>Cannot name the object '{0}' because it is already named '{1}'.</source>
+        <target state="translated">Nesne daha önce '{1}' olarak adlandırıldığından '{0}' olarak adlandırılamıyor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializationManagerWithinSession">
+        <source>This method cannot be invoked because the serialization manager has an active serialization session.</source>
+        <target state="translated">Serileştirme yöneticisinin etkin bir serileştirme oturumu olduğundan bu metot başlatılamıyor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerBadElementTypes">
+        <source>Elements of type {0} are not supported.  The serializer expects the element to be one of the following: {1}.</source>
+        <target state="translated">{0} türündeki öğeler desteklenmez. Seri hale getirici öğenin şu türlerden birinde olmasını bekler: {1}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerFieldTargetEvalFailed">
+        <source>The field '{0}' could not be found on the target object.  Make sure that the field is defined as an instance variable on the target object and has the correct scope.</source>
+        <target state="translated">Hedef nesnede '{0}' alanı bulunamadı. Alanın hedef nesnede bir örnek değişkeni olarak tanımladığından ve kapsamının doğru olduğundan emin olun.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerInvalidArrayRank">
+        <source>Array rank '{0}' is too high.  Visual Studio can only save and load arrays with a rank of 1.</source>
+        <target state="translated">'{0}' dizi sıralaması çok yüksek. Visual Studio yalnızca 1 sıralamasına sahip dizileri kaydedip yükleyebilir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerLostStatements">
+        <source>Code statements for the object '{0}' were lost during serialization.  This may have been a result of another object misbehaving during serialization.</source>
+        <target state="translated">'{0}' nesnesinin kod deyimleri serileştirme işlemi sırasında kayboldu. Bunun nedeni, serileştirme sırasında yanlış davranan başka bir nesne olabilir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerMemberTypeNotSerializable">
+        <source>Members of type '{0}' cannot be serialized.</source>
+        <target state="translated">'{0}' türündeki üyeler seri hale getirilemiyor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerNoRootExpression">
+        <source>The source code contains a reference to the class definition, but the class definition cannot be found.</source>
+        <target state="translated">Kaynak kodu sınıf tanımına başvuru içeriyor ancak sınıf tanımı bulunamıyor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerNoSerializerForComponent">
+        <source>The object '{0}' failed to serialize itself.  It may not support code generation.</source>
+        <target state="translated">'{0}' nesnesi kendisini seri hale getiremedi. Kod oluşturmayı desteklemiyor olabilir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerNoSuchEvent">
+        <source>The type '{0}' has no event named '{1}'.</source>
+        <target state="translated">'{0}' türünde, '{1}' adını taşıyan bir olay yok.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerNoSuchField">
+        <source>The type '{0}' has no field named '{1}'.</source>
+        <target state="translated">'{0}' türünde, '{1}' adını taşıyan bir alan yok.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerNoSuchProperty">
+        <source>The type '{0}' has no property named '{1}'.</source>
+        <target state="translated">'{0}' türünde, '{1}' adını taşıyan bir özellik yok.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerNullNestedProperty">
+        <source>The object '{0}' returned null for the property '{1}' but this is not allowed.</source>
+        <target state="translated">'{0}' nesnesi, '{1}' özelliği için null döndürdü, ancak buna izin verilmiyor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerPropertyGenFailed">
+        <source>Code generation for property '{0}' failed.  Error was: '{1}'</source>
+        <target state="translated">'{0}' özelliği için kod üretilemedi. Hata: '{1}'</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerResourceException">
+        <source>Error reading resources from the resource file for the culture {0}: {1}</source>
+        <target state="translated">{0}: {1} kültürünün kaynak dosyasındaki kaynakları okuma hatası</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerResourceExceptionInvariant">
+        <source>Error reading resources from the resource file for the default culture: {0}</source>
+        <target state="translated">{0} varsayılan kültürünün kaynak dosyasındaki kaynakları okuma hatası</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerTypeAbstract">
+        <source>The designer must create an instance of type '{0}' but it cannot because the type is declared as abstract.</source>
+        <target state="translated">Tasarımcı '{0}' türünde bir örnek oluşturmalıdır, ancak tür özet olarak bildirilmediğinden bu işlem gerçekleştirilemiyor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerTypeNotFound">
+        <source>Could not find type '{0}'.  Please make sure that the assembly that contains this type is referenced.  If this type is a part of your development project, make sure that the project has been successfully built using settings for your current platform or Any CPU.</source>
+        <target state="translated">'{0}' türü bulunamadı. Lütfen bu türü içeren bütünleştirilmiş koda başvurulduğundan emin olun. Bu tür, geliştirme projenizin bir parçasıysa, projenin geçerli platformunuzun ayarları veya Herhangi Bir CPU kullanılarak başarıyla oluşturulduğundan emin olun.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerUndeclaredName">
+        <source>The variable '{0}' is either undeclared or was never assigned.</source>
+        <target state="translated">'{0}' değişkeni bildirilmemiş ya da hiç değer atanmamış.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuAbout">
+        <source>&amp;About...</source>
+        <target state="translated">&amp;Hakkında...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuContents">
+        <source>&amp;Contents</source>
+        <target state="translated">İçi&amp;ndekiler</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuCopy">
+        <source>&amp;Copy</source>
+        <target state="translated">&amp;Kopyala</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuCreateDesc">
+        <source>Create Standard Menu</source>
+        <target state="translated">Standart Menü Oluştur</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuCustomize">
+        <source>&amp;Customize</source>
+        <target state="translated">&amp;Özelleştir</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuCut">
+        <source>Cu&amp;t</source>
+        <target state="translated">&amp;Kes</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuEdit">
+        <source>&amp;Edit</source>
+        <target state="translated">&amp;Düzenle</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuExit">
+        <source>E&amp;xit</source>
+        <target state="translated">&amp;Çıkış</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuFile">
+        <source>&amp;File</source>
+        <target state="translated">&amp;Dosya</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuHelp">
+        <source>&amp;Help</source>
+        <target state="translated">&amp;Yardım</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuIndex">
+        <source>&amp;Index</source>
+        <target state="translated">Di&amp;zin</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuNew">
+        <source>&amp;New</source>
+        <target state="translated">&amp;Yeni</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuOpen">
+        <source>&amp;Open</source>
+        <target state="translated">&amp;Aç</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuOptions">
+        <source>&amp;Options</source>
+        <target state="translated">&amp;Seçenekler</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuPaste">
+        <source>&amp;Paste</source>
+        <target state="translated">&amp;Yapıştır</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuPrint">
+        <source>&amp;Print</source>
+        <target state="translated">Y&amp;azdır</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuPrintPreview">
+        <source>Print Pre&amp;view</source>
+        <target state="translated">Baskı Ön&amp;izleme</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuRedo">
+        <source>&amp;Redo</source>
+        <target state="translated">Yi&amp;nele</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuSave">
+        <source>&amp;Save</source>
+        <target state="translated">&amp;Kaydet</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuSaveAs">
+        <source>Save &amp;As</source>
+        <target state="translated">&amp;Farklı Kaydet</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuSearch">
+        <source>&amp;Search</source>
+        <target state="translated">&amp;Ara</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuSelectAll">
+        <source>Select &amp;All</source>
+        <target state="translated">&amp;Tümünü Seç</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuTools">
+        <source>&amp;Tools</source>
+        <target state="translated">&amp;Araçlar</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuUndo">
+        <source>&amp;Undo</source>
+        <target state="translated">&amp;Geri Al</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardToolCut">
+        <source>C&amp;ut</source>
+        <target state="translated">K&amp;es</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardToolHelp">
+        <source>He&amp;lp</source>
+        <target state="translated">&amp;Yardım</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_Dock">
+        <source>Dock:</source>
+        <target state="translated">Yerleştir:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_DockDesc">
+        <source>Changes the Dock property</source>
+        <target state="translated">Dock özelliğini değiştirir</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_GripStyle">
+        <source>GripStyle:</source>
+        <target state="translated">GripStyle:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_GripStyleDesc">
+        <source>Changes the GripStyle property</source>
+        <target state="translated">GripStyle özelliğini değiştirir</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_Layout">
+        <source>Layout &amp;&amp; Appearance</source>
+        <target state="translated">Düzen ve Görünüm</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_RenderMode">
+        <source>RenderMode:</source>
+        <target state="translated">RenderMode:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_RenderModeDesc">
+        <source>Changes the RenderMode property</source>
+        <target state="translated">RenderMode özelliğini değiştirir</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripAddingItem">
+        <source>Adding {0} Item</source>
+        <target state="translated">{0} Öğe Ekleniyor</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">
+        <source>AllowItemReorder and AllowDrop cannot both be true.</source>
+        <target state="translated">Hem AllowItemReorder hem de AllowDrop True olamaz.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripCreatingNewItemTransaction">
+        <source>ToolStrip New Item create Transaction.</source>
+        <target state="translated">ToolStrip New Item oluşturma İşlemi.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerEmbedVerb">
+        <source>Embed in ToolStripContainer</source>
+        <target state="translated">ToolStripContainer'a ekle</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerEmbedVerbDesc">
+        <source>Embeds the current ToolStrip in ToolStripContainer</source>
+        <target state="translated">Geçerli ToolStrip'i ToolStripContainer'a katıştırır</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerStandardItemsVerb">
+        <source>&amp;Insert Standard Items</source>
+        <target state="translated">&amp;Standart Öğe Ekle</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerStandardItemsVerbDesc">
+        <source>Inserts standard items in the current ToolStrip</source>
+        <target state="translated">Geçerli ToolStrip'e standart öğeler ekler</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTemplateNodeEnterText">
+        <source>Type Here</source>
+        <target state="translated">Buraya Yazın</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTemplateNodeLabelToolTip">
+        <source>Type Text for ToolStripMenuItem</source>
+        <target state="translated">ToolStripMenuItem için Metin Yaz</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTemplateNodeSplitButtonStatusStripAccessibleName">
+        <source>Add Menu Item</source>
+        <target state="translated">Menü Öğesi Ekle</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTemplateNodeSplitButtonStatusStripToolTip">
+        <source>Add ToolStripStatusLabel</source>
+        <target state="translated">ToolStripStatusLabel Ekle</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTemplateNodeSplitButtonToolTip">
+        <source>Add ToolStripButton</source>
+        <target state="translated">ToolStripButton Ekle</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerToolStripAccessibleName">
+        <source>New item selection</source>
+        <target state="translated">Yeni öğe seçimi</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTransactionAddingItem">
+        <source>Adding Item</source>
+        <target state="translated">Öğe Ekleniyor</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTransactionRemovingItem">
+        <source>Removing Item</source>
+        <target state="translated">Öğe Kaldırılıyor</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDropDownItemCollectionEditorVerb">
+        <source>&amp;Edit DropDownItems...</source>
+        <target state="translated">&amp;DropDownItems Düzenle...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripInsertingIntoDropDownTransaction">
+        <source>ToolStrip MenuItem Insert in DropDown Transaction.</source>
+        <target state="translated">DropDown İşleminde ToolStrip MenuItem Ekleme.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemCollectionEditorVerb">
+        <source>&amp;Edit Items...</source>
+        <target state="translated">&amp;Öğeleri Düzenle...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemContextMenuConvertTo">
+        <source>Con&amp;vert To</source>
+        <target state="translated">Dö&amp;nüştür</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemContextMenuInsert">
+        <source>&amp;Insert</source>
+        <target state="translated">&amp;Ekle</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemContextMenuSetImage">
+        <source>Set I&amp;mage...</source>
+        <target state="translated">&amp;Görüntü Ayarla...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemPropertyChangeTransaction">
+        <source>ToolStripItem Property Change Transaction.</source>
+        <target state="translated">ToolStripItem Özelliği Değiştirme İşlemi.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripMorphingItemTransaction">
+        <source>ToolStripItem Morphing Transaction.</source>
+        <target state="translated">ToolStripItem Şekillendirme İşlemi.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripSelectMenuItem">
+        <source>'{0}'</source>
+        <target state="translated">'{0}'</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripSeparatorError">
+        <source>Cannot add ToolStripSeparator to MenuStrip.</source>
+        <target state="translated">ToolStripSeparator MenuStrip'e eklenemiyor.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolboxItemInvalidKey">
         <source>Argument should be a non-empty string.</source>
-        <target state="new">Argument should be a non-empty string.</target>
+        <target state="translated">Bağımsız değişken boş olmayan bir dize olmalıdır.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolboxItemInvalidPropertyType">
         <source>Property {0} requires an argument of type {1}.</source>
-        <target state="new">Property {0} requires an argument of type {1}.</target>
+        <target state="translated">{0} özelliği {1} türünde bir bağımsız değişken gerektiriyor.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolboxItemLocked">
         <source>Toolbox item cannot be modified.</source>
-        <target state="new">Toolbox item cannot be modified.</target>
+        <target state="translated">Araç kutusu öğesi değiştirilemez.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolboxItemValueNotSerializable">
         <source>Data type {0} is not serializable. Items added to a property dictionary must be serializable.</source>
-        <target state="new">Data type {0} is not serializable. Items added to a property dictionary must be serializable.</target>
+        <target state="translated">{0} veri türü seri hale getirilemez. Özellik sözlüğüne eklenen öğelerin seri hale getirilebilir olması gerekir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrayAutoArrange">
+        <source>Auto Arrange Tray Icons</source>
+        <target state="translated">Tepsi Simgelerini Otomatik Ayarla</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrayLineUpIcons">
+        <source>Line Up Tray Icons</source>
+        <target state="translated">Tepsi Simgelerini Hizala</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrayShowLargeIcons">
+        <source>Show Large or Small Icons</source>
+        <target state="translated">Büyük Veya Küçük Simgeleri Göster</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TypeNotFoundInTargetFramework">
+        <source>Type '{0}' is not available in the target framework.</source>
+        <target state="translated">Hedef çerçevede '{0}' türü yok.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UIServiceHelper_ErrorCaption">
+        <source>Error</source>
+        <target state="translated">Hata</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentAdd0">
         <source>Add Component</source>
-        <target state="new">Add Component</target>
+        <target state="translated">Bileşen Ekle</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentAdd1">
         <source>Add {0}</source>
-        <target state="new">Add {0}</target>
+        <target state="translated">{0} Ekle</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentChange0">
         <source>Change Component</source>
-        <target state="new">Change Component</target>
+        <target state="translated">Bileşeni Değiştir</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentChange1">
         <source>Change {0}</source>
-        <target state="new">Change {0}</target>
+        <target state="translated">{0} Değiştir</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentChange2">
         <source>Change {0}.{1}</source>
-        <target state="new">Change {0}.{1}</target>
+        <target state="translated">{0}.{1} Değiştir</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentRemove0">
         <source>Remove Component</source>
-        <target state="new">Remove Component</target>
+        <target state="translated">Bileşeni Kaldır</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentRemove1">
         <source>Remove {0}</source>
-        <target state="new">Remove {0}</target>
+        <target state="translated">{0} Kaldır</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentRename">
         <source>Rename {0} to {1}</source>
-        <target state="new">Rename {0} to {1}</target>
+        <target state="translated">{0} öğesini {1} olarak yeniden adlandır</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineMissingService">
         <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
-        <target state="new">The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</target>
+        <target state="translated">{0} hizmeti gerekiyordu ancak bulunamadı. Bu hizmeti kaldırdıysanız bunun yerine geçecek bir hizmet sağladığınızdan emin olun.</target>
         <note />
       </trans-unit>
       <trans-unit id="UnsafeNativeMethodsNotImplemented">
         <source>Not implemented.</source>
-        <target state="new">Not implemented.</target>
+        <target state="translated">Uygulanmadı.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WindowsFormsAddEvent">
+        <source>&lt;couldn't find resource string "WindowsFormsAddEvent"&gt;</source>
+        <target state="translated">&lt;"WindowsFormsAddEvent" kaynak dizesi bulunamadı&gt;</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WindowsFormsCommandCenterX">
+        <source>Horizontal center of {0} component(s)</source>
+        <target state="translated">{0} bileşenlerinin yatay ortası</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WindowsFormsCommandCenterY">
+        <source>Vertical center of {0} component(s)</source>
+        <target state="translated">{0} bileşenlerinin dikey ortası</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lockedDescr">
+        <source>The Locked property determines if we can move or resize the control.</source>
+        <target state="translated">Denetimin taşınmasının veya yeniden boyutlandırılmasının mümkün olup olmadığını Locked özelliği belirler.</target>
         <note />
       </trans-unit>
     </body>

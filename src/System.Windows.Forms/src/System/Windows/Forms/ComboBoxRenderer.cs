@@ -12,12 +12,11 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\ComboBoxRenderer.uex' path='docs/doc[@for="ComboBoxRenderer"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       This is a rendering class for the ComboBox control.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     public sealed class ComboBoxRenderer {
 
         //Make this per-thread, so that different threads can safely use these methods.
@@ -30,13 +29,12 @@ namespace System.Windows.Forms {
         private ComboBoxRenderer() {
         }
 
-        /// <include file='doc\ComboBoxRenderer.uex' path='docs/doc[@for="ComboBoxRenderer.IsSupported"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Returns true if this class is supported for the current OS and user/application settings, 
         ///       otherwise returns false.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static bool IsSupported {
             get {
                 return VisualStyleRenderer.IsSupported; // no downlevel support
@@ -58,12 +56,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBoxRenderer.uex' path='docs/doc[@for="ComboBoxRenderer.DrawTextBox"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders the textbox part of a ComboBox control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // Using Graphics instead of IDeviceContext intentionally
         ]
@@ -78,32 +75,29 @@ namespace System.Windows.Forms {
             DrawBackground(g, bounds, state);
         }
 
-        /// <include file='doc\ComboBoxRenderer.uex' path='docs/doc[@for="ComboBoxRenderer.DrawTextBox1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders the textbox part of a ComboBox control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void DrawTextBox(Graphics g, Rectangle bounds, string comboBoxText, Font font, ComboBoxState state) {
             DrawTextBox(g, bounds, comboBoxText, font, TextFormatFlags.TextBoxControl, state);
         }
 
-        /// <include file='doc\ComboBoxRenderer.uex' path='docs/doc[@for="ComboBoxRenderer.DrawTextBox2"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders the textbox part of a ComboBox control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void DrawTextBox(Graphics g, Rectangle bounds, string comboBoxText, Font font, Rectangle textBounds, ComboBoxState state) {
             DrawTextBox(g, bounds, comboBoxText, font, textBounds, TextFormatFlags.TextBoxControl, state);
         }
 
-        /// <include file='doc\ComboBoxRenderer.uex' path='docs/doc[@for="ComboBoxRenderer.DrawTextBox3"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders the textbox part of a ComboBox control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void DrawTextBox(Graphics g, Rectangle bounds, string comboBoxText, Font font, TextFormatFlags flags, ComboBoxState state) {
             if (visualStyleRenderer == null) {
                 visualStyleRenderer = new VisualStyleRenderer(TextBoxElement.ClassName, TextBoxElement.Part, (int)state);
@@ -117,12 +111,11 @@ namespace System.Windows.Forms {
             DrawTextBox(g, bounds, comboBoxText, font, textBounds, flags, state);
         }
 
-        /// <include file='doc\ComboBoxRenderer.uex' path='docs/doc[@for="ComboBoxRenderer.DrawTextBox4"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders the textbox part of a ComboBox control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // Using Graphics instead of IDeviceContext intentionally
         ]
@@ -139,12 +132,11 @@ namespace System.Windows.Forms {
             TextRenderer.DrawText(g, comboBoxText, font, textBounds, textColor, flags);
         }
 
-        /// <include file='doc\ComboBoxRenderer.uex' path='docs/doc[@for="ComboBoxRenderer.DrawDropDownButton"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a ComboBox drop-down button.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // Using Graphics instead of IDeviceContext intentionally
         ]

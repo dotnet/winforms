@@ -49,13 +49,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void ColumnHeader_Ctor_String(string imageKey)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ColumnHeader_Ctor_String(string imageKey, string expectedImageKey)
         {
             var header = new ColumnHeader(imageKey);
             Assert.Equal(-1, header.DisplayIndex);
             Assert.Equal(-1, header.ImageIndex);
-            Assert.Equal(imageKey ?? string.Empty, header.ImageKey);
+            Assert.Equal(expectedImageKey, header.ImageKey);
             Assert.Null(header.ImageList);
             Assert.Equal(-1, header.Index);
             Assert.Null(header.ListView);
@@ -87,7 +87,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, header.DisplayIndex);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header.DisplayIndex = value;
             Assert.Equal(value, header.DisplayIndex);
         }
@@ -103,7 +103,7 @@ namespace System.Windows.Forms.Tests
             header.DisplayIndex = value;
             Assert.Equal(value, header.DisplayIndex);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header.DisplayIndex = value;
             Assert.Equal(value, header.DisplayIndex);
         }
@@ -120,7 +120,7 @@ namespace System.Windows.Forms.Tests
             header.DisplayIndex = value;
             Assert.Equal(value, header.DisplayIndex);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header.DisplayIndex = value;
             Assert.Equal(value, header.DisplayIndex);
         }
@@ -144,7 +144,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedHeader2, header2.DisplayIndex);
             Assert.Equal(expectedHeader3, header3.DisplayIndex);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header1.DisplayIndex = value;
             Assert.Equal(value, header1.DisplayIndex);
             Assert.Equal(expectedHeader2, header2.DisplayIndex);
@@ -170,7 +170,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedHeader1, header1.DisplayIndex);
             Assert.Equal(expectedHeader3, header3.DisplayIndex);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header2.DisplayIndex = value;
             Assert.Equal(value, header2.DisplayIndex);
             Assert.Equal(expectedHeader1, header1.DisplayIndex);
@@ -196,7 +196,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedHeader1, header1.DisplayIndex);
             Assert.Equal(expectedHeader2, header2.DisplayIndex);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header3.DisplayIndex = value;
             Assert.Equal(value, header3.DisplayIndex);
             Assert.Equal(expectedHeader1, header1.DisplayIndex);
@@ -226,7 +226,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, header.ImageIndex);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header.ImageIndex = value;
             Assert.Equal(value, header.ImageIndex);
         }
@@ -244,7 +244,7 @@ namespace System.Windows.Forms.Tests
             header.ImageIndex = value;
             Assert.Equal(value, header.ImageIndex);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header.ImageIndex = value;
             Assert.Equal(value, header.ImageIndex);
         }
@@ -265,7 +265,7 @@ namespace System.Windows.Forms.Tests
             header.ImageIndex = value;
             Assert.Equal(-1, header.ImageIndex);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header.ImageIndex = value;
             Assert.Equal(-1, header.ImageIndex);
         }
@@ -284,7 +284,7 @@ namespace System.Windows.Forms.Tests
             header.ImageIndex = value;
             Assert.Equal(value, header.ImageIndex);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header.ImageIndex = value;
             Assert.Equal(value, header.ImageIndex);
         }
@@ -294,27 +294,27 @@ namespace System.Windows.Forms.Tests
         public void ColumnHeader_ImageIndex_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
         {
             var header = new ColumnHeader();
-            Assert.Throws<ArgumentOutOfRangeException>("ImageIndex", () => header.ImageIndex = value);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => header.ImageIndex = value);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void ColumnHeader_ImageKey_SetWithoutListView_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ColumnHeader_ImageKey_SetWithoutListView_GetReturnsExpected(string value, string expected)
         {
             var header = new ColumnHeader
             {
                 ImageKey = value
             };
-            Assert.Equal(value ?? string.Empty, header.ImageKey);
+            Assert.Same(expected, header.ImageKey);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header.ImageKey = value;
-            Assert.Equal(value ?? string.Empty, header.ImageKey);
+            Assert.Same(expected, header.ImageKey);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void ColumnHeader_ImageKey_SetWithListView_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ColumnHeader_ImageKey_SetWithListView_GetReturnsExpected(string value, string expected)
         {
             var listView = new ListView();
             var header = new ColumnHeader
@@ -322,16 +322,16 @@ namespace System.Windows.Forms.Tests
                 ImageKey = value
             };
             listView.Columns.Add(header);
-            Assert.Equal(value ?? string.Empty, header.ImageKey);
+            Assert.Same(expected, header.ImageKey);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header.ImageKey = value;
-            Assert.Equal(value ?? string.Empty, header.ImageKey);
+            Assert.Same(expected, header.ImageKey);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void ColumnHeader_ImageKey_SetWithListViewWithHandle_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ColumnHeader_ImageKey_SetWithListViewWithHandle_GetReturnsExpected(string value, string expected)
         {
             var listView = new ListView();
             var header = new ColumnHeader
@@ -340,11 +340,11 @@ namespace System.Windows.Forms.Tests
             };
             listView.Columns.Add(header);
             Assert.NotEqual(IntPtr.Zero, listView.Handle);
-            Assert.Equal(value ?? string.Empty, header.ImageKey);
+            Assert.Same(expected, header.ImageKey);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header.ImageKey = value;
-            Assert.Equal(value ?? string.Empty, header.ImageKey);
+            Assert.Same(expected, header.ImageKey);
         }
 
         [Fact]
@@ -378,8 +378,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void ColumnHeader_Name_GetWithSite_ReturnsExpected(string name)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ColumnHeader_Name_GetWithSite_ReturnsExpected(string name, string expected)
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
@@ -390,43 +390,43 @@ namespace System.Windows.Forms.Tests
             {
                 Site = mockSite.Object
             };
-            Assert.Equal(name ?? string.Empty, header.Name);
+            Assert.Equal(expected, header.Name);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void ColumnHeader_Name_SetWithoutListView_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ColumnHeader_Name_SetWithoutListView_GetReturnsExpected(string value, string expected)
         {
             var header = new ColumnHeader
             {
                 Name = value
             };
-            Assert.Equal(value ?? string.Empty, header.Name);
+            Assert.Same(expected, header.Name);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header.Name = value;
-            Assert.Equal(value ?? string.Empty, header.Name);
+            Assert.Same(expected, header.Name);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void ColumnHeader_Name_SetWithListView_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ColumnHeader_Name_SetWithListView_GetReturnsExpected(string value, string expected)
         {
             var listView = new ListView();
             var header = new ColumnHeader();
             listView.Columns.Add(header);
 
             header.Name = value;
-            Assert.Equal(value ?? string.Empty, header.Name);
+            Assert.Same(expected, header.Name);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header.Name = value;
-            Assert.Equal(value ?? string.Empty, header.Name);
+            Assert.Same(expected, header.Name);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void ColumnHeader_Name_SetWithListViewWithHandle_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ColumnHeader_Name_SetWithListViewWithHandle_GetReturnsExpected(string value, string expected)
         {
             var listView = new ListView();
             var header = new ColumnHeader();
@@ -434,28 +434,28 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, listView.Handle);
 
             header.Name = value;
-            Assert.Equal(value ?? string.Empty, header.Name);
+            Assert.Same(expected, header.Name);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header.Name = value;
-            Assert.Equal(value ?? string.Empty, header.Name);
+            Assert.Same(expected, header.Name);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void ColumnHeader_Name_SetWithSite_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ColumnHeader_Name_SetWithSite_GetReturnsExpected(string value, string expected)
         {
             var header = new ColumnHeader
             {
                 Site = Mock.Of<ISite>(),
                 Name = value
             };
-            Assert.Equal(value ?? string.Empty, header.Name);
+            Assert.Same(expected, header.Name);
             Assert.Equal(value, header.Site.Name);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header.Name = value;
-            Assert.Equal(value ?? string.Empty, header.Name);
+            Assert.Same(expected, header.Name);
             Assert.Equal(value, header.Site.Name);
         }
 
@@ -469,45 +469,45 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, header.Tag);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header.Tag = value;
             Assert.Equal(value, header.Tag);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void ColumnHeader_Text_SetWithoutListView_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ColumnHeader_Text_SetWithoutListView_GetReturnsExpected(string value, string expected)
         {
             var header = new ColumnHeader
             {
                 Text = value
             };
-            Assert.Equal(value ?? string.Empty, header.Text);
+            Assert.Same(expected, header.Text);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header.Text = value;
-            Assert.Equal(value ?? string.Empty, header.Text);
+            Assert.Same(expected, header.Text);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void ColumnHeader_Text_SetWithListView_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ColumnHeader_Text_SetWithListView_GetReturnsExpected(string value, string expected)
         {
             var listView = new ListView();
             var header = new ColumnHeader();
             listView.Columns.Add(header);
 
             header.Text = value;
-            Assert.Equal(value ?? string.Empty, header.Text);
+            Assert.Same(expected, header.Text);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header.Text = value;
-            Assert.Equal(value ?? string.Empty, header.Text);
+            Assert.Same(expected, header.Text);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void ColumnHeader_Text_SetWithListViewWithHandle_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ColumnHeader_Text_SetWithListViewWithHandle_GetReturnsExpected(string value, string expected)
         {
             var listView = new ListView();
             var header = new ColumnHeader();
@@ -515,11 +515,11 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, listView.Handle);
 
             header.Text = value;
-            Assert.Equal(value ?? string.Empty, header.Text);
+            Assert.Same(expected, header.Text);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header.Text = value;
-            Assert.Equal(value ?? string.Empty, header.Text);
+            Assert.Same(expected, header.Text);
         }
 
         [Theory]
@@ -554,7 +554,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, header.TextAlign);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header.TextAlign = value;
             Assert.Equal(value, header.TextAlign);
         }
@@ -570,7 +570,7 @@ namespace System.Windows.Forms.Tests
             header.TextAlign = value;
             Assert.Equal(HorizontalAlignment.Left, header.TextAlign);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header.TextAlign = value;
             Assert.Equal(HorizontalAlignment.Left, header.TextAlign);
         }
@@ -587,7 +587,7 @@ namespace System.Windows.Forms.Tests
             header.TextAlign = value;
             Assert.Equal(value, header.TextAlign);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header.TextAlign = value;
             Assert.Equal(value, header.TextAlign);
         }
@@ -604,7 +604,7 @@ namespace System.Windows.Forms.Tests
             header.TextAlign = value;
             Assert.Equal(HorizontalAlignment.Left, header.TextAlign);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header.TextAlign = value;
             Assert.Equal(HorizontalAlignment.Left, header.TextAlign);
         }
@@ -622,7 +622,7 @@ namespace System.Windows.Forms.Tests
             header.TextAlign = value;
             Assert.Equal(value, header.TextAlign);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header.TextAlign = value;
             Assert.Equal(value, header.TextAlign);
         }
@@ -680,7 +680,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, header.Width);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header.Width = value;
             Assert.Equal(value, header.Width);
         }
@@ -696,7 +696,7 @@ namespace System.Windows.Forms.Tests
             header.Width = value;
             Assert.Equal(value, header.Width);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header.Width = value;
             Assert.Equal(value, header.Width);
         }
@@ -713,7 +713,7 @@ namespace System.Windows.Forms.Tests
             header.Width = value;
             Assert.Equal(value, header.Width);
 
-            // Set again to test caching behaviour.
+            // Set same.
             header.Width = value;
             Assert.Equal(value, header.Width);
         }

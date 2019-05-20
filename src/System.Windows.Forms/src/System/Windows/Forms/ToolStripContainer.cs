@@ -109,12 +109,8 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new event EventHandler BackColorChanged {
-            add {
-                base.BackColorChanged += value;
-            }
-            remove {
-                base.BackColorChanged -= value;
-            }
+            add => base.BackColorChanged += value;
+            remove => base.BackColorChanged -= value;
         }
 
         [
@@ -134,12 +130,8 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
-            remove {
-                base.BackgroundImageChanged -= value;
-            }
+            add => base.BackgroundImageChanged += value;
+            remove => base.BackgroundImageChanged -= value;
         }
 
         [
@@ -158,12 +150,8 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
-            remove {
-                base.BackgroundImageLayoutChanged += value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
+            remove => base.BackgroundImageLayoutChanged += value;
         }
 
         [
@@ -216,12 +204,8 @@ namespace System.Windows.Forms {
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler CausesValidationChanged {
-            add {
-                base.CausesValidationChanged += value;
-            }
-            remove {
-                base.CausesValidationChanged -= value;
-            }
+            add => base.CausesValidationChanged += value;
+            remove => base.CausesValidationChanged -= value;
         }
 
         [
@@ -236,12 +220,8 @@ namespace System.Windows.Forms {
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ContextMenuStripChanged {
-            add {
-                base.ContextMenuStripChanged += value;
-            }
-            remove {
-                base.ContextMenuStripChanged -= value;
-            }
+            add => base.ContextMenuStripChanged += value;
+            remove => base.ContextMenuStripChanged -= value;
         }
 
         [
@@ -260,12 +240,8 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         ]
         public new event EventHandler CursorChanged {
-            add {
-                base.CursorChanged += value;
-            }
-            remove {
-                base.CursorChanged -= value;
-            }
+            add => base.CursorChanged += value;
+            remove => base.CursorChanged -= value;
         }
 
 
@@ -291,12 +267,8 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         ]
         public new event EventHandler ForeColorChanged {
-            add {
-                base.ForeColorChanged += value;
-            }
-            remove {
-                base.ForeColorChanged -= value;
-            }
+            add => base.ForeColorChanged += value;
+            remove => base.ForeColorChanged -= value;
         }
 
         [
@@ -379,11 +351,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.Controls"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Controls Collection...
         ///     This is overriden so that the Controls.Add ( ) is not Code Gened...
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Control.ControlCollection Controls {

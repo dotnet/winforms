@@ -15,37 +15,32 @@ namespace System.Windows.Forms {
     using System.IO;
     using Microsoft.Win32;
 
-    /// <include file='doc\SelectionRange.uex' path='docs/doc[@for="SelectionRange"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///     This is a class that represents the date selection range of a MonthCalendar control.
-    /// </devdoc>
+    /// </summary>
     [
     TypeConverterAttribute(typeof(SelectionRangeConverter))
     ]
     public sealed class SelectionRange {
-        /// <include file='doc\SelectionRange.uex' path='docs/doc[@for="SelectionRange.start"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The lower limit of the selection range.
-        /// </devdoc>
+        /// </summary>
         private DateTime start = DateTime.MinValue.Date;
 
-        /// <include file='doc\SelectionRange.uex' path='docs/doc[@for="SelectionRange.end"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The upper limit of the selection range.
-        /// </devdoc>
+        /// </summary>
         private DateTime end = DateTime.MaxValue.Date;
 
-        /// <include file='doc\SelectionRange.uex' path='docs/doc[@for="SelectionRange.SelectionRange"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Create a new SelectionRange object with the range [null, null].
-        /// </devdoc>
+        /// </summary>
         public SelectionRange() {
         }
 
-        /// <include file='doc\SelectionRange.uex' path='docs/doc[@for="SelectionRange.SelectionRange1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Create a new SelectionRange object with the given range.
-        /// </devdoc>
+        /// </summary>
         public SelectionRange(DateTime lower, DateTime upper) {
             //NOTE: simcooke: we explicitly DO NOT want to throw an exception here - just silently
             //                swap them around. This is because the win32 control can return non-
@@ -63,19 +58,17 @@ namespace System.Windows.Forms {
             }                        
         }
 
-        /// <include file='doc\SelectionRange.uex' path='docs/doc[@for="SelectionRange.SelectionRange2"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Create a new SelectionRange object given an existing SelectionRange object.
-        /// </devdoc>
+        /// </summary>
         public SelectionRange(SelectionRange range) {
             this.start = range.start;
             this.end = range.end;
         }
 
-        /// <include file='doc\SelectionRange.uex' path='docs/doc[@for="SelectionRange.End"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the ending time of this range.
-        /// </devdoc>
+        /// </summary>
         public DateTime End {
             get { 
                 return end;
@@ -85,10 +78,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SelectionRange.uex' path='docs/doc[@for="SelectionRange.Start"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Starting time of this range
-        /// </devdoc>
+        /// </summary>
         public DateTime Start {
             get {
                 return start;
@@ -98,11 +90,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SelectionRange.uex' path='docs/doc[@for="SelectionRange.ToString"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns a string representation for this control.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         public override string ToString() {
             return "SelectionRange: Start: " + start.ToString() + ", End: " + end.ToString();
         }

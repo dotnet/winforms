@@ -10,23 +10,21 @@ namespace System.Windows.Forms {
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para>
-    ///      Called when the background of the winbar is being rendered
+    ///      Called when the background of the ToolStrip is being rendered
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip | ToolStripItemDesignerAvailability.ContextMenuStrip)]
     public class ToolStripSeparator : ToolStripItem {
-            private const int WINBAR_SEPARATORTHICKNESS = 6;
-            private const int WINBAR_SEPARATORHEIGHT = 23;
+            private const int ToolStrip_SEPARATORTHICKNESS = 6;
+            private const int ToolStrip_SEPARATORHEIGHT = 23;
 
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
             public ToolStripSeparator() {
                 this.ForeColor = SystemColors.ControlDark;
             }
 
-            /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.AutoToolTip"]/*' />
             [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -42,7 +40,6 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Image"]/*' />
             [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -58,7 +55,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.BackgroundImageLayout"]/*' />
             [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -73,7 +69,6 @@ namespace System.Windows.Forms {
               }
             }
             
-            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.CanSelect"]/*' />
             public override bool CanSelect { 
                 get  { 
                     return DesignMode; 
@@ -81,19 +76,17 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.DefaultSize"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     Deriving classes can override this to configure a default size for their control.
             ///     This is more efficient than setting the size in the control's constructor.
-            /// </devdoc>
+            /// </summary>
             protected override Size DefaultSize {
                 get {
-                    return new Size(WINBAR_SEPARATORTHICKNESS, WINBAR_SEPARATORTHICKNESS);
+                    return new Size(ToolStrip_SEPARATORTHICKNESS, ToolStrip_SEPARATORTHICKNESS);
                 }
             }
 
 
-            /// <include file='doc\WinBarSeparator.uex' path='docs/doc[@for="ToolStripSeparator.DefaultMargin"]/*' />
             protected internal override Padding DefaultMargin {
                get {
                    return Padding.Empty;
@@ -115,7 +108,6 @@ namespace System.Windows.Forms {
                }
            }
 
-            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.Enabled"]/*' />
             [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -131,19 +123,12 @@ namespace System.Windows.Forms {
 
             }
 
-            /// <include file='doc\TabPage.uex' path='docs/doc[@for="ToolStripSeparator.EnabledChanged"]/*' />
-            /// <internalonly/>
             [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
             new public event EventHandler EnabledChanged {
-                add {
-                    base.EnabledChanged += value;
-                }
-                remove {
-                    base.EnabledChanged -= value;
-                }
+                add => base.EnabledChanged += value;
+                remove => base.EnabledChanged -= value;
             }
 
-            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.DisplayStyle"]/*' />
             [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -158,19 +143,12 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\TabPage.uex' path='docs/doc[@for="ToolStripSeparator.DisplayStyleChanged"]/*' />
-            /// <internalonly/>
             [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
             new public event EventHandler DisplayStyleChanged {
-                add {
-                    base.DisplayStyleChanged += value;
-                }
-                remove {
-                    base.DisplayStyleChanged -= value;
-                }
+                add => base.DisplayStyleChanged += value;
+                remove => base.DisplayStyleChanged -= value;
             }
 
-            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.Font"]/*' />
             [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -199,7 +177,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.Image"]/*' />
             [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -216,7 +193,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.ImageIndex"]/*' />
             [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -232,7 +208,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.ImageKey"]/*' />
             [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -300,7 +275,6 @@ namespace System.Windows.Forms {
             }
             
 
-            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.Text"]/*' />
             [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -315,19 +289,12 @@ namespace System.Windows.Forms {
               }
             }
 
-             /// <include file='doc\TabPage.uex' path='docs/doc[@for="ToolStripSeparator.TextChanged"]/*' />
-            /// <internalonly/>
             [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
             new public event EventHandler TextChanged {
-                add {
-                    base.TextChanged += value;
-                }
-                remove {
-                    base.TextChanged -= value;
-                }
+                add => base.TextChanged += value;
+                remove => base.TextChanged -= value;
             }
 
-            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.TextAlign"]/*' />
             [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -353,7 +320,6 @@ namespace System.Windows.Forms {
                  }
             }
 
-            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.TextImageRelation"]/*' />
             [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -402,7 +368,6 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.GetPreferredSize"]/*' />
             public override Size GetPreferredSize(Size constrainingSize) {
                 ToolStrip parent = this.ParentInternal;
 
@@ -410,31 +375,30 @@ namespace System.Windows.Forms {
                     parent = Owner;
                 }
                 if (parent == null) {
-                    return new Size(WINBAR_SEPARATORTHICKNESS, WINBAR_SEPARATORTHICKNESS);
+                    return new Size(ToolStrip_SEPARATORTHICKNESS, ToolStrip_SEPARATORTHICKNESS);
                 }
                 
                 ToolStripDropDownMenu dropDownMenu = parent as ToolStripDropDownMenu;
                 if (dropDownMenu != null) {
-                    return new Size(parent.Width - (parent.Padding.Horizontal - dropDownMenu.ImageMargin.Width), WINBAR_SEPARATORTHICKNESS);
+                    return new Size(parent.Width - (parent.Padding.Horizontal - dropDownMenu.ImageMargin.Width), ToolStrip_SEPARATORTHICKNESS);
                 }
                 else {        
                     if (parent.LayoutStyle != ToolStripLayoutStyle.HorizontalStackWithOverflow || parent.LayoutStyle != ToolStripLayoutStyle.VerticalStackWithOverflow) {
                         // we dont actually know what size to make it, so just keep it a stock size.
-                        constrainingSize.Width = WINBAR_SEPARATORHEIGHT;
-                        constrainingSize.Height = WINBAR_SEPARATORHEIGHT;
+                        constrainingSize.Width = ToolStrip_SEPARATORHEIGHT;
+                        constrainingSize.Height = ToolStrip_SEPARATORHEIGHT;
                     }
                     if (IsVertical) {
-                        return new Size(WINBAR_SEPARATORTHICKNESS, constrainingSize.Height);                        
+                        return new Size(ToolStrip_SEPARATORTHICKNESS, constrainingSize.Height);                        
                     }
                     else {
-                        return new Size(constrainingSize.Width, WINBAR_SEPARATORTHICKNESS);   
+                        return new Size(constrainingSize.Width, ToolStrip_SEPARATORTHICKNESS);   
                     }
                 }
                 
             }
 
             
-            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.OnPaint"]/*' />
             protected override void OnPaint(System.Windows.Forms.PaintEventArgs e) {
                 if (this.Owner != null && this.ParentInternal != null) {
                     this.Renderer.DrawSeparator(new ToolStripSeparatorRenderEventArgs(e.Graphics, this, IsVertical));
@@ -470,9 +434,9 @@ namespace System.Windows.Forms {
                 base.SetBounds(rect); 
             }
 
-            /// <devdoc>
+            /// <summary>
             /// An implementation of AccessibleChild for use with ToolStripItems        
-            /// </devdoc>
+            /// </summary>
             [System.Runtime.InteropServices.ComVisible(true)]        
             internal class ToolStripSeparatorAccessibleObject : ToolStripItemAccessibleObject {
                 private ToolStripSeparator ownerItem = null;
@@ -495,7 +459,7 @@ namespace System.Windows.Forms {
                 }
 
                 internal override object GetPropertyValue(int propertyID) {
-                    if (AccessibilityImprovements.Level3 && propertyID == NativeMethods.UIA_ControlTypePropertyId) {
+                    if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
                         return NativeMethods.UIA_SeparatorControlTypeId;
                     }
 

@@ -15,10 +15,9 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Globalization;
     
-    /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para>Provides methods for sending keystrokes to an application.</para>
-    /// </devdoc>
+    /// </summary>
     public class SendKeys {
         private const int  HAVESHIFT = 0;
         private const int  HAVECTRL  = 1;
@@ -87,24 +86,21 @@ namespace System.Windows.Forms {
         private const int  CTRLKEYSCAN   = 0x0200;
         private const int  ALTKEYSCAN    = 0x0400;
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.stopHook"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     should we stop using the hook?
-        /// </devdoc>
+        /// </summary>
         private static bool stopHook;
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.hhook"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     HHOOK
-        /// </devdoc>
+        /// </summary>
         private static IntPtr hhook;
 
         private static NativeMethods.HookProc hook;
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.events"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     vector of events that we have yet to post to the journaling hook.
-        /// </devdoc>
+        /// </summary>
         private static Queue events;
 
         private static bool fStartNewChar;
@@ -134,18 +130,16 @@ namespace System.Windows.Forms {
             messageWindow.CreateControl();
         }
         
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.SendKeys"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     private constructor to prevent people from creating one of these.  they
         ///     should use public static methods
-        /// </devdoc>
+        /// </summary>
         private SendKeys() {
         }
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.AddEvent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     adds an event to our list of events for the hook
-        /// </devdoc>
+        /// </summary>
         private static void AddEvent(SKEvent skevent) {
 
             if (events == null) {
@@ -160,19 +154,19 @@ namespace System.Windows.Forms {
 
             if (vk != -1) {
                 if (haveKeys[HAVESHIFT] == 0 && (vk & SHIFTKEYSCAN) != 0) {
-                    AddEvent(new SKEvent(NativeMethods.WM_KEYDOWN, (int)Keys.ShiftKey, fStartNewChar, hwnd));
+                    AddEvent(new SKEvent(Interop.WindowMessages.WM_KEYDOWN, (int)Keys.ShiftKey, fStartNewChar, hwnd));
                     fStartNewChar = false;
                     haveKeys[HAVESHIFT] = UNKNOWN_GROUPING;
                 }
 
                 if (haveKeys[HAVECTRL] == 0 && (vk & CTRLKEYSCAN) != 0) {
-                    AddEvent(new SKEvent(NativeMethods.WM_KEYDOWN, (int)Keys.ControlKey, fStartNewChar, hwnd));
+                    AddEvent(new SKEvent(Interop.WindowMessages.WM_KEYDOWN, (int)Keys.ControlKey, fStartNewChar, hwnd));
                     fStartNewChar = false;
                     haveKeys[HAVECTRL] = UNKNOWN_GROUPING;
                 }
 
                 if (haveKeys[HAVEALT] == 0 && (vk & ALTKEYSCAN) != 0) {
-                    AddEvent(new SKEvent(NativeMethods.WM_KEYDOWN, (int)Keys.Menu, fStartNewChar, hwnd));
+                    AddEvent(new SKEvent(Interop.WindowMessages.WM_KEYDOWN, (int)Keys.Menu, fStartNewChar, hwnd));
                     fStartNewChar = false;
                     haveKeys[HAVEALT] = UNKNOWN_GROUPING;
                 }
@@ -183,7 +177,7 @@ namespace System.Windows.Forms {
             else {
                 int oemVal = SafeNativeMethods.OemKeyScan((short)(0xFF & (int)character));
                 for (int i = 0; i < repeat; i++) {
-                    AddEvent(new SKEvent(NativeMethods.WM_CHAR, character, (int)(oemVal & 0xFFFF), hwnd));
+                    AddEvent(new SKEvent(Interop.WindowMessages.WM_CHAR, character, (int)(oemVal & 0xFFFF), hwnd));
                 }
             }
 
@@ -191,42 +185,39 @@ namespace System.Windows.Forms {
             return fStartNewChar;
         }
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.AddMsgsForVK"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     given the vk, add the appropriate messages for it
-        /// </devdoc>
+        /// </summary>
         private static void AddMsgsForVK(int vk, int repeat, bool altnoctrldown, IntPtr hwnd) {
             for (int i = 0; i < repeat; i++) {
-                AddEvent(new SKEvent(altnoctrldown ? NativeMethods.WM_SYSKEYDOWN : NativeMethods.WM_KEYDOWN, vk, fStartNewChar, hwnd));
+                AddEvent(new SKEvent(altnoctrldown ? Interop.WindowMessages.WM_SYSKEYDOWN : Interop.WindowMessages.WM_KEYDOWN, vk, fStartNewChar, hwnd));
                 // fStartNewChar = false;
-                AddEvent(new SKEvent(altnoctrldown ? NativeMethods.WM_SYSKEYUP : NativeMethods.WM_KEYUP, vk, fStartNewChar, hwnd));
+                AddEvent(new SKEvent(altnoctrldown ? Interop.WindowMessages.WM_SYSKEYUP : Interop.WindowMessages.WM_KEYUP, vk, fStartNewChar, hwnd));
             }
         }
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.CancelMods"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     called whenever there is a closing parenthesis, or the end of a
         ///     character.  This generates events for the end of a modifier.
-        /// </devdoc>
+        /// </summary>
         private static void CancelMods(int [] haveKeys, int level, IntPtr hwnd) {
             if (haveKeys[HAVESHIFT] == level) {
-                AddEvent(new SKEvent(NativeMethods.WM_KEYUP, (int)Keys.ShiftKey, false, hwnd));
+                AddEvent(new SKEvent(Interop.WindowMessages.WM_KEYUP, (int)Keys.ShiftKey, false, hwnd));
                 haveKeys[HAVESHIFT] = 0;
             }
             if (haveKeys[HAVECTRL] == level) {
-                AddEvent(new SKEvent(NativeMethods.WM_KEYUP, (int)Keys.ControlKey, false, hwnd));
+                AddEvent(new SKEvent(Interop.WindowMessages.WM_KEYUP, (int)Keys.ControlKey, false, hwnd));
                 haveKeys[HAVECTRL] = 0;
             }
             if (haveKeys[HAVEALT] == level) {
-                AddEvent(new SKEvent(NativeMethods.WM_SYSKEYUP, (int)Keys.Menu, false, hwnd));
+                AddEvent(new SKEvent(Interop.WindowMessages.WM_SYSKEYUP, (int)Keys.Menu, false, hwnd));
                 haveKeys[HAVEALT] = 0;
             }
         }
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.InstallHook"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     install the hook.  quite easy
-        /// </devdoc>
+        /// </summary>
         private static void InstallHook() {
             if (hhook == IntPtr.Zero) {
                 hook = new NativeMethods.HookProc(new SendKeysHookProc().Callback);
@@ -292,11 +283,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.JournalCancel"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     tells us to shut down the server, perhaps if we're shutting down and the
         ///     hook is still running
-        /// </devdoc>
+        /// </summary>
         private static void JournalCancel() {
             if (hhook != IntPtr.Zero) {
                 stopHook = false;
@@ -317,12 +307,11 @@ namespace System.Windows.Forms {
             UnsafeNativeMethods.SetKeyboardState(keystate);
         }
         
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.ClearKeyboardState"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     before we do a sendkeys, we want to  clear the state
         ///     of a couple of keys [capslock, numlock, scrolllock] so they don't
         ///     interfere.
-        /// </devdoc>
+        /// </summary>
         private static void ClearKeyboardState() {
 
             byte [] keystate = GetKeyboardState();
@@ -334,11 +323,10 @@ namespace System.Windows.Forms {
             SetKeyboardState(keystate);
         }
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.MatchKeyword"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     given the string, match the keyword to a VK.  return -1 if it don't match
         ///     nuthin'
-        /// </devdoc>
+        /// </summary>
         private static int MatchKeyword(string keyword) {
             for (int i = 0; i < keywords.Length; i++)
                 if (string.Equals(keywords[i].keyword, keyword, StringComparison.OrdinalIgnoreCase))
@@ -347,12 +335,11 @@ namespace System.Windows.Forms {
             return -1;
         }
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.OnThreadExit"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This event is raised from Application when each window thread
         ///     termiantes.  It gives us a chance to uninstall our journal
         ///     hook if we had one installed.
-        /// </devdoc>
+        /// </summary>
         private static void OnThreadExit(object sender, EventArgs e) {
             try {
                 UninstallJournalingHook();
@@ -361,11 +348,10 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.ParseKeys"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     parse the string the user has given us, and generate the appropriate
         ///     events for the journaling hook
-        /// </devdoc>
+        /// </summary>
         private static void ParseKeys(string keys, IntPtr hwnd) {
 
             int i = 0;
@@ -464,19 +450,19 @@ namespace System.Windows.Forms {
                         if (vk != -1) {
                             // Unlike AddSimpleKey, the bit mask uses Keys, rather than scan keys
                             if (haveKeys[HAVESHIFT] == 0 && (vk & (int)Keys.Shift) != 0) {
-                                AddEvent(new SKEvent(NativeMethods.WM_KEYDOWN, (int)Keys.ShiftKey, fStartNewChar, hwnd));
+                                AddEvent(new SKEvent(Interop.WindowMessages.WM_KEYDOWN, (int)Keys.ShiftKey, fStartNewChar, hwnd));
                                 fStartNewChar = false;
                                 haveKeys[HAVESHIFT] = UNKNOWN_GROUPING;
                             }
                 
                             if (haveKeys[HAVECTRL] == 0 && (vk & (int)Keys.Control) != 0) {
-                                AddEvent(new SKEvent(NativeMethods.WM_KEYDOWN, (int)Keys.ControlKey, fStartNewChar, hwnd));
+                                AddEvent(new SKEvent(Interop.WindowMessages.WM_KEYDOWN, (int)Keys.ControlKey, fStartNewChar, hwnd));
                                 fStartNewChar = false;
                                 haveKeys[HAVECTRL] = UNKNOWN_GROUPING;
                             }
                 
                             if (haveKeys[HAVEALT] == 0 && (vk & (int)Keys.Alt) != 0) {
-                                AddEvent(new SKEvent(NativeMethods.WM_KEYDOWN, (int)Keys.Menu, fStartNewChar, hwnd));
+                                AddEvent(new SKEvent(Interop.WindowMessages.WM_KEYDOWN, (int)Keys.Menu, fStartNewChar, hwnd));
                                 fStartNewChar = false;
                                 haveKeys[HAVEALT] = UNKNOWN_GROUPING;
                             }
@@ -497,7 +483,7 @@ namespace System.Windows.Forms {
                     case '+':
                         if (haveKeys[HAVESHIFT] != 0) throw new ArgumentException(string.Format(SR.InvalidSendKeysString, keys));
 
-                        AddEvent(new SKEvent(NativeMethods.WM_KEYDOWN, (int)Keys.ShiftKey, fStartNewChar, hwnd));
+                        AddEvent(new SKEvent(Interop.WindowMessages.WM_KEYDOWN, (int)Keys.ShiftKey, fStartNewChar, hwnd));
                         fStartNewChar = false;
                         haveKeys[HAVESHIFT] = UNKNOWN_GROUPING;
                         break;
@@ -505,7 +491,7 @@ namespace System.Windows.Forms {
                     case '^':
                         if (haveKeys[HAVECTRL]!= 0) throw new ArgumentException(string.Format(SR.InvalidSendKeysString, keys));
 
-                        AddEvent(new SKEvent(NativeMethods.WM_KEYDOWN, (int)Keys.ControlKey, fStartNewChar, hwnd));
+                        AddEvent(new SKEvent(Interop.WindowMessages.WM_KEYDOWN, (int)Keys.ControlKey, fStartNewChar, hwnd));
                         fStartNewChar = false;
                         haveKeys[HAVECTRL] = UNKNOWN_GROUPING;
                         break;
@@ -513,7 +499,7 @@ namespace System.Windows.Forms {
                     case '%':
                         if (haveKeys[HAVEALT] != 0) throw new ArgumentException(string.Format(SR.InvalidSendKeysString, keys));
 
-                        AddEvent(new SKEvent((haveKeys[HAVECTRL] != 0) ? NativeMethods.WM_KEYDOWN : NativeMethods.WM_SYSKEYDOWN,
+                        AddEvent(new SKEvent((haveKeys[HAVECTRL] != 0) ? Interop.WindowMessages.WM_KEYDOWN : Interop.WindowMessages.WM_SYSKEYDOWN,
                                              (int)Keys.Menu, fStartNewChar, hwnd));
                         fStartNewChar = false;
                         haveKeys[HAVEALT] = UNKNOWN_GROUPING;
@@ -587,7 +573,7 @@ namespace System.Windows.Forms {
             currentInput[1].inputUnion.ki.time = 0;
 
             // send each of our SKEvents using SendInput
-            int INPUTSize = Marshal.SizeOf(typeof(NativeMethods.INPUT));
+            int INPUTSize = Marshal.SizeOf<NativeMethods.INPUT>();
 
             // need these outside the lock below
             uint eventsSent=0;
@@ -615,7 +601,7 @@ namespace System.Windows.Forms {
 
                         currentInput[0].inputUnion.ki.dwFlags = 0;
 
-                        if (skEvent.wm == NativeMethods.WM_CHAR)
+                        if (skEvent.wm == Interop.WindowMessages.WM_CHAR)
                         {
                             // for WM_CHAR, send a KEYEVENTF_UNICODE instead of a Keyboard event
                             // to support extended ascii characters with no keyboard equivalent.
@@ -634,7 +620,7 @@ namespace System.Windows.Forms {
                             currentInput[0].inputUnion.ki.wScan = 0;
 
                             // add KeyUp flag if we have a KeyUp
-                            if (skEvent.wm == NativeMethods.WM_KEYUP || skEvent.wm == NativeMethods.WM_SYSKEYUP)
+                            if (skEvent.wm == Interop.WindowMessages.WM_KEYUP || skEvent.wm == Interop.WindowMessages.WM_SYSKEYUP)
                             {
                                 currentInput[0].inputUnion.ki.dwFlags |= NativeMethods.KEYEVENTF_KEYUP;
                             }
@@ -704,13 +690,13 @@ namespace System.Windows.Forms {
                 SKEvent skEvent = (SKEvent)previousEvents.Dequeue();
 
                 bool isOn;
-                if ((skEvent.wm == NativeMethods.WM_KEYUP) ||
-                    (skEvent.wm == NativeMethods.WM_SYSKEYUP))
+                if ((skEvent.wm == Interop.WindowMessages.WM_KEYUP) ||
+                    (skEvent.wm == Interop.WindowMessages.WM_SYSKEYUP))
                 {
                     isOn = false;
                 }
-                else if ((skEvent.wm == NativeMethods.WM_KEYDOWN) ||
-                         (skEvent.wm == NativeMethods.WM_SYSKEYDOWN))
+                else if ((skEvent.wm == Interop.WindowMessages.WM_KEYDOWN) ||
+                         (skEvent.wm == Interop.WindowMessages.WM_SYSKEYDOWN))
                 {
                     isOn = true;
                 }
@@ -735,15 +721,15 @@ namespace System.Windows.Forms {
 
             if (shift)
             {
-                AddEvent(new SKEvent(NativeMethods.WM_KEYUP, (int)Keys.ShiftKey, false, IntPtr.Zero));
+                AddEvent(new SKEvent(Interop.WindowMessages.WM_KEYUP, (int)Keys.ShiftKey, false, IntPtr.Zero));
             }
             else if (ctrl)
             {
-                AddEvent(new SKEvent(NativeMethods.WM_KEYUP, (int)Keys.ControlKey, false, IntPtr.Zero));
+                AddEvent(new SKEvent(Interop.WindowMessages.WM_KEYUP, (int)Keys.ControlKey, false, IntPtr.Zero));
             }
             else if (alt)
             {
-                AddEvent(new SKEvent(NativeMethods.WM_SYSKEYUP, (int)Keys.Menu, false, IntPtr.Zero));
+                AddEvent(new SKEvent(Interop.WindowMessages.WM_SYSKEYUP, (int)Keys.Menu, false, IntPtr.Zero));
             }
         }
 
@@ -771,7 +757,7 @@ namespace System.Windows.Forms {
 
         private static void CheckGlobalKeys(SKEvent skEvent)
         {
-            if (skEvent.wm == NativeMethods.WM_KEYDOWN)
+            if (skEvent.wm == Interop.WindowMessages.WM_KEYDOWN)
             {
                 switch (skEvent.paramL)
                 {
@@ -838,17 +824,16 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.Send"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Sends keystrokes to the active application.</para>
-        /// </devdoc>
+        /// </summary>
         public static void Send(string keys) {
             Send(keys, null, false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sends keystrokes to the active application.
-        /// </devdoc>
+        /// </summary>
 
 
         // WARNING: this method will never work if control != null, because while
@@ -925,20 +910,18 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.SendWait"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Sends the given keys to the active application, and then waits for
         ///       the messages to be processed.</para>
-        /// </devdoc>
+        /// </summary>
         public static void SendWait(string keys) {
             SendWait(keys, null);
         }
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.SendWait1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Sends the given keys to the active application, and then waits for
         ///     the messages to be processed.
-        /// </devdoc>
+        /// </summary>
 
 
         // WARNING: this method will never work if control != null, because while
@@ -949,10 +932,9 @@ namespace System.Windows.Forms {
             Send(keys, control, true);
         }
 
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.Flush"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Processes all the Windows messages currently in the message queue.</para>
-        /// </devdoc>
+        /// </summary>
         public static void Flush() {
             Application.DoEvents();
             while (events != null && events.Count > 0) {
@@ -960,10 +942,9 @@ namespace System.Windows.Forms {
             }
         }
     
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.UninstallJournalingHook"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     cleans up and uninstalls the hook
-        /// </devdoc>
+        /// </summary>
         private static void UninstallJournalingHook() {
             if (hhook != IntPtr.Zero) {
                 stopHook = false;
@@ -975,9 +956,9 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     SendKeys creates a window to monitor WM_CANCELJOURNAL messages.
-        /// </devdoc>
+        /// </summary>
         private class SKWindow : Control {
         
             public SKWindow() {
@@ -988,7 +969,7 @@ namespace System.Windows.Forms {
             }
             
             protected override void WndProc(ref Message m) {
-                if (m.Msg == NativeMethods.WM_CANCELJOURNAL) {
+                if (m.Msg == Interop.WindowMessages.WM_CANCELJOURNAL) {
                     try {
                         SendKeys.JournalCancel();
                     }
@@ -998,10 +979,9 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.SKEvent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     helps us hold information about the various events we're going to journal
-        /// </devdoc>
+        /// </summary>
         private class SKEvent {
             internal int wm;
             internal int paramL;
@@ -1023,10 +1003,9 @@ namespace System.Windows.Forms {
             }
         }
     
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.KeywordVk"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     holds a keyword and the associated VK_ for it
-        /// </devdoc>
+        /// </summary>
         private class KeywordVk {
             internal string keyword;
             internal int    vk;
@@ -1037,10 +1016,9 @@ namespace System.Windows.Forms {
             }
         }
     
-        /// <include file='doc\SendKeys.uex' path='docs/doc[@for="SendKeys.SendKeysHookProc"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     this class is our callback for the journaling hook we install
-        /// </devdoc>
+        /// </summary>
         private class SendKeysHookProc {
 
             // Microsoft:  There appears to be a timing issue where setting and removing and then setting
@@ -1052,7 +1030,7 @@ namespace System.Windows.Forms {
             private bool gotNextEvent = false;
     
             public virtual IntPtr Callback(int code, IntPtr wparam, IntPtr lparam) {
-                NativeMethods.EVENTMSG eventmsg = (NativeMethods.EVENTMSG)UnsafeNativeMethods.PtrToStructure(lparam, typeof(NativeMethods.EVENTMSG));
+                NativeMethods.EVENTMSG eventmsg = Marshal.PtrToStructure<NativeMethods.EVENTMSG>(lparam);
                 
     
                 if (UnsafeNativeMethods.GetAsyncKeyState((int)Keys.Pause) != 0) {

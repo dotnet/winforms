@@ -10,20 +10,20 @@ namespace System.Windows.Forms
     [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly")]
     public enum PreProcessControlState
     {
-        /// <devdoc>
+        /// <summary>
         /// Indicates the message has been processed, and no further processing
         /// is necessary
-        /// </devdoc>
+        /// </summary>
         MessageProcessed = 0x00,
 
-        /// <devdoc>
+        /// <summary>
         /// Indicates the control wants the message and processing should continue
-        /// </devdoc>
+        /// </summary>
         MessageNeeded = 0x01,
 
-        /// <devdoc>
+        /// <summary>
         /// Indicates the control doesn't care about the message
-        /// </devdoc>
+        /// </summary>
         MessageNotNeeded = 0x02
     }
 }

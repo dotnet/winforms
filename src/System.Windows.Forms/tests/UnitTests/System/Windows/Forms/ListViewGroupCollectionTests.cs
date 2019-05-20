@@ -367,10 +367,16 @@ namespace System.Windows.Forms.Tests
         {
             var listView = new ListView();
             ListViewGroupCollection collection = listView.Groups;
-            var group = new ListViewGroup();
-            collection.Add(group);
-            Assert.Same(group, Assert.Single(collection));
-            Assert.Same(listView, group.ListView);
+            var group1 = new ListViewGroup();
+            Assert.Equal(0, collection.Add(group1));
+            Assert.Same(group1, Assert.Single(collection));
+            Assert.Same(listView, group1.ListView);
+
+            // Add another.
+            var group2 = new ListViewGroup();
+            Assert.Equal(1, collection.Add(group2));
+            Assert.Equal(new ListViewGroup[] { group1, group2 } , collection.Cast<ListViewGroup>());
+            Assert.Same(listView, group2.ListView);
         }
 
         [Fact]
@@ -380,10 +386,16 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, listView.Handle);
 
             ListViewGroupCollection collection = listView.Groups;
-            var group = new ListViewGroup();
-            collection.Add(group);
-            Assert.Same(group, Assert.Single(collection));
-            Assert.Same(listView, group.ListView);
+            var group1 = new ListViewGroup();
+            Assert.Equal(0, collection.Add(group1));
+            Assert.Same(group1, Assert.Single(collection));
+            Assert.Same(listView, group1.ListView);
+
+            // Add another.
+            var group2 = new ListViewGroup();
+            Assert.Equal(1, collection.Add(group2));
+            Assert.Equal(new ListViewGroup[] { group1, group2 } , collection.Cast<ListViewGroup>());
+            Assert.Same(listView, group2.ListView);
         }
 
         [Fact]
@@ -398,7 +410,7 @@ namespace System.Windows.Forms.Tests
             group.Items.Add(item);
             listView.Items.Add(item);
 
-            collection.Add(group);
+            Assert.Equal(0, collection.Add(group));
             Assert.Same(group, Assert.Single(collection));
             Assert.Same(listView, group.ListView);
         }
@@ -412,14 +424,16 @@ namespace System.Windows.Forms.Tests
             var item = new ListViewItem();
 
             ListViewGroupCollection collection = listView.Groups;
-            var group = new ListViewGroup();
-            group.Items.Add(new ListViewItem());
-            group.Items.Add(item);
+            var group1 = new ListViewGroup();
+            group1.Items.Add(new ListViewItem());
+            group1.Items.Add(item);
             listView.Items.Add(item);
 
-            collection.Add(group);
-            Assert.Same(group, Assert.Single(collection));
-            Assert.Same(listView, group.ListView);
+            Assert.Equal(0, collection.Add(group1));
+            Assert.Same(group1, Assert.Single(collection));
+            Assert.Same(listView, group1.ListView);
+
+            var group2 = new ListViewGroup();
         }
 
         [Fact]
@@ -429,10 +443,10 @@ namespace System.Windows.Forms.Tests
             ListViewGroupCollection collection = listView.Groups;
             var group1 = new ListViewGroup();
             var group2 = new ListViewGroup();
-            collection.Add(group1);
-            collection.Add(group2);
+            Assert.Equal(0, collection.Add(group1));
+            Assert.Equal(1, collection.Add(group2));
 
-            collection.Add(group1);
+            Assert.Equal(-1, collection.Add(group1));
             Assert.Equal(2, collection.Count);
         }
 
@@ -481,10 +495,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [InlineData(null, null)]
-        [InlineData("", "")]
-        [InlineData("key", "headerText")]
-        public void ListViewGroupCollection_Add_StringString_Success(string key, string headerText)
+        [InlineData(null, null, "")]
+        [InlineData("", "", "")]
+        [InlineData("key", "headerText", "headerText")]
+        public void ListViewGroupCollection_Add_StringString_Success(string key, string headerText, string expectedHeaderText)
         {
             var listView = new ListView();
             ListViewGroupCollection collection = listView.Groups;
@@ -492,7 +506,7 @@ namespace System.Windows.Forms.Tests
 
             ListViewGroup group = Assert.Single(collection.Cast<ListViewGroup>());
             Assert.Equal(key, group.Name);
-            Assert.Equal(headerText ?? string.Empty, group.Header);
+            Assert.Equal(expectedHeaderText, group.Header);
         }
 
         [Fact]
@@ -821,11 +835,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ListViewGroupCollection_Insert_SetHasItemsFromOtherListView_Success()
+        public void ListViewGroupCollection_Insert_HasItemsFromOtherListView_ThrowsArgumentException()
         {
             var listView = new ListView();
             ListViewGroupCollection collection = listView.Groups;
-            collection.Add(new ListViewGroup());
             var otherListView = new ListView();
 
             var item = new ListViewItem();
@@ -833,9 +846,8 @@ namespace System.Windows.Forms.Tests
             group.Items.Add(item);
             otherListView.Items.Add(item);
 
-            collection.Insert(0, group);
-            Assert.Same(group, collection[0]);
-            Assert.Same(listView, group.ListView);
+            Assert.Throws<ArgumentException>(null, () => collection.Insert(0, group));
+            Assert.Empty(collection);
         }
 
         [Theory]

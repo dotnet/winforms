@@ -7,57 +7,51 @@ namespace System.Windows.Forms {
     using System.Collections;
     
     
-    /// <include file='doc\InputLanguageCollection.uex' path='docs/doc[@for="InputLanguageCollection"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///     <para>
     ///       A collection that stores <see cref='System.Windows.Forms.InputLanguage'/> objects.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     public class InputLanguageCollection : ReadOnlyCollectionBase {
         
-        /// <include file='doc\InputLanguageCollection.uex' path='docs/doc[@for="InputLanguageCollection.InputLanguageCollection"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         ///       Initializes a new instance of <see cref='System.Windows.Forms.InputLanguageCollection'/> containing any array of <see cref='System.Windows.Forms.InputLanguage'/> objects.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         internal InputLanguageCollection(InputLanguage[] value) {
             InnerList.AddRange(value);
         }
         
-        /// <include file='doc\InputLanguageCollection.uex' path='docs/doc[@for="InputLanguageCollection.this"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Represents the entry at the specified index of the <see cref='System.Windows.Forms.InputLanguage'/>.</para>
-        /// </devdoc>
+        /// </summary>
         public InputLanguage this[int index] {
             get {
                 return ((InputLanguage)(InnerList[index]));
             }
         }
         
-        /// <include file='doc\InputLanguageCollection.uex' path='docs/doc[@for="InputLanguageCollection.Contains"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets a value indicating whether the 
         ///    <see cref='System.Windows.Forms.InputLanguageCollection'/> contains the specified <see cref='System.Windows.Forms.InputLanguage'/>.</para>
-        /// </devdoc>
+        /// </summary>
         public bool Contains(InputLanguage value) {
             return InnerList.Contains(value);
         }
         
-        /// <include file='doc\InputLanguageCollection.uex' path='docs/doc[@for="InputLanguageCollection.CopyTo"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Copies the <see cref='System.Windows.Forms.InputLanguageCollection'/> values to a one-dimensional <see cref='System.Array'/> instance at the 
         ///    specified index.</para>
-        /// </devdoc>
+        /// </summary>
         public void CopyTo(InputLanguage[] array, int index) {
             InnerList.CopyTo(array, index);
         }
         
-        /// <include file='doc\InputLanguageCollection.uex' path='docs/doc[@for="InputLanguageCollection.IndexOf"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Returns the index of a <see cref='System.Windows.Forms.InputLanguage'/> in 
         ///       the <see cref='System.Windows.Forms.InputLanguageCollection'/> .</para>
-        /// </devdoc>
+        /// </summary>
         public int IndexOf(InputLanguage value) {
             return InnerList.IndexOf(value);
         }

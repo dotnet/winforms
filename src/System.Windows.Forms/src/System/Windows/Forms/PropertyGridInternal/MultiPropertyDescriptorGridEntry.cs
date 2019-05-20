@@ -143,10 +143,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return temp;
         }
 
-        /// <include file='doc\MultiSelectPropertyGridEntry.uex' path='docs/doc[@for="MultiSelectPropertyGridEntry.GetPropertyTextValue"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Returns the text value of this property.
-        /// </devdoc>
+        /// </summary>
         public override string GetPropertyTextValue(object value) {
 
             bool allEqual = true;

@@ -2,24 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-    using System;
-    using System.Collections;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Drawing;
-    using System.Runtime.Versioning;
-    using System.Security;
-    using System.Windows.Forms.Layout;
-    
-    /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost"]/*' />
-    /// <devdoc>
+using System.Collections;
+using System.ComponentModel;
+using System.ComponentModel.Design;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
+using System.Windows.Forms.Layout;
+
+namespace System.Windows.Forms
+{
+    /// <summary>
     /// ToolStripItem that can host Controls.
-    /// </devdoc>
-    public class ToolStripControlHost : ToolStripItem {
- 
+    /// </summary>
+    public class ToolStripControlHost : ToolStripItem
+    {
         private Control control;
         private int suspendSyncSizeCount = 0;
         private ContentAlignment controlAlign = ContentAlignment.MiddleCenter;
@@ -36,10 +33,9 @@ namespace System.Windows.Forms {
         internal static readonly object EventValidating                      = new object();
 
 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.ToolStripControlHost"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Constructs a ToolStripControlHost
-        /// </devdoc>
+        /// </summary>
         
         public ToolStripControlHost(Control c) {
             if (c == null) {
@@ -54,9 +50,7 @@ namespace System.Windows.Forms {
             Rectangle bounds = this.Bounds;
             CommonProperties.UpdateSpecifiedBounds(c, bounds.X, bounds.Y, bounds.Width, bounds.Height);
 
-            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                c.ToolStripControlHost = this;
-            }
+            c.ToolStripControlHost = this;
 
             OnSubscribeControlEvents(c);
         }
@@ -64,7 +58,6 @@ namespace System.Windows.Forms {
             this.Name = name;
         }
      
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.BackColor"]/*' />
         public override Color BackColor {
             get {
                 return Control.BackColor;
@@ -74,12 +67,11 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Image"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>
         /// Gets or sets the image that is displayed on a <see cref='System.Windows.Forms.Label'/>.
         /// </para>
-        /// </devdoc>
+        /// </summary>
         [
         Localizable(true),
         SRCategory(nameof(SR.CatAppearance)),
@@ -95,7 +87,6 @@ namespace System.Windows.Forms {
             }
         }
  
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.BackgroundImageLayout"]/*' />
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(ImageLayout.Tile),
@@ -110,10 +101,9 @@ namespace System.Windows.Forms {
               Control.BackgroundImageLayout = value;
           }
         }
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.CanSelect"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Overriden to return value from Control.CanSelect.
-        /// </devdoc>
+        /// </summary>
         public override bool CanSelect {
             get { 
                 if (control != null) {
@@ -133,7 +123,6 @@ namespace System.Windows.Forms {
             set { Control.CausesValidation = value; }
         }
 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.ControlAlign"]/*' />
         [DefaultValue(ContentAlignment.MiddleCenter), Browsable(false)]
         public ContentAlignment ControlAlign {
             get { return controlAlign; }
@@ -148,10 +137,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.Control"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// The control that this item is hosting.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Control Control {
             get {  
@@ -165,11 +153,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.DefaultSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Deriving classes can override this to configure a default size for their control.
         /// This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
+        /// </summary>
         protected override Size DefaultSize {
             get {
                 if (Control != null) {
@@ -181,7 +168,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.DisplayStyle"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new ToolStripItemDisplayStyle DisplayStyle {
             get { 
@@ -194,19 +180,15 @@ namespace System.Windows.Forms {
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DisplayStyleChanged {
-            add { 
-                Events.AddHandler(EventDisplayStyleChanged, value); 
-            }
-            remove {
-                Events.RemoveHandler(EventDisplayStyleChanged, value);
-            }
+            add => Events.AddHandler(EventDisplayStyleChanged, value); 
+            remove => Events.RemoveHandler(EventDisplayStyleChanged, value);
         }
 
-        /// <devdoc> 
+        /// <summary> 
         //  For control hosts, this property has no effect
         /// as they get their own clicks.  Use ControlStyles.StandardClick
         /// instead. 
-        /// </devdoc>
+        /// </summary>
         [DefaultValue(false), Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new bool DoubleClickEnabled {
             get {
@@ -216,7 +198,6 @@ namespace System.Windows.Forms {
                 base.DoubleClickEnabled = value;
             }
         }
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.Font"]/*' />
         public override Font Font {
             get {
                 return Control.Font;
@@ -226,7 +207,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.Enabled"]/*' />
         public override bool Enabled {
             get {
                 return Control.Enabled;
@@ -237,18 +217,12 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.GotFocus"]/*' />
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnEnterDescr))]
         public event EventHandler Enter {
-            add {
-                Events.AddHandler(EventEnter, value);
-            }
-            remove {
-                Events.RemoveHandler(EventEnter, value);
-            }
+            add => Events.AddHandler(EventEnter, value);
+            remove => Events.RemoveHandler(EventEnter, value);
         }
 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.Focused"]/*' />
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Always)
         ]
@@ -258,7 +232,6 @@ namespace System.Windows.Forms {
            }
         }
 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.ForeColor"]/*' />
         public override Color ForeColor {
             get {
                 return Control.ForeColor;
@@ -268,7 +241,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.GotFocus"]/*' />
         [
         SRCategory(nameof(SR.CatFocus)), 
         SRDescription(nameof(SR.ToolStripItemOnGotFocusDescr)), 
@@ -276,12 +248,8 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Advanced)
         ]
         public event EventHandler GotFocus {
-            add {
-                Events.AddHandler(EventGotFocus, value);
-            }
-            remove {
-                Events.RemoveHandler(EventGotFocus, value);
-            }
+            add => Events.AddHandler(EventGotFocus, value);
+            remove => Events.RemoveHandler(EventGotFocus, value);
         }
 
         [
@@ -343,18 +311,13 @@ namespace System.Windows.Forms {
 
          [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnLeaveDescr))]
          public event EventHandler Leave {
-             add {
-                 Events.AddHandler(EventLeave, value);
-             }
-             remove {
-                 Events.RemoveHandler(EventLeave, value);
-             }
+             add => Events.AddHandler(EventLeave, value);
+             remove => Events.RemoveHandler(EventLeave, value);
          }
 
-         /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.LostFocus"]/*' />
-         /// <devdoc>
+         /// <summary>
          /// <para>Occurs when the control loses focus.</para>
-         /// </devdoc>
+         /// </summary>
          [
          SRCategory(nameof(SR.CatFocus)), 
          SRDescription(nameof(SR.ToolStripItemOnLostFocusDescr)), 
@@ -362,63 +325,43 @@ namespace System.Windows.Forms {
          EditorBrowsable(EditorBrowsableState.Advanced)
          ]
          public event EventHandler LostFocus {
-             add {
-                 Events.AddHandler(EventLostFocus, value);
-             }
-             remove {
-                 Events.RemoveHandler(EventLostFocus, value);
-             }
+             add => Events.AddHandler(EventLostFocus, value);
+             remove => Events.RemoveHandler(EventLostFocus, value);
          }
 
 
-         /// <include file='doc\WinBarControlHost.uex' path='docs/doc[@for="ToolStripControlHost.KeyDown"]/*' />
-         /// <devdoc>
+         /// <summary>
          /// <para>Occurs when a key is pressed down while the control has focus.</para>
-         /// </devdoc>
+         /// </summary>
          [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyDownDescr))]
          public event KeyEventHandler KeyDown {
-             add {
-                 Events.AddHandler(EventKeyDown, value);
-             }
-             remove {
-                 Events.RemoveHandler(EventKeyDown, value);
-             }
+             add => Events.AddHandler(EventKeyDown, value);
+             remove => Events.RemoveHandler(EventKeyDown, value);
          }
       
-         /// <include file='doc\WinBarControlHost.uex' path='docs/doc[@for="ToolStripControlHost.KeyPress"]/*' />
-         /// <devdoc>
+         /// <summary>
          /// <para> Occurs when a key is pressed while the control has focus.</para>
-         /// </devdoc>
+         /// </summary>
          [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyPressDescr))]
          public event KeyPressEventHandler KeyPress {
-             add {
-                 Events.AddHandler(EventKeyPress, value);
-             }
-             remove {
-                 Events.RemoveHandler(EventKeyPress, value);
-             }
+             add => Events.AddHandler(EventKeyPress, value);
+             remove => Events.RemoveHandler(EventKeyPress, value);
          }
       
-         /// <include file='doc\WinBarControlHost.uex' path='docs/doc[@for="ToolStripControlHost.KeyUp"]/*' />
-         /// <devdoc>
+         /// <summary>
          /// <para> Occurs when a key is released while the control has focus.</para>
-         /// </devdoc>
+         /// </summary>
          [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyUpDescr))]
          public event KeyEventHandler KeyUp {
-             add {
-                 Events.AddHandler(EventKeyUp, value);
-             }
-             remove {
-                 Events.RemoveHandler(EventKeyUp, value);
-             }
+             add => Events.AddHandler(EventKeyUp, value);
+             remove => Events.RemoveHandler(EventKeyUp, value);
          }
 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.RightToLeft"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// This is used for international applications where the language
         /// is written from RightToLeft. When this property is true,
         /// control placement and text will be from right to left.
-        /// </devdoc>
+        /// </summary>
         public override RightToLeft RightToLeft {
             get { 
                 if (control != null) {
@@ -447,7 +390,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.Selected"]/*' />
         public override bool Selected {
             get { 
                 if (Control != null)
@@ -485,9 +427,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Overriden to set the Site for the control hosted. This is set at DesignTime when the component is added to the Container. 
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public override ISite Site {
             get {
@@ -506,10 +448,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.Text"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Overriden to modify hosted control's text.
-        /// </devdoc>
+        /// </summary>
         [DefaultValue("")]
         public override string Text {
             get {
@@ -520,7 +461,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.TextAlign"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new ContentAlignment TextAlign {
              get {
@@ -541,7 +481,6 @@ namespace System.Windows.Forms {
              }
         }
 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.TextImageRelation"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new TextImageRelation TextImageRelation {
            get {
@@ -554,35 +493,26 @@ namespace System.Windows.Forms {
 
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnValidatingDescr))]
         public event CancelEventHandler Validating {
-            add {
-                Events.AddHandler(EventValidating, value);
-            }
-            remove {
-                Events.RemoveHandler(EventValidating, value);
-            }
+            add => Events.AddHandler(EventValidating, value);
+            remove => Events.RemoveHandler(EventValidating, value);
         }
 
 
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnValidatedDescr))]
         public event EventHandler Validated {
-            add {
-                Events.AddHandler(EventValidated, value);
-            }
-            remove {
-                Events.RemoveHandler(EventValidated, value);
-            }
+            add => Events.AddHandler(EventValidated, value);
+            remove => Events.RemoveHandler(EventValidated, value);
         }
 
-                /// </devdoc>
+                /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override AccessibleObject CreateAccessibilityInstance() {
             return Control.AccessibilityObject;
         }
 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.Dispose"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Cleans up and destroys the hosted control.
-        /// </devdoc>
+        /// </summary>
         protected override void Dispose(bool disposing) {
             // Call base first so other things stop trying to talk to the control.  This will
             // unparent the host item which will cause a SyncControlParent, so the control
@@ -599,7 +529,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.Focus"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public void Focus() 
         {
@@ -607,7 +536,6 @@ namespace System.Windows.Forms {
         }
 
     
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.GetPreferredSize"]/*' />
         public override Size GetPreferredSize(Size constrainingSize) {
             if (control != null) {
                 return Control.GetPreferredSize(constrainingSize - Padding.Size) + Padding.Size;
@@ -761,10 +689,9 @@ namespace System.Windows.Forms {
         }
         
         
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.OnGotFocus"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// called when the control has lost focus
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnGotFocus(EventArgs e) {
             RaiseEvent(EventGotFocus, e);            
         }
@@ -773,29 +700,24 @@ namespace System.Windows.Forms {
             RaiseEvent(EventLeave, e);
         }
         
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.OnLostFocus"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// called when the control has lost focus
-        /// </devdoc >
+        /// </summary>
         protected virtual void OnLostFocus(EventArgs e) {         
             RaiseEvent(EventLostFocus, e);                              
         } 
-        /// <include file='doc\WinBarControlHost.uex' path='docs/doc[@for="ToolStripControlHost.OnKeyDown"]/*' />
         protected virtual void OnKeyDown(KeyEventArgs e) {         
             RaiseKeyEvent(EventKeyDown, e);                              
         } 
-        /// <include file='doc\WinBarControlHost.uex' path='docs/doc[@for="ToolStripControlHost.OnKeyPress"]/*' />
         protected virtual void OnKeyPress(KeyPressEventArgs e) {         
             RaiseKeyPressEvent(EventKeyPress, e);                              
         } 
-        /// <include file='doc\WinBarControlHost.uex' path='docs/doc[@for="ToolStripControlHost.OnKeyUp"]/*' />
         protected virtual void OnKeyUp(KeyEventArgs e) {         
             RaiseKeyEvent(EventKeyUp, e);                              
         } 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.OnBoundsChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Called when the items bounds are changed.  Here, we update the Control's bounds.
-        /// </devdoc>
+        /// </summary>
         protected override void OnBoundsChanged() {
             if (control != null) {
                 SuspendSizeSync();
@@ -821,24 +743,21 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.OnPaint"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Called when the control fires its Paint event.
-        /// </devdoc>
+        /// </summary>
         protected override void OnPaint(PaintEventArgs e) {
             // do nothing....
         }
 
         
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.OnLayout"]/*' />
         protected internal override void OnLayout(LayoutEventArgs e) {    
             // do nothing... called via the controls collection
         }
     
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.OnParentChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Called when the item's parent has been changed.
-        /// </devdoc>
+        /// </summary>
         protected override void OnParentChanged(ToolStrip oldParent, ToolStrip newParent) {
             if (oldParent != null && Owner == null  && newParent == null && Control != null) {
                 // if we've really been removed from the item collection,
@@ -859,12 +778,11 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.OnSubscribeControlEvents"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// The events from the hosted control are subscribed here.  
         /// Override to add/prevent syncing of control events.
         /// NOTE: if you override and hook up events here, you should unhook in OnUnsubscribeControlEvents.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnSubscribeControlEvents(Control control) {
 
             if (control != null) {
@@ -909,11 +827,10 @@ namespace System.Windows.Forms {
         }
       
 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.OnUnsubscribeControlEvents"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// The events from the hosted control are unsubscribed here.  
         /// Override to unhook events subscribed in OnSubscribeControlEvents.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnUnsubscribeControlEvents(Control control) {
              if (control != null) {
                 // Please keep this alphabetized and in sync with Subscribe
@@ -979,21 +896,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.OnHostedControlResize"]/*' />
         protected virtual void OnHostedControlResize(EventArgs e) {
             // support for syncing the wrapper when the control size has changed
             this.Size = Control.Size;
         }
     
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.ProcessCmdKey"]/*' />
-        // 
-
-
-        [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
-        protected internal override bool ProcessCmdKey(ref Message m, Keys keyData) {
-            // Control will get this from being in the control collection.
-            return false;
-        }
+        protected internal override bool ProcessCmdKey(ref Message m, Keys keyData) => false;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters")] // 'charCode' matches control.cs
         protected internal override bool ProcessMnemonic(char charCode) {
@@ -1003,12 +911,7 @@ namespace System.Windows.Forms {
             return base.ProcessMnemonic( charCode );
         }
 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.ProcessDialogKey"]/*' />
-        [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
-        protected internal override bool ProcessDialogKey(Keys keyData) {
-            // Control will get this from being in the control collection.
-            return false;
-        }
+        protected internal override bool ProcessDialogKey(Keys keyData) => false;
 
         protected override void SetVisibleCore(bool visible) {
             // This is needed, because if you try and set set visible to true before the parent is visible,
@@ -1106,9 +1009,9 @@ namespace System.Windows.Forms {
                 owner = host as IComponent;
             }
             // The component sited by this component site.
-            /// <devdoc>
+            /// <summary>
             ///    <para>When implemented by a class, gets the component associated with the <see cref='System.ComponentModel.ISite'/>.</para>
-            /// </devdoc>
+            /// </summary>
             IComponent ISite.Component {
                 get
                 {
@@ -1117,9 +1020,9 @@ namespace System.Windows.Forms {
             }
         
             // The container in which the component is sited.
-            /// <devdoc>
+            /// <summary>
             /// <para>When implemented by a class, gets the container associated with the <see cref='System.ComponentModel.ISite'/>.</para>
-            /// </devdoc>
+            /// </summary>
             IContainer ISite.Container {
                 get {
                     return owner.Site.Container;
@@ -1127,9 +1030,9 @@ namespace System.Windows.Forms {
             }
         
             // Indicates whether the component is in design mode.
-            /// <devdoc>
+            /// <summary>
             ///    <para>When implemented by a class, determines whether the component is in design mode.</para>
-            /// </devdoc>
+            /// </summary>
             bool ISite.DesignMode {
                 get {
                     return owner.Site.DesignMode;
@@ -1138,10 +1041,10 @@ namespace System.Windows.Forms {
 
             // The name of the component.
             //
-            /// <devdoc>
+            /// <summary>
             ///    <para>When implemented by a class, gets or sets the name of
             ///       the component associated with the <see cref='System.ComponentModel.ISite'/>.</para>
-            /// </devdoc>
+            /// </summary>
             string ISite.Name {
                 get {
                     return owner.Site.Name;
@@ -1172,9 +1075,9 @@ namespace System.Windows.Forms {
                 return null;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the key corresponding to the given value.
-            /// </devdoc>
+            /// </summary>
             object IDictionaryService.GetKey(object value) {
                 if (_dictionary != null) {
                     foreach (DictionaryEntry de in _dictionary) {
@@ -1187,9 +1090,9 @@ namespace System.Windows.Forms {
                 return null;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the value corresponding to the given key.
-            /// </devdoc>
+            /// </summary>
             object IDictionaryService.GetValue(object key) {
                 if (_dictionary != null) {
                     return _dictionary[key];
@@ -1197,11 +1100,11 @@ namespace System.Windows.Forms {
                 return null;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Stores the given key-value pair in an object's site.  This key-value
             ///     pair is stored on a per-object basis, and is a handy place to save
             ///     additional information about a component.
-            /// </devdoc>
+            /// </summary>
             void IDictionaryService.SetValue(object key, object value) {
                 if (_dictionary == null) {
                     _dictionary = new Hashtable();

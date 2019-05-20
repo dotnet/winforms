@@ -11,19 +11,16 @@ namespace System.Windows.Forms
     using System.Drawing;
     using System.Globalization;
     
-    /// <include file='doc\DataGridViewTextBoxColumn.uex' path='docs/doc[@for="DataGridViewTextBoxColumn"]/*' />
-    [ToolboxBitmapAttribute(typeof(DataGridViewTextBoxColumn), "DataGridViewTextBoxColumn.bmp")]
+    [ToolboxBitmapAttribute(typeof(DataGridViewTextBoxColumn), "DataGridViewTextBoxColumn")]
     public class DataGridViewTextBoxColumn : DataGridViewColumn
     {
         private const int DATAGRIDVIEWTEXTBOXCOLUMN_maxInputLength = 32767;
 
-        /// <include file='doc\DataGridViewTextBoxColumn.uex' path='docs/doc[@for="DataGridViewTextBoxColumn.DataGridViewTextBoxColumn"]/*' />
         public DataGridViewTextBoxColumn() : base(new DataGridViewTextBoxCell())
         {
             this.SortMode = DataGridViewColumnSortMode.Automatic;
         }
 
-        /// <include file='doc\DataGridViewTextBoxColumn.uex' path='docs/doc[@for="DataGridViewTextBoxColumn.CellTemplate"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -44,7 +41,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewTextBoxColumn.uex' path='docs/doc[@for="DataGridViewTextBoxColumn.MaxInputLength"]/*' />
         [
             DefaultValue(DATAGRIDVIEWTEXTBOXCOLUMN_maxInputLength),
             SRCategory(nameof(SR.CatBehavior)),
@@ -83,7 +79,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewTextBoxColumn.uex' path='docs/doc[@for="DataGridViewTextBoxColumn.SortMode"]/*' />
         [
             DefaultValue(DataGridViewColumnSortMode.Automatic)
         ]
@@ -107,7 +102,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewTextBoxColumn.uex' path='docs/doc[@for="DataGridViewTextBoxColumn.ToString"]/*' />
         public override string ToString() 
         {
             StringBuilder sb = new StringBuilder(64);

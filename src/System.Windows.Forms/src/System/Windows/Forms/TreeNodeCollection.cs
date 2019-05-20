@@ -14,7 +14,6 @@ namespace System.Windows.Forms {
     using System.Drawing.Design;
     using System.Globalization;
 
-    /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection"]/*' />
     [
     Editor("System.Windows.Forms.Design.TreeNodeCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
     ]
@@ -36,8 +35,6 @@ namespace System.Windows.Forms {
             this.owner = owner;
         }
         
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.FixedIndex"]/*' />
-        /// <internalonly/>
         internal int FixedIndex
         {
             get {
@@ -49,7 +46,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.this"]/*' />
         public virtual TreeNode this[int index] {
             get {
                 if (index < 0 || index >= owner.childCount) {
@@ -59,7 +55,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (index < 0 || index >= owner.childCount)
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 value.parent = owner;
                 value.index = index;
                 owner.children[index] = value;
@@ -67,8 +63,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.IList.this"]/*' />
-        /// <internalonly/>
         object IList.this[int index] {
             get {
                 return this[index];
@@ -83,10 +77,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.this"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     <para>Retrieves the child control with the specified key.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual TreeNode this[string key] {
             get {
                 // We do not support null and empty string as valid keys.
@@ -105,7 +98,6 @@ namespace System.Windows.Forms {
 
             }
         }
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.Count"]/*' />
         // Make this property available to Intellisense. (Removed the EditorBrowsable attribute.)
         [Browsable(false)]
         public int Count {
@@ -114,41 +106,33 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.ICollection.SyncRoot"]/*' />
-        /// <internalonly/>
         object ICollection.SyncRoot {
             get {
                 return this;
             }
         }
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.ICollection.IsSynchronized"]/*' />
-        /// <internalonly/>
         bool ICollection.IsSynchronized {
             get {
                 return false;
             }
         }
         
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.IList.IsFixedSize"]/*' />
-        /// <internalonly/>
         bool IList.IsFixedSize {
             get {
                 return false;
             }
         }
         
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.IsReadOnly"]/*' />
         public bool IsReadOnly {
             get {  
                 return false;
             }
         }
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.Add"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new child node under this node.  Child node is positioned after siblings.
-        /// </devdoc>
+        /// </summary>
         public virtual TreeNode Add(string text) {
             TreeNode tn = new TreeNode(text);
             Add(tn);
@@ -157,10 +141,9 @@ namespace System.Windows.Forms {
 
         // <-- NEW ADD OVERLOADS IN WHIDBEY
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.Add1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new child node under this node.  Child node is positioned after siblings.
-        /// </devdoc>
+        /// </summary>
         public virtual TreeNode Add(string key, string text) {
             TreeNode tn = new TreeNode(text);
             tn.Name = key;
@@ -168,10 +151,9 @@ namespace System.Windows.Forms {
             return tn;
         }
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.Add2"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new child node under this node.  Child node is positioned after siblings.
-        /// </devdoc>
+        /// </summary>
         public virtual TreeNode Add(string key, string text, int imageIndex) {
             TreeNode tn = new TreeNode(text);
             tn.Name = key;
@@ -180,10 +162,9 @@ namespace System.Windows.Forms {
             return tn;
         }
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.Add3"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new child node under this node.  Child node is positioned after siblings.
-        /// </devdoc>
+        /// </summary>
         public virtual TreeNode Add(string key, string text, string imageKey) {
             TreeNode tn = new TreeNode(text);
             tn.Name = key;
@@ -192,10 +173,9 @@ namespace System.Windows.Forms {
             return tn;
         }
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.Add4"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new child node under this node.  Child node is positioned after siblings.
-        /// </devdoc>
+        /// </summary>
         public virtual TreeNode Add(string key, string text, int imageIndex, int selectedImageIndex) {
             TreeNode tn = new TreeNode(text, imageIndex, selectedImageIndex);
             tn.Name = key;
@@ -203,10 +183,9 @@ namespace System.Windows.Forms {
             return tn;
         }
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.Add5"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new child node under this node.  Child node is positioned after siblings.
-        /// </devdoc>
+        /// </summary>
         public virtual TreeNode Add(string key, string text, string imageKey, string selectedImageKey) {
             TreeNode tn = new TreeNode(text);
             tn.Name = key;
@@ -218,7 +197,6 @@ namespace System.Windows.Forms {
 
         // END - NEW ADD OVERLOADS IN WHIDBEY -->
         
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.AddRange"]/*' />
         public virtual void AddRange(TreeNode[] nodes) {
             if (nodes == null) {
                 throw new ArgumentNullException(nameof(nodes));
@@ -240,7 +218,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.Find"]/*' />
         public TreeNode[] Find (string key, bool searchAllChildren) {
              ArrayList foundNodes =  FindInternal(key, searchAllChildren, this, new ArrayList());
 
@@ -285,10 +262,9 @@ namespace System.Windows.Forms {
             return foundTreeNodes;
         }
 
-		/// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.Add1"]/*' />
-		/// <devdoc>
+		/// <summary>
 		///     Adds a new child node to this node.  Child node is positioned after siblings.
-		/// </devdoc>
+		/// </summary>
 		public virtual int Add(TreeNode node) {
 			return AddInternal(node, 0);
 		}
@@ -334,8 +310,6 @@ namespace System.Windows.Forms {
             return node.index;
         }
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.IList.Add"]/*' />
-        /// <internalonly/>
         int IList.Add(object node) {
             if (node == null) {
                 throw new ArgumentNullException(nameof(node));
@@ -349,22 +323,18 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.Contains"]/*' />
         public bool Contains(TreeNode node) {
             return IndexOf(node) != -1;
         }
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.ContainsKey"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual bool ContainsKey(string key) {
            return IsValidIndex(IndexOfKey(key)); 
         }
 
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.IList.Contains"]/*' />
-        /// <internalonly/>
         bool IList.Contains(object node) {
             if (node is TreeNode) {
                 return Contains((TreeNode)node);
@@ -374,7 +344,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.IndexOf"]/*' />
         public int IndexOf(TreeNode node) {
             for(int index=0; index < Count; ++index) {
                 if (this[index] == node) {
@@ -384,8 +353,6 @@ namespace System.Windows.Forms {
             return -1;
         }
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.IList.IndexOf"]/*' />
-        /// <internalonly/>
         int IList.IndexOf(object node) {
             if (node is TreeNode) {
                 return IndexOf((TreeNode)node);
@@ -396,10 +363,9 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.this"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual int  IndexOfKey(string key) {
             // Step 0 - Arg validation
             if (string.IsNullOrEmpty(key)){
@@ -428,10 +394,9 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.Insert"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Inserts a new child node on this node.  Child node is positioned as specified by index.
-        /// </devdoc>
+        /// </summary>
         public virtual void Insert(int index, TreeNode node) {
             if (node.handle != IntPtr.Zero)
                 throw new ArgumentException(string.Format(SR.OnlyOneControl, node.Text), "node");
@@ -451,8 +416,6 @@ namespace System.Windows.Forms {
             owner.InsertNodeAt(index, node);
         }
         
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.IList.Insert"]/*' />
-        /// <internalonly/>
         void IList.Insert(int index, object node) {
             if (node is TreeNode) {
                 Insert(index, (TreeNode)node);
@@ -464,20 +427,18 @@ namespace System.Windows.Forms {
 
         // <-- NEW INSERT OVERLOADS IN WHIDBEY
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.Insert1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Inserts a new child node on this node.  Child node is positioned as specified by index.
-        /// </devdoc>
+        /// </summary>
         public virtual TreeNode Insert(int index, string text) {
             TreeNode tn = new TreeNode(text);
             Insert(index, tn);
             return tn;
         }
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.Insert2"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Inserts a new child node on this node.  Child node is positioned as specified by index.
-        /// </devdoc>
+        /// </summary>
         public virtual TreeNode Insert(int index, string key, string text) {
             TreeNode tn = new TreeNode(text);
             tn.Name = key;
@@ -485,10 +446,9 @@ namespace System.Windows.Forms {
             return tn;
         }
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.Insert3"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Inserts a new child node on this node.  Child node is positioned as specified by index.
-        /// </devdoc>
+        /// </summary>
         public virtual TreeNode Insert(int index, string key, string text, int imageIndex) {
             TreeNode tn = new TreeNode(text);
             tn.Name = key;
@@ -497,10 +457,9 @@ namespace System.Windows.Forms {
             return tn;
         }
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.Insert4"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Inserts a new child node on this node.  Child node is positioned as specified by index.
-        /// </devdoc>
+        /// </summary>
         public virtual TreeNode Insert(int index, string key, string text, string imageKey) {
             TreeNode tn = new TreeNode(text);
             tn.Name = key;
@@ -509,10 +468,9 @@ namespace System.Windows.Forms {
             return tn;
         }
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.Insert5"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Inserts a new child node on this node.  Child node is positioned as specified by index.
-        /// </devdoc>
+        /// </summary>
         public virtual TreeNode Insert(int index, string key, string text, int imageIndex, int selectedImageIndex) {
             TreeNode tn = new TreeNode(text, imageIndex, selectedImageIndex);
             tn.Name = key;
@@ -520,10 +478,9 @@ namespace System.Windows.Forms {
             return tn;
         }
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.Insert6"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Inserts a new child node on this node.  Child node is positioned as specified by index.
-        /// </devdoc>
+        /// </summary>
         public virtual TreeNode Insert(int index, string key, string text, string imageKey, string selectedImageKey) {
             TreeNode tn = new TreeNode(text);
             tn.Name = key;
@@ -535,52 +492,43 @@ namespace System.Windows.Forms {
 
         // END - NEW INSERT OVERLOADS IN WHIDBEY -->
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.IsValidIndex"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     <para>Determines if the index is valid for the collection.</para>
-        /// </devdoc>
-        /// <internalonly/> 
+        /// </summary>
         private bool IsValidIndex(int index) {
             return ((index >= 0) && (index < this.Count));
         }
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.Clear"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Remove all nodes from the tree view.
-        /// </devdoc>
+        /// </summary>
         public virtual void Clear() {
             owner.Clear();
         }
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.CopyTo"]/*' />
         public void CopyTo(Array dest, int index) {
             if (owner.childCount > 0) {
                 System.Array.Copy(owner.children, 0, dest, index, owner.childCount);
             }
         }
         
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.Remove"]/*' />
         public void Remove(TreeNode node) {
             node.Remove();
         }
         
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.IList.Remove"]/*' />
-        /// <internalonly/>
         void IList.Remove(object node) {
             if (node is TreeNode ) {
                 Remove((TreeNode)node);
             }
         }
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.RemoveAt"]/*' />
         public virtual void RemoveAt(int index) {
             this[index].Remove();
         }
        
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.RemoveByKey"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     <para>Removes the child control with the specified key.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual void RemoveByKey(string key) {
             int index = IndexOfKey(key);
             if (IsValidIndex(index)) {
@@ -589,7 +537,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.GetEnumerator"]/*' />
         public IEnumerator GetEnumerator() {
             return new WindowsFormsUtils.ArraySubsetEnumerator(owner.children, owner.childCount);
         }

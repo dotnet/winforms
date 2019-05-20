@@ -6,10 +6,10 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     // This enum is tightly coupled to Orientation so you can determine quickly
     // an orientation from a direction. (direction & Orientation.Vertical == Orientation.Vertical)
-    /// </devdoc>
+    /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
     public enum ArrowDirection
     {

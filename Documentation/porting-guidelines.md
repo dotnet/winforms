@@ -85,6 +85,10 @@ For additional information and assistance, we recommend checking out [this artic
 
 ## Migration tips
 
+### Include the System.Windows.Forms.Datavisualization Pack
+
+If you wish to use types previously associated with the [Charting control in the .NET Framework][framework-charting], you should add a package reference to the [NuGet package of Data Visualization][nuget-dataviz] ported to .NET Core. For more information about Data Visualization and the Charting control in .NET Core, including a sample application demonstrating its use, see the [winforms-datavisualization repository][dataviz]
+
 ### Include the Windows.Compatibility Pack
 
 Windows applications like Windows Forms and WPF often use APIs that aren't referenced by default in .NET Core. The reason is that .NET Core tries to reduce the risk that new applications accidentally depend on legacy technologies or on APIs that are Windows-only. However, when porting existing Windows applications, neither of these two aspects is a concern. To simplify your porting efforts, you can simply reference the [Windows Compatibility Pack][compat-pack], which will give
@@ -108,6 +112,10 @@ differences:
 System.PlatformNotSupportedException: 'Configuration files are not supported.'
 ```
 
+### Additional Types and Namespaces
+
+You can search for additional types which you may need in porting your apps to .NET Core on [APIs of DotNet][apisofnet]. For example, when you search for the type `System.AppDomain`, you will see that the type has been moved to `System.Runtime.Extensions` namespace starting in .NET Core 2.0.
+
 [comment]: <> (URI Links)
 
 [dotnet-blog-port-guide]: https://devblogs.microsoft.com/dotnet/how-to-port-desktop-applications-to-net-core-3-0/
@@ -115,5 +123,9 @@ System.PlatformNotSupportedException: 'Configuration files are not supported.'
 [api-port]: https://blogs.msdn.microsoft.com/dotnet/2018/08/08/are-your-windows-forms-and-wpf-applications-ready-for-net-core-3-0/
 [pkg-config]: https://docs.microsoft.com/en-us/nuget/reference/migrate-packages-config-to-package-reference
 [sdk-tool]:https://github.com/hvanbakel/CsprojToVs2017
+[framework-charting]: https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.datavisualization.charting
+[nuget-dataviz]: https://www.nuget.org/packages/System.windows.forms.datavisualization
+[dataviz]: https://github.com/dotnet/winforms-datavisualization
 [compat-pack]: https://docs.microsoft.com/en-us/dotnet/core/porting/windows-compat-pack
 [wcf-supported]: https://github.com/dotnet/wcf/blob/master/release-notes/SupportedFeatures-v2.1.0.md
+[apisofnet]: https://apisof.net/

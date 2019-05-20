@@ -4,8 +4,8 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Represents the method that will handle the CacheVirtualItems event of a ListView.
-    /// </devdoc>
+    /// </summary>
     public delegate void CacheVirtualItemsEventHandler(object sender, CacheVirtualItemsEventArgs e);
 }

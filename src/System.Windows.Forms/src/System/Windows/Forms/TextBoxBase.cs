@@ -7,7 +7,6 @@ namespace System.Windows.Forms {
     using System.Text;
     using System.Runtime.Serialization.Formatters;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System;
@@ -24,13 +23,12 @@ namespace System.Windows.Forms {
     using System.Reflection;
     using System.Globalization;
 
-    /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Implements the basic functionality required by text
     ///       controls.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -64,23 +62,21 @@ namespace System.Windows.Forms {
         private static readonly object EVENT_MULTILINECHANGED       = new object();
         private static readonly object EVENT_READONLYCHANGED        = new object();
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.borderStyle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The current border for this edit control.
-        /// </devdoc>
+        /// </summary>
         private BorderStyle borderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.maxLength"]/*' />
-        /// <devdoc>
-        ///     Controls the maximum length of text in the edit control.
-        /// </devdoc>
-        private int maxLength = 32767; // Win9X default, used for consistency
+        /// <summary>
+        /// Controls the maximum length of text in the edit control.
+        /// Matches the Windows limit.
+        /// </summary>
+        private int maxLength = 32767;
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.requestedHeight"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Used by the autoSizing code to help figure out the desired height of
         ///     the edit box.
-        /// </devdoc>
+        /// </summary>
         private int requestedHeight;
         bool integralHeightAdjust = false;
 
@@ -89,11 +85,11 @@ namespace System.Windows.Forms {
         private int selectionStart = 0;
         private int selectionLength = 0;
 
-        /// <devdoc>
+        /// <summary>
         ///     Controls firing of click event (Left click).
         ///     This is used by TextBox, RichTextBox and MaskedTextBox, code was moved down from TextBox/RichTextBox
         ///     but cannot make it as default behavior to avoid introducing breaking changes.
-        /// </devdoc>
+        /// </summary>
         private  bool doubleClickFired = false;
 
         private static int[] shortcutsToDisable;
@@ -102,11 +98,10 @@ namespace System.Windows.Forms {
         //
         private BitVector32 textBoxFlags = new BitVector32();
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.TextBoxBase"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new TextBox control.  Uses the parent's current font and color
         ///     set.
-        /// </devdoc>
+        /// </summary>
         internal TextBoxBase() : base() {
         
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
@@ -126,8 +121,7 @@ namespace System.Windows.Forms {
             requestedHeight = Height;
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.AcceptsTab"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets
         ///       a value indicating whether pressing the TAB key
@@ -135,7 +129,7 @@ namespace System.Windows.Forms {
         ///       a TAB character in the control instead of moving the focus to the next control
         ///       in the tab order.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -153,26 +147,20 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.AcceptsTabChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnAcceptsTabChangedDescr))]
         public event EventHandler AcceptsTabChanged {
-            add {
-                Events.AddHandler(EVENT_ACCEPTSTABCHANGED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_ACCEPTSTABCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_ACCEPTSTABCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_ACCEPTSTABCHANGED, value);
         }
 
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.ShortcutsEnabled"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the following shortcuts should be enabled or not:
         ///       Ctrl-Z, Ctrl-C, Ctrl-X, Ctrl-V, Ctrl-A, Ctrl-L, Ctrl-R, Ctrl-E, Ctrl-I, Ctrl-Y,
         ///       Ctrl-BackSpace, Ctrl-Del, Shift-Del, Shift-Ins.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
@@ -193,10 +181,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for=TextBoxBase.ProcessCmdKey]/*'/ />
-        /// <devdoc>
+        /// <summary>
         ///     Implements the <see cref='System.Windows.Forms.TextBoxBase.ShortcutsEnabled'/> property.
-        /// </devdoc>
+        /// </summary>
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
             // First call parent's ProcessCmdKey, since we don't to eat up
             // the shortcut key we are not supported in TextBox.
@@ -246,8 +233,7 @@ namespace System.Windows.Forms {
             return returnedValue;
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.AutoSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the size
         ///       of the control automatically adjusts when the font assigned to the control
@@ -256,7 +242,7 @@ namespace System.Windows.Forms {
         ///       Note: this works differently than other Controls' AutoSize, so we're hiding
         ///       it to avoid confusion.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
@@ -289,13 +275,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.BackColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets
         ///       the background color of the control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DispId(NativeMethods.ActiveX.DISPID_BACKCOLOR),
@@ -318,10 +303,8 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.BackgroundImage"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
             get {
@@ -334,33 +317,20 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.AutoSizeChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged {
-            add {
-                base.AutoSizeChanged += value;
-            }
-            remove {
-                base.AutoSizeChanged -= value;
-            }
+            add => base.AutoSizeChanged += value;
+            remove => base.AutoSizeChanged -= value;
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.BackgroundImageChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
-            remove {
-                base.BackgroundImageChanged -= value;
-            }
+            add => base.BackgroundImageChanged += value;
+            remove => base.BackgroundImageChanged -= value;
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.BackgroundImageLayout"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -371,25 +341,18 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.BackgroundImageLayoutChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
-            remove {
-                base.BackgroundImageLayoutChanged -= value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
+            remove => base.BackgroundImageLayoutChanged -= value;
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.BorderStyle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the border type
         ///       of the text box control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(BorderStyle.Fixed3D),
@@ -423,15 +386,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.BorderStyleChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnBorderStyleChangedDescr))]
         public event EventHandler BorderStyleChanged {
-            add {
-                Events.AddHandler(EVENT_BORDERSTYLECHANGED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_BORDERSTYLECHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_BORDERSTYLECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_BORDERSTYLECHANGED, value);
         }
 
         internal virtual bool CanRaiseTextChangedEvent {
@@ -440,9 +398,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Specifies whether the ImeMode can be enabled - See also ImeModeBase.
-        /// </devdoc>
+        /// </summary>
         protected override bool CanEnableIme {
             get {
                 Debug.WriteLineIf( CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside get_CanEnableIme(), this = " + this );
@@ -457,13 +415,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.CanUndo"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets a value
         ///       indicating whether the user can undo the previous operation in a text box control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Browsable(false),
@@ -474,7 +431,7 @@ namespace System.Windows.Forms {
             get {
                 if (IsHandleCreated) {
                     bool b;
-                    b = unchecked( (int) (long)SendMessage(NativeMethods.EM_CANUNDO, 0, 0)) != 0;
+                    b = unchecked( (int) (long)SendMessage(Interop.EditMessages.EM_CANUNDO, 0, 0)) != 0;
 
                     return b;
                 }
@@ -482,16 +439,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.CreateParams"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Returns the parameters needed to create the handle. Inheriting classes
         ///       can override this to provide extra functionality. They should not,
         ///       however, forget to call base.getCreateParams() first to get the struct
         ///       filled up with the basic info.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override CreateParams CreateParams {
             get {
                 CreateParams cp = base.CreateParams;
@@ -519,11 +474,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.DoubleBuffered"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This property is overridden and hidden from statement completion
         ///     on controls that are based on Win32 Native Controls.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override bool DoubleBuffered {
             get {
@@ -534,52 +488,39 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.Click"]/*' />
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public new event EventHandler Click {
-            add {
-                base.Click += value;
-            }
-            remove {
-                base.Click -= value;
-            }
+            add => base.Click += value;
+            remove => base.Click -= value;
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.MouseClick"]/*' />
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public new event MouseEventHandler MouseClick {
-            add {
-                base.MouseClick += value;
-            }
-            remove {
-                base.MouseClick -= value;
-            }
+            add => base.MouseClick += value;
+            remove => base.MouseClick -= value;
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.DefaultCursor"]/*' />
         protected override Cursor DefaultCursor {
             get {
                 return Cursors.IBeam;
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.DefaultSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
+        /// </summary>
         protected override Size DefaultSize {
             get {
                 return new Size(100, PreferredHeight);
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.ForeColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the foreground color of the control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DispId(NativeMethods.ActiveX.DISPID_FORECOLOR),
@@ -599,13 +540,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.HideSelection"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the selected
         ///       text in the text box control remains highlighted when the control loses focus.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
@@ -625,22 +565,17 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.HideSelectionChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnHideSelectionChangedDescr))]
         public event EventHandler HideSelectionChanged {
-            add {
-                Events.AddHandler(EVENT_HIDESELECTIONCHANGED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_HIDESELECTIONCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_HIDESELECTIONCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_HIDESELECTIONCHANGED, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Internal version of ImeMode property.  The ImeMode of TextBoxBase controls depend on its IME restricted
         ///     mode which is determined by the CanEnableIme property which checks whether the control is in Password or
         ///     ReadOnly mode.
-        /// </devdoc>
+        /// </summary>
         protected override ImeMode ImeModeBase {
             get {
                 if( DesignMode ) {
@@ -662,13 +597,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.Lines"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or
         ///       sets the lines of text in an text box control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -727,18 +661,17 @@ namespace System.Windows.Forms {
                     Text = text.ToString();
                 }
                 else {
-                    Text = "";
+                    Text = string.Empty;
                 }
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.MaxLength"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the maximum number of
         ///       characters the user can type into the text box control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(32767),
@@ -751,7 +684,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException(nameof(MaxLength), string.Format(SR.InvalidLowBoundArgumentEx, "MaxLength", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(MaxLength), value, 0));
                 }
 
                 if (maxLength != value) {
@@ -761,13 +694,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.Modified"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value that indicates that the text box control has been modified by the user since
         ///       the control was created or its contents were last set.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Browsable(false),
@@ -777,7 +709,7 @@ namespace System.Windows.Forms {
         public bool Modified {
             get {
                 if (IsHandleCreated) {
-                    bool curState = (0 != unchecked( (int) (long)SendMessage(NativeMethods.EM_GETMODIFY, 0, 0)));
+                    bool curState = (0 != unchecked( (int) (long)SendMessage(Interop.EditMessages.EM_GETMODIFY, 0, 0)));
                     if (textBoxFlags[modified] != curState) {
                         // Raise ModifiedChanged event.  See WmReflectCommand for more info.
                         textBoxFlags[modified] = curState;
@@ -794,7 +726,7 @@ namespace System.Windows.Forms {
             set {
                 if (Modified != value) {
                     if (IsHandleCreated) {
-                        SendMessage(NativeMethods.EM_SETMODIFY, value ? 1 : 0, 0);
+                        SendMessage(Interop.EditMessages.EM_SETMODIFY, value ? 1 : 0, 0);
                         // Must maintain this state always in order for the
                         // test in the Get method to work properly.
                     }
@@ -805,24 +737,18 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.ModifiedChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnModifiedChangedDescr))]
         public event EventHandler ModifiedChanged {
-            add {
-                Events.AddHandler(EVENT_MODIFIEDCHANGED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_MODIFIEDCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_MODIFIEDCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_MODIFIEDCHANGED, value);
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.Multiline"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether this
         ///       is a multiline text box control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -857,18 +783,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.MultilineChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnMultilineChangedDescr))]
         public event EventHandler MultilineChanged {
-            add {
-                Events.AddHandler(EVENT_MULTILINECHANGED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_MULTILINECHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_MULTILINECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_MULTILINECHANGED, value);
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.Padding"]/*' />
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -879,7 +799,6 @@ namespace System.Windows.Forms {
             set { base.Padding = value;}
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.PaddingChanged"]/*' />
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -887,19 +806,15 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnPaddingChangedDescr))
         ]
         public new event EventHandler PaddingChanged {
-            add {
-                base.PaddingChanged += value;
-            }
-            remove {
-                base.PaddingChanged -= value;
-            }
+            add => base.PaddingChanged += value;
+            remove => base.PaddingChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines if the control is in password protect mode.  This is overridden in TextBox and
         ///     MaskedTextBox and is false by default so RichTextBox that doesn't support Password doesn't
         ///     have to care about this.
-        /// </devdoc>
+        /// </summary>
         virtual internal bool PasswordProtect
         {
             get {
@@ -907,13 +822,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.PreferredHeight"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Returns the preferred
         ///       height for a single-line text box.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
@@ -975,11 +889,11 @@ namespace System.Windows.Forms {
             return preferredSize;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Get the currently selected text start position and length.  Use this method internally
         ///     to avoid calling SelectionStart + SelectionLength each of which does essentially the
         ///     same (save one message round trip).
-        /// </devdoc>
+        /// </summary>
         internal void GetSelectionStartAndLength( out int start, out int length ){
             int end = 0;
 
@@ -993,7 +907,7 @@ namespace System.Windows.Forms {
             }
             else {
                 start = 0;
-                UnsafeNativeMethods.SendMessage( new HandleRef( this, Handle ), NativeMethods.EM_GETSEL, ref start, ref end );
+                UnsafeNativeMethods.SendMessage( new HandleRef( this, Handle ), Interop.EditMessages.EM_GETSEL, ref start, ref end );
 
                 //Here, we return the max of either 0 or the # returned by
                 //the windows call.  This eliminates a problem on nt4 where
@@ -1026,12 +940,11 @@ namespace System.Windows.Forms {
 #endif
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.ReadOnly"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether text in the text box is read-only.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -1046,7 +959,7 @@ namespace System.Windows.Forms {
                 if (textBoxFlags[readOnly] != value) {
                     textBoxFlags[readOnly] = value;
                     if (IsHandleCreated) {
-                        SendMessage(NativeMethods.EM_SETREADONLY, value? -1: 0, 0);
+                        SendMessage(Interop.EditMessages.EM_SETREADONLY, value? -1: 0, 0);
                     }
 
                     OnReadOnlyChanged(EventArgs.Empty);
@@ -1056,23 +969,17 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.ReadOnlyChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnReadOnlyChangedDescr))]
         public event EventHandler ReadOnlyChanged {
-            add {
-                Events.AddHandler(EVENT_READONLYCHANGED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_READONLYCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_READONLYCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_READONLYCHANGED, value);
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.SelectedText"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       The currently selected text in the control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
@@ -1090,45 +997,44 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Replaces the selected text with the one passed in.
-        /// </devdoc>
+        /// </summary>
         internal virtual void SetSelectedTextInternal(string text, bool clearUndo){
             if (!IsHandleCreated) {
                 CreateHandle();
             }
 
             if( text == null ){
-                text = "";
+                text = string.Empty;
             }
 
             // The EM_LIMITTEXT message limits only the text the user can enter. It does not affect any text
             // already in the edit control when the message is sent, nor does it affect the length of the text
             // copied to the edit control by the WM_SETTEXT message.
-            SendMessage(NativeMethods.EM_LIMITTEXT, 0, 0);
+            SendMessage(Interop.EditMessages.EM_LIMITTEXT, 0, 0);
 
             if( clearUndo ){
-                SendMessage(NativeMethods.EM_REPLACESEL, 0, text);
+                SendMessage(Interop.EditMessages.EM_REPLACESEL, 0, text);
                 // For consistency with Text, we clear the modified flag
-                SendMessage(NativeMethods.EM_SETMODIFY, 0, 0);
+                SendMessage(Interop.EditMessages.EM_SETMODIFY, 0, 0);
                 ClearUndo();
             }
             else{
-                SendMessage(NativeMethods.EM_REPLACESEL, /*undoable*/ -1, text);
+                SendMessage(Interop.EditMessages.EM_REPLACESEL, /*undoable*/ -1, text);
             }
 
             // Re-enable user input.
-            SendMessage(NativeMethods.EM_LIMITTEXT, maxLength, 0);
+            SendMessage(Interop.EditMessages.EM_LIMITTEXT, maxLength, 0);
         }
 
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.SelectionLength"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the number of characters selected in the text
         ///       box.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
@@ -1146,7 +1052,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value < 0){
-                    throw new ArgumentOutOfRangeException(nameof(SelectionLength), string.Format(SR.InvalidArgument, "SelectionLength", value.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SelectionLength), value));
                 }
 
                 int selStart, selLength;
@@ -1158,14 +1064,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.SelectionStart"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the starting
         ///       point of text selected in the text
         ///       box.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
@@ -1182,7 +1087,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0){
-                    throw new ArgumentOutOfRangeException(nameof(SelectionStart), string.Format(SR.InvalidArgument, "SelectionStart", value.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SelectionStart), value));
                 }
                 Select(value, SelectionLength);
             }
@@ -1195,13 +1100,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.Text"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets
         ///       the current text in the text box.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         Localizable(true),
         Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
@@ -1215,7 +1119,7 @@ namespace System.Windows.Forms {
                     base.Text = value;
                     if (IsHandleCreated) {
                         // clear the modified flag
-                        SendMessage(NativeMethods.EM_SETMODIFY, 0, 0);
+                        SendMessage(Interop.EditMessages.EM_SETMODIFY, 0, 0);
                     }
                 }
             }
@@ -1226,24 +1130,22 @@ namespace System.Windows.Forms {
             // Note: Currently Winforms does not fully support surrogates.  If
             // the text contains surrogate characters this property may return incorrect values.
 
-            => IsHandleCreated ? SafeNativeMethods.GetWindowTextLength(new HandleRef(this, Handle)) : Text.Length;
+            => IsHandleCreated ? Interop.User32.GetWindowTextLengthW(new HandleRef(this, Handle)) : Text.Length;
 
         // Since setting the WindowText while the handle is created
         // generates a WM_COMMAND message, we must trap that case
         // and prevent the event from getting fired, or we get
         // double "TextChanged" events.
         //
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.WindowText"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         internal override string WindowText {
             get {
                 return base.WindowText;
             }
 
             set {
-                if (value == null) value = "";
+                if (value == null) value = string.Empty;
                 if (!WindowText.Equals(value)) {
                     textBoxFlags[codeUpdateText] = true;
                     try {
@@ -1256,21 +1158,21 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     In certain circumstances we might have to force
         ///     text into the window whether or not the text is the same.
         ///     Make this a method on TextBoxBase rather than RichTextBox (which is the only
         ///     control that needs this at this point), since we need to set codeUpdateText.
-        /// </devdoc>
+        /// </summary>
         internal void ForceWindowText(string value) {
             if (value == null) {
-                value = "";
+                value = string.Empty;
             }
             
             textBoxFlags[codeUpdateText] = true;
             try {
                 if (IsHandleCreated) {
-                    UnsafeNativeMethods.SetWindowText(new HandleRef(this, Handle), value);
+                    Interop.User32.SetWindowTextW(new HandleRef(this, Handle), value);
                 }
                 else {
                     if (value.Length == 0) {
@@ -1286,14 +1188,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.WordWrap"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether a
         ///       multiline text box control automatically wraps words to the beginning of the next
         ///       line when necessary.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
@@ -1314,12 +1215,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.AdjustHeight"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Adjusts the height of a single-line edit control to match the height of
         ///     the control's font.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void AdjustHeight(bool returnIfAnchored) {
 
             // If we're anchored to two opposite sides of the form, don't adjust the size because
@@ -1360,12 +1259,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.AppendText"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Append text to the current text of text box.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void AppendText( string text ) {
             if (text.Length > 0) {
                 int selStart, selLength;
@@ -1391,43 +1289,38 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.Clear"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Clears all text from the text box control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void Clear() {
             Text = null;
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.ClearUndo"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Clears information about the most recent operation
         ///       from the undo buffer of the text box.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void ClearUndo() {
             if (IsHandleCreated) {
-                SendMessage(NativeMethods.EM_EMPTYUNDOBUFFER, 0, 0);
+                SendMessage(Interop.EditMessages.EM_EMPTYUNDOBUFFER, 0, 0);
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.Copy"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Copies the current selection in the text box to the Clipboard.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void Copy() {
-            SendMessage(NativeMethods.WM_COPY, 0, 0);
+            SendMessage(Interop.WindowMessages.WM_COPY, 0, 0);
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.CreateHandle"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         protected override void CreateHandle() {
             // This "creatingHandle" stuff is to avoid property change events
             // when we set the Text property.
@@ -1446,30 +1339,27 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.Cut"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Moves the current selection in the text box to the Clipboard.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void Cut() {
-            SendMessage(NativeMethods.WM_CUT, 0, 0);
+            SendMessage(Interop.WindowMessages.WM_CUT, 0, 0);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the text end position (one past the last input character).  This property is virtual to allow MaskedTextBox
         ///     to set the last input char position as opposed to the last char position which may be a mask character.
-        /// </devdoc>
+        /// </summary>
         internal virtual int GetEndPosition(){
             // +1 because RichTextBox has this funny EOF pseudo-character after all the text.
             return IsHandleCreated ? TextLength + 1 : TextLength;
         }
 
-                /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.IsInputKey"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    Overridden to handle TAB key.
-        /// </devdoc>
+        /// </summary>
         protected override bool IsInputKey(Keys keyData) {
             if ((keyData & Keys.Alt) != Keys.Alt) {
                 switch (keyData & Keys.KeyCode) {
@@ -1496,12 +1386,10 @@ namespace System.Windows.Forms {
             return base.IsInputKey(keyData);
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.OnHandleCreated"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    Overridden to update the newly created handle with the settings of the
         ///    MaxLength and PasswordChar properties.
-        /// </devdoc>
+        /// </summary>
         protected override void OnHandleCreated(EventArgs e) {
             base.OnHandleCreated(e);
             // it's likely here that the create params could have changed
@@ -1511,7 +1399,7 @@ namespace System.Windows.Forms {
 
             UpdateMaxLength();
             if (textBoxFlags[modified]){
-                SendMessage(NativeMethods.EM_SETMODIFY, 1, 0);
+                SendMessage(Interop.EditMessages.EM_SETMODIFY, 1, 0);
             }
             if (textBoxFlags[scrollToCaretOnHandleCreated]) {
                 ScrollToCaret();
@@ -1519,10 +1407,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.OnHandleDestroyed"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         protected override void OnHandleDestroyed(EventArgs e) {
             textBoxFlags[modified] = Modified;
             textBoxFlags[setSelectionOnHandleCreated] = true;            
@@ -1531,17 +1417,15 @@ namespace System.Windows.Forms {
             base.OnHandleDestroyed(e);
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.Paste"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Replaces the current selection in the text box with the contents of the Clipboard.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void Paste() {
-            SendMessage(NativeMethods.WM_PASTE, 0, 0);
+            SendMessage(Interop.WindowMessages.WM_PASTE, 0, 0);
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.ProcessDialogKey"]/*' />
         protected override bool ProcessDialogKey(Keys keyData) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "TextBoxBase.ProcessDialogKey [" + keyData.ToString() + "]");
             Keys keyCode = (Keys)keyData & Keys.KeyCode;
@@ -1554,23 +1438,17 @@ namespace System.Windows.Forms {
             return base.ProcessDialogKey(keyData);
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.OnPaint"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     TextBox / RichTextBox Onpaint.
-        /// </devdoc>
-        /// <internalonly/><hideinheritance/>
+        /// </summary>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
-            add {
-                base.Paint += value;
-            }
-            remove {
-                base.Paint -= value;
-            }
+            add => base.Paint += value;
+            remove => base.Paint -= value;
         }
 
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.OnAcceptsTabChanged"]/*' />
         protected virtual void OnAcceptsTabChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_ACCEPTSTABCHANGED] as EventHandler;
             if (eh != null) {
@@ -1578,7 +1456,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.OnBorderStyleChanged"]/*' />
         protected virtual void OnBorderStyleChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_BORDERSTYLECHANGED] as EventHandler;
             if (eh != null) {
@@ -1586,13 +1463,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.OnFontChanged"]/*' />
         protected override void OnFontChanged(EventArgs e) {
             base.OnFontChanged(e);
             AdjustHeight(false);
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.OnHideSelectionChanged"]/*' />
         protected virtual void OnHideSelectionChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_HIDESELECTIONCHANGED] as EventHandler;
             if (eh != null) {
@@ -1600,7 +1475,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.OnModifiedChanged"]/*' />
         protected virtual void OnModifiedChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_MODIFIEDCHANGED] as EventHandler;
             if (eh != null) {
@@ -1608,9 +1482,9 @@ namespace System.Windows.Forms {
             }
         }
 
-         /// <devdoc>
+         /// <summary>
         ///     Raises the MouseUp event.
-        /// </devdoc>
+        /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent) {
             Point pt = PointToScreen(mevent.Location);
 
@@ -1631,7 +1505,6 @@ namespace System.Windows.Forms {
             base.OnMouseUp(mevent);
         }
 
-         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.OnMultilineChanged"]/*' />
         protected virtual void OnMultilineChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_MULTILINECHANGED] as EventHandler;
             if (eh != null) {
@@ -1645,7 +1518,6 @@ namespace System.Windows.Forms {
             AdjustHeight(false);
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.OnReadOnlyChanged"]/*' />
         protected virtual void OnReadOnlyChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_READONLYCHANGED] as EventHandler;
             if (eh != null) {
@@ -1662,23 +1534,21 @@ namespace System.Windows.Forms {
             base.OnTextChanged(e);
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.GetCharFromPosition"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the character nearest to the given point.
-        /// </devdoc>
+        /// </summary>
         public virtual char GetCharFromPosition(Point pt) {
             string t = this.Text;
             int index = GetCharIndexFromPosition(pt);
             return (index < 0 || index >= t.Length) ? (char)0 : t[index];
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.GetCharIndexFromPosition"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the index of the character nearest to the given point.
-        /// </devdoc>
+        /// </summary>
         public virtual int GetCharIndexFromPosition(Point pt) {
             int longPoint = NativeMethods.Util.MAKELONG(pt.X, pt.Y);
-            int index = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.EM_CHARFROMPOS, 0, longPoint);
+            int index = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_CHARFROMPOS, 0, longPoint);
             index = NativeMethods.Util.LOWORD(index);
 
             if (index < 0) {
@@ -1696,57 +1566,52 @@ namespace System.Windows.Forms {
             return index;
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.GetLineFromCharIndex"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the number of the line containing a specified character position
         ///     in a textbox. Note that this returns the physical line number
         ///     and not the conceptual line number. For example, if the first conceptual
         ///     line (line number 0) word-wraps and extends to the second line, and if
         ///     you pass the index of a overflowed character, GetLineFromCharIndex would
         ///     return 1 and not 0.
-        /// </devdoc>
+        /// </summary>
         public virtual int GetLineFromCharIndex(int index) {
-            return unchecked( (int) (long)SendMessage(NativeMethods.EM_LINEFROMCHAR, index, 0));
+            return unchecked( (int) (long)SendMessage(Interop.EditMessages.EM_LINEFROMCHAR, index, 0));
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.GetPositionFromCharIndex"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the location of the character at the given index.
-        /// </devdoc>
+        /// </summary>
         public virtual Point GetPositionFromCharIndex(int index) {
             if (index < 0 || index >= Text.Length)
                 return Point.Empty;
 
-            int i = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.EM_POSFROMCHAR, index, 0);
+            int i = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_POSFROMCHAR, index, 0);
             return new Point(NativeMethods.Util.SignedLOWORD(i), NativeMethods.Util.SignedHIWORD(i));
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.GetFirstCharIndexFromLine"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the index of the first character of a given line. Returns -1 of lineNumber is invalid.
-        /// </devdoc>
+        /// </summary>
         public int GetFirstCharIndexFromLine(int lineNumber) {
             if (lineNumber < 0) {
-                throw new ArgumentOutOfRangeException(nameof(lineNumber), string.Format(SR.InvalidArgument, "lineNumber", lineNumber.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(lineNumber), lineNumber, string.Format(SR.InvalidArgument, nameof(lineNumber), lineNumber));
             }
-            return unchecked( (int) (long)SendMessage(NativeMethods.EM_LINEINDEX, lineNumber, 0));
+            return unchecked( (int) (long)SendMessage(Interop.EditMessages.EM_LINEINDEX, lineNumber, 0));
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.GetFirstCharIndexofCurrentLine"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the index of the first character of the line where the caret is.
-        /// </devdoc>
+        /// </summary>
         public int GetFirstCharIndexOfCurrentLine() {
-            return unchecked( (int) (long)SendMessage(NativeMethods.EM_LINEINDEX, -1, 0));
+            return unchecked( (int) (long)SendMessage(Interop.EditMessages.EM_LINEINDEX, -1, 0));
         }
 
 
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.ScrollToCaret"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Ensures that the caret is visible in the TextBox window, by scrolling the
         ///     TextBox control surface if necessary.
-        /// </devdoc>
+        /// </summary>
         public void ScrollToCaret() {
             if (IsHandleCreated) {
                 if (string.IsNullOrEmpty(this.WindowText)) {
@@ -1758,7 +1623,7 @@ namespace System.Windows.Forms {
                 object editOle = null;
                 IntPtr editOlePtr = IntPtr.Zero;
                 try {
-                    if (UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichTextBoxConstants.EM_GETOLEINTERFACE, 0, out editOle) != 0) {
+                    if (UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_GETOLEINTERFACE, 0, out editOle) != 0) {
 
                         editOlePtr = Marshal.GetIUnknownForObject(editOle);
 
@@ -1790,7 +1655,7 @@ namespace System.Windows.Forms {
                                     textRange.ScrollIntoView(0);   // 0 ==> tomEnd
 
                                     // 2. Get the first visible line.
-                                    int firstVisibleLine = unchecked( (int) (long)SendMessage(NativeMethods.EM_GETFIRSTVISIBLELINE, 0, 0));
+                                    int firstVisibleLine = unchecked( (int) (long)SendMessage(Interop.EditMessages.EM_GETFIRSTVISIBLELINE, 0, 0));
 
                                     // 3. If the first visible line is smaller than the start of the selection, we are done;
                                     if (firstVisibleLine <= selStartLine) {
@@ -1817,7 +1682,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (!scrolled) {
-                    SendMessage(NativeMethods.EM_SCROLLCARET, 0, 0);
+                    SendMessage(Interop.EditMessages.EM_SCROLLCARET, 0, 0);
                 }
             }
             else {
@@ -1825,25 +1690,23 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.DeselectAll"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Sets the SelectionLength to 0.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void DeselectAll() {
             this.SelectionLength = 0;
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.Select"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Selects a range of text in the text box.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void Select(int start, int length) {
             if (start < 0){
-                throw new ArgumentOutOfRangeException(nameof(start), string.Format(SR.InvalidArgument, "start", start.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(start), start, string.Format(SR.InvalidArgument, nameof(start), start));
             }
 
             int textLen = TextLength;
@@ -1864,21 +1727,21 @@ namespace System.Windows.Forms {
             SelectInternal(start, length, textLen);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Performs the actual select without doing arg checking.
         ///
         ///     Send in -1 for the textLen parameter if you don't have the text
         ///     length cached when calling this method. It will be computed.
         ///     But if you do have it cached, please pass it in. This will avoid
         ///     the expensive call to the TextLength property.
-        /// </devdoc>
+        /// </summary>
         internal virtual void SelectInternal(int start, int length, int textLen) {
             //if our handle is created - send message...
             if (IsHandleCreated) {
                 int s, e;
                 AdjustSelectionStartAndEnd(start, length, out s, out e, textLen);
 
-                SendMessage(NativeMethods.EM_SETSEL, s, e);
+                SendMessage(Interop.EditMessages.EM_SETSEL, s, e);
                 // 
 
             }
@@ -1891,22 +1754,19 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.SelectAll"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Selects all text in the text box.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void SelectAll() {
             int textLen = TextLength;
             SelectInternal(0, textLen, textLen);
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.SetBoundsCore"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    Overrides Control.setBoundsCore to enforce autoSize.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
 
             if (!integralHeightAdjust && height != Height)
@@ -1978,21 +1838,19 @@ namespace System.Windows.Forms {
                 textBoxFlags[setSelectionOnHandleCreated] = false;
                 int start, end;
                 AdjustSelectionStartAndEnd(this.selectionStart, this.selectionLength, out start, out end, -1);
-                SendMessage(NativeMethods.EM_SETSEL, start, end);
+                SendMessage(Interop.EditMessages.EM_SETSEL, start, end);
             }
         }
  
-        /// <devdoc>
+        /// <summary>
         ///     Converts byte offsset to unicode offsets.
         ///     When procssing WM_GETSEL/WM_SETSEL, EDIT control works with byte offsets instead of character positions
         ///     as opposed to RICHEDIT which does it always as character positions.  
         ///     This method is used when handling the WM_GETSEL message.
-        /// </devdoc>
+        /// </summary>
         static void ToUnicodeOffsets(string str, ref int start, ref int end) {
             Encoding e = Encoding.Default;
 
-            // Acutally, we may get away with this call if we can get the bytes from Win9x.  Dont know if it is possible.
-            // This can be expensive since start/end could be small, but str.Length can be quite big.
             byte[] bytes = e.GetBytes(str);
 
             bool swap = start > end;
@@ -2024,12 +1882,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Converts unicode offsset to byte offsets.
         ///     When procssing WM_GETSEL/WM_SETSEL, EDIT control works with byte offsets instead of character positions
         ///     as opposed to RICHEDIT which does it always as character positions.  
         ///     This method is used when handling the WM_SETSEL message.
-        /// </devdoc>
+        /// </summary>
         static internal void ToDbcsOffsets(string str, ref int start, ref int end) {
             Encoding e = Encoding.Default;
 
@@ -2067,12 +1925,10 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.ToString"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    Provides some interesting information for the TextBox control in
         ///    String form.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         public override string ToString() {
 
             string s = base.ToString();
@@ -2082,26 +1938,25 @@ namespace System.Windows.Forms {
             return s + ", Text: " + txt.ToString();
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.Undo"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Undoes the last edit operation in the text box.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void Undo() {
-            SendMessage(NativeMethods.EM_UNDO, 0, 0);
+            SendMessage(Interop.EditMessages.EM_UNDO, 0, 0);
         }
 
         internal virtual void UpdateMaxLength() {
             if (IsHandleCreated) {
-                SendMessage(NativeMethods.EM_LIMITTEXT, maxLength, 0);
+                SendMessage(Interop.EditMessages.EM_LIMITTEXT, maxLength, 0);
             }
         }
 
 
         internal override IntPtr InitializeDCForWmCtlColor (IntPtr dc, int msg)
         {
-            if ((msg == NativeMethods.WM_CTLCOLORSTATIC) && !ShouldSerializeBackColor()) {
+            if ((msg == Interop.WindowMessages.WM_CTLCOLORSTATIC) && !ShouldSerializeBackColor()) {
                 // Let the Win32 Edit control handle background colors itself.
                 // This is necessary because a disabled edit control will display a different
                 // BackColor than when enabled.
@@ -2112,10 +1967,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.WmReflectCommand"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         private void WmReflectCommand(ref Message m) {
             if (!textBoxFlags[codeUpdateText] && !textBoxFlags[creatingHandle]) {
                 if (NativeMethods.Util.HIWORD(m.WParam) == NativeMethods.EN_CHANGE && CanRaiseTextChangedEvent) {
@@ -2129,14 +1982,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.WmSetFont"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void WmSetFont(ref Message m) {
             base.WndProc(ref m);
             if (!textBoxFlags[multiline]) {
-                SendMessage(NativeMethods.EM_SETMARGINS, NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN, 0);
+                SendMessage(Interop.EditMessages.EM_SETMARGINS, NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN, 0);
             }
         }
 
@@ -2152,14 +2003,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_CONTEXTMENU message based on this
         ///     table:
         ///     ShortcutsEnabled    #1      #2      #3
         ///     Yes                 strip   context system
         ///     No                  strip   context N/A
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmTextBoxContextMenu(ref Message m) {
 
             if (ContextMenu != null || ContextMenuStrip != null) {
@@ -2175,7 +2025,7 @@ namespace System.Windows.Forms {
                     client = new Point(Width/2, Height/2);
                 }
                 else {
-                    client = PointToClientInternal(new Point(x, y));
+                    client = PointToClient(new Point(x, y));
                 }
 
                 // 
@@ -2196,29 +2046,27 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.WndProc"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    The control's window procedure.  Inheriting classes can override this
         ///    to add extra functionality, but should not forget to call
         ///    base.wndProc(m); to ensure the control continues to function properly.
-        /// </devdoc>
+        /// </summary>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case NativeMethods.WM_LBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
                     this.doubleClickFired = true;
                     base.WndProc(ref m);
                     break;
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_COMMAND:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_COMMAND:
                     WmReflectCommand(ref m);
                     break;
-                case NativeMethods.WM_GETDLGCODE:
+                case Interop.WindowMessages.WM_GETDLGCODE:
                     WmGetDlgCode(ref m);
                     break;
-                case NativeMethods.WM_SETFONT:
+                case Interop.WindowMessages.WM_SETFONT:
                     WmSetFont(ref m);
                     break;
-                case NativeMethods.WM_CONTEXTMENU:
+                case Interop.WindowMessages.WM_CONTEXTMENU:
                     if (ShortcutsEnabled) {
                         //calling base will find ContextMenus in this order:
                         // 1) ContextMenu 2) ContextMenuStrip 3) SystemMenu

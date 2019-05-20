@@ -231,7 +231,7 @@ namespace System.Windows.Forms.Func.Tests
                 throw new ArgumentException(nameof(times) + " may not be zero.");
             }
 
-            string keys = "";
+            string keys = string.Empty;
             for (uint i = 0; i < times; i++)
             {
                 keys += "{TAB}";

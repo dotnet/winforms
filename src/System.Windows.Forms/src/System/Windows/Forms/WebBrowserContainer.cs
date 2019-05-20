@@ -2,24 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.InteropServices;
-using System.ComponentModel;
-using System.Diagnostics;
-using System;
-using System.Reflection;
-using System.Globalization;
-using System.Security.Permissions;
 using System.Collections;
-using System.Drawing;    
-using System.Windows.Forms.Design;
+using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Security;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
-namespace System.Windows.Forms {
-    internal class WebBrowserContainer : UnsafeNativeMethods.IOleContainer, UnsafeNativeMethods.IOleInPlaceFrame {
-        //
-        // Private fields:
-        //
+namespace System.Windows.Forms
+{
+    internal class WebBrowserContainer : UnsafeNativeMethods.IOleContainer, UnsafeNativeMethods.IOleInPlaceFrame
+    {
         private WebBrowserBase parent;
         private IContainer assocContainer;  // associated IContainer...
                                             // the assocContainer may be null, in which case all this container does is
@@ -353,7 +345,7 @@ namespace System.Windows.Forms {
             siteUIActive = site;
             ContainerControl f = site.ContainingControl;
             if (f != null && f.Contains(site)) {
-                f.SetActiveControlInternal(site);
+                f.SetActiveControl(site);
             }
         }
 
@@ -375,7 +367,7 @@ namespace System.Windows.Forms {
                 siteActive = null;
                 ContainerControl parentContainer = parent.FindContainerControlInternal();
                 if (parentContainer != null) {
-                    parentContainer.SetActiveControlInternal(null);
+                    parentContainer.SetActiveControl(null);
                 }
             }
         }

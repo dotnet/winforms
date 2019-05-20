@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
     using System.Drawing;
     
-    /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection"]/*' />
     /// <summary>
     /// Summary description for ToolStripItemCollection.
     /// </summary>
@@ -42,7 +41,6 @@ namespace System.Windows.Forms {
             this.isReadOnly = isReadOnly;
         }
 
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.ToolStripItemCollection"]/*' />
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ToolStripItemCollection(ToolStrip owner, ToolStripItem[] value) {
             if (owner == null) {
@@ -53,20 +51,18 @@ namespace System.Windows.Forms {
             AddRange(value);
         }
 
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.this"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para></para>
-        /// </devdoc>
+        /// </summary>
         public new virtual ToolStripItem this[int index] {
             get {
                 return (ToolStripItem)(InnerList[index]);
             }
         }
         
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.this1"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Retrieves the child control with the specified key.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual ToolStripItem this[string key] {
             get {
                 // We do not support null and empty string as valid keys.
@@ -102,7 +98,6 @@ namespace System.Windows.Forms {
             return item;
         }
             
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.Add"]/*' />
         public int Add(ToolStripItem value) {
             CheckCanAddOrInsertItem(value);
             
@@ -116,7 +111,6 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.AddRange"]/*' />
         public void AddRange(ToolStripItem[] toolStripItems) {        
             if (toolStripItems == null) {
                 throw new ArgumentNullException(nameof(toolStripItems));
@@ -134,7 +128,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.AddRange1"]/*' />
         public void AddRange(ToolStripItemCollection toolStripItems) {
             if (toolStripItems == null) {
                 throw new ArgumentNullException(nameof(toolStripItems));
@@ -154,13 +147,11 @@ namespace System.Windows.Forms {
           
         }
 
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.Contains"]/*' />
         public bool Contains(ToolStripItem value) {
             return InnerList.Contains(value);
         }
 
         
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.Clear"]/*' />
         public virtual void Clear() {
             if (IsReadOnly) {
                throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
@@ -192,10 +183,9 @@ namespace System.Windows.Forms {
             }
         }
    
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.ContainsKey"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual bool ContainsKey(string key) {
             return IsValidIndex(IndexOfKey(key)); 
         }
@@ -221,12 +211,11 @@ namespace System.Windows.Forms {
            
         }
 
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.Find"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Searches for Items by their Name property, builds up an array 
         /// of all the controls that match. 
         /// </para>
-        /// </devdoc>
+        /// </summary>
         public ToolStripItem[] Find(string key, bool searchAllChildren) {            
             if ((key == null) || (key.Length == 0)) {
               throw new System.ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
@@ -241,12 +230,11 @@ namespace System.Windows.Forms {
             return stronglyTypedFoundItems;
         }
       
-        /// <devdoc>
+        /// <summary>
         ///     <para>Searches for Items by their Name property, builds up an array list
         ///           of all the items that match. 
         ///     </para>
-        /// </devdoc>
-        /// <internalonly/> 
+        /// </summary>
         private ArrayList FindInternal(string key, bool searchAllChildren, ToolStripItemCollection itemsToLookIn, ArrayList foundItems)
         {
             if ((itemsToLookIn == null) || (foundItems == null)) {
@@ -313,13 +301,10 @@ namespace System.Windows.Forms {
         int IList.IndexOf(object value) { return IndexOf(value as ToolStripItem); }
         void IList.Insert(int index, object value) { Insert(index, value as ToolStripItem);  }
 
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.IList.this"]/*' />
-        /// <internalonly/>
         object IList.this[int index] {
             get { return InnerList[index]; }            
             set { throw new NotSupportedException(SR.ToolStripCollectionMustInsertAndRemove); /* InnerList[index] = value; */ }
         }
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.Insert"]/*' />
         public void Insert(int index, ToolStripItem value) {
             CheckCanAddOrInsertItem(value);
             SetOwner(value);
@@ -338,14 +323,12 @@ namespace System.Windows.Forms {
 
         }
 			
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.IndexOf"]/*' />
         public int IndexOf(ToolStripItem value) {
             return InnerList.IndexOf(value);
         }
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.IndexOfKey"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual int IndexOfKey(string key) {
             // Step 0 - Arg validation
             if ((key == null) || (key.Length == 0)){
@@ -372,17 +355,16 @@ namespace System.Windows.Forms {
             return -1;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>Determines if the index is valid for the collection.</para>
-        /// </devdoc>
-        /// <internalonly/> 
+        /// </summary>
         private bool IsValidIndex(int index) {
             return ((index >= 0) && (index < this.Count));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///  Do proper cleanup of ownership, etc.
-        /// </devdoc>
+        /// </summary>
         private void OnAfterRemove(ToolStripItem item) {
             if (itemsCollection) {
                 ToolStrip parent = null; 
@@ -409,7 +391,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.Remove"]/*' />
         public void Remove(ToolStripItem value) {
             if (IsReadOnly) {
                throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
@@ -418,7 +399,6 @@ namespace System.Windows.Forms {
             OnAfterRemove(value);
         }
 
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.RemoveAt"]/*' />
         public void RemoveAt(int index) {
             if (IsReadOnly) {
                throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
@@ -431,10 +411,9 @@ namespace System.Windows.Forms {
             OnAfterRemove(item);
         }
       
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.RemoveByKey"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Removes the child item with the specified key.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual void RemoveByKey(string key) {
             if (IsReadOnly) {
                throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
@@ -445,7 +424,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.CopyTo"]/*' />
         public void CopyTo(ToolStripItem[] array, int index) {
             InnerList.CopyTo(array, index);
         }

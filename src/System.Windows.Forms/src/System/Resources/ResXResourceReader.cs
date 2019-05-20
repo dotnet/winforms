@@ -22,10 +22,9 @@ namespace System.Resources {
     using System.ComponentModel.Design;
     using System.Globalization;
     
-    /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///     ResX resource reader.
-    /// </devdoc>
+    /// </summary>
     public class ResXResourceReader : IResourceReader {
         string fileName = null;
         TextReader reader = null;
@@ -115,15 +114,13 @@ namespace System.Resources {
 
         
 
-        /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for=".Finalize"]/*' />
         ~ResXResourceReader() {
             Dispose(false);
         }
 
-        /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.BasePath"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     BasePath for relatives filepaths with ResXFileRefs.
-        /// </devdoc>
+        /// </summary>
         public string BasePath {
             get {
                 return basePath;
@@ -136,13 +133,12 @@ namespace System.Resources {
             }
         }
 
-        /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.ResXResourceReader5"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     ResXFileRef's TypeConverter automatically unwraps it, creates the referenced
         ///     object and returns it. This property gives the user control over whether this unwrapping should
         ///     happen, or a ResXFileRef object should be returned. Default is true for backward compat and common case
         ///     scenario.
-        /// </devdoc>
+        /// </summary>
         public bool UseResXDataNodes {
             get {
                 return this.useResXDataNodes;
@@ -155,24 +151,20 @@ namespace System.Resources {
             }
         }
 
-        /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.Close"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Closes and files or streams being used by the reader.
-        /// </devdoc>
+        /// </summary>
         // NOTE: Part of IResourceReader - not protected by class level LinkDemand.
         public void Close() {
             ((IDisposable)this).Dispose();
         }
 
-        /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.IDisposable.Dispose"]/*' />
-        /// <internalonly/>
         // NOTE: Part of IDisposable - not protected by class level LinkDemand.
         void IDisposable.Dispose() {
             GC.SuppressFinalize(this);
             Dispose(true);
         }
 
-        /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.Dispose"]/*' />
         protected virtual void Dispose(bool disposing) {
             if (disposing) {
                 if (fileName != null && stream != null) {
@@ -205,9 +197,9 @@ namespace System.Resources {
             reader.NameTable.Add(ResXResourceWriter.AliasStr);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Demand loads the resource data.
-        /// </devdoc>
+        /// </summary>
         private void EnsureResData() {
             if (resData == null) {
                 resData = new ListDictionary();
@@ -246,19 +238,16 @@ namespace System.Resources {
 
 
 
-        /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.FromFileContents"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Creates a reader with the specified file contents.
-        /// </devdoc>
+        /// </summary>
         public static ResXResourceReader FromFileContents(string fileContents) {
             return FromFileContents(fileContents, (ITypeResolutionService)null);
         }
 
-        /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.FromFileContents1"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///     Creates a reader with the specified file contents.
-        /// </devdoc>
+        /// </summary>
         public static ResXResourceReader FromFileContents(string fileContents, ITypeResolutionService typeResolver) {
             return new ResXResourceReader(typeResolver)
             {
@@ -266,11 +255,9 @@ namespace System.Resources {
             };
         }
 
-        /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.FromFileContents1"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///     Creates a reader with the specified file contents.
-        /// </devdoc>
+        /// </summary>
         public static ResXResourceReader FromFileContents(string fileContents, AssemblyName[] assemblyNames) {
             return new ResXResourceReader(assemblyNames)
             {
@@ -278,14 +265,11 @@ namespace System.Resources {
             };
         }
 
-        /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.IEnumerable.GetEnumerator"]/*' />
-        /// <internalonly/>
         // NOTE: Part of IEnumerable - not protected by class level LinkDemand.
         IEnumerator IEnumerable.GetEnumerator() {
             return GetEnumerator();
         }
 
-        /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.GetEnumerator"]/*' />
         // NOTE: Part of IResourceReader - not protected by class level LinkDemand.
         public IDictionaryEnumerator GetEnumerator() {
             isReaderDirty = true;
@@ -293,18 +277,17 @@ namespace System.Resources {
             return resData.GetEnumerator();
         }
 
-        /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.GetMetadataEnumerator"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    Returns a dictionary enumerator that can be used to enumerate the <metadata> elements in the .resx file.
-        /// </devdoc>
+        /// </summary>
         public IDictionaryEnumerator GetMetadataEnumerator() {
             EnsureResData();
             return resMetadata.GetEnumerator();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Attempts to return the line and column (Y, X) of the XML reader.
-        /// </devdoc>
+        /// </summary>
         private Point GetPosition(XmlReader reader) {
             Point pt = new Point(0, 0);
 
@@ -588,14 +571,14 @@ namespace System.Resources {
 
         private string GetAliasFromTypeName(string typeName) {
              
-             int indexStart = typeName.IndexOf(",");
+             int indexStart = typeName.IndexOf(',');
              return typeName.Substring(indexStart + 2); 
         
         }
 
         private string GetTypeFromTypeName(string typeName) {
              
-             int indexStart = typeName.IndexOf(",");
+             int indexStart = typeName.IndexOf(',');
              return typeName.Substring(0, indexStart); 
         
         }

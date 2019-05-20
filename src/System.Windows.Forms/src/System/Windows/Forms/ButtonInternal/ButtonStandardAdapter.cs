@@ -176,7 +176,7 @@ namespace System.Windows.Forms.ButtonInternal {
                 layout.focus.Inflate(1, 1);
             }
 
-            if (up & IsHighContrastHighlighted2()) {
+            if (up & IsHighContrastHighlighted()) {
                 var highlightTextColor = SystemColors.HighlightText;
                 PaintField(e, layout, colors, highlightTextColor, false);
 

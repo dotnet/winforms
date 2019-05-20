@@ -13,13 +13,12 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Drawing;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting.Lifetime;
     using System.Runtime.Serialization.Formatters;
     using System.Runtime.Versioning;
     using System.Threading;
     using System.Globalization;
 
-    /// <devdoc>
+    /// <summary>
     ///    Ok, this class needs some explanation.  We share message loops with other applications through 
     ///    an interface called IMsoComponentManager. A "component' is fairly coarse here:  Windows Forms
     ///    is a single component.  The component manager is the application that owns and runs the message
@@ -78,7 +77,7 @@ namespace System.Windows.Forms {
     ///    CProxy: IMsoComponent half of ComponentManagerProxy
     ///    CMProxy: IMsoComponentManager half of ComponentManagerProxy
     ///    AC: Application's IMsoComponent implementation
-    /// </devdoc>
+    /// </summary>
     internal sealed class ComponentManagerBroker : MarshalByRefObject {
 
         // These are constants per process and are initialized in 
@@ -99,16 +98,16 @@ namespace System.Windows.Forms {
         [ThreadStatic]
         private ComponentManagerProxy _proxy;
 
-        /// <devdoc>
+        /// <summary>
         ///    Static ctor.  We just set up a few per-process globals here
-        /// </devdoc>
+        /// </summary>
         static ComponentManagerBroker() {
             int pid = SafeNativeMethods.GetCurrentProcessId();
             _syncObject = new object();
             _remoteObjectName = string.Format(CultureInfo.CurrentCulture, "ComponentManagerBroker.{0}.{1:X}", Application.WindowsFormsVersion, pid);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Ctor.  Quite a bit happens here. Here, we register a channel so 
         ///     we can be found and we publish ouru object by calling Marshal.
         ///
@@ -121,7 +120,7 @@ namespace System.Windows.Forms {
         ///     object, because the calling code will use the Singleton property
         ///     to extract the actual _broker value.
         ///    NOTE: ctor must be public here for remoting to grab hold.
-        /// </devdoc>
+        /// </summary>
         public ComponentManagerBroker() {
 
             // Note that we only ever configure a single broker object.
@@ -131,34 +130,27 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Called during creation to account for an existing component manager
         ///     broker that was never remoted.  We try not to remote the broker
         ///     until we need to because it is very expensive.
-        /// </devdoc>
+        /// </summary>
         internal ComponentManagerBroker Singleton {
             get {
                 return _broker;
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         internal void ClearComponentManager() {
             _proxy = null;
         }
 
-        /// <devdoc>
-        ///     Keep the object alive forever.
-        /// </devdoc>
-        public override object InitializeLifetimeService() {
-            return null;
-        }
-
         #region Instance API only callable from a proxied object
         
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         public UnsafeNativeMethods.IMsoComponentManager GetProxy(long pCM) {
             if (_proxy == null) {
                 UnsafeNativeMethods.IMsoComponentManager original = (UnsafeNativeMethods.IMsoComponentManager)Marshal.GetObjectForIUnknown((IntPtr)pCM);
@@ -172,12 +164,12 @@ namespace System.Windows.Forms {
         
         #region Static API callable from any domain
 
-        /// <devdoc>
+        /// <summary>
         ///    This method locates our per-process app domain and connects to a running
         ///    instance of ComponentManagerBroker.  That instance then demand-
         ///    creates an instance of ComponentManagerProxy for the calling thread
         ///    and returns it.
-        /// </devdoc>
+        /// </summary>
         internal static UnsafeNativeMethods.IMsoComponentManager GetComponentManager(IntPtr pOriginal) {
 
             lock(_syncObject) {
@@ -211,9 +203,6 @@ namespace System.Windows.Forms {
                     if (domain == AppDomain.CurrentDomain) {
                         _broker = new ComponentManagerBroker();
                     }
-                    else {
-                        _broker = GetRemotedComponentManagerBroker(domain);
-                    }
                 }
             }
 
@@ -221,28 +210,14 @@ namespace System.Windows.Forms {
             // and we can now call on it.
             return _broker.GetProxy((long)pOriginal);
         }
-
-        /// <devdoc>
-        ///     This method is factored out of GetComponentManager so we can prevent System.Runtime.Remoting from being
-        ///     loaded into the process if we are using a single domain.
-        /// </devdoc>
-        private static ComponentManagerBroker GetRemotedComponentManagerBroker(AppDomain domain) {
-#if REMOTING
-            Type ourType = typeof(ComponentManagerBroker);
-            ComponentManagerBroker broker = (ComponentManagerBroker)domain.CreateInstanceAndUnwrap(ourType.Assembly.FullName, ourType.FullName);
-            return broker.Singleton;
-#else
-            return _broker;
-#endif
-        }
         #endregion
     }
 
     #region ComponentManagerProxy Class
-    /// <devdoc>
+    /// <summary>
     ///   The proxy object. This acts as, well, a proxy between the unmanaged IMsoComponentManager and zero or more
     ///    managed components.  
-    /// </devdoc>
+    /// </summary>
     internal class ComponentManagerProxy : MarshalByRefObject, UnsafeNativeMethods.IMsoComponentManager, UnsafeNativeMethods.IMsoComponent {
 
         private ComponentManagerBroker _broker;
@@ -273,13 +248,6 @@ namespace System.Windows.Forms {
                 _refCount = 0;
                 _broker.ClearComponentManager();
             }
-        }
-
-        /// <devdoc>
-        ///     Keep the object alive forever.
-        /// </devdoc>
-        public override object InitializeLifetimeService() {
-            return null;
         }
 
         private bool RevokeComponent() {

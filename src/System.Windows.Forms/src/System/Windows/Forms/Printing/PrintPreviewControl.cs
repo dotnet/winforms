@@ -9,7 +9,6 @@
 namespace System.Windows.Forms {
     using System.Runtime.Serialization.Formatters;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
     using System.Diagnostics;
     using System;
     using System.Drawing;
@@ -18,14 +17,13 @@ namespace System.Windows.Forms {
     using System.Drawing.Printing;
     using System.Globalization;
 
-    /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       The raw "preview" part of print previewing, without any dialogs or buttons.
     ///       Most PrintPreviewControl's are found on PrintPreviewDialog's,
     ///       but they don't have to be.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultProperty(nameof(Document))]
@@ -57,12 +55,11 @@ namespace System.Windows.Forms {
         bool pageInfoCalcPending;
         bool exceptionPrinting;
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.PrintPreviewControl"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.PrintPreviewControl'/> class.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public PrintPreviewControl() {
             ResetBackColor();
             ResetForeColor();
@@ -72,7 +69,6 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.UseAntiAlias"]/*' />
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -87,13 +83,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.AutoZoom"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value If true (the default), resizing the control or changing the number of pages shown
         ///       will automatically adjust Zoom to make everything visible.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
@@ -109,13 +104,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.Document"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating the document to preview.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(null),
@@ -129,13 +123,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.Columns"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the number of pages
         ///       displayed horizontally across the screen.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(1),
         SRCategory(nameof(SR.CatLayout)),
@@ -145,7 +138,7 @@ namespace System.Windows.Forms {
             get { return columns;}
             set {
                 if (value < 1 ) {
-                    throw new ArgumentOutOfRangeException(nameof(Columns), string.Format(SR.InvalidLowBoundArgumentEx, "Columns", value.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Columns), value, 1));
                 }
 
                 columns = value;
@@ -153,15 +146,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.CreateParams"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets the CreateParams used to create the window.
         ///       If a subclass overrides this function, it must call the base implementation.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override CreateParams CreateParams {
             get {
                 CreateParams cp = base.CreateParams;
@@ -171,10 +162,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.Position"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The virtual coordinate of the upper left visible pixel.
-        /// </devdoc>
+        /// </summary>
 
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -189,13 +179,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.Rows"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the number of pages
         ///       displayed vertically down the screen.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(1),
         SRDescription(nameof(SR.PrintPreviewRowsDescr)),
@@ -206,7 +195,7 @@ namespace System.Windows.Forms {
             set {
                 
                 if (value < 1 ) {
-                    throw new ArgumentOutOfRangeException(nameof(Rows), string.Format(SR.InvalidLowBoundArgumentEx, "Rows", value.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Rows), value, 1));
                 }
 
                 rows = value;
@@ -214,12 +203,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.RightToLeft"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
         ///     control placement and text will be from right to left.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
@@ -236,7 +224,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.Text"]/*' />
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never), 
         Bindable(false), 
@@ -251,25 +238,18 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.TextChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
-            remove {
-                base.TextChanged -= value;
-            }
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
         
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.StartPage"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the page number of the upper left page.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(0),
         SRDescription(nameof(SR.PrintPreviewStartPageDescr)),
@@ -287,7 +267,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0 ) {
-                    throw new ArgumentOutOfRangeException(nameof(StartPage), string.Format(SR.InvalidLowBoundArgumentEx, "StartPage", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(StartPage), value, 0));
                 }
                 int oldValue = StartPage;
                 startPage = value;
@@ -300,21 +280,15 @@ namespace System.Windows.Forms {
 
         private static readonly object EVENT_STARTPAGECHANGED = new object();
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.StartPageChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.RadioButtonOnStartPageChangedDescr))]
         public event EventHandler StartPageChanged {
-            add {
-                Events.AddHandler(EVENT_STARTPAGECHANGED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_STARTPAGECHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_STARTPAGECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_STARTPAGECHANGED, value);
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.VirtualSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     How big the control would be if the screen was infinitely large.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
@@ -329,12 +303,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.Zoom"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating how large the pages will appear.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.PrintPreviewZoomDescr)),
@@ -356,7 +329,7 @@ namespace System.Windows.Forms {
                 case NativeMethods.SB_THUMBPOSITION:
                 case NativeMethods.SB_THUMBTRACK:
                     NativeMethods.SCROLLINFO si = new NativeMethods.SCROLLINFO();
-                    si.cbSize = Marshal.SizeOf(typeof(NativeMethods.SCROLLINFO));
+                    si.cbSize = Marshal.SizeOf<NativeMethods.SCROLLINFO>();
                     si.fMask = NativeMethods.SIF_TRACKPOS;
                     int direction = horizontal ? NativeMethods.SB_HORZ : NativeMethods.SB_VERT;
                     if (SafeNativeMethods.GetScrollInfo(new HandleRef(this, m.HWnd), direction, si))
@@ -451,7 +424,6 @@ namespace System.Windows.Forms {
                 document.PrintController = new PrintControllerWithStatusDialog(previewController, 
                                                                                string.Format(SR.PrintControllerWithStatusDialog_DialogTitlePreview));
 
-                // Want to make sure we've reverted any security asserts before we call Print -- that calls into user code
                 document.Print();
                 pageInfo = previewController.GetPreviewPageInfo();
                 Debug.Assert(pageInfo != null, "ReviewPrintController did not give us preview info");
@@ -470,24 +442,21 @@ namespace System.Windows.Forms {
             Invalidate();
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.InvalidatePreview"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Refreshes the preview of the document.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void InvalidatePreview() {
             pageInfo = null;
             InvalidateLayout();
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.OnResize"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Invalidate the layout, if necessary.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnResize(EventArgs eventargs) {
             InvalidateLayout();
             base.OnResize(eventargs);
@@ -519,13 +488,11 @@ namespace System.Windows.Forms {
         }
             
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.OnPaint"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Paints the control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnPaint(PaintEventArgs pevent) {
             Brush backBrush = new SolidBrush(BackColor);
 
@@ -647,7 +614,6 @@ namespace System.Windows.Forms {
             base.OnPaint(pevent); // raise paint event
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.OnStartPageChanged"]/*' />
         protected virtual void OnStartPageChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_STARTPAGECHANGED] as EventHandler;
             if (eh != null) {
@@ -683,29 +649,25 @@ namespace System.Windows.Forms {
                             PixelsToPhysical(pixels.Height, dpi.Y));
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.ResetBackColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Resets the back color to the defaults for the PrintPreviewControl.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override void ResetBackColor() {
             BackColor = SystemColors.AppWorkspace;
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.ResetForeColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Resets the back color to the defaults for the PrintPreviewControl.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override void ResetForeColor() {
             ForeColor = Color.White;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     WM_HSCROLL handler
-        /// </devdoc>
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.WmHScroll"]/*' />
-        /// <internalonly/>
+        /// </summary>
 
         private void WmHScroll(ref Message m) {
 
@@ -764,11 +726,9 @@ namespace System.Windows.Forms {
             UnsafeNativeMethods.SetScrollInfo(new HandleRef(this, Handle), NativeMethods.SB_HORZ, info, true);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     WM_VSCROLL handler
-        /// </devdoc>
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.WmVScroll"]/*' />
-        /// <internalonly/>
+        /// </summary>
 
         private void WmVScroll(ref Message m) {
 
@@ -788,11 +748,9 @@ namespace System.Windows.Forms {
             Position = locPos;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.WmKeyChar"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_KEYDOWN message.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         //added to handle keyboard events
         //
         private void WmKeyDown(ref Message msg) {
@@ -902,19 +860,17 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.WndProc"]/*' />
-        /// <internalonly/>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case NativeMethods.WM_VSCROLL:
+                case Interop.WindowMessages.WM_VSCROLL:
                     WmVScroll(ref m);
                     break;
-                case NativeMethods.WM_HSCROLL:
+                case Interop.WindowMessages.WM_HSCROLL:
                     WmHScroll(ref m);
                     break;
                 //added case to handle keyboard events
                 //
-                case NativeMethods.WM_KEYDOWN:
+                case Interop.WindowMessages.WM_KEYDOWN:
                     WmKeyDown(ref m);
                     break;
                 default:
@@ -923,24 +879,22 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.ShouldSerializeBackColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Indicates whether the <see cref='System.Windows.Forms.Control.BackColor'/> property should be
         ///       persisted.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         internal override bool ShouldSerializeBackColor() {
             return !BackColor.Equals(SystemColors.AppWorkspace);
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.ShouldSerializeForeColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Indicates whether the <see cref='System.Windows.Forms.Control.ForeColor'/> property should be
         ///       persisted.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         internal override bool ShouldSerializeForeColor() {
             return !ForeColor.Equals(Color.White);
         }

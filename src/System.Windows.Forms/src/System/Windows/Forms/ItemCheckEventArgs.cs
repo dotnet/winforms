@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.CheckedListBox.ItemCheck'/> event.
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
     public class ItemCheckEventArgs : EventArgs
     {
@@ -19,19 +19,19 @@ namespace System.Windows.Forms
             CurrentValue = currentValue;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The index of the item that is about to change.
-        /// </devdoc>
+        /// </summary>
         public int Index { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The proposed new value of the CheckBox.
-        /// </devdoc>
+        /// </summary>
         public CheckState NewValue { get; set; }
 
-        /// <devdoc>
+        /// <summary>
         /// The current state of the CheckBox.
-        /// </devdoc>
+        /// </summary>
         public CheckState CurrentValue { get; }
     }
 }

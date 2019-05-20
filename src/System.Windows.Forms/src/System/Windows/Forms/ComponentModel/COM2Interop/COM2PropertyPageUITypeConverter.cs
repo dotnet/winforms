@@ -14,9 +14,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.Runtime.InteropServices;
     using System.Windows.Forms.Design;
 
-    /// <include file='doc\COM2PropertyPageUITypeConverter.uex' path='docs/doc[@for="Com2PropertyPageUITypeEditor"]/*' />
-    /// <devdoc>
-    /// </devdoc>
+    /// <summary>
+    /// </summary>
     internal class Com2PropertyPageUITypeEditor : Com2ExtendedUITypeEditor, ICom2PropertyPageDisplayService {
 
         private Com2PropertyDescriptor propDesc;
@@ -27,14 +26,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             this.guid = guid;
         }
 
-        /// <include file='doc\COM2PropertyPageUITypeConverter.uex' path='docs/doc[@for="Com2PropertyPageUITypeEditor.EditValue"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Takes the value returned from valueAccess.getValue() and modifies or replaces
         ///     the value, passing the result into valueAccess.setValue().  This is where
         ///     an editor can launch a modal dialog or create a drop down editor to allow
         ///     the user to modify the value.  Host assistance in presenting UI to the user
         ///     can be found through the valueAccess.getService function.
-        /// </devdoc>
+        /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value) {
 
             IntPtr hWndParent = UnsafeNativeMethods.GetFocus(); // Windows.GetForegroundWindow
@@ -71,11 +69,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return value;
         }
 
-        /// <include file='doc\COM2PropertyPageUITypeConverter.uex' path='docs/doc[@for="Com2PropertyPageUITypeEditor.GetEditStyle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the editing style of the Edit method.  If the method
         ///      is not supported, this will return None.
-        /// </devdoc>
+        /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) {
             return UITypeEditorEditStyle.Modal;
         }

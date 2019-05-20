@@ -12,10 +12,9 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.ButtonInternal;
     using System.Windows.Forms.Design;    
 
-    /// <include file='doc\ToolStripLabel.uex' path='docs/doc[@for="ToolStripLabel"]/*' />
-    /// <devdoc>
-    /// A non selectable winbar item
-    /// </devdoc>
+    /// <summary>
+    /// A non selectable ToolStrip item
+    /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip)]
     public class ToolStripLabel : ToolStripItem {
 
@@ -31,10 +30,9 @@ namespace System.Windows.Forms {
                      
               
 
-        /// <include file='doc\ToolStripLabel.uex' path='docs/doc[@for="ToolStripLabel.ToolStripLabel"]/*' />
-        /// <devdoc>
-        /// A non selectable winbar item
-        /// </devdoc>
+        /// <summary>
+        /// A non selectable ToolStrip item
+        /// </summary>
         public ToolStripLabel() {
         }
         public ToolStripLabel(string text):base(text,null,null) {
@@ -53,7 +51,6 @@ namespace System.Windows.Forms {
             IsLink = isLink;
         }
 
-        /// <include file='doc\ToolStripLabel.uex' path='docs/doc[@for="ToolStripLabel.CanSelect"]/*' />
         public override bool CanSelect {
             get { return (IsLink || DesignMode); }
         }
@@ -194,11 +191,10 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.InvalidateLinkFonts"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Invalidates the current set of fonts we use when painting
         ///     links.  The fonts will be recreated when needed.
-        /// </devdoc>
+        /// </summary>
         private void InvalidateLinkFonts() {
   
             if (linkFont != null) {
@@ -274,10 +270,10 @@ namespace System.Windows.Forms {
 
        
 
-        /// <devdoc>
+        /// <summary>
         /// Creates an instance of the object that defines how image and text
         /// gets laid out in the ToolStripItem
-        /// </devdoc>
+        /// </summary>
         internal override ToolStripItemInternalLayout CreateInternalLayout() {
             return new ToolStripLabelLayout(this);
         }
@@ -287,10 +283,9 @@ namespace System.Windows.Forms {
             return new ToolStripLabelAccessibleObject(this);
         }
 
-        /// <include file='doc\ToolStripLabel.uex' path='docs/doc[@for="ToolStripLabel.OnPaint"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Inheriting classes should override this method to handle this event.
-        /// </devdoc>
+        /// </summary>
         protected override void OnPaint(System.Windows.Forms.PaintEventArgs e) {
 
             if (this.Owner != null) {
@@ -377,13 +372,11 @@ namespace System.Windows.Forms {
             }
 
             internal override object GetPropertyValue(int propertyID) {
-                if (AccessibilityImprovements.Level3) {
-                    if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
-                        return NativeMethods.UIA_TextControlTypeId;
-                    }
-                    else if (propertyID == NativeMethods.UIA_LegacyIAccessibleStatePropertyId) {
-                        return this.State;
-                    }
+                if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
+                    return NativeMethods.UIA_TextControlTypeId;
+                }
+                else if (propertyID == NativeMethods.UIA_LegacyIAccessibleStatePropertyId) {
+                    return this.State;
                 }
 
                 return base.GetPropertyValue(propertyID);
@@ -405,11 +398,11 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///  This class performs internal layout for the "split button button" portion of a split button.
         ///  Its main job is to make sure the inner button has the same parent as the split button, so
         ///  that layout can be performed using the correct graphics context.
-        /// </devdoc>
+        /// </summary>
         private class ToolStripLabelLayout : ToolStripItemInternalLayout {
 
              ToolStripLabel owner;

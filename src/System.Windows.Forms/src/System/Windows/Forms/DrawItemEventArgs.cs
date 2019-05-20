@@ -6,28 +6,28 @@ using System.Drawing;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// This event is fired by owner draw Controls, such as ListBoxes and
     /// ComboBoxes. It contains all the information needed for the user to
     /// paint the given item, including the item index, the Rectangle in which
     /// the drawing should be done, and the Graphics object with which the drawing
     /// should be done.
-    /// </devdoc>
+    /// </summary>
     public class DrawItemEventArgs : EventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// The backColor to paint each menu item with.
-        /// </devdoc>
+        /// </summary>
         private Color _backColor;
 
-        /// <devdoc>
+        /// <summary>
         /// The foreColor to paint each menu item with.
-        /// </devdoc>
+        /// </summary>
         private Color _foreColor;
 
-        /// <devdoc>
+        /// <summary>
         /// Creates a new DrawItemEventArgs with the given parameters.
-        /// </devdoc>
+        /// </summary>
         public DrawItemEventArgs(Graphics graphics, Font font, Rectangle rect,
                                  int index, DrawItemState state)
         {
@@ -40,9 +40,9 @@ namespace System.Windows.Forms
             _backColor = SystemColors.Window;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Creates a new DrawItemEventArgs with the given parameters, including the foreColor and backColor of the control.
-        /// </devdoc>
+        /// </summary>
         public DrawItemEventArgs(Graphics graphics, Font font, Rectangle rect,
                                  int index, DrawItemState state, Color foreColor, Color backColor)
         {
@@ -55,40 +55,38 @@ namespace System.Windows.Forms
             _backColor = backColor;
         }
 
-        /// <include file='doc\DrawItemEvent.uex' path='docs/doc[@for="DrawItemEventArgs.Graphics"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Graphics object with which painting should be done.
-        /// </devdoc>
+        /// </summary>
         public Graphics Graphics { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// A suggested font, usually the parent control's Font property.
-        /// </devdoc>
+        /// </summary>
         public Font Font { get; }
 
-        /// <include file='doc\DrawItemEvent.uex' path='docs/doc[@for="DrawItemEventArgs.Bounds"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// The rectangle outlining the area in which the painting should be  done.
-        /// </devdoc>
+        /// </summary>
         public Rectangle Bounds { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The index of the item that should be painted.
-        /// </devdoc>
+        /// </summary>
         public int Index { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Miscellaneous state information, such as whether the item is
         /// "selected", "focused", or some other such information.  ComboBoxes
         /// have one special piece of information which indicates if the item
         /// being painted is the editable portion of the ComboBox.
-        /// </devdoc>
+        /// </summary>
         public DrawItemState State { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// A suggested color drawing: either SystemColors.WindowText or SystemColors.HighlightText,
         /// depending on whether this item is selected.
-        /// </devdoc>
+        /// </summary>
         public Color ForeColor
         {
             get
@@ -113,9 +111,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Draws the background of the given rectangle with the color returned from the BackColor property.
-        /// </devdoc>
+        /// </summary>
         public virtual void DrawBackground()
         {
             Brush backBrush = new SolidBrush(BackColor);
@@ -123,9 +121,9 @@ namespace System.Windows.Forms
             backBrush.Dispose();
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Draws a handy focus rect in the given rectangle.
-        /// </devdoc>
+        /// </summary>
         public virtual void DrawFocusRectangle()
         {
             if ((State & DrawItemState.Focus) == DrawItemState.Focus &&

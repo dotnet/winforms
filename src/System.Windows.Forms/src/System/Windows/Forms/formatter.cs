@@ -2,15 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Globalization;
+using System.Reflection;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.ComponentModel;
-    using System.Globalization;
-    using System.Reflection;
-    using System.Security;
-    using System.Security.Permissions;
-    
     internal class Formatter
     {
         static private Type stringType = typeof(string);
@@ -19,7 +16,7 @@ namespace System.Windows.Forms
         static private object parseMethodNotFound = new object();
         static private object defaultDataSourceNullValue = System.DBNull.Value;
 
-        /// <devdoc>
+        /// <summary>
         ///
         /// Converts a binary value into a format suitable for display to the end user.
         /// Used when pushing a value from a back-end data source into a data-bound property on a control.
@@ -29,7 +26,7 @@ namespace System.Windows.Forms
         /// types and values, which are then used in the actual conversion. If the caller is expecting a nullable
         /// value back, we must also re-wrap the final result inside a nullable value before returning.
         ///
-        /// </devdoc>
+        /// </summary>
         public static object FormatObject(object value,
                                           Type targetType, 
                                           TypeConverter sourceConverter, 
@@ -74,7 +71,7 @@ namespace System.Windows.Forms
             return result;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///
         /// Converts a value into a format suitable for display to the end user.
         ///
@@ -83,7 +80,7 @@ namespace System.Windows.Forms
         /// - Uses TypeConverters or IConvertible where appropriate
         /// - Throws a FormatException is no suitable conversion can be found
         ///
-        /// </devdoc>
+        /// </summary>
         private static object FormatObjectInternal(object value,
                                                    Type targetType, 
                                                    TypeConverter sourceConverter, 
@@ -192,7 +189,7 @@ namespace System.Windows.Forms
             throw new FormatException(GetCantConvertMessage(value, targetType));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///
         /// Converts a value entered by the end user (through UI) into the corresponding binary value.
         /// Used when pulling input from a data-bound property on a control to store in a back-end data source.
@@ -202,7 +199,7 @@ namespace System.Windows.Forms
         /// types and values, which are then used in the actual conversion. If the caller is expecting a nullable
         /// value back, we must also re-wrap the final result inside a nullable value before returning.
         ///
-        /// </devdoc>
+        /// </summary>
         public static object ParseObject(object value, 
                                          Type targetType, 
                                          Type sourceType, 
@@ -242,7 +239,7 @@ namespace System.Windows.Forms
             return result;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///
         /// Converts a value entered by the end user (through UI) into the corresponding binary value.
         ///
@@ -251,7 +248,7 @@ namespace System.Windows.Forms
         /// - Uses TypeConverters or IConvertible where appropriate
         /// - Throws a FormatException is no suitable conversion can be found
         ///
-        /// </devdoc>
+        /// </summary>
         private static object ParseObjectInternal(object value, 
                                                   Type targetType, 
                                                   Type sourceType, 
@@ -342,9 +339,9 @@ namespace System.Windows.Forms
             throw new FormatException(GetCantConvertMessage(value, targetType));
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Converts a value to the specified type using Convert.ChangeType()
-        /// </devdoc>
+        /// </summary>
         private static object ChangeType(object value, Type type, IFormatProvider formatInfo) {
             try {
                 if (formatInfo == null) {
@@ -358,9 +355,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Indicates whether the specified value matches the display-formatted representation of 'null data' for a given binding.
-        /// </devdoc>
+        /// </summary>
         private static bool EqualsFormattedNullValue(object value, object formattedNullValue, IFormatProvider formatInfo) {
             string formattedNullValueStr = formattedNullValue as string;
             string valueStr = value as string;
@@ -378,17 +375,17 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns the FormatException message used when formatting/parsing fails to find any suitable conversion
-        /// </devdoc>
+        /// </summary>
         private static string GetCantConvertMessage(object value, Type targetType) {
             string stringResId = (value == null) ? SR.Formatter_CantConvertNull : SR.Formatter_CantConvert;
             return string.Format(CultureInfo.CurrentCulture, stringResId, value, targetType.Name);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Determines the correct culture to use during formatting and parsing
-        /// </devdoc>
+        /// </summary>
         private static CultureInfo GetFormatterCulture(IFormatProvider formatInfo) {
             if (formatInfo is CultureInfo) {
                 return formatInfo as CultureInfo;
@@ -398,9 +395,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Converts a value to the specified type using best Parse() method on that type
-        /// </devdoc>
+        /// </summary>
         public static object InvokeStringParseMethod(object value, Type targetType, IFormatProvider formatInfo) {
             try {
                 MethodInfo mi;
@@ -439,18 +436,18 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Indicates whether a given value represents 'null' for data source fields of the same type.
-        /// </devdoc>
+        /// </summary>
         public static bool IsNullData(object value, object dataSourceNullValue) {
             return value == null ||
                    value == System.DBNull.Value ||
                    Object.Equals(value, NullData(value.GetType(), dataSourceNullValue));
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns the default representation of 'null' for a given data source field type.
-        /// </devdoc>
+        /// </summary>
         public static object NullData(Type type, object dataSourceNullValue) {
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>)) {
                 // For nullable types, null is represented by an instance of that type with no assigned value.
@@ -474,9 +471,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Extract the inner type from a nullable type
-        /// </devdoc>
+        /// </summary>
         private static Type NullableUnwrap(Type type) {
             if (type == stringType) // ...performance optimization for the most common case
                 return stringType;
@@ -486,9 +483,9 @@ namespace System.Windows.Forms
             return underlyingType ?? type;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Extract the inner type converter from a nullable type converter
-        /// </devdoc>
+        /// </summary>
         private static TypeConverter NullableUnwrap(TypeConverter typeConverter) {
             NullableConverter nullableConverter = typeConverter as NullableConverter;
             return (nullableConverter != null) ? nullableConverter.UnderlyingTypeConverter : typeConverter;

@@ -2,19 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+
 namespace System.Windows.Forms
 {
-        using System;
-        using System.Diagnostics;
-        using System.Security.Permissions;
-        using System.Security;
-        using System.ComponentModel;
-        
-        using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
-
-        /// <devdoc>
-        /// </devdoc>
-        internal class DropTarget : UnsafeNativeMethods.IOleDropTarget {
+    internal class DropTarget : UnsafeNativeMethods.IOleDropTarget
+    {
             private IDataObject lastDataObject = null;
             private DragDropEffects lastEffect = DragDropEffects.None;
             private IDropTarget owner;

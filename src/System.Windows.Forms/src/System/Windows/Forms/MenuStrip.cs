@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Windows.Forms.Layout;
 
-    /// <include file='doc\MenuStrip.uex' path='docs/doc[@for="MenuStrip"]/*' />
     [ComVisible(true),
      ClassInterface(ClassInterfaceType.AutoDispatch),
      SRDescription(nameof(SR.DescriptionMenuStrip))
@@ -26,7 +25,6 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\MenuStrip.uex' path='docs/doc[@for="MenuStrip.MenuStrip"]/*' />
         public MenuStrip() {
             this.CanOverflow = false;
             this.GripStyle = ToolStripGripStyle.Hidden;
@@ -77,7 +75,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuStrip.uex' path='docs/doc[@for="MenuStrip.DefaultSize"]/*' />
         protected override Size DefaultSize {
             get {
                 return new Size(200, 24);
@@ -107,22 +104,14 @@ namespace System.Windows.Forms {
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.MenuStripMenuActivateDescr))]
         public event EventHandler MenuActivate {
-            add {
-                Events.AddHandler(EventMenuActivate, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMenuActivate, value);
-            }
+            add => Events.AddHandler(EventMenuActivate, value);
+            remove => Events.RemoveHandler(EventMenuActivate, value);
         }
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.MenuStripMenuDeactivateDescr))]
         public event EventHandler MenuDeactivate {
-            add {
-                Events.AddHandler(EventMenuDeactivate, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMenuDeactivate, value);
-            }
+            add => Events.AddHandler(EventMenuDeactivate, value);
+            remove => Events.RemoveHandler(EventMenuDeactivate, value);
         }
 
         [DefaultValue(false)]
@@ -163,7 +152,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MenuStrip.uex' path='docs/doc[@for="MenuStrip.CreateAccessibilityInstance"]/*' />
         protected override AccessibleObject CreateAccessibilityInstance() {
             return new MenuStripAccessibleObject(this);
         }
@@ -178,7 +166,7 @@ namespace System.Windows.Forms {
 
         internal override ToolStripItem GetNextItem(ToolStripItem start, ArrowDirection direction, bool rtlAware) {
             ToolStripItem nextItem = base.GetNextItem(start, direction, rtlAware);
-            if (nextItem is MdiControlStrip.SystemMenuItem && AccessibilityImprovements.Level2) {
+            if (nextItem is MdiControlStrip.SystemMenuItem) {
                 nextItem = base.GetNextItem(nextItem, direction, rtlAware);
             }
             return nextItem;
@@ -200,9 +188,9 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Called from ToolStripManager.ProcessMenuKey.  Fires MenuActivate event and sets focus.
-        /// </devdoc>
+        /// </summary>
         internal bool OnMenuKey() {
             if (!(Focused || ContainsFocus)) {
                 Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ProcessMenuKey] set focus to menustrip");
@@ -236,7 +224,7 @@ namespace System.Windows.Forms {
                         Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[MenuStrip.ProcessCmdKey] Rolling up the menu and invoking the system menu");
                         ToolStripManager.ModalMenuFilter.ExitMenuMode();
                         // send a WM_SYSCOMMAND SC_KEYMENU + Space to activate the system menu.
-                        UnsafeNativeMethods.PostMessage(WindowsFormsUtils.GetRootHWnd(this), NativeMethods.WM_SYSCOMMAND, NativeMethods.SC_KEYMENU, (int)Keys.Space);
+                        UnsafeNativeMethods.PostMessage(WindowsFormsUtils.GetRootHWnd(this), Interop.WindowMessages.WM_SYSCOMMAND, NativeMethods.SC_KEYMENU, (int)Keys.Space);
                         return true;
                     }
                 }
@@ -245,14 +233,13 @@ namespace System.Windows.Forms {
 
 
         }
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.WndProc"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Summary of WndProc.
-        /// </devdoc>
+        /// </summary>
         /// <param name=m></param>
         protected override void WndProc(ref Message m) {
 
-            if (m.Msg == NativeMethods.WM_MOUSEACTIVATE && (ActiveDropDowns.Count == 0)) {
+            if (m.Msg == Interop.WindowMessages.WM_MOUSEACTIVATE && (ActiveDropDowns.Count == 0)) {
                 // call menu activate before we actually take focus.
                 Point pt = PointToClient(WindowsFormsUtils.LastCursorPoint);
                 ToolStripItem item = GetItemAt(pt);
@@ -284,7 +271,7 @@ namespace System.Windows.Forms {
             }
 
             internal override object GetPropertyValue(int propertyID) {
-                if (AccessibilityImprovements.Level3 && propertyID == NativeMethods.UIA_ControlTypePropertyId) {
+                if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
                     return NativeMethods.UIA_MenuBarControlTypeId;
                 }
 

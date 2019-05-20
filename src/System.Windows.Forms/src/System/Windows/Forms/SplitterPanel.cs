@@ -2,40 +2,22 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Drawing;
+using System.Runtime.InteropServices;
 
-namespace System.Windows.Forms {
-    
-    using Microsoft.Win32;
-    using System;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Security;
-    using System.Security.Permissions;
-    using System.Windows.Forms;
-    using System.Drawing;
-    using System.Drawing.Design;
-    using System.Drawing.Imaging;
-    using System.Runtime.InteropServices;
-    using System.ComponentModel.Design;
-    using System.ComponentModel.Design.Serialization;
-
-    /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel"]/*' />
-    /// <devdoc>
-    ///     TBD.
-    /// </devdoc>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    Docking(DockingBehavior.Never),
-    Designer("System.Windows.Forms.Design.SplitterPanelDesigner, " + AssemblyRef.SystemDesign),
-    ToolboxItem(false)
-    ]
-    public sealed class SplitterPanel : Panel {
-
+namespace System.Windows.Forms
+{
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [Docking(DockingBehavior.Never)]
+    [Designer("System.Windows.Forms.Design.SplitterPanelDesigner, " + AssemblyRef.SystemDesign)]
+    [ToolboxItem(false)]
+    public sealed class SplitterPanel : Panel
+    {
         SplitContainer owner  = null;
         private bool collapsed = false;
         
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.SplitterPanel"]/*' />
         public SplitterPanel(SplitContainer owner)
         : base() {
               this.owner =   owner;
@@ -53,10 +35,9 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.AutoSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    Override AutoSize to make it hidden from the user in the designer 
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -71,20 +52,15 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.AutoSizeChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged {
-            add {
-                base.AutoSizeChanged += value;
-            }
-            remove {
-                base.AutoSizeChanged -= value;
-            }
+            add => base.AutoSizeChanged += value;
+            remove => base.AutoSizeChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Allows the control to optionally shrink when AutoSize is true.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -99,10 +75,9 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.Anchor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    Override Anchor to make it hidden from the user in the designer 
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -117,11 +92,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.BorderStyle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Indicates what type of border the Splitter control has.  This value
         ///     comes from the System.Windows.Forms.BorderStyle enumeration.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -136,13 +110,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.Dock"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The dock property. The dock property controls to which edge
         ///     of the container this control is docked to. For example, when docked to
         ///     the top of the container, the control will be displayed flush at the
         ///     top of the container, extending the length of the container.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -157,10 +130,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.DockPadding"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    Override DockPadding to make it hidden from the user in the designer 
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -172,10 +144,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.Height"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The height of this SplitterPanel
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
@@ -203,10 +174,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.Location"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Override Location to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -221,11 +191,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.DefaultMargin"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Deriving classes can override this to configure a default size for their control.
         /// This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
+        /// </summary>
         protected override Padding DefaultMargin {
             get {
                 return new Padding(0, 0, 0, 0);
@@ -233,10 +202,9 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.MinimumSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    Override AutoSize to make it hidden from the user in the designer 
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -252,10 +220,9 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.MaximumSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    Override AutoSize to make it hidden from the user in the designer 
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -270,12 +237,11 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.Name"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Name of this control. The designer will set this to the same
         ///     as the programatic Id "(name)" of the control.  The name can be
         ///     used as a key into the ControlCollection.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -290,20 +256,18 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.Parent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The parent of this control.
-        /// </devdoc>
+        /// </summary>
         internal SplitContainer Owner {
             get {
                 return owner;
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.Parent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The parent of this control.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -318,10 +282,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.Size"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Override Size to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -339,10 +302,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.TabIndex"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Override TabIndex to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -358,10 +320,9 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.TabStop"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Override TabStop to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -376,10 +337,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.Visible"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Override Visible to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -394,10 +354,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.Width"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The width of this control.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
@@ -425,94 +384,69 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.VisibleChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Override VisibleChanged to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         Browsable(false)    
         ]
         public new event EventHandler VisibleChanged {
-            add {
-                base.VisibleChanged += value;
-            }
-            remove {
-                base.VisibleChanged -= value;
-            }
+            add => base.VisibleChanged += value;
+            remove => base.VisibleChanged -= value;
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.DockChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Override DockChanged to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         Browsable(false)    
         ]
         public new event EventHandler DockChanged {
-            add {
-                base.DockChanged += value;
-            }
-            remove {
-                base.DockChanged -= value;
-            }
+            add => base.DockChanged += value;
+            remove => base.DockChanged -= value;
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.LocationChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Override LocationChanged to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         Browsable(false)    
         ]
         public new event EventHandler LocationChanged {
-            add {
-                base.LocationChanged += value;
-            }
-            remove {
-                base.LocationChanged -= value;
-            }
+            add => base.LocationChanged += value;
+            remove => base.LocationChanged -= value;
         }
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.TabIndexChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Override TabIndexChanged to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         Browsable(false)    
         ]
         public new event EventHandler TabIndexChanged {
-            add {
-                base.TabIndexChanged += value;
-            }
-            remove {
-                base.TabIndexChanged -= value;
-            }
+            add => base.TabIndexChanged += value;
+            remove => base.TabIndexChanged -= value;
         }        
 
-        /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.TabStopChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Override TabStopChanged to make it hidden from the user in the designer
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         Browsable(false)    
         ]
         public new event EventHandler TabStopChanged {
-            add {
-                base.TabStopChanged += value;
-            }
-            remove {
-                base.TabStopChanged -= value;
-            }
+            add => base.TabStopChanged += value;
+            remove => base.TabStopChanged -= value;
         }
 
     }

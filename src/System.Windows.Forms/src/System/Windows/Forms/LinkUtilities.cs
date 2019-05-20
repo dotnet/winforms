@@ -22,11 +22,10 @@ using System.Globalization;
         const string IEAnchorColorVisited = "Anchor Color Visited";
         const string IEAnchorColorHover = "Anchor Color Hover";
 
-        /// <include file='doc\LinkUtilities.uex' path='docs/doc[@for="LinkUtilities.GetIEColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves a named IE color from the registry. There are constants at the top
         ///     of this file of the valid names to retrieve.
-        /// </devdoc>
+        /// </summary>
         private static Color GetIEColor(string name) {
             RegistryKey key = Registry.CurrentUser.OpenSubKey(IESettingsRegPath);
 
@@ -104,10 +103,9 @@ using System.Globalization;
             return Color.FromArgb(r, g, b);
         }
 
-        /// <include file='doc\LinkUtilities.uex' path='docs/doc[@for="LinkUtilities.GetIELinkBehavior"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the IE settings for link behavior from the registry.
-        /// </devdoc>
+        /// </summary>
         public static LinkBehavior GetIELinkBehavior() {
             RegistryKey key = null;
             try {

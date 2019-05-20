@@ -6,7 +6,7 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="System.Windows.Forms.Internal.WindowsBrush.FromHdc(System.IntPtr):System.Windows.Forms.Internal.WindowsBrush")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="System.Windows.Forms.Internal.WindowsBrush.FromBrush(System.Drawing.Brush):System.Windows.Forms.Internal.WindowsBrush")]
 
-#if WINFORMS_NAMESPACE
+#if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
 #elif DRAWING_NAMESPACE
 namespace System.Drawing.Internal
@@ -15,18 +15,17 @@ namespace System.Experimental.Gdi
 #endif
 {
     using System;
-    using System.Internal;
     using System.Runtime.InteropServices;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Drawing;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     ///     <para>
     ///         Encapsulates a GDI Brush object.
     ///     </para>
-    /// </devdoc>
+    /// </summary>
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
 #else
@@ -49,10 +48,10 @@ namespace System.Experimental.Gdi
 
         protected abstract void CreateBrush();
 
-        /// <devdoc>
+        /// <summary>
         ///     Parameterless constructor to use default color.
         ///     Notice that the actual object construction is done in the derived classes.
-        /// </devdoc>
+        /// </summary>
         
         public WindowsBrush(DeviceContext dc)
         {
@@ -107,9 +106,9 @@ namespace System.Experimental.Gdi
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///       Gets the native Win32 brush handle. It creates it on demand.
-        /// </devdoc>
+        /// </summary>
         protected IntPtr NativeHandle
         {
             get
@@ -133,10 +132,10 @@ namespace System.Experimental.Gdi
 
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
 
-        /// <devdoc>
+        /// <summary>
         ///     Derived classes implement this method to get a native GDI brush wrapper with the same
         ///     properties as this object.
-        /// </devdoc>
+        /// </summary>
         
         
         public static WindowsBrush FromBrush(DeviceContext dc, Brush originalBrush)
@@ -154,9 +153,9 @@ namespace System.Experimental.Gdi
             return null;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a WindowsBrush from the DC currently selected HBRUSH
-        /// </devdoc>
+        /// </summary>
         
         
         public static WindowsBrush FromDC(DeviceContext dc)
@@ -170,9 +169,9 @@ namespace System.Experimental.Gdi
             return WindowsBrush.FromLogBrush(dc, logBrush );
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a WindowsBrush from a LOGBRUSH.
-        /// </devdoc>
+        /// </summary>
         
         
         public static WindowsBrush FromLogBrush( DeviceContext dc, IntNativeMethods.LOGBRUSH logBrush )
@@ -195,11 +194,11 @@ namespace System.Experimental.Gdi
         }
 #endif
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Returns the native Win32 brush handle.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public IntPtr HBrush
         { 
             get

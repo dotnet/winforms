@@ -15,27 +15,25 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Runtime.Versioning;
 
-    /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Represents
     ///       a common dialog box that allows the user to specify options for saving a
     ///       file. This class cannot be inherited.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     [
     Designer("System.Windows.Forms.Design.SaveFileDialogDesigner, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionSaveFileDialog))
     ]
     public sealed class SaveFileDialog : FileDialog {
 
-        /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog.CreatePrompt"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box prompts the user for
         ///       permission to create a file if the user specifies a file that does not exist.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -50,13 +48,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog.OverwritePrompt"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the Save As dialog box displays a warning if the user specifies
         ///       a file name that already exists.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
@@ -71,31 +68,24 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog.OpenFile"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Opens the file with read/write permission selected by the user.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
-        /// 
-
-
-        [SuppressMessage("Microsoft.Security", "CA2103:ReviewImperativeSecurity")]
-        
-        
         public Stream OpenFile() {
-            string filename = FileNamesInternal[0];
-
+            string filename = FileNames[0];
             if (string.IsNullOrEmpty(filename))
-                throw new ArgumentNullException( "FileName" );
+            {
+                throw new ArgumentNullException(nameof(FileName));
+            }
                 
             return new FileStream(filename, FileMode.Create, FileAccess.ReadWrite);
         }
 
-        /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog.PromptFileCreate"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Prompts the user with a <see cref='System.Windows.Forms.MessageBox'/>
         ///       when a file is about to be created. This method is
@@ -103,15 +93,14 @@ namespace System.Windows.Forms {
         ///       does not exist. A return value of false prevents the dialog from
         ///       closing.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         private bool PromptFileCreate(string fileName) 
         {
             return MessageBoxWithFocusRestore(string.Format(SR.FileDialogCreatePrompt, fileName),
                     DialogCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
         }
 
-        /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog.PromptFileOverwrite"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Prompts the user when a file is about to be overwritten. This method is
         ///       invoked when the "overwritePrompt" property is true and the specified
@@ -119,7 +108,7 @@ namespace System.Windows.Forms {
         ///       closing.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         private bool PromptFileOverwrite(string fileName) {
             return MessageBoxWithFocusRestore(string.Format(SR.FileDialogOverwritePrompt, fileName),
                     DialogCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
@@ -128,19 +117,19 @@ namespace System.Windows.Forms {
         // If it's necessary to throw up a "This file exists, are you sure?" kind of
         // MessageBox, here's where we do it.
         // Return value is whether or not the user hit "okay".
-        internal override bool PromptUserIfAppropriate(string fileName) {
+        private protected override bool PromptUserIfAppropriate(string fileName) {
             if (!base.PromptUserIfAppropriate(fileName)) {
                 return false;
             }
 
             //Note: When we are using the Vista dialog mode we get two prompts (one from us and one from the OS) if we do this
-            if ((options & NativeMethods.OFN_OVERWRITEPROMPT) != 0 && FileExists(fileName) && !this.UseVistaDialogInternal) {
+            if ((_options & NativeMethods.OFN_OVERWRITEPROMPT) != 0 && FileExists(fileName) && !this.UseVistaDialogInternal) {
                 if (!PromptFileOverwrite(fileName)) {
                     return false;
                 }
             }
 
-            if ((options & NativeMethods.OFN_CREATEPROMPT) != 0 && !FileExists(fileName)) {
+            if ((_options & NativeMethods.OFN_CREATEPROMPT) != 0 && !FileExists(fileName)) {
                 if (!PromptFileCreate(fileName)) {
                     return false;
                 }
@@ -149,23 +138,20 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog.Reset"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Resets all dialog box options to their default
         ///       values.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override void Reset() {
             base.Reset();
             SetOption(NativeMethods.OFN_OVERWRITEPROMPT, true);
         }
 
-        /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog.RunFileDialog"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
-        internal override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn) {
+        /// <summary>
+        /// </summary>
+        private protected override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn) {
             bool result = UnsafeNativeMethods.GetSaveFileName(ofn);
 
             if (!result) {
@@ -179,17 +165,18 @@ namespace System.Windows.Forms {
             }
             
             return result;
-         }
-        internal override string[] ProcessVistaFiles(FileDialogNative.IFileDialog dialog)
+        }
+
+        private protected override string[] ProcessVistaFiles(FileDialogNative.IFileDialog dialog)
         {
             FileDialogNative.IFileSaveDialog saveDialog = (FileDialogNative.IFileSaveDialog)dialog;
-            FileDialogNative.IShellItem item;
-            dialog.GetResult(out item);
+            dialog.GetResult(out FileDialogNative.IShellItem item);
             return new string[] { GetFilePathFromShellItem(item) };
         }
-        internal override FileDialogNative.IFileDialog CreateVistaDialog()
-        { return new FileDialogNative.NativeFileSaveDialog(); }
 
-
+        private protected override FileDialogNative.IFileDialog CreateVistaDialog()
+        {
+            return new FileDialogNative.NativeFileSaveDialog();
+        }
     }
 }

@@ -15,12 +15,11 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Globalization;
     
-    /// <include file='doc\Help.uex' path='docs/doc[@for="Help"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Represents the HTML 1.0 Help engine.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     public class Help {
 #if DEBUG        
         internal static readonly TraceSwitch WindowsFormsHelpTrace = new TraceSwitch("WindowsFormsHelpTrace", "Debug help system");
@@ -65,37 +64,34 @@ namespace System.Windows.Forms {
         private Help() {
         }        
 
-        /// <include file='doc\Help.uex' path='docs/doc[@for="Help.ShowHelp"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays
         ///       the contents of the Help file at located at a specified Url.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void ShowHelp(Control parent, string url) {
             ShowHelp(parent, url, HelpNavigator.TableOfContents, null);
         }
 
-        /// <include file='doc\Help.uex' path='docs/doc[@for="Help.ShowHelp1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays the contents of
         ///       the Help
         ///       file for a specific topic found at the specified Url.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void ShowHelp(Control parent, string url, HelpNavigator navigator) {
             ShowHelp(parent, url, navigator, null);
         }
 
-        /// <include file='doc\Help.uex' path='docs/doc[@for="Help.ShowHelp2"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays the contents of
         ///       the Help
         ///       file for a specific topic found at the specified Url.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void ShowHelp(Control parent, string url, string keyword) {
             if (keyword != null && keyword.Length != 0) {
                 ShowHelp(parent, url, HelpNavigator.Topic, keyword);
@@ -105,15 +101,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Help.uex' path='docs/doc[@for="Help.ShowHelp3"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays the contents of the Help file located at
         ///       the Url
         ///       supplied by the
         ///       user.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void ShowHelp(Control parent, string url, HelpNavigator command, object parameter) {
             Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "Help:: ShowHelp");
 
@@ -127,24 +122,22 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Help.uex' path='docs/doc[@for="Help.ShowHelpIndex"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays the index of the specified file.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void ShowHelpIndex(Control parent, string url) {
             Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "Help:: ShowHelpIndex");
 
             ShowHelp(parent, url, HelpNavigator.Index, null);
         }
 
-        /// <include file='doc\Help.uex' path='docs/doc[@for="Help.ShowPopup"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays a Help pop-up window.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void ShowPopup(Control parent, string caption, Point location) {
             Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "Help:: ShowPopup");
 
@@ -171,11 +164,9 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\Help.uex' path='docs/doc[@for="Help.ShowHTML10Help"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Displays HTML 1.0 Help with the specified parameters
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private static void ShowHTML10Help(Control parent, string url, HelpNavigator command, object param) {
             Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "Help:: ShowHTML10Help:: " + url + ", " + command.ToString("G") + ", " + param);
             
@@ -247,16 +238,14 @@ namespace System.Windows.Forms {
                 SafeNativeMethods.HtmlHelp(handle, pathAndFileName, HH_DISPLAY_TEXT_POPUP, (NativeMethods.HH_POPUP)param);
             }
             else if (param.GetType() == typeof(int)) {
-                throw new ArgumentException(string.Format(SR.InvalidArgument, "param", "Integer"));
+                throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(param), "Integer"), nameof(param));
             }
         }
 
 
-        /// <include file='doc\Help.uex' path='docs/doc[@for="Help.ShowHTMLFile"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Displays HTMLFile with the specified parameters
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         /// 
 
 
@@ -308,12 +297,7 @@ namespace System.Windows.Forms {
                     file = new Uri(partialUri);
                 }
                 catch (UriFormatException) {
-                    // eat URI parse exceptions...
-                    //
-                }   
-                catch (ArgumentNullException) {
-                    // Catch specific exceptions
-                    // Shouldnt get here...
+                    // Ignore invalid uris.
                 }
             }
 
@@ -337,13 +321,7 @@ namespace System.Windows.Forms {
                                    partialUri);
                 }
                 catch (UriFormatException) {
-                    // Catch specific exceptions
-                    // eat URI parse exceptions...
-                    //
-                }
-                catch (ArgumentNullException) {
-                    // Catch specific exceptions
-                    // Shouldnt get here...                    
+                    // Ignore invalid uris.
                 }
 
                 if (file != null && file.Scheme == "file") {
@@ -361,8 +339,6 @@ namespace System.Windows.Forms {
             return file;
         }
 
-        /// <include file='doc\Help.uex' path='docs/doc[@for="Help.GetHelpFileType"]/*' />
-        /// <internalonly/>
         private static int GetHelpFileType(string url) {
             Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "Help:: GetHelpFileType " + url);
 
@@ -387,11 +363,9 @@ namespace System.Windows.Forms {
             return HTMLFILE;
         }
 
-        /// <include file='doc\Help.uex' path='docs/doc[@for="Help.MapCommandToHTMLCommand"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Maps one of the COMMAND_* constants to the HTML 1.0 Help equivalent.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private static int MapCommandToHTMLCommand(HelpNavigator command, string param, out object htmlParam) {
             htmlParam = param;
 

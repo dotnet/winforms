@@ -13,7 +13,6 @@ namespace System.Windows.Forms
     using System.Drawing.Design;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle"]/*' />
     [
         TypeConverterAttribute(typeof(DataGridViewCellStyleConverter)),
         EditorAttribute("System.Windows.Forms.Design.DataGridViewCellStyleEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
@@ -34,25 +33,21 @@ namespace System.Windows.Forms
         private static readonly int PropTag = PropertyStore.CreateKey();
         private static readonly int PropWrapMode = PropertyStore.CreateKey();
 
-        private const string DATAGRIDVIEWCELLSTYLE_nullText = "";    // default value of NullValue property
-
         private DataGridViewCellStyleScopes scope;
         private PropertyStore propertyStore;          // Contains all properties that are not always set.
         private DataGridView dataGridView;
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.DataGridViewCellStyle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewCellStyle'/> class.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public DataGridViewCellStyle()
         {
             this.propertyStore = new PropertyStore();
             this.scope = DataGridViewCellStyleScopes.None;
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.DataGridViewCellStyle2"]/*' />
         public DataGridViewCellStyle(DataGridViewCellStyle dataGridViewCellStyle)
         {
             if (dataGridViewCellStyle == null)
@@ -79,7 +74,6 @@ namespace System.Windows.Forms
             this.PaddingInternal = dataGridViewCellStyle.Padding;
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.Alignment"]/*' />
         [
             SRDescription(nameof(SR.DataGridViewCellStyleAlignmentDescr)),
             //Localizable(true),
@@ -136,7 +130,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.BackColor"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance))
         ]
@@ -160,7 +153,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.DataSourceNullValue"]/*' />
         [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -204,7 +196,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.Font"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance))
         ]
@@ -230,7 +221,6 @@ namespace System.Windows.Forms
             }
         }
         
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.ForeColor"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance))
         ]
@@ -254,7 +244,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.Format"]/*' />
         [
             DefaultValue(""),
             EditorAttribute("System.Windows.Forms.Design.FormatStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
@@ -289,7 +278,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.FormatProvider"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced)
@@ -319,7 +307,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.IsDataSourceNullValueDefault"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced)
@@ -336,7 +323,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.IsFormatProviderDefault"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced)
@@ -349,7 +335,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.IsNullValueDefault"]/*' />
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced)
@@ -362,17 +347,15 @@ namespace System.Windows.Forms
                 {
                     return true;
                 }
+
                 object nullValue = this.Properties.GetObject(PropNullValue);
-                return (nullValue is string && nullValue.Equals(DATAGRIDVIEWCELLSTYLE_nullText));
+                return nullValue is string nullValueString && nullValueString.Length == 0;
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.NullValue"]/*' />
-        [
-            DefaultValue(DATAGRIDVIEWCELLSTYLE_nullText),
-            TypeConverter(typeof(StringConverter)),
-            SRCategory(nameof(SR.CatData))
-        ]
+        [DefaultValue("")]
+        [TypeConverter(typeof(StringConverter))]
+        [SRCategory(nameof(SR.CatData))]
         public object NullValue
         {
             get
@@ -381,7 +364,7 @@ namespace System.Windows.Forms
                 {
                     return this.Properties.GetObject(PropNullValue);
                 }
-                return DATAGRIDVIEWCELLSTYLE_nullText;
+                return string.Empty;
             }
             set
             {
@@ -393,9 +376,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (value is string &&
-                    value.Equals(DATAGRIDVIEWCELLSTYLE_nullText) &&
-                    this.Properties.ContainsObject(PropNullValue))
+                if (value is string stringValue && stringValue.Length == 0 && Properties.ContainsObject(PropNullValue))
                 {
                     this.Properties.RemoveObject(PropNullValue);
                 }
@@ -412,16 +393,12 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.Padding"]/*' />
         [
             SRCategory(nameof(SR.CatLayout))
         ]
         public Padding Padding
         {
-            get
-            {
-                return this.Properties.GetPadding(PropPadding);
-            }
+            get => Properties.GetPadding(PropPadding, out _);
             set
             {
                 if (value.Left < 0 || value.Right < 0 || value.Top < 0 || value.Bottom < 0)
@@ -479,7 +456,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.SelectionBackColor"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance))
         ]
@@ -503,7 +479,6 @@ namespace System.Windows.Forms
             }
         }
         
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.SelectionForeColor"]/*' />
         [
             SRCategory(nameof(SR.CatAppearance))
         ]
@@ -527,7 +502,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.Tag"]/*' />
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -547,7 +521,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.WrapMode"]/*' />
         [
             DefaultValue(DataGridViewTriState.NotSet),
             SRCategory(nameof(SR.CatLayout))
@@ -594,7 +567,6 @@ namespace System.Windows.Forms
             this.dataGridView = dataGridView;
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.Dispose"]/*' />
         public virtual void ApplyStyle(DataGridViewCellStyle dataGridViewCellStyle)
         {
             if (dataGridViewCellStyle == null)
@@ -655,12 +627,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.Clone"]/*' />
         public virtual DataGridViewCellStyle Clone() {
             return new DataGridViewCellStyle(this);
         }
 
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.Equals"]/*' />
         public override bool Equals(object o) 
         {
             DataGridViewCellStyle dgvcs = o as DataGridViewCellStyle;
@@ -811,7 +781,6 @@ namespace System.Windows.Forms
             return found;
         }
         
-        /// <include file='doc\DataGridViewCellStyle.uex' path='docs/doc[@for="DataGridViewCellStyle.ToString"]/*' />
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder(128);
@@ -826,7 +795,7 @@ namespace System.Windows.Forms
             {
                 if (!firstPropAdded)
                 {
-                    sb.Append(",");
+                    sb.Append(',');
                 }
                 sb.Append(" ForeColor=" + this.ForeColor.ToString());
                 firstPropAdded = false;
@@ -835,7 +804,7 @@ namespace System.Windows.Forms
             {
                 if (!firstPropAdded)
                 {
-                    sb.Append(",");
+                    sb.Append(',');
                 }
                 sb.Append(" SelectionBackColor=" + this.SelectionBackColor.ToString());
                 firstPropAdded = false;
@@ -844,7 +813,7 @@ namespace System.Windows.Forms
             {
                 if (!firstPropAdded)
                 {
-                    sb.Append(",");
+                    sb.Append(',');
                 }
                 sb.Append(" SelectionForeColor=" + this.SelectionForeColor.ToString());
                 firstPropAdded = false;
@@ -853,7 +822,7 @@ namespace System.Windows.Forms
             {
                 if (!firstPropAdded)
                 {
-                    sb.Append(",");
+                    sb.Append(',');
                 }
                 sb.Append(" Font=" + this.Font.ToString());
                 firstPropAdded = false;
@@ -862,7 +831,7 @@ namespace System.Windows.Forms
             {
                 if (!firstPropAdded)
                 {
-                    sb.Append(",");
+                    sb.Append(',');
                 }
                 sb.Append(" NullValue=" + this.NullValue.ToString());
                 firstPropAdded = false;
@@ -871,7 +840,7 @@ namespace System.Windows.Forms
             {
                 if (!firstPropAdded)
                 {
-                    sb.Append(",");
+                    sb.Append(',');
                 }
                 sb.Append(" DataSourceNullValue=" + this.DataSourceNullValue.ToString());
                 firstPropAdded = false;
@@ -880,7 +849,7 @@ namespace System.Windows.Forms
             {
                 if (!firstPropAdded)
                 {
-                    sb.Append(",");
+                    sb.Append(',');
                 }
                 sb.Append(" Format=" + this.Format);
                 firstPropAdded = false;
@@ -889,7 +858,7 @@ namespace System.Windows.Forms
             {
                 if (!firstPropAdded)
                 {
-                    sb.Append(",");
+                    sb.Append(',');
                 }
                 sb.Append(" WrapMode=" + this.WrapMode.ToString());
                 firstPropAdded = false;
@@ -898,7 +867,7 @@ namespace System.Windows.Forms
             {
                 if (!firstPropAdded)
                 {
-                    sb.Append(",");
+                    sb.Append(',');
                 }
                 sb.Append(" Alignment=" + this.Alignment.ToString());
                 firstPropAdded = false;
@@ -907,7 +876,7 @@ namespace System.Windows.Forms
             {
                 if (!firstPropAdded)
                 {
-                    sb.Append(",");
+                    sb.Append(',');
                 }
                 sb.Append(" Padding=" + this.Padding.ToString());
                 firstPropAdded = false;
@@ -916,7 +885,7 @@ namespace System.Windows.Forms
             {
                 if (!firstPropAdded)
                 {
-                    sb.Append(",");
+                    sb.Append(',');
                 }
                 sb.Append(" Tag=" + this.Tag.ToString());
                 firstPropAdded = false;

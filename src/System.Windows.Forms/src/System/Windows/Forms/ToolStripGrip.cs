@@ -42,10 +42,10 @@ namespace System.Windows.Forms {
             SupportsItemClick = false;
         }
 
-	    /// <devdoc>
+	    /// <summary>
         /// Deriving classes can override this to configure a default size for their control.
         /// This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
+        /// </summary>
         protected internal override Padding DefaultMargin {
             get {
                 return scaledDefaultPadding;
@@ -274,13 +274,11 @@ namespace System.Windows.Forms {
             }
 
             internal override object GetPropertyValue(int propertyID) {
-                if (AccessibilityImprovements.Level3) {
-                    switch (propertyID) {
-                        case NativeMethods.UIA_IsOffscreenPropertyId:
-                            return false;
-                        case NativeMethods.UIA_ControlTypePropertyId:
-                            return NativeMethods.UIA_ThumbControlTypeId;
-                    }
+                switch (propertyID) {
+                    case NativeMethods.UIA_IsOffscreenPropertyId:
+                        return false;
+                    case NativeMethods.UIA_ControlTypePropertyId:
+                        return NativeMethods.UIA_ThumbControlTypeId;
                 }
 
                 return base.GetPropertyValue(propertyID);

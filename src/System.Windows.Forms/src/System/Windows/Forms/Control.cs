@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#define DEBUG_PREFERREDSIZE
+// #define DEBUG_PREFERREDSIZE
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="System.Windows.Forms.Control+ActiveXFontMarshaler..ctor()")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Scope="member", Target="System.Windows.Forms.Control.PreProcessControlMessageInternal(System.Windows.Forms.Control, System.Windows.Forms.Message):System.Windows.Forms.PreProcessControlState")]
@@ -28,7 +28,6 @@ namespace System.Windows.Forms {
     using System.Reflection;
     using System.Runtime.InteropServices;
     using System.Runtime.InteropServices.ComTypes;
-    using System.Runtime.Remoting;
     using System.Runtime.Serialization;
     using System.Runtime.Serialization.Formatters;
     using System.Runtime.Serialization.Formatters.Binary;
@@ -45,11 +44,10 @@ namespace System.Windows.Forms {
     using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
     using Collections.Generic;
 
-    /// <include file='doc\Control.uex' path='docs/doc[@for="Control"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para>Defines the base class for controls, which are components
     ///       with visual representation.</para>
-    /// </devdoc>
+    /// </summary>
     [
         ComVisible(true),
         ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -282,17 +280,15 @@ namespace System.Windows.Forms {
         internal static readonly object EventPaddingChanged           = new object();
         private static readonly object EventPreviewKeyDown            = new object();
 
-        #if WIN95_SUPPORT
-        private static int mouseWheelMessage = NativeMethods.WM_MOUSEWHEEL;
+        private static int mouseWheelMessage = Interop.WindowMessages.WM_MOUSEWHEEL;
         private static bool mouseWheelRoutingNeeded;
         private static bool mouseWheelInit;
-        #endif
 
         private static int threadCallbackMessage;
 
         // Initially check for illegal multithreading based on whether the
         // debugger is attached.
-        
+
         private static bool checkForIllegalCrossThreadCalls = Debugger.IsAttached;
         private static ContextCallback invokeMarshaledCallbackHelperDelegate;
 
@@ -458,15 +454,14 @@ example usage
 
 #endif
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Control"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.Control'/> class.</para>
-        /// </devdoc>
+        /// </summary>
         public Control() : this(true) {
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         internal Control(bool autoInstallSyncContext) : base() {
 #if DEBUG
             if (AssertOnControlCreateSwitch.Enabled) {
@@ -494,9 +489,7 @@ example usage
                      ControlStyles.UseTextForAccessibility |
                      ControlStyles.Selectable,true);
 
-#if WIN95_SUPPORT
             InitMouseWheelSupport();
-#endif
 
             // We baked the "default default" margin and min size into CommonProperties
             // so that in the common case the PropertyStore would be empty.  If, however,
@@ -541,34 +534,30 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Control1"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.Control'/> class.</para>
-        /// </devdoc>
+        /// </summary>
         public Control( string text ) : this( (Control) null, text ) {
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Control2"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.Control'/> class.</para>
-        /// </devdoc>
+        /// </summary>
         public Control( string text, int left, int top, int width, int height ) :
                     this( (Control) null, text, left, top, width, height ) {
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Control3"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.Control'/> class.</para>
-        /// </devdoc>
+        /// </summary>
         public Control( Control parent, string text ) : this() {
             this.Parent = parent;
             this.Text = text;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Control4"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.Control'/> class.</para>
-        /// </devdoc>
+        /// </summary>
         public Control( Control parent, string text, int left, int top, int width, int height ) : this( parent, text ) {
             this.Location = new Point( left, top );
             this.Size = new Size( width, height );
@@ -583,10 +572,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AccessibilityObject"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      The Accessibility Object for this Control
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -611,10 +599,10 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Private accessibility object for control, used to wrap the object that
         ///      OLEACC.DLL creates to represent the control's non-client (NC) region.
-        /// </devdoc>
+        /// </summary>
         private AccessibleObject NcAccessibilityObject {
             get {
                 AccessibleObject ncAccessibleObject = (AccessibleObject)Properties.GetObject(PropNcAccessibility);
@@ -628,11 +616,10 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns a specific AccessibleObject associated with this
         ///     control, based on standard "accessibile object id".
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private AccessibleObject GetAccessibilityObject(int accObjId) {
             AccessibleObject accessibleObject;
 
@@ -655,22 +642,20 @@ example usage
             return accessibleObject;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GetAccessibilityObjectById"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Returns a specific AccessibleObbject associated w/ the objectID
-        /// </devdoc>
+        /// </summary>
         protected virtual AccessibleObject GetAccessibilityObjectById(int objectId) {
-            if (AccessibilityImprovements.Level3 && this is IAutomationLiveRegion) {
+            if (this is IAutomationLiveRegion) {
                 return this.AccessibilityObject;
             }
 
             return null;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AccessibleDefaultActionDescription"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      The default action description of the control
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatAccessibility)),
             Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
@@ -686,10 +671,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AccessibleDescription"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      The accessible description of the control
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatAccessibility)),
             DefaultValue(null),
@@ -705,10 +689,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AccessibleName"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      The accessible name of the control
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatAccessibility)),
             DefaultValue(null),
@@ -725,10 +708,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AccessibleRole"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      The accessible role of the control
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatAccessibility)),
             DefaultValue(AccessibleRole.Default),
@@ -756,61 +738,61 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Helper method for retrieving an ActiveX property.  We abstract these
         ///     to another method so we do not force JIT the ActiveX codebase.
-        /// </devdoc>
+        /// </summary>
         private Color ActiveXAmbientBackColor {
             get {
                 return ActiveXInstance.AmbientBackColor;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Helper method for retrieving an ActiveX property.  We abstract these
         ///     to another method so we do not force JIT the ActiveX codebase.
-        /// </devdoc>
+        /// </summary>
         private Color ActiveXAmbientForeColor {
             get {
                 return ActiveXInstance.AmbientForeColor;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Helper method for retrieving an ActiveX property.  We abstract these
         ///     to another method so we do not force JIT the ActiveX codebase.
-        /// </devdoc>
+        /// </summary>
         private Font ActiveXAmbientFont {
             get {
                 return ActiveXInstance.AmbientFont;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Helper method for retrieving an ActiveX property.  We abstract these
         ///     to another method so we do not force JIT the ActiveX codebase.
-        /// </devdoc>
+        /// </summary>
         private bool ActiveXEventsFrozen {
             get {
                 return ActiveXInstance.EventsFrozen;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Helper method for retrieving an ActiveX property.  We abstract these
         ///     to another method so we do not force JIT the ActiveX codebase.
-        /// </devdoc>
+        /// </summary>
         private IntPtr ActiveXHWNDParent {
             get {
                 return ActiveXInstance.HWNDParent;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the ActiveX control implementation for
         ///      this control.  This will demand create the implementation
         ///      if it does not already exist.
-        /// </devdoc>
+        /// </summary>
         private ActiveXImpl ActiveXInstance {
             get {
                 ActiveXImpl activeXImpl = (ActiveXImpl)Properties.GetObject(PropActiveXImpl);
@@ -835,11 +817,10 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AllowDrop"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The AllowDrop property. If AllowDrop is set to true then
         ///     this control will allow drag and drop operations and events to be used.
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatBehavior)),
             DefaultValue(false),
@@ -892,12 +873,11 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Anchor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The current value of the anchor property. The anchor property
         ///     determines which edges of the control are anchored to the container's
         ///     edges.
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatLayout)),
             Localizable(true),
@@ -914,7 +894,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AutoSize"]/*' />
         [SRCategory(nameof(SR.CatLayout))]
         [RefreshProperties(RefreshProperties.All)]
         [Localizable(true)]
@@ -943,22 +922,17 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AutoSizeChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public event EventHandler AutoSizeChanged {
-            add {
-                Events.AddHandler(EventAutoSizeChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventAutoSizeChanged, value);
-            }
+            add => Events.AddHandler(EventAutoSizeChanged, value);
+            remove => Events.RemoveHandler(EventAutoSizeChanged, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Controls the location of where this control is scrolled to in ScrollableControl.ScrollControlIntoView.
         /// Default is the upper left hand corner of the control.
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -986,18 +960,17 @@ example usage
             return CommonProperties.GetAutoSizeMode(this);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LayoutEngine"]/*' />
         // Public because this is interesting for ControlDesigners.
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public virtual LayoutEngine LayoutEngine {
             get { return DefaultLayout.Instance; }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The GDI brush for our background color.
         ///     Whidbey Note: Made this internal, since we need to use this in ButtonStandardAdapter. Also, renamed
         ///                   from BackBrush to BackColorBrush due to a naming conflict with DataGrid's BackBrush.
-        /// </devdoc>
+        /// </summary>
         internal IntPtr BackColorBrush {
             get {
                 object customBackBrush = Properties.GetObject(PropBackBrush);
@@ -1041,11 +1014,10 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BackColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The background color of this control. This is an ambient property and
         ///     will always return a non-null value.
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatAppearance)),
             DispId(NativeMethods.ActiveX.DISPID_BACKCOLOR),
@@ -1099,21 +1071,15 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BackColorChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBackColorChangedDescr))]
         public event EventHandler BackColorChanged {
-            add {
-                Events.AddHandler(EventBackColor, value);
-            }
-            remove {
-                Events.RemoveHandler(EventBackColor, value);
-            }
+            add => Events.AddHandler(EventBackColor, value);
+            remove => Events.RemoveHandler(EventBackColor, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BackgroundImage"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The background image of the control.
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatAppearance)),
             DefaultValue(null),
@@ -1132,21 +1098,15 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BackgroundImageChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBackgroundImageChangedDescr))]
         public event EventHandler BackgroundImageChanged {
-            add {
-                Events.AddHandler(EventBackgroundImage, value);
-            }
-            remove {
-                Events.RemoveHandler(EventBackgroundImage, value);
-            }
+            add => Events.AddHandler(EventBackgroundImage, value);
+            remove => Events.RemoveHandler(EventBackgroundImage, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BackgroundImageLayout"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The BackgroundImageLayout of the control.
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatAppearance)),
             DefaultValue(ImageLayout.Tile),
@@ -1184,15 +1144,10 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BackgroundImageLayoutChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBackgroundImageLayoutChangedDescr))]
         public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                Events.AddHandler(EventBackgroundImageLayout, value);
-            }
-            remove {
-                Events.RemoveHandler(EventBackgroundImageLayout, value);
-            }
+            add => Events.AddHandler(EventBackgroundImageLayout, value);
+            remove => Events.RemoveHandler(EventBackgroundImageLayout, value);
         }
 
         // Set/reset by ContainerControl.AssignActiveControlInternal
@@ -1217,7 +1172,6 @@ example usage
             return accName != null && accName.Length > 0;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResetBindings"]/*' />
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void ResetBindings() {
             ControlBindingsCollection bindings = (ControlBindingsCollection)Properties.GetObject(PropBindings);
@@ -1226,12 +1180,11 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BindingContextInternal"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    BindingContextInternal provides a mechanism so that controls like SplitContainer that inherit from the
         ///    ContainerControl can bypass the "containerControls" bindingContext property and do what the other simple controls
         ///    do.
-        /// </devdoc>
+        /// </summary>
         internal BindingContext BindingContextInternal
         {
             get
@@ -1269,7 +1222,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BindingContext"]/*' />
         [
             Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -1284,21 +1236,15 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BindingContextChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBindingContextChangedDescr))]
         public event EventHandler BindingContextChanged {
-            add {
-                Events.AddHandler(EventBindingContext, value);
-            }
-            remove {
-                Events.RemoveHandler(EventBindingContext, value);
-            }
+            add => Events.AddHandler(EventBindingContext, value);
+            remove => Events.RemoveHandler(EventBindingContext, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Bottom"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>The bottom coordinate of this control.</para>
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -1311,11 +1257,10 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Bounds"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The bounds of this control. This is the window coordinates of the
         ///     control in parent client coordinates.
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -1332,20 +1277,18 @@ example usage
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         internal virtual bool CanAccessProperties {
             get {
                 return true;
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CanFocus"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates whether the control can receive focus. This
         ///       property is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -1363,12 +1306,11 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CanRaiseEvents"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Determines if events can be fired on the control.  If this control is being
         ///     hosted as an ActiveX control, this property will return false if the ActiveX
         ///     control has its events frozen.
-        /// </devdoc>
+        /// </summary>
         protected override bool CanRaiseEvents {
             get {
                 if (IsActiveX) {
@@ -1379,12 +1321,11 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CanSelect"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Indicates whether the control can be selected. This property
         ///       is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -1400,10 +1341,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Capture"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> Indicates whether the control has captured the mouse.</para>
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -1436,11 +1376,10 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CausesValidation"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Indicates whether entering the control causes validation on the controls requiring validation.</para>
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatFocus)),
             DefaultValue(true),
@@ -1459,15 +1398,10 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CausesValidationChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnCausesValidationChangedDescr))]
         public event EventHandler CausesValidationChanged {
-            add {
-                Events.AddHandler(EventCausesValidation, value);
-            }
-            remove {
-                Events.RemoveHandler(EventCausesValidation, value);
-            }
+            add => Events.AddHandler(EventCausesValidation, value);
+            remove => Events.RemoveHandler(EventCausesValidation, value);
         }
 
 
@@ -1519,7 +1453,6 @@ example usage
             }                
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CheckForIllegalCrossThreadCalls"]/*' />
         [ 
             Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
             SRDescription(nameof(SR.ControlCheckForIllegalCrossThreadCalls)),
@@ -1530,10 +1463,9 @@ example usage
             set { checkForIllegalCrossThreadCalls = value; }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ClientRectangle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The client rect of the control.
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -1546,10 +1478,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ClientSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The size of the clientRect.
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatLayout)),
             Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
@@ -1566,24 +1497,18 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ClientSizeChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    Fired when ClientSize changes.
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnClientSizeChangedDescr))]
         public event EventHandler ClientSizeChanged {
-            add {
-                Events.AddHandler(EventClientSize, value);
-            }
-            remove {
-                Events.RemoveHandler(EventClientSize, value);
-            }
+            add => Events.AddHandler(EventClientSize, value);
+            remove => Events.RemoveHandler(EventClientSize, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CompanyName"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the company name of this specific component.
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -1597,11 +1522,10 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ContainsFocus"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates whether the control or one of its children currently has the system
         ///       focus. This property is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -1631,14 +1555,13 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ContextMenu"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The contextMenu associated with this control. The contextMenu
         ///     will be shown when the user right clicks the mouse on the control.
         ///
         ///     Whidbey: ContextMenu is browsable false.  In all cases where both a context menu
         ///     and a context menu strip are assigned, context menu will be shown instead of context menu strip.
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatBehavior)),
             DefaultValue(null),
@@ -1670,27 +1593,21 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ContextMenuChanged"]/*' />
         [
             SRCategory(nameof(SR.CatPropertyChanged)),
             SRDescription(nameof(SR.ControlOnContextMenuChangedDescr)),
             Browsable(false)
         ]
         public event EventHandler ContextMenuChanged {
-            add {
-                Events.AddHandler(EventContextMenu, value);
-            }
-            remove {
-                Events.RemoveHandler(EventContextMenu, value);
-            }
+            add => Events.AddHandler(EventContextMenu, value);
+            remove => Events.RemoveHandler(EventContextMenu, value);
         }
 
-       /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ContextMenu"]/*' />
-       /// <devdoc>
+       /// <summary>
        ///     The contextMenuStrip associated with this control. The contextMenuStrip
        ///     will be shown when the user right clicks the mouse on the control.
        ///     Note: if a context menu is also assigned, it will take precidence over this property.
-       /// </devdoc>
+       /// </summary>
         [
             SRCategory(nameof(SR.CatBehavior)),
             DefaultValue(null),
@@ -1722,21 +1639,15 @@ example usage
 
         }
         
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ContextMenuStripChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlContextMenuStripChangedDescr))]
         public event EventHandler ContextMenuStripChanged {
-            add {
-                Events.AddHandler(EventContextMenuStrip, value);
-            }
-            remove {
-                Events.RemoveHandler(EventContextMenuStrip, value);
-            }
+            add => Events.AddHandler(EventContextMenuStrip, value);
+            remove => Events.RemoveHandler(EventContextMenuStrip, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Controls"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Collection of child controls.
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
@@ -1754,10 +1665,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Created"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates whether the control has been created. This property is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -1769,12 +1679,11 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CreateParams"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the CreateParams used to create the handle for this control.
         ///     Inheriting classes should call base.CreateParams in the manor
         ///     below:
-        /// </devdoc>
+        /// </summary>
         protected virtual CreateParams CreateParams {
             get {
 
@@ -1853,7 +1762,7 @@ example usage
             this.ValidationCancelled = ev.Cancel ;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Helper method...
         ///
         ///     Triggers validation on the active control, and returns bool indicating whether that control was valid.
@@ -1863,11 +1772,11 @@ example usage
         ///
         ///     Used by controls that don't participate in the normal enter/leave/validation process, but which
         ///     want to force form-level validation to occur before they attempt some important action.
-        /// </devdoc>
+        /// </summary>
         internal bool ValidateActiveControl(out bool validatedControlAllowsFocusChange) {
             bool valid = true;
             validatedControlAllowsFocusChange = false;
-            IContainerControl c = GetContainerControlInternal();
+            IContainerControl c = GetContainerControl();
             if (c != null && this.CausesValidation) {
                 ContainerControl container = c as ContainerControl;
                 if (container != null) {
@@ -1875,7 +1784,7 @@ example usage
                         ContainerControl cc;
                         Control parent = container.ParentInternal;
                         if (parent != null) {
-                            cc = parent.GetContainerControlInternal() as ContainerControl;
+                            cc = parent.GetContainerControl() as ContainerControl;
                             if (cc != null) {
                                 container = cc;
                             }
@@ -1914,12 +1823,11 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     returns bool indicating whether the Top MDI Window is closing.
         ///     This property is set in the MDI children in WmClose method in form.cs when the top window is closing.
         ///     This property will be used in ActiveControl to determine if we want to skip set focus and window handle re-creation for the control.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         internal bool IsTopMdiWindowClosing {
             set {
                 SetState2(STATE2_TOPMDIWINDOWCLOSING, value);
@@ -1929,11 +1837,10 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     returns bool indicating whether the control is currently being scaled.
         ///     This property is set in ScaleControl method to allow method being called to condition code that should not run for scaling.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         internal bool IsCurrentlyBeingScaled {
             private set {
                 SetState2(STATE2_CURRENTLYBEINGSCALED, value);
@@ -1943,12 +1850,11 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the Win32 thread ID of the thread that created the
         ///     handle for this control.  If the control's handle hasn't been
         ///     created yet, this method will return the current thread's ID.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         internal int CreateThreadId {
             get {
                 if (IsHandleCreated) {
@@ -1961,11 +1867,10 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Cursor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the cursor that will be displayed when the mouse is over this
         ///     control.
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatAppearance)),
             SRDescription(nameof(SR.ControlCursorDescr)),
@@ -2022,7 +1927,7 @@ example usage
                     UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
 
                     if ((r.left <= p.x && p.x < r.right && r.top <= p.y && p.y < r.bottom) || UnsafeNativeMethods.GetCapture() == Handle)
-                        SendMessage(NativeMethods.WM_SETCURSOR, Handle, (IntPtr)NativeMethods.HTCLIENT);
+                        SendMessage(Interop.WindowMessages.WM_SETCURSOR, Handle, (IntPtr)NativeMethods.HTCLIENT);
                 }
 
                 if (!resolvedCursor.Equals(value)) {
@@ -2031,21 +1936,15 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CursorChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnCursorChangedDescr))]
         public event EventHandler CursorChanged {
-            add {
-                Events.AddHandler(EventCursor, value);
-            }
-            remove {
-                Events.RemoveHandler(EventCursor, value);
-            }
+            add => Events.AddHandler(EventCursor, value);
+            remove => Events.RemoveHandler(EventCursor, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DataBindings"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the bindings for this control.
-        /// </devdoc>
+        /// </summary>
         [
             DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
             SRCategory(nameof(SR.CatData)),
@@ -2067,32 +1966,29 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DefaultBackColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The default BackColor of a generic top-level Control.  Subclasses may have
         ///     different defaults.
-        /// </devdoc>
+        /// </summary>
         public static Color DefaultBackColor {
             get { return SystemColors.Control;}
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DefaultCursor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Deriving classes can override this to configure a default cursor for their control.
         ///     This is more efficient than setting the cursor in the control's constructor,
         ///     and gives automatic support for ShouldSerialize and Reset in the designer.
-        /// </devdoc>
+        /// </summary>
         protected virtual Cursor DefaultCursor {
             get {
                 return Cursors.Default;
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DefaultFont"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The default Font of a generic top-level Control.  Subclasses may have
         ///     different defaults.
-        /// </devdoc>
+        /// </summary>
         public static Font DefaultFont {
             get {
                 if (defaultFont == null) {
@@ -2104,31 +2000,26 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DefaultForeColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The default ForeColor of a generic top-level Control.  Subclasses may have
         ///     different defaults.
-        /// </devdoc>
+        /// </summary>
         public static Color DefaultForeColor {
             get { return SystemColors.ControlText;}
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DefaultMargin"]/*' />
         protected virtual Padding DefaultMargin {
             get { return CommonProperties.DefaultMargin; }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DefaultMaximumSize"]/*' />
         protected virtual Size DefaultMaximumSize {
             get { return CommonProperties.DefaultMaximumSize; }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DefaultMinimumSize"]/*' />
         protected virtual Size DefaultMinimumSize {
             get { return CommonProperties.DefaultMinimumSize; }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DefaultPadding"]/*' />
         protected virtual Padding DefaultPadding {
             get { return Padding.Empty; }
         }
@@ -2137,11 +2028,10 @@ example usage
             get { return RightToLeft.No; }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DefaultSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
+        /// </summary>
         protected virtual Size DefaultSize {
             get { return Size.Empty; }
         }
@@ -2154,11 +2044,10 @@ example usage
             ContextMenuStrip = null;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DeviceDpi"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///  DPI value either for the primary screen or for the monitor where the top-level parent is displayed when
         ///  EnableDpiChangedMessageHandling option is on and the application is per-monitor V2 DPI-aware (rs2+)
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(false), // don't show in property browser
             EditorBrowsable(EditorBrowsableState.Always), // do show in the intellisense
@@ -2195,13 +2084,12 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DisplayRectangle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the client rect of the display area of the control.
         ///     For the base control class, this is identical to getClientRect.
         ///     However, inheriting controls may want to change this if their client
         ///     area differs from their display area.
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -2214,11 +2102,10 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Disposed"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates whether the control has been disposed. This
         ///       property is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -2230,9 +2117,9 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Disposes of the currently selected font handle (if cached).
-        /// </devdoc>
+        /// </summary>
         private void DisposeFontHandle() {
             if (Properties.ContainsObject(PropFontHandleWrapper)) {
                 FontHandleWrapper fontHandle = Properties.GetObject(PropFontHandleWrapper) as FontHandleWrapper;
@@ -2243,11 +2130,10 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Disposing"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates whether the control is in the process of being disposed. This
         ///       property is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -2259,13 +2145,12 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Dock"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The dock property. The dock property controls to which edge
         ///     of the container this control is docked to. For example, when docked to
         ///     the top of the container, the control will be displayed flush at the
         ///     top of the container, extending the length of the container.
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatLayout)),
             Localizable(true),
@@ -2296,21 +2181,15 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DockChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnDockChangedDescr))]
         public event EventHandler DockChanged {
-            add {
-                Events.AddHandler(EventDock, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDock, value);
-            }
+            add => Events.AddHandler(EventDock, value);
+            remove => Events.RemoveHandler(EventDock, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DoubleBuffered"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>This will enable or disable double buffering.</para>
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatBehavior)),
             SRDescription(nameof(SR.ControlDoubleBufferedDescr))
@@ -2339,10 +2218,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Enabled"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates whether the control is currently enabled.</para>
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatBehavior)),
             Localizable(true),
@@ -2375,24 +2253,18 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.EnabledChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the control is enabled.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnEnabledChangedDescr))]
         public event EventHandler EnabledChanged {
-            add {
-                Events.AddHandler(EventEnabled, value);
-            }
-            remove {
-                Events.RemoveHandler(EventEnabled, value);
-            }
+            add => Events.AddHandler(EventEnabled, value);
+            remove => Events.RemoveHandler(EventEnabled, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Focused"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates whether the control has focus. This property is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -2404,11 +2276,10 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Font"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the current font for this control. This will be the font used
         ///     by default for painting and text in the control.
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatAppearance)),
             Localizable(true),
@@ -2517,15 +2388,10 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.FontChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnFontChangedDescr))]
         public event EventHandler FontChanged {
-            add {
-                Events.AddHandler(EventFont, value);
-            }
-            remove {
-                Events.RemoveHandler(EventFont, value);
-            }
+            add => Events.AddHandler(EventFont, value);
+            remove => Events.RemoveHandler(EventFont, value);
         }
 
         internal IntPtr FontHandle {
@@ -2576,7 +2442,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.FontHeight"]/*' />
         protected int FontHeight {
             get {
                 bool found;
@@ -2613,10 +2478,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ForeColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The foreground color of the control.
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatAppearance)),
             DispId(NativeMethods.ActiveX.DISPID_FORECOLOR),
@@ -2663,15 +2527,10 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ForeColorChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnForeColorChangedDescr))]
         public event EventHandler ForeColorChanged {
-            add {
-                Events.AddHandler(EventForeColor, value);
-            }
-            remove {
-                Events.RemoveHandler(EventForeColor, value);
-            }
+            add => Events.AddHandler(EventForeColor, value);
+            remove => Events.RemoveHandler(EventForeColor, value);
         }
 
         private Font GetParentFont() {
@@ -2681,7 +2540,6 @@ example usage
                 return null;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GetPreferredSize"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [SuppressMessage("Microsoft.Security", "CA2119:SealMethodsThatSatisfyPrivateInterfaces")]
         public virtual Size GetPreferredSize(Size proposedSize) {
@@ -2749,11 +2607,10 @@ example usage
             return CommonProperties.GetSpecifiedBounds(this).Size;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Handle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The HWND handle that this control is bound to. If the handle
         ///     has not yet been created, this will force handle creation.
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -2784,12 +2641,11 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.HasChildren"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     True if this control has child controls in its collection.  This
         ///     is more efficient than checking for Controls.Count > 0, but has the
         ///     same effect.
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -2808,10 +2664,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Height"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The height of this control
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatLayout)),
             Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
@@ -2867,10 +2722,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IsHandleCreated"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Whether or not this control has a handle associated with it.
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -2880,9 +2734,9 @@ example usage
             get { return window.Handle != IntPtr.Zero; }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines if layout is currently suspended.
-        /// </devdoc>
+        /// </summary>
         internal bool IsLayoutSuspended {
             get {
                 return layoutSuspendCount > 0;
@@ -2948,10 +2802,10 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the current value of the handle. This may be zero if the handle
         ///     has not been created.
-        /// </devdoc>
+        /// </summary>
         internal IntPtr InternalHandle {
             get {
                 if (!IsHandleCreated)
@@ -2965,8 +2819,7 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.InvokeRequired"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Determines if the caller must call invoke when making method
         ///     calls to this control.  Controls in windows forms are bound to a specific thread,
         ///     and are not thread safe.  Therefore, if you are calling a control's method
@@ -2979,7 +2832,7 @@ example usage
         ///     thread:  GetInvokeRequired, Invoke, BeginInvoke, EndInvoke and
         ///     CreateGraphics.  For all other method calls, you should use one of the
         ///     invoke methods.
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -3011,11 +2864,10 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IsAccessible"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Indicates whether or not this control is an accessible control
         ///      i.e. whether it should be visible to accessibility applications.
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatBehavior)),
             Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
@@ -3031,9 +2883,9 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Used to tell if this control is being hosted as an ActiveX control.
-        /// </devdoc>
+        /// </summary>
         internal bool IsActiveX {
             get {
                 return GetState2(STATE2_ISACTIVEX);
@@ -3053,20 +2905,20 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Used to tell if this control is being hosted in IE.
-        /// </devdoc>
+        /// </summary>
         internal bool IsIEParent {
             get {
                 return IsActiveX ? ActiveXInstance.IsIE : false;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Used to tell if the control is mirrored
         ///     Don't call this from CreateParams. Will lead to nasty problems
         ///     since we might call CreateParams here - you dig!
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatLayout)),        
             Browsable(false),
@@ -3084,9 +2936,9 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Specifies whether the control is willing to process mnemonics when hosted in an container ActiveX (Ax Sourcing).
-        /// </devdoc>
+        /// </summary>
         internal virtual bool IsMnemonicsListenerAxSourced
         {
             get
@@ -3095,9 +2947,9 @@ example usage
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     Used to tell if this BackColor is Supported
-        /// </devdoc>
+        /// </summary>
         private bool IsValidBackColor (Color c){
            if (!c.IsEmpty && !GetStyle(ControlStyles.SupportsTransparentBackColor) && c.A < 255)
            {
@@ -3107,10 +2959,9 @@ example usage
 
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Left"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The left coordinate of this control.
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatLayout)),
             Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
@@ -3126,10 +2977,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Location"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The location of this control.
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatLayout)),
             Localizable(true),
@@ -3144,18 +2994,12 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LocationChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnLocationChangedDescr))]
         public event EventHandler LocationChanged {
-            add {
-                Events.AddHandler(EventLocation, value);
-            }
-            remove {
-                Events.RemoveHandler(EventLocation, value);
-            }
+            add => Events.AddHandler(EventLocation, value);
+            remove => Events.RemoveHandler(EventLocation, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Margin"]/*' />
         [
             SRDescription(nameof(SR.ControlMarginDescr)),
             SRCategory(nameof(SR.CatLayout)),
@@ -3180,21 +3024,13 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MarginChanged"]/*' />
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnMarginChangedDescr))]
         public event EventHandler MarginChanged
         {
-            add
-            {
-                Events.AddHandler(EventMarginChanged, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(EventMarginChanged, value);
-            }
+            add => Events.AddHandler(EventMarginChanged, value);
+            remove => Events.RemoveHandler(EventMarginChanged, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MaximumSize"]/*' />
         [SRCategory(nameof(SR.CatLayout))]
         [Localizable(true)]
         [SRDescription(nameof(SR.ControlMaximumSizeDescr))]
@@ -3215,7 +3051,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MinimumSize"]/*' />
         [SRCategory(nameof(SR.CatLayout))]
         [Localizable(true)]
         [SRDescription(nameof(SR.ControlMinimumSizeDescr))]
@@ -3230,11 +3065,10 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ModifierKeys"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the current state of the modifier keys. This will check the
         ///     current state of the shift, control, and alt keys.
-        /// </devdoc>
+        /// </summary>
         public static Keys ModifierKeys {
             get {
                 Keys modifiers = 0;
@@ -3247,11 +3081,10 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MouseButtons"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The current state of the mouse buttons. This will check the
         ///     current state of the left, right, and middle mouse buttons.
-        /// </devdoc>
+        /// </summary>
         public static MouseButtons MouseButtons {
             get {
                 MouseButtons buttons = (MouseButtons)0;
@@ -3266,31 +3099,24 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MousePosition"]/*' />
-        /// <devdoc>
-        ///     The current position of the mouse in screen coordinates.
-        /// </devdoc>
-        public static Point MousePosition {
-            get {
-                // Reviewed: The following demand has always been commented out since v1.0. In Whidbey, we have
-                // re-reviewed this method to see if it needs protection, but haven't found any threats, so are
-                // going to keep it this way.
-                //
-                // Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ScreenLocationOfThings Demanded");
-                // IntSecurity.ScreenLocationOfThings.Demand();
-
-                NativeMethods.POINT pt = new NativeMethods.POINT();
+        /// <summary>
+        /// The current position of the mouse in screen coordinates.
+        /// </summary>
+        public static Point MousePosition
+        {
+            get
+            {
+                var pt = new NativeMethods.POINT();
                 UnsafeNativeMethods.GetCursorPos(pt);
                 return new Point(pt.x, pt.y);
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Name"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Name of this control. The designer will set this to the same
         ///     as the programatic Id "(name)" of the control.  The name can be
         ///     used as a key into the ControlCollection.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
         public string Name {
             get {
@@ -3301,7 +3127,7 @@ example usage
                     }
 
                     if (name == null) {
-                        name = "";
+                        name = string.Empty;
                     }
                 }
 
@@ -3317,10 +3143,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Parent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The parent of this control.
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatBehavior)),
             Browsable(false),
@@ -3352,10 +3177,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ProductName"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the product name of this specific component.
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -3369,10 +3193,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ProductVersion"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the product version of this specific component.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -3386,11 +3209,11 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves our internal property storage object. If you have a property
         ///     whose value is not always set, you should store it in here to save
         ///     space.
-        /// </devdoc>
+        /// </summary>
         internal PropertyStore Properties {
             get {
                 return propertyStore;
@@ -3404,11 +3227,10 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RecreatingHandle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates whether the control is currently recreating its handle. This
         ///       property is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
@@ -3444,11 +3266,10 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Region"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The Region associated with this control.  (defines the
         ///     outline/silhouette/boundary of control)
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
@@ -3497,23 +3318,16 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RegionChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Event fired when the value of Region property is changed on Control
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlRegionChangedDescr))]
         public event EventHandler RegionChanged {
-            add {
-               Events.AddHandler(EventRegionChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventRegionChanged, value);
-            }
+            add => Events.AddHandler(EventRegionChanged, value);
+            remove => Events.RemoveHandler(EventRegionChanged, value);
         }
 
         // Helper function for Rtl
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RenderRightToLeft"]/*' />
-        /// <internalonly/>
         [Obsolete("This property has been deprecated. Please use RightToLeft instead. http://go.microsoft.com/fwlink/?linkid=14202")]
         protected internal bool RenderRightToLeft
         {
@@ -3522,38 +3336,37 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines if the parent's background will be rendered on the label control.
-        /// </devdoc>
+        /// </summary>
         internal bool RenderTransparent {
             get {
                 return GetStyle(ControlStyles.SupportsTransparentBackColor) && this.BackColor.A < 255;
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         private bool RenderColorTransparent(Color c) {
             return GetStyle(ControlStyles.SupportsTransparentBackColor) && c.A < 255;
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// This property is required by certain controls (TabPage) to render its transparency using theming API.
         /// We dont want all controls (that are have transparent BackColor) to use theming API to render its background because it has  HUGE PERF cost.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         internal virtual bool RenderTransparencyWithVisualStyles {
             get {
                 return false;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Represents the bounds of the control that need to be scaled.  Control bounds
         ///     need to be scaled until ScaleControl is called.  They need to be scaled again
         ///     if their bounds change after ScaleControl is called.
-        /// </devdoc>
+        /// </summary>
         internal BoundsSpecified RequiredScaling {
             get {
                 if ((requiredScaling & RequiredScalingEnabledMask) != 0) {
@@ -3567,10 +3380,10 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines if the required scaling property is enabled.  If not,
         ///     RequiredScaling always returns None.
-        /// </devdoc>
+        /// </summary>
         internal bool RequiredScalingEnabled {
             get {
                 return (requiredScaling & RequiredScalingEnabledMask) != 0;
@@ -3582,10 +3395,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResizeRedraw"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Indicates whether the control should redraw itself when resized.
-        /// </devdoc>
+        /// </summary>
         [
         SRDescription(nameof(SR.ControlResizeRedrawDescr))
         ]
@@ -3598,10 +3410,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Right"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>The right coordinate of the control.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
@@ -3614,12 +3425,11 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RightToLeft"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
         ///     control placement and text will be from right to left.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
@@ -3649,7 +3459,7 @@ example usage
             set {
                 //valid values are 0x0 to 0x2.
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)RightToLeft.No, (int)RightToLeft.Inherit)){
-                    throw new InvalidEnumArgumentException(nameof(RightToLeft), (int)value, typeof(RightToLeft));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(RightToLeft));
                 }
 
                 RightToLeft oldValue = RightToLeft;
@@ -3670,25 +3480,19 @@ example usage
 
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RightToLeftChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftChangedDescr))]
         public event EventHandler RightToLeftChanged {
-            add {
-                Events.AddHandler(EventRightToLeft, value);
-            }
-            remove {
-                Events.RemoveHandler(EventRightToLeft, value);
-            }
+            add => Events.AddHandler(EventRightToLeft, value);
+            remove => Events.RemoveHandler(EventRightToLeft, value);
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ScaleChildren"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This property controls the scaling of child controls.  If true child controls
         ///     will be scaled when the Scale method on this control is called.  If false,
         ///     child controls will not be scaled.  The default is true, and you must override
         ///     this property to provide a different value.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual bool ScaleChildren {
             get {
@@ -3696,7 +3500,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Site"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public override ISite Site {
             get {
@@ -3764,10 +3567,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Size"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>The size of the control.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
         Localizable(true),
@@ -3782,23 +3584,17 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SizeChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnSizeChangedDescr))]
         public event EventHandler SizeChanged {
-            add {
-                Events.AddHandler(EventSize, value);
-            }
-            remove {
-                Events.RemoveHandler(EventSize, value);
-            }
+            add => Events.AddHandler(EventSize, value);
+            remove => Events.RemoveHandler(EventSize, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.TabIndex"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       The tab index of
         ///       this control.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
@@ -3811,7 +3607,7 @@ example usage
             }
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException(nameof(TabIndex), string.Format(SR.InvalidLowBoundArgumentEx, "TabIndex", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(TabIndex), value, 0));
                 }
 
                 if (tabIndex != value) {
@@ -3822,22 +3618,16 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.TabIndexChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnTabIndexChangedDescr))]
         public event EventHandler TabIndexChanged {
-            add {
-                Events.AddHandler(EventTabIndex, value);
-            }
-            remove {
-                Events.RemoveHandler(EventTabIndex, value);
-            }
+            add => Events.AddHandler(EventTabIndex, value);
+            remove => Events.RemoveHandler(EventTabIndex, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.TabStop"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates whether the user can give the focus to this control using the TAB
         ///       key. This property is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
@@ -3869,20 +3659,14 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.TabStopChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnTabStopChangedDescr))]
         public event EventHandler TabStopChanged {
-            add {
-                Events.AddHandler(EventTabStop, value);
-            }
-            remove {
-                Events.RemoveHandler(EventTabStop, value);
-            }
+            add => Events.AddHandler(EventTabStop, value);
+            remove => Events.RemoveHandler(EventTabStop, value);
         }
 
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Tag"]/*' />
         [
         SRCategory(nameof(SR.CatData)),
         Localizable(false),
@@ -3900,10 +3684,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Text"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The current text associated with this control.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
@@ -3923,7 +3706,7 @@ example usage
 
             set {
                 if (value == null) {
-                    value = "";
+                    value = string.Empty;
                 }
 
                 if (value == Text) {
@@ -3949,21 +3732,15 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.TextChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnTextChangedDescr))]
         public event EventHandler TextChanged {
-            add {
-                Events.AddHandler(EventText, value);
-            }
-            remove {
-                Events.RemoveHandler(EventText, value);
-            }
+            add => Events.AddHandler(EventText, value);
+            remove => Events.RemoveHandler(EventText, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Top"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Top coordinate of this control.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
@@ -3979,12 +3756,11 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.TopLevelControl"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The top level control that contains this control. This doesn't
         ///     have to be the same as the value returned from getForm since forms
         ///     can be parented to other controls.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
@@ -4026,11 +3802,10 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ShowKeyboardCues"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates whether the user interface is in a state to show or hide keyboard
         ///       accelerators. This property is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         protected internal virtual bool ShowKeyboardCues {
             get {
@@ -4074,14 +3849,13 @@ example usage
                         else {
                             // if we're in the hidden state, we need to manufacture an update message so everyone knows it.
                             //
-                            int actionMask = (NativeMethods.UISF_HIDEACCEL | 
-                                (AccessibilityImprovements.Level1 ? 0 : NativeMethods.UISF_HIDEFOCUS)) << 16;
+                            int actionMask = NativeMethods.UISF_HIDEACCEL << 16;
                             uiCuesState |= UISTATE_KEYBOARD_CUES_HIDDEN;
 
                             // The side effect of this initial state is that adding new controls may clear the accelerator
                             // state (has been this way forever)
                             UnsafeNativeMethods.SendMessage(new HandleRef(TopMostParent, TopMostParent.Handle),
-                                    NativeMethods.WM_CHANGEUISTATE,
+                                    Interop.WindowMessages.WM_CHANGEUISTATE,
                                     (IntPtr)(actionMask | NativeMethods.UIS_SET),
                                     IntPtr.Zero);
                         }
@@ -4090,11 +3864,10 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ShowFocusCues"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates whether the user interface is in a state to show or hide focus
         ///       rectangles. This property is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         protected internal virtual bool ShowFocusCues {
             get {
@@ -4121,7 +3894,7 @@ example usage
                         // The side effect of this initial state is that adding new controls may clear the focus cue state
                         // state (has been this way forever)
                         UnsafeNativeMethods.SendMessage(new HandleRef(TopMostParent, TopMostParent.Handle),
-                                NativeMethods.WM_CHANGEUISTATE,
+                                Interop.WindowMessages.WM_CHANGEUISTATE,
                                 (IntPtr)(actionMask | NativeMethods.UIS_SET),
                                 IntPtr.Zero);
 
@@ -4140,11 +3913,10 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UseWaitCursor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     When this property in true the Cursor Property is set to WaitCursor as well as the Cursor Property
         ///     of all the child controls.
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(false),
         EditorBrowsable(EditorBrowsableState.Always),
@@ -4171,13 +3943,13 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
         ///     This property overwrites the UseCompatibleTextRenderingDefault switch when set programmatically.
         ///     Exposed publicly only by controls that support GDI text rendering (Label, LinkLabel and some others).
         ///     Observe that this property is NOT virtual (to allow for caching the property value - see LinkLabel)
         ///     and should be used by controls that support it only (see SupportsUseCompatibleTextRendering).
-        /// </devdoc>
+        /// </summary>
         internal bool UseCompatibleTextRenderingInt {
             get{
                 if (Properties.ContainsInteger(PropUseCompatibleTextRendering)){
@@ -4200,11 +3972,11 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines whether the control supports rendering text using GDI+ and GDI.
         ///     This is provided for container controls (PropertyGrid) to iterate through its children to set 
         ///     UseCompatibleTextRendering to the same value if the child control supports it.
-        /// </devdoc>
+        /// </summary>
         internal virtual bool SupportsUseCompatibleTextRendering {
             get {
                 return false;
@@ -4222,10 +3994,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Visible"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates whether the control is visible.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
@@ -4240,24 +4011,18 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.VisibleChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the control becomes visible.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnVisibleChangedDescr))]
         public event EventHandler VisibleChanged {
-            add {
-                Events.AddHandler(EventVisible, value);
-            }
-            remove {
-                Events.RemoveHandler(EventVisible, value);
-            }
+            add => Events.AddHandler(EventVisible, value);
+            remove => Events.RemoveHandler(EventVisible, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.WaitForWaitHandle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Wait for the wait handle to receive a signal: throw an exception if the thread is no longer with us.
-        /// </devdoc>
+        /// </summary>
         private void WaitForWaitHandle(WaitHandle waitHandle) {
             int threadId = CreateThreadId;
             Application.ThreadContext ctx = Application.ThreadContext.FromId(threadId);
@@ -4302,10 +4067,9 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Width"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The width of this control.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
@@ -4321,10 +4085,9 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The current exStyle of the hWnd
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private int WindowExStyle {
             get {
                 return unchecked((int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_EXSTYLE));
@@ -4334,10 +4097,9 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The current style of the hWnd
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         internal int WindowStyle {
             get {
                 return unchecked((int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE));
@@ -4347,11 +4109,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.WindowTarget"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The target of Win32 window messages.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
@@ -4367,13 +4127,13 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The current text of the Window; if the window has not yet been created, stores it in the control.
         ///     If the window has been created, stores the text in the underlying win32 control.
         ///     This property should be used whenever you want to get at the win32 control's text. For all other cases,
         ///     use the Text property - but note that this is overridable, and any of your code that uses it will use
         ///     the overridden version in controls that subclass your own.
-        /// </devdoc>
+        /// </summary>
         internal virtual string WindowText {
             get {
 
@@ -4386,28 +4146,16 @@ example usage
                     }
                 }
 
-                using (new MultithreadSafeCallScope()) {
-
-                    // it's okay to call GetWindowText cross-thread.
-                    //
-
-                    int textLen = SafeNativeMethods.GetWindowTextLength(new HandleRef(window, Handle));
-
-                    // Check to see if the system supports DBCS character
-                    // if so, double the length of the buffer.
-                    if (SystemInformation.DbcsEnabled) {
-                        textLen = (textLen * 2) + 1;
-                    }
-                    StringBuilder sb = new StringBuilder(textLen + 1);
-                    UnsafeNativeMethods.GetWindowText(new HandleRef(window, Handle), sb, sb.Capacity);
-                    return sb.ToString();
+                using (new MultithreadSafeCallScope())
+                {
+                    return Interop.User32.GetWindowText(new HandleRef(window, Handle));
                 }
             }
             set {
-                if (value == null) value = "";
+                if (value == null) value = string.Empty;
                 if (!WindowText.Equals(value)) {
                     if (IsHandleCreated) {
-                        UnsafeNativeMethods.SetWindowText(new HandleRef(window, Handle), value);
+                        Interop.User32.SetWindowTextW(new HandleRef(window, Handle), value);
                     }
                     else {
                         if (value.Length == 0) {
@@ -4423,26 +4171,20 @@ example usage
 
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Click"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the control is clicked.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnClickDescr))]
         public event EventHandler Click {
-            add {
-                Events.AddHandler(EventClick, value);
-            }
-            remove {
-                Events.RemoveHandler(EventClick, value);
-            }
+            add => Events.AddHandler(EventClick, value);
+            remove => Events.RemoveHandler(EventClick, value);
         }
 
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAdded"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when a new control is added.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Browsable(true),
@@ -4450,19 +4192,14 @@ example usage
         SRDescription(nameof(SR.ControlOnControlAddedDescr))
         ]
         public event ControlEventHandler ControlAdded {
-            add {
-                Events.AddHandler(EventControlAdded, value);
-            }
-            remove {
-                Events.RemoveHandler(EventControlAdded, value);
-            }
+            add => Events.AddHandler(EventControlAdded, value);
+            remove => Events.RemoveHandler(EventControlAdded, value);
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlRemoved"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when a control is removed.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Browsable(true),
@@ -4470,133 +4207,82 @@ example usage
         SRDescription(nameof(SR.ControlOnControlRemovedDescr))
         ]
         public event ControlEventHandler ControlRemoved {
-            add {
-                Events.AddHandler(EventControlRemoved, value);
-            }
-            remove {
-                Events.RemoveHandler(EventControlRemoved, value);
-            }
+            add => Events.AddHandler(EventControlRemoved, value);
+            remove => Events.RemoveHandler(EventControlRemoved, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DragDrop"]/*' />
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragDropDescr))]
         public event DragEventHandler DragDrop {
-            add {
-                Events.AddHandler(EventDragDrop, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDragDrop, value);
-            }
+            add => Events.AddHandler(EventDragDrop, value);
+            remove => Events.RemoveHandler(EventDragDrop, value);
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DragEnter"]/*' />
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragEnterDescr))]
         public event DragEventHandler DragEnter {
-            add {
-                Events.AddHandler(EventDragEnter, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDragEnter, value);
-            }
+            add => Events.AddHandler(EventDragEnter, value);
+            remove => Events.RemoveHandler(EventDragEnter, value);
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DragOver"]/*' />
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragOverDescr))]
         public event DragEventHandler DragOver {
-            add {
-                Events.AddHandler(EventDragOver, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDragOver, value);
-            }
+            add => Events.AddHandler(EventDragOver, value);
+            remove => Events.RemoveHandler(EventDragOver, value);
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DragLeave"]/*' />
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragLeaveDescr))]
         public event EventHandler DragLeave {
-            add {
-                Events.AddHandler(EventDragLeave, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDragLeave, value);
-            }
+            add => Events.AddHandler(EventDragLeave, value);
+            remove => Events.RemoveHandler(EventDragLeave, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GiveFeedback"]/*' />
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnGiveFeedbackDescr))]
         public event GiveFeedbackEventHandler GiveFeedback {
-            add {
-                Events.AddHandler(EventGiveFeedback, value);
-            }
-            remove {
-                Events.RemoveHandler(EventGiveFeedback, value);
-            }
+            add => Events.AddHandler(EventGiveFeedback, value);
+            remove => Events.RemoveHandler(EventGiveFeedback, value);
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.HandleCreated"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when a handle is created for the control.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatPrivate)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), SRDescription(nameof(SR.ControlOnCreateHandleDescr))]
         public event EventHandler HandleCreated {
-            add {
-                Events.AddHandler(EventHandleCreated, value);
-            }
-            remove {
-                Events.RemoveHandler(EventHandleCreated, value);
-            }
+            add => Events.AddHandler(EventHandleCreated, value);
+            remove => Events.RemoveHandler(EventHandleCreated, value);
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.HandleDestroyed"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the control's handle is destroyed.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatPrivate)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), SRDescription(nameof(SR.ControlOnDestroyHandleDescr))]
         public event EventHandler HandleDestroyed {
-            add {
-                Events.AddHandler(EventHandleDestroyed, value);
-            }
-            remove {
-                Events.RemoveHandler(EventHandleDestroyed, value);
-            }
+            add => Events.AddHandler(EventHandleDestroyed, value);
+            remove => Events.RemoveHandler(EventHandleDestroyed, value);
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.HelpRequested"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnHelpDescr))]
         public event HelpEventHandler HelpRequested {
-            add {
-                Events.AddHandler(EventHelpRequested, value);
-            }
-            remove {
-                Events.RemoveHandler(EventHelpRequested, value);
-            }
+            add => Events.AddHandler(EventHelpRequested, value);
+            remove => Events.RemoveHandler(EventHelpRequested, value);
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Invalidated"]/*' />
         [SRCategory(nameof(SR.CatAppearance)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), SRDescription(nameof(SR.ControlOnInvalidateDescr))]
         public event InvalidateEventHandler Invalidated {
-            add {
-                Events.AddHandler(EventInvalidated, value);
-            }
-            remove {
-                Events.RemoveHandler(EventInvalidated, value);
-            }
+            add => Events.AddHandler(EventInvalidated, value);
+            remove => Events.RemoveHandler(EventInvalidated, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.PreferredSize"]/*' />
         [Browsable(false)]
         public Size PreferredSize {
             get { return GetPreferredSize(Size.Empty); }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Padding"]/*' />
         [
         SRDescription(nameof(SR.ControlPaddingDescr)),
         SRCategory(nameof(SR.CatLayout)),
@@ -4624,475 +4310,309 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.PaddingChanged"]/*' />
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnPaddingChangedDescr))]
         public event EventHandler PaddingChanged {
-            add {
-                Events.AddHandler(EventPaddingChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventPaddingChanged, value);
-            }
+            add => Events.AddHandler(EventPaddingChanged, value);
+            remove => Events.RemoveHandler(EventPaddingChanged, value);
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Paint"]/*' />
         [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ControlOnPaintDescr))]
         public event PaintEventHandler Paint {
-            add {
-                Events.AddHandler(EventPaint, value);
-            }
-            remove {
-                Events.RemoveHandler(EventPaint, value);
-            }
+            add => Events.AddHandler(EventPaint, value);
+            remove => Events.RemoveHandler(EventPaint, value);
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.QueryContinueDrag"]/*' />
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnQueryContinueDragDescr))]
         public event QueryContinueDragEventHandler QueryContinueDrag {
-            add {
-                Events.AddHandler(EventQueryContinueDrag, value);
-            }
-            remove {
-                Events.RemoveHandler(EventQueryContinueDrag, value);
-            }
+            add => Events.AddHandler(EventQueryContinueDrag, value);
+            remove => Events.RemoveHandler(EventQueryContinueDrag, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.QueryAccessibilityHelp"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnQueryAccessibilityHelpDescr))]
         public event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp {
-            add {
-                Events.AddHandler(EventQueryAccessibilityHelp, value);
-            }
-            remove {
-                Events.RemoveHandler(EventQueryAccessibilityHelp, value);
-            }
+            add => Events.AddHandler(EventQueryAccessibilityHelp, value);
+            remove => Events.RemoveHandler(EventQueryAccessibilityHelp, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DoubleClick"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the control is double clicked.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnDoubleClickDescr))]
         public event EventHandler DoubleClick {
-            add {
-                Events.AddHandler(EventDoubleClick, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDoubleClick, value);
-            }
+            add => Events.AddHandler(EventDoubleClick, value);
+            remove => Events.RemoveHandler(EventDoubleClick, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Enter"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the control is entered.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnEnterDescr))]
         public event EventHandler Enter {
-            add {
-                Events.AddHandler(EventEnter, value);
-            }
-            remove {
-                Events.RemoveHandler(EventEnter, value);
-            }
+            add => Events.AddHandler(EventEnter, value);
+            remove => Events.RemoveHandler(EventEnter, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GotFocus"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the control receives focus.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnGotFocusDescr)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public event EventHandler GotFocus {
-            add {
-                Events.AddHandler(EventGotFocus, value);
-            }
-            remove {
-                Events.RemoveHandler(EventGotFocus, value);
-            }
+            add => Events.AddHandler(EventGotFocus, value);
+            remove => Events.RemoveHandler(EventGotFocus, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.KeyDown"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when a key is pressed down while the control has focus.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyDownDescr))]
         public event KeyEventHandler KeyDown {
-            add {
-                Events.AddHandler(EventKeyDown, value);
-            }
-            remove {
-                Events.RemoveHandler(EventKeyDown, value);
-            }
+            add => Events.AddHandler(EventKeyDown, value);
+            remove => Events.RemoveHandler(EventKeyDown, value);
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.KeyPress"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> Occurs when a key is pressed while the control has focus.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyPressDescr))]
         public event KeyPressEventHandler KeyPress {
-            add {
-                Events.AddHandler(EventKeyPress, value);
-            }
-            remove {
-                Events.RemoveHandler(EventKeyPress, value);
-            }
+            add => Events.AddHandler(EventKeyPress, value);
+            remove => Events.RemoveHandler(EventKeyPress, value);
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.KeyUp"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> Occurs when a key is released while the control has focus.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyUpDescr))]
         public event KeyEventHandler KeyUp {
-            add {
-                Events.AddHandler(EventKeyUp, value);
-            }
-            remove {
-                Events.RemoveHandler(EventKeyUp, value);
-            }
+            add => Events.AddHandler(EventKeyUp, value);
+            remove => Events.RemoveHandler(EventKeyUp, value);
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Layout"]/*' />
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnLayoutDescr))]
         public event LayoutEventHandler Layout {
-            add {
-                Events.AddHandler(EventLayout, value);
-            }
-            remove {
-                Events.RemoveHandler(EventLayout, value);
-            }
+            add => Events.AddHandler(EventLayout, value);
+            remove => Events.RemoveHandler(EventLayout, value);
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Leave"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the control is left.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnLeaveDescr))]
         public event EventHandler Leave {
-            add {
-                Events.AddHandler(EventLeave, value);
-            }
-            remove {
-                Events.RemoveHandler(EventLeave, value);
-            }
+            add => Events.AddHandler(EventLeave, value);
+            remove => Events.RemoveHandler(EventLeave, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LostFocus"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the control loses focus.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnLostFocusDescr)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public event EventHandler LostFocus {
-            add {
-                Events.AddHandler(EventLostFocus, value);
-            }
-            remove {
-                Events.RemoveHandler(EventLostFocus, value);
-            }
+            add => Events.AddHandler(EventLostFocus, value);
+            remove => Events.RemoveHandler(EventLostFocus, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MouseClick"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the control is mouse clicked.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnMouseClickDescr))]
         public event MouseEventHandler MouseClick {
-            add {
-                Events.AddHandler(EventMouseClick, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMouseClick, value);
-            }
+            add => Events.AddHandler(EventMouseClick, value);
+            remove => Events.RemoveHandler(EventMouseClick, value);
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MouseDoubleClick"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the control is mouse double clicked.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnMouseDoubleClickDescr))]
         public event MouseEventHandler MouseDoubleClick {
-            add {
-                Events.AddHandler(EventMouseDoubleClick, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMouseDoubleClick, value);
-            }
+            add => Events.AddHandler(EventMouseDoubleClick, value);
+            remove => Events.RemoveHandler(EventMouseDoubleClick, value);
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MouseCaptureChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the control loses mouse Capture.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnMouseCaptureChangedDescr))]
         public event EventHandler MouseCaptureChanged {
-            add {
-                Events.AddHandler(EventMouseCaptureChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMouseCaptureChanged, value);
-            }
+            add => Events.AddHandler(EventMouseCaptureChanged, value);
+            remove => Events.RemoveHandler(EventMouseCaptureChanged, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MouseDown"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the mouse pointer is over the control and a mouse button is
         ///       pressed.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseDownDescr))]
         public event MouseEventHandler MouseDown {
-            add {
-                Events.AddHandler(EventMouseDown, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMouseDown, value);
-            }
+            add => Events.AddHandler(EventMouseDown, value);
+            remove => Events.RemoveHandler(EventMouseDown, value);
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MouseEnter"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> Occurs when the mouse pointer enters the control.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseEnterDescr))]
         public event EventHandler MouseEnter {
-            add {
-                Events.AddHandler(EventMouseEnter, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMouseEnter, value);
-            }
+            add => Events.AddHandler(EventMouseEnter, value);
+            remove => Events.RemoveHandler(EventMouseEnter, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MouseLeave"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> Occurs when the mouse pointer leaves the control.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseLeaveDescr))]
         public event EventHandler MouseLeave {
-            add {
-                Events.AddHandler(EventMouseLeave, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMouseLeave, value);
-            }
+            add => Events.AddHandler(EventMouseLeave, value);
+            remove => Events.RemoveHandler(EventMouseLeave, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DpiChangedBeforeParent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> Occurs when the DPI resolution of the screen this control is displayed on changes, 
         ///    either when the top level window is moved between monitors or when the OS settings are changed.
         ///    This event is raised before the top level parent window recieves WM_DPICHANGED message.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnDpiChangedBeforeParentDescr))]
         public event EventHandler DpiChangedBeforeParent {
-            add {
-                Events.AddHandler(EventDpiChangedBeforeParent, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDpiChangedBeforeParent, value);
-            }
+            add => Events.AddHandler(EventDpiChangedBeforeParent, value);
+            remove => Events.RemoveHandler(EventDpiChangedBeforeParent, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DpiChangedAfterParent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> Occurs when the DPI resolution of the screen this control is displayed on changes, 
         ///    either when the top level window is moved between monitors or when the OS settings are changed.
         ///    This message is received after the top levet parent window recieves WM_DPICHANGED message.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnDpiChangedAfterParentDescr))]
         public event EventHandler DpiChangedAfterParent {
-            add {
-                Events.AddHandler(EventDpiChangedAfterParent, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDpiChangedAfterParent, value);
-            }
+            add => Events.AddHandler(EventDpiChangedAfterParent, value);
+            remove => Events.RemoveHandler(EventDpiChangedAfterParent, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MouseHover"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> Occurs when the mouse pointer hovers over the contro.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseHoverDescr))]
         public event EventHandler MouseHover {
-            add {
-                Events.AddHandler(EventMouseHover, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMouseHover, value);
-            }
+            add => Events.AddHandler(EventMouseHover, value);
+            remove => Events.RemoveHandler(EventMouseHover, value);
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MouseMove"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> Occurs when the mouse pointer is moved over the control.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseMoveDescr))]
         public event MouseEventHandler MouseMove {
-            add {
-                Events.AddHandler(EventMouseMove, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMouseMove, value);
-            }
+            add => Events.AddHandler(EventMouseMove, value);
+            remove => Events.RemoveHandler(EventMouseMove, value);
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MouseUp"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the mouse pointer is over the control and a mouse button is released.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseUpDescr))]
         public event MouseEventHandler MouseUp {
-            add {
-                Events.AddHandler(EventMouseUp, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMouseUp, value);
-            }
+            add => Events.AddHandler(EventMouseUp, value);
+            remove => Events.RemoveHandler(EventMouseUp, value);
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MouseWheel"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> Occurs when the mouse wheel moves while the control has focus.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseWheelDescr)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public event MouseEventHandler MouseWheel {
-            add {
-                Events.AddHandler(EventMouseWheel, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMouseWheel, value);
-            }
+            add => Events.AddHandler(EventMouseWheel, value);
+            remove => Events.RemoveHandler(EventMouseWheel, value);
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Move"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the control is moved.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnMoveDescr))]
         public event EventHandler Move {
-            add {
-                Events.AddHandler(EventMove, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMove, value);
-            }
+            add => Events.AddHandler(EventMove, value);
+            remove => Events.RemoveHandler(EventMove, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Raised to preview a key down event</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.PreviewKeyDownDescr))]
         public event PreviewKeyDownEventHandler PreviewKeyDown {
-            add {
-                Events.AddHandler(EventPreviewKeyDown, value);
-            }
-            remove {
-                Events.RemoveHandler(EventPreviewKeyDown, value);
-            }
+            add => Events.AddHandler(EventPreviewKeyDown, value);
+            remove => Events.RemoveHandler(EventPreviewKeyDown, value);
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Resize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the control is resized.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnResizeDescr)),
          EditorBrowsable(EditorBrowsableState.Advanced)]
         public event EventHandler Resize {
-            add {
-                Events.AddHandler(EventResize, value);
-            }
-            remove {
-                Events.RemoveHandler(EventResize, value);
-            }
+            add => Events.AddHandler(EventResize, value);
+            remove => Events.RemoveHandler(EventResize, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ChangeUICues"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnChangeUICuesDescr))]
         public event UICuesEventHandler ChangeUICues {
-            add {
-                Events.AddHandler(EventChangeUICues, value);
-            }
-            remove {
-                Events.RemoveHandler(EventChangeUICues, value);
-            }
+            add => Events.AddHandler(EventChangeUICues, value);
+            remove => Events.RemoveHandler(EventChangeUICues, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.StyleChanged"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnStyleChangedDescr))]
         public event EventHandler StyleChanged {
-            add {
-                Events.AddHandler(EventStyleChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventStyleChanged, value);
-            }
+            add => Events.AddHandler(EventStyleChanged, value);
+            remove => Events.RemoveHandler(EventStyleChanged, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SystemColorsChanged"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnSystemColorsChangedDescr))]
         public event EventHandler SystemColorsChanged {
-            add {
-                Events.AddHandler(EventSystemColorsChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventSystemColorsChanged, value);
-            }
+            add => Events.AddHandler(EventSystemColorsChanged, value);
+            remove => Events.RemoveHandler(EventSystemColorsChanged, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Validating"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the control is validating.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnValidatingDescr))]
         public event CancelEventHandler Validating {
-            add {
-                Events.AddHandler(EventValidating, value);
-            }
-            remove {
-                Events.RemoveHandler(EventValidating, value);
-            }
+            add => Events.AddHandler(EventValidating, value);
+            remove => Events.RemoveHandler(EventValidating, value);
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Validated"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the control is done validating.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnValidatedDescr))]
         public event EventHandler Validated {
-            add {
-                Events.AddHandler(EventValidated, value);
-            }
-            remove {
-                Events.RemoveHandler(EventValidated, value);
-            }
+            add => Events.AddHandler(EventValidated, value);
+            remove => Events.RemoveHandler(EventValidated, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AccessibilityNotifyClients"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected internal void AccessibilityNotifyClients(AccessibleEvents accEvent, int childID) {
             AccessibilityNotifyClients(accEvent, NativeMethods.OBJID_CLIENT, childID);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AccessibilityNotifyClients1"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void AccessibilityNotifyClients(AccessibleEvents accEvent, int objectID, int childID) {
             if (IsHandleCreated) {
@@ -5100,28 +4620,28 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Helper method for retrieving an ActiveX property.  We abstract these
         ///     to another method so we do not force JIT the ActiveX codebase.
-        /// </devdoc>
+        /// </summary>
         
         
         private IntPtr ActiveXMergeRegion(IntPtr region) {
             return ActiveXInstance.MergeRegion(region);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Helper method for retrieving an ActiveX property.  We abstract these
         ///     to another method so we do not force JIT the ActiveX codebase.
-        /// </devdoc>
+        /// </summary>
         private void ActiveXOnFocus(bool focus) {
             ActiveXInstance.OnFocus(focus);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Helper method for retrieving an ActiveX property.  We abstract these
         ///     to another method so we do not force JIT the ActiveX codebase.
-        /// </devdoc>
+        /// </summary>
         private void ActiveXViewChanged() {
             ActiveXInstance.ViewChangedInternal();
         }
@@ -5132,10 +4652,9 @@ example usage
         // This has been cut from the product.
         //
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXRegister"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This is called by regasm to register a control as an ActiveX control.
-        /// </devdoc>
+        /// </summary>
         [ComRegisterFunction()]
         protected static void ActiveXRegister(Type type) {
 
@@ -5197,10 +4716,10 @@ example usage
         }
         #endif
 
-        /// <devdoc>
+        /// <summary>
         ///     Helper method for retrieving an ActiveX property.  We abstract these
         ///     to another method so we do not force JIT the ActiveX codebase.
-        /// </devdoc>
+        /// </summary>
         private void ActiveXUpdateBounds(ref int x, ref int y, ref int width, ref int height, int flags) {
             ActiveXInstance.UpdateBounds(ref x, ref y, ref width, ref height, flags);
         }
@@ -5211,10 +4730,9 @@ example usage
         // This has been cut from the product.
         //
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXUnregister"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This is called by regasm to un-register a control as an ActiveX control.
-        /// </devdoc>
+        /// </summary>
         [ComUnregisterFunction()]
         protected static void ActiveXUnregister(Type type) {
 
@@ -5265,10 +4783,10 @@ example usage
         }
         #endif
 
-        /// <devdoc>
+        /// <summary>
         ///     Assigns a new parent control. Sends out the appropriate property change
         ///     notifications for properties that are affected by the change of parent.
-        /// </devdoc>
+        /// </summary>
         internal virtual void AssignParent(Control value) {
 
             // Adopt the parent's required scaling bits
@@ -5339,19 +4857,13 @@ example usage
             if (ParentInternal != null) ParentInternal.LayoutEngine.InitLayout(this, BoundsSpecified.All);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ParentChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnParentChangedDescr))]
         public event EventHandler ParentChanged {
-            add {
-                Events.AddHandler(EventParent, value);
-            }
-            remove {
-                Events.RemoveHandler(EventParent, value);
-            }
+            add => Events.AddHandler(EventParent, value);
+            remove => Events.RemoveHandler(EventParent, value);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BeginInvoke"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Executes the given delegate on the thread that owns this Control's
         ///     underlying window handle.  The delegate is called asynchronously and this
         ///     method returns immediately.  You may call this from any thread, even the
@@ -5366,31 +4878,29 @@ example usage
         ///     thread:  GetInvokeRequired, Invoke, BeginInvoke, EndInvoke and CreateGraphics.
         ///     For all other method calls, you should use one of the invoke methods to marshal
         ///     the call to the control's thread.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public IAsyncResult BeginInvoke(Delegate method) {
             return BeginInvoke(method, null);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BeginInvoke1"]/*' />
-        /// <devdoc>
-        ///     Executes the given delegate on the thread that owns this Control's
-        ///     underlying window handle.  The delegate is called asynchronously and this
-        ///     method returns immediately.  You may call this from any thread, even the
-        ///     thread that owns the control's handle.  If the control's handle doesn't
-        ///     exist yet, this will follow up the control's parent chain until it finds a
-        ///     control or form that does have a window handle.  If no appropriate handle
-        ///     can be found, BeginInvoke will throw an exception.  Exceptions within the
-        ///     delegate method are considered untrapped and will be sent to the
-        ///     application's untrapped exception handler.
+        /// <summary>
+        /// Executes the given delegate on the thread that owns this Control's
+        /// underlying window handle.  The delegate is called asynchronously and this
+        /// method returns immediately.  You may call this from any thread, even the
+        /// thread that owns the control's handle.  If the control's handle doesn't
+        /// exist yet, this will follow up the control's parent chain until it finds a
+        /// control or form that does have a window handle.  If no appropriate handle
+        /// can be found, BeginInvoke will throw an exception.  Exceptions within the
+        /// delegate method are considered untrapped and will be sent to the
+        /// application's untrapped exception handler.
         ///
-        ///     There are five functions on a control that are safe to call from any
-        ///     thread:  GetInvokeRequired, Invoke, BeginInvoke, EndInvoke and CreateGraphics.
-        ///     For all other method calls, you should use one of the invoke methods to marshal
-        ///     the call to the control's thread.
-        /// </devdoc>
+        /// There are five functions on a control that are safe to call from any
+        /// thread:  GetInvokeRequired, Invoke, BeginInvoke, EndInvoke and CreateGraphics.
+        /// For all other method calls, you should use one of the invoke methods to marshal
+        /// the call to the control's thread.
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]        
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
         public IAsyncResult BeginInvoke(Delegate method, params object[] args) {
             using (new MultithreadSafeCallScope()) {
                 Control marshaler = FindMarshalingControl();
@@ -5402,14 +4912,13 @@ example usage
             if (!IsHandleCreated) {
                 return;
             }
-            if (updateCount == 0) SendMessage(NativeMethods.WM_SETREDRAW, 0, 0);
+            if (updateCount == 0) SendMessage(Interop.WindowMessages.WM_SETREDRAW, 0, 0);
             updateCount++;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BringToFront"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Brings this control to the front of the zorder.
-        /// </devdoc>
+        /// </summary>
         public void BringToFront() {
             if (parent != null) {
                 parent.Controls.SetChildIndex(this, 0);
@@ -5420,11 +4929,11 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Specifies whether this control can process the mnemonic or not.  A condition to process a mnemonic is that
         ///     all controls in the parent chain can do it too, but since the semantics for this function can be overriden,
         ///     we need to call the method on the parent 'recursively' (not exactly since it is not necessarily the same method).
-        /// </devdoc>
+        /// </summary>
         internal virtual bool CanProcessMnemonic() {
 #if DEBUG
             TraceCanProcessMnemonic();
@@ -5456,10 +4965,10 @@ example usage
             return true;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Searches the parent/owner tree for bottom to find any instance
         ///     of toFind in the parent/owner tree.
-        /// </devdoc>
+        /// </summary>
         internal static void CheckParentingCycle(Control bottom, Control toFind) {
             Form lastOwner = null;
             Control lastParent = null;
@@ -5489,9 +4998,8 @@ example usage
                 }
             }
         }
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         private void ChildGotFocus(Control child) {
             if (IsActiveX) {
                 ActiveXOnFocus(true);
@@ -5501,10 +5009,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Contains"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Verifies if a control is a child of this control.</para>
-        /// </devdoc>
+        /// </summary>
         public bool Contains(Control ctl) {
             while (ctl != null) {
                 ctl = ctl.ParentInternal;
@@ -5518,34 +5025,31 @@ example usage
             return false;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CreateAccessibilityInstance"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     constructs the new instance of the accessibility object for this control. Subclasses
         ///     should not call base.CreateAccessibilityObject.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual AccessibleObject CreateAccessibilityInstance() {
             return new ControlAccessibleObject(this);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CreateControlsInstance"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Constructs the new instance of the Controls collection objects. Subclasses
         ///     should not call base.CreateControlsInstance.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual ControlCollection CreateControlsInstance() {
             return new System.Windows.Forms.Control.ControlCollection(this);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CreateGraphics"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Creates a Graphics for this control. The control's brush, font, foreground
         ///     color and background color become the default values for the Graphics.
         ///     The returned Graphics must be disposed through a call to its dispose()
         ///     method when it is no longer needed.  The Graphics Object is only valid for
         ///     the duration of the current window's message.
-        /// </devdoc>
+        /// </summary>
         
         
         public System.Drawing.Graphics CreateGraphics() {
@@ -5562,12 +5066,11 @@ example usage
             return Graphics.FromHwndInternal(this.Handle);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CreateHandle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Creates a handle for this control. This method is called by the .NET Framework, this should
         ///     not be called. Inheriting classes should always call base.createHandle when
         ///     overriding this method.
-        /// </devdoc>
+        /// </summary>
         [
         EditorBrowsable(EditorBrowsableState.Advanced),
         ]
@@ -5638,11 +5141,10 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CreateControl"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Forces the creation of the control. This includes the creation of the handle,
         ///     and any child controls.
-        /// </devdoc>
+        /// </summary>
         public void CreateControl() {
             bool controlIsAlreadyCreated = this.Created;
             CreateControl(false);
@@ -5657,14 +5159,14 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Forces the creation of the control. This includes the creation of the handle,
         ///     and any child controls.
         /// <param name='fIgnoreVisible'>
         ///     Determines whether we should create the handle after checking the Visible
         ///     property of the control or not.
         /// </param>
-        /// </devdoc>
+        /// </summary>
         internal void CreateControl(bool fIgnoreVisible) {
             bool ready = (state & STATE_CREATED) == 0;
 
@@ -5708,10 +5210,9 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DefWndProc"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Sends the message to the default window proc.
-        /// </devdoc>
+        /// </summary>
         /* Primarily here for Form to override */
         [
             EditorBrowsable(EditorBrowsableState.Advanced)
@@ -5721,11 +5222,10 @@ example usage
         }
 
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DestroyHandle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Destroys the handle associated with this control. Inheriting classes should
         ///     always call base.destroyHandle.
-        /// </devdoc>
+        /// </summary>
         [
             EditorBrowsable(EditorBrowsableState.Advanced)
         ]
@@ -5770,7 +5270,7 @@ example usage
             }
 
             if (0 != (NativeMethods.WS_EX_MDICHILD & (int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(window, InternalHandle), NativeMethods.GWL_EXSTYLE))) {
-                UnsafeNativeMethods.DefMDIChildProc(InternalHandle, NativeMethods.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+                UnsafeNativeMethods.DefMDIChildProc(InternalHandle, Interop.WindowMessages.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
             }
             else {
                 window.DestroyHandle();
@@ -5779,12 +5279,11 @@ example usage
             trackMouseEvent = null;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Dispose"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Disposes of the resources (other than memory) used by the
         ///    <see cref='System.Windows.Forms.Control'/>
         ///    .</para>
-        /// </devdoc>
+        /// </summary>
         protected override void Dispose(bool disposing) {
             if (GetState(STATE_OWNCTLBRUSH)) {
                 object backBrush = Properties.GetObject(PropBackBrush);
@@ -5884,15 +5383,14 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DoDragDrop"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Begins a drag operation. The allowedEffects determine which
         ///     drag operations can occur. If the drag operation needs to interop
         ///     with applications in another process, data should either be
         ///     a base managed class (String, Bitmap, or Metafile) or some Object
         ///     that implements System.Runtime.Serialization.ISerializable. data can also be any Object that
         ///     implements System.Windows.Forms.IDataObject.
-        /// </devdoc>
+        /// </summary>
         public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects) {            
             int[] finalEffect = new int[] {(int)DragDropEffects.None};
             UnsafeNativeMethods.IOleDropSource dropSource = new DropSource( this );
@@ -5926,14 +5424,13 @@ example usage
             return(DragDropEffects)finalEffect[0];
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DrawToBitmap"]/*' />
-        /// <devdoc>
+        /// <summary>
         //      Trinity are currently calling IViewObject::Draw in order to render controls on Word & Excel
         //      before they are in place active. However this method is private and they need a public way to do this.
         //      This means that we will need to add a public method to control that supports rendering to a Bitmap:
         //      public virtual void DrawToBitmap(Bitmap bmp, RectangleF targetBounds)
         //      where target bounds is the bounds within which the control should render.
-        /// </devdoc>
+        /// </summary>
         [
             SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly"),
             SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters"),          // Using Bitmap instead of Image intentionally
@@ -5963,7 +5460,7 @@ example usage
                 using (Graphics g = Graphics.FromImage(image)) {
                     IntPtr hDc = g.GetHdc();
                     //send the actual wm_print message
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.WM_PRINT, (IntPtr)hDc,
+                    UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), Interop.WindowMessages.WM_PRINT, (IntPtr)hDc,
                         (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
 
                     //now BLT the result to the destination bitmap.
@@ -5979,13 +5476,12 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.EndInvoke"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the return value of the asynchronous operation
         ///     represented by the IAsyncResult interface passed. If the
         ///     async operation has not been completed, this function will
         ///     block until the result is available.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public object EndInvoke(IAsyncResult asyncResult) {
             using (new MultithreadSafeCallScope())
@@ -6029,7 +5525,7 @@ example usage
                 Debug.Assert(IsHandleCreated, "Handle should be created by now");
                 updateCount--;
                 if (updateCount == 0) {
-                    SendMessage(NativeMethods.WM_SETREDRAW, -1, 0);
+                    SendMessage(Interop.WindowMessages.WM_SETREDRAW, -1, 0);
                     if (invalidate) {
                         Invalidate();
                     }
@@ -6042,31 +5538,27 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.FindForm"]/*' />
-        /// <devdoc>
-        ///     Retrieves the form that this control is on. The control's parent
-        ///     may not be the same as the form.
-        /// </devdoc>
-        public Form FindForm() {
-            return FindFormInternal();
-        }
-
-        // SECURITY WARNING: This method bypasses a security demand. Use with caution!
-        internal Form FindFormInternal() {
+        /// <summary>
+        /// Retrieves the form that this control is on. The control's parent may not be
+        /// the same as the form.
+        /// </summary>
+        public Form FindForm()
+        {
             Control cur = this;
-            while (cur != null && !(cur is Form) ) {
+            while (cur != null && !(cur is Form))
+            {
                 cur = cur.ParentInternal;
             }
+
             return (Form)cur;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Attempts to find a control Object that we can use to marshal
         ///     calls.  We must marshal calls to a control with a window
         ///     handle, so we traverse up the parent chain until we find one.
         ///     Failing that, we just return ouselves.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private Control FindMarshalingControl() {
             // 
             lock(this) {
@@ -6093,74 +5585,66 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GetTopLevel"]/*' />
         protected bool GetTopLevel() {
             return(state & STATE_TOPLEVEL) != 0;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Used by AxHost to fire the CreateHandle event.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         internal void RaiseCreateHandleEvent(EventArgs e) {
             EventHandler handler = (EventHandler)Events[EventHandleCreated];
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RaiseKeyEvent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Raises the event associated with key with the event data of
         ///     e and a sender of this control.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseKeyEvent(object key, KeyEventArgs e) {
             KeyEventHandler handler = (KeyEventHandler)Events[key];
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RaiseMouseEvent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Raises the event associated with key with the event data of
         ///     e and a sender of this control.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseMouseEvent(object key, MouseEventArgs e) {
             MouseEventHandler handler = (MouseEventHandler)Events[key];
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Focus"]/*' />
-        /// <devdoc>
-        ///    <para> Sets focus to the control.</para>
-        ///    <para>Attempts to set focus to this control.</para>
-        /// </devdoc>
+        /// <summary>
+        /// Attempts to set focus to this control.
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public bool Focus() {
-            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Control::Focus - " + this.Name);
+        public bool Focus()
+        {
+            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Control::Focus - " + Name);
 
-            //here, we call our internal method (which form overrides)
-            //see comments in FocusInternal
-            //
+            // Call the internal method (which form overrides)
             return FocusInternal();
         }
 
-        /// <devdoc>
-        ///    Internal method for setting focus to the control.
-        ///    Form overrides this method - because MDI child forms
-        ///    need to be focused by calling the MDIACTIVATE message.
-        /// </devdoc>
-        // SECURITY WARNING: This method bypasses a security demand. Use with caution!
-        internal virtual bool FocusInternal() {
+        /// <summary>
+        /// Internal method for setting focus to the control.
+        /// Form overrides this method - because MDI child forms
+        /// need to be focused by calling the MDIACTIVATE message.
+        /// </summary>
+        private protected virtual bool FocusInternal() {
             Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Control::FocusInternal - " + this.Name);
             if (CanFocus){
                 UnsafeNativeMethods.SetFocus(new HandleRef(this, Handle));
             }
             if (Focused && this.ParentInternal != null) {
-                IContainerControl c = this.ParentInternal.GetContainerControlInternal();
+                IContainerControl c = this.ParentInternal.GetContainerControl();
 
                 if (c != null) {
                     if (c is ContainerControl) {
-                        ((ContainerControl)c).SetActiveControlInternal(this);
+                        ((ContainerControl)c).SetActiveControl(this);
                     }
                     else {
                         c.ActiveControl = this;
@@ -6171,48 +5655,46 @@ example usage
             return Focused;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.FromChildHandle"]/*' />
-        /// <devdoc>
-        ///     Returns the control that is currently associated with handle.
-        ///     This method will search up the HWND parent chain until it finds some
-        ///     handle that is associated with with a control. This method is more
-        ///     robust that fromHandle because it will correctly return controls
-        ///     that own more than one handle.
-        /// </devdoc>
+        /// <summary>
+        /// Returns the control that is currently associated with handle.
+        /// This method will search up the HWND parent chain until it finds some
+        /// handle that is associated with with a control. This method is more
+        /// robust that fromHandle because it will correctly return controls
+        /// that own more than one handle.
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public static Control FromChildHandle(IntPtr handle) {
-            return FromChildHandleInternal(handle);
-        }
+        public static Control FromChildHandle(IntPtr handle)
+        {
+            while (handle != IntPtr.Zero)
+            {
+                Control ctl = FromHandle(handle);
+                if (ctl != null)
+                {
+                    return ctl;
+                }
 
-        // SECURITY WARNING: This method bypasses a security demand. Use with caution!
-        internal static Control FromChildHandleInternal(IntPtr handle) {
-            while (handle != IntPtr.Zero) {
-                Control ctl = FromHandleInternal(handle);
-                if (ctl != null) return ctl;
                 handle = UnsafeNativeMethods.GetAncestor(new HandleRef(null, handle), NativeMethods.GA_PARENT);
             }
             return null;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.FromHandle"]/*' />
-        /// <devdoc>
-        ///     Returns the control that is currently associated with handle.
-        /// </devdoc>
+        /// <summary>
+        /// Returns the control that is currently associated with handle.
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public static Control FromHandle(IntPtr handle) {
-            return FromHandleInternal(handle);
-        }
-
-        // SECURITY WARNING: This method bypasses a security demand. Use with caution!
-        internal static Control FromHandleInternal(IntPtr handle) {
+        public static Control FromHandle(IntPtr handle)
+        {
             NativeWindow w = NativeWindow.FromHandle(handle);
-            while (w != null && !(w is ControlNativeWindow)) {
+            while (w != null && !(w is ControlNativeWindow))
+            {
                 w = w.PreviousWindow;
             }
 
-            if (w is ControlNativeWindow) {
-                return((ControlNativeWindow)w).GetControl();
+            if (w is ControlNativeWindow controlNativeWindow)
+            {
+                return controlNativeWindow.GetControl();
             }
+
             return null;
         }
 
@@ -6247,11 +5729,10 @@ example usage
             return new Rectangle(suggestedX, suggestedY, proposedWidth, proposedHeight);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GetChildAtPoint"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the child control that is located at the specified client
         ///     coordinates.
-        /// </devdoc>
+        /// </summary>
         public Control GetChildAtPoint(Point pt, GetChildAtPointSkip skipValue) {
             int value = (int)skipValue;
             // Since this is a Flags Enumeration... the only way to validate skipValue is by checking if its within the range.
@@ -6261,56 +5742,25 @@ example usage
             }
 
             IntPtr hwnd = UnsafeNativeMethods.ChildWindowFromPointEx(new HandleRef(null, Handle), pt.X, pt.Y, value);
-
-            // Security Reviewed
-            // While doing a security review it was noticed that GetChildAtPoint
-            // does work to ensure that you can only gain access to children of your own control,
-            // but the methods it uses to determine the children demand all window permission first,
-            // negating the extra check.
-            // It is OK to return child windows for children within your own control for semitrust.
-
-            // Hence  calling the Internal methods to ByPass the Security Demand...
-            // for IntSecurity.ControlFromHandleOrLocation == ALLWindows.
-
-            Control ctl = FromChildHandleInternal(hwnd);
+            Control ctl = FromChildHandle(hwnd);
 
             return(ctl == this) ? null : ctl;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GetChildAtPoint"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the child control that is located at the specified client
         ///     coordinates.
-        /// </devdoc>
+        /// </summary>
         public Control GetChildAtPoint(Point pt) {
             return GetChildAtPoint(pt, GetChildAtPointSkip.None);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GetContainerControl"]/*' />
-        /// <devdoc>
-        ///     Returns the closest ContainerControl in the control's chain of
-        ///     parent controls and forms.
-        /// </devdoc>
-        public IContainerControl GetContainerControl() {
-            return GetContainerControlInternal();
-        }
-
-        private static bool IsFocusManagingContainerControl(Control ctl) {
-            return ((ctl.controlStyle & ControlStyles.ContainerControl) == ControlStyles.ContainerControl && ctl is IContainerControl);
-        }
-
-    /// <devdoc>
-        ///     This new Internal method checks the updateCount to signify that the control is within the "BeginUpdate" and "EndUpdate" cycle.
-        ///     Check out : for usage of this. The Treeview tries to ForceUpdate the scrollbars by calling "WM_SETREDRAW"
-        ///     even if the control in "Begin - End" update cycle. Using thie Function we can guard against repetitively redrawing the control.
-        /// </devdoc>
-        internal bool IsUpdating()
+        /// <summary>
+        /// Returns the closest ContainerControl in the control's chain of parent controls
+        /// and forms.
+        /// </summary>
+        public IContainerControl GetContainerControl()
         {
-            return (updateCount > 0);
-        }
-
-        // SECURITY WARNING: This method bypasses a security demand. Use with caution!
-        internal IContainerControl GetContainerControlInternal() {
             Control c = this;
             
             // Refer to IsContainerControl property for more details.            
@@ -6318,10 +5768,26 @@ example usage
             {
                 c = c.ParentInternal;
             }
-            while (c != null && (!IsFocusManagingContainerControl(c))) {
+            while (c != null && !IsFocusManagingContainerControl(c))
+            {
                 c = c.ParentInternal;
             }
+
             return (IContainerControl)c;
+        }
+
+        private static bool IsFocusManagingContainerControl(Control ctl) {
+            return ((ctl.controlStyle & ControlStyles.ContainerControl) == ControlStyles.ContainerControl && ctl is IContainerControl);
+        }
+
+    /// <summary>
+        ///     This new Internal method checks the updateCount to signify that the control is within the "BeginUpdate" and "EndUpdate" cycle.
+        ///     Check out : for usage of this. The Treeview tries to ForceUpdate the scrollbars by calling "WM_SETREDRAW"
+        ///     even if the control in "Begin - End" update cycle. Using thie Function we can guard against repetitively redrawing the control.
+        /// </summary>
+        internal bool IsUpdating()
+        {
+            return (updateCount > 0);
         }
 
         // Essentially an Hfont; see inner class for details.
@@ -6336,20 +5802,19 @@ example usage
         internal IntPtr GetHRgn(Region region) {
             Graphics graphics = CreateGraphicsInternal();
             IntPtr handle = region.GetHrgn(graphics);
-            System.Internal.HandleCollector.Add(handle, NativeMethods.CommonHandles.GDI);
+            Interop.HandleCollector.Add(handle, Interop.CommonHandles.GDI);
             graphics.Dispose();
             return handle;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GetScaledBounds"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This is a helper method that is called by ScaleControl to retrieve the bounds
         ///     that the control should be scaled by.  You may override this method if you
         ///     wish to reuse ScaleControl's scaling logic but you need to supply your own
         ///     bounds.  The default implementation returns scaled bounds that take into
         ///     account the BoundsSpecified, whether the control is top level, and whether
         ///     the control is fixed width or auto size, and any adornments the control may have.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual Rectangle GetScaledBounds(Rectangle bounds, SizeF factor, BoundsSpecified specified) {
 
@@ -6475,11 +5940,11 @@ example usage
             return mi;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     - Returns child controls sorted according to their TabIndex property order.
         ///     - Controls with the same TabIndex remain in original relative child index order (= z-order).
         ///     - Returns a TabIndex sorted array of ControlTabOrderHolder objects.
-        /// </devdoc>
+        /// </summary>
         private ArrayList GetChildControlsTabOrderList(bool handleCreatedOnly) {
             ArrayList holders = new ArrayList();
 
@@ -6494,14 +5959,14 @@ example usage
             return holders;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     - Returns native child windows sorted according to their TabIndex property order.
         ///     - Controls with the same TabIndex remain in original relative child index order (= z-order).
         ///     - Child windows with no corresponding Control objects (and therefore no discernable TabIndex)
         ///       are sorted to the front of the list (but remain in relative z-order to one another).
         ///     - This version returns a sorted array of integers, representing the original z-order
         ///       based indexes of the native child windows.
-        /// </devdoc>
+        /// </summary>
         private int[] GetChildWindowsInTabOrder() {
             ArrayList holders = GetChildWindowsTabOrderList();
 
@@ -6514,11 +5979,11 @@ example usage
             return indexes;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     - Returns child controls sorted according to their TabIndex property order.
         ///     - Controls with the same TabIndex remain in original relative child index order (= z-order).
         ///     - This version returns a sorted array of control references.
-        /// </devdoc>
+        /// </summary>
         internal Control[] GetChildControlsInTabOrder(bool handleCreatedOnly) {
             ArrayList holders = GetChildControlsTabOrderList(handleCreatedOnly);
 
@@ -6531,11 +5996,11 @@ example usage
             return ctls;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      This class contains a control and associates it with a z-order.
         ///      This is used when sorting controls based on tab index first,
         ///      z-order second.
-        /// </devdoc>
+        /// </summary>
         private class ControlTabOrderHolder {
             internal readonly int oldOrder;
             internal readonly int newOrder;
@@ -6548,9 +6013,9 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Used to sort controls based on tab index and z-order.
-        /// </devdoc>
+        /// </summary>
         private class ControlTabOrderComparer : IComparer {
             int IComparer.Compare(object x, object y) {
                 ControlTabOrderHolder hx = (ControlTabOrderHolder) x;
@@ -6564,9 +6029,9 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Given a native window handle, returns array of handles to window's children (in z-order).
-        /// </devdoc>
+        /// </summary>
         private static ArrayList GetChildWindows(IntPtr hWndParent) {
             ArrayList windows = new ArrayList();
 
@@ -6579,19 +6044,19 @@ example usage
             return windows;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     - Returns native child windows sorted according to their TabIndex property order.
         ///     - Controls with the same TabIndex remain in original relative child index order (= z-order).
         ///     - Child windows with no corresponding Control objects (and therefore no discernable TabIndex)
         ///       are sorted to the front of the list (but remain in relative z-order to one another).
         ///     - Returns a TabIndex sorted array of ControlTabOrderHolder objects.
-        /// </devdoc>
+        /// </summary>
         private ArrayList GetChildWindowsTabOrderList() {
             ArrayList holders = new ArrayList();
             ArrayList windows = GetChildWindows(this.Handle);
 
             foreach (IntPtr hWnd in windows) {
-                Control ctl = FromHandleInternal(hWnd);
+                Control ctl = FromHandle(hWnd);
                 int tabIndex = (ctl == null) ? -1 : ctl.TabIndex;
                 holders.Add(new ControlTabOrderHolder(holders.Count, tabIndex, ctl));
             }
@@ -6630,10 +6095,9 @@ example usage
 
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GetNextControl"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the next control in the tab order of child controls.
-        /// </devdoc>
+        /// </summary>
         public Control GetNextControl(Control ctl, bool forward) {
             if (!Contains(ctl)) {
                 ctl = this;
@@ -6802,68 +6266,65 @@ example usage
             return ctl == this? null: ctl;
         }
 
-        /// <devdoc>
-        ///     Return ((Control) window).Handle if window is a Control.
-        ///     Otherwise, demands permission for AllWindows and returns window.Handle
-        /// </devdoc>
+        /// <summary>
+        /// Return ((Control) window).Handle if window is a Control.
+        /// Otherwise, returns window.Handle
+        /// </summary>
         internal static IntPtr GetSafeHandle(IWin32Window window)
         {
             Debug.Assert(window != null, "window is null in Control.GetSafeHandle");
-            IntPtr hWnd = IntPtr.Zero;
-            Control control = window as Control;
-            if (control != null) {
-                hWnd = control.Handle;
-                Debug.Assert(hWnd == IntPtr.Zero || UnsafeNativeMethods.IsWindow(new HandleRef(null, hWnd)));
-                return hWnd;
+            if (window is Control control)
+            {
+                return control.Handle;
             }
-            else {
-                hWnd = window.Handle;
-                if (hWnd == IntPtr.Zero || UnsafeNativeMethods.IsWindow(new HandleRef(null, hWnd))) {
+            else
+            {
+                IntPtr hWnd = window.Handle;
+                if (hWnd == IntPtr.Zero || UnsafeNativeMethods.IsWindow(new HandleRef(null, hWnd)))
+                {
                     return hWnd;
                 }
-                else {
+                else
+                {
                     throw new Win32Exception(NativeMethods.ERROR_INVALID_HANDLE);
                 }
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the current value of the specified bit in the control's state.
-        /// </devdoc>
+        /// </summary>
         internal bool GetState(int flag) {
             return(state & flag) != 0;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the current value of the specified bit in the control's state2.
-        /// </devdoc>
+        /// </summary>
         private bool GetState2(int flag)
         {
             return (state2 & flag) != 0;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GetStyle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the current value of the specified bit in the control's style.
         ///     NOTE: This is control style, not the Win32 style of the hWnd.
-        /// </devdoc>
+        /// </summary>
         protected bool GetStyle(ControlStyles flag) {
             return (controlStyle & flag) == flag;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Hide"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Hides the control by setting the visible property to false;
-        /// </devdoc>
+        /// </summary>
         public void Hide() {
             Visible = false;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sets up the TrackMouseEvent for listening for the
         ///     mouse leave event.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void HookMouseEvent() {
             if (!GetState(STATE_TRACKINGMOUSEEVENT)) {
                 SetState(STATE_TRACKINGMOUSEEVENT, true);
@@ -6878,19 +6339,18 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.InitLayout"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Called after the control has been added to another container.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void InitLayout() {
             LayoutEngine.InitLayout(this, BoundsSpecified.All);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This method initializes the scaling bits for this control based on
         ///     the bounds.
-        /// </devdoc>
+        /// </summary>
         private void InitScaling(BoundsSpecified specified) {
             requiredScaling |= (byte)((int)specified & RequiredScalingMask);
         }
@@ -6912,17 +6372,14 @@ example usage
             }
         }
 
-        #if WIN95_SUPPORT
-        /// <devdoc>
+        /// <summary>
         ///     Initializes mouse wheel support. This may involve registering some windows
         ///     messages on older operating systems.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void InitMouseWheelSupport() {
             if (!mouseWheelInit) {
-                // If we are running on less than NT4 or less that Win98 then we must use
-                // the manual mousewheel stuff...
-                //
+                // If we are running on a system without a mouse wheel then we must use
+                // manual mousewheel routines.
                 mouseWheelRoutingNeeded = !SystemInformation.NativeMouseWheelSupport;
 
                 if (mouseWheelRoutingNeeded) {
@@ -6949,26 +6406,23 @@ example usage
                 mouseWheelInit = true;
             }
         }
-        #endif
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Invalidate"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Invalidates a region of the control and causes a paint message
         ///     to be sent to the control. This will not force a synchronous paint to
         ///     occur, calling update after invalidate will force a
         ///     synchronous paint.
-        /// </devdoc>
+        /// </summary>
         public void Invalidate(Region region) {
             Invalidate(region, false);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Invalidate1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Invalidates a region of the control and causes a paint message
         ///     to be sent to the control. This will not force a synchronous paint to
         ///     occur, calling update after invalidate will force a
         ///     synchronous paint.
-        /// </devdoc>
+        /// </summary>
         public void Invalidate(Region region, bool invalidateChildren) {
             if (region == null) {
                 Invalidate(invalidateChildren);
@@ -7010,22 +6464,20 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Invalidate2"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Invalidates the control and causes a paint message to be sent to the control.
         ///     This will not force a synchronous paint to occur, calling update after
         ///     invalidate will force a synchronous paint.
-        /// </devdoc>
+        /// </summary>
         public void Invalidate() {
             Invalidate(false);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Invalidate3"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Invalidates the control and causes a paint message to be sent to the control.
         ///     This will not force a synchronous paint to occur, calling update after
         ///     invalidate will force a synchronous paint.
-        /// </devdoc>
+        /// </summary>
         public void Invalidate(bool invalidateChildren) {
             if (IsHandleCreated) {
                 if (invalidateChildren) {
@@ -7049,24 +6501,22 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Invalidate4"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Invalidates a rectangular region of the control and causes a paint message
         ///     to be sent to the control. This will not force a synchronous paint to
         ///     occur, calling update after invalidate will force a
         ///     synchronous paint.
-        /// </devdoc>
+        /// </summary>
         public void Invalidate(Rectangle rc) {
             Invalidate(rc, false);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Invalidate5"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Invalidates a rectangular region of the control and causes a paint message
         ///     to be sent to the control. This will not force a synchronous paint to
         ///     occur, calling update after invalidate will force a
         ///     synchronous paint.
-        /// </devdoc>
+        /// </summary>
         public void Invalidate(Rectangle rc, bool invalidateChildren) {
             if (rc.IsEmpty) {
                 Invalidate(invalidateChildren);
@@ -7096,8 +6546,7 @@ example usage
                 NotifyInvalidate(rc);
             }
         }
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Invoke"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Executes the given delegate on the thread that owns this Control's
         ///     underlying window handle.  It is an error to call this on the same thread that
         ///     the control belongs to.  If the control's handle doesn't exist yet, this will
@@ -7110,13 +6559,12 @@ example usage
         ///     thread:  GetInvokeRequired, Invoke, BeginInvoke, EndInvoke and CreateGraphics.
         ///     For all other method calls, you should use one of the invoke methods to marshal
         ///     the call to the control's thread.
-        /// </devdoc>
+        /// </summary>
         public object Invoke(Delegate method) {
             return Invoke(method, null);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Invoke1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Executes the given delegate on the thread that owns this Control's
         ///     underlying window handle.  It is an error to call this on the same thread that
         ///     the control belongs to.  If the control's handle doesn't exist yet, this will
@@ -7129,7 +6577,7 @@ example usage
         ///     thread:  GetInvokeRequired, Invoke, BeginInvoke, EndInvoke and CreateGraphics.
         ///     For all other method calls, you should use one of the invoke methods to marshal
         ///     the call to the control's thread.
-        /// </devdoc>
+        /// </summary>
         public object Invoke(Delegate method, params object[] args) {
             using (new MultithreadSafeCallScope()) {
                 Control marshaler = FindMarshalingControl();
@@ -7137,7 +6585,7 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Perform the callback of a particular ThreadMethodEntry - called by InvokeMarshaledCallbacks below.
         ///
         ///     If the invoke request originated from another thread, we should have already captured the ExecutionContext
@@ -7150,7 +6598,7 @@ example usage
         ///
         ///     When the invoke request comes from this thread, there won't be an ExecutionContext so we just invoke
         ///     the callback as is.
-        /// </devdoc>
+        /// </summary>
         private void InvokeMarshaledCallback(ThreadMethodEntry tme){
             if (tme.executionContext != null) {
                 if (invokeMarshaledCallbackHelperDelegate == null) {
@@ -7170,9 +6618,9 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Worker for invoking marshaled callbacks.
-        /// </devdoc>
+        /// </summary>
         private static void InvokeMarshaledCallbackHelper(object obj)
         {
             ThreadMethodEntry tme = (ThreadMethodEntry) obj;
@@ -7194,8 +6642,8 @@ example usage
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         private static void InvokeMarshaledCallbackDo(ThreadMethodEntry tme)
         {
             // We short-circuit a couple of common cases for speed.
@@ -7225,11 +6673,11 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Called on the control's owning thread to perform the actual callback.
         ///     This empties this control's callback queue, propagating any exceptions
         ///     back as needed.
-        /// </devdoc>
+        /// </summary>
         private void InvokeMarshaledCallbacks() {
             ThreadMethodEntry current = null;
             lock(threadCallbackList) {
@@ -7283,20 +6731,17 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.InvokePaint"]/*' />
         protected void InvokePaint(Control c, PaintEventArgs e) {
             c.OnPaint(e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.InvokePaintBackground"]/*' />
         protected void InvokePaintBackground(Control c, PaintEventArgs e) {
            c.OnPaintBackground(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// determines whether the font is set
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         internal bool IsFontSet() {
             Font font = (Font)Properties.GetObject(PropFont);
             if (font != null) {
@@ -7305,12 +6750,11 @@ example usage
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     WARNING! The meaning of this method is not what it appears.
         ///     The method returns true if "descendant" (the argument) is a descendant
         ///     of "this". I'd expect it to be the other way around, but oh well too late.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         internal bool IsDescendant(Control descendant) {
             Control control = descendant;
             while (control != null) {
@@ -7321,10 +6765,9 @@ example usage
             return false;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IsKeyLocked"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// This Function will return a Boolean as to whether the Key value passed in is Locked...
-        /// </devdoc>
+        /// </summary>
         public static bool IsKeyLocked(Keys keyVal) {
             if (keyVal == Keys.Insert || keyVal == Keys.NumLock || keyVal == Keys.CapsLock || keyVal == Keys.Scroll) {
                 int result = UnsafeNativeMethods.GetKeyState((int)keyVal);
@@ -7349,8 +6792,7 @@ example usage
             throw new NotSupportedException(SR.ControlIsKeyLockedNumCapsScrollLockKeysSupportedOnly);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IsInputChar"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Determines if charCode is an input character that the control
         ///     wants. This method is called during window message pre-processing to
         ///     determine whether the given input character should be pre-processed or
@@ -7360,7 +6802,7 @@ example usage
         ///     control if it is not consumed by the pre-processing phase. The
         ///     pre-processing of a character includes checking whether the character
         ///     is a mnemonic of another control.
-        /// </devdoc>
+        /// </summary>
         protected virtual bool IsInputChar(char charCode) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.IsInputChar 0x" + ((int)charCode).ToString("X", CultureInfo.InvariantCulture));
 
@@ -7371,11 +6813,10 @@ example usage
             else {
                 mask = NativeMethods.DLGC_WANTCHARS | NativeMethods.DLGC_WANTALLKEYS;
             }
-            return(unchecked( (int) (long)SendMessage(NativeMethods.WM_GETDLGCODE, 0, 0)) & mask) != 0;
+            return(unchecked( (int) (long)SendMessage(Interop.WindowMessages.WM_GETDLGCODE, 0, 0)) & mask) != 0;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IsInputKey"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Determines if keyData is an input key that the control wants.
         ///     This method is called during window message pre-processing to determine
         ///     whether the given input key should be pre-processed or sent directly to
@@ -7384,7 +6825,7 @@ example usage
         ///     pre-processed and only sent to the control if it is not consumed by the
         ///     pre-processing phase. Keys that are pre-processed include TAB, RETURN,
         ///     ESCAPE, and arrow keys.
-        /// </devdoc>
+        /// </summary>
         protected virtual bool IsInputKey(Keys keyData) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.IsInputKey " + keyData.ToString());
 
@@ -7403,19 +6844,18 @@ example usage
             }
 
             if (IsHandleCreated) {
-                return(unchecked( (int) (long)SendMessage(NativeMethods.WM_GETDLGCODE, 0, 0)) & mask) != 0;
+                return(unchecked( (int) (long)SendMessage(Interop.WindowMessages.WM_GETDLGCODE, 0, 0)) & mask) != 0;
             }
             else {
                 return false;
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IsMnemonic"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Determines if charCode is the mnemonic character in text.
         ///     The mnemonic character is the character imediately following the first
         ///     instance of "&amp;" in text
-        /// </devdoc>
+        /// </summary>
         public static bool IsMnemonic(char charCode, string text) {
 #if DEBUG
             if (ControlKeyboardRouting.TraceVerbose) {
@@ -7472,11 +6912,10 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LogicalToDeviceUnits"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Transforms an integer coordinate from logical to device units
         /// by scaling it for the current DPI and rounding down to the nearest integer value.
-        /// </devdoc>
+        /// </summary>
         public int LogicalToDeviceUnits(int value) {
             return DpiHelper.LogicalToDeviceUnits(value, DeviceDpi);
         }
@@ -7588,13 +7027,13 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This method is used by WM_GETCONTROLNAME and WM_GETCONTROLTYPE
         ///     to marshal a string to a message structure.  It handles
         ///     two cases:  if no buffer was passed it returns the size of
         ///     buffer needed.  If a buffer was passed, it fills the buffer.
         ///     If the passed buffer is not long enough it will return -1.
-        /// </devdoc>
+        /// </summary>
         private void MarshalStringToMessage(string value, ref Message m) {
             if (m.LParam == IntPtr.Zero) {
                 m.Result = (IntPtr)((value.Length + 1) * sizeof(char));
@@ -7633,13 +7072,11 @@ example usage
             OnLeave(EventArgs.Empty);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.NotifyInvalidate"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    Propagates the invalidation event, notifying the control that
         ///    some part of it is being invalidated and will subsequently need
         ///    to repaint.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void NotifyInvalidate(Rectangle invalidatedArea) {
             OnInvalidated(new InvalidateEventArgs(invalidatedArea));
@@ -7657,10 +7094,9 @@ example usage
             OnValidated(EventArgs.Empty);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.InvokeOnClick"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.Click'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void InvokeOnClick(Control toInvoke, EventArgs e) {
             if (toInvoke != null) {
@@ -7668,7 +7104,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnAutoSizeChanged"]/*' />
         protected virtual void OnAutoSizeChanged(EventArgs e) {
             Contract.Requires(e != null);
             EventHandler eh = Events[EventAutoSizeChanged] as EventHandler;
@@ -7677,7 +7112,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnBackColorChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBackColorChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -7714,7 +7148,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnBackgroundImageChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBackgroundImageChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -7740,7 +7173,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnBackgroundImageLayoutChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBackgroundImageLayoutChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -7756,7 +7188,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnBindingContextChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBindingContextChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -7780,7 +7211,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnCausesValidationChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCausesValidationChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -7790,18 +7220,16 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnChildLayoutResuming"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Called when a child is about to resume its layout.  The default implementation
         ///     calls OnChildLayoutResuming on the parent.
-        /// </devdoc>
+        /// </summary>
         internal virtual void OnChildLayoutResuming(Control child, bool performLayout) {
             if (ParentInternal != null) {
                 ParentInternal.OnChildLayoutResuming(child, performLayout);
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnContextMenuChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnContextMenuChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -7811,7 +7239,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnContextMenuStripChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnContextMenuStripChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -7821,7 +7248,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnCursorChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCursorChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -7841,7 +7267,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnDockChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDockChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -7851,12 +7276,11 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnEnabledChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.Enabled'/> event.</para>
         /// <para>Inheriting classes should override this method to handle this event.
         ///    Call base.OnEnabled to send this event to any registered event listeners.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnEnabledChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -7894,7 +7318,6 @@ example usage
         internal virtual void OnFrameWindowActivate(bool fActivate) {
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnFontChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnFontChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -7938,7 +7361,6 @@ example usage
             LayoutTransaction.DoLayout(this,this,PropertyNames.Font);            
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnForeColorChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnForeColorChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -7964,7 +7386,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnRightToLeftChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRightToLeftChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -7994,18 +7415,16 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnNotifyMessage"]/*' />
-        /// <devdoc>
-        ///    OnNotifyMessage is called if the ControlStyles.EnableNotifyMessage
-        ///    bit is set. This allows for semi-trusted controls to listen to
-        ///    window messages, without allowing them to actually modify the
-        ///    message.
-        /// </devdoc>
+        /// <summary>
+        /// OnNotifyMessage is called if the ControlStyles.EnableNotifyMessage bit is set.
+        /// This allows for controls to listen to window messages, without allowing them to
+        /// actually modify the message.
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected virtual void OnNotifyMessage(Message m) {
+        protected virtual void OnNotifyMessage(Message m)
+        {
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentBackColorChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentBackColorChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8015,14 +7434,12 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentBackgroundImageChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentBackgroundImageChanged(EventArgs e) {
             Contract.Requires(e != null);
             OnBackgroundImageChanged(e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentBindingContextChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentBindingContextChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8031,7 +7448,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentCursorChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentCursorChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8040,7 +7456,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentEnabledChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentEnabledChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8049,7 +7464,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentFontChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentFontChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8100,7 +7514,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentForeColorChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentForeColorChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8110,7 +7523,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentRightToLeftChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentRightToLeftChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8119,7 +7531,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentVisibleChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentVisibleChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8142,10 +7553,9 @@ example usage
             }
         }
         
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnPrint"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Inheriting classes should override this method to handle this event.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnPrint(PaintEventArgs e) {
             if (e == null) {
@@ -8154,9 +7564,8 @@ example usage
             Contract.EndContractBlock();
 
             if (GetStyle(ControlStyles.UserPaint)) {
-                // Theme support on Windows XP requires that we paint the background
+                // Theme support requires that we paint the background
                 // and foreground to support semi-transparent children
-                //
                 PaintWithErrorHandling(e, PaintLayerBackground);
                 e.ResetGraphics();
                 PaintWithErrorHandling(e, PaintLayerForeground);
@@ -8176,7 +7585,7 @@ example usage
                         hdc = e.Graphics.GetHdc();
                         releaseDC = true;
                     }
-                    m = Message.Create(this.Handle, NativeMethods.WM_PRINTCLIENT, hdc, flags);
+                    m = Message.Create(this.Handle, Interop.WindowMessages.WM_PRINTCLIENT, hdc, flags);
                 }
                 else {
                     m = ppev.Message;
@@ -8193,7 +7602,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnTabIndexChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnTabIndexChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8203,7 +7611,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnTabStopChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnTabStopChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8213,7 +7620,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnTextChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnTextChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8223,12 +7629,11 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnVisibleChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.Visible'/> event.</para>
         /// <para>Inheriting classes should override this method to handle this event.
         ///    Call base.OnVisible to send this event to any registered event listeners.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnVisibleChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8268,7 +7673,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnTopMostActiveXParentChanged"]/*' />
         internal virtual void OnTopMostActiveXParentChanged(EventArgs e) {
             Contract.Requires(e != null);
             ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
@@ -8282,7 +7686,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8298,11 +7701,10 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnClick"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.Click'/>
         /// event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnClick(EventArgs e) {
             Contract.Requires(e != null);
@@ -8310,7 +7712,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnClientSizeChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnClientSizeChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8320,10 +7721,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnControlAdded"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.ControlAdded'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnControlAdded(ControlEventArgs e) {
             Contract.Requires(e != null);
@@ -8331,10 +7731,9 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnControlRemoved"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.ControlRemoved'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnControlRemoved(ControlEventArgs e) {
             Contract.Requires(e != null);
@@ -8342,20 +7741,18 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnCreateControl"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Called when the control is first created.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCreateControl() {
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnHandleCreated"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Inheriting classes should override this method to find out when the
         ///     handle has been created.
         ///     Call base.OnHandleCreated first.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnHandleCreated(EventArgs e) {
             Contract.Requires(e != null);
@@ -8417,7 +7814,7 @@ example usage
 
                 // Set the window text from the Text property.
                 if (text != null && text.Length != 0) {
-                    UnsafeNativeMethods.SetWindowText(new HandleRef(this, Handle), text);
+                    Interop.User32.SetWindowTextW(new HandleRef(this, Handle), text);
                 }
 
                 if (!(this is ScrollableControl) && !IsMirrored && GetState2(STATE2_SETSCROLLPOS) && !GetState2(STATE2_HAVEINVOKED)) {
@@ -8456,16 +7853,15 @@ example usage
         internal virtual void OnInvokedSetScrollPosition(object sender, EventArgs e) {
             if (!(this is ScrollableControl) && !IsMirrored) {
                 NativeMethods.SCROLLINFO si = new NativeMethods.SCROLLINFO();
-                si.cbSize = Marshal.SizeOf(typeof(NativeMethods.SCROLLINFO));
+                si.cbSize = Marshal.SizeOf<NativeMethods.SCROLLINFO>();
                 si.fMask = NativeMethods.SIF_RANGE;
                 if (UnsafeNativeMethods.GetScrollInfo(new HandleRef(this, Handle), NativeMethods.SB_HORZ,si) != false) {
                     si.nPos = (RightToLeft == RightToLeft.Yes) ? si.nMax : si.nMin;
-                    SendMessage(NativeMethods.WM_HSCROLL, NativeMethods.Util.MAKELPARAM(NativeMethods.SB_THUMBPOSITION, si.nPos), 0);
+                    SendMessage(Interop.WindowMessages.WM_HSCROLL, NativeMethods.Util.MAKELPARAM(NativeMethods.SB_THUMBPOSITION, si.nPos), 0);
                 }                
             } 
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnLocationChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnLocationChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8477,13 +7873,12 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnHandleDestroyed"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Inheriting classes should override this method to find out when the
         ///     handle is about to be destroyed.
         ///     Call base.OnHandleDestroyed last.
         /// <para>Raises the <see cref='System.Windows.Forms.Control.HandleDestroyed'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnHandleDestroyed(EventArgs e) {
             Contract.Requires(e != null);
@@ -8530,10 +7925,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnDoubleClick"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.DoubleClick'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDoubleClick(EventArgs e) {
             Contract.Requires(e != null);
@@ -8541,16 +7935,15 @@ example usage
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnDragEnter"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.Enter'/> event.</para>
         /// <para>Inheriting classes should override this method to handle this event.
         ///    Call base.onEnter to send this event to any registered event listeners.</para>
-        /// </devdoc>
-        /// <devdoc>
+        /// </summary>
+        /// <summary>
         ///     Inheriting classes should override this method to handle this event.
         ///     Call base.onDragEnter to send this event to any registered event listeners.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDragEnter(DragEventArgs drgevent) {
             Contract.Requires(drgevent != null);
@@ -8558,11 +7951,10 @@ example usage
             if (handler != null) handler(this,drgevent);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnDragOver"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Inheriting classes should override this method to handle this event.
         ///     Call base.onDragOver to send this event to any registered event listeners.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDragOver(DragEventArgs drgevent) {
             Contract.Requires(drgevent != null);
@@ -8570,11 +7962,10 @@ example usage
             if (handler != null) handler(this,drgevent);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnDragLeave"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Inheriting classes should override this method to handle this event.
         ///     Call base.onDragLeave to send this event to any registered event listeners.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDragLeave(EventArgs e) {
             Contract.Requires(e != null);
@@ -8582,11 +7973,10 @@ example usage
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnDragDrop"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Inheriting classes should override this method to handle this event.
         ///     Call base.onDragDrop to send this event to any registered event listeners.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDragDrop(DragEventArgs drgevent) {
             Contract.Requires(drgevent != null);
@@ -8594,11 +7984,10 @@ example usage
             if (handler != null) handler(this,drgevent);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnGiveFeedback"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Inheriting classes should override this method to handle this event.
         ///     Call base.onGiveFeedback to send this event to any registered event listeners.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [SuppressMessage("Microsoft.Security", "CA2119:SealMethodsThatSatisfyPrivateInterfaces")]
         protected virtual void OnGiveFeedback(GiveFeedbackEventArgs gfbevent) {
@@ -8607,7 +7996,6 @@ example usage
             if (handler != null) handler(this,gfbevent);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnEnter"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnEnter(EventArgs e) {
             Contract.Requires(e != null);
@@ -8615,24 +8003,20 @@ example usage
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.InvokeGotFocus"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.GotFocus'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void InvokeGotFocus(Control toInvoke, EventArgs e) {
             if (toInvoke != null) {
                 toInvoke.OnGotFocus(e);
-                if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                    KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(toInvoke);
-                }
+                KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(toInvoke);
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnGotFocus"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.GotFocus'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnGotFocus(EventArgs e) {
             Contract.Requires(e != null);
@@ -8648,33 +8032,35 @@ example usage
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnHelpRequested"]/*' />
-        /// <devdoc>
-        ///     Inheriting classes should override this method to handle this event.
-        ///     Call base.onHelp to send this event to any registered event listeners.
-        /// </devdoc>
+        /// <summary>
+        /// Inheriting classes should override this method to handle this event.
+        /// Call base.onHelp to send this event to any registered event listeners.
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected virtual void OnHelpRequested(HelpEventArgs hevent) {
-            Contract.Requires(hevent != null);
+        protected virtual void OnHelpRequested(HelpEventArgs hevent)
+        {
             HelpEventHandler handler = (HelpEventHandler)Events[EventHelpRequested];
-            if (handler != null) {
+            if (handler != null)
+            {
                 handler(this,hevent);
-                // Set this to true so that multiple events aren't raised to the Form.
-                hevent.Handled = true;
+                // Mark the event as handled so that the event isn't raised for the
+                // control's parent.
+                if (hevent != null)
+                {
+                    hevent.Handled = true;
+                }
             }
 
-            if (!hevent.Handled) {
-                if (ParentInternal != null) {
-                    ParentInternal.OnHelpRequested(hevent);
-                }
+            if (hevent != null && !hevent.Handled)
+            {
+                ParentInternal?.OnHelpRequested(hevent);
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnInvalidated"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Inheriting classes should override this method to handle this event.
         ///     Call base.OnInvalidate to send this event to any registered event listeners.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnInvalidated(InvalidateEventArgs e) {
             Contract.Requires(e != null);
@@ -8698,10 +8084,9 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnKeyDown"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.KeyDown'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnKeyDown(KeyEventArgs e) {
             Contract.Requires(e != null);
@@ -8709,10 +8094,9 @@ example usage
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnKeyPress"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.KeyPress'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnKeyPress(KeyPressEventArgs e) {
             Contract.Requires(e != null);
@@ -8720,10 +8104,9 @@ example usage
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnKeyUp"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.KeyUp'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnKeyUp(KeyEventArgs e) {
             Contract.Requires(e != null);
@@ -8731,14 +8114,13 @@ example usage
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnLayout"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Core layout logic. Inheriting controls should override this function
         ///     to do any custom layout logic. It is not neccessary to call
         ///     base.layoutCore, however for normal docking and anchoring
         ///     functions to work, base.layoutCore must be called.
         /// <para>Raises the <see cref='System.Windows.Forms.Control.Layout'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnLayout(LayoutEventArgs levent) {
             Contract.Requires(levent != null);
@@ -8760,13 +8142,12 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnLayoutResuming"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Called when the last resume layout call is made.  If performLayout is true
         ///     a layout will occur as soon as this call returns.  Layout is
         ///     still suspended when this call is made.  The default implementation
         ///     calls OnChildLayoutResuming on the parent, if it exists.
-        /// </devdoc>
+        /// </summary>
         internal virtual void OnLayoutResuming(bool performLayout) {
             if (ParentInternal != null) {
                 ParentInternal.OnChildLayoutResuming(this, performLayout);
@@ -8776,10 +8157,9 @@ example usage
         internal virtual void OnLayoutSuspended() {
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnLeave"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.Leave'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnLeave(EventArgs e) {
             Contract.Requires(e != null);
@@ -8787,21 +8167,17 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.InvokeLostFocus"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void InvokeLostFocus(Control toInvoke, EventArgs e) {
             if (toInvoke != null) {
                 toInvoke.OnLostFocus(e);
-                if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                    KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(toInvoke);
-                }
+                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(toInvoke);
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnLostFocus"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.LostFocus'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnLostFocus(EventArgs e) {
             Contract.Requires(e != null);
@@ -8819,10 +8195,9 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnMouseDoubleClick"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseDoubleClick'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseDoubleClick(MouseEventArgs e) {
             Contract.Requires(e != null);
@@ -8830,10 +8205,9 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnMouseClick"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.OnMouseClick'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseClick(MouseEventArgs e) {
             Contract.Requires(e != null);
@@ -8841,10 +8215,9 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnMouseCaptureChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseCaptureChanged'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseCaptureChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -8852,10 +8225,9 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnMouseDown"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseDown'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseDown(MouseEventArgs e) {
             Contract.Requires(e != null);
@@ -8863,10 +8235,9 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnMouseEnter"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseEnter'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseEnter(EventArgs e) {
             Contract.Requires(e != null);
@@ -8874,10 +8245,9 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnMouseLeave"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseLeave'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseLeave(EventArgs e) {
             Contract.Requires(e != null);
@@ -8885,15 +8255,14 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnDpiChangedBeforeParent"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>
         /// Raises the <see cref='System.Windows.Forms.Control.DpiChangedBeforeParent'/> event.
         /// Occurs when the form is moved to a monitor with a different resolution (number of dots per inch),
         /// or when scaling level is changed in the windows setting by the user.
         /// This message is not sent to the top level windows.
         /// </para>
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(true), 
             EditorBrowsable(EditorBrowsableState.Always)
@@ -8903,15 +8272,14 @@ example usage
             ((EventHandler)Events[EventDpiChangedBeforeParent])?.Invoke(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnDpiChangedAfterParent"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>
         /// Raises the <see cref='System.Windows.Forms.Control.DpiChangedAfterParent'/> event.
         /// Occurs when the form is moved to a monitor with a different resolution (number of dots per inch),
         /// or when scaling level is changed in windows setting by the user.
         /// This message is not sent to the top level windows.
         /// </para>
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(true), 
             EditorBrowsable(EditorBrowsableState.Always)
@@ -8921,10 +8289,9 @@ example usage
             ((EventHandler)Events[EventDpiChangedAfterParent])?.Invoke(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnMouseHover"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseHover'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseHover(EventArgs e) {
             Contract.Requires(e != null);
@@ -8932,10 +8299,9 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnMouseMove"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseMove'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseMove(MouseEventArgs e) {
             Contract.Requires(e != null);
@@ -8943,10 +8309,9 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnMouseUp"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseUp'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseUp(MouseEventArgs e) {
             Contract.Requires(e != null);
@@ -8954,10 +8319,9 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnMouseWheel"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseWheel'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseWheel(MouseEventArgs e) {
             Contract.Requires(e != null);
@@ -8965,10 +8329,9 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnMove"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.Move'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMove(EventArgs e) {
             Contract.Requires(e != null);
@@ -8978,11 +8341,10 @@ example usage
                 Invalidate();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnPaint"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Inheriting classes should override this method to handle this event.
         ///     Call base.onPaint to send this event to any registered event listeners.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnPaint(PaintEventArgs e) {
             Contract.Requires(e != null);
@@ -8999,13 +8361,12 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnPaintBackground"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Inheriting classes should override this method to handle the erase
         ///     background request from windows. It is not necessary to call
         ///     base.onPaintBackground, however if you do not want the default
         ///     Windows behavior you must set event.handled to true.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnPaintBackground(PaintEventArgs pevent) {
             Contract.Requires(pevent != null);
@@ -9035,11 +8396,10 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnQueryContinueDrag"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Inheriting classes should override this method to handle this event.
         ///     Call base.onQueryContinueDrag to send this event to any registered event listeners.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [SuppressMessage("Microsoft.Security", "CA2119:SealMethodsThatSatisfyPrivateInterfaces")]
         protected virtual void OnQueryContinueDrag(QueryContinueDragEventArgs qcdevent) {
@@ -9048,10 +8408,9 @@ example usage
             if (handler != null) handler(this, qcdevent);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnRegionChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.RegionChanged'/> event when the Region property has changed.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRegionChanged(EventArgs e) {
            Contract.Requires(e != null);
@@ -9061,10 +8420,9 @@ example usage
            }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnResize"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.Resize'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnResize(EventArgs e) {
             Contract.Requires(e != null);
@@ -9077,10 +8435,9 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnPreviewKeyDown"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.PreviewKeyDown'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [
             EditorBrowsable(EditorBrowsableState.Advanced),
             SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")
@@ -9093,7 +8450,6 @@ example usage
             }
         }
        
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnSizeChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnSizeChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -9105,11 +8461,10 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnChangeUICues"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.ChangeUICues'/>
         /// event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnChangeUICues(UICuesEventArgs e) {
             Contract.Requires(e != null);
@@ -9117,11 +8472,10 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnStyleChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.OnStyleChanged'/>
         /// event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnStyleChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -9129,11 +8483,10 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnSystemColorsChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.SystemColorsChanged'/>
         /// event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnSystemColorsChanged(EventArgs e) {
             Contract.Requires(e != null);
@@ -9152,11 +8505,10 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnValidating"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.Validating'/>
         /// event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnValidating(CancelEventArgs e) {
             Contract.Requires(e != null);
@@ -9164,10 +8516,9 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnValidated"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.Validated'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnValidated(EventArgs e) {
             Contract.Requires(e != null);
@@ -9175,12 +8526,11 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RescaleConstantsForDpi"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Is invoked when the control handle is created or right before the top level parent receives WM_DPICHANGED message.
         /// This method is an opportunity to rescale any constant sizes, glyphs or bitmaps before re-painting.
         /// The derived class can choose to not call the base class implementation.
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(true), 
             EditorBrowsable(EditorBrowsableState.Advanced)
@@ -9473,10 +8823,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ParentContainerControl"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Find ContainerControl that is the container of this control.
-        /// </devdoc>
+        /// </summary>
         internal ContainerControl ParentContainerControl {
             get {
                 for (Control c = this.ParentInternal; c != null; c = c.ParentInternal) {
@@ -9489,10 +8838,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.PerformLayout"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Forces the control to apply layout logic to all of the child controls.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public void PerformLayout() {
             if (cachedLayoutEventArgs != null) {
@@ -9509,10 +8857,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.PerformLayout1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Forces the control to apply layout logic to all of the child controls.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public void PerformLayout(Control affectedControl, string affectedProperty) {
             PerformLayout(new LayoutEventArgs(affectedControl, affectedProperty));
@@ -9578,7 +8925,7 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Peforms data validation (not paint validation!) on a single control.
         ///
         ///     Returns whether validation failed:
@@ -9588,8 +8935,7 @@ example usage
         ///     NOTE: This is the lowest possible level of validation. It does not account
         ///     for the context in which the validation is occuring, eg. change of focus
         ///     between controls in a container. Stuff like that is handled by the caller.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         internal bool PerformControlValidation(bool bulkValidation) {
 
             // Skip validation for controls that don't support it
@@ -9621,13 +8967,12 @@ example usage
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Validates all the child controls in a container control. Exactly which controls are
         ///     validated and which controls are skipped is determined by <paramref name="validationConstraints"/>.
         ///     Return value indicates whether validation failed for any of the controls validated.
         ///     Calling function is responsible for checking the correctness of the validationConstraints argument.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         internal bool PerformContainerValidation(ValidationConstraints validationConstraints) {
             bool failed = false;
 
@@ -9658,48 +9003,27 @@ example usage
             return failed;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.PointToClient"]/*' />
-        /// <devdoc>
-        ///     Computes the location of the screen point p in client coords.
-        /// </devdoc>
-        public Point PointToClient(Point p) {
-            // Reviewed: The following demand has always been commented out since v1.0. In Whidbey, we have
-            // re-reviewed this method to see if it needs protection, but haven't found any threats, so are
-            // going to keep it this way.
-            //
-            // Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ScreenLocationOfThings Demanded");
-            // IntSecurity.ScreenLocationOfThings.Demand();
-            return PointToClientInternal(p);
-        }
-        internal Point PointToClientInternal(Point p) {            
-            // Win9x reports incorrect values if you go outside the 16-bit range.
-            // We're not going to do anything about it, though -- it's esoteric, it clutters up the code,
-            // and potentially causes problems on systems that do support 32-bit coordinates.
-
-            NativeMethods.POINT point = new NativeMethods.POINT(p.X, p.Y);
+        /// <summary>
+        /// Computes the location of the screen point p in client coords.
+        /// </summary>
+        public Point PointToClient(Point p)
+        {
+            var point = new NativeMethods.POINT(p.X, p.Y);
             UnsafeNativeMethods.MapWindowPoints(NativeMethods.NullHandleRef, new HandleRef(this, Handle), point, 1);
             return new Point(point.x, point.y);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.PointToScreen"]/*' />
-        /// <devdoc>
-        ///     Computes the location of the client point p in screen coords.
-        /// </devdoc>
-        public Point PointToScreen(Point p) {
-            // Reviewed: The following demand has always been commented out since v1.0. In Whidbey, we have
-            // re-reviewed this method to see if it needs protection, but haven't found any threats, so are
-            // going to keep it this way. .
-            //
-            // Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ScreenLocationOfThings Demanded");
-            // IntSecurity.ScreenLocationOfThings.Demand();
-
+        /// <summary>
+        /// Computes the location of the client point p in screen coords.
+        /// </summary>
+        public Point PointToScreen(Point p)
+        {
             NativeMethods.POINT point = new NativeMethods.POINT(p.X, p.Y);
             UnsafeNativeMethods.MapWindowPoints(new HandleRef(this, Handle), NativeMethods.NullHandleRef, point, 1);
             return new Point(point.x, point.y);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.PreProcessMessage"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         ///     This method is called by the application's message loop to pre-process
         ///     input messages before they are dispatched. Possible values for the
@@ -9736,13 +9060,13 @@ example usage
         ///     processDialogChar(), or processDialogKey()) instead of overriding
         ///     preProcessMessage().
         ///     </para>
-        /// </devdoc>
+        /// </summary>
         public virtual bool PreProcessMessage(ref Message msg) {
          //   Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.PreProcessMessage " + msg.ToString());
 
             bool ret;
 
-            if (msg.Msg == NativeMethods.WM_KEYDOWN || msg.Msg == NativeMethods.WM_SYSKEYDOWN) {
+            if (msg.Msg == Interop.WindowMessages.WM_KEYDOWN || msg.Msg == Interop.WindowMessages.WM_SYSKEYDOWN) {
                 if (!GetState2(STATE2_UICUES)) {
                     ProcessUICues(ref msg);
                 }
@@ -9759,8 +9083,8 @@ example usage
                     ret = ProcessDialogKey(keyData);
                 }
             }
-            else if (msg.Msg == NativeMethods.WM_CHAR || msg.Msg == NativeMethods.WM_SYSCHAR) {
-                if (msg.Msg == NativeMethods.WM_CHAR && IsInputChar((char)msg.WParam)) {
+            else if (msg.Msg == Interop.WindowMessages.WM_CHAR || msg.Msg == Interop.WindowMessages.WM_SYSCHAR) {
+                if (msg.Msg == Interop.WindowMessages.WM_CHAR && IsInputChar((char)msg.WParam)) {
                     SetState2(STATE2_INPUTCHAR, true);
                     ret = false;
                 }
@@ -9785,7 +9109,7 @@ example usage
             return PreProcessControlMessageInternal(null, ref msg);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///  This method is similar to PreProcessMessage, but instead of indicating
         ///  that the message was either processed or it wasn't, it has three return
         ///  values:
@@ -9799,11 +9123,11 @@ example usage
         ///
         ///         MessageNotNeeded - PreProcessMessage() returns false, and IsInputKey/Char
         ///                            return false.
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         internal static PreProcessControlState PreProcessControlMessageInternal(Control target, ref Message msg) {
             if (target == null) {
-                target = Control.FromChildHandleInternal(msg.HWnd);
+                target = Control.FromChildHandle(msg.HWnd);
             }
 
             if (target == null) {
@@ -9823,7 +9147,7 @@ example usage
                 Keys keyData = (Keys)(unchecked((int)(long)msg.WParam) | (int)ModifierKeys);
 
                 // Allow control to preview key down message.
-                if (msg.Msg == NativeMethods.WM_KEYDOWN || msg.Msg == NativeMethods.WM_SYSKEYDOWN) {
+                if (msg.Msg == Interop.WindowMessages.WM_KEYDOWN || msg.Msg == Interop.WindowMessages.WM_SYSKEYDOWN) {
                     target.ProcessUICues(ref msg);                    
 
                     PreviewKeyDownEventArgs args = new PreviewKeyDownEventArgs(keyData);
@@ -9839,7 +9163,7 @@ example usage
                 PreProcessControlState state = PreProcessControlState.MessageNotNeeded;
                 
                 if (!target.PreProcessMessage(ref msg)) {
-                    if (msg.Msg == NativeMethods.WM_KEYDOWN || msg.Msg == NativeMethods.WM_SYSKEYDOWN) {
+                    if (msg.Msg == Interop.WindowMessages.WM_KEYDOWN || msg.Msg == Interop.WindowMessages.WM_SYSKEYDOWN) {
 
                         // check if IsInputKey has already procssed this message
                         // or if it is safe to call - we only want it to be called once.
@@ -9848,7 +9172,7 @@ example usage
                             state = PreProcessControlState.MessageNeeded;
                         }
                     }
-                    else if (msg.Msg == NativeMethods.WM_CHAR || msg.Msg == NativeMethods.WM_SYSCHAR) {
+                    else if (msg.Msg == Interop.WindowMessages.WM_CHAR || msg.Msg == Interop.WindowMessages.WM_SYSCHAR) {
 
                         // check if IsInputChar has already procssed this message
                         // or if it is safe to call - we only want it to be called once.
@@ -9869,8 +9193,7 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ProcessCmdKey"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         ///     Processes a command key. This method is called during message
         ///     pre-processing to handle command keys. Command keys are keys that always
@@ -9894,7 +9217,7 @@ example usage
         ///     <para>
         /// Controls will seldom, if ever, need to override this method.
         ///     </para>
-        /// </devdoc>
+        /// </summary>
         protected virtual bool ProcessCmdKey(ref Message msg, Keys keyData) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessCmdKey " + msg.ToString());
             ContextMenu contextMenu = (ContextMenu)Properties.GetObject(PropContextMenu);
@@ -9976,7 +9299,7 @@ example usage
         private void PrintToMetaFile_SendPrintMessage(HandleRef hDC, IntPtr lParam) {
             if(GetStyle(ControlStyles.UserPaint)) {
                 // We let user paint controls paint directly into the metafile
-                SendMessage(NativeMethods.WM_PRINT, hDC.Handle, lParam);
+                SendMessage(Interop.WindowMessages.WM_PRINT, hDC.Handle, lParam);
             }
             else {
                 // If a system control has no children in the Controls collection we
@@ -9991,13 +9314,12 @@ example usage
                 // which is then copied into the metafile.  (Old GDI line drawing
                 // is 1px thin, which causes borders to disappear, etc.)
                 using (MetafileDCWrapper dcWrapper = new MetafileDCWrapper(hDC, this.Size)) {
-                    SendMessage(NativeMethods.WM_PRINT, dcWrapper.HDC, lParam);
+                    SendMessage(Interop.WindowMessages.WM_PRINT, dcWrapper.HDC, lParam);
                 }
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ProcessDialogChar"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         ///     Processes a dialog character. This method is called during message
         ///     pre-processing to handle dialog characters, such as control mnemonics.
@@ -10019,14 +9341,13 @@ example usage
         ///     <para>
         /// Controls will seldom, if ever, need to override this method.
         ///     </para>
-        /// </devdoc>
+        /// </summary>
         protected virtual bool ProcessDialogChar(char charCode) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessDialogChar [" + charCode.ToString() + "]");
             return parent == null? false: parent.ProcessDialogChar(charCode);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ProcessDialogKey"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         ///     Processes a dialog key. This method is called during message
         ///     pre-processing to handle dialog characters, such as TAB, RETURN, ESCAPE,
@@ -10048,14 +9369,13 @@ example usage
         ///     <para>
         /// Controls will seldom, if ever, need to override this method.
         ///     </para>
-        /// </devdoc>
+        /// </summary>
         protected virtual bool ProcessDialogKey(Keys keyData) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessDialogKey " + keyData.ToString());
             return parent == null? false: parent.ProcessDialogKey(keyData);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ProcessKeyEventArgs"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         ///     Processes a key message. This method is called when a control receives a
         ///     keyboard message. The method is responsible for generating the appropriate
@@ -10073,14 +9393,14 @@ example usage
         ///     <para>
         /// Controls will seldom, if ever, need to override this method.
         ///     </para>
-        /// </devdoc>
+        /// </summary>
         protected virtual bool ProcessKeyEventArgs(ref Message m) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessKeyEventArgs " + m.ToString());
             KeyEventArgs ke = null;
             KeyPressEventArgs kpe = null;
             IntPtr newWParam = IntPtr.Zero;
 
-            if (m.Msg == NativeMethods.WM_CHAR || m.Msg == NativeMethods.WM_SYSCHAR) {
+            if (m.Msg == Interop.WindowMessages.WM_CHAR || m.Msg == Interop.WindowMessages.WM_SYSCHAR) {
                 int charsToIgnore = this.ImeWmCharsToIgnore;
 
                 if (charsToIgnore > 0) {
@@ -10096,7 +9416,7 @@ example usage
                     newWParam = (IntPtr) kpe.KeyChar;
                 }
             }
-            else if (m.Msg == NativeMethods.WM_IME_CHAR) {
+            else if (m.Msg == Interop.WindowMessages.WM_IME_CHAR) {
                 int charsToIgnore = this.ImeWmCharsToIgnore;
 
                 charsToIgnore += (3 - sizeof(char));
@@ -10117,7 +9437,7 @@ example usage
             }
             else {
                 ke = new KeyEventArgs((Keys)(unchecked((int)(long)m.WParam)) | ModifierKeys);
-                if (m.Msg == NativeMethods.WM_KEYDOWN || m.Msg == NativeMethods.WM_SYSKEYDOWN) {
+                if (m.Msg == Interop.WindowMessages.WM_KEYDOWN || m.Msg == Interop.WindowMessages.WM_SYSKEYDOWN) {
                     OnKeyDown(ke);
                 }
                 else {
@@ -10133,16 +9453,15 @@ example usage
             else {
                 Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "    processkeyeventarg returning: " + ke.Handled);
                 if (ke.SuppressKeyPress) {
-                    RemovePendingMessages(NativeMethods.WM_CHAR,     NativeMethods.WM_CHAR);
-                    RemovePendingMessages(NativeMethods.WM_SYSCHAR,  NativeMethods.WM_SYSCHAR);
-                    RemovePendingMessages(NativeMethods.WM_IME_CHAR, NativeMethods.WM_IME_CHAR);
+                    RemovePendingMessages(Interop.WindowMessages.WM_CHAR,     Interop.WindowMessages.WM_CHAR);
+                    RemovePendingMessages(Interop.WindowMessages.WM_SYSCHAR,  Interop.WindowMessages.WM_SYSCHAR);
+                    RemovePendingMessages(Interop.WindowMessages.WM_IME_CHAR, Interop.WindowMessages.WM_IME_CHAR);
                 }
                 return ke.Handled;
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ProcessKeyMessage"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Processes a key message. This method is called when a control receives a
         ///     keyboard message. The method first checks if the control has a parent,
         ///     and if so calls the parent's processKeyPreview() method. If the parent's
@@ -10156,15 +9475,14 @@ example usage
         ///     by the control, the result of "base.processKeyMessage()" should be
         ///     returned.
         /// Controls will seldom, if ever, need to override this method.
-        /// </devdoc>
+        /// </summary>
         protected internal virtual bool ProcessKeyMessage(ref Message m) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessKeyMessage " + m.ToString());
             if (parent != null && parent.ProcessKeyPreview(ref m)) return true;
             return ProcessKeyEventArgs(ref m);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ProcessKeyPreview"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         ///     Previews a keyboard message. This method is called by a child control
         ///     when the child control receives a keyboard message. The child control
@@ -10187,14 +9505,13 @@ example usage
         ///     by the control, the result of "base.ProcessKeyPreview(...)" should be
         ///     returned.
         ///     </para>
-        /// </devdoc>
+        /// </summary>
         protected virtual bool ProcessKeyPreview(ref Message m) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessKeyPreview " + m.ToString());
             return parent == null? false: parent.ProcessKeyPreview(ref m);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ProcessMnemonic"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         ///     Processes a mnemonic character. This method is called to give a control
         ///     the opportunity to process a mnemonic character. The method should check
@@ -10217,7 +9534,7 @@ example usage
         /// This default implementation of processMnemonic() simply returns false
         ///     to indicate that the control has no mnemonic.
         ///     </para>
-        /// </devdoc>
+        /// </summary>
         protected internal virtual bool ProcessMnemonic(char charCode) {
 #if DEBUG
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessMnemonic [0x" + ((int)charCode).ToString("X", CultureInfo.InvariantCulture) + "]");
@@ -10225,9 +9542,9 @@ example usage
             return false;
         }
 
-         /// <devdoc>
+         /// <summary>
          ///     Preprocess keys which affect focus indicators and keyboard cues.
-         /// </devdoc>
+         /// </summary>
          internal void ProcessUICues(ref Message msg) {
              Keys keyCode = (Keys)((int)msg.WParam) & Keys.KeyCode;
              
@@ -10236,13 +9553,13 @@ example usage
              }
              
              Control topMostParent = null;
-             int current = unchecked( (int) (long)SendMessage(NativeMethods.WM_QUERYUISTATE, 0, 0));
+             int current = unchecked( (int) (long)SendMessage(Interop.WindowMessages.WM_QUERYUISTATE, 0, 0));
 
              // dont trust when a control says the accelerators are showing.
              // make sure the topmost parent agrees with this as we could be in a mismatched state.
              if (current == 0 /*accelerator and focus cues are showing*/) {
                  topMostParent = this.TopMostParent;
-                 current = (int)topMostParent.SendMessage(NativeMethods.WM_QUERYUISTATE, 0, 0);
+                 current = (int)topMostParent.SendMessage(Interop.WindowMessages.WM_QUERYUISTATE, 0, 0);
              }
              int toClear = 0;
 
@@ -10284,28 +9601,26 @@ example usage
                  //           (we're in charge here, we've got to change the state of the root window)
                  UnsafeNativeMethods.SendMessage(
                      new HandleRef(topMostParent, topMostParent.Handle),
-                     UnsafeNativeMethods.GetParent(new HandleRef(null, topMostParent.Handle)) == IntPtr.Zero ? NativeMethods.WM_CHANGEUISTATE : NativeMethods.WM_UPDATEUISTATE,
+                     UnsafeNativeMethods.GetParent(new HandleRef(null, topMostParent.Handle)) == IntPtr.Zero ? Interop.WindowMessages.WM_CHANGEUISTATE : Interop.WindowMessages.WM_UPDATEUISTATE,
                      (IntPtr)(NativeMethods.UIS_CLEAR | (toClear << 16)),
                      IntPtr.Zero);
              }
          }
       
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RaiseDragEvent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Raises the event associated with key with the event data of
         ///     e and a sender of this control.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseDragEvent(object key, DragEventArgs e) {
             DragEventHandler handler = (DragEventHandler)Events[key];
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RaisePaintEvent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Raises the event associated with key with the event data of
         ///     e and a sender of this control.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaisePaintEvent(object key, PaintEventArgs e) {
             PaintEventHandler handler = (PaintEventHandler)Events[EventPaint];
@@ -10324,16 +9639,14 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResetBackColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Resets the back color to be based on the parent's back color.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual void ResetBackColor() {
             BackColor = Color.Empty;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResetCursor"]/*' />
         [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual void ResetCursor() {
             Cursor = null;
@@ -10343,19 +9656,17 @@ example usage
             Enabled = true;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResetFont"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Resets the font to be based on the parent's font.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual void ResetFont() {
             Font = null;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResetForeColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Resets the fore color to be based on the parent's fore color.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual void ResetForeColor() {
             ForeColor = Color.Empty;
@@ -10381,20 +9692,18 @@ example usage
             Size = DefaultSize;
        }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResetRightToLeft"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Resets the RightToLeft to be the default.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual void ResetRightToLeft() {
             RightToLeft = RightToLeft.Inherit;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RecreateHandle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Forces the recreation of the handle for this control. Inheriting controls
         ///     must call base.RecreateHandle.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RecreateHandle() {
             RecreateHandleCore();
@@ -10481,7 +9790,7 @@ example usage
                     }
                     finally {
                         if (parentHandle.Handle != IntPtr.Zero                               // the parent was not null
-                            && (Control.FromHandleInternal(parentHandle.Handle) == null || this.parent == null) // but wasnt a windows forms window
+                            && (Control.FromHandle(parentHandle.Handle) == null || this.parent == null) // but wasnt a windows forms window
                             && UnsafeNativeMethods.IsWindow(parentHandle)) {                 // and still is a window
                             // correctly parent back up to where we were before.
                             // if we were parented to a proper windows forms control, CreateControl would have properly parented
@@ -10492,68 +9801,52 @@ example usage
                     
                     // Restore control focus
                     if (focused) {
-                        FocusInternal();
+                        Focus();
                     }
                 }
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RectangleToClient"]/*' />
-        /// <devdoc>
-        ///     Computes the location of the screen rectangle r in client coords.
-        /// </devdoc>
-        public Rectangle RectangleToClient(Rectangle r) {
-            // Reviewed: The following demand has always been commented out since v1.0. In Whidbey, we have
-            // re-reviewed this method to see if it needs protection, but haven't found any threats, so are
-            // going to keep it this way.
-            //
-            // Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ScreenLocationOfThings Demanded");
-            // IntSecurity.ScreenLocationOfThings.Demand();
-
+        /// <summary>
+        /// Computes the location of the screen rectangle r in client coords.
+        /// </summary>
+        public Rectangle RectangleToClient(Rectangle r)
+        {
             NativeMethods.RECT rect = NativeMethods.RECT.FromXYWH(r.X, r.Y, r.Width, r.Height);
             UnsafeNativeMethods.MapWindowPoints(NativeMethods.NullHandleRef, new HandleRef(this, Handle), ref rect, 2);
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RectangleToScreen"]/*' />
-        /// <devdoc>
-        ///     Computes the location of the client rectangle r in screen coords.
-        /// </devdoc>
-        public Rectangle RectangleToScreen(Rectangle r) {
-            // Reviewed: The following demand has always been commented out since v1.0. In Whidbey, we have
-            // re-reviewed this method to see if it needs protection, but haven't found any threats, so are
-            // going to keep it this way.
-            //
-            // Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ScreenLocationOfThings Demanded");
-            // IntSecurity.ScreenLocationOfThings.Demand();
-
+        /// <summary>
+        /// Computes the location of the client rectangle r in screen coords.
+        /// </summary>
+        public Rectangle RectangleToScreen(Rectangle r)
+        {
             NativeMethods.RECT rect = NativeMethods.RECT.FromXYWH(r.X, r.Y, r.Width, r.Height);
             UnsafeNativeMethods.MapWindowPoints(new HandleRef(this, Handle), NativeMethods.NullHandleRef, ref rect, 2);
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ReflectMessage"]/*' />
-        /// <devdoc>
-        ///     Reflects the specified message to the control that is bound to hWnd.
-        /// </devdoc>
+        /// <summary>
+        /// Reflects the specified message to the control that is bound to hWnd.
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected static bool ReflectMessage(IntPtr hWnd, ref Message m) {
-            return ReflectMessageInternal(hWnd, ref m);
-        }
-        
-        // SECURITY WARNING: This method bypasses a security demand. Use with caution!
-        internal static bool ReflectMessageInternal(IntPtr hWnd, ref Message m) {
-            Control control = Control.FromHandleInternal(hWnd);
-            if (control == null) return false;
-            m.Result = control.SendMessage(NativeMethods.WM_REFLECT + m.Msg, m.WParam, m.LParam);
+        protected static bool ReflectMessage(IntPtr hWnd, ref Message m)
+        {
+            Control control = Control.FromHandle(hWnd);
+            if (control == null)
+            {
+                return false;
+            }
+
+            m.Result = control.SendMessage(Interop.WindowMessages.WM_REFLECT + m.Msg, m.WParam, m.LParam);
             return true;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Refresh"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Forces the control to invalidate and immediately
         ///     repaint itself and any children.
-        /// </devdoc>
+        /// </summary>
         public virtual void Refresh() {
             Invalidate(true);
             Update();
@@ -10571,11 +9864,9 @@ example usage
             UnsafeNativeMethods.UiaReturnRawElementProvider(new HandleRef(this, handle), new IntPtr(0), new IntPtr(0), null);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResetMouseEventArgs"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Resets the mouse leave listeners.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void ResetMouseEventArgs() {
             if (GetState(STATE_TRACKINGMOUSEEVENT)) {
@@ -10584,10 +9875,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResetText"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Resets the text to it's default value.
-        /// </devdoc>
+        /// </summary>
         public virtual void ResetText() {
             Text = string.Empty;
         }
@@ -10596,20 +9886,18 @@ example usage
             Visible = true;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResumeLayout"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Resumes normal layout logic. This will force a layout immediately
         ///     if there are any pending layout requests.
-        /// </devdoc>
+        /// </summary>
         public void ResumeLayout() {
             ResumeLayout(true);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResumeLayout1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Resumes normal layout logic. If performLayout is set to true then
         ///     this will force a layout immediately if there are any pending layout requests.
-        /// </devdoc>
+        /// </summary>
         public void ResumeLayout(bool performLayout) {
 #if DEBUG        
             if (CompModSwitches.LayoutSuspendResume.TraceInfo) {
@@ -10671,10 +9959,9 @@ example usage
 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Used to actually register the control as a drop target.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         internal void SetAcceptDrops(bool accept) {
             if (accept != GetState(STATE_DROPTARGET) && IsHandleCreated) {
                 try {
@@ -10708,20 +9995,18 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Scale"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Scales to entire control and any child controls.
-        /// </devdoc>
+        /// </summary>
         [Obsolete("This method has been deprecated. Use the Scale(SizeF ratio) method instead. http://go.microsoft.com/fwlink/?linkid=14202")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void Scale(float ratio) {
             ScaleCore(ratio, ratio);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Scale1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Scales the entire control and any child controls.
-        /// </devdoc>
+        /// </summary>
         [Obsolete("This method has been deprecated. Use the Scale(SizeF ratio) method instead. http://go.microsoft.com/fwlink/?linkid=14202")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void Scale(float dx, float dy) {
@@ -10740,10 +10025,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Scale2"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Scales a control and its children given a scaling factor.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public void Scale(SizeF factor) {
             // manually call ScaleControl recursively instead of the internal scale method
@@ -10769,8 +10053,7 @@ example usage
 
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Scale3"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Scales a control and its children given a pair of scaling factors.
         ///     IncludedFactor will be applied to the dimensions of controls based on
         ///     their RequiredScaling property.  For example, if a control's
@@ -10785,7 +10068,7 @@ example usage
         ///
         ///     The requestingControl property indicates which control has requested
         ///     the scaling function.
-        /// </devdoc>
+        /// </summary>
         internal virtual void Scale(SizeF includedFactor, SizeF excludedFactor, Control requestingControl) {
             // When we scale, we are establishing new baselines for the
             // positions of all controls.  Therefore, we should resume(false).
@@ -10796,8 +10079,7 @@ example usage
             LayoutTransaction.DoLayout(this, this, PropertyNames.Bounds);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ScaleChildControls"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Scales the children of this control.  The default implementation recursively
         ///     walks children and calls ScaleControl on each one.
         ///     IncludedFactor will be applied to the dimensions of controls based on
@@ -10817,7 +10099,7 @@ example usage
         ///     The updateWindowFontIfNeeded parameter indicates if we need to update Window
         ///     font for controls that need it, i.e. controls using default or inherited font,
         ///     that are also not user-painted.
-        /// </devdoc>
+        /// </summary>
         internal void ScaleChildControls(SizeF includedFactor, SizeF excludedFactor, Control requestingControl, bool updateWindowFontIfNeeded = false) {
 
             if (ScaleChildren) {
@@ -10851,7 +10133,7 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Scales the children of this control.  The default implementation walks the controls
         ///     collection for the control and calls Scale on each control.
         ///     IncludedFactor will be applied to the dimensions of controls based on
@@ -10867,7 +10149,7 @@ example usage
         ///
         ///     The requestingControl property indicates which control has requested
         ///     the scaling function.
-        /// </devdoc>
+        /// </summary>
         internal void ScaleControl(SizeF includedFactor, SizeF excludedFactor, Control requestingControl) {
             try {
                 IsCurrentlyBeingScaled = true;
@@ -10906,8 +10188,7 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ScaleControl"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Scales an individual control's location, size, padding and margin.
         ///     If the control is top level, this will not scale the control's location.
         ///     This does not scale children or the size of auto sized controls.  You can
@@ -10915,7 +10196,7 @@ example usage
         ///
         ///     After the control is scaled the RequiredScaling property is set to
         ///     BoundsSpecified.None.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void ScaleControl(SizeF factor, BoundsSpecified specified) {
 
@@ -11003,10 +10284,9 @@ example usage
             MinimumSize = minSize;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ScaleCore"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Performs the work of scaling the entire control and any child controls.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected virtual void ScaleCore(float dx, float dy) {
             Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, GetType().Name + "::ScaleCore(" + dx + ", " + dy + ")");
@@ -11050,9 +10330,9 @@ example usage
             }
         }        
 
-        /// <devdoc>
+        /// <summary>
         ///     Scales a given size with the provided values.
-        /// </devdoc>
+        /// </summary>
         internal Size ScaleSize(Size startSize, float x, float y) {
             Size size = startSize;
             if (!GetStyle(ControlStyles.FixedWidth)) {
@@ -11064,28 +10344,25 @@ example usage
             return size;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Select"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Activates this control.
-        /// </devdoc>
+        /// </summary>
         public void Select() {
             Select(false, false);
         }
 
         // used by Form
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Select1"]/*' />
         protected virtual void Select(bool directed, bool forward) {
-            IContainerControl c = GetContainerControlInternal();
+            IContainerControl c = GetContainerControl();
 
             if (c != null) {
                 c.ActiveControl = this;
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SelectNextControl"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Selects the next control following ctl.
-        /// </devdoc>
+        /// </summary>
         public bool SelectNextControl(Control ctl, bool forward, bool tabStopOnly, bool nested, bool wrap) {
             Control nextSelectableControl = this.GetNextSelectableControl(ctl, forward, tabStopOnly, nested, wrap);
             if (nextSelectableControl != null) {
@@ -11116,7 +10393,7 @@ example usage
                         && (!tabStopOnly || ctl.TabStop)
                         && (nested || ctl.parent == this)) {
 
-                        if (AccessibilityImprovements.Level3 && ctl.parent is ToolStrip) {
+                        if (ctl.parent is ToolStrip) {
                             continue;
                         }
                         return ctl;
@@ -11126,42 +10403,35 @@ example usage
             return null;
         }
 
-        /// <devdoc>
-        ///     Unsafe internal version of SelectNextControl - Use with caution!
-        /// </devdoc>
-        internal bool SelectNextControlInternal(Control ctl, bool forward, bool tabStopOnly, bool nested, bool wrap) {
-            return SelectNextControl(ctl, forward, tabStopOnly, nested, wrap);
-        }
-
-        /// <devdoc>
+        /// <summary>
         ///     This is called recursively when visibility is changed for a control, this
         ///     forces focus to be moved to a visible control.
-        /// </devdoc>
+        /// </summary>
         private void SelectNextIfFocused() {
             //           We want to move focus away from hidden controls, so this
             //           function was added.
             //
             if (ContainsFocus && ParentInternal != null) {
-                IContainerControl c = ParentInternal.GetContainerControlInternal();
+                IContainerControl c = ParentInternal.GetContainerControl();
 
                 if (c != null) {
-                    ((Control)c).SelectNextControlInternal(this, true, true, true, true);
+                    ((Control)c).SelectNextControl(this, true, true, true, true);
                 }
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sends a Win32 message to this control.  If the control does not yet
         ///     have a handle, it will be created.
-        /// </devdoc>
+        /// </summary>
         internal IntPtr SendMessage(int msg, int wparam, int lparam) {
             return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, wparam, lparam);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sends a Win32 message to this control.  If the control does not yet
         ///     have a handle, it will be created.
-        /// </devdoc>
+        /// </summary>
         internal IntPtr SendMessage(int msg, ref int wparam, ref int lparam) {
             Debug.Assert(IsHandleCreated, "Performance alert!  Calling Control::SendMessage and forcing handle creation.  Re-work control so handle creation is not required to set properties.  If there is no work around, wrap the call in an IsHandleCreated check.");
             return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, ref wparam, ref lparam);
@@ -11182,36 +10452,35 @@ example usage
             return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, wparam, (IntPtr)lparam);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sends a Win32 message to this control.  If the control does not yet
         ///     have a handle, it will be created.
-        /// </devdoc>
+        /// </summary>
         internal IntPtr SendMessage(int msg, int wparam, ref NativeMethods.RECT lparam) {
             return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, wparam, ref lparam);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sends a Win32 message to this control.  If the control does not yet
         ///     have a handle, it will be created.
-        /// </devdoc>
+        /// </summary>
         internal IntPtr SendMessage(int msg, bool wparam, int lparam) {
             Debug.Assert(IsHandleCreated, "Performance alert!  Calling Control::SendMessage and forcing handle creation.  Re-work control so handle creation is not required to set properties.  If there is no work around, wrap the call in an IsHandleCreated check.");
             return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, wparam, lparam);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sends a Win32 message to this control.  If the control does not yet
         ///     have a handle, it will be created.
-        /// </devdoc>
+        /// </summary>
         internal IntPtr SendMessage(int msg, int wparam, string lparam) {
             Debug.Assert(IsHandleCreated, "Performance alert!  Calling Control::SendMessage and forcing handle creation.  Re-work control so handle creation is not required to set properties.  If there is no work around, wrap the call in an IsHandleCreated check.");
             return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, wparam, lparam);
         }
         
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SendToBack"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     sends this control to the back of the z-order
-        /// </devdoc>
+        /// </summary>
         public void SendToBack() {
             if (parent != null) {
                 parent.Controls.SetChildIndex(this, -1);
@@ -11222,10 +10491,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SetBounds"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Sets the bounds of the control.
-        /// </devdoc>
+        /// </summary>
         public void SetBounds(int x, int y, int width, int height) {
             if (this.x != x || this.y != y || this.width != width ||
                 this.height != height) {
@@ -11241,10 +10509,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SetBounds1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Sets the bounds of the control.
-        /// </devdoc>
+        /// </summary>
         public void SetBounds(int x, int y, int width, int height, BoundsSpecified specified) {
             if ((specified & BoundsSpecified.X) == BoundsSpecified.None) x = this.x;
             if ((specified & BoundsSpecified.Y) == BoundsSpecified.None) y = this.y;
@@ -11265,13 +10532,12 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SetBoundsCore"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Performs the work of setting the bounds of this control. Inheriting
         ///     classes can overide this function to add size restrictions. Inheriting
         ///     classes must call base.setBoundsCore to actually cause the bounds
         ///     of the control to change.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
 #if DEBUG        
@@ -11357,10 +10623,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SetClientSizeCore"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Performs the work of setting the size of the client area of the control.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void SetClientSizeCore(int x, int y) {
             Size = SizeFromClientSize(x, y);
@@ -11369,7 +10634,6 @@ example usage
             OnClientSizeChanged(EventArgs.Empty);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SizeFromClientSize"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual Size SizeFromClientSize(Size clientSize) {
             return SizeFromClientSize(clientSize.Width, clientSize.Height);
@@ -11452,11 +10716,10 @@ example usage
             state2 = value ? state2 | flag : state2 & ~flag;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SetStyle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Sets the current value of the specified bit in the control's style.
         ///     NOTE: This is control style, not the Win32 style of the hWnd.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void SetStyle(ControlStyles flag, bool value) {
             // WARNING: if we ever add argument checking to "flag", we will need
@@ -11479,7 +10742,6 @@ example usage
             return result;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SetTopLevel"]/*' />
         protected void SetTopLevel(bool value) {
             if (value && IsActiveX) {
                 throw new InvalidOperationException(SR.TopLevelNotAllowedIfActiveX);
@@ -11489,9 +10751,8 @@ example usage
             }
         }
 
-        // SECURITY WARNING: This method bypasses a security demand. Use with caution!
-        internal void SetTopLevelInternal(bool value) {
-
+        private protected void SetTopLevelInternal(bool value)
+        {
             if (GetTopLevel() != value) {
                 if (parent != null) {
                     throw new ArgumentException(SR.TopLevelParentedControl, "value");
@@ -11511,10 +10772,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SetVisibleCore"]/*' />
         protected virtual void SetVisibleCore(bool value) {
             try {
-                System.Internal.HandleCollector.SuspendCollect();
+                Interop.HandleCollector.SuspendCollect();
 
                 if (GetVisibleCore() != value) {
                     if (!value) {
@@ -11603,28 +10863,24 @@ example usage
                 }
             }
             finally {
-                System.Internal.HandleCollector.ResumeCollect();
+                Interop.HandleCollector.ResumeCollect();
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="ContainerControl.GetAutoValidateForControl"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Determine effective auto-validation setting for a given control, based on the AutoValidate property
         ///     of its containing control. Defaults to 'EnablePreventFocusChange' if there is no containing control
         ///     (eg. because this control is a top-level container).
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         internal static AutoValidate GetAutoValidateForControl(Control control) {
             ContainerControl parent = control.ParentContainerControl;
             return (parent != null) ? parent.AutoValidate : AutoValidate.EnablePreventFocusChange;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ShouldAutoValidate"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Is auto-validation currently in effect for this control?
         ///     Depends on the AutoValidate property of the containing control.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal bool ShouldAutoValidate {
             get {
@@ -11638,20 +10894,18 @@ example usage
             return GetStyle(ControlStyles.ContainerControl);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ShouldSerializeBackColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns true if the backColor should be persisted in code gen.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeBackColor() {
             Color backColor = Properties.GetColor(PropBackColor);
             return !backColor.IsEmpty;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ShouldSerializeCursor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns true if the cursor should be persisted in code gen.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeCursor() {
             bool found;
@@ -11659,28 +10913,26 @@ example usage
             return (found && cursor != null);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns true if the enabled property should be persisted in code gen.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         private bool ShouldSerializeEnabled() {
             return (!GetState(STATE_ENABLED));
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ShouldSerializeForeColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns true if the foreColor should be persisted in code gen.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeForeColor() {
             Color foreColor = Properties.GetColor(PropForeColor);
             return !foreColor.IsEmpty;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ShouldSerializeFont"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns true if the font should be persisted in code gen.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeFont() {
             bool found;
@@ -11688,10 +10940,9 @@ example usage
             return (found && font != null);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ShouldSerializeRightToLeft"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns true if the RightToLeft should be persisted in code gen.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeRightToLeft() {
             bool found;
@@ -11699,9 +10950,9 @@ example usage
             return (found && rtl != (int)RightToLeft.Inherit);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns true if the visible property should be persisted in code gen.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         private bool ShouldSerializeVisible() {
             return (!GetState(STATE_VISIBLE));
@@ -11709,25 +10960,21 @@ example usage
 
         // Helper function - translates text alignment for Rtl controls
         // Read TextAlign as Left == Near, Right == Far
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RtlTranslateAlignment"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected HorizontalAlignment RtlTranslateAlignment(HorizontalAlignment align) {
             return RtlTranslateHorizontal(align);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RtlTranslateAlignment1"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected LeftRightAlignment RtlTranslateAlignment(LeftRightAlignment align) {
             return RtlTranslateLeftRight(align);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RtlTranslateAlignment2"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected ContentAlignment RtlTranslateAlignment(ContentAlignment align) {
             return RtlTranslateContent(align);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RtlTranslateHorizontal"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected HorizontalAlignment RtlTranslateHorizontal(HorizontalAlignment align) {
 
@@ -11743,7 +10990,6 @@ example usage
             return align;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RtlTranslateLeftRight"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected LeftRightAlignment RtlTranslateLeftRight(LeftRightAlignment align) {
 
@@ -11759,7 +11005,6 @@ example usage
             return align;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RtlTranslateContent"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected internal ContentAlignment RtlTranslateContent(ContentAlignment align) {
             if (RightToLeft.Yes == RightToLeft) {
@@ -11794,7 +11039,7 @@ example usage
         }
 
         private void SetWindowFont(){
-            SendMessage(NativeMethods.WM_SETFONT, FontHandle, 0 /*redraw = false*/);
+            SendMessage(Interop.WindowMessages.WM_SETFONT, FontHandle, 0 /*redraw = false*/);
         }
 
         private void SetWindowStyle(int flag, bool value) {
@@ -11802,10 +11047,9 @@ example usage
             UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)(value? styleFlags | flag: styleFlags & ~flag)));
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Show"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Makes the control display by setting the visible property to true
-        /// </devdoc>
+        /// </summary>
         public void Show() {
             Visible = true;
         }
@@ -11830,10 +11074,9 @@ example usage
             return !Padding.Equals(DefaultPadding);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ShouldSerializeSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.Control.Size'/> property needs to be persisted.</para>
-        /// </devdoc>        
+        /// </summary>        
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeSize() {
             // In Whidbey the ControlDesigner class will always serialize size as it replaces the Size
@@ -11842,19 +11085,17 @@ example usage
             return width != s.Width || height != s.Height;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ShouldSerializeText"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.Control.Text'/> property needs to be persisted.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeText() {
             return Text.Length != 0;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SuspendLayout"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Suspends the layout logic for the control.
-        /// </devdoc>
+        /// </summary>
         public void SuspendLayout() {
             layoutSuspendCount++;
             if (layoutSuspendCount == 1) {
@@ -11869,27 +11110,24 @@ example usage
 #endif            
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Stops listening for the mouse leave event.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void UnhookMouseEvent() {
             SetState(STATE_TRACKINGMOUSEEVENT, false);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Update"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Forces the control to paint any currently invalid areas.
-        /// </devdoc>
+        /// </summary>
         public void Update() {
             SafeNativeMethods.UpdateWindow(new HandleRef(window, InternalHandle));
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UpdateBounds"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Updates the bounds of the control based on the handle the control is
         ///     bound to.
-        /// </devdoc>
+        /// </summary>
         // Internal for ScrollableControl
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected internal void UpdateBounds() {
@@ -11906,10 +11144,9 @@ example usage
                          rect.bottom - rect.top, clientWidth, clientHeight);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UpdateBounds1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Updates the bounds of the control based on the bounds passed in.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void UpdateBounds(int x, int y, int width, int height) {
             Debug.Assert(!IsHandleCreated, "Don't call this method when handle is created!!");
@@ -11927,10 +11164,9 @@ example usage
             UpdateBounds(x, y, width, height, clientWidth, clientHeight);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UpdateBounds2"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Updates the bounds of the control based on the bounds passed in.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void UpdateBounds(int x, int y, int width, int height, int clientWidth, int clientHeight) {
 #if DEBUG
@@ -11993,21 +11229,21 @@ example usage
 #endif 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Updates the binding manager bindings when the binding proeprty changes.
         ///     We have the code here, rather than in PropertyChagned, so we don't pull
         ///     in the data assembly if it's not used.
-        /// </devdoc>
+        /// </summary>
         private void UpdateBindings() {
             for (int i = 0; i < DataBindings.Count; i++) {
                 BindingContext.UpdateBinding(BindingContext, DataBindings[i]);
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Updates the child control's position in the control array to correctly
         ///     reflect it's index.
-        /// </devdoc>
+        /// </summary>
         private void UpdateChildControlIndex(Control ctl) {
             // Don't reorder the child control array for tab controls. Implemented as a special case
             // in order to keep the method private.
@@ -12021,7 +11257,7 @@ example usage
             int curIndex = this.Controls.GetChildIndex(ctl);
             IntPtr hWnd = ctl.InternalHandle;
             while ((hWnd = UnsafeNativeMethods.GetWindow(new HandleRef(null, hWnd), NativeMethods.GW_HWNDPREV)) != IntPtr.Zero) {
-                Control c = FromHandleInternal(hWnd);
+                Control c = FromHandle(hWnd);
                 if (c != null) {
                     newIndex = this.Controls.GetChildIndex(c, false) + 1;
                     break;
@@ -12050,17 +11286,16 @@ example usage
             if (!Disposing && findNewParent && IsHandleCreated) {
                 IntPtr parentHandle = UnsafeNativeMethods.GetParent(new HandleRef(this, Handle));
                 if (parentHandle != IntPtr.Zero) {
-                    ReflectParent = Control.FromHandleInternal(parentHandle);
+                    ReflectParent = Control.FromHandle(parentHandle);
                     return;
                 }
             }
             ReflectParent = null;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UpdateZOrder"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Updates this control in it's parent's zorder.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void UpdateZOrder() {
             if (parent != null) {
@@ -12068,9 +11303,9 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Syncs the ZOrder of child control to the index we want it to be.
-        /// </devdoc>
+        /// </summary>
         private void UpdateChildZOrder(Control ctl) {
             if (!IsHandleCreated || !ctl.IsHandleCreated || ctl.parent != this) return;
             IntPtr prevHandle = (IntPtr)NativeMethods.HWND_TOP;
@@ -12093,19 +11328,18 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Updates the rootReference in the bound window.
         ///     (Used to prevent visible top-level controls from being garbage collected)
-        /// </devdoc>
+        /// </summary>
         private void UpdateRoot() {
             window.LockReference(GetTopLevel() && Visible);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UpdateStyles"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Forces styles to be reapplied to the handle. This function will call
         ///     CreateParams to get the styles to apply.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void UpdateStyles() {
             UpdateStylesCore();
@@ -12184,33 +11418,32 @@ example usage
                 }
 
                 if (lastParentHandle != IntPtr.Zero) {
-                    UnsafeNativeMethods.PostMessage(new HandleRef(null, lastParentHandle), NativeMethods.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+                    UnsafeNativeMethods.PostMessage(new HandleRef(null, lastParentHandle), Interop.WindowMessages.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
                 }
             }
 
             DefWndProc(ref m);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_CAPTURECHANGED message
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmCaptureChanged(ref Message m) {
             OnMouseCaptureChanged(EventArgs.Empty);
             DefWndProc(ref m);
 
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_COMMAND message
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmCommand(ref Message m) {
             if (IntPtr.Zero == m.LParam) {
                 if (Command.DispatchID(NativeMethods.Util.LOWORD(m.WParam))) return;
             }
             else {
-                if (ReflectMessageInternal(m.LParam, ref m)) {
+                if (ReflectMessage(m.LParam, ref m))
+                {
                     return;
                 }
             }
@@ -12222,10 +11455,9 @@ example usage
             WmContextMenu(ref m, this);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_CONTEXTMENU message
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         internal void WmContextMenu(ref Message m, Control sourceControl) {
             ContextMenu contextMenu             = Properties.GetObject(PropContextMenu) as ContextMenu;
             ContextMenuStrip contextMenuStrip   = (contextMenu != null) ? null /*save ourselves a property fetch*/
@@ -12244,7 +11476,7 @@ example usage
                     client = new Point(Width/2, Height/2);
                 }
                 else {
-                    client = PointToClientInternal(new Point(x, y));
+                    client = PointToClient(new Point(x, y));
                 }
 
                 // VisualStudio7 # 156, only show the context menu when clicked in the client area
@@ -12269,13 +11501,12 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_CTLCOLOR message
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmCtlColorControl(ref Message m) {
             // We could simply reflect the message, but it's faster to handle it here if possible.
-            Control control = Control.FromHandleInternal(m.LParam);
+            Control control = Control.FromHandle(m.LParam);
             if (control != null) {
                 m.Result = control.InitializeDCForWmCtlColor(m.WParam, m.Msg);
                 if (m.Result != IntPtr.Zero) {
@@ -12291,10 +11522,9 @@ example usage
             DefWndProc(ref m);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     WM_DRAWITEM handler
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmDrawItem(ref Message m) {
 
             // If the wparam is zero, then the message was sent by a menu.
@@ -12322,10 +11552,9 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_ERASEBKGND message
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmEraseBkgnd(ref Message m) {
             if (GetStyle(ControlStyles.UserPaint)) {
                 // When possible, it's best to do all painting directly from WM_PAINT.
@@ -12349,11 +11578,10 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_EXITMENULOOP message. If this control has a context menu, its
         ///     Collapse event is raised.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmExitMenuLoop(ref Message m) {
             bool isContextMenu = (unchecked((int)(long)m.WParam) == 0) ? false : true;
 
@@ -12367,10 +11595,9 @@ example usage
             DefWndProc(ref m);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_GETCONTROLNAME message. Returns the name of the control.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmGetControlName(ref Message m) {
             string name;
 
@@ -12382,31 +11609,29 @@ example usage
             }
 
             if (name == null)
-                name = "";
+                name = string.Empty;
 
 
             MarshalStringToMessage(name, ref m);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_GETCONTROLTYPE message. Returns the name of the control.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmGetControlType(ref Message m) {
             string type = GetType().AssemblyQualifiedName;
             MarshalStringToMessage(type, ref m);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_GETOBJECT message. Used for accessibility.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmGetObject(ref Message m) {
             Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "In WmGetObject, this = " + this.GetType().FullName + ", lParam = " + m.LParam.ToString());
 
             InternalAccessibleObject intAccessibleObject = null;
 
-            if (m.Msg == NativeMethods.WM_GETOBJECT && m.LParam == (IntPtr)NativeMethods.UiaRootObjectId && this.SupportsUiaProviders) {
+            if (m.Msg == Interop.WindowMessages.WM_GETOBJECT && m.LParam == (IntPtr)NativeMethods.UiaRootObjectId && this.SupportsUiaProviders) {
                 // If the requested object identifier is UiaRootObjectId, 
                 // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
                 intAccessibleObject = new InternalAccessibleObject(this.AccessibilityObject);
@@ -12479,10 +11704,9 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_HELP message
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmHelp(ref Message m) {
 
             // if there's currently a message box open - grab the help info from it.
@@ -12511,10 +11735,9 @@ example usage
 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_INITMENUPOPUP message
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmInitMenuPopup(ref Message m) {
             ContextMenu contextMenu = (ContextMenu)Properties.GetObject(PropContextMenu);
             if (contextMenu != null) {
@@ -12525,10 +11748,9 @@ example usage
             DefWndProc(ref m);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     WM_MEASUREITEM handler
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmMeasureItem(ref Message m) {
 
             // If the wparam is zero, then the message was sent by a menu.
@@ -12556,10 +11778,9 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_MENUCHAR message
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmMenuChar(ref Message m) {
             Menu menu = ContextMenu;
             if (menu != null) {
@@ -12571,10 +11792,9 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_MENUSELECT message
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmMenuSelect(ref Message m) {
             int item = NativeMethods.Util.LOWORD(m.WParam);
             int flags = NativeMethods.Util.HIWORD(m.WParam);
@@ -12604,10 +11824,9 @@ example usage
             DefWndProc(ref m);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_CREATE message
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmCreate(ref Message m) {
 
             DefWndProc(ref m);
@@ -12632,10 +11851,9 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_DESTROY message
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmDestroy(ref Message m) {
             // Let any interested sites know that we're destroying our handle
             //
@@ -12672,20 +11890,18 @@ example usage
             DefWndProc(ref m);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_CHAR, WM_KEYDOWN, WM_SYSKEYDOWN, WM_KEYUP, and
         ///     WM_SYSKEYUP messages.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmKeyChar(ref Message m) {
             if (ProcessKeyMessage(ref m)) return;
             DefWndProc(ref m);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_KILLFOCUS message
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmKillFocus(ref Message m) {
             Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Control::WmKillFocus - " + this.Name);
             WmImeKillFocus();
@@ -12693,10 +11909,9 @@ example usage
             this.InvokeLostFocus(this, EventArgs.Empty);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_MOUSEDOWN message
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmMouseDown(ref Message m, MouseButtons button, int clicks) {
             // If this is a "real" mouse event (not just WM_LBUTTONDOWN, etc) then
             // we need to see if something happens during processing of
@@ -12720,7 +11935,7 @@ example usage
                 // DefWndProc would normally set the focus to this control, but
                 // since we're skipping DefWndProc, we need to do it ourselves.
                 if (button == MouseButtons.Left && GetStyle(ControlStyles.Selectable)) {
-                    FocusInternal();
+                    Focus();
                 }
             }
 
@@ -12744,30 +11959,26 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_MOUSEENTER message
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmMouseEnter(ref Message m) {
             DefWndProc(ref m);
-            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                KeyboardToolTipStateMachine.Instance.NotifyAboutMouseEnter(this);
-            }
+            KeyboardToolTipStateMachine.Instance.NotifyAboutMouseEnter(this);
             OnMouseEnter(EventArgs.Empty);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_MOUSELEAVE message
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmMouseLeave(ref Message m) {
             DefWndProc(ref m);
             OnMouseLeave(EventArgs.Empty);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_DPICHANGED_BEFOREPARENT message. This message is not sent to top level windows.
-        /// </devdoc>
+        /// </summary>
         private void WmDpiChangedBeforeParent(ref Message m) {
             DefWndProc(ref m);
 
@@ -12792,29 +12003,27 @@ example usage
             OnDpiChangedBeforeParent(EventArgs.Empty);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_DPICHANGED_AFTERPARENT message
-        /// </devdoc>
+        /// </summary>
         private void WmDpiChangedAfterParent(ref Message m) {
             DefWndProc(ref m);
 
             OnDpiChangedAfterParent(EventArgs.Empty);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the "WM_MOUSEHOVER" message... until we get actuall OS support
         ///     for this, it is implemented as a custom message.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmMouseHover(ref Message m) {
             DefWndProc(ref m);
             OnMouseHover(EventArgs.Empty);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_MOUSEMOVE message
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmMouseMove(ref Message m) {
             // If the UserMouse style is set, the control does its own processing
             // of mouse messages
@@ -12825,10 +12034,9 @@ example usage
             OnMouseMove(new MouseEventArgs(MouseButtons, 0, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_MOUSEUP message
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmMouseUp(ref Message m, MouseButtons button, int clicks) {
             // Get the mouse location
             //
@@ -12849,7 +12057,7 @@ example usage
                     // (for a right button click), but since we're skipping DefWndProc
                     // we have to do it ourselves.
                     if (button == MouseButtons.Right) {
-                        SendMessage(NativeMethods.WM_CONTEXTMENU, this.Handle, NativeMethods.Util.MAKELPARAM(pt.X, pt.Y));
+                        SendMessage(Interop.WindowMessages.WM_CONTEXTMENU, this.Handle, NativeMethods.Util.MAKELPARAM(pt.X, pt.Y));
                     }
                 }
 
@@ -12892,10 +12100,9 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_MOUSEWHEEL message
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmMouseWheel(ref Message m) {
             Point p = new Point(NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam));
             p = PointToClient(p);
@@ -12913,50 +12120,46 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_MOVE message.  We must do this in
         ///     addition to WM_WINDOWPOSCHANGED because windows may
         ///     send WM_MOVE directly.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmMove(ref Message m) {
             DefWndProc(ref m);
             UpdateBounds();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_NOTIFY message
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private unsafe void WmNotify(ref Message m) {
             NativeMethods.NMHDR* nmhdr = (NativeMethods.NMHDR*)m.LParam;
-            if (!ReflectMessageInternal(nmhdr->hwndFrom,ref m)) {
+            if (!ReflectMessage(nmhdr->hwndFrom,ref m)) {
                 if(nmhdr->code == NativeMethods.TTN_SHOW) {
-                    m.Result = UnsafeNativeMethods.SendMessage(new HandleRef(null, nmhdr->hwndFrom), NativeMethods.WM_REFLECT + m.Msg, m.WParam, m.LParam);
+                    m.Result = UnsafeNativeMethods.SendMessage(new HandleRef(null, nmhdr->hwndFrom), Interop.WindowMessages.WM_REFLECT + m.Msg, m.WParam, m.LParam);
                     return;
                 }
                 if(nmhdr->code == NativeMethods.TTN_POP) {
-                    UnsafeNativeMethods.SendMessage(new HandleRef(null, nmhdr->hwndFrom), NativeMethods.WM_REFLECT + m.Msg, m.WParam, m.LParam);
+                    UnsafeNativeMethods.SendMessage(new HandleRef(null, nmhdr->hwndFrom), Interop.WindowMessages.WM_REFLECT + m.Msg, m.WParam, m.LParam);
                 }
                 
                 DefWndProc(ref m);
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_NOTIFYFORMAT message
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmNotifyFormat(ref Message m) {
-            if (!ReflectMessageInternal(m.WParam, ref m)) {
+            if (!ReflectMessage(m.WParam, ref m)) {
                 DefWndProc(ref m);
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_DRAWITEM\WM_MEASUREITEM messages for controls other than menus
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmOwnerDraw(ref Message m) {          
             bool reflectCalled = false;
 
@@ -12969,13 +12172,13 @@ example usage
                 // treating it as signed
                 p = (IntPtr)(long)ctrlId;
             }
-            if (!ReflectMessageInternal(p, ref m)) {
+            if (!ReflectMessage(p, ref m)) {
                 //Additional Check For Control .... TabControl truncates the Hwnd value...
                 IntPtr handle = window.GetHandleFromID((short)NativeMethods.Util.LOWORD(m.WParam));
                 if (handle != IntPtr.Zero) {
-                    Control control = Control.FromHandleInternal(handle);
+                    Control control = Control.FromHandle(handle);
                     if (control != null) {
-                        m.Result = control.SendMessage(NativeMethods.WM_REFLECT + m.Msg, handle, m.LParam);
+                        m.Result = control.SendMessage(Interop.WindowMessages.WM_REFLECT + m.Msg, handle, m.LParam);
                         reflectCalled = true;
                     }
                 }
@@ -12990,11 +12193,10 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_PAINT messages.  This should only be called
         ///     for userpaint controls.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmPaint(ref Message m) {
             bool doubleBuffered = DoubleBuffered || (GetStyle(ControlStyles.AllPaintingInWmPaint) && DoubleBufferingEnabled);
 #if DEBUG
@@ -13127,10 +12329,9 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_PRINTCLIENT messages.  
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmPrintClient(ref Message m) {
             using (PaintEventArgs e = new PrintPaintEventArgs(m, m.WParam, ClientRectangle)) {
                 OnPrint(e);
@@ -13153,10 +12354,9 @@ example usage
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_SETCURSOR message
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmSetCursor(ref Message m) {
 
             // Accessing through the Handle property has side effects that break this
@@ -13171,10 +12371,9 @@ example usage
 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_WINDOWPOSCHANGING message
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private unsafe void WmWindowPosChanging(ref Message m) {
 
             // We let this fall through to defwndproc unless we are being surfaced as
@@ -13203,38 +12402,36 @@ example usage
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_PARENTNOTIFY message
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmParentNotify(ref Message m) {
             int msg = NativeMethods.Util.LOWORD(m.WParam);
             IntPtr hWnd = IntPtr.Zero;
             switch (msg) {
-                case NativeMethods.WM_CREATE:
+                case Interop.WindowMessages.WM_CREATE:
                     hWnd = m.LParam;
                     break;
-                case NativeMethods.WM_DESTROY:
+                case Interop.WindowMessages.WM_DESTROY:
                     break;
                 default:
                     hWnd = UnsafeNativeMethods.GetDlgItem(new HandleRef(this, Handle), NativeMethods.Util.HIWORD(m.WParam));
                     break;
             }
-            if (hWnd == IntPtr.Zero || !ReflectMessageInternal(hWnd, ref m)) {
+            if (hWnd == IntPtr.Zero || !ReflectMessage(hWnd, ref m)) {
                 DefWndProc(ref m);
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_SETFOCUS message
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmSetFocus(ref Message m) {
             Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Control::WmSetFocus - " + this.Name);
             WmImeSetFocus();
 
             if (!HostedInWin32DialogManager) {
-                IContainerControl c = GetContainerControlInternal();
+                IContainerControl c = GetContainerControl();
                 if (c != null) {
                     bool activateSucceed;
 
@@ -13259,10 +12456,9 @@ example usage
             this.InvokeGotFocus(this, EventArgs.Empty);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_SHOWWINDOW message
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmShowWindow(ref Message m) {
             // We get this message for each control, even if their parent is not visible.
 
@@ -13313,10 +12509,9 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_UPDATEUISTATE message
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void WmUpdateUIState(ref Message m) {
 
             // See "How this all works" in ShowKeyboardCues
@@ -13405,10 +12600,9 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_WINDOWPOSCHANGED message
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private unsafe void WmWindowPosChanged(ref Message m) {
             DefWndProc(ref m);
             // Update new size / position
@@ -13423,12 +12617,11 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.WndProc"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Base wndProc. All messages are sent to wndProc after getting filtered
         ///     through the preProcessMessage function. Inheriting controls should
         ///     call base.wndProc for any messages that they don't handle.
-        /// </devdoc>
+        /// </summary>
         protected virtual void WndProc(ref Message m) {
 
             /*
@@ -13456,47 +12649,47 @@ example usage
             * messages which the Ocx would own before passing them onto Control.wndProc.
             */
             switch (m.Msg) {
-                case NativeMethods.WM_CAPTURECHANGED:
+                case Interop.WindowMessages.WM_CAPTURECHANGED:
                      WmCaptureChanged(ref m);
                      break;
 
-                case NativeMethods.WM_GETOBJECT:
+                case Interop.WindowMessages.WM_GETOBJECT:
                     WmGetObject(ref m);
                     break;
 
-                case NativeMethods.WM_COMMAND:
+                case Interop.WindowMessages.WM_COMMAND:
                     WmCommand(ref m);
                     break;
                     
-                case NativeMethods.WM_CLOSE:
+                case Interop.WindowMessages.WM_CLOSE:
                     WmClose(ref m);
                     break;
                     
-                case NativeMethods.WM_CONTEXTMENU:
+                case Interop.WindowMessages.WM_CONTEXTMENU:
                     WmContextMenu(ref m);
                     break;
                     
-                case NativeMethods.WM_DISPLAYCHANGE:
+                case Interop.WindowMessages.WM_DISPLAYCHANGE:
                     WmDisplayChange(ref m);
                     break;
                     
-                case NativeMethods.WM_DRAWITEM:
+                case Interop.WindowMessages.WM_DRAWITEM:
                     WmDrawItem(ref m);
                     break;
                     
-                case NativeMethods.WM_ERASEBKGND:
+                case Interop.WindowMessages.WM_ERASEBKGND:
                     WmEraseBkgnd(ref m);
                     break;
 
-                case NativeMethods.WM_EXITMENULOOP:
+                case Interop.WindowMessages.WM_EXITMENULOOP:
                     WmExitMenuLoop(ref m);
                     break;
 
-                case NativeMethods.WM_HELP:
+                case Interop.WindowMessages.WM_HELP:
                     WmHelp(ref m);
                     break;
 
-                case NativeMethods.WM_PAINT:
+                case Interop.WindowMessages.WM_PAINT:
                     if (GetStyle(ControlStyles.UserPaint)) {
                         WmPaint(ref m);
                     }
@@ -13505,7 +12698,7 @@ example usage
                     }
                     break;
 
-                case NativeMethods.WM_PRINTCLIENT:
+                case Interop.WindowMessages.WM_PRINTCLIENT:
                     if (GetStyle(ControlStyles.UserPaint)) {
                         WmPrintClient(ref m);
                     }
@@ -13514,11 +12707,11 @@ example usage
                     }
                     break;
 
-                case NativeMethods.WM_INITMENUPOPUP:
+                case Interop.WindowMessages.WM_INITMENUPOPUP:
                     WmInitMenuPopup(ref m);
                     break;
 
-                case NativeMethods.WM_SYSCOMMAND:
+                case Interop.WindowMessages.WM_SYSCOMMAND:
                     if ((unchecked((int)(long)m.WParam) & 0xFFF0) == NativeMethods.SC_KEYMENU) {
                         Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.WndProc processing " + m.ToString());
 
@@ -13531,229 +12724,229 @@ example usage
                     DefWndProc(ref m);
                     break;
                     
-                case NativeMethods.WM_INPUTLANGCHANGE:
+                case Interop.WindowMessages.WM_INPUTLANGCHANGE:
                     WmInputLangChange(ref m);
                     break;
 
-                case NativeMethods.WM_INPUTLANGCHANGEREQUEST:
+                case Interop.WindowMessages.WM_INPUTLANGCHANGEREQUEST:
                     WmInputLangChangeRequest(ref m);
                     break;
 
-                case NativeMethods.WM_MEASUREITEM:
+                case Interop.WindowMessages.WM_MEASUREITEM:
                     WmMeasureItem(ref m);
                     break;
                     
-                case NativeMethods.WM_MENUCHAR:
+                case Interop.WindowMessages.WM_MENUCHAR:
                     WmMenuChar(ref m);
                     break;
 
-                case NativeMethods.WM_MENUSELECT:
+                case Interop.WindowMessages.WM_MENUSELECT:
                     WmMenuSelect(ref m);
                     break;
 
-                case NativeMethods.WM_SETCURSOR:
+                case Interop.WindowMessages.WM_SETCURSOR:
                     WmSetCursor(ref m);
                     break;
 
-                case NativeMethods.WM_WINDOWPOSCHANGING:
+                case Interop.WindowMessages.WM_WINDOWPOSCHANGING:
                     WmWindowPosChanging(ref m);
                     break;
 
-                case NativeMethods.WM_CHAR:
-                case NativeMethods.WM_KEYDOWN:
-                case NativeMethods.WM_SYSKEYDOWN:
-                case NativeMethods.WM_KEYUP:
-                case NativeMethods.WM_SYSKEYUP:
+                case Interop.WindowMessages.WM_CHAR:
+                case Interop.WindowMessages.WM_KEYDOWN:
+                case Interop.WindowMessages.WM_SYSKEYDOWN:
+                case Interop.WindowMessages.WM_KEYUP:
+                case Interop.WindowMessages.WM_SYSKEYUP:
                     WmKeyChar(ref m);
                     break;
                     
-                case NativeMethods.WM_CREATE:
+                case Interop.WindowMessages.WM_CREATE:
                     WmCreate(ref m);
                     break;
                     
-                case NativeMethods.WM_DESTROY:
+                case Interop.WindowMessages.WM_DESTROY:
                     WmDestroy(ref m);
                     break;
 
-                case NativeMethods.WM_CTLCOLOR:
-                case NativeMethods.WM_CTLCOLORBTN:
-                case NativeMethods.WM_CTLCOLORDLG:
-                case NativeMethods.WM_CTLCOLORMSGBOX:
-                case NativeMethods.WM_CTLCOLORSCROLLBAR:
-                case NativeMethods.WM_CTLCOLOREDIT:
-                case NativeMethods.WM_CTLCOLORLISTBOX:
-                case NativeMethods.WM_CTLCOLORSTATIC:
+                case Interop.WindowMessages.WM_CTLCOLOR:
+                case Interop.WindowMessages.WM_CTLCOLORBTN:
+                case Interop.WindowMessages.WM_CTLCOLORDLG:
+                case Interop.WindowMessages.WM_CTLCOLORMSGBOX:
+                case Interop.WindowMessages.WM_CTLCOLORSCROLLBAR:
+                case Interop.WindowMessages.WM_CTLCOLOREDIT:
+                case Interop.WindowMessages.WM_CTLCOLORLISTBOX:
+                case Interop.WindowMessages.WM_CTLCOLORSTATIC:
 
                 // this is for the trinity guys.  The case is if you've got a windows
                 // forms edit or something hosted as an AX control somewhere, there isn't anyone to reflect
                 // these back.  If they went ahead and just sent them back, some controls don't like that 
                 // and end up recursing.  Our code handles it fine because we just pick the HWND out of the LPARAM.
                 //
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_CTLCOLOR:
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_CTLCOLORBTN:
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_CTLCOLORDLG:
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_CTLCOLORMSGBOX:
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_CTLCOLORSCROLLBAR:
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_CTLCOLOREDIT:
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_CTLCOLORLISTBOX:
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_CTLCOLORSTATIC:                    
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLOR:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLORBTN:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLORDLG:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLORMSGBOX:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLORSCROLLBAR:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLOREDIT:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLORLISTBOX:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLORSTATIC:                    
                     WmCtlColorControl(ref m);
                     break;
                     
-                case NativeMethods.WM_HSCROLL:
-                case NativeMethods.WM_VSCROLL:
-                case NativeMethods.WM_DELETEITEM:
-                case NativeMethods.WM_VKEYTOITEM:
-                case NativeMethods.WM_CHARTOITEM:
-                case NativeMethods.WM_COMPAREITEM:
-                    if (!ReflectMessageInternal(m.LParam, ref m)) {
+                case Interop.WindowMessages.WM_HSCROLL:
+                case Interop.WindowMessages.WM_VSCROLL:
+                case Interop.WindowMessages.WM_DELETEITEM:
+                case Interop.WindowMessages.WM_VKEYTOITEM:
+                case Interop.WindowMessages.WM_CHARTOITEM:
+                case Interop.WindowMessages.WM_COMPAREITEM:
+                    if (!ReflectMessage(m.LParam, ref m)) {
                         DefWndProc(ref m);
                     }
                     break;
                     
-                case NativeMethods.WM_IME_CHAR:
+                case Interop.WindowMessages.WM_IME_CHAR:
                     WmImeChar(ref m);
                     break;
                     
-                case NativeMethods.WM_IME_STARTCOMPOSITION:
+                case Interop.WindowMessages.WM_IME_STARTCOMPOSITION:
                     WmImeStartComposition(ref m);
                     break;
                     
-                case NativeMethods.WM_IME_ENDCOMPOSITION:
+                case Interop.WindowMessages.WM_IME_ENDCOMPOSITION:
                     WmImeEndComposition(ref m);
                     break;
                     
-                case NativeMethods.WM_IME_NOTIFY:
+                case Interop.WindowMessages.WM_IME_NOTIFY:
                     WmImeNotify(ref m);
                     break;
                     
-                case NativeMethods.WM_KILLFOCUS:
+                case Interop.WindowMessages.WM_KILLFOCUS:
                     WmKillFocus(ref m);
                     break;
                     
-                case NativeMethods.WM_LBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Left, 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick)) {
                         SetState(STATE_DOUBLECLICKFIRED, true);
                     }
                     break;
                     
-                case NativeMethods.WM_LBUTTONDOWN:
+                case Interop.WindowMessages.WM_LBUTTONDOWN:
                     WmMouseDown(ref m, MouseButtons.Left, 1);
                     break;
                     
-                case NativeMethods.WM_LBUTTONUP:
+                case Interop.WindowMessages.WM_LBUTTONUP:
                     WmMouseUp(ref m, MouseButtons.Left, 1);
                     break;
                     
-                case NativeMethods.WM_MBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_MBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Middle, 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick)) {
                         SetState(STATE_DOUBLECLICKFIRED, true);
                     }
                     break;
                     
-                case NativeMethods.WM_MBUTTONDOWN:
+                case Interop.WindowMessages.WM_MBUTTONDOWN:
                     WmMouseDown(ref m, MouseButtons.Middle, 1);
                     break;
                     
-                case NativeMethods.WM_MBUTTONUP:
+                case Interop.WindowMessages.WM_MBUTTONUP:
                     WmMouseUp(ref m, MouseButtons.Middle, 1);
                     break;
                     
-                case NativeMethods.WM_XBUTTONDOWN:
+                case Interop.WindowMessages.WM_XBUTTONDOWN:
                     WmMouseDown(ref m, GetXButton(NativeMethods.Util.HIWORD(m.WParam)), 1);
                     break;
                     
-                case NativeMethods.WM_XBUTTONUP:
+                case Interop.WindowMessages.WM_XBUTTONUP:
                     WmMouseUp(ref m, GetXButton(NativeMethods.Util.HIWORD(m.WParam)), 1);
                     break;
                     
-                case NativeMethods.WM_XBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_XBUTTONDBLCLK:
                     WmMouseDown(ref m, GetXButton(NativeMethods.Util.HIWORD(m.WParam)), 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick)) {
                         SetState(STATE_DOUBLECLICKFIRED, true);
                     }
                     break;
                     
-                case NativeMethods.WM_MOUSELEAVE:
+                case Interop.WindowMessages.WM_MOUSELEAVE:
                     WmMouseLeave(ref m);
                     break;
                     
-                case NativeMethods.WM_DPICHANGED_BEFOREPARENT:
+                case Interop.WindowMessages.WM_DPICHANGED_BEFOREPARENT:
                     WmDpiChangedBeforeParent(ref m);
                     m.Result = IntPtr.Zero;
                     break;
                     
-                case NativeMethods.WM_DPICHANGED_AFTERPARENT:
+                case Interop.WindowMessages.WM_DPICHANGED_AFTERPARENT:
                     WmDpiChangedAfterParent(ref m);
                     m.Result = IntPtr.Zero;
                     break;
                     
-                case NativeMethods.WM_MOUSEMOVE:
+                case Interop.WindowMessages.WM_MOUSEMOVE:
                     WmMouseMove(ref m);
                     break;
                     
-                case NativeMethods.WM_MOUSEWHEEL:
+                case Interop.WindowMessages.WM_MOUSEWHEEL:
                     WmMouseWheel(ref m);
                     break;
                     
-                case NativeMethods.WM_MOVE:
+                case Interop.WindowMessages.WM_MOVE:
                     WmMove(ref m);
                     break;
                     
-                case NativeMethods.WM_NOTIFY:
+                case Interop.WindowMessages.WM_NOTIFY:
                     WmNotify(ref m);
                     break;
                     
-                case NativeMethods.WM_NOTIFYFORMAT:
+                case Interop.WindowMessages.WM_NOTIFYFORMAT:
                     WmNotifyFormat(ref m);
                     break;
                     
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFYFORMAT:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFYFORMAT:
                     m.Result = (IntPtr)(NativeMethods.NFR_UNICODE);
                     break;
                     
-                case NativeMethods.WM_SHOWWINDOW:
+                case Interop.WindowMessages.WM_SHOWWINDOW:
                     WmShowWindow(ref m);
                     break;
                     
-                case NativeMethods.WM_RBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_RBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Right, 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick)) {
                         SetState(STATE_DOUBLECLICKFIRED, true);
                     }
                     break;
                     
-                case NativeMethods.WM_RBUTTONDOWN:
+                case Interop.WindowMessages.WM_RBUTTONDOWN:
                     WmMouseDown(ref m, MouseButtons.Right, 1);
                     break;
                     
-                case NativeMethods.WM_RBUTTONUP:
+                case Interop.WindowMessages.WM_RBUTTONUP:
                     WmMouseUp(ref m, MouseButtons.Right, 1);
                     break;
                     
-                case NativeMethods.WM_SETFOCUS:
+                case Interop.WindowMessages.WM_SETFOCUS:
                     WmSetFocus(ref m);
                     break;
                     
-                case NativeMethods.WM_MOUSEHOVER:
+                case Interop.WindowMessages.WM_MOUSEHOVER:
                     WmMouseHover(ref m);
                     break;
                     
-                case NativeMethods.WM_WINDOWPOSCHANGED:
+                case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
                     WmWindowPosChanged(ref m);
                     break;
                     
-                case NativeMethods.WM_QUERYNEWPALETTE:
+                case Interop.WindowMessages.WM_QUERYNEWPALETTE:
                     WmQueryNewPalette(ref m);
                     break;
                     
-                case NativeMethods.WM_UPDATEUISTATE:
+                case Interop.WindowMessages.WM_UPDATEUISTATE:
                     WmUpdateUIState(ref m);
                     break;
                     
-                case NativeMethods.WM_PARENTNOTIFY:
+                case Interop.WindowMessages.WM_PARENTNOTIFY:
                     WmParentNotify(ref m);
                     break;
                     
@@ -13773,7 +12966,6 @@ example usage
                         return;
                     }
 
-                    #if WIN95_SUPPORT
                     // If we have to route the mousewheel messages, do it (this logic was taken
                     // from the MFC sources...)
                     //
@@ -13794,7 +12986,7 @@ example usage
 
                                 while (result == IntPtr.Zero && hwndFocus != IntPtr.Zero && hwndFocus != hwndDesktop) {
                                     result = UnsafeNativeMethods.SendMessage(new HandleRef(null, hwndFocus),
-                                                                       NativeMethods.WM_MOUSEWHEEL,
+                                                                       Interop.WindowMessages.WM_MOUSEWHEEL,
                                                                        (unchecked((int)(long)m.WParam) << 16) | (int)keyState,
                                                                        m.LParam);
                                     hwndFocus = UnsafeNativeMethods.GetParent(new HandleRef(null, hwndFocus));
@@ -13802,7 +12994,6 @@ example usage
                             }
                         }
                     }
-                    #endif
 
                     if (m.Msg == NativeMethods.WM_MOUSEENTER) {
                         WmMouseEnter(ref m);
@@ -13815,16 +13006,14 @@ example usage
 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Called when an exception occurs in dispatching messages through
         ///      the main window procedure.
-        /// </devdoc>
+        /// </summary>
         private void WndProcException(Exception e) {
             Application.OnThreadException(e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IArrangedElement.Children"]/*' />
-        /// <internalonly/>
         ArrangedElementCollection IArrangedElement.Children {
             get {
                 ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
@@ -13835,8 +13024,6 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IArrangedElement.Container"]/*' />
-        /// <internalonly/>
         IArrangedElement IArrangedElement.Container {
             get {
                 // This is safe because the IArrangedElement interface is internal
@@ -13844,27 +13031,19 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IArrangedElement.ParticipatesInLayout"]/*' />
-        /// <internalonly/>
         bool IArrangedElement.ParticipatesInLayout {
             get { return GetState(STATE_VISIBLE); }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IArrangedElement.PerformLayout"]/*' />
-        /// <internalonly/>
         void IArrangedElement.PerformLayout(IArrangedElement affectedElement, string affectedProperty) {
             PerformLayout(new LayoutEventArgs(affectedElement, affectedProperty));
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IArrangedElement.Properties"]/*' />
-        /// <internalonly/>
         PropertyStore IArrangedElement.Properties {
             get { return Properties; }
         }
 
         // CAREFUL: This really calls SetBoundsCore, not SetBounds.
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IArrangedElement.SetBounds"]/*' />
-        /// <internalonly/>
         void IArrangedElement.SetBounds(Rectangle bounds, BoundsSpecified specified) {
             ISite site = Site;
             IComponentChangeService ccs = null;
@@ -13929,8 +13108,8 @@ example usage
             }
         }
         
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         internal sealed class ControlNativeWindow : NativeWindow, IWindowTarget {
             private Control         control;
             private GCHandle        rootRef;   // We will root the control when we do not want to be elligible for garbage collection.
@@ -14004,11 +13183,11 @@ example usage
                 // to occur within control.
                 //
                 switch (m.Msg) {
-                    case NativeMethods.WM_MOUSELEAVE:
+                    case Interop.WindowMessages.WM_MOUSELEAVE:
                         control.UnhookMouseEvent();
                         break;
 
-                    case NativeMethods.WM_MOUSEMOVE:
+                    case Interop.WindowMessages.WM_MOUSEMOVE:
                         if (!control.GetState(Control.STATE_TRACKINGMOUSEEVENT)) {
                             control.HookMouseEvent();
                             if (!control.GetState(Control.STATE_MOUSEENTERPENDING)) {
@@ -14020,7 +13199,7 @@ example usage
                         }
                         break;
 
-                    case NativeMethods.WM_MOUSEWHEEL:
+                    case Interop.WindowMessages.WM_MOUSEWHEEL:
                         // TrackMouseEvent's mousehover implementation doesn't watch the wheel
                         // correctly...
                         //
@@ -14035,26 +13214,18 @@ example usage
         ///
         /// Explicit support of DropTarget
         ///
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IDropTarget.OnDragEnter"]/*' />
-        /// <internalonly/>
         void IDropTarget.OnDragEnter(DragEventArgs drgEvent) {
                 OnDragEnter(drgEvent);
         }
         
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IDropTarget.OnDragOver"]/*' />
-        /// <internalonly/>
         void IDropTarget.OnDragOver(DragEventArgs drgEvent) {
                 OnDragOver(drgEvent);
         }
         
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IDropTarget.OnDragLeave"]/*' />
-        /// <internalonly/>
         void IDropTarget.OnDragLeave(EventArgs e) {
                 OnDragLeave(e);
         }
         
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IDropTarget.OnDragDrop"]/*' />
-        /// <internalonly/>
         void IDropTarget.OnDragDrop(DragEventArgs drgEvent) {
                 OnDragDrop(drgEvent);
         }
@@ -14062,22 +13233,17 @@ example usage
         ///
         /// Explicit support of DropSource
         ///
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ISupportOleDropSource.OnGiveFeedback"]/*' />
-        /// <internalonly/>
         void ISupportOleDropSource.OnGiveFeedback(GiveFeedbackEventArgs giveFeedbackEventArgs)  {
                 OnGiveFeedback(giveFeedbackEventArgs);
         }
         
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ISupportOleDropSource.OnQueryContinueDrag"]/*' />
-        /// <internalonly/>
         void ISupportOleDropSource.OnQueryContinueDrag(QueryContinueDragEventArgs queryContinueDragEventArgs) {
                 OnQueryContinueDrag(queryContinueDragEventArgs);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Collection of controls...
-        /// </devdoc>
+        /// </summary>
         [ListBindable(false), ComVisible(false)]
         public class ControlCollection : ArrangedElementCollection, IList, ICloneable {
 
@@ -14090,25 +13256,22 @@ example usage
             private int lastAccessedIndex = -1;
 
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.ControlCollection"]/*' />
             public ControlCollection(Control owner) {
                 this.owner = owner;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.ContainsKey"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
-            /// </devdoc>
+            /// </summary>
             public virtual bool ContainsKey(string key) {
                return IsValidIndex(IndexOfKey(key));
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.Add"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///    <para>Adds a child control to this control. The control becomes the last control in
             ///       the child control list. If the control is already a child of another control it
             ///       is first removed from that control.</para>
-            /// </devdoc>
+            /// </summary>
             public virtual void Add(Control value) {
                 if (value == null)
                     return;
@@ -14195,8 +13358,6 @@ example usage
                 owner.OnControlAdded(new ControlEventArgs(value));
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="ControlCollection.IList.Add"]/*' />
-            /// <internalonly/>
             int IList.Add(object control) {
                 if (control is Control) {
                     Add((Control)control);
@@ -14207,7 +13368,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.AddRange"]/*' />
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public virtual void AddRange(Control[] controls) {
                 if (controls == null) {
@@ -14232,8 +13392,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="ControlCollection.ICloneable.Clone"]/*' />
-            /// <internalonly/>
             object ICloneable.Clone() {
                 // Use CreateControlInstance so we get the same type of ControlCollection, but whack the
                 // owner so adding controls to this new collection does not affect the control we cloned from.
@@ -14244,17 +13402,15 @@ example usage
                 return ccOther;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.Contains"]/*' />
             public bool Contains(Control control) {
                 return InnerList.Contains(control);
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.Find"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     <para>Searches for Controls by their Name property, builds up an array
             ///           of all the controls that match.
             ///     </para>
-            /// </devdoc>
+            /// </summary>
             public Control[] Find(string key, bool searchAllChildren) {
                 if (string.IsNullOrEmpty(key)) {
                    throw new System.ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
@@ -14269,13 +13425,11 @@ example usage
                 return stronglyTypedFoundControls;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.FindInternal"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     <para>Searches for Controls by their Name property, builds up an array list
             ///           of all the controls that match.
             ///     </para>
-            /// </devdoc>
-            /// <internalonly/>
+            /// </summary>
             private ArrayList FindInternal(string key, bool searchAllChildren, ControlCollection controlsToLookIn, ArrayList foundControls) {
                 if ((controlsToLookIn == null) || (foundControls == null)) {
                     return null;
@@ -14321,15 +13475,13 @@ example usage
                 return new ControlCollectionEnumerator(this); 
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.IndexOf"]/*' />
             public int IndexOf(Control control) {
                 return InnerList.IndexOf(control);
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.this"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
-            /// </devdoc>
+            /// </summary>
             public virtual int IndexOfKey(string key) {
                 // Step 0 - Arg validation
                 if (string.IsNullOrEmpty(key)) {
@@ -14357,31 +13509,26 @@ example usage
                 return -1;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.IsValidIndex"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     <para>Determines if the index is valid for the collection.</para>
-            /// </devdoc>
-            /// <internalonly/>
+            /// </summary>
             private bool IsValidIndex(int index) {
                 return ((index >= 0) && (index < this.Count));
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.Owner"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     <para>Who owns this control collection.</para>
-            /// </devdoc>
-            /// <internalonly/>
+            /// </summary>
             public Control Owner {
                 get {
                     return owner;
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.Remove"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     Removes control from this control. Inheriting controls should call
             ///     base.remove to ensure that the control is removed.
-            /// </devdoc>
+            /// </summary>
             public virtual void Remove(Control value) {
 
                 // Sanity check parameter
@@ -14403,7 +13550,7 @@ example usage
                     owner.OnControlRemoved(new ControlEventArgs(value));
 
                     // ContainerControl needs to see it needs to find a new ActiveControl.
-                    ContainerControl cc = owner.GetContainerControlInternal() as ContainerControl;
+                    ContainerControl cc = owner.GetContainerControl() as ContainerControl;
                     if (cc != null)
                     {
                         cc.AfterControlRemoved(value, owner);
@@ -14411,23 +13558,19 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="ControlCollection.IList.Remove"]/*' />
-            /// <internalonly/>
             void IList.Remove(object control) {
                 if (control is Control) {
                     Remove((Control)control);
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.RemoveAt"]/*' />
             public void RemoveAt(int index) {
                 Remove(this[index]);
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.RemoveByKey"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     <para>Removes the child control with the specified key.</para>
-            /// </devdoc>
+            /// </summary>
             public virtual void RemoveByKey(string key) {
                 int index = IndexOfKey(key);
                 if (IsValidIndex(index)) {
@@ -14435,10 +13578,9 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.this"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the child control with the specified index.
-            /// </devdoc>
+            /// </summary>
             public new virtual Control this[int index] {
                 get {
                     //do some bounds checking here...
@@ -14452,10 +13594,9 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.this1"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     <para>Retrieves the child control with the specified key.</para>
-            /// </devdoc>
+            /// </summary>
             public virtual Control this[string key] {
                 get {
                     // We do not support null and empty string as valid keys.
@@ -14475,7 +13616,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.Clear"]/*' />
             public virtual void Clear() {
 #if DEBUG
                 int layoutSuspendCount = owner.LayoutSuspendCount;
@@ -14496,24 +13636,22 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.GetChildIndex"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the index of the specified
             ///     child control in this array.  An ArgumentException
             ///     is thrown if child is not parented to this
             ///     Control.
-            /// </devdoc>
+            /// </summary>
             public int GetChildIndex(Control child) {
                 return GetChildIndex(child, true);
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.GetChildIndex1"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the index of the specified
             ///     child control in this array.  An ArgumentException
             ///     is thrown if child is not parented to this
             ///     Control.
-            /// </devdoc>
+            /// </summary>
             public virtual int GetChildIndex(Control child, bool throwException) {
                 int index = IndexOf(child);
                 if (index == -1 && throwException) {
@@ -14522,11 +13660,10 @@ example usage
                 return index;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     This is internal virtual method so that "Readonly Collections" can override this and throw as they should not allow changing
             ///     the child control indices.
-            /// </devdoc>
-            /// <internalonly/>
+            /// </summary>
             internal virtual void SetChildIndexInternal(Control child, int newIndex)
             {
                 // Sanity check parameters
@@ -14552,13 +13689,12 @@ example usage
 
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.SetChildIndex"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     Sets the index of the specified
             ///     child control in this array.  An ArgumentException
             ///     is thrown if child is not parented to this
             ///     Control.
-            /// </devdoc>
+            /// </summary>
             public virtual void SetChildIndex(Control child, int newIndex) {
                 SetChildIndexInternal(child, newIndex);
             }
@@ -14616,14 +13752,12 @@ example usage
 
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleControl.GetControlInfo"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleControl.GetControlInfo(NativeMethods.tagCONTROLINFO pCI) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetControlInfo");
 
-            pCI.cb = Marshal.SizeOf(typeof(NativeMethods.tagCONTROLINFO));
+            pCI.cb = Marshal.SizeOf<NativeMethods.tagCONTROLINFO>();
             pCI.hAccel = IntPtr.Zero;
             pCI.cAccel = 0;
             pCI.dwFlags = 0;
@@ -14639,10 +13773,8 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleControl.OnMnemonic"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleControl.OnMnemonic(ref NativeMethods.MSG pMsg) {
 
             // If we got a mnemonic here, then the appropriate control will focus itself which
@@ -14653,10 +13785,8 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleControl.OnAmbientPropertyChange"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleControl.OnAmbientPropertyChange(int dispID) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:OnAmbientPropertyChange.  Dispid: " + dispID);
             Debug.Indent();
@@ -14665,10 +13795,8 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleControl.FreezeEvents"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleControl.FreezeEvents(int bFreeze) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:FreezeEvents.  Freeze: " + bFreeze);
             ActiveXInstance.EventsFrozen = (bFreeze != 0);
@@ -14676,44 +13804,34 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceActiveObject.GetWindow"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleInPlaceActiveObject.GetWindow(out IntPtr hwnd) {
             return((UnsafeNativeMethods.IOleInPlaceObject)this).GetWindow(out hwnd);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceActiveObject.ContextSensitiveHelp"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IOleInPlaceActiveObject.ContextSensitiveHelp(int fEnterMode) {
             ((UnsafeNativeMethods.IOleInPlaceObject)this).ContextSensitiveHelp(fEnterMode);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceActiveObject.TranslateAccelerator"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleInPlaceActiveObject.TranslateAccelerator(ref NativeMethods.MSG lpmsg) {
             return ActiveXInstance.TranslateAccelerator(ref lpmsg);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceActiveObject.OnFrameWindowActivate"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IOleInPlaceActiveObject.OnFrameWindowActivate(bool fActivate) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:OnFrameWindowActivate");
             OnFrameWindowActivate(fActivate);
             // return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceActiveObject.OnDocWindowActivate"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IOleInPlaceActiveObject.OnDocWindowActivate(int fActivate) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:OnDocWindowActivate.  Activate: " + fActivate.ToString(CultureInfo.InvariantCulture));
             Debug.Indent();
@@ -14721,28 +13839,22 @@ example usage
             Debug.Unindent();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceActiveObject.ResizeBorder"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IOleInPlaceActiveObject.ResizeBorder(NativeMethods.COMRECT prcBorder, UnsafeNativeMethods.IOleInPlaceUIWindow pUIWindow, bool fFrameWindow) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:ResizesBorder");
             // return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceActiveObject.EnableModeless"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IOleInPlaceActiveObject.EnableModeless(int fEnable) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:EnableModeless");
             // return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceObject.GetWindow"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleInPlaceObject.GetWindow(out IntPtr hwnd) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetWindow");
             int hr = ActiveXInstance.GetWindow(out hwnd);
@@ -14750,10 +13862,8 @@ example usage
             return hr;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceObject.ContextSensitiveHelp"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IOleInPlaceObject.ContextSensitiveHelp(int fEnterMode) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:ContextSensitiveHelp.  Mode: " + fEnterMode.ToString(CultureInfo.InvariantCulture));
             if (fEnterMode != 0) {
@@ -14761,10 +13871,8 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceObject.InPlaceDeactivate"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IOleInPlaceObject.InPlaceDeactivate() {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:InPlaceDeactivate");
             Debug.Indent();
@@ -14772,19 +13880,15 @@ example usage
             Debug.Unindent();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceObject.UIDeactivate"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleInPlaceObject.UIDeactivate() {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:UIDeactivate");
             return ActiveXInstance.UIDeactivate();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceObject.SetObjectRects"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IOleInPlaceObject.SetObjectRects(NativeMethods.COMRECT lprcPosRect, NativeMethods.COMRECT lprcClipRect) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetObjectRects(" + lprcClipRect.left + ", " + lprcClipRect.top + ", " + lprcClipRect.right + ", " + lprcClipRect.bottom + ")");
             Debug.Indent();
@@ -14792,38 +13896,30 @@ example usage
             Debug.Unindent();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceObject.ReactivateAndUndo"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IOleInPlaceObject.ReactivateAndUndo() {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:ReactivateAndUndo");
             // return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.SetClientSite"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleObject.SetClientSite(UnsafeNativeMethods.IOleClientSite pClientSite) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetClientSite");
             ActiveXInstance.SetClientSite(pClientSite);
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.GetClientSite"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         UnsafeNativeMethods.IOleClientSite UnsafeNativeMethods.IOleObject.GetClientSite() {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetClientSite");
             return ActiveXInstance.GetClientSite();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.SetHostNames"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleObject.SetHostNames(string szContainerApp, string szContainerObj) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetHostNames");
             // Since ActiveX controls never "open" for editing, we shouldn't need
@@ -14831,58 +13927,46 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.Close"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleObject.Close(int dwSaveOption) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Close. Save option: " + dwSaveOption);
             ActiveXInstance.Close(dwSaveOption);
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.SetMoniker"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleObject.SetMoniker(int dwWhichMoniker, object pmk) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetMoniker");
             return NativeMethods.E_NOTIMPL;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.GetMoniker"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleObject.GetMoniker(int dwAssign, int dwWhichMoniker, out object moniker) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetMoniker");
             moniker = null;
             return NativeMethods.E_NOTIMPL;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.InitFromData"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleObject.InitFromData(IComDataObject pDataObject, int fCreation, int dwReserved) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:InitFromData");
             return NativeMethods.E_NOTIMPL;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.GetClipboardData"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleObject.GetClipboardData(int dwReserved, out IComDataObject data) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetClipboardData");
             data = null;
             return NativeMethods.E_NOTIMPL;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.DoVerb"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleObject.DoVerb(int iVerb, IntPtr lpmsg, UnsafeNativeMethods.IOleClientSite pActiveSite, int lindex, IntPtr hwndParent, NativeMethods.COMRECT lprcPosRect) {
 
             // In Office they are internally casting an iverb to a short and not
@@ -14917,47 +14001,37 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.EnumVerbs"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleObject.EnumVerbs(out UnsafeNativeMethods.IEnumOLEVERB e) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:EnumVerbs");
             return ActiveXImpl.EnumVerbs(out e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.OleUpdate"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleObject.OleUpdate() {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:OleUpdate");
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.IsUpToDate"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleObject.IsUpToDate() {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IsUpToDate");
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.GetUserClassID"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleObject.GetUserClassID(ref Guid pClsid) {
             pClsid = GetType().GUID;
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetUserClassID.  ClassID: " + pClsid.ToString());
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.GetUserType"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleObject.GetUserType(int dwFormOfType, out string userType) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetUserType");
             if (dwFormOfType == NativeMethods.USERCLASSTYPE_FULL) {
@@ -14969,10 +14043,8 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.SetExtent"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleObject.SetExtent(int dwDrawAspect, NativeMethods.tagSIZEL pSizel) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetExtent(" + pSizel.cx + ", " + pSizel.cy + ")");
             Debug.Indent();
@@ -14981,10 +14053,8 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.GetExtent"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleObject.GetExtent(int dwDrawAspect, NativeMethods.tagSIZEL pSizel) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetExtent.  Aspect: " + dwDrawAspect.ToString(CultureInfo.InvariantCulture));
             Debug.Indent();
@@ -14994,20 +14064,16 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.Advise"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleObject.Advise(IAdviseSink pAdvSink, out int cookie) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Advise");
             cookie = ActiveXInstance.Advise(pAdvSink);
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.Unadvise"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleObject.Unadvise(int dwConnection) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Unadvise");
             Debug.Indent();
@@ -15016,20 +14082,16 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.EnumAdvise"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleObject.EnumAdvise(out IEnumSTATDATA e) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:EnumAdvise");
             e = null;
             return NativeMethods.E_NOTIMPL;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.GetMiscStatus"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleObject.GetMiscStatus(int dwAspect, out int cookie) {
             if ((dwAspect & NativeMethods.DVASPECT_CONTENT) != 0) {
                 int status = NativeMethods.OLEMISC_ACTIVATEWHENVISIBLE | NativeMethods.OLEMISC_INSIDEOUT | NativeMethods.OLEMISC_SETCLIENTSITEFIRST;
@@ -15053,61 +14115,47 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.SetColorScheme"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleObject.SetColorScheme(NativeMethods.tagLOGPALETTE pLogpal) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetColorScheme");
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleWindow.GetWindow"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IOleWindow.GetWindow(out IntPtr hwnd) {
             return((UnsafeNativeMethods.IOleInPlaceObject)this).GetWindow(out hwnd);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleWindow.ContextSensitiveHelp"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IOleWindow.ContextSensitiveHelp(int fEnterMode) {
             ((UnsafeNativeMethods.IOleInPlaceObject)this).ContextSensitiveHelp(fEnterMode);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersist.GetClassID"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IPersist.GetClassID(out Guid pClassID) {
             pClassID = GetType().GUID;
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersist.GetClassID.  ClassID: " + pClassID.ToString());
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistPropertyBag.InitNew"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IPersistPropertyBag.InitNew() {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistPropertyBag.InitNew");
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistPropertyBag.GetClassID"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IPersistPropertyBag.GetClassID(out Guid pClassID) {
             pClassID = GetType().GUID;
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistPropertyBag.GetClassID.  ClassID: " + pClassID.ToString());
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistPropertyBag.Load"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IPersistPropertyBag.Load(UnsafeNativeMethods.IPropertyBag pPropBag, UnsafeNativeMethods.IErrorLog pErrorLog) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Load (IPersistPropertyBag)");
             Debug.Indent();
@@ -15115,10 +14163,8 @@ example usage
             Debug.Unindent();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistPropertyBag.Save"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IPersistPropertyBag.Save(UnsafeNativeMethods.IPropertyBag pPropBag, bool fClearDirty, bool fSaveAllProperties) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Save (IPersistPropertyBag)");
             Debug.Indent();
@@ -15126,36 +14172,28 @@ example usage
             Debug.Unindent();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStorage.GetClassID"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IPersistStorage.GetClassID(out Guid pClassID) {
             pClassID = GetType().GUID;
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.GetClassID.  ClassID: " + pClassID.ToString());
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStorage.IsDirty"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IPersistStorage.IsDirty() {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.IsDirty");
             return ActiveXInstance.IsDirty();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStorage.InitNew"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IPersistStorage.InitNew(UnsafeNativeMethods.IStorage pstg) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.InitNew");
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStorage.Load"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IPersistStorage.Load(UnsafeNativeMethods.IStorage pstg) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.Load");
             Debug.Indent();
@@ -15164,10 +14202,8 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStorage.Save"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IPersistStorage.Save(UnsafeNativeMethods.IStorage pstg, bool fSameAsLoad) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.Save");
             Debug.Indent();
@@ -15175,44 +14211,34 @@ example usage
             Debug.Unindent();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStorage.SaveCompleted"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IPersistStorage.SaveCompleted(UnsafeNativeMethods.IStorage pStgNew) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.SaveCompleted");
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStorage.HandsOffStorage"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IPersistStorage.HandsOffStorage() {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.HandsOffStorage");
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStreamInit.GetClassID"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IPersistStreamInit.GetClassID(out Guid pClassID) {
             pClassID = GetType().GUID;
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.GetClassID.  ClassID: " + pClassID.ToString());
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStreamInit.IsDirty"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IPersistStreamInit.IsDirty() {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.IsDirty");
             return ActiveXInstance.IsDirty();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStreamInit.Load"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IPersistStreamInit.Load(UnsafeNativeMethods.IStream pstm) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.Load");
             Debug.Indent();
@@ -15220,10 +14246,8 @@ example usage
             Debug.Unindent();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStreamInit.Save"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IPersistStreamInit.Save(UnsafeNativeMethods.IStream pstm, bool fClearDirty) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.Save");
             Debug.Indent();
@@ -15231,26 +14255,20 @@ example usage
             Debug.Unindent();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStreamInit.GetSizeMax"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IPersistStreamInit.GetSizeMax(long pcbSize) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetSizeMax");
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStreamInit.InitNew"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IPersistStreamInit.InitNew() {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.InitNew");
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IQuickActivate.QuickActivate"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IQuickActivate.QuickActivate(UnsafeNativeMethods.tagQACONTAINER pQaContainer, UnsafeNativeMethods.tagQACONTROL pQaControl) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:QuickActivate");
             Debug.Indent();
@@ -15258,10 +14276,8 @@ example usage
             Debug.Unindent();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IQuickActivate.SetContentExtent"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IQuickActivate.SetContentExtent(NativeMethods.tagSIZEL pSizel) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetContentExtent");
             Debug.Indent();
@@ -15269,10 +14285,8 @@ example usage
             Debug.Unindent();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IQuickActivate.GetContentExtent"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IQuickActivate.GetContentExtent(NativeMethods.tagSIZEL pSizel) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetContentExtent");
             Debug.Indent();
@@ -15280,10 +14294,8 @@ example usage
             Debug.Unindent();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject.Draw"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IViewObject.Draw(int dwDrawAspect, int lindex, IntPtr pvAspect, NativeMethods.tagDVTARGETDEVICE ptd,
                                             IntPtr hdcTargetDev, IntPtr hdcDraw, NativeMethods.COMRECT lprcBounds, NativeMethods.COMRECT lprcWBounds,
                                             IntPtr pfnContinue, int dwContinue) {
@@ -15305,10 +14317,8 @@ example usage
             return NativeMethods.S_OK;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject.GetColorSet"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IViewObject.GetColorSet(int dwDrawAspect, int lindex, IntPtr pvAspect, NativeMethods.tagDVTARGETDEVICE ptd,
                                                    IntPtr hicTargetDev, NativeMethods.tagLOGPALETTE ppColorSet) {
 
@@ -15319,46 +14329,36 @@ example usage
             return NativeMethods.E_NOTIMPL;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject.Freeze"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IViewObject.Freeze(int dwDrawAspect, int lindex, IntPtr pvAspect, IntPtr pdwFreeze) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Freezes");
             return NativeMethods.E_NOTIMPL;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject.Unfreeze"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IViewObject.Unfreeze(int dwFreeze) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Unfreeze");
             return NativeMethods.E_NOTIMPL;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject.SetAdvise"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IViewObject.SetAdvise(int aspects, int advf, IAdviseSink pAdvSink) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetAdvise");
             ActiveXInstance.SetAdvise(aspects, advf, pAdvSink);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject.GetAdvise"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IViewObject.GetAdvise(int[] paspects, int[] padvf, IAdviseSink[] pAdvSink) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetAdvise");
             ActiveXInstance.GetAdvise(paspects, padvf, pAdvSink);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject2.Draw"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IViewObject2.Draw(int dwDrawAspect, int lindex, IntPtr pvAspect, NativeMethods.tagDVTARGETDEVICE ptd,
                                              IntPtr hdcTargetDev, IntPtr hdcDraw, NativeMethods.COMRECT lprcBounds, NativeMethods.COMRECT lprcWBounds,
                                              IntPtr pfnContinue, int dwContinue) {
@@ -15369,10 +14369,8 @@ example usage
             Debug.Unindent();
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject2.GetColorSet"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IViewObject2.GetColorSet(int dwDrawAspect, int lindex, IntPtr pvAspect, NativeMethods.tagDVTARGETDEVICE ptd,
                                                     IntPtr hicTargetDev, NativeMethods.tagLOGPALETTE ppColorSet) {
 
@@ -15383,46 +14381,36 @@ example usage
             return NativeMethods.E_NOTIMPL;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject2.Freeze"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IViewObject2.Freeze(int dwDrawAspect, int lindex, IntPtr pvAspect, IntPtr pdwFreeze) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Freezes");
             return NativeMethods.E_NOTIMPL;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject2.Unfreeze"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         int UnsafeNativeMethods.IViewObject2.Unfreeze(int dwFreeze) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Unfreeze");
             return NativeMethods.E_NOTIMPL;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject2.SetAdvise"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IViewObject2.SetAdvise(int aspects, int advf, IAdviseSink pAdvSink) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetAdvise");
             ActiveXInstance.SetAdvise(aspects, advf, pAdvSink);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject2.GetAdvise"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IViewObject2.GetAdvise(int[] paspects, int[] padvf, IAdviseSink[] pAdvSink) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetAdvise");
             ActiveXInstance.GetAdvise(paspects, padvf, pAdvSink);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject2.GetExtent"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         void UnsafeNativeMethods.IViewObject2.GetExtent(int dwDrawAspect, int lindex, NativeMethods.tagDVTARGETDEVICE ptd, NativeMethods.tagSIZEL lpsizel) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetExtent (IViewObject2)");
             // we already have an implementation of this [from IOleObject]
@@ -15589,11 +14577,10 @@ example usage
             return true;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      This class holds all of the state data for an ActiveX control and
         ///      supplies the implementation for many of the non-trivial methods.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private class ActiveXImpl : MarshalByRefObject, IWindowTarget {
             // SECUNDONE : This call is private and is only used to expose a WinForm control as
             //           : an ActiveX control. This class needs more review.
@@ -15645,10 +14632,9 @@ example usage
             private short                   accelCount = -1;
             private NativeMethods.COMRECT   adjustRect; // temporary rect used during OnPosRectChange && SetObjectRects
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.ActiveXImpl"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Creates a new ActiveXImpl.
-            /// </devdoc>
+            /// </summary>
             internal ActiveXImpl(Control control) {
                 this.control = control;
 
@@ -15667,10 +14653,9 @@ example usage
                 };
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.AmbientBackColor"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Retrieves the ambient back color for the control.
-            /// </devdoc>
+            /// </summary>
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             internal Color AmbientBackColor {
                 get {
@@ -15704,9 +14689,9 @@ example usage
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Retrieves the ambient font for the control.
-            /// </devdoc>
+            /// </summary>
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             internal Font AmbientFont {                               
                 get {
@@ -15742,9 +14727,9 @@ example usage
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Retrieves the ambient back color for the control.
-            /// </devdoc>
+            /// </summary>
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             internal Color AmbientForeColor {
                 get {
@@ -15778,10 +14763,9 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.EventsFrozen"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Determines if events should be frozen.
-            /// </devdoc>
+            /// </summary>
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             internal bool EventsFrozen {
                 get {
@@ -15792,21 +14776,21 @@ example usage
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Provides access to the parent window handle
             ///     when we are UI active
-            /// </devdoc>
+            /// </summary>
             internal IntPtr HWNDParent {
                 get {
                     return hwndParent;
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Returns true if this app domain is running inside of IE.  The
             ///     control must be sited for this to succeed (it will assert and
             ///     return false if the control is not sited).
-            /// </devdoc>
+            /// </summary>
             internal bool IsIE {
                 get {
                     if (!checkedIE) {
@@ -15826,8 +14810,8 @@ example usage
                                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "AxSource:IsIE running under IE");
                             }
 
-                            if (container != null && UnsafeNativeMethods.IsComObject(container)) {
-                                UnsafeNativeMethods.ReleaseComObject(container);
+                            if (container != null && Marshal.IsComObject(container)) {
+                                Marshal.ReleaseComObject(container);
                             }
                         }
 
@@ -15838,10 +14822,10 @@ example usage
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Retrieves the number of logical pixels per inch on the
             ///      primary monitor.
-            /// </devdoc>
+            /// </summary>
             private Point LogPixels {
                 get {
                     if (logPixels.IsEmpty) {
@@ -15855,19 +14839,17 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.Advise"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Implements IOleObject::Advise
-            /// </devdoc>
+            /// </summary>
             internal int Advise(IAdviseSink pAdvSink) {
                 adviseList.Add(pAdvSink);
                 return adviseList.Count;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.Close"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Implements IOleObject::Close
-            /// </devdoc>
+            /// </summary>
             internal void Close(int dwSaveOption) {
                 if (activeXState[inPlaceActive]) {
                     InPlaceDeactivate();
@@ -15884,10 +14866,9 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.DoVerb"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Implements IOleObject::DoVerb
-            /// </devdoc>
+            /// </summary>
             internal void DoVerb(int iVerb, IntPtr lpmsg, UnsafeNativeMethods.IOleClientSite pActiveSite, int lindex, IntPtr hwndParent, NativeMethods.COMRECT lprcPosRect) {
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "AxSource:ActiveXImpl:DoVerb(" + iVerb + ")");
                 switch (iVerb) {
@@ -15902,10 +14883,10 @@ example usage
                         // is valid.
                         //
                         if (lpmsg != IntPtr.Zero) {
-                            NativeMethods.MSG msg = (NativeMethods.MSG)UnsafeNativeMethods.PtrToStructure(lpmsg, typeof(NativeMethods.MSG));
+                            NativeMethods.MSG msg = Marshal.PtrToStructure<NativeMethods.MSG>(lpmsg);
                             Control target = control;
 
-                            if (msg.hwnd != control.Handle && msg.message >= NativeMethods.WM_MOUSEFIRST && msg.message <= NativeMethods.WM_MOUSELAST) {
+                            if (msg.hwnd != control.Handle && msg.message >= Interop.WindowMessages.WM_MOUSEFIRST && msg.message <= Interop.WindowMessages.WM_MOUSELAST) {
 
                                 // Must translate message coordniates over to our HWND.  We first try
                                 //
@@ -15935,7 +14916,7 @@ example usage
                             }
 #endif // DEBUG
 
-                            if (msg.message == NativeMethods.WM_KEYDOWN && msg.wParam == (IntPtr)NativeMethods.VK_TAB) {
+                            if (msg.message == Interop.WindowMessages.WM_KEYDOWN && msg.wParam == (IntPtr)NativeMethods.VK_TAB) {
                                 target.SelectNextControl(null, Control.ModifierKeys != Keys.Shift, true, true, true);
                             }
                             else {
@@ -15979,10 +14960,9 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.Draw"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Implements IViewObject2::Draw.
-            /// </devdoc>
+            /// </summary>
             internal void Draw(int dwDrawAspect, int lindex, IntPtr pvAspect, NativeMethods.tagDVTARGETDEVICE ptd,
                              IntPtr hdcTargetDev, IntPtr hdcDraw, NativeMethods.COMRECT prcBounds, NativeMethods.COMRECT lprcWBounds,
                              IntPtr pfnContinue, int dwContinue) {
@@ -16049,7 +15029,7 @@ example usage
                                   //| NativeMethods.PRF_OWNED));
 
                     if(hdcType != NativeMethods.OBJ_ENHMETADC) {
-                        control.SendMessage(NativeMethods.WM_PRINT, hdcDraw, flags);
+                        control.SendMessage(Interop.WindowMessages.WM_PRINT, hdcDraw, flags);
                     } else {
                         control.PrintToMetaFile(new HandleRef(null, hdcDraw), flags);
                     }
@@ -16067,10 +15047,9 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.EnumVerbs"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     Returns a new verb enumerator.
-            /// </devdoc>
+            /// </summary>
             internal static int EnumVerbs(out UnsafeNativeMethods.IEnumOLEVERB e) {
                 if (axVerbs == null) {
                     NativeMethods.tagOLEVERB verbShow             = new NativeMethods.tagOLEVERB();
@@ -16105,9 +15084,9 @@ example usage
                 return NativeMethods.S_OK;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Converts the given string to a byte array.
-            /// </devdoc>
+            /// </summary>
             private static byte[] FromBase64WrappedString(string text) {
                 if (text.IndexOfAny(new char[] {' ', '\r', '\n'}) != -1) {
                     StringBuilder sb = new StringBuilder(text.Length);
@@ -16129,9 +15108,9 @@ example usage
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Implements IViewObject2::GetAdvise.
-            /// </devdoc>
+            /// </summary>
             internal void GetAdvise(int[] paspects, int[] padvf, IAdviseSink[] pAdvSink) {
                 // if they want it, give it to them
                 //
@@ -16151,10 +15130,10 @@ example usage
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Helper function to retrieve an ambient property.  Returns false if the
             ///      property wasn't found.
-            /// </devdoc>
+            /// </summary>
             private bool GetAmbientProperty(int dispid, ref object obj) {
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetAmbientProperty");
                 Debug.Indent();
@@ -16183,17 +15162,15 @@ example usage
                 return false;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Implements IOleObject::GetClientSite.
-            /// </devdoc>
+            /// </summary>
             internal UnsafeNativeMethods.IOleClientSite GetClientSite() {
                 return clientSite;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.GetControlInfo"]/*' />
-            /// <devdoc>
-            /// </devdoc>
-            /// <internalonly/>
+            /// <summary>
+            /// </summary>
             internal int GetControlInfo(NativeMethods.tagCONTROLINFO pCI) {
                 if (accelCount == -1) {
                     ArrayList mnemonicList = new ArrayList();
@@ -16202,7 +15179,7 @@ example usage
                     accelCount = (short)mnemonicList.Count;
 
                     if (accelCount > 0) {
-                        int accelSize = UnsafeNativeMethods.SizeOf(typeof(NativeMethods.ACCEL));
+                        int accelSize = Marshal.SizeOf<NativeMethods.ACCEL>();
 
                         // In the worst case we may have two accelerators per mnemonic:  one lower case and
                         // one upper case, hence the * 2 below.
@@ -16278,9 +15255,9 @@ example usage
                 return NativeMethods.S_OK;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Implements IOleObject::GetExtent.
-            /// </devdoc>
+            /// </summary>
             internal void GetExtent(int dwDrawAspect, NativeMethods.tagSIZEL pSizel) {
                 if ((dwDrawAspect & NativeMethods.DVASPECT_CONTENT) != 0) {
                     Size size = control.Size;
@@ -16294,11 +15271,11 @@ example usage
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Searches the control hierarchy of the given control and adds
             ///     the mnemonics for each control to mnemonicList.  Each mnemonic
             ///     is added as a char to the list.
-            /// </devdoc>
+            /// </summary>
             private void GetMnemonicList(Control control, ArrayList mnemonicList) {
                 // Get the mnemonic for our control
                 //
@@ -16314,10 +15291,10 @@ example usage
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Name to use for a stream: use the control's type name (max 31 chars, use the end chars
             ///     if it's longer than that)
-            /// </devdoc>
+            /// </summary>
             private string GetStreamName()
             {
                 string streamName = control.GetType().FullName;
@@ -16329,9 +15306,9 @@ example usage
                 return streamName;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Implements IOleWindow::GetWindow
-            /// </devdoc>
+            /// </summary>
             internal int GetWindow(out IntPtr hwnd) {
                 if (!activeXState[inPlaceActive]) {
                     hwnd = IntPtr.Zero;
@@ -16341,10 +15318,9 @@ example usage
                 return NativeMethods.S_OK;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Converts coordinates in HiMetric to pixels.  Used for ActiveX sourcing.
-            /// </devdoc>
-            /// <internalonly/>
+            /// </summary>
             private Point HiMetricToPixel(int x, int y) {
                 Point pt = new Point();
                 pt.X = (LogPixels.X * x + hiMetricPerInch / 2) / hiMetricPerInch;
@@ -16352,10 +15328,9 @@ example usage
                 return pt;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.InPlaceActivate"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      In place activates this Object.
-            /// </devdoc>
+            /// </summary>
             internal void InPlaceActivate(int verb)
             {
                 // If we don't have a client site, then there's not much to do.
@@ -16393,7 +15368,7 @@ example usage
                 if (!activeXState[inPlaceVisible]) {
                     Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "\tActiveXImpl:InPlaceActivate --> inplacevisible");
                     NativeMethods.tagOIFI inPlaceFrameInfo = new NativeMethods.tagOIFI();
-                    inPlaceFrameInfo.cb = UnsafeNativeMethods.SizeOf(typeof(NativeMethods.tagOIFI));
+                    inPlaceFrameInfo.cb = Marshal.SizeOf<NativeMethods.tagOIFI>();
                     IntPtr hwndParent = IntPtr.Zero;
 
                     // We are entering a secure context here.
@@ -16405,13 +15380,13 @@ example usage
                     NativeMethods.COMRECT posRect = new NativeMethods.COMRECT();
                     NativeMethods.COMRECT clipRect = new NativeMethods.COMRECT();
 
-                    if (inPlaceUiWindow != null && UnsafeNativeMethods.IsComObject(inPlaceUiWindow)) {
-                        UnsafeNativeMethods.ReleaseComObject(inPlaceUiWindow);
+                    if (inPlaceUiWindow != null && Marshal.IsComObject(inPlaceUiWindow)) {
+                        Marshal.ReleaseComObject(inPlaceUiWindow);
                         inPlaceUiWindow = null;
                     }
 
-                    if (inPlaceFrame != null && UnsafeNativeMethods.IsComObject(inPlaceFrame)) {
-                        UnsafeNativeMethods.ReleaseComObject(inPlaceFrame);
+                    if (inPlaceFrame != null && Marshal.IsComObject(inPlaceFrame)) {
+                        Marshal.ReleaseComObject(inPlaceFrame);
                         inPlaceFrame = null;
                     }
 
@@ -16432,9 +15407,7 @@ example usage
                     this.hwndParent = hwndParent;
                     UnsafeNativeMethods.SetParent(new HandleRef(control, control.Handle), new HandleRef(null, hwndParent));
 
-                    // Now create our handle if it hasn't already been done. Note that because
-                    // this raises events to the user that it CANNOT be done with a security assertion
-                    // in place!
+                    // Now create our handle if it hasn't already been done.
                     //
                     control.CreateControl();
 
@@ -16463,7 +15436,7 @@ example usage
 
                     // take the focus  [which is what UI Activation is all about !]
                     //
-                    if (!control.ContainsFocus) control.FocusInternal();
+                    if (!control.ContainsFocus) control.Focus();
 
                     // set ourselves up in the host.
                     //
@@ -16478,14 +15451,14 @@ example usage
                     int hr = inPlaceFrame.SetBorderSpace(null);
                     if (NativeMethods.Failed(hr) && hr != NativeMethods.OLE_E_INVALIDRECT &&
                         hr != NativeMethods.INPLACE_E_NOTOOLSPACE && hr != NativeMethods.E_NOTIMPL) {
-                        UnsafeNativeMethods.ThrowExceptionForHR(hr);
+                        Marshal.ThrowExceptionForHR(hr);
                     }
 
                     if (inPlaceUiWindow != null) {
                         hr = inPlaceFrame.SetBorderSpace(null);
                         if (NativeMethods.Failed(hr) && hr != NativeMethods.OLE_E_INVALIDRECT &&
                             hr != NativeMethods.INPLACE_E_NOTOOLSPACE && hr != NativeMethods.E_NOTIMPL) {
-                            UnsafeNativeMethods.ThrowExceptionForHR(hr);
+                            Marshal.ThrowExceptionForHR(hr);
                         }
                     }
                 }
@@ -16494,10 +15467,9 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.InPlaceDeactivate"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Implements IOleInPlaceObject::InPlaceDeactivate.
-            /// </devdoc>
+            /// </summary>
             internal void InPlaceDeactivate() {
 
                 // Only do this if we're already in place active.
@@ -16529,20 +15501,20 @@ example usage
                 control.Visible = false;
                 hwndParent = IntPtr.Zero;
 
-                if (inPlaceUiWindow != null && UnsafeNativeMethods.IsComObject(inPlaceUiWindow)) {
-                    UnsafeNativeMethods.ReleaseComObject(inPlaceUiWindow);
+                if (inPlaceUiWindow != null && Marshal.IsComObject(inPlaceUiWindow)) {
+                    Marshal.ReleaseComObject(inPlaceUiWindow);
                     inPlaceUiWindow = null;
                 }
 
-                if (inPlaceFrame != null && UnsafeNativeMethods.IsComObject(inPlaceFrame)) {
-                    UnsafeNativeMethods.ReleaseComObject(inPlaceFrame);
+                if (inPlaceFrame != null && Marshal.IsComObject(inPlaceFrame)) {
+                    Marshal.ReleaseComObject(inPlaceFrame);
                     inPlaceFrame = null;
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Implements IPersistStreamInit::IsDirty.
-            /// </devdoc>
+            /// </summary>
             internal int IsDirty() {
                 if (activeXState[isDirty]) {
                     return NativeMethods.S_OK;
@@ -16552,10 +15524,10 @@ example usage
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Looks at the property to see if it should be loaded / saved as a resource or
             ///      through a type converter.
-            /// </devdoc>
+            /// </summary>
             private bool IsResourceProp(PropertyDescriptor prop) {
                 TypeConverter converter = prop.Converter;
                 Type[] convertTypes = new Type[] {
@@ -16574,10 +15546,9 @@ example usage
                 return (prop.GetValue(control) is ISerializable);
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.Load"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Implements IPersistStorage::Load
-            /// </devdoc>
+            /// </summary>
             internal void Load(UnsafeNativeMethods.IStorage stg) {
                 UnsafeNativeMethods.IStream stream = null;
 
@@ -16597,15 +15568,14 @@ example usage
 
                 Load(stream);
                 stream = null;
-                if (UnsafeNativeMethods.IsComObject(stg)) {
-                    UnsafeNativeMethods.ReleaseComObject(stg);
+                if (Marshal.IsComObject(stg)) {
+                    Marshal.ReleaseComObject(stg);
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.Load1"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Implements IPersistStreamInit::Load
-            /// </devdoc>
+            /// </summary>
             internal void Load(UnsafeNativeMethods.IStream stream) {
                 // We do everything through property bags because we support full fidelity
                 // in them.  So, load through that method.
@@ -16614,14 +15584,14 @@ example usage
                 bag.Read(stream);
                 Load(bag, null);
 
-                if (UnsafeNativeMethods.IsComObject(stream)) {
-                    UnsafeNativeMethods.ReleaseComObject(stream);
+                if (Marshal.IsComObject(stream)) {
+                    Marshal.ReleaseComObject(stream);
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Implements IPersistPropertyBag::Load
-            /// </devdoc>
+            /// </summary>
             internal void Load(UnsafeNativeMethods.IPropertyBag pPropBag, UnsafeNativeMethods.IErrorLog pErrorLog) {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(control,
                     new Attribute[] {DesignerSerializationVisibilityAttribute.Visible});
@@ -16717,15 +15687,15 @@ example usage
                         }
                     }
                 }
-                if (UnsafeNativeMethods.IsComObject(pPropBag)) {
-                    UnsafeNativeMethods.ReleaseComObject(pPropBag);
+                if (Marshal.IsComObject(pPropBag)) {
+                    Marshal.ReleaseComObject(pPropBag);
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Simple lookup to find the AmbientProperty corresponding to the given
             ///      dispid.
-            /// </devdoc>
+            /// </summary>
             private AmbientProperty LookupAmbient(int dispid) {
                 for (int i = 0; i < ambientProperties.Length; i++) {
                     if (ambientProperties[i].DispID == dispid) {
@@ -16736,12 +15706,12 @@ example usage
                 return ambientProperties[0];
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Merges the input region with the current clipping region.
             ///      The output is always a region that can be fed directly
             ///      to SetWindowRgn.  The region does not have to be destroyed.
             ///      The original region is destroyed if a new region is returned.
-            /// </devdoc>
+            /// </summary>
             internal IntPtr MergeRegion(IntPtr region) {
                 if (clipRegion == IntPtr.Zero) {
                     return region;
@@ -16813,10 +15783,9 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.OnAmbientPropertyChange"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Implements IOleControl::OnAmbientPropertyChanged
-            /// </devdoc>
+            /// </summary>
             internal void OnAmbientPropertyChange(int dispID) {
                 if (dispID != NativeMethods.ActiveX.DISPID_UNKNOWN) {
 
@@ -16859,10 +15828,9 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.OnDocWindowActivate"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Implements IOleInPlaceActiveObject::OnDocWindowActivate.
-            /// </devdoc>
+            /// </summary>
             internal void OnDocWindowActivate(int fActivate) {
                 if (activeXState[uiActive] && fActivate != 0 && inPlaceFrame != null) {
                     // we have to explicitly say we don't wany any border space.
@@ -16870,14 +15838,14 @@ example usage
                     int hr = inPlaceFrame.SetBorderSpace(null);
 
                     if (NativeMethods.Failed(hr) && hr != NativeMethods.INPLACE_E_NOTOOLSPACE && hr != NativeMethods.E_NOTIMPL) {
-                        UnsafeNativeMethods.ThrowExceptionForHR(hr);
+                        Marshal.ThrowExceptionForHR(hr);
                     }
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Called by Control when it gets the focus.
-            /// </devdoc>
+            /// </summary>
             internal void OnFocus(bool focus) {
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AXSource: SetFocus:  " + focus.ToString());
                 if (activeXState[inPlaceActive] && clientSite is UnsafeNativeMethods.IOleControlSite) {
@@ -16889,10 +15857,9 @@ example usage
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Converts coordinates in pixels to HiMetric.
-            /// </devdoc>
-            /// <internalonly/>
+            /// </summary>
             private Point PixelToHiMetric(int x, int y) {
                 Point pt = new Point();
                 pt.X = (hiMetricPerInch * x + (LogPixels.X >> 1)) / LogPixels.X;
@@ -16900,10 +15867,9 @@ example usage
                 return pt;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.QuickActivate"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     Our implementation of IQuickActivate::QuickActivate
-            /// </devdoc>
+            /// </summary>
             internal void QuickActivate(UnsafeNativeMethods.tagQACONTAINER pQaContainer, UnsafeNativeMethods.tagQACONTROL pQaControl) {
                 // Hookup our ambient colors
                 //
@@ -16942,7 +15908,7 @@ example usage
                 //
                 int status;
 
-                pQaControl.cbSize = UnsafeNativeMethods.SizeOf(typeof(UnsafeNativeMethods.tagQACONTROL));
+                pQaControl.cbSize = Marshal.SizeOf<UnsafeNativeMethods.tagQACONTROL>();
 
                 SetClientSite(pQaContainer.pClientSite);
 
@@ -16981,24 +15947,24 @@ example usage
                     }
                 }
 
-                if (pQaContainer.pPropertyNotifySink != null && UnsafeNativeMethods.IsComObject(pQaContainer.pPropertyNotifySink)) {
-                    UnsafeNativeMethods.ReleaseComObject(pQaContainer.pPropertyNotifySink);
+                if (pQaContainer.pPropertyNotifySink != null && Marshal.IsComObject(pQaContainer.pPropertyNotifySink)) {
+                    Marshal.ReleaseComObject(pQaContainer.pPropertyNotifySink);
                 }
 
-                if (pQaContainer.pUnkEventSink != null && UnsafeNativeMethods.IsComObject(pQaContainer.pUnkEventSink)) {
-                    UnsafeNativeMethods.ReleaseComObject(pQaContainer.pUnkEventSink);
+                if (pQaContainer.pUnkEventSink != null && Marshal.IsComObject(pQaContainer.pUnkEventSink)) {
+                    Marshal.ReleaseComObject(pQaContainer.pUnkEventSink);
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Helper class. Calls IConnectionPoint.Advise to hook up a native COM event sink 
             ///     to a manage .NET event interface. 
             ///     The events are exposed to COM by the CLR-supplied COM-callable Wrapper (CCW).
-            /// </devdoc>
+            /// </summary>
             internal static class AdviseHelper {
-                /// <devdoc>
+                /// <summary>
                 ///     Get the COM connection point container from the CLR's CCW and advise for the given event id.
-                /// </devdoc>
+                /// </summary>
                 public static bool AdviseConnectionPoint(object connectionPoint, object sink, Type eventInterface, out int cookie) {
                     
                     // Note that we cannot simply cast the connectionPoint object to 
@@ -17014,9 +15980,9 @@ example usage
                     }
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///     Find the COM connection point and call Advise for the given event id.
-                /// </devdoc>
+                /// </summary>
                 [SuppressMessage("Microsoft.Reliability", "CA2001:AvoidCallingProblematicMethods", MessageId = "System.Runtime.InteropServices.SafeHandle.DangerousGetHandle")]
                 internal static bool AdviseConnectionPoint(ComConnectionPointContainer cpc, object sink, Type eventInterface, out int cookie) {
                     
@@ -17035,23 +16001,23 @@ example usage
                     }
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///     Wraps a native IUnknown in a SafeHandle. 
                 ///     See similar implementaton in the <see cref='System.Transactions.SafeIUnknown'/> class.
-                /// </devdoc>
+                /// </summary>
                 internal class SafeIUnknown : SafeHandle {
 
-                    /// <devdoc>
+                    /// <summary>
                     ///     Wrap an incomoing unknown or get the unknown for the CCW (COM-callable wrapper).
-                    /// </devdoc>
+                    /// </summary>
                     public SafeIUnknown(object obj, bool addRefIntPtr)
                         : this(obj, addRefIntPtr, Guid.Empty) {
                     }
 
-                    /// <devdoc>
+                    /// <summary>
                     ///     Wrap an incomoing unknown or get the unknown for the CCW (COM-callable wrapper).
                     ///     If an iid is supplied, QI for the interface and wrap that unknonwn instead.
-                    /// </devdoc>
+                    /// </summary>
                     public SafeIUnknown(object obj, bool addRefIntPtr, Guid iid)
                         : base(IntPtr.Zero, true) {
 
@@ -17100,9 +16066,9 @@ example usage
                         }
                     }
 
-                    /// <devdoc>
+                    /// <summary>
                     ///     Helper function for QueryInterface.
-                    /// </devdoc>
+                    /// </summary>
                     private static IntPtr InternalQueryInterface(IntPtr pUnk, ref Guid iid) {
                         IntPtr ppv;
                         int hresult = Marshal.QueryInterface(pUnk, ref iid, out ppv);
@@ -17112,9 +16078,9 @@ example usage
                         return ppv;
                     }
 
-                    /// <devdoc>
+                    /// <summary>
                     ///     Return whether the handle is invalid.
-                    /// </devdoc>
+                    /// </summary>
                     public sealed override bool IsInvalid {
                         get {
                             if (!base.IsClosed) {
@@ -17124,9 +16090,9 @@ example usage
                         }
                     }
 
-                    /// <devdoc>
+                    /// <summary>
                     ///     Release the IUnknown.
-                    /// </devdoc>
+                    /// </summary>
                     protected sealed override bool ReleaseHandle() {
                         IntPtr ptr1 = base.handle;
                         base.handle = IntPtr.Zero;
@@ -17136,19 +16102,19 @@ example usage
                         return true;
                     }
 
-                    /// <devdoc>
+                    /// <summary>
                     ///     Helper function to load a COM v-table from a com object pointer.
-                    /// </devdoc>
+                    /// </summary>
                     protected V LoadVtable<V>() {
                         IntPtr vtblptr = Marshal.ReadIntPtr(this.handle, 0);
-                        return (V)Marshal.PtrToStructure(vtblptr, typeof(V));
+                        return Marshal.PtrToStructure<V>(vtblptr);
                     }
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///     Helper class to access IConnectionPointContainer from a .NET COM-callable wrapper. 
                 ///     The IConnectionPointContainer COM pointer is wrapped in a SafeHandle.
-                /// </devdoc>
+                /// </summary>
                 internal sealed class ComConnectionPointContainer 
                     : SafeIUnknown {
 
@@ -17169,9 +16135,9 @@ example usage
                         public IntPtr FindConnectionPointPtr;
                     }
 
-                    /// <devdoc>
+                    /// <summary>
                     ///     Call IConnectionPointContainer.FindConnectionPoint using Delegate.Invoke on the v-table slot.
-                    /// </devdoc>
+                    /// </summary>
                     public ComConnectionPoint FindConnectionPoint(Type eventInterface) {
                         FindConnectionPointD findConnectionPoint = (FindConnectionPointD)Marshal.GetDelegateForFunctionPointer(this.vtbl.FindConnectionPointPtr, typeof(FindConnectionPointD));
                         IntPtr result = IntPtr.Zero;
@@ -17189,10 +16155,10 @@ example usage
                     private delegate int FindConnectionPointD(IntPtr This, ref Guid iid, out IntPtr ppv);
                 }
 
-                /// <devdoc>
+                /// <summary>
                 ///     Helper class to access IConnectionPoint from a .NET COM-callable wrapper. 
                 ///     The IConnectionPoint COM pointer is wrapped in a SafeHandle.
-                /// </devdoc>
+                /// </summary>
                 internal sealed class ComConnectionPoint 
                     : SafeIUnknown {
 
@@ -17216,9 +16182,9 @@ example usage
 
                     private VTABLE vtbl;
 
-                    /// <devdoc>
+                    /// <summary>
                     ///     Call IConnectioinPoint.Advise using Delegate.Invoke on the v-table slot.
-                    /// </devdoc>
+                    /// </summary>
                     public bool Advise(IntPtr punkEventSink, out int cookie) {
                         AdviseD advise = (AdviseD)Marshal.GetDelegateForFunctionPointer(this.vtbl.AdvisePtr, typeof(AdviseD));
                         if (advise.Invoke(this.handle, punkEventSink, out cookie) == 0) {
@@ -17233,11 +16199,11 @@ example usage
 
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Return the default COM events interface declared on a .NET class.
             ///     This looks for the ComSourceInterfacesAttribute and returns the .NET 
             ///     interface type of the first interface declared.
-            /// </devdoc>
+            /// </summary>
             private static Type GetDefaultEventsInterface(Type controlType) {
                 
                 Type eventInterface = null;
@@ -17256,21 +16222,19 @@ example usage
             }
 
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.Save"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Implements IPersistStorage::Save
-            /// </devdoc>
+            /// </summary>
             internal void Save(UnsafeNativeMethods.IStorage stg, bool fSameAsLoad) {
                 UnsafeNativeMethods.IStream stream = stg.CreateStream(this.GetStreamName(), NativeMethods.STGM_WRITE | NativeMethods.STGM_SHARE_EXCLUSIVE | NativeMethods.STGM_CREATE, 0, 0);
                 Debug.Assert(stream != null, "Stream should be non-null, or an exception should have been thrown.");
                 Save(stream, true);
-                UnsafeNativeMethods.ReleaseComObject(stream);
+                Marshal.ReleaseComObject(stream);
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.Save1"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Implements IPersistStreamInit::Save
-            /// </devdoc>
+            /// </summary>
             internal void Save(UnsafeNativeMethods.IStream stream, bool fClearDirty) {
                 // We do everything through property bags because we support full fidelity
                 // in them.  So, save through that method.
@@ -17279,14 +16243,14 @@ example usage
                 Save(bag, fClearDirty, false);
                 bag.Write(stream);
 
-                if (UnsafeNativeMethods.IsComObject(stream)) {
-                    UnsafeNativeMethods.ReleaseComObject(stream);
+                if (Marshal.IsComObject(stream)) {
+                    Marshal.ReleaseComObject(stream);
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Implements IPersistPropertyBag::Save
-            /// </devdoc>
+            /// </summary>
             internal void Save(UnsafeNativeMethods.IPropertyBag pPropBag, bool fClearDirty, bool fSaveAllProperties) {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(control,
                     new Attribute[] {DesignerSerializationVisibilityAttribute.Visible});
@@ -17330,8 +16294,8 @@ example usage
                     }
                 }
 
-                if (UnsafeNativeMethods.IsComObject(pPropBag)) {
-                    UnsafeNativeMethods.ReleaseComObject(pPropBag);
+                if (Marshal.IsComObject(pPropBag)) {
+                    Marshal.ReleaseComObject(pPropBag);
                 }
 
                 if (fClearDirty) {
@@ -17339,11 +16303,10 @@ example usage
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Fires the OnSave event to all of our IAdviseSink
             ///      listeners.  Used for ActiveXSourcing.
-            /// </devdoc>
-            /// <internalonly/>
+            /// </summary>
             private void SendOnSave() {
                 int cnt = adviseList.Count;
                 for (int i = 0; i < cnt; i++) {
@@ -17353,10 +16316,9 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.SetAdvise"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Implements IViewObject2::SetAdvise.
-            /// </devdoc>
+            /// </summary>
             internal void SetAdvise(int aspects, int advf, IAdviseSink pAdvSink) {
                 // if it's not a content aspect, we don't support it.
                 //
@@ -17369,8 +16331,8 @@ example usage
                 activeXState[viewAdvisePrimeFirst] = (advf & NativeMethods.ADVF_PRIMEFIRST) != 0 ? true : false;
                 activeXState[viewAdviseOnlyOnce] = (advf & NativeMethods.ADVF_ONLYONCE) != 0 ? true : false;
 
-                if (viewAdviseSink != null && UnsafeNativeMethods.IsComObject(viewAdviseSink)) {
-                    UnsafeNativeMethods.ReleaseComObject(viewAdviseSink);
+                if (viewAdviseSink != null && Marshal.IsComObject(viewAdviseSink)) {
+                    Marshal.ReleaseComObject(viewAdviseSink);
                 }
 
                 viewAdviseSink = pAdvSink;
@@ -17382,10 +16344,9 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.SetClientSite"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Implements IOleObject::SetClientSite.
-            /// </devdoc>
+            /// </summary>
             internal void SetClientSite(UnsafeNativeMethods.IOleClientSite value) {
                 if (clientSite != null) {
 
@@ -17409,7 +16370,7 @@ example usage
                         }
                     }
 
-                    if (UnsafeNativeMethods.IsComObject(clientSite)) {
+                    if (Marshal.IsComObject(clientSite)) {
                         Marshal.FinalReleaseComObject(clientSite);
                     }
                 }
@@ -17470,9 +16431,9 @@ example usage
                 control.OnTopMostActiveXParentChanged(EventArgs.Empty);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Implements IOleObject::SetExtent
-            /// </devdoc>
+            /// </summary>
             internal void SetExtent(int dwDrawAspect, NativeMethods.tagSIZEL pSizel) {
                 if ((dwDrawAspect & NativeMethods.DVASPECT_CONTENT) != 0) {
 
@@ -17540,17 +16501,17 @@ example usage
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Marks our state as in place visible.
-            /// </devdoc>
+            /// </summary>
             private void SetInPlaceVisible(bool visible) {
                 activeXState[inPlaceVisible] = visible;
                 control.Visible = visible;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Implements IOleInPlaceObject::SetObjectRects.
-            /// </devdoc>
+            /// </summary>
             internal void SetObjectRects(NativeMethods.COMRECT lprcPosRect, NativeMethods.COMRECT lprcClipRect) {
 
 #if DEBUG
@@ -17684,9 +16645,9 @@ example usage
             // This has been cut from the product.
             //
 
-            /// <devdoc>
+            /// <summary>
             ///      Shows a property page dialog.
-            /// </devdoc>
+            /// </summary>
             private void ShowProperties() {
                 if (propPage == null) {
                     propPage = new ActiveXPropPage(control);
@@ -17706,19 +16667,17 @@ example usage
             }
             #endif
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.ThrowHr"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Throws the given hresult.  This is used by ActiveX sourcing.
-            /// </devdoc>
+            /// </summary>
             internal static void ThrowHr(int hr) {
                 ExternalException e = new ExternalException(SR.ExternalException, hr);
                 throw e;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.TranslateAccelerator"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     Handles IOleControl::TranslateAccelerator
-            /// </devdoc>
+            /// </summary>
             internal int TranslateAccelerator(ref NativeMethods.MSG lpmsg) {
                
 #if DEBUG
@@ -17736,10 +16695,10 @@ example usage
                 bool needPreProcess = false;
 
                 switch (lpmsg.message) {
-                    case NativeMethods.WM_KEYDOWN:
-                    case NativeMethods.WM_SYSKEYDOWN:
-                    case NativeMethods.WM_CHAR:
-                    case NativeMethods.WM_SYSCHAR:
+                    case Interop.WindowMessages.WM_KEYDOWN:
+                    case Interop.WindowMessages.WM_SYSKEYDOWN:
+                    case Interop.WindowMessages.WM_CHAR:
+                    case Interop.WindowMessages.WM_SYSCHAR:
                         needPreProcess = true;
                         break;
                 }
@@ -17747,7 +16706,7 @@ example usage
                 Message msg = Message.Create(lpmsg.hwnd, lpmsg.message, lpmsg.wParam, lpmsg.lParam);
 
                 if (needPreProcess) {
-                    Control target = Control.FromChildHandleInternal(lpmsg.hwnd);
+                    Control target = Control.FromChildHandle(lpmsg.hwnd);
                     if (target != null && (control == target || control.Contains(target))) {
                         PreProcessControlState messageState = PreProcessControlMessageInternal(target, ref msg);
                         switch (messageState) {
@@ -17798,10 +16757,9 @@ example usage
                 return hr;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.UIDeactivate"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Implements IOleInPlaceObject::UIDeactivate.
-            /// </devdoc>
+            /// </summary>
             internal int UIDeactivate() {
                 // Only do this if we're UI active
                 //
@@ -17829,10 +16787,9 @@ example usage
                 return NativeMethods.S_OK;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.Unadvise"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Implements IOleObject::Unadvise
-            /// </devdoc>
+            /// </summary>
             internal void Unadvise(int dwConnection) {
                 if (dwConnection > adviseList.Count || adviseList[dwConnection - 1] == null) {
                     ThrowHr(NativeMethods.OLE_E_NOCONNECTION);
@@ -17840,15 +16797,14 @@ example usage
 
                 IAdviseSink sink = (IAdviseSink)adviseList[dwConnection - 1];
                 adviseList.RemoveAt(dwConnection - 1);
-                if (sink != null && UnsafeNativeMethods.IsComObject(sink)) {
-                    UnsafeNativeMethods.ReleaseComObject(sink);
+                if (sink != null && Marshal.IsComObject(sink)) {
+                    Marshal.ReleaseComObject(sink);
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Notifies our site that we have changed our size and location.
-            /// </devdoc>
-            /// <internalonly/>
+            /// </summary>
             internal void UpdateBounds(ref int x, ref int y, ref int width, ref int height, int flags) {
                 if (!activeXState[adjustingRect] && activeXState[inPlaceVisible]) {
                     UnsafeNativeMethods.IOleInPlaceSite ioleClientSite = clientSite as UnsafeNativeMethods.IOleInPlaceSite;
@@ -17898,10 +16854,9 @@ example usage
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Notifies that the accelerator table needs to be updated due to a change in a control mnemonic.
-            /// </devdoc>
-            [SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts")]
+            /// </summary>
             internal void UpdateAccelTable(){
                 // Setting the count to -1 will recreate the table on demand (when GetControlInfo is called).
                 this.accelCount = -1;
@@ -17913,18 +16868,15 @@ example usage
             }
 
             // Since this method is used by Reflection .. dont change the "signature"
-            [SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts")]
             internal void ViewChangedInternal()
             {
                 ViewChanged();
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Notifies our view advise sink (if it exists) that the view has
             ///      changed.
-            /// </devdoc>
-            /// <internalonly/>
-            [SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts")]
+            /// </summary>
             private void ViewChanged() {
                 // send the view change notification to anybody listening.
                 //
@@ -17936,33 +16888,33 @@ example usage
                     viewAdviseSink.OnViewChange(NativeMethods.DVASPECT_CONTENT, -1);
 
                     if (activeXState[viewAdviseOnlyOnce]) {
-                        if (UnsafeNativeMethods.IsComObject(viewAdviseSink)) {
-                            UnsafeNativeMethods.ReleaseComObject(viewAdviseSink);
+                        if (Marshal.IsComObject(viewAdviseSink)) {
+                            Marshal.ReleaseComObject(viewAdviseSink);
                         }
                         viewAdviseSink = null;
                     }
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Called when the window handle of the control has changed.
-            /// </devdoc>
+            /// </summary>
             void IWindowTarget.OnHandleChange(IntPtr newHandle) {
                 controlWindowTarget.OnHandleChange(newHandle);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Called to do control-specific processing for this window.
-            /// </devdoc>
+            /// </summary>
             void IWindowTarget.OnMessage(ref Message m) {
                 if (activeXState[uiDead]) {
-                    if (m.Msg >= NativeMethods.WM_MOUSEFIRST && m.Msg <= NativeMethods.WM_MOUSELAST) {
+                    if (m.Msg >= Interop.WindowMessages.WM_MOUSEFIRST && m.Msg <= Interop.WindowMessages.WM_MOUSELAST) {
                         return;
                     }
-                    if (m.Msg >= NativeMethods.WM_NCLBUTTONDOWN && m.Msg <= NativeMethods.WM_NCMBUTTONDBLCLK) {
+                    if (m.Msg >= Interop.WindowMessages.WM_NCLBUTTONDOWN && m.Msg <= Interop.WindowMessages.WM_NCMBUTTONDBLCLK) {
                         return;
                     }
-                    if (m.Msg >= NativeMethods.WM_KEYFIRST && m.Msg <= NativeMethods.WM_KEYLAST) {
+                    if (m.Msg >= Interop.WindowMessages.WM_KEYFIRST && m.Msg <= Interop.WindowMessages.WM_KEYLAST) {
                         return;
                     }
                 }
@@ -17970,10 +16922,10 @@ example usage
                 controlWindowTarget.OnMessage(ref m);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      This is a property bag implementation that sits on a stream.  It can
             ///      read and write the bag to the stream.
-            /// </devdoc>
+            /// </summary>
             private class PropertyBagStream : UnsafeNativeMethods.IPropertyBag {
                 private Hashtable bag = new Hashtable();
 
@@ -18081,8 +17033,6 @@ example usage
                             shimManager = new HtmlShimManager();
                         }
 
-                        // Security note: There is a demand for FullTrust on HtmlDocument that should apply
-                        // to this call. So we don't need to demand here.
                         retVal = new HtmlDocument(shimManager, iOlecontainer as UnsafeNativeMethods.IHTMLDocument);
                     }
 
@@ -18114,10 +17064,10 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This is a marshaler object that knows how to marshal IFont to Font
         ///     and back.
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
         private class ActiveXFontMarshaler : ICustomMarshaler {
 
@@ -18193,9 +17143,9 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Simple verb enumerator.
-        /// </devdoc>
+        /// </summary>
         private class ActiveXVerbEnum : UnsafeNativeMethods.IEnumOLEVERB {
             private NativeMethods.tagOLEVERB[] verbs;
             private int current;
@@ -18260,15 +17210,15 @@ example usage
             }
         }
 
-        #if ACTIVEX_SOURCING
+#if ACTIVEX_SOURCING
 
         //
         // This has been cut from the product.
         //
 
-        /// <devdoc>
+        /// <summary>
         ///     The properties window we display.
-        /// </devdoc>
+        /// </summary>
         private class ActiveXPropPage {
             private Form form;
             private PropertyGrid grid;
@@ -18290,10 +17240,7 @@ example usage
                     form.ControlBox = true;
                     form.SizeGripStyle = SizeGripStyle.Show;
                     form.DockPadding.Bottom = 16; // size grip size
-
-                    Bitmap bitmap = new Bitmap(grid.GetType(), "PropertyGrid.bmp");
-                    bitmap.MakeTransparent();
-                    form.Icon = Icon.FromHandle(bitmap.GetHicon());
+                    form.Icon = new Icon(grid.GetType(), "PropertyGrid");
 
                     grid.Dock = DockStyle.Fill;
 
@@ -18312,21 +17259,20 @@ example usage
             }
         }
 
-        #endif
+#endif
 
-        /// <devdoc>
+        /// <summary>
         ///      Contains a single ambient property, including DISPID, name and value.
-        /// </devdoc>
+        /// </summary>
         private class AmbientProperty {
             private string name;
             private int dispID;
             private object value;
             private bool empty;
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AmbientProperty.AmbientProperty"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Creates a new, empty ambient property.
-            /// </devdoc>
+            ///</summary>>
             internal AmbientProperty(string name, int dispID) {
                 this.name = name;
                 this.dispID = dispID;
@@ -18334,40 +17280,36 @@ example usage
                 this.empty = true;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AmbientProperty.Name"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      The windows forms property name.
-            /// </devdoc>
+            /// </summary>
             internal string Name {
                 get {
                     return name;
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AmbientProperty.DispID"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      The DispID for the property.
-            /// </devdoc>
+            /// </summary>
             internal int DispID {
                 get {
                     return dispID;
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AmbientProperty.Empty"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Returns true if this property has not been set.
-            /// </devdoc>
+            /// </summary>
             internal bool Empty {
                 get {
                     return empty;
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AmbientProperty.Value"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      The current value of the property.
-            /// </devdoc>
+            /// </summary>
             internal object Value {
                 get {
                     return value;
@@ -18378,17 +17320,16 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AmbientProperty.ResetValue"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Resets the property.
-            /// </devdoc>
+            /// </summary>
             internal void ResetValue() {
                 empty = true;
                 value = null;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     MetafileDCWrapper is used to wrap a metafile DC so that subsequent
         ///     paint operations are rendered to a temporary bitmap.  When the
         ///     wrapper is disposed, it copies the bitmap back to the metafile DC.
@@ -18399,7 +17340,7 @@ example usage
         ///         // ...use dcWrapper.HDC to do painting
         ///     }
         ///
-        /// </devdoc>
+        /// </summary>
         private class MetafileDCWrapper : IDisposable {
 
             HandleRef hBitmapDC     = NativeMethods.NullHandleRef;
@@ -18490,7 +17431,7 @@ example usage
                     }
 
                     NativeMethods.BITMAPINFO_FLAT lpbmi = new NativeMethods.BITMAPINFO_FLAT();
-                    lpbmi.bmiHeader_biSize = Marshal.SizeOf(typeof(NativeMethods.BITMAPINFOHEADER));
+                    lpbmi.bmiHeader_biSize = Marshal.SizeOf<NativeMethods.BITMAPINFOHEADER>();
                     lpbmi.bmiHeader_biWidth = bmp.bmWidth;
                     lpbmi.bmiHeader_biHeight = bmp.bmHeight;
                     lpbmi.bmiHeader_biPlanes = 1;
@@ -18507,7 +17448,7 @@ example usage
                     // Include the palette for 256 color bitmaps
                     long iColors = 1 << (bmp.bmBitsPixel * bmp.bmPlanes);
                     if (iColors <= 256) {
-                        byte[] aj = new byte[Marshal.SizeOf(typeof(NativeMethods.PALETTEENTRY)) * 256];
+                        byte[] aj = new byte[Marshal.SizeOf<NativeMethods.PALETTEENTRY>() * 256];
                         SafeNativeMethods.GetSystemPaletteEntries(hdcSrc, 0, (int)iColors, aj);
 
                         fixed (byte* pcolors = lpbmi.bmiColors) {
@@ -18571,10 +17512,9 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      An implementation of AccessibleChild for use with Controls
-        /// </devdoc>
+        /// </summary>
         [System.Runtime.InteropServices.ComVisible(true)]
         public class ControlAccessibleObject : AccessibleObject {
 
@@ -18588,7 +17528,6 @@ example usage
 
             // constructors
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.ControlAccessibleObject"]/*' />
             public ControlAccessibleObject(Control ownerControl) {
 
                 Debug.Assert(ownerControl != null, "Cannot construct a ControlAccessibleObject with a null ownerControl");
@@ -18598,14 +17537,11 @@ example usage
 
                 this.ownerControl = ownerControl;
 
-                // call get_Handle outside the UnmanagedCode permission because if the handle is not created yet,
-                // we will invoke 3rd party HandleCreated event handlers
                 IntPtr handle = ownerControl.Handle;
 
                 this.Handle = handle;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.ControlAccessibleObject1"]/*' />
             internal ControlAccessibleObject(Control ownerControl, int accObjId) {
 
                 Debug.Assert(ownerControl != null, "Cannot construct a ControlAccessibleObject with a null ownerControl");
@@ -18621,13 +17557,13 @@ example usage
                 this.Handle = handle;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     For container controls only, return array of child controls sorted into
             ///     tab index order. This gets applies to the list of child accessible objects
             ///     as returned by the system, so that we can present a meaningful order to
             ///     the user. The system defaults to z-order, which is bad for us because
             ///     that is usually the reverse of tab order!
-            /// </devdoc>
+            /// </summary>
             internal override int[] GetSysChildOrder() {
                 if (ownerControl.GetStyle(ControlStyles.ContainerControl))
                     return ownerControl.GetChildWindowsInTabOrder();
@@ -18635,7 +17571,7 @@ example usage
                 return base.GetSysChildOrder();
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Perform custom navigation between parent/child/sibling accessible objects,
             ///     using tab index order as the guide, rather than letting the system default
             ///     behavior do navigation based on z-order.
@@ -18665,7 +17601,7 @@ example usage
             ///     When combined with the re-ordering behavior of GetSysChildOrder() above, this
             ///     allows us to present the end user with the illusion of accessible objects in
             ///     tab index order, even though the system behavior only supports z-order.
-            /// </devdoc>
+            /// </summary>
             internal override bool GetSysChild(AccessibleNavigation navdir, out AccessibleObject accessibleObject) {
 
                 // Clear the out parameter
@@ -18728,7 +17664,6 @@ example usage
                 return true;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.DefaultAction"]/*' />
             public override string DefaultAction {
                 get {
                     string defaultAction = ownerControl.AccessibleDefaultActionDescription;
@@ -18754,7 +17689,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.Description"]/*' />
             public override string Description {
                 get {
                     string description = ownerControl.AccessibleDescription;
@@ -18767,7 +17701,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.Handle"]/*' />
             public IntPtr Handle {
 
                 get {
@@ -18806,7 +17739,6 @@ example usage
 
             } // end Handle
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.Help"]/*' />
             public override string Help {
                 get {
                     QueryAccessibilityHelpEventHandler handler = (QueryAccessibilityHelpEventHandler)Owner.Events[EventQueryAccessibilityHelp];
@@ -18822,7 +17754,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="ControlAccessibleObject.KeyboardShortcut"]/*' />
             public override string KeyboardShortcut {
                 get {
                     // For controls, the default keyboard shortcut comes directly from the accessible
@@ -18832,7 +17763,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.Name"]/*' />
             public override string Name {
                 get {
                     // Special case: If an explicit name has been set in the AccessibleName property, use that.
@@ -18855,7 +17785,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="ControlAccessibleObject.Parent"]/*' />
             public override AccessibleObject Parent {
                 get {
                     return base.Parent;
@@ -18893,7 +17822,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.Owner"]/*' />
             public Control Owner {
                 get {
                     return ownerControl;
@@ -18916,7 +17844,7 @@ example usage
                     }
 
                     // Find this control's containing control
-                    ContainerControl container = parent.GetContainerControlInternal() as ContainerControl;
+                    ContainerControl container = parent.GetContainerControl() as ContainerControl;
                     if (container == null) {
                         return null;
                     }
@@ -18941,7 +17869,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.Role"]/*' />
             public override AccessibleRole Role {
                 get {
                     AccessibleRole role = ownerControl.AccessibleRole;
@@ -18955,7 +17882,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.GetHelpTopic"]/*' />
             public override int GetHelpTopic(out string fileName) {
                 int topic = 0;
 
@@ -18983,7 +17909,6 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.NotifyClients"]/*' />
             public void NotifyClients(AccessibleEvents accEvent) {
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "Control.NotifyClients: this = " +
                                   this.ToString() + ", accEvent = " + accEvent.ToString() + ", childID = self");
@@ -18991,7 +17916,6 @@ example usage
                 UnsafeNativeMethods.NotifyWinEvent((int)accEvent, new HandleRef(this, Handle), NativeMethods.OBJID_CLIENT, 0);
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.NotifyClients1"]/*' />
             public void NotifyClients(AccessibleEvents accEvent, int childID) {
 
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "Control.NotifyClients: this = " +
@@ -19002,7 +17926,6 @@ example usage
                 UnsafeNativeMethods.NotifyWinEvent((int)accEvent, new HandleRef(this, Handle), NativeMethods.OBJID_CLIENT, childID + 1);
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.NotifyClients2"]/*' />
             public void NotifyClients(AccessibleEvents accEvent, int objectID, int childID) {
 
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "Control.NotifyClients: this = " +
@@ -19029,7 +17952,7 @@ example usage
             }
 
             internal override bool IsIAccessibleExSupported() {
-                if (AccessibilityImprovements.Level3 && this.Owner is IAutomationLiveRegion) {
+                if (this.Owner is IAutomationLiveRegion) {
                     return true;
                 }
 
@@ -19037,7 +17960,7 @@ example usage
             }
 
             internal override object GetPropertyValue(int propertyID) {
-                if (AccessibilityImprovements.Level3 && propertyID == NativeMethods.UIA_LiveSettingPropertyId && Owner is IAutomationLiveRegion) {
+                if (propertyID == NativeMethods.UIA_LiveSettingPropertyId && Owner is IAutomationLiveRegion) {
                     return ((IAutomationLiveRegion)Owner).LiveSetting;
                 }
 
@@ -19051,8 +17974,7 @@ example usage
                         case NativeMethods.UIA_AccessKeyPropertyId:
                             return string.Empty;
                         case NativeMethods.UIA_HelpTextPropertyId:
-                            var help = Help;
-                            return AccessibilityImprovements.Level3 ? (help ?? string.Empty) : help;
+                            return Help ?? string.Empty;
                     }
                 }
 
@@ -19061,17 +17983,12 @@ example usage
 
             internal override UnsafeNativeMethods.IRawElementProviderSimple HostRawElementProvider {
                 get {
-                    if (AccessibilityImprovements.Level3) {
-                        UnsafeNativeMethods.IRawElementProviderSimple provider;
-                        UnsafeNativeMethods.UiaHostProviderFromHwnd(new HandleRef(this, Handle), out provider);
-                        return provider;
-                    }
-
-                    return base.HostRawElementProvider;
+                    UnsafeNativeMethods.IRawElementProviderSimple provider;
+                    UnsafeNativeMethods.UiaHostProviderFromHwnd(new HandleRef(this, Handle), out provider);
+                    return provider;
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.ToString"]/*' />
             public override string ToString() {
                 if (Owner != null) {
                     return "ControlAccessibleObject: Owner = " + Owner.ToString();
@@ -19098,7 +18015,7 @@ example usage
                 if (CompModSwitches.LifetimeTracing.Enabled) stackOnCreate = new System.Diagnostics.StackTrace().ToString();
 #endif
                 handle = font.ToHfont();
-                System.Internal.HandleCollector.Add(handle, NativeMethods.CommonHandles.GDI);
+                Interop.HandleCollector.Add(handle, Interop.CommonHandles.GDI);
             }
 
             internal IntPtr Handle {
@@ -19137,9 +18054,9 @@ example usage
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Used with BeginInvoke/EndInvoke
-        /// </devdoc>
+        /// </summary>
         private class ThreadMethodEntry : IAsyncResult {
             internal Control   caller;
             internal Control   marshaler;
@@ -19245,10 +18162,9 @@ example usage
                 this.owner = owner;
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlVersionInfo.CompanyName"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     The company name associated with the component.
-            /// </devdoc>
+            /// </summary>
             internal string CompanyName {
                 get {
                     if (companyName == null) {
@@ -19271,7 +18187,7 @@ example usage
                                 ns = string.Empty;
                             }
 
-                            int firstDot = ns.IndexOf("/");
+                            int firstDot = ns.IndexOf('/');
                             if (firstDot != -1) {
                                 companyName = ns.Substring(0, firstDot);
                             }
@@ -19284,10 +18200,9 @@ example usage
                 }
             }
 
-            /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlVersionInfo.ProductName"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     The product name associated with this component.
-            /// </devdoc>
+            /// </summary>
             internal string ProductName {
                 get {
                     if (productName == null) {
@@ -19309,7 +18224,7 @@ example usage
                             if (ns == null) {
                                 ns = string.Empty;
                             }
-                            int firstDot = ns.IndexOf(".");
+                            int firstDot = ns.IndexOf('.');
                             if (firstDot != -1) {
                                 productName = ns.Substring(firstDot+1);
                             }
@@ -19324,9 +18239,9 @@ example usage
             }
 
 
-            /// <devdoc>
+            /// <summary>
             ///     The product version associated with this component.
-            /// </devdoc>
+            /// </summary>
             internal string ProductVersion {
                 get {
                     if (productVersion == null) {
@@ -19356,10 +18271,10 @@ example usage
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the FileVersionInfo associated with the main module for
             ///     the component.
-            /// </devdoc>
+            /// </summary>
             private FileVersionInfo GetFileVersionInfo() {
                 if (versionInfo == null) {
                     string path = owner.GetType().Module.FullyQualifiedName;

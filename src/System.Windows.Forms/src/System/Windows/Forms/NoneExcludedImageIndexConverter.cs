@@ -5,13 +5,11 @@
 namespace System.Windows.Forms {
 
 
-    /// <include file='doc\NoneExcludedImageIndexConverter.uex' path='docs/doc[@for="NoneExcludedImageIndexConverter"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///      Just returns false for IncludeNoneAsStandardValue
-    /// </devdoc>
+    /// </summary>
     internal sealed class NoneExcludedImageIndexConverter : ImageIndexConverter {
 
-        /// <include file='doc\NoneExcludedImageIndexConverter.uex' path='docs/doc[@for="NoneExcludedImageIndexConverter.IncludeNoneAsStandardValue"]/*' />
         protected override bool IncludeNoneAsStandardValue {
             get {
                 return false;

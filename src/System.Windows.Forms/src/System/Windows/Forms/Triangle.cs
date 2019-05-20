@@ -11,10 +11,9 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using Microsoft.Win32;
 
-    /// <include file='doc\Triangle.uex' path='docs/doc[@for="Triangle"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///      This class fully encapsulates the painting logic for a triangle.  (Used by DataGrid)
-    /// </devdoc>
+    /// </summary>
     internal static class Triangle {
         private const double TRI_HEIGHT_RATIO = 2.5;
         private const double TRI_WIDTH_RATIO  = 0.8;
@@ -126,20 +125,10 @@ namespace System.Windows.Forms {
         }
     }
 
-    /// <include file='doc\Triangle.uex' path='docs/doc[@for="TriangleDirection"]/*' />
-    /// <internalonly/>
     internal enum TriangleDirection {
-        /// <include file='doc\Triangle.uex' path='docs/doc[@for="TriangleDirection.Up"]/*' />
-        /// <internalonly/>
         Up,
-        /// <include file='doc\Triangle.uex' path='docs/doc[@for="TriangleDirection.Down"]/*' />
-        /// <internalonly/>
         Down,
-        /// <include file='doc\Triangle.uex' path='docs/doc[@for="TriangleDirection.Left"]/*' />
-        /// <internalonly/>
         Left,
-        /// <include file='doc\Triangle.uex' path='docs/doc[@for="TriangleDirection.Right"]/*' />
-        /// <internalonly/>
         Right
     }
 }

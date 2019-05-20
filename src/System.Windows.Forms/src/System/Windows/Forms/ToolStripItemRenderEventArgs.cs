@@ -8,28 +8,28 @@ namespace System.Windows.Forms
 {
     public class ToolStripItemRenderEventArgs : EventArgs
     {
-        /// <devdoc>
-        /// This class represents all the information to render the winbar
-        /// </devdoc>
+        /// <summary>
+        /// This class represents all the information to render the ToolStrip
+        /// </summary>
         public ToolStripItemRenderEventArgs(Graphics g, ToolStripItem item)
         {
             Graphics = g;
             Item = item;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The graphics object to draw with
-        /// </devdoc>
+        /// </summary>
         public Graphics Graphics { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// The item to draw
-        /// </devdoc>
+        /// </summary>
         public ToolStripItem Item { get; }
         
-	    /// <devdoc>
+	    /// <summary>
 	    /// The toolstrip the item is currently parented to
-	    /// </devdoc>
+	    /// </summary>
         public ToolStrip ToolStrip => Item.ParentInternal;
     }
 }

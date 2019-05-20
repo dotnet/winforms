@@ -2,22 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Drawing;
-using System.Drawing.Printing;
-using System.Windows.Forms;
-using System.Security.Permissions;
-using System.Security;
-using System.Runtime.InteropServices;
-using System.Net;
 using System.Collections;
+using System.Diagnostics;
 
-namespace System.Windows.Forms {
-    /// <include file='doc\HtmlElementCollection.uex' path='docs/doc[@for="HtmlElementCollection"]/*' />
-    public sealed class HtmlElementCollection : ICollection {
+namespace System.Windows.Forms
+{
+    public sealed class HtmlElementCollection : ICollection
+    {
         private UnsafeNativeMethods.IHTMLElementCollection htmlElementCollection;
         private HtmlElement[] elementsArray;
         private HtmlShimManager shimManager;
@@ -48,12 +39,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlElementCollection.uex' path='docs/doc[@for="HtmlElementCollection.this"]/*' />
         public HtmlElement this[int index] {
             get {
                 //do some bounds checking here...
-                if (index < 0 || index >= this.Count) {
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidBoundArgument, "index", index, 0, this.Count - 1));
+                if (index < 0 || index >= Count) {
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidBoundArgument, nameof(index), index, 0, Count - 1));
                 }
 
                 if (this.NativeHtmlElementCollection != null) {
@@ -70,7 +60,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlElementCollection.uex' path='docs/doc[@for="HtmlElementCollection.this1"]/*' />
         public HtmlElement this[string elementId] {
             get {
                 if (this.NativeHtmlElementCollection != null) {
@@ -94,7 +83,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlElementCollection.uex' path='docs/doc[@for="HtmlElementCollection.GetElementsByName"]/*' />
         public HtmlElementCollection GetElementsByName(string name) {
             int count = this.Count;
             HtmlElement[] temp = new HtmlElement[count];    // count is the maximum # of matches
@@ -120,10 +108,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlElementCollection.uex' path='docs/doc[@for="HtmlElementCollection.Count"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the total number of elements in the collection.
-        /// </devdoc>
+        /// </summary>
         public int Count {
             get {
                 if (this.NativeHtmlElementCollection != null) {
@@ -138,24 +125,18 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\HtmlElementCollection.uex' path='docs/doc[@for="HtmlElementCollection.ICollection.IsSynchronized"]/*' />
-        /// <internalonly/>
         bool ICollection.IsSynchronized {
             get {
                 return false;
             }
         }
         
-        /// <include file='doc\HtmlElementCollection.uex' path='docs/doc[@for="HtmlElementCollection.ICollection.SyncRoot"]/*' />
-        /// <internalonly/>
         object ICollection.SyncRoot {
             get {
                 return this;
             }
         }
 
-        /// <include file='doc\HtmlElementCollection.uex' path='docs/doc[@for="HtmlElementCollection.ICollection.CopyTo"]/*' />
-        /// <internalonly/>
         void ICollection.CopyTo(Array dest, int index) {
             int count = this.Count;
             for (int i = 0; i < count; i++) {
@@ -163,8 +144,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\HtmlElementCollection.uex' path='docs/doc[@for="HtmlElementCollection.GetEnumerator"]/*' />
-        /// <internalonly/>
         public IEnumerator GetEnumerator() {
             HtmlElement[] htmlElements = new HtmlElement[this.Count];
             ((ICollection)this).CopyTo(htmlElements, 0);

@@ -19,12 +19,11 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
     using Microsoft.Win32;
 
-    /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para> Displays an image that can be a graphic from a bitmap, 
     ///       icon, or metafile, as well as from
     ///       an enhanced metafile, JPEG, or GIF files.</para>
-    /// </devdoc>
+    /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -36,23 +35,20 @@ namespace System.Windows.Forms {
     ]
     public class PictureBox : Control, ISupportInitialize {
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.borderStyle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The type of border this control will have.
-        /// </devdoc>
+        /// </summary>
         private BorderStyle borderStyle = System.Windows.Forms.BorderStyle.None;
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.image"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The image being displayed.
-        /// </devdoc>
+        /// </summary>
         private Image image;
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.sizeMode"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Controls how the image is placed within our bounds, or how we are
         ///     sized to fit said image.
-        /// </devdoc>
+        /// </summary>
         private PictureBoxSizeMode sizeMode = PictureBoxSizeMode.Normal;
         private Size savedSize;
 
@@ -108,12 +104,11 @@ namespace System.Windows.Forms {
         StreamReader localImageStreamReader = null;
         Stream uriImageStream = null;
  
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.PictureBox"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Creates a new picture with all default properties and no 
         ///       Image. The default PictureBox.SizeMode will be PictureBoxSizeMode.NORMAL.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public PictureBox() {
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
             SetState2(STATE2_USEPREFERREDSIZECACHE, true);  
@@ -129,10 +124,9 @@ namespace System.Windows.Forms {
             savedSize = Size;
         }
         
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.AllowDrop"]/*' />
-        /// <internalonly/><hideinheritance/>
-        /// <devdoc>
-        /// </devdoc>
+        /// <hideinheritance/>
+        /// <summary>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override bool AllowDrop {
             get {
@@ -143,11 +137,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.BorderStyle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> Indicates the
         ///       border style for the control.</para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(BorderStyle.None),
         SRCategory(nameof(SR.CatAppearance)),
@@ -192,7 +185,6 @@ namespace System.Windows.Forms {
             return uri;
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.CancelAsync"]/*' />
         [
         SRCategory(nameof(SR.CatAsynchronous)),
         SRDescription(nameof(SR.PictureBoxCancelAsyncDescr))
@@ -202,8 +194,6 @@ namespace System.Windows.Forms {
             pictureBoxState[PICTUREBOXSTATE_cancellationPending] = true;
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.CausesValidation"]/*' />
-        /// <internalonly/>
         /// <devdoc/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new bool CausesValidation {
@@ -215,26 +205,18 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.CausesValidationChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler CausesValidationChanged {
-            add {
-                base.CausesValidationChanged += value;
-            }
-            remove {
-                base.CausesValidationChanged -= value;
-            }
+            add => base.CausesValidationChanged += value;
+            remove => base.CausesValidationChanged -= value;
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.CreateParams"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>Returns the parameters needed to create the handle. Inheriting classes
         ///       can override this to provide extra functionality. They should not,
         ///       however, forget to call base.getCreateParams() first to get the struct
         ///       filled up with the basic info.</para>
-        /// </devdoc>
+        /// </summary>
         protected override CreateParams CreateParams {
             get {
                 CreateParams cp = base.CreateParams;
@@ -252,25 +234,22 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.DefaultImeMode"]/*' />
         protected override ImeMode DefaultImeMode {
             get {
                 return ImeMode.Disable;
             }
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.DefaultSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
+        /// </summary>
         protected override Size DefaultSize {
             get {
                 return new Size(100, 50);
             }
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.ErrorImage"]/*' />
         [
         SRCategory(nameof(SR.CatAsynchronous)),
         Localizable(true),
@@ -292,9 +271,7 @@ namespace System.Windows.Forms {
                         // Can't share images across threads.
                         if (defaultErrorImageForThread == null)
                         {
-                            defaultErrorImageForThread =
-                                new Bitmap(typeof(PictureBox),
-                                           "ImageInError.bmp");
+                            defaultErrorImageForThread = DpiHelper.GetBitmapFromIcon(typeof(PictureBox), "ImageInError");
                         }
                         defaultErrorImage = defaultErrorImageForThread;
                     }
@@ -312,10 +289,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.ForeColor"]/*' />
-        /// <internalonly/><hideinheritance/>
-        /// <devdoc>
-        /// </devdoc>
+        /// <hideinheritance/>
+        /// <summary>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor {
             get {
@@ -326,22 +302,15 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.ForeColorChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
-            add {
-                base.ForeColorChanged += value;
-            }
-            remove {
-                base.ForeColorChanged -= value;
-            }
+            add => base.ForeColorChanged += value;
+            remove => base.ForeColorChanged -= value;
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.Font"]/*' />
-        /// <internalonly/><hideinheritance/>
-        /// <devdoc>
-        /// </devdoc>
+        /// <hideinheritance/>
+        /// <summary>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Font Font {
             get {
@@ -352,22 +321,15 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.FontChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler FontChanged {
-            add {
-                base.FontChanged += value;
-            }
-            remove {
-                base.FontChanged -= value;
-            }
+            add => base.FontChanged += value;
+            remove => base.FontChanged -= value;
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.Image"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Retrieves the Image that the <see cref='System.Windows.Forms.PictureBox'/> is currently displaying.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
@@ -385,7 +347,6 @@ namespace System.Windows.Forms {
         }
 
         // The area occupied by the image
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.ImageLocation"]/*' />
         [
          SRCategory(nameof(SR.CatAsynchronous)),
          Localizable(true),
@@ -471,7 +432,6 @@ namespace System.Windows.Forms {
             return result;
         }
         
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.InitialImage"]/*' />
         [
         SRCategory(nameof(SR.CatAsynchronous)),
         Localizable(true),
@@ -493,9 +453,7 @@ namespace System.Windows.Forms {
                         // Can't share images across threads.
                         if (defaultInitialImageForThread == null)
                         {
-                            defaultInitialImageForThread =
-                                new Bitmap(typeof(PictureBox),
-                                           "PictureBox.Loading.bmp");
+                            defaultInitialImageForThread =  DpiHelper.GetBitmapFromIcon(typeof(PictureBox), "PictureBox.Loading");
                         }
                         defaultInitialImage = defaultInitialImageForThread;
                     }
@@ -531,7 +489,6 @@ namespace System.Windows.Forms {
             CommonProperties.xClearPreferredSizeCache(this);
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.ImeMode"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public ImeMode ImeMode {
             get {
@@ -542,19 +499,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.ImeModeChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
-            add {
-                base.ImeModeChanged += value;
-            }
-            remove {
-                base.ImeModeChanged -= value;
-            }
+            add => base.ImeModeChanged += value;
+            remove => base.ImeModeChanged -= value;
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.Load"]/*' />
         // Synchronous load
         [
         SRCategory(nameof(SR.CatAsynchronous)),
@@ -610,7 +560,6 @@ namespace System.Windows.Forms {
             InstallNewImage(img, installType);
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.Load2"]/*' />
         [
         SRCategory(nameof(SR.CatAsynchronous)),
         SRDescription(nameof(SR.PictureBoxLoad1Descr)),
@@ -622,7 +571,6 @@ namespace System.Windows.Forms {
             this.Load();
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.LoadAsync"]/*' />
         [
         SRCategory(nameof(SR.CatAsynchronous)),
         SRDescription(nameof(SR.PictureBoxLoadAsync0Descr))
@@ -833,7 +781,6 @@ namespace System.Windows.Forms {
         }
         
         
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.LoadAsync2"]/*' />
         [
         SRCategory(nameof(SR.CatAsynchronous)),
         SRDescription(nameof(SR.PictureBoxLoadAsync1Descr)),
@@ -845,38 +792,24 @@ namespace System.Windows.Forms {
             this.LoadAsync();
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.LoadCompleted"]/*' />
         [
         SRCategory(nameof(SR.CatAsynchronous)),
         SRDescription(nameof(SR.PictureBoxLoadCompletedDescr))
         ]
         public event AsyncCompletedEventHandler LoadCompleted
         {
-            add
-            {
-                this.Events.AddHandler(loadCompletedKey, value);
-            }
-            remove
-            {
-                this.Events.RemoveHandler(loadCompletedKey, value);
-            }
+            add => this.Events.AddHandler(loadCompletedKey, value);
+            remove => this.Events.RemoveHandler(loadCompletedKey, value);
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.LoadProgressChanged"]/*' />
         [
         SRCategory(nameof(SR.CatAsynchronous)),
         SRDescription(nameof(SR.PictureBoxLoadProgressChangedDescr))
         ]
         public event ProgressChangedEventHandler LoadProgressChanged
         {
-            add
-            {
-                this.Events.AddHandler(loadProgressChangedKey, value);
-            }
-            remove
-            {
-                this.Events.RemoveHandler(loadProgressChangedKey, value);
-            }
+            add => this.Events.AddHandler(loadProgressChangedKey, value);
+            remove => this.Events.RemoveHandler(loadProgressChangedKey, value);
         }
         
         private void ResetInitialImage()
@@ -896,10 +829,9 @@ namespace System.Windows.Forms {
             InstallNewImage(null, ImageInstallationType.DirectlySpecified);
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.RightToLeft"]/*' />
-        /// <internalonly/><hideinheritance/>
-        /// <devdoc>
-        /// </devdoc>
+        /// <hideinheritance/>
+        /// <summary>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override RightToLeft RightToLeft {
             get {
@@ -910,16 +842,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.RightToLeftChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler RightToLeftChanged {
-            add {
-                base.RightToLeftChanged += value;
-            }
-            remove {
-                base.RightToLeftChanged -= value;
-            }
+            add => base.RightToLeftChanged += value;
+            remove => base.RightToLeftChanged -= value;
         }
 
         // Be sure not to re-serialized initial image if it's the default. 
@@ -943,10 +869,9 @@ namespace System.Windows.Forms {
                 && (Image != null);
         }
         
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.SizeMode"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates how the image is displayed.</para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(PictureBoxSizeMode.Normal),
         SRCategory(nameof(SR.CatBehavior)),
@@ -984,22 +909,16 @@ namespace System.Windows.Forms {
         
         private static readonly object EVENT_SIZEMODECHANGED = new object();
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.SizeModeChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PictureBoxOnSizeModeChangedDescr))]
         public event EventHandler SizeModeChanged {
-            add {
-                Events.AddHandler(EVENT_SIZEMODECHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_SIZEMODECHANGED, value);
 
-            remove {
-                Events.RemoveHandler(EVENT_SIZEMODECHANGED, value);
-            }
+            remove => Events.RemoveHandler(EVENT_SIZEMODECHANGED, value);
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.TabStop"]/*' />
-        /// <internalonly/><hideinheritance/>
-        /// <devdoc>
-        /// </devdoc>
+        /// <hideinheritance/>
+        /// <summary>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool TabStop {
             get {
@@ -1010,22 +929,15 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.TabStopChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabStopChanged {
-            add {
-                base.TabStopChanged += value;
-            }
-            remove {
-                base.TabStopChanged -= value;
-            }
+            add => base.TabStopChanged += value;
+            remove => base.TabStopChanged -= value;
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.TabIndex"]/*' />
-        /// <internalonly/><hideinheritance/>
-        /// <devdoc>
-        /// </devdoc>
+        /// <hideinheritance/>
+        /// <summary>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public int TabIndex {
             get {
@@ -1036,22 +948,15 @@ namespace System.Windows.Forms {
             }
         }     
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.TabIndexChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabIndexChanged {
-            add {
-                base.TabIndexChanged += value;
-            }
-            remove {
-                base.TabIndexChanged -= value;
-            }
+            add => base.TabIndexChanged += value;
+            remove => base.TabIndexChanged -= value;
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.Text"]/*' />
-        /// <internalonly/><hideinheritance/>        
-        /// <devdoc>
-        /// </devdoc>
+        /// <hideinheritance/>        
+        /// <summary>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]        
         public override string Text {
             get {
@@ -1062,81 +967,48 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.TextChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
-            remove {
-                base.TextChanged -= value;
-            }
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
         
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.Enter"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Enter {
-            add {
-                base.Enter += value;
-            }
-            remove {
-                base.Enter -= value;
-            }
+            add => base.Enter += value;
+            remove => base.Enter -= value;
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.KeyUp"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyUp {
-            add {
-                base.KeyUp += value;
-            }
-            remove {
-                base.KeyUp -= value;
-            }
+            add => base.KeyUp += value;
+            remove => base.KeyUp -= value;
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.KeyDown"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyDown {
-            add {
-                base.KeyDown += value;
-            }
-            remove {
-                base.KeyDown -= value;
-            }
+            add => base.KeyDown += value;
+            remove => base.KeyDown -= value;
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.KeyPress"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyPressEventHandler KeyPress {
-            add {
-                base.KeyPress += value;
-            }
-            remove {
-                base.KeyPress -= value;
-            }
+            add => base.KeyPress += value;
+            remove => base.KeyPress -= value;
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.Leave"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Leave {
-            add {
-                base.Leave += value;
-            }
-            remove {
-                base.Leave -= value;
-            }
+            add => base.Leave += value;
+            remove => base.Leave -= value;
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.AdjustSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     If the PictureBox has the SizeMode property set to AutoSize, this makes
         ///     sure that the picturebox is large enough to hold the image.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void AdjustSize() {
             if (sizeMode == PictureBoxSizeMode.AutoSize) {
                 Size = PreferredSize;
@@ -1171,10 +1043,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.Dispose"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 StopAnimate();
@@ -1208,7 +1078,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.OnEnabledChanged"]/*' />
         protected override void OnEnabledChanged(EventArgs e) {
             base.OnEnabledChanged(e);
             Animate();
@@ -1247,7 +1116,6 @@ namespace System.Windows.Forms {
             base.OnHandleCreated(e);
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.OnLoadCompleted"]/*' />
         protected virtual void OnLoadCompleted(AsyncCompletedEventArgs e)
         {
             AsyncCompletedEventHandler handler = (AsyncCompletedEventHandler)(Events[loadCompletedKey]);
@@ -1257,7 +1125,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.OnLoadProgressChanged"]/*' />
         protected virtual void OnLoadProgressChanged(ProgressChangedEventArgs e)
         {
             ProgressChangedEventHandler handler = (ProgressChangedEventHandler)(Events[loadProgressChangedKey]);
@@ -1267,11 +1134,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.OnPaint"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Overridden onPaint to make sure that the image is painted correctly.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected override void OnPaint(PaintEventArgs pe) {
 
             if (pictureBoxState[PICTUREBOXSTATE_needToLoadImageLocation])
@@ -1317,23 +1182,19 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.OnVisibleChanged"]/*' />
         protected override void OnVisibleChanged(EventArgs e) {
             base.OnVisibleChanged(e);
             Animate();
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.OnParentChanged"]/*' />
         protected override void OnParentChanged(EventArgs e) {
             base.OnParentChanged(e);
             Animate();
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.OnResize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     OnResize override to invalidate entire control in Stetch mode
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected override void OnResize(EventArgs e) {
             base.OnResize(e);
             if (sizeMode == PictureBoxSizeMode.Zoom || sizeMode == PictureBoxSizeMode.StretchImage || sizeMode == PictureBoxSizeMode.CenterImage || BackgroundImage != null) {
@@ -1342,7 +1203,6 @@ namespace System.Windows.Forms {
             savedSize = Size;
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.OnSizeModeChanged"]/*' />
         protected virtual void OnSizeModeChanged(EventArgs e) {
             EventHandler eh = Events[EVENT_SIZEMODECHANGED] as EventHandler;
             if (eh != null) {
@@ -1350,18 +1210,15 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.ToString"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns a string representation for this control.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         public override string ToString() {
 
             string s = base.ToString();
             return s + ", SizeMode: " + sizeMode.ToString("G");
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.WaitOnLoad"]/*' />
         [
         SRCategory(nameof(SR.CatAsynchronous)),
         Localizable(true),
@@ -1384,15 +1241,11 @@ namespace System.Windows.Forms {
             FromUrl
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.ISupportInitialize.BeginInit"]/*' />
-        /// <internalonly/>
         void ISupportInitialize.BeginInit()
         {
             pictureBoxState[PICTUREBOXSTATE_inInitialization] = true;
         }
 
-        /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.ISupportInitialize.EndInit"]/*' />
-        /// <internalonly/>
         void ISupportInitialize.EndInit()
         {
             Debug.Assert(pictureBoxState[PICTUREBOXSTATE_inInitialization]);

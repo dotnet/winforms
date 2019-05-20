@@ -44,7 +44,6 @@ using System.Runtime.Versioning;
 [assembly: SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+PARAFORMAT):System.IntPtr")]
 [assembly: SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+POINT):System.IntPtr")]
 [assembly: SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+RECT&):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+REPASTESPECIAL):System.IntPtr")]
 [assembly: SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+SIZE):System.IntPtr")]
 [assembly: SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+SYSTEMTIME):System.IntPtr")]
 [assembly: SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+SYSTEMTIMEARRAY):System.IntPtr")]
@@ -69,6 +68,7 @@ using System.Runtime.Versioning;
 namespace System.Windows.Forms {
 
     using Accessibility;
+    using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
     using System.Runtime.InteropServices.ComTypes;
     using System.Runtime.ConstrainedExecution;
@@ -92,8 +92,8 @@ namespace System.Windows.Forms {
         
         public static extern int ReadClassStg(HandleRef pStg, [In, Out] ref Guid pclsid);
 
-        [DllImport(ExternDll.Ole32, SetLastError = true, CharSet = CharSet.Auto, ExactSpelling = true)]
-        internal extern static void CoTaskMemFree(IntPtr pv);
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
+        public static extern int GetMessageTime();
 
         [DllImport(ExternDll.User32)]
         
@@ -152,25 +152,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        // We need this for Vista specific features/fixes
-        private static readonly Version VistaOSVersion = new Version(6, 0);
-
-        /// <summary>
-        /// Used to tell if Vista API's are supported
-        /// </summary>
-        internal static bool IsVista
-        {
-            get
-            {
-                OperatingSystem os = Environment.OSVersion;
-                if (os == null)
-                    return false;
-
-                return (os.Platform == PlatformID.Win32NT) &&
-                       (os.Version.CompareTo(VistaOSVersion) >= 0);
-            }
-        }
-
         [DllImport(ExternDll.Kernel32, CharSet=System.Runtime.InteropServices.CharSet.Auto)]
         
         public static extern int GetLocaleInfo(int Locale,int LCType,StringBuilder lpLCData,int cchData) ;
@@ -194,19 +175,8 @@ namespace System.Windows.Forms {
         
         public static extern int OleSaveToStream(IPersistStream pPersistStream, IStream pStream);
 
-        [DllImport(ExternDll.Ole32)]
-        
-        public static extern int CoGetMalloc(int dwReserved, out IMalloc pMalloc);
-        
-        /* Commenting this out until someone actually needs to use it again...
-        [DllImport(ExternDll.Ole32)]
-          public static extern int OleSetMenuDescriptor(IntPtr hOleMenu, IntPtr hWndFrame, IntPtr hWndActiveObject, IOleInPlaceFrame frame, IOleInPlaceActiveObject activeObject);
-        */
-
-        /* Commenting this out until someone actually needs to use it again...
-        [DllImport(ExternDll.Kernel32)]
-        public static extern bool IsBadReadPtr(HandleRef ptr, int size);
-        */
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        public static extern int GetWindowThreadProcessId(HandleRef hWnd, out int lpdwProcessId);
 
         [DllImport(ExternDll.Comdlg32, SetLastError=true, CharSet=CharSet.Auto)]
         
@@ -288,7 +258,7 @@ namespace System.Windows.Forms {
                     // passing null for buffer will return actual number of charectors in the file name.
                     // So, one extra call would be suffice to avoid while loop in case of long path.
                     int capacity = DragQueryFile(hDrop, iFile, null, 0);
-                    if (capacity < NativeMethods.MAX_UNICODESTRING_LEN)
+                    if (capacity < Interop.Kernel32.MAX_UNICODESTRING_LEN)
                     {
                         lpszFile.EnsureCapacity(capacity);
                         resultValue = DragQueryFile(hDrop, iFile, lpszFile, capacity);
@@ -347,7 +317,7 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr CreateMenu() {
-            return System.Internal.HandleCollector.Add(IntCreateMenu(), NativeMethods.CommonHandles.Menu);
+            return Interop.HandleCollector.Add(IntCreateMenu(), Interop.CommonHandles.Menu);
         }
         
         [DllImport(ExternDll.Comdlg32, SetLastError=true, CharSet=CharSet.Auto)]
@@ -396,7 +366,7 @@ namespace System.Windows.Forms {
         public static IntPtr DuplicateHandle(HandleRef processSource, HandleRef handleSource, HandleRef processTarget, ref IntPtr handleTarget, int desiredAccess, bool inheritHandle, int options) {
             IntPtr ret = IntDuplicateHandle(processSource, handleSource, processTarget, ref handleTarget,
                                          desiredAccess, inheritHandle, options);
-            System.Internal.HandleCollector.Add(handleTarget, NativeMethods.CommonHandles.Kernel);
+            Interop.HandleCollector.Add(handleTarget, Interop.CommonHandles.Kernel);
             return ret;
         }
         
@@ -435,17 +405,17 @@ namespace System.Windows.Forms {
         public static extern int GetModuleFileName(HandleRef hModule, StringBuilder buffer, int length);
         public static StringBuilder GetModuleFileNameLongPath(HandleRef hModule)
         {
-            StringBuilder buffer = new StringBuilder(NativeMethods.MAX_PATH);
+            StringBuilder buffer = new StringBuilder(Interop.Kernel32.MAX_PATH);
             int noOfTimes = 1;
             int length = 0;
             // Iterating by allocating chunk of memory each time we find the length is not sufficient.
             // Performance should not be an issue for current MAX_PATH length due to this change.
             while (((length = GetModuleFileName(hModule, buffer, buffer.Capacity)) == buffer.Capacity) 
                 && Marshal.GetLastWin32Error() == NativeMethods.ERROR_INSUFFICIENT_BUFFER 
-                && buffer.Capacity < NativeMethods.MAX_UNICODESTRING_LEN)
+                && buffer.Capacity < Interop.Kernel32.MAX_UNICODESTRING_LEN)
             {
                 noOfTimes += 2; // Increasing buffer size by 520 in each iteration.
-                int capacity = noOfTimes * NativeMethods.MAX_PATH < NativeMethods.MAX_UNICODESTRING_LEN ? noOfTimes * NativeMethods.MAX_PATH : NativeMethods.MAX_UNICODESTRING_LEN;
+                int capacity = noOfTimes * Interop.Kernel32.MAX_PATH < Interop.Kernel32.MAX_UNICODESTRING_LEN ? noOfTimes * Interop.Kernel32.MAX_PATH : Interop.Kernel32.MAX_UNICODESTRING_LEN;
                 buffer.EnsureCapacity(capacity);
             }
             buffer.Length = length;
@@ -505,7 +475,7 @@ namespace System.Windows.Forms {
         
         private static extern bool IntCloseHandle(HandleRef handle);
         public static bool CloseHandle(HandleRef handle) {
-            System.Internal.HandleCollector.Remove((IntPtr)handle, NativeMethods.CommonHandles.Kernel);
+            Interop.HandleCollector.Remove((IntPtr)handle, Interop.CommonHandles.Kernel);
             return IntCloseHandle(handle);
         }
         
@@ -515,7 +485,7 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr CreateCompatibleDC(HandleRef hDC) {
-            return System.Internal.HandleCollector.Add(IntCreateCompatibleDC(hDC), NativeMethods.CommonHandles.CompatibleHDC);
+            return Interop.HandleCollector.Add(IntCreateCompatibleDC(hDC), Interop.CommonHandles.CompatibleHDC);
         }
 
         #region SendKeys SendInput functionality
@@ -535,13 +505,13 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.Kernel32, EntryPoint = "CreateFileMapping", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr IntCreateFileMapping(HandleRef hFile, IntPtr lpAttributes, int flProtect, int dwMaxSizeHi, int dwMaxSizeLow, string lpName);
         public static IntPtr CreateFileMapping(HandleRef hFile, IntPtr lpAttributes, int flProtect, int dwMaxSizeHi, int dwMaxSizeLow, string lpName) {
-            return System.Internal.HandleCollector.Add(IntCreateFileMapping(hFile, lpAttributes, flProtect, dwMaxSizeHi, dwMaxSizeLow, lpName), NativeMethods.CommonHandles.Kernel);
+            return Interop.HandleCollector.Add(IntCreateFileMapping(hFile, lpAttributes, flProtect, dwMaxSizeHi, dwMaxSizeLow, lpName), Interop.CommonHandles.Kernel);
         }
 
         [DllImport(ExternDll.Kernel32, EntryPoint = "OpenFileMapping", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr IntOpenFileMapping(int dwDesiredAccess, bool bInheritHandle, string lpName);
         public static IntPtr OpenFileMapping(int dwDesiredAccess, bool bInheritHandle, string lpName) {
-            return System.Internal.HandleCollector.Add(IntOpenFileMapping(dwDesiredAccess, bInheritHandle, lpName), NativeMethods.CommonHandles.Kernel);
+            return Interop.HandleCollector.Add(IntOpenFileMapping(dwDesiredAccess, bInheritHandle, lpName), Interop.CommonHandles.Kernel);
         }
 */
 
@@ -552,14 +522,14 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr MapViewOfFile(HandleRef hFileMapping, int dwDesiredAccess, int dwFileOffsetHigh, int dwFileOffsetLow, int dwNumberOfBytesToMap) {
-            return System.Internal.HandleCollector.Add(IntMapViewOfFile(hFileMapping, dwDesiredAccess, dwFileOffsetHigh, dwFileOffsetLow, dwNumberOfBytesToMap), NativeMethods.CommonHandles.Kernel);
+            return Interop.HandleCollector.Add(IntMapViewOfFile(hFileMapping, dwDesiredAccess, dwFileOffsetHigh, dwFileOffsetLow, dwNumberOfBytesToMap), Interop.CommonHandles.Kernel);
         }
 
         [DllImport(ExternDll.Kernel32, EntryPoint = "UnmapViewOfFile", ExactSpelling = true, CharSet = CharSet.Auto, SetLastError = true)]
         
         private static extern bool IntUnmapViewOfFile(HandleRef pvBaseAddress);
         public static bool UnmapViewOfFile(HandleRef pvBaseAddress) {
-            System.Internal.HandleCollector.Remove((IntPtr)pvBaseAddress, NativeMethods.CommonHandles.Kernel);
+            Interop.HandleCollector.Remove((IntPtr)pvBaseAddress, Interop.CommonHandles.Kernel);
             return IntUnmapViewOfFile(pvBaseAddress);
         }
 
@@ -569,7 +539,7 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr GetDCEx(HandleRef hWnd, HandleRef hrgnClip, int flags) {
-            return System.Internal.HandleCollector.Add(IntGetDCEx(hWnd, hrgnClip, flags), NativeMethods.CommonHandles.HDC);
+            return Interop.HandleCollector.Add(IntGetDCEx(hWnd, hrgnClip, flags), Interop.CommonHandles.HDC);
         }
         
         // GetObject stuff
@@ -581,21 +551,21 @@ namespace System.Windows.Forms {
         
         public static extern int GetObject(HandleRef hObject, int nSize, [In, Out] NativeMethods.LOGPEN lp);
         public static int GetObject(HandleRef hObject, NativeMethods.LOGPEN lp) {
-            return GetObject(hObject, Marshal.SizeOf(typeof(NativeMethods.LOGPEN)), lp);
+            return GetObject(hObject, Marshal.SizeOf<NativeMethods.LOGPEN>(), lp);
         }
         
         [DllImport(ExternDll.Gdi32, SetLastError=true, CharSet=CharSet.Auto)]
         
         public static extern int GetObject(HandleRef hObject, int nSize, [In, Out] NativeMethods.LOGBRUSH lb);
         public static int GetObject(HandleRef hObject, NativeMethods.LOGBRUSH lb) {
-            return GetObject(hObject, Marshal.SizeOf(typeof(NativeMethods.LOGBRUSH)), lb);
+            return GetObject(hObject, Marshal.SizeOf<NativeMethods.LOGBRUSH>(), lb);
         }
         
         [DllImport(ExternDll.Gdi32, SetLastError=true, CharSet=CharSet.Auto)]
         
         public static extern int GetObject(HandleRef hObject, int nSize, [In, Out] NativeMethods.LOGFONT lf);
         public static int GetObject(HandleRef hObject, NativeMethods.LOGFONT lp) {
-            return GetObject(hObject, Marshal.SizeOf(typeof(NativeMethods.LOGFONT)), lp);
+            return GetObject(hObject, Marshal.SizeOf<NativeMethods.LOGFONT>(), lp);
         }
         
         //HPALETTE
@@ -615,13 +585,13 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr CreateAcceleratorTable(/*ACCEL*/ HandleRef pentries, int cCount) {
-            return System.Internal.HandleCollector.Add(IntCreateAcceleratorTable(pentries, cCount), NativeMethods.CommonHandles.Accelerator);
+            return Interop.HandleCollector.Add(IntCreateAcceleratorTable(pentries, cCount), Interop.CommonHandles.Accelerator);
         }
         [DllImport(ExternDll.User32, ExactSpelling=true, EntryPoint="DestroyAcceleratorTable", CharSet=CharSet.Auto)]
         
         private static extern bool IntDestroyAcceleratorTable(HandleRef hAccel);
         public static bool DestroyAcceleratorTable(HandleRef hAccel) {
-            System.Internal.HandleCollector.Remove((IntPtr)hAccel, NativeMethods.CommonHandles.Accelerator);
+            Interop.HandleCollector.Remove((IntPtr)hAccel, Interop.CommonHandles.Accelerator);
             return IntDestroyAcceleratorTable(hAccel);
         }
 
@@ -656,22 +626,15 @@ namespace System.Windows.Forms {
                 // we do this because after a SetWindowRgn call, the system owns the region
                 // so we don't need to bother cleaning it up.
                 //
-                System.Internal.HandleCollector.Remove((IntPtr)hrgn, NativeMethods.CommonHandles.GDI);
+                Interop.HandleCollector.Remove((IntPtr)hrgn, Interop.CommonHandles.GDI);
             }
             return retval;
         }
-        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
-        
-        public static extern int GetWindowText(HandleRef hWnd, StringBuilder lpString, int nMaxCount);
-        
+
         [DllImport(ExternDll.Kernel32, CharSet=CharSet.Auto)]            
         
         [SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable")]
         public static extern void GetTempFileName(string tempDirName, string prefixName, int unique, StringBuilder sb);
-        
-        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
-        
-        public static extern bool SetWindowText(HandleRef hWnd, string text);
 
         [DllImport(ExternDll.Kernel32, ExactSpelling=true, CharSet=CharSet.Auto)]
         
@@ -828,7 +791,11 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
         
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.LVBKIMAGE lParam);
-        
+
+        [DllImport(ExternDll.User32, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        [SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable")]
+        public static extern IntPtr SendMessage(IntPtr hwnd, int msg, bool wparam, int lparam);
+
         [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
         
         public static extern int SendMessage(HandleRef hWnd, int msg, int wParam, ref NativeMethods.LVHITTESTINFO lParam);
@@ -883,11 +850,8 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
         
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, NativeMethods.POINT wParam, int lParam);
-        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
-        
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.REPASTESPECIAL lParam);
-        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
-        
+
+        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]        
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.EDITSTREAM lParam);
         [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
         
@@ -992,8 +956,11 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.User32, ExactSpelling=true, CharSet=CharSet.Auto)]
         
         public static extern IntPtr GetWindow(HandleRef hWnd, int uCmd);
+
         [DllImport(ExternDll.User32, ExactSpelling=true, CharSet=CharSet.Auto)]
-        
+        public static extern IntPtr GetWindow(IntPtr hWnd, int uCmd);
+
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetDlgItem(HandleRef hWnd, int nIDDlgItem);
         [DllImport(ExternDll.Kernel32, CharSet=CharSet.Auto)]
         
@@ -1008,17 +975,7 @@ namespace System.Windows.Forms {
         
         public static extern IntPtr CallWindowProc(IntPtr wndProc, IntPtr hWnd, int msg,
                                                 IntPtr wParam, IntPtr lParam);
-        
-/*                                               
-        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
-        public static extern IntPtr GetProp(HandleRef hWnd, int atom);
-        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
-        public static extern IntPtr GetProp(HandleRef hWnd, string name);
-        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
-        public static extern IntPtr RemoveProp(HandleRef hWnd, short atom);
-        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
-        public static extern IntPtr RemoveProp(HandleRef hWnd, string propName);
-   */
+
         [DllImport(ExternDll.Kernel32, ExactSpelling=true, CharSet=CharSet.Auto)]
         
         public static extern short GlobalDeleteAtom(short atom);
@@ -1033,10 +990,7 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
         
         public static extern bool GetClassInfo(HandleRef hInst, string lpszClass, IntPtr h);
-/*
-        [DllImport(ExternDll.Shell32, CharSet=CharSet.Auto)]
-        public static extern int SHGetFolderPath(HandleRef hwndOwner, int nFolder, HandleRef hToken, int dwFlags, StringBuilder lpszPath);
-*/        
+
         [DllImport(ExternDll.User32, ExactSpelling=true, CharSet=CharSet.Auto)]
         
         public static extern int GetSystemMetrics(int nIndex);
@@ -1045,6 +999,9 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.User32, ExactSpelling=true, CharSet=CharSet.Auto)]
         
         public static extern int GetSystemMetricsForDpi(int nIndex, uint dpi);
+
+        [DllImport(ExternDll.Gdi32, CharSet = CharSet.Auto)]
+        public static extern bool GetTextMetrics(HandleRef hdc, NativeMethods.TEXTMETRIC tm);
 
         /// <summary>
         /// Tries to get system metrics for the dpi. dpi is ignored if "GetSystemMetricsForDpi" is not available on the OS that this application is running.
@@ -1135,6 +1092,9 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.Ole32, ExactSpelling=true, CharSet=CharSet.Auto)]
         
         public static extern int RevokeDragDrop(HandleRef hwnd);
+
+        [DllImport(ExternDll.Ole32, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        public static extern int RevokeDragDrop(IntPtr hwnd);
         [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
         
         public static extern bool PeekMessage([In, Out] ref NativeMethods.MSG msg, HandleRef hwnd, int msgMin, int msgMax, int remove);
@@ -1161,6 +1121,10 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.Oleacc, ExactSpelling=true, CharSet=CharSet.Auto)]
         
         public static extern IntPtr LresultFromObject(ref Guid refiid, IntPtr wParam, HandleRef pAcc);
+
+        [DllImport(ExternDll.Oleacc, ExactSpelling = true, CharSet = CharSet.Auto)]
+        public static extern IntPtr LresultFromObject(ref Guid refiid, IntPtr wParam, IntPtr pAcc);
+
         [DllImport(ExternDll.Oleacc, ExactSpelling=true, CharSet=System.Runtime.InteropServices.CharSet.Auto)]
         
         public static extern int CreateStdAccessibleObject(HandleRef hWnd, int objID, ref Guid refiid, [In, Out, MarshalAs(UnmanagedType.Interface)] ref object pAcc);
@@ -1183,16 +1147,22 @@ namespace System.Windows.Forms {
         
         private static extern IntPtr IntBeginPaint(HandleRef hWnd, [In, Out] ref NativeMethods.PAINTSTRUCT lpPaint);
         public static IntPtr BeginPaint(HandleRef hWnd, [In, Out, MarshalAs(UnmanagedType.LPStruct)] ref NativeMethods.PAINTSTRUCT lpPaint) {
-            return System.Internal.HandleCollector.Add(IntBeginPaint(hWnd, ref lpPaint), NativeMethods.CommonHandles.HDC);
+            return Interop.HandleCollector.Add(IntBeginPaint(hWnd, ref lpPaint), Interop.CommonHandles.HDC);
         }
-        
+
+        [DllImport(ExternDll.User32, ExactSpelling = true, EntryPoint = "BeginPaint", CharSet = CharSet.Auto)]
+        public static extern IntPtr BeginPaint(IntPtr hWnd, [In, Out] ref NativeMethods.PAINTSTRUCT lpPaint);
+
         [DllImport(ExternDll.User32, ExactSpelling=true, EntryPoint="EndPaint", CharSet=CharSet.Auto)]
         
         private static extern bool IntEndPaint(HandleRef hWnd, ref NativeMethods.PAINTSTRUCT lpPaint);
         public static bool EndPaint(HandleRef hWnd, [In, MarshalAs(UnmanagedType.LPStruct)] ref NativeMethods.PAINTSTRUCT lpPaint) {
-            System.Internal.HandleCollector.Remove(lpPaint.hdc, NativeMethods.CommonHandles.HDC);
+            Interop.HandleCollector.Remove(lpPaint.hdc, Interop.CommonHandles.HDC);
             return IntEndPaint(hWnd, ref lpPaint);
         }
+
+        [DllImport(ExternDll.User32, ExactSpelling = true, EntryPoint = "EndPaint", CharSet = CharSet.Auto)]
+        public static extern bool EndPaint(IntPtr hWnd, ref NativeMethods.PAINTSTRUCT lpPaint);
 
         [DllImport(ExternDll.User32, ExactSpelling=true, EntryPoint="GetDC", CharSet=CharSet.Auto)]
         
@@ -1200,7 +1170,7 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr GetDC(HandleRef hWnd) {
-            return System.Internal.HandleCollector.Add(IntGetDC(hWnd), NativeMethods.CommonHandles.HDC);
+            return Interop.HandleCollector.Add(IntGetDC(hWnd), Interop.CommonHandles.HDC);
         }
 
         [DllImport(ExternDll.User32, ExactSpelling=true, EntryPoint="GetWindowDC", CharSet=CharSet.Auto)]
@@ -1209,14 +1179,14 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr GetWindowDC(HandleRef hWnd) {
-            return System.Internal.HandleCollector.Add(IntGetWindowDC(hWnd), NativeMethods.CommonHandles.HDC);
+            return Interop.HandleCollector.Add(IntGetWindowDC(hWnd), Interop.CommonHandles.HDC);
         }
         
         [DllImport(ExternDll.User32, ExactSpelling=true, EntryPoint="ReleaseDC", CharSet=CharSet.Auto)]
         
         private static extern int IntReleaseDC(HandleRef hWnd, HandleRef hDC);
         public static int ReleaseDC(HandleRef hWnd, HandleRef hDC) {
-            System.Internal.HandleCollector.Remove((IntPtr)hDC, NativeMethods.CommonHandles.HDC);
+            Interop.HandleCollector.Remove((IntPtr)hDC, Interop.CommonHandles.HDC);
             return IntReleaseDC(hWnd, hDC);
         }
 
@@ -1227,12 +1197,12 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr CreateDC(string lpszDriver) {
-            return System.Internal.HandleCollector.Add(IntCreateDC(lpszDriver, null, null, NativeMethods.NullHandleRef), NativeMethods.CommonHandles.HDC);
+            return Interop.HandleCollector.Add(IntCreateDC(lpszDriver, null, null, NativeMethods.NullHandleRef), Interop.CommonHandles.HDC);
         }
         
         
         public static IntPtr CreateDC(string lpszDriverName, string lpszDeviceName, string lpszOutput, HandleRef /*DEVMODE*/ lpInitData) {
-            return System.Internal.HandleCollector.Add(IntCreateDC(lpszDriverName, lpszDeviceName, lpszOutput, lpInitData), NativeMethods.CommonHandles.HDC);
+            return Interop.HandleCollector.Add(IntCreateDC(lpszDriverName, lpszDeviceName, lpszOutput, lpInitData), Interop.CommonHandles.HDC);
         }
         
         [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
@@ -1345,7 +1315,7 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr CreatePopupMenu() {
-            return System.Internal.HandleCollector.Add(IntCreatePopupMenu(), NativeMethods.CommonHandles.Menu);
+            return Interop.HandleCollector.Add(IntCreatePopupMenu(), Interop.CommonHandles.Menu);
         }
         
         [DllImport(ExternDll.User32, ExactSpelling=true, CharSet=CharSet.Auto)]
@@ -1356,7 +1326,7 @@ namespace System.Windows.Forms {
         
         private static extern bool IntDestroyMenu(HandleRef hMenu);
         public static bool DestroyMenu(HandleRef hMenu) {
-            System.Internal.HandleCollector.Remove((IntPtr)hMenu, NativeMethods.CommonHandles.Menu);
+            Interop.HandleCollector.Remove((IntPtr)hMenu, Interop.CommonHandles.Menu);
             return IntDestroyMenu(hMenu);
         }
         
@@ -1411,7 +1381,7 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr CreateIC(string lpszDriverName, string lpszDeviceName, string lpszOutput, HandleRef /*DEVMODE*/ lpInitData) {
-            return System.Internal.HandleCollector.Add(IntCreateIC(lpszDriverName, lpszDeviceName, lpszOutput, lpInitData), NativeMethods.CommonHandles.HDC);
+            return Interop.HandleCollector.Add(IntCreateIC(lpszDriverName, lpszDeviceName, lpszOutput, lpInitData), Interop.CommonHandles.HDC);
         }
         
         [DllImport(ExternDll.User32, ExactSpelling=true, CharSet=CharSet.Auto)]
@@ -1438,7 +1408,7 @@ namespace System.Windows.Forms {
         
         private static extern bool IntDestroyCursor(HandleRef hCurs);
         public static bool DestroyCursor(HandleRef hCurs) {
-            System.Internal.HandleCollector.Remove((IntPtr)hCurs, NativeMethods.CommonHandles.Cursor);
+            Interop.HandleCollector.Remove((IntPtr)hCurs, Interop.CommonHandles.Cursor);
             return IntDestroyCursor(hCurs);
         }
         
@@ -1450,13 +1420,13 @@ namespace System.Windows.Forms {
         
         private static extern bool IntDeleteDC(HandleRef hDC);
         public static bool DeleteDC(HandleRef hDC) {
-            System.Internal.HandleCollector.Remove((IntPtr)hDC, NativeMethods.CommonHandles.HDC);
+            Interop.HandleCollector.Remove((IntPtr)hDC, Interop.CommonHandles.HDC);
             return IntDeleteDC(hDC);
         }
 
         public static bool DeleteCompatibleDC(HandleRef hDC)
         {
-            System.Internal.HandleCollector.Remove((IntPtr)hDC, NativeMethods.CommonHandles.CompatibleHDC);
+            Interop.HandleCollector.Remove((IntPtr)hDC, Interop.CommonHandles.CompatibleHDC);
             return IntDeleteDC(hDC);
         }
 
@@ -1582,13 +1552,13 @@ namespace System.Windows.Forms {
                             regionRects = new NativeMethods.RECT[pRgnDataHeader->nCount];
 
                             Debug.Assert(regionDataSize == pRgnDataHeader->cbSizeOfStruct + pRgnDataHeader->nCount * pRgnDataHeader->nRgnSize);
-                            Debug.Assert(Marshal.SizeOf(typeof(NativeMethods.RECT)) == pRgnDataHeader->nRgnSize || pRgnDataHeader->nRgnSize == 0);
+                            Debug.Assert(Marshal.SizeOf<NativeMethods.RECT>() == pRgnDataHeader->nRgnSize || pRgnDataHeader->nRgnSize == 0);
 
                             // use the header size as the offset, and cast each rect in.
                             int rectStart = pRgnDataHeader->cbSizeOfStruct;
                             for (int i = 0; i < pRgnDataHeader->nCount; i++) {
                                 // use some fancy pointer math to just copy the rect bits directly into the array.
-                                regionRects[i] = *((NativeMethods.RECT*)((byte*)pBytes + rectStart + (Marshal.SizeOf(typeof(NativeMethods.RECT)) * i)));
+                                regionRects[i] = *((NativeMethods.RECT*)((byte*)pBytes + rectStart + (Marshal.SizeOf<NativeMethods.RECT>() * i)));
                             }
                         }
                     }
@@ -1600,6 +1570,15 @@ namespace System.Windows.Forms {
                 }
             }
             return regionRects;
+        }
+
+        public static ref T PtrToRef<T>(IntPtr ptr)
+            where T : unmanaged
+        {
+            unsafe
+            {
+                return ref Unsafe.AsRef<T>(ptr.ToPointer());
+            }
         }
 
         /* Unused
@@ -4846,13 +4825,12 @@ namespace System.Windows.Forms {
         ]
         public interface IMsoComponentManager {
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.QueryService"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Return in *ppvObj an implementation of interface iid for service
         ///      guidService (same as IServiceProvider::QueryService).
         ///      Return NOERROR if the requested service is supported, otherwise return
         ///      NULL in *ppvObj and an appropriate error (eg E_FAIL, E_NOINTERFACE).
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         int QueryService(
             ref Guid guidService,
@@ -4860,13 +4838,12 @@ namespace System.Windows.Forms {
             [MarshalAs(UnmanagedType.Interface)] 
             out object ppvObj);
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.FDebugMessage"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Standard FDebugMessage method.
         ///      Since IMsoComponentManager is a reference counted interface, 
         ///      MsoDWGetChkMemCounter should be used when processing the 
         ///      msodmWriteBe message.
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         bool FDebugMessage(
             IntPtr hInst, 
@@ -4874,43 +4851,39 @@ namespace System.Windows.Forms {
             IntPtr wParam, 
             IntPtr lParam);
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.FRegisterComponent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Register component piComponent and its registration info pcrinfo with
         ///      this component manager.  Return in *pdwComponentID a cookie which will
         ///      identify the component when it calls other IMsoComponentManager
         ///      methods.
         ///      Return TRUE if successful, FALSE otherwise.
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         bool FRegisterComponent(
             IMsoComponent component,
             NativeMethods.MSOCRINFOSTRUCT pcrinfo,
             out IntPtr dwComponentID);
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.FRevokeComponent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Undo the registration of the component identified by dwComponentID
         ///      (the cookie returned from the FRegisterComponent method).
         ///      Return TRUE if successful, FALSE otherwise.
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         bool FRevokeComponent(IntPtr dwComponentID);
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.FUpdateComponentRegistration"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Update the registration info of the component identified by
         ///      dwComponentID (the cookie returned from FRegisterComponent) with the
         ///      new registration information pcrinfo.
         ///      Typically this is used to update the idle time registration data, but
         ///      can be used to update other registration data as well.
         ///      Return TRUE if successful, FALSE otherwise.
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         bool FUpdateComponentRegistration(IntPtr dwComponentID,NativeMethods.MSOCRINFOSTRUCT pcrinfo);
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.FOnComponentActivate"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Notify component manager that component identified by dwComponentID
         ///      (cookie returned from FRegisterComponent) has been activated.
         ///      The active component gets the  chance to process messages before they
@@ -4921,12 +4894,11 @@ namespace System.Windows.Forms {
         ///      msoerrACompIsXActive (comp usually need not take any special action
         ///      in this case).
         ///      Return TRUE if successful.
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         bool FOnComponentActivate(IntPtr dwComponentID);
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.FSetTrackingComponent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Called to inform component manager that  component identified by 
         ///      dwComponentID (cookie returned from FRegisterComponent) wishes
         ///      to perform a tracking operation (such as mouse tracking).
@@ -4942,12 +4914,11 @@ namespace System.Windows.Forms {
         ///              time via IMsoComponent::FDoIdle.
         ///      Note: there can only be one tracking component at a time.
         ///      Return TRUE if successful, FALSE otherwise.
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         bool FSetTrackingComponent(IntPtr dwComponentID, [In, MarshalAs(UnmanagedType.Bool)] bool fTrack);
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.OnComponentEnterState"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Notify component manager that component identified by dwComponentID
         ///      (cookie returned from FRegisterComponent) is entering the state
         ///      identified by uStateID (msocstateXXX value).  (For convenience when
@@ -4981,12 +4952,11 @@ namespace System.Windows.Forms {
         ///      Note: inplace objects should not call this method with
         ///      uStateID == msocstateModal when entering modal state. Such objects
         ///      should call IOleInPlaceFrame::EnableModeless instead.
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         void OnComponentEnterState(IntPtr dwComponentID,int uStateID,int uContext,int cpicmExclude,/* IMsoComponentManger** */ int rgpicmExclude,int dwReserved);
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.FOnComponentExitState"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Notify component manager that component identified by dwComponentID
         ///      (cookie returned from FRegisterComponent) is exiting the state
         ///      identified by uStateID (a msocstateXXX value).  (For convenience when
@@ -5007,7 +4977,7 @@ namespace System.Windows.Forms {
         ///      
         ///      Note: n calls to this method are symmetric with n calls to 
         ///      OnComponentEnterState (see OnComponentEnterState comments, above).
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         bool FOnComponentExitState(
             IntPtr dwComponentID,
@@ -5016,27 +4986,24 @@ namespace System.Windows.Forms {
             int cpicmExclude, 
             /* IMsoComponentManager** */ int rgpicmExclude);
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.FInState"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Return TRUE if the state identified by uStateID (a msocstateXXX value)
         ///      is in effect at the root of this component manager's state context, 
         ///      FALSE otherwise (see "Comments on State Contexts", above).
         ///      pvoid is reserved for future use and should be NULL.
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         bool FInState(int uStateID,/* PVOID */ IntPtr pvoid);
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.FContinueIdle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Called periodically by a component during IMsoComponent::FDoIdle.
         ///      Return TRUE if component can continue its idle time processing, 
         ///      FALSE if not (in which case component returns from FDoIdle.) 
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         bool FContinueIdle();
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.FPushMessageLoop"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Component identified by dwComponentID (cookie returned from 
         ///      FRegisterComponent) wishes to push a message loop for reason uReason.
         ///      uReason is one the values from the msoloop enumeration (above).
@@ -5051,12 +5018,11 @@ namespace System.Windows.Forms {
         ///      FALSE if it had to terminate the loop for some other reason.  In the 
         ///      latter case, component should perform any necessary action (such as 
         ///      cleanup).
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         bool FPushMessageLoop(IntPtr dwComponentID,int uReason,/* PVOID */ int pvLoopData);
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.FCreateSubComponentManager"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Cause the component manager to create a "sub" component manager, which
         ///      will be one of its children in the hierarchical tree of component
         ///      managers used to maintiain state contexts (see "Comments on State
@@ -5068,7 +5034,7 @@ namespace System.Windows.Forms {
         ///      will delegate its IMsoComponentManager::QueryService calls. 
         ///      (see objext.h or docobj.h for definition of IServiceProvider).
         ///      Returns TRUE if successful.
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         bool FCreateSubComponentManager(
             [MarshalAs(UnmanagedType.Interface)]
@@ -5078,20 +5044,18 @@ namespace System.Windows.Forms {
             ref Guid riid,
             out IntPtr ppvObj);
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.FGetParentComponentManager"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Return in *ppicm an AddRef'ed ptr to this component manager's parent
         ///      in the hierarchical tree of component managers used to maintain state
         ///      contexts (see "Comments on State       Contexts", above).
         ///      Returns TRUE if the parent is returned, FALSE if no parent exists or
         ///      some error occurred.
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         bool FGetParentComponentManager(
             out IMsoComponentManager ppicm);
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponentManager.FGetActiveComponent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Return in *ppic an AddRef'ed ptr to the current active or tracking
         ///      component (as indicated by dwgac (a msogacXXX value)), and
         ///      its registration information in *pcrinfo.  ppic and/or pcrinfo can be
@@ -5100,7 +5064,7 @@ namespace System.Windows.Forms {
         ///      Returns TRUE if the component indicated by dwgac exists, FALSE if no 
         ///      such component exists or some error occurred.
         ///      dwReserved is reserved for future use and should be zero.
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         bool FGetActiveComponent(
         int dwgac,
@@ -5116,13 +5080,12 @@ namespace System.Windows.Forms {
         ]
         public interface IMsoComponent {
 
-            /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponent.FDebugMessage"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Standard FDebugMessage method.
             ///      Since IMsoComponentManager is a reference counted interface, 
             ///      MsoDWGetChkMemCounter should be used when processing the 
             ///      msodmWriteBe message.
-            /// </devdoc>
+            /// </summary>
             [PreserveSig]
             bool FDebugMessage(
                 IntPtr hInst, 
@@ -5130,18 +5093,16 @@ namespace System.Windows.Forms {
                 IntPtr wParam, 
                 IntPtr lParam);
 
-            /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponent.FPreTranslateMessage"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Give component a chance to process the message pMsg before it is
             ///      translated and dispatched. Component can do TranslateAccelerator
             ///      do IsDialogMessage, modify pMsg, or take some other action.
             ///      Return TRUE if the message is consumed, FALSE otherwise.
-            /// </devdoc>
+            /// </summary>
             [PreserveSig]
             bool FPreTranslateMessage(ref NativeMethods.MSG msg);            
 
-            /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponent.OnEnterState"]/*' />
-            /// <devdoc>  
+            /// <summary>  
             ///      Notify component when app enters or exits (as indicated by fEnter)
             ///      the state identified by uStateID (a value from olecstate enumeration).
             ///      Component should take action depending on value of uStateID
@@ -5156,14 +5117,13 @@ namespace System.Windows.Forms {
             ///     (incremented when this method is called with TRUE fEnter, decremented
             ///     when called with FALSE fEnter), the counter should not be decremented
             ///     for FALSE fEnter if it is already at zero.)  
-            /// </devdoc>
+            /// </summary>
             [PreserveSig]
             void OnEnterState(
                 int uStateID,
                 bool fEnter);
 
-            /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponent.OnAppActivate"]/*' />
-            /// <devdoc>  
+            /// <summary>  
             ///      Notify component when the host application gains or loses activation.
             ///     If fActive is TRUE, the host app is being activated and dwOtherThreadID
             ///      is the ID of the thread owning the window being deactivated.
@@ -5172,22 +5132,20 @@ namespace System.Windows.Forms {
             ///      activated.
             ///      Note: this method is not called when both the window being activated
             ///      and the one being deactivated belong to the host app.
-            /// </devdoc>
+            /// </summary>
             [PreserveSig]
             void OnAppActivate(
                 bool fActive,
                 int dwOtherThreadID);                
 
-            /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponent.OnLoseActivation"]/*' />
-            /// <devdoc>      
+            /// <summary>      
             ///      Notify the active component that it has lost its active status because
             ///      the host or another component has become active.
-            /// </devdoc>
+            /// </summary>
             [PreserveSig]
             void OnLoseActivation();
 
-            /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponent.OnActivationChange"]/*' />
-            /// <devdoc> 
+            /// <summary> 
             ///      Notify component when a new object is being activated.
             ///      If pic is non-NULL, then it is the component that is being activated.
             ///      In this case, fSameComponent is TRUE if pic is the same component as
@@ -5220,7 +5178,7 @@ namespace System.Windows.Forms {
             ///      ExclusiveActive mode ends, indicated by a future call to 
             ///      OnActivationChange with ExclusiveActivation bit not set or with NULL
             ///      pcrinfo.
-            /// </devdoc>
+            /// </summary>
             [PreserveSig]
             void OnActivationChange(
                 IMsoComponent component,
@@ -5230,8 +5188,7 @@ namespace System.Windows.Forms {
                 int pchostinfo,
                 int dwReserved);
 
-            /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponent.FDoIdle"]/*' />
-            /// <devdoc> 
+            /// <summary> 
             ///      Give component a chance to do idle time tasks.  grfidlef is a group of
             ///      bit flags taken from the enumeration of oleidlef values (above),
             ///      indicating the type of idle tasks to perform.  
@@ -5246,14 +5203,13 @@ namespace System.Windows.Forms {
             ///      Note: If this method is called on while component is performing a 
             ///      tracking operation, component should only perform idle time tasks that
             ///      it deems are appropriate to perform during tracking.
-            /// </devdoc>
+            /// </summary>
             [PreserveSig]
             bool FDoIdle(
                 int grfidlef);            
 
 
-            /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponent.FContinueMessageLoop"]/*' />
-            /// <devdoc>         
+            /// <summary>         
             ///      Called during each iteration of a message loop that the component
             ///      pushed. uReason and pvLoopData are the reason and the component private 
             ///      data that were passed to IOleComponentManager::FPushMessageLoop.
@@ -5266,7 +5222,7 @@ namespace System.Windows.Forms {
             ///      Return TRUE if the message loop should continue, FALSE otherwise.
             ///      If FALSE is returned, the component manager terminates the loop without
             ///      removing pMsgPeeked from the queue. 
-            /// </devdoc>
+            /// </summary>
             [PreserveSig]
             bool FContinueMessageLoop(
                 int uReason,
@@ -5274,8 +5230,7 @@ namespace System.Windows.Forms {
                 [MarshalAs(UnmanagedType.LPArray)] NativeMethods.MSG[] pMsgPeeked);            
 
 
-            /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponent.FQueryTerminate"]/*' />
-            /// <devdoc> 
+            /// <summary> 
             ///      Called when component manager wishes to know if the component is in a
             ///      state in which it can terminate.  If fPromptUser is FALSE, component
             ///      should simply return TRUE if it can terminate, FALSE otherwise.
@@ -5284,29 +5239,27 @@ namespace System.Windows.Forms {
             ///      user, either 1.) asking user if it can terminate and returning TRUE
             ///      or FALSE appropriately, or 2.) giving an indication as to why it
             ///      cannot terminate and returning FALSE. 
-            /// </devdoc>
+            /// </summary>
             [PreserveSig]
             bool FQueryTerminate(
                 bool fPromptUser);
 
-            /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponent.Terminate"]/*' />
-            /// <devdoc>     
+            /// <summary>     
             ///      Called when component manager wishes to terminate the component's
             ///      registration.  Component should revoke its registration with component
             ///      manager, release references to component manager and perform any
             ///      necessary cleanup. 
-            /// </devdoc>
+            /// </summary>
             [PreserveSig]
             void Terminate();
 
-            /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods.IMsoComponent.HwndGetWindow"]/*' />
-            /// <devdoc> 
+            /// <summary> 
             ///      Called to retrieve a window associated with the component, as specified
             ///      by dwWhich, a olecWindowXXX value (see olecWindow, above).
             ///      dwReserved is reserved for future use and should be zero.
             ///      Component should return the desired window or NULL if no such window
             ///      exists. 
-            /// </devdoc>
+            /// </summary>
             
             [PreserveSig]
             IntPtr HwndGetWindow(
@@ -7015,7 +6968,7 @@ namespace System.Windows.Forms {
     }
     [ComImport(), Guid("00020403-0000-0000-C000-000000000046"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
     public interface  ITypeComp {
-         void RemoteBind(
+         unsafe void RemoteBind(
                 [In, MarshalAs(UnmanagedType.LPWStr)] 
                  string szName,
                 [In, MarshalAs(UnmanagedType.U4)] 
@@ -7027,9 +6980,9 @@ namespace System.Windows.Forms {
                 [Out, MarshalAs(UnmanagedType.LPArray)] 
                   NativeMethods.tagDESCKIND[] pDescKind,
                 [Out, MarshalAs(UnmanagedType.LPArray)] 
-                   NativeMethods.tagFUNCDESC[] ppFuncDesc,
+                   NativeMethods.tagFUNCDESC*[] ppFuncDesc,
                 [Out, MarshalAs(UnmanagedType.LPArray)] 
-                   NativeMethods.tagVARDESC[] ppVarDesc,
+                   NativeMethods.tagVARDESC*[] ppVarDesc,
                 [Out, MarshalAs(UnmanagedType.LPArray)] 
                    UnsafeNativeMethods.ITypeComp[] ppTypeComp,
                 [Out, MarshalAs(UnmanagedType.LPArray)] 
@@ -7177,7 +7130,7 @@ namespace System.Windows.Forms {
     public sealed class tagQACONTAINER
     {
       [MarshalAs(UnmanagedType.U4)]
-      public int cbSize = Marshal.SizeOf(typeof(tagQACONTAINER));
+      public int cbSize = Marshal.SizeOf<tagQACONTAINER>();
 
       public UnsafeNativeMethods.IOleClientSite pClientSite;
 
@@ -7229,7 +7182,7 @@ namespace System.Windows.Forms {
     public sealed class tagQACONTROL
     {
       [MarshalAs(UnmanagedType.U4)/*leftover(offset=0, cbSize)*/]
-      public int cbSize = Marshal.SizeOf(typeof(tagQACONTROL));
+      public int cbSize = Marshal.SizeOf<tagQACONTROL>();
 
       [MarshalAs(UnmanagedType.U4)/*leftover(offset=4, dwMiscStatus)*/]
       public int dwMiscStatus = 0;
@@ -7284,271 +7237,68 @@ namespace System.Windows.Forms {
         string DefaultAction { get; }
     }
 
-    [ComImport(), Guid("0000000A-0000-0000-C000-000000000046"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
-    public interface ILockBytes {
-
-        
-         void ReadAt(
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long ulOffset,
-                [Out] 
-                 IntPtr pv,
-                [In, MarshalAs(UnmanagedType.U4)] 
-                 int cb,
-                [Out, MarshalAs(UnmanagedType.LPArray)] 
-                 int[] pcbRead);
-
-        
-         void WriteAt(
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long ulOffset,
-
-                 IntPtr pv,
-                [In, MarshalAs(UnmanagedType.U4)] 
-                 int cb,
-                [Out, MarshalAs(UnmanagedType.LPArray)] 
-                 int[] pcbWritten);
-
-        
-         void Flush();
-
-        
-         void SetSize(
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long cb);
-
-        
-         void LockRegion(
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long libOffset,
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long cb,
-                [In, MarshalAs(UnmanagedType.U4)] 
-                 int dwLockType);
-
-        
-         void UnlockRegion(
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long libOffset,
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long cb,
-                [In, MarshalAs(UnmanagedType.U4)] 
-                 int dwLockType);
-
-        
-         void Stat(
-                [Out] 
-                  NativeMethods.STATSTG pstatstg,
-                [In, MarshalAs(UnmanagedType.U4)] 
-                 int grfStatFlag);
-
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public class OFNOTIFY
-    {
-        // hdr was a by-value NMHDR structure
-        public IntPtr hdr_hwndFrom = IntPtr.Zero;
-        public IntPtr hdr_idFrom = IntPtr.Zero;
-        public int  hdr_code = 0;
-    
-        public IntPtr lpOFN = IntPtr.Zero;
-        public IntPtr pszFile = IntPtr.Zero;
-    }
-
-    internal static bool IsComObject(object o)
-    {
-        return Marshal.IsComObject(o);
-    }
-
-    internal static int ReleaseComObject(object objToRelease)
-    {
-        return Marshal.ReleaseComObject(objToRelease);
-    }
-            
-    public static object PtrToStructure(IntPtr lparam, Type cls) {
-        return Marshal.PtrToStructure(lparam, cls);
-    }
-    
-    public static void PtrToStructure(IntPtr lparam, object data) {
-        Marshal.PtrToStructure(lparam, data);
-    }
-
-        internal static int SizeOf(Type t)
+        [ComImport]
+        [Guid("0000000A-0000-0000-C000-000000000046")]
+        [InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface ILockBytes
         {
-            return Marshal.SizeOf(t);
+            void ReadAt(
+                [In, MarshalAs(UnmanagedType.U8)] long ulOffset,
+                [Out] IntPtr pv,
+                [In, MarshalAs(UnmanagedType.U4)] int cb,
+                [Out, MarshalAs(UnmanagedType.LPArray)] int[] pcbRead
+            );
+
+            void WriteAt(
+                [In, MarshalAs(UnmanagedType.U8)] long ulOffset,
+                IntPtr pv,
+                [In, MarshalAs(UnmanagedType.U4)] int cb,
+                [Out, MarshalAs(UnmanagedType.LPArray)] int[] pcbWritten
+            );
+
+            void Flush();
+
+            void SetSize([In, MarshalAs(UnmanagedType.U8)] long cb);
+
+            void LockRegion(
+                [In, MarshalAs(UnmanagedType.U8)] long libOffset,
+                [In, MarshalAs(UnmanagedType.U8)] long cb,
+                [In, MarshalAs(UnmanagedType.U4)] int dwLockType
+            );
+
+            void UnlockRegion(
+                [In, MarshalAs(UnmanagedType.U8)] long libOffset,
+                [In, MarshalAs(UnmanagedType.U8)] long cb,
+                [In, MarshalAs(UnmanagedType.U4)] int dwLockType
+            );
+
+            void Stat(
+                [Out] NativeMethods.STATSTG pstatstg,
+                [In, MarshalAs(UnmanagedType.U4)] int grfStatFlag
+            );
         }
 
-        internal static void ThrowExceptionForHR(int errorCode)
+        [StructLayout(LayoutKind.Sequential)]
+        public class OFNOTIFY
         {
-            Marshal.ThrowExceptionForHR(errorCode);
-        }
+            // hdr was a by-value NMHDR structure
+            public IntPtr hdr_hwndFrom = IntPtr.Zero;
+            public IntPtr hdr_idFrom = IntPtr.Zero;
+            public int hdr_code = 0;
 
-
-        public delegate int BrowseCallbackProc(
-            IntPtr hwnd,
-            int msg, 
-            IntPtr lParam, 
-            IntPtr lpData);
-
-        [Flags]    
-        public enum BrowseInfos
-        {
-            NewDialogStyle      = 0x0040,   // Use the new dialog layout with the ability to resize
-            HideNewFolderButton = 0x0200    // Don't display the 'New Folder' button
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
-        public class BROWSEINFO 
-        {
-            [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
-            public IntPtr hwndOwner; //HWND hwndOwner; // HWND of the owner for the dialog
-            [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
-            public IntPtr pidlRoot; //LPCITEMIDLIST pidlRoot; // Root ITEMIDLIST
-    
-            // For interop purposes, send over a buffer of MAX_PATH size. 
-            [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
-            public IntPtr pszDisplayName; //LPWSTR pszDisplayName; // Return display name of item selected.
-    
-            public string lpszTitle; //LPCWSTR lpszTitle; // text to go in the banner over the tree.
-            public int ulFlags; //UINT ulFlags; // Flags that control the return stuff
-            public BrowseCallbackProc lpfn; //BFFCALLBACK lpfn; // Call back pointer
-            [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
-            public IntPtr lParam; //LPARAM lParam; // extra info that's passed back in callbacks
-            public int iImage; //int iImage; // output var: where to return the Image index.
+            public IntPtr lpOFN = IntPtr.Zero;
+            public IntPtr pszFile = IntPtr.Zero;
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
         internal class Shell32 
         {
-            [DllImport(ExternDll.Shell32)]
-            
-            public static extern int SHGetSpecialFolderLocation(IntPtr hwnd, int csidl, ref IntPtr ppidl);
-            //SHSTDAPI SHGetSpecialFolderLocation(HWND hwnd, int csidl, LPITEMIDLIST *ppidl);
-
-            [DllImport(ExternDll.Shell32, CharSet = CharSet.Auto)]
-            
-            private static extern bool SHGetPathFromIDListEx(IntPtr pidl, IntPtr pszPath, int cchPath, int flags);
-            //SHSTDAPI_(BOOL) SHGetPathFromIDListW(LPCITEMIDLIST pidl, LPWSTR pszPath);
-
-            public static bool SHGetPathFromIDListLongPath(IntPtr pidl, ref IntPtr pszPath)
-            {
-                int noOfTimes = 1;
-                int length = NativeMethods.MAX_PATH;
-                bool result = false;
-
-                // SHGetPathFromIDListEx returns false in case of insufficient buffer.
-                // This method does not distinguish between insufficient memory and an error. Until we get a proper solution,
-                // this logic would work. In the worst case scenario, loop exits when length reaches unicode string length.
-                while ((result = SHGetPathFromIDListEx(pidl, pszPath, length, 0)) == false 
-                        && length < NativeMethods.MAX_UNICODESTRING_LEN)
-                {
-                    string path = Marshal.PtrToStringAuto(pszPath);
-
-                    if (path.Length != 0 && path.Length < length)
-                        break;
-
-                    noOfTimes += 2; //520 chars capacity increase in each iteration.
-                    length = noOfTimes * length >= NativeMethods.MAX_UNICODESTRING_LEN 
-                        ? NativeMethods.MAX_UNICODESTRING_LEN : noOfTimes * length;
-                    pszPath = Marshal.ReAllocHGlobal(pszPath, (IntPtr)((length + 1) * sizeof(char)));
-                }
-
-                return result;
-            }
-
-            [DllImport(ExternDll.Shell32, CharSet=CharSet.Auto)]
-            
-            public static extern IntPtr SHBrowseForFolder([In] BROWSEINFO lpbi);        
-            //SHSTDAPI_(LPITEMIDLIST) SHBrowseForFolderW(LPBROWSEINFOW lpbi);
-              
-            [DllImport(ExternDll.Shell32)]
-            
-            public static extern int SHGetMalloc([Out, MarshalAs(UnmanagedType.LPArray)] UnsafeNativeMethods.IMalloc[] ppMalloc);
-            //SHSTDAPI SHGetMalloc(LPMALLOC * ppMalloc);
-
-            [SuppressMessage("Microsoft.Interoperability", "CA1400:PInvokeEntryPointsShouldExist")]
             [DllImport(ExternDll.Shell32, PreserveSig = true)]
-            
-            private static extern int SHGetKnownFolderPath(ref Guid rfid, uint dwFlags, IntPtr hToken, out IntPtr pszPath);
-
-            public static int SHGetFolderPathEx(ref Guid rfid, uint dwFlags, IntPtr hToken, StringBuilder pszPath)
-            {                
-                if (IsVista)
-                {
-                    IntPtr path = IntPtr.Zero;
-                    int result = -1;
-                    if ((result = SHGetKnownFolderPath(ref rfid, dwFlags, hToken, out path)) == NativeMethods.S_OK)
-                    {
-                        pszPath.Append(Marshal.PtrToStringAuto(path));
-                        CoTaskMemFree(path);
-                    }
-                    return result;
-                }
-                throw new NotSupportedException();
-            }
-
-            [DllImport(ExternDll.Shell32, PreserveSig = true)]
-            
             public static extern int SHCreateShellItem(IntPtr pidlParent, IntPtr psfParent, IntPtr pidl, out FileDialogNative.IShellItem ppsi);
 
             [DllImport(ExternDll.Shell32, PreserveSig = true)]
-            
             public static extern int SHILCreateFromPath([MarshalAs(UnmanagedType.LPWStr)]string pszPath, out IntPtr ppIdl, ref uint rgflnOut);
         }
-
-        [
-        ComImport(), 
-        Guid("00000002-0000-0000-c000-000000000046"), 
-        System.Runtime.InteropServices.InterfaceTypeAttribute(System.Runtime.InteropServices.ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IMalloc 
-        {
-            [PreserveSig]
-            IntPtr Alloc(int cb);
-
-            [PreserveSig]
-            IntPtr Realloc(IntPtr pv, int cb);
-
-            [PreserveSig]
-            void Free(IntPtr pv);
-
-            [PreserveSig]
-            int GetSize(IntPtr pv);
-
-            [PreserveSig]
-            int DidAlloc(IntPtr pv);
-
-            [PreserveSig]
-            void HeapMinimize();
-        }
-
-          [
-          ComImport,
-          Guid("00000126-0000-0000-C000-000000000046"),
-          InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)
-          ]
-          public interface IRunnableObject 
-          {
-               void GetRunningClass(out Guid guid);
-
-               [PreserveSig]
-               int Run(IntPtr lpBindContext);
-               bool IsRunning();
-               void LockRunning(bool fLock, bool fLastUnlockCloses);
-               void SetContainedObject(bool fContained);          
-          }
-
-        [ComVisible(true), ComImport(), Guid("B722BCC7-4E68-101B-A2BC-00AA00404770"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
-               public interface IOleDocumentSite 
-          {
-    
-               [return: MarshalAs(UnmanagedType.I4)]
-               [PreserveSig]
-               int ActivateMe(
-                    [In, MarshalAs(UnmanagedType.Interface)] 
-                    IOleDocumentView pViewToActivate);
-    
-          }
 
           [ComVisible(true), Guid("B722BCC6-4E68-101B-A2BC-00AA00404770"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
                public interface IOleDocumentView 
@@ -7951,10 +7701,9 @@ namespace System.Windows.Forms {
                     int cySrc);
         }
 
-        /// <include file='doc\UnsafeNativeMethods.uex' path='docs/doc[@for="UnsafeNativeMethods"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// This class provides static methods to create, activate and deactivate the theming scope.
-        /// </devdoc>
+        /// </summary>
         internal class ThemingScope
         {
             private static ACTCTX enableThemingActivationContext;
@@ -7962,10 +7711,10 @@ namespace System.Windows.Forms {
             private static IntPtr hActCtx;
             private static bool contextCreationSucceeded;
 
-            /// <devdoc>
+            /// <summary>
             /// We now use explicitactivate everywhere and use this method to determine if we
             /// really need to activate the activationcontext.  This should be pretty fast.
-            /// </devdoc>
+            /// </summary>
             
             
             private static bool IsContextActive()
@@ -7979,12 +7728,12 @@ namespace System.Windows.Forms {
                 return false;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Activate() does nothing if a theming context is already active on the current thread, which is good
             ///     for perf reasons. However, in some cases, like in the Timer callback, we need to put another context
             ///     on the stack even if one is already present. In such cases, this method helps - you get to manage
             ///     the cookie yourself though.
-            /// </devdoc>
+            /// </summary>
             
             
             public static IntPtr Activate()
@@ -8006,9 +7755,9 @@ namespace System.Windows.Forms {
                 return userCookie;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Use this to deactivate a context activated by calling ExplicitActivate.
-            /// </devdoc>
+            /// </summary>
             public static IntPtr Deactivate(IntPtr userCookie)
             {
                 if (userCookie != IntPtr.Zero && OSFeature.Feature.IsPresent(OSFeature.Themes))
@@ -8039,7 +7788,7 @@ namespace System.Windows.Forms {
 
                         enableThemingActivationContext = new ACTCTX();
 
-                        enableThemingActivationContext.cbSize = Marshal.SizeOf(typeof(ACTCTX));
+                        enableThemingActivationContext.cbSize = Marshal.SizeOf<ACTCTX>();
                         enableThemingActivationContext.lpSource = dllPath;
                         enableThemingActivationContext.lpResourceName = (IntPtr)nativeResourceManifestID;
                         enableThemingActivationContext.dwFlags = ACTCTX_FLAG_RESOURCE_NAME_VALID;
@@ -8325,16 +8074,10 @@ namespace System.Windows.Forms {
             IRawElementProviderSimple GetOverrideProviderForHwnd(IntPtr hwnd);
         }
 
-        /// <SecurityNote>
-        ///     Critical:Elevates to Unmanaged code permission
-        /// </SecurityNote>
         [ComImport()]
         [Guid("6D5140C1-7436-11CE-8034-00AA006009FA")]
         [InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
         internal interface IServiceProvider {
-            ///<SecurityNote>
-            /// Critical elevates via a SUC.
-            ///</SecurityNote>
             [PreserveSig]
             int QueryService(ref Guid service, ref Guid riid, out IntPtr ppvObj);
         }

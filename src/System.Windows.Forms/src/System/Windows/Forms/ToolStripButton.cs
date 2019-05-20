@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Windows.Forms.Design; 
     	
-    /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton"]/*' />
     /// <devdoc/>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip)]
     public class ToolStripButton : ToolStripItem {
@@ -23,10 +22,9 @@ namespace System.Windows.Forms {
         private static readonly object EventCheckedChanged      = new object();
         private static readonly object EventCheckStateChanged   = new object();
 
-        /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton.ToolStripButton"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Summary of ToolStripButton.
-        /// </devdoc>
+        /// </summary>
         public ToolStripButton() {
             Initialize();
         }
@@ -58,17 +56,15 @@ namespace System.Windows.Forms {
         }
 
        
-        /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton.CanSelect"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Summary of CanSelect.
-        /// </devdoc>
+        /// </summary>
         public override bool CanSelect {
             get { 
                 return true; 
             }
         }
 
-        /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton.CheckOnClick"]/*' />
         [
         DefaultValue(false),
         SRCategory(nameof(SR.CatBehavior)),
@@ -83,12 +79,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton.Checked"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>
         /// Gets or sets a value indicating whether the item is checked.
         /// </para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(false),
         SRCategory(nameof(SR.CatAppearance)),
@@ -108,11 +103,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton.CheckState"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets
         /// or sets a value indicating whether the check box is checked.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(CheckState.Unchecked),
@@ -139,35 +133,25 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton.CheckedChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the
         /// value of the <see cref='System.Windows.Forms.CheckBox.Checked'/>
         /// property changes.</para>
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckedChangedDescr))]
         public event EventHandler CheckedChanged {
-            add {
-                Events.AddHandler(EventCheckedChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventCheckedChanged, value);
-            }
+            add => Events.AddHandler(EventCheckedChanged, value);
+            remove => Events.RemoveHandler(EventCheckedChanged, value);
         }   
-        /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton.CheckStateChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the
         /// value of the <see cref='System.Windows.Forms.CheckBox.CheckState'/>
         /// property changes.</para>
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckStateChangedDescr))]
         public event EventHandler CheckStateChanged {
-            add {
-                Events.AddHandler(EventCheckStateChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventCheckStateChanged, value);
-            }
+            add => Events.AddHandler(EventCheckStateChanged, value);
+            remove => Events.RemoveHandler(EventCheckStateChanged, value);
         }
 
 
@@ -177,11 +161,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton.CreateAccessibilityInstance"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// constructs the new instance of the accessibility object for this ToolStripItem. Subclasses
         /// should not call base.CreateAccessibilityObject.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override AccessibleObject CreateAccessibilityInstance() {
             return new ToolStripButtonAccessibleObject(this);
@@ -193,9 +176,9 @@ namespace System.Windows.Forms {
            return prefSize;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Called by all constructors of ToolStripButton.
-        /// </devdoc>
+        /// </summary>
         private void Initialize() {
             SupportsSpaceKey = true;
             if (DpiHelper.IsScalingRequirementMet) {
@@ -203,30 +186,27 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton.OnCheckedChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.ToolStripMenuItem.CheckedChanged'/>
         /// event.</para>
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnCheckedChanged(EventArgs e) {
             EventHandler handler = (EventHandler)Events[EventCheckedChanged];
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton.OnCheckStateChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.ToolStripMenuItem.CheckStateChanged'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnCheckStateChanged(EventArgs e) {
             AccessibilityNotifyClients(AccessibleEvents.StateChange);
             EventHandler handler = (EventHandler)Events[EventCheckStateChanged];
             if (handler != null) handler(this,e);
         }
         
-        /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton.OnPaint"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Inheriting classes should override this method to handle this event.
-        /// </devdoc>
+        /// </summary>
         protected override void OnPaint(System.Windows.Forms.PaintEventArgs e) {
 
             if (this.Owner != null) {
@@ -246,7 +226,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton.OnClick"]/*' />
         protected override void OnClick(EventArgs e) {
             if (checkOnClick) {
                 this.Checked = !this.Checked;
@@ -254,9 +233,9 @@ namespace System.Windows.Forms {
             base.OnClick(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// An implementation of AccessibleChild for use with ToolStripItems        
-        /// </devdoc>
+        /// </summary>
         [System.Runtime.InteropServices.ComVisible(true)]        
         internal class ToolStripButtonAccessibleObject : ToolStripItemAccessibleObject {
             private ToolStripButton ownerItem = null;
@@ -266,11 +245,9 @@ namespace System.Windows.Forms {
             }
 
             internal override object GetPropertyValue(int propertyID) {
-                if (AccessibilityImprovements.Level3) {
-                    switch (propertyID) {
-                        case NativeMethods.UIA_ControlTypePropertyId:
-                            return NativeMethods.UIA_ButtonControlTypeId;
-                    }
+                switch (propertyID) {
+                    case NativeMethods.UIA_ControlTypePropertyId:
+                        return NativeMethods.UIA_ButtonControlTypeId;
                 }
 
                 return base.GetPropertyValue(propertyID);
@@ -278,7 +255,7 @@ namespace System.Windows.Forms {
 
             public override AccessibleRole Role {
                 get {
-                    if (ownerItem.CheckOnClick && AccessibilityImprovements.Level1) {
+                    if (ownerItem.CheckOnClick) {
                         return AccessibleRole.CheckButton;
                     }
                     else {
@@ -293,11 +270,9 @@ namespace System.Windows.Forms {
                         return base.State | AccessibleStates.Checked;
                     }
 
-                    if (AccessibilityImprovements.Level1) {
-                        // Disabled ToolStripButton, that is selected, must have focus state so that Narrator can announce it
-                        if (!ownerItem.Enabled && ownerItem.Selected) {
-                            return base.State | AccessibleStates.Focused;
-                        }
+                    // Disabled ToolStripButton, that is selected, must have focus state so that Narrator can announce it
+                    if (!ownerItem.Enabled && ownerItem.Selected) {
+                        return base.State | AccessibleStates.Focused;
                     }
 
                     return base.State;

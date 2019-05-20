@@ -3,32 +3,27 @@
 // See the LICENSE file in the project root for more information.
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop {
-    using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
     using System.ComponentModel;
     using System.Diagnostics;
     using System;
     using System.Windows.Forms;
-    using System.ComponentModel.Design;    
-    using Microsoft.Win32;
     using System.Collections;
     using Hashtable = System.Collections.Hashtable;
     
     using System.Reflection.Emit;
     using System.Reflection;
-    using System.Threading;
     using System.Globalization;
    
 
-    /// <include file='doc\COM2TypeInfoProcessor.uex' path='docs/doc[@for="Com2TypeInfoProcessor"]/*' />
-    /// <devdoc>
+    /// <summary>
     /// This is the main worker class of Com2 property interop. It takes an IDispatch Object
     /// and translates it's ITypeInfo into Com2PropertyDescriptor objects that are understandable
     /// by managed code.
     ///
     /// This class only knows how to process things that are natively in the typeinfo.  Other property
     /// information such as IPerPropertyBrowsing is handled elsewhere.
-    /// </devdoc>
+    /// </summary>
     internal class Com2TypeInfoProcessor {
         
         private static TraceSwitch DbgTypeInfoProcessorSwitch = new TraceSwitch("DbgTypeInfoProcessor", "Com2TypeInfoProcessor: debug Com2 type info processing");
@@ -54,10 +49,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         private static Hashtable processedLibraries;
         
          
-        /// <include file='doc\COM2TypeInfoProcessor.uex' path='docs/doc[@for="Com2TypeInfoProcessor.FindTypeInfo"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Given an Object, this attempts to locate its type ifo
-        /// </devdoc>
+        /// </summary>
         public static UnsafeNativeMethods.ITypeInfo FindTypeInfo(object obj, bool wantCoClass) {
             UnsafeNativeMethods.ITypeInfo  pTypeInfo = null;
 
@@ -100,11 +94,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
 
-        /// <include file='doc\COM2TypeInfoProcessor.uex' path='docs/doc[@for="Com2TypeInfoProcessor.FindTypeInfos"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Given an Object, this attempts to locate its type info. If it implementes IProvideMultipleClassInfo
         /// all available type infos will be returned, otherwise the primary one will be alled.
-        /// </devdoc>
+        /// </summary>
         public static UnsafeNativeMethods.ITypeInfo[] FindTypeInfos(object obj, bool wantCoClass){
             
             UnsafeNativeMethods.ITypeInfo[] typeInfos = null;
@@ -140,11 +133,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return typeInfos;
         }
         
-        /// <include file='doc\COM2TypeInfoProcessor.uex' path='docs/doc[@for="Com2TypeInfoProcessor.GetNameDispId"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Retrieve the dispid of the property that we are to use as the name
         /// member.  In this case, the grid will put parens around the name.
-        /// </devdoc>
+        /// </summary>
         public static int GetNameDispId(UnsafeNativeMethods.IDispatch obj){
             int dispid = NativeMethods.DISPID_UNKNOWN;
             string[] names = null;
@@ -186,11 +178,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
 
-        /// <include file='doc\COM2TypeInfoProcessor.uex' path='docs/doc[@for="Com2TypeInfoProcessor.GetProperties"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Gets the properties for a given Com2 Object.  The returned Com2Properties
         /// Object contains the properties and relevant data about them.
-        /// </devdoc>
+        /// </summary>
         public static Com2Properties GetProperties(object obj) {
 
             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "Com2TypeInfoProcessor.GetProperties");
@@ -223,7 +214,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                }
 
                int[] versions = new int[2];
-               Guid typeGuid = GetGuidForTypeInfo(ti, null, versions);
+               Guid typeGuid = GetGuidForTypeInfo(ti, versions);
                PropertyDescriptor[] props = null;
                bool dontProcess = typeGuid != Guid.Empty && processedLibraries != null && processedLibraries.Contains(typeGuid);
 
@@ -272,49 +263,34 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return new Com2Properties(obj, temp2, defaultProp);
         }
 
-        private static Guid GetGuidForTypeInfo(UnsafeNativeMethods.ITypeInfo typeInfo, StructCache structCache, int[] versions) {
+        private static Guid GetGuidForTypeInfo(UnsafeNativeMethods.ITypeInfo typeInfo, int[] versions) {
             IntPtr pTypeAttr = IntPtr.Zero;
             int hr = typeInfo.GetTypeAttr(ref pTypeAttr);
             if (!NativeMethods.Succeeded(hr)) {
                 throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
             }
 
-            Guid g = Guid.Empty;
-            NativeMethods.tagTYPEATTR typeAttr = null;
             try {
-                
-
-                if (structCache == null) {
-                    typeAttr = new NativeMethods.tagTYPEATTR();
-                }
-                else {
-                    typeAttr = (NativeMethods.tagTYPEATTR)structCache.GetStruct(typeof(NativeMethods.tagTYPEATTR));
-                }
-                UnsafeNativeMethods.PtrToStructure(pTypeAttr, typeAttr);
-                g = typeAttr.guid;
+                ref readonly NativeMethods.tagTYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagTYPEATTR>(pTypeAttr);
                 if (versions != null) {
                     versions[0] = typeAttr.wMajorVerNum;
                     versions[1] = typeAttr.wMinorVerNum;
                 }
+
+                return typeAttr.guid;
             }
             finally {
                 typeInfo.ReleaseTypeAttr(pTypeAttr);
-                if (structCache != null && typeAttr != null) {
-                    structCache.ReleaseStruct(typeAttr);
-                }
             }
-
-            return g;
         }
 
 
-        /// <include file='doc\COM2TypeInfoProcessor.uex' path='docs/doc[@for="Com2TypeInfoProcessor.GetValueTypeFromTypeDesc"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Resolves a value type for a property from a TYPEDESC.  Value types can be
         /// user defined, which and may be aliased into other type infos.  This function
         /// will recusively walk the ITypeInfos to resolve the type to a clr Type.
-        /// </devdoc>
-        private static Type GetValueTypeFromTypeDesc(NativeMethods.tagTYPEDESC typeDesc, UnsafeNativeMethods.ITypeInfo typeInfo, object[] typeData, StructCache structCache) {
+        /// </summary>
+        private static Type GetValueTypeFromTypeDesc(in NativeMethods.tagTYPEDESC typeDesc, UnsafeNativeMethods.ITypeInfo typeInfo, object[] typeData) {
             IntPtr hreftype;
             int hr = 0;
 
@@ -325,7 +301,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             case NativeMethods.tagVT.VT_UNKNOWN:
             case NativeMethods.tagVT.VT_DISPATCH:
                 // get the guid
-                typeData[0] = GetGuidForTypeInfo(typeInfo, structCache, null);
+                typeData[0] = GetGuidForTypeInfo(typeInfo, null);
                 
                 // return the type
                 return VTToType((NativeMethods.tagVT)typeDesc.vt);
@@ -339,29 +315,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             case NativeMethods.tagVT.VT_PTR:
                 // we'll need to recurse into a user defined reference typeinfo
                 Debug.Assert(typeDesc.unionMember != IntPtr.Zero, "typeDesc doesn't contain an refTypeDesc!");
-                NativeMethods.tagTYPEDESC refTypeDesc = (NativeMethods.tagTYPEDESC)structCache.GetStruct(typeof(NativeMethods.tagTYPEDESC));
+                ref readonly NativeMethods.tagTYPEDESC refTypeDesc = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagTYPEDESC>(typeDesc.unionMember);
                 
-                try {
+                if (refTypeDesc.vt == (int)NativeMethods.tagVT.VT_VARIANT) {
+                    return VTToType((NativeMethods.tagVT)refTypeDesc.vt);
+                }
 
-                    try {
-                        //(tagTYPEDESC)Marshal.PtrToStructure(typeDesc.unionMember, typeof(tagTYPEDESC));
-                        UnsafeNativeMethods.PtrToStructure(typeDesc.unionMember, refTypeDesc);
-                    }
-                    catch {
-                        // above is failing, why?
-                        refTypeDesc = new NativeMethods.tagTYPEDESC();
-                        refTypeDesc.unionMember = (IntPtr)Marshal.ReadInt32(typeDesc.unionMember);
-                        refTypeDesc.vt = Marshal.ReadInt16(typeDesc.unionMember, 4);
-                    }
-    
-                    if (refTypeDesc.vt == (int)NativeMethods.tagVT.VT_VARIANT) {
-                        return VTToType((NativeMethods.tagVT)refTypeDesc.vt);
-                    }
-                    hreftype = refTypeDesc.unionMember;
-                }
-                finally {
-                    structCache.ReleaseStruct(refTypeDesc);
-                }
+                hreftype = refTypeDesc.unionMember;
                 break;
             }
 
@@ -387,9 +347,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
                     }
 
-                    NativeMethods.tagTYPEATTR refTypeAttr = (NativeMethods.tagTYPEATTR)structCache.GetStruct(typeof(NativeMethods.tagTYPEATTR));//(tagTYPEATTR)Marshal.PtrToStructure(pRefTypeAttr, typeof(tagTYPEATTR));
-                    UnsafeNativeMethods.PtrToStructure(pRefTypeAttr, refTypeAttr);
                     try {
+                        ref readonly NativeMethods.tagTYPEATTR refTypeAttr = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagTYPEATTR>(pRefTypeAttr);
                         Guid g = refTypeAttr.guid;
 
                         // save the guid if we've got one here
@@ -400,11 +359,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         switch ((NativeMethods.tagTYPEKIND)refTypeAttr.typekind) {
 
                             case NativeMethods.tagTYPEKIND.TKIND_ENUM:
-                                return ProcessTypeInfoEnum(refTypeInfo, structCache);
+                                return ProcessTypeInfoEnum(refTypeInfo);
                                 //return VTToType(tagVT.VT_I4);
                             case NativeMethods.tagTYPEKIND.TKIND_ALIAS:
                                 // recurse here
-                                return GetValueTypeFromTypeDesc(refTypeAttr.Get_tdescAlias(), refTypeInfo, typeData, structCache);
+                                return GetValueTypeFromTypeDesc(refTypeAttr.Get_tdescAlias(), refTypeInfo, typeData);
                             case NativeMethods.tagTYPEKIND.TKIND_DISPATCH:
                                 return VTToType(NativeMethods.tagVT.VT_DISPATCH);
                                                         case NativeMethods.tagTYPEKIND.TKIND_INTERFACE:
@@ -416,7 +375,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     }
                     finally {
                         refTypeInfo.ReleaseTypeAttr(pRefTypeAttr);
-                        structCache.ReleaseStruct(refTypeAttr);
                     }
                 }
             }
@@ -437,13 +395,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             int nameDispID = GetNameDispId((UnsafeNativeMethods.IDispatch)obj);
             bool addAboutBox = false;
             
-            StructCache structCache = new StructCache();            
-            
             // properties can live as functions with get_ and put_ or
             // as variables, so we do two steps here.
             try {
                 // DO FUNCDESC things
-                ProcessFunctions(typeInfo, propInfos, dispidToGet, nameDispID, ref addAboutBox, structCache);
+                ProcessFunctions(typeInfo, propInfos, dispidToGet, nameDispID, ref addAboutBox);
             }
             catch (ExternalException ex) {
                 Debug.Fail("ProcessFunctions failed with hr=" + ex.ErrorCode.ToString(CultureInfo.InvariantCulture) + ", message=" + ex.ToString());
@@ -451,7 +407,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
             try {
                 // DO VARDESC things.
-                ProcessVariables(typeInfo, propInfos, dispidToGet, nameDispID, structCache);
+                ProcessVariables(typeInfo, propInfos, dispidToGet, nameDispID);
             }
             catch (ExternalException ex) {
                 Debug.Fail("ProcessVariables failed with hr=" + ex.ErrorCode.ToString(CultureInfo.InvariantCulture) + ", message=" + ex.ToString());
@@ -515,7 +471,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
 
-        private static PropInfo ProcessDataCore(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, int dispid, int nameDispID, NativeMethods.tagTYPEDESC typeDesc, int flags, StructCache structCache) {
+        private static PropInfo ProcessDataCore(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, int dispid, int nameDispID, in NativeMethods.tagTYPEDESC typeDesc, int flags) {
             string          pPropName = null;
             string          pPropDesc = null;
 
@@ -555,7 +511,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             if (pi.ValueType == null) {
                 object[] pTypeData = new object[1];
                 try {
-                    pi.ValueType = GetValueTypeFromTypeDesc(typeDesc, typeInfo, pTypeData, structCache);
+                    pi.ValueType = GetValueTypeFromTypeDesc(in typeDesc, typeInfo, pTypeData);
                 }
                 catch (Exception ex) {
                     Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "Hiding property " + pi.Name + " because value Type could not be resolved: " + ex.ToString());
@@ -610,7 +566,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return pi;
         }
 
-        private static void ProcessFunctions(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, int dispidToGet, int nameDispID, ref bool addAboutBox, StructCache structCache) {
+        private static void ProcessFunctions(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, int dispidToGet, int nameDispID, ref bool addAboutBox) {
             IntPtr pTypeAttr = IntPtr.Zero;
             int hr = typeInfo.GetTypeAttr(ref pTypeAttr);
 
@@ -618,17 +574,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
             }
 
-            NativeMethods.tagTYPEATTR         typeAttr = (NativeMethods.tagTYPEATTR)structCache.GetStruct(typeof(NativeMethods.tagTYPEATTR));//(tagTYPEATTR)Marshal.PtrToStructure(pTypeAttr, typeof(tagTYPEATTR));
-            UnsafeNativeMethods.PtrToStructure(pTypeAttr, typeAttr);
-            if (typeAttr == null) {
-                return;
-            }
-            NativeMethods.tagFUNCDESC         funcDesc = null;
-            NativeMethods.tagELEMDESC         ed = null;
             try {
-                
-                funcDesc = (NativeMethods.tagFUNCDESC)structCache.GetStruct(typeof(NativeMethods.tagFUNCDESC));
-                ed = (NativeMethods.tagELEMDESC)structCache.GetStruct(typeof(NativeMethods.tagELEMDESC));
+                ref readonly NativeMethods.tagTYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagTYPEATTR>(pTypeAttr);
                 
                 bool              isPropGet;
                 PropInfo          pi;
@@ -642,9 +589,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         continue;
                     }
 
-                    //funcDesc = (tagFUNCDESC)Marshal.PtrToStructure(pFuncDesc, typeof(tagFUNCDESC));
-                    UnsafeNativeMethods.PtrToStructure(pFuncDesc, funcDesc);
                     try {
+                        ref readonly NativeMethods.tagFUNCDESC funcDesc = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagFUNCDESC>(pFuncDesc);
                         if (funcDesc.invkind == (int)NativeMethods.tagINVOKEKIND.INVOKE_FUNC ||
                             (dispidToGet != NativeMethods.MEMBERID_NIL && funcDesc.memid != dispidToGet)) {
                             
@@ -666,7 +612,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                                 continue;
                             }
 
-                            typeDesc = funcDesc.elemdescFunc.tdesc;
+                            unsafe
+                            {
+                                typeDesc = *funcDesc.elemdescFunc.tdesc;
+                            }
                         }
                         else {
                             Debug.Assert(funcDesc.lprgelemdescParam != IntPtr.Zero, "ELEMDESC param is null!");
@@ -674,10 +623,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                                 
                                 continue;
                             }
-                            Marshal.PtrToStructure(funcDesc.lprgelemdescParam, ed);
-                            typeDesc = ed.tdesc;
+
+                            ref readonly NativeMethods.tagELEMDESC ed = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagELEMDESC>(funcDesc.lprgelemdescParam);
+                            unsafe
+                            {
+                                typeDesc = *ed.tdesc;
+                            }
                         }
-                        pi = ProcessDataCore(typeInfo, propInfoList, funcDesc.memid, nameDispID, typeDesc, funcDesc.wFuncFlags, structCache);
+                        pi = ProcessDataCore(typeInfo, propInfoList, funcDesc.memid, nameDispID, in typeDesc, funcDesc.wFuncFlags);
 
                         // if we got a setmethod, it's not readonly
                         if (pi != null && !isPropGet) {
@@ -690,23 +643,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 }
             }
             finally {
-                if (funcDesc != null) {
-                    structCache.ReleaseStruct(funcDesc);
-                }
-                if (ed != null) {
-                    structCache.ReleaseStruct(ed);
-                }
                 typeInfo.ReleaseTypeAttr(pTypeAttr);
-                structCache.ReleaseStruct(typeAttr);
             }
         }
 
-        /// <include file='doc\COM2TypeInfoProcessor.uex' path='docs/doc[@for="Com2TypeInfoProcessor.ProcessTypeInfoEnum"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// This converts a type info that describes a IDL defined enum
         /// into one we can use
-        /// </devdoc>
-        private static Type ProcessTypeInfoEnum(UnsafeNativeMethods.ITypeInfo enumTypeInfo, StructCache structCache) {
+        /// </summary>
+        private static Type ProcessTypeInfoEnum(UnsafeNativeMethods.ITypeInfo enumTypeInfo) {
 
             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum entered");
 
@@ -723,15 +668,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
                 }
 
-                NativeMethods.tagTYPEATTR typeAttr = (NativeMethods.tagTYPEATTR)structCache.GetStruct(typeof(NativeMethods.tagTYPEATTR));//(tagTYPEATTR)Marshal.PtrToStructure(pTypeAttr, typeof(tagTYPEATTR));
-                UnsafeNativeMethods.PtrToStructure(pTypeAttr, typeAttr);
-
-                if (pTypeAttr == IntPtr.Zero) {
-                    Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum: failed to get a typeAttr");
-                    return null;
-                }
-
                 try {
+                    ref readonly NativeMethods.tagTYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagTYPEATTR>(pTypeAttr);
 
                     int nItems = typeAttr.cVars;
 
@@ -740,7 +678,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     ArrayList strs = new ArrayList();
                     ArrayList vars = new ArrayList();
 
-                    NativeMethods.tagVARDESC varDesc = (NativeMethods.tagVARDESC)structCache.GetStruct(typeof(NativeMethods.tagVARDESC));
                     object varValue = null;
                     string enumName = null;
                     string name = null;
@@ -761,11 +698,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         }
 
                         try {
-                            //varDesc = (tagVARDESC)Marshal.PtrToStructure(pVarDesc, typeof(tagVARDESC));
-                            UnsafeNativeMethods.PtrToStructure(pVarDesc, varDesc);
+                            ref readonly NativeMethods.tagVARDESC varDesc = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagVARDESC>(pVarDesc);
 
-                            if (varDesc == null ||
-                                varDesc.varkind != (int)NativeMethods.tagVARKIND.VAR_CONST ||
+                            if (varDesc.varkind != (int)NativeMethods.tagVARKIND.VAR_CONST ||
                                 varDesc.unionMember == IntPtr.Zero) {
                                 continue;
                             }
@@ -787,19 +722,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
                             // get the value
                             try {
-                                //varValue = (VARIANT)Marshal.PtrToStructure(varDesc.unionMember, typeof(VARIANT));
                                 varValue = Marshal.GetObjectForNativeVariant(varDesc.unionMember);
                             }
                             catch (Exception ex) {
                                 Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum: PtrtoStructFailed " + ex.GetType().Name + "," + ex.Message);
                             }
 
-                            /*if (varValue == null) {
-                                Debug.Fail("Couldn't get VARIANT from VARIANTDESC");
-                                continue;
-                            }*/
-
-                            //variant v = varValue.ToVariant();
                             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum: adding variable value=" + Convert.ToString(varValue, CultureInfo.InvariantCulture));
                             vars.Add(varValue);
 
@@ -821,7 +749,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                             }
                         }
                     }
-                    structCache.ReleaseStruct(varDesc);
+
                     Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum: returning enum with " + strs.Count.ToString(CultureInfo.InvariantCulture) + " items");
 
                     // just build our enumerator
@@ -864,7 +792,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 }
                 finally {
                     enumTypeInfo.ReleaseTypeAttr(pTypeAttr);
-                    structCache.ReleaseStruct(typeAttr);
                 }
             }
             catch {
@@ -873,7 +800,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
 
-        private static void ProcessVariables(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, int dispidToGet, int nameDispID, StructCache structCache) {
+        private static void ProcessVariables(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, int dispidToGet, int nameDispID) {
             IntPtr pTypeAttr = IntPtr.Zero;
             int hr = typeInfo.GetTypeAttr(ref pTypeAttr);
 
@@ -881,14 +808,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
             }
 
-            NativeMethods.tagTYPEATTR typeAttr = (NativeMethods.tagTYPEATTR)structCache.GetStruct(typeof(NativeMethods.tagTYPEATTR));//(tagTYPEATTR)Marshal.PtrToStructure(pTypeAttr, typeof(tagTYPEATTR));
-            UnsafeNativeMethods.PtrToStructure(pTypeAttr, typeAttr);
-
             try {
-                if (typeAttr == null) {
-                    return;
-                }
-                NativeMethods.tagVARDESC        varDesc = (NativeMethods.tagVARDESC)structCache.GetStruct(typeof(NativeMethods.tagVARDESC));
+                ref readonly NativeMethods.tagTYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagTYPEATTR>(pTypeAttr);
 
                 for (int i = 0; i < typeAttr.cVars; i++) {
                     IntPtr pVarDesc = IntPtr.Zero;
@@ -899,20 +820,20 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         continue;
                     }
 
-                    //varDesc = (tagVARDESC)Marshal.PtrToStructure(pVarDesc, typeof(tagVARDESC));
-                    UnsafeNativeMethods.PtrToStructure(pVarDesc, varDesc);
-
                     try {
+                        ref readonly NativeMethods.tagVARDESC varDesc = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagVARDESC>(pVarDesc);
 
                         if (varDesc.varkind == (int)NativeMethods.tagVARKIND.VAR_CONST ||
                             (dispidToGet != NativeMethods.MEMBERID_NIL && varDesc.memid != dispidToGet)) {
                             continue;
                         }
 
-
-                        PropInfo pi = ProcessDataCore(typeInfo, propInfoList, varDesc.memid, nameDispID, varDesc.elemdescVar.tdesc, varDesc.wVarFlags, structCache);
-                        if (pi.ReadOnly != PropInfo.ReadOnlyTrue) {
-                            pi.ReadOnly = PropInfo.ReadOnlyFalse;
+                        unsafe
+                        {
+                            PropInfo pi = ProcessDataCore(typeInfo, propInfoList, varDesc.memid, nameDispID, in *varDesc.elemdescVar.tdesc, varDesc.wVarFlags);
+                            if (pi.ReadOnly != PropInfo.ReadOnlyTrue) {
+                                pi.ReadOnly = PropInfo.ReadOnlyFalse;
+                            }
                         }
                     }
                     finally {
@@ -921,11 +842,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         }
                     }
                 }
-                structCache.ReleaseStruct(varDesc);
             }
             finally {
                 typeInfo.ReleaseTypeAttr(pTypeAttr);
-                structCache.ReleaseStruct(typeAttr);
             }
         }
 
@@ -1064,82 +983,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 return retProps;
             }
         }
-        
-        /// <include file='doc\COM2TypeInfoProcessor.uex' path='docs/doc[@for="Com2TypeInfoProcessor.StructCache"]/*' />
-        /// <devdoc>
-        /// This class manages a cache of structures that we can use
-        /// for passing into native so we don't have to create them every time.
-        /// for many objects, these can be used thousands of times.
-        /// </devdoc>
-        public class StructCache {
-           
-           private Hashtable queuedTypes = new Hashtable();
-           
-#if DEBUG
-           private Hashtable releaseCheck = new Hashtable();
-
-           ~StructCache() {
-                IEnumerator enumRelease = releaseCheck.Keys.GetEnumerator();
-                
-                while (enumRelease.MoveNext()) {
-                    Type t = (Type)enumRelease.Current;
-                    if ((int)releaseCheck[t] != 0) {
-                        Debug.Assert(false, "Failed to release struct of type " + t.Name);
-                    }
-                }      
-           }
-           
-#endif
-           
-           private Queue GetQueue(Type t, bool create) {
-                object queue = queuedTypes[t];
-               
-               if (queue == null && create){
-                  queue = new Queue();
-                  queuedTypes[t] = queue;
-                  #if DEBUG
-                    releaseCheck[t] = 0;
-                  #endif
-               }
-               
-               return (Queue)queue;
-           }
-           
-           public object GetStruct(Type t) {
-               Queue queue = GetQueue(t, true);
-
-                object str = null;
-               
-               if (queue.Count == 0) {
-                  str = Activator.CreateInstance(t);
-               }
-               else {
-                  str = queue.Dequeue();
-               }
-               
-               #if DEBUG
-                    int count = (int)releaseCheck[t];
-                    releaseCheck[t] = ++count;
-               #endif
-               
-               return str;
-           }
-           
-           public void ReleaseStruct(object str) {
-               Type t = str.GetType();
-               Queue queue = GetQueue(t, false);
-               
-               if (queue != null) {
-                  queue.Enqueue(str);
-                  
-                  #if DEBUG
-                    int count = (int)releaseCheck[t];
-                    releaseCheck[t] = --count;
-                  #endif
-               } 
-           }
-            
-        }
 
         private class PropInfo {
 
@@ -1205,7 +1048,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     
     
     // just so we can recognize a variant properly...
-    /// <include file='doc\COM2TypeInfoProcessor.uex' path='docs/doc[@for="Com2Variant"]/*' />
     public class Com2Variant {
     }
 }

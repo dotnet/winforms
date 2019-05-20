@@ -20,10 +20,9 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Internal;    
     using System.Runtime.Versioning;
 
-    /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem"]/*' />
-    /// <devdoc>
+    /// <summary>
     /// ToolStripMenuItem
-    /// </devdoc>
+    /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.MenuStrip | ToolStripItemDesignerAvailability.ContextMenuStrip)]
     [DesignerSerializer("System.Windows.Forms.Design.ToolStripMenuItemCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign)] 
     public class ToolStripMenuItem : ToolStripDropDownItem {
@@ -67,7 +66,6 @@ namespace System.Windows.Forms {
         private static readonly object EventCheckedChanged = new object();
         private static readonly object EventCheckStateChanged = new object();
             
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.ToolStripMenuItem"]/*' />
         public ToolStripMenuItem() : base() {
             Initialize(); // all additional work should be done in Initialize
         }
@@ -98,11 +96,11 @@ namespace System.Windows.Forms {
             Properties.SetObject(PropMdiForm,mdiForm);
         }
 
-        /// <devdoc> this constructor is only used when we're trying to
+        /// <summary> this constructor is only used when we're trying to
         ///          mimic a native menu like the system menu.  In that case
         ///          we've got to go ahead and collect the command id and the
         ///          target window to send WM_COMMAND/WM_SYSCOMMAND messages to.
-        /// </devdoc>
+        /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         internal ToolStripMenuItem(IntPtr hMenu, int nativeMenuCommandId, IWin32Window targetWindow) {
             Initialize();
@@ -157,9 +155,8 @@ namespace System.Windows.Forms {
             cachedShortcutText = null;
         }
 
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.CreateDefaultDropDown"]/*' />
         protected override ToolStripDropDown CreateDefaultDropDown() {
-            // AutoGenerate a Winbar DropDown - set the property so we hook events
+            // AutoGenerate a ToolStrip DropDown - set the property so we hook events
              return new ToolStripDropDownMenu(this, true);
         }
 
@@ -184,11 +181,10 @@ namespace System.Windows.Forms {
             this.SupportsDisabledHotTracking = true;
         }
     
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.DefaultSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Deriving classes can override this to configure a default size for their control.
         /// This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
+        /// </summary>
         protected override Size DefaultSize {
             get {
                 return new Size(32, 19);
@@ -196,13 +192,11 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\WinBarMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.DefaultMargin"]/*' />
         protected internal override Padding DefaultMargin {
             get {
                  return Padding.Empty;
             }
         }
-        /// <include file='doc\WinBarMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.DefaultPadding"]/*' />
         protected override Padding DefaultPadding {
             get {
                 if (IsOnDropDown) {
@@ -234,12 +228,11 @@ namespace System.Windows.Forms {
            }
         }
       
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.Checked"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>
         /// Gets or sets a value indicating whether the item is checked.
         /// </para>
-        /// </devdoc>
+        /// </summary>
         [
         Bindable(true),
         DefaultValue(false),
@@ -261,10 +254,10 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Keeps a shared copy of the checked image between all menu items
         /// Fishes out the appropriate one based on CheckState.
-        /// </devdoc>
+        /// </summary>
         internal Image CheckedImage {
             
             
@@ -274,13 +267,11 @@ namespace System.Windows.Forms {
                 if (checkedState == CheckState.Indeterminate) {
                     if (indeterminateCheckedImage == null) {
                         if (DpiHelper.IsScalingRequirementMet) {
-                            indeterminateCheckedImage = GetBitmapFromIcon("IndeterminateChecked.ico", scaledCheckMarkBitmapSize);
+                            indeterminateCheckedImage = GetBitmapFromIcon("IndeterminateChecked", scaledCheckMarkBitmapSize);
                         }
                         else {
-                            Bitmap indeterminateCheckedBmp = new Bitmap(typeof(ToolStripMenuItem), "IndeterminateChecked.bmp");
+                            Bitmap indeterminateCheckedBmp = DpiHelper.GetBitmapFromIcon(typeof(ToolStripMenuItem), "IndeterminateChecked");
                             if (indeterminateCheckedBmp != null) {
-                                // 
-                                indeterminateCheckedBmp.MakeTransparent(indeterminateCheckedBmp.GetPixel(1, 1));
                                 if (DpiHelper.IsScalingRequired) {
                                     DpiHelper.ScaleBitmapLogicalToDevice(ref indeterminateCheckedBmp);
                                 }
@@ -293,13 +284,11 @@ namespace System.Windows.Forms {
                 else if (checkedState == CheckState.Checked) {
                     if (checkedImage == null) {
                         if (DpiHelper.IsScalingRequirementMet) {
-                            checkedImage = GetBitmapFromIcon("Checked.ico", scaledCheckMarkBitmapSize);
+                            checkedImage = GetBitmapFromIcon("Checked", scaledCheckMarkBitmapSize);
                         }
                         else {
-                            Bitmap checkedBmp = new Bitmap(typeof(ToolStripMenuItem), "Checked.bmp");
+                            Bitmap checkedBmp = DpiHelper.GetBitmapFromIcon(typeof(ToolStripMenuItem), "Checked");
                             if (checkedBmp != null) {
-                                // 
-                                checkedBmp.MakeTransparent(checkedBmp.GetPixel(1, 1));
                                 if (DpiHelper.IsScalingRequired) {
                                     DpiHelper.ScaleBitmapLogicalToDevice(ref checkedBmp);
                                 }
@@ -330,7 +319,6 @@ namespace System.Windows.Forms {
 
                         if (b != null)
                         {
-                            b.MakeTransparent(b.GetPixel(1, 1));
                             if (DpiHelper.IsScalingRequired && (b.Size.Width != desiredIconSize.Width || b.Size.Height != desiredIconSize.Height))
                             {
                                 Bitmap scaledBitmap = DpiHelper.CreateResizedBitmap(b, desiredIconSize);
@@ -353,7 +341,6 @@ namespace System.Windows.Forms {
             return b;
         }
 
-         /// <include file='doc\WinBarMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.CheckOnClick"]/*' />
          [
          DefaultValue(false),
          SRCategory(nameof(SR.CatBehavior)),
@@ -368,11 +355,10 @@ namespace System.Windows.Forms {
              }
          }
 
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.CheckState"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets
         /// or sets a value indicating whether the check box is checked.</para>
-        /// </devdoc>
+        /// </summary>
         [
         Bindable(true),
         SRCategory(nameof(SR.CatAppearance)),
@@ -402,43 +388,32 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.CheckedChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the
         /// value of the <see cref='System.Windows.Forms.CheckBox.Checked'/>
         /// property changes.</para>
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckedChangedDescr))]
         public event EventHandler CheckedChanged {
-            add {
-                Events.AddHandler(EventCheckedChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventCheckedChanged, value);
-            }
+            add => Events.AddHandler(EventCheckedChanged, value);
+            remove => Events.RemoveHandler(EventCheckedChanged, value);
         }   
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.CheckStateChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when the
         /// value of the <see cref='System.Windows.Forms.CheckBox.CheckState'/>
         /// property changes.</para>
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckStateChangedDescr))]
         public event EventHandler CheckStateChanged {
-            add {
-                Events.AddHandler(EventCheckStateChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventCheckStateChanged, value);
-            }
+            add => Events.AddHandler(EventCheckStateChanged, value);
+            remove => Events.RemoveHandler(EventCheckStateChanged, value);
         }
 
 
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.Overflow"]/*' />
-        /// <devdoc>
-        /// <para>Specifies whether or not the item is glued to the winbar or overflow or
+        /// <summary>
+        /// <para>Specifies whether or not the item is glued to the ToolStrip or overflow or
         /// can float between the two.</para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(ToolStripItemOverflow.Never),
         SRDescription(nameof(SR.ToolStripItemOverflowDescr)),
@@ -453,13 +428,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.ShortcutKeys"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>
         /// Gets or sets the shortcut keys associated with the menu
         /// item.
         /// </para>
-        /// </devdoc>
+        /// </summary>
         [
         Localizable(true),
         DefaultValue(Keys.None),
@@ -532,15 +506,14 @@ namespace System.Windows.Forms {
             }
         }
                     
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.ShowShortcutKeys"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>
         /// Gets or sets a value that indicates whether the shortcut
         /// keys that are assocaited
         /// with the menu item are displayed next to the menu item
         /// caption.
         /// </para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(true),
         Localizable(true),
@@ -565,10 +538,10 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// An item is toplevel if it is parented to anything other than a ToolStripDropDownMenu
         /// This implies that a ToolStripMenuItem in an overflow IS a toplevel item
-        /// </devdoc>
+        /// </summary>
         internal bool IsTopLevel {
             get {
                 return (this.ParentInternal as ToolStripDropDown == null);
@@ -589,7 +562,7 @@ namespace System.Windows.Forms {
         }
         
 
-        /// <devdoc> Tag property for internal use </devdoc>
+        /// <summary> Tag property for internal use </summary>
         internal Form MdiForm {
             get {
                 if (Properties.ContainsObject(PropMdiForm)) {
@@ -684,7 +657,7 @@ namespace System.Windows.Forms {
                 return false;
             }
             NativeMethods.MENUITEMINFO_T_RW info = new NativeMethods.MENUITEMINFO_T_RW();
-            info.cbSize = Marshal.SizeOf(typeof(NativeMethods.MENUITEMINFO_T_RW));
+            info.cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T_RW>();
             info.fMask = NativeMethods.MIIM_STATE;
             info.fType = NativeMethods.MIIM_STATE;
             info.wID = nativeMenuCommandID;
@@ -831,14 +804,13 @@ namespace System.Windows.Forms {
         internal void HandleAutoExpansion() {
             if (Enabled && ParentInternal != null && ParentInternal.MenuAutoExpand && HasDropDownItems) {
                 ShowDropDown();
-                if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                    KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-                }
+
+                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
+
                 DropDown.SelectNextToolStripItem(null, /*forward=*/true);
             }
         }
 
-        /// <include file='doc\WinBarMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.OnClick"]/*' />
         protected override void OnClick(EventArgs e) {
             if (checkOnClick) {
                 this.Checked = !this.Checked;
@@ -852,40 +824,37 @@ namespace System.Windows.Forms {
                     // use PostMessage instead of SendMessage so that the DefWndProc can appropriately handle
                     // the system message... if we use SendMessage the dismissal of our window
                     // breaks things like the modal sizing loop.
-                    UnsafeNativeMethods.PostMessage( new HandleRef(this, targetWindowHandle), NativeMethods.WM_SYSCOMMAND,nativeMenuCommandID, 0);
+                    UnsafeNativeMethods.PostMessage( new HandleRef(this, targetWindowHandle), Interop.WindowMessages.WM_SYSCOMMAND,nativeMenuCommandID, 0);
                 }
                 else {
                     // These are user added items like ".Net Window..."
                      
                     // be consistent with sending a WM_SYSCOMMAND, use POST not SEND.
-                    UnsafeNativeMethods.PostMessage( new HandleRef(this, targetWindowHandle), NativeMethods.WM_COMMAND, nativeMenuCommandID, 0);
+                    UnsafeNativeMethods.PostMessage( new HandleRef(this, targetWindowHandle), Interop.WindowMessages.WM_COMMAND, nativeMenuCommandID, 0);
                 }
                 this.Invalidate();
             }
            
         }
 
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.OnCheckedChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.ToolStripMenuItem.CheckedChanged'/>
         /// event.</para>
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnCheckedChanged(EventArgs e) {
             EventHandler handler = (EventHandler)Events[EventCheckedChanged];
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.OnCheckStateChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.ToolStripMenuItem.CheckStateChanged'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnCheckStateChanged(EventArgs e) {     
             AccessibilityNotifyClients(AccessibleEvents.StateChange);
             EventHandler handler = (EventHandler)Events[EventCheckStateChanged];
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.OnDropDownHide"]/*' />
         protected override void OnDropDownHide(EventArgs e) {
         
             Debug.WriteLineIf(ToolStrip.MenuAutoExpandDebug.TraceVerbose, "[ToolStripMenuItem.OnDropDownHide] MenuTimer.Cancel called");
@@ -908,13 +877,12 @@ namespace System.Windows.Forms {
             ClearShortcutCache();
             base.OnFontChanged(e);
         }
-        /// <devdoc/><internalonly/>
+        /// <devdoc/>
         internal void OnMenuAutoExpand() {
             this.ShowDropDown();
         }
 
         
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.OnMouseDown"]/*' />
         /// <devdoc/>
         protected override void OnMouseDown(MouseEventArgs e) {
 
@@ -975,7 +943,6 @@ namespace System.Windows.Forms {
 
             
        
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.OnMouseEnter"]/*' />
         /// <devdoc/>
         protected override void OnMouseEnter(EventArgs e) {
            
@@ -995,7 +962,6 @@ namespace System.Windows.Forms {
         }
 
        
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.OnMouseLeave"]/*' />
         /// <devdoc/>
         protected override void OnMouseLeave(EventArgs e) {
               Debug.WriteLineIf(ToolStrip.MenuAutoExpandDebug.TraceVerbose, "[ToolStripMenuItem.OnMouseLeave] MenuTimer.Cancel called");
@@ -1026,7 +992,6 @@ namespace System.Windows.Forms {
             base.OnOwnerChanged(e);
         }
 
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.OnPaint"]/*' />
         /// <devdoc/>
         protected override void OnPaint(System.Windows.Forms.PaintEventArgs e) {    
 
@@ -1102,7 +1067,7 @@ namespace System.Windows.Forms {
                 else {
                                         
 
-                    // Toplevel item support, menu items hosted on a plain winbar dropdown
+                    // Toplevel item support, menu items hosted on a plain ToolStrip dropdown
                     if ((DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text) { 
                         renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, this.Text, InternalLayout.TextRectangle, textColor, this.Font, InternalLayout.TextFormat));
                     }
@@ -1117,10 +1082,9 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.ProcessCmdKey"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// handle shortcut keys here.
-        /// </devdoc>
+        /// </summary>
         protected internal override bool ProcessCmdKey(ref Message m, Keys keyData) {
 
             if (Enabled && ShortcutKeys == keyData && !HasDropDownItems) {
@@ -1133,7 +1097,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.ProcessMnemonic"]/*' />
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters")] // 'charCode' matches control.cs
         protected internal override bool ProcessMnemonic(char charCode) {
              // no need to check IsMnemonic, toolstrip.ProcessMnemonic checks this already.
@@ -1141,9 +1104,7 @@ namespace System.Windows.Forms {
 				 Select();
                  ShowDropDown();
 
-                 if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                    KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-                 }
+                 KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
 
                  DropDown.SelectNextToolStripItem(null, /*forward=*/true);
                  return true;
@@ -1152,8 +1113,7 @@ namespace System.Windows.Forms {
              return base.ProcessMnemonic(charCode);
         }
 
-        /// <include file='doc\WinBarMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.SetBounds"]/*' />
-        /// <devdoc> overridden here so we scooch over when we're in the ToolStripDropDownMenu</devdoc>
+        /// <summary> overridden here so we scooch over when we're in the ToolStripDropDownMenu</summary>
         internal protected override void SetBounds(Rectangle rect) {
 
             ToolStripMenuItemInternalLayout internalLayout = InternalLayout as ToolStripMenuItemInternalLayout;
@@ -1172,12 +1132,12 @@ namespace System.Windows.Forms {
             base.SetBounds(rect); 
         }
 
-        /// <devdoc> this is to support routing to native menu commands </devdoc>
+        /// <summary> this is to support routing to native menu commands </summary>
         internal void SetNativeTargetWindow(IWin32Window window) {
             targetWindowHandle = Control.GetSafeHandle(window);
         }
         
-        /// <devdoc> this is to support routing to native menu commands </devdoc>
+        /// <summary> this is to support routing to native menu commands </summary>
         internal void SetNativeTargetMenu(IntPtr hMenu) {
             nativeMenuHandle = hMenu;
         }
@@ -1205,9 +1165,9 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// An implementation of AccessibleChild for use with ToolStripItems        
-        /// </devdoc>
+        /// </summary>
         [System.Runtime.InteropServices.ComVisible(true)]        
         internal class ToolStripMenuItemAccessibleObject : ToolStripDropDownItemAccessibleObject {
             private ToolStripMenuItem ownerItem = null;
@@ -1240,7 +1200,7 @@ namespace System.Windows.Forms {
                 if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
                     return NativeMethods.UIA_MenuItemControlTypeId;
                 }
-                else if (AccessibilityImprovements.Level2 && propertyID == NativeMethods.UIA_AcceleratorKeyPropertyId) {
+                else if (propertyID == NativeMethods.UIA_AcceleratorKeyPropertyId) {
                     return ownerItem.GetShortcutText();
                 }
                 else {
@@ -1337,9 +1297,9 @@ namespace System.Windows.Forms {
             CancelCore();
            
         }
-        ///<devdoc> cancels if and only if this item was the one that 
+        ///<summary> cancels if and only if this item was the one that 
         ///         requested the timer
-        ///</devdoc>
+        ///</summary>
         public void Cancel(ToolStripMenuItem item) {
             if (InTransition) {
                 return;

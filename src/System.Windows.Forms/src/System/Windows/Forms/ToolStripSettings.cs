@@ -13,10 +13,9 @@ namespace System.Windows.Forms {
     using System.Text;
     using System.Text.RegularExpressions;
 
-    /// <include file='doc\ToolStripSettings.uex' path='docs/doc[@for="ToolStripSettings"]/*' />
-    /// <devdoc> 
+    /// <summary> 
     ///     A settings class used by the ToolStripManager to save toolstrip settings.
-    /// </devdoc>
+    /// </summary>
     internal class ToolStripSettings : ApplicationSettingsBase {
 
         internal ToolStripSettings(string settingsKey) : base(settingsKey) {}
@@ -102,11 +101,10 @@ namespace System.Windows.Forms {
         }
     }
 
-    /// <include file='doc\ToolStripSettings.uex' path='docs/doc[@for="ToolStripSettings"]/*' />
-    /// <devdoc> 
+    /// <summary> 
     ///     Helper class used by ToolStripManager that implements most of the logic to save out and apply
     ///     settings for toolstrips on a form.
-    /// </devdoc>
+    /// </summary>
     internal class ToolStripSettingsManager {
         private Form form;
         private string formKey;
@@ -157,7 +155,7 @@ namespace System.Windows.Forms {
             for (int i = 0; i < toolStrip.Items.Count; i++) {
                 itemNames.Append((toolStrip.Items[i].Name == null) ? "null" : toolStrip.Items[i].Name);
                 if (i != toolStrip.Items.Count - 1) {
-                    itemNames.Append(",");
+                    itemNames.Append(',');
                 }
             }
             return itemNames.ToString();
@@ -358,9 +356,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc> 
+        /// <summary> 
         ///     Light weight structure that captures the properties we want to save as settings.
-        /// </devdoc>
+        /// </summary>
         private struct SettingsStub {
             public bool     Visible;
             public string   ToolStripPanelName;

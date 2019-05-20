@@ -4,70 +4,70 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies the state of an item that is being drawn.
-    /// </devdoc>
+    /// </summary>
     [Flags]
     public enum DrawItemState
     {
-        /// <devdoc>
+        /// <summary>
         /// The item is checked. Only menu controls use this value.
-        /// </devdoc>
+        /// </summary>
         Checked = NativeMethods.ODS_CHECKED,
 
-        /// <devdoc>
+        /// <summary>
         /// The item is the editing portion of a <see cref='System.Windows.Forms.ComboBox'/> .
-        /// </devdoc>
+        /// </summary>
         ComboBoxEdit = NativeMethods.ODS_COMBOBOXEDIT,
 
-        /// <devdoc>
+        /// <summary>
         /// The item is the default item of the control.
-        /// </devdoc>
+        /// </summary>
         Default = NativeMethods.ODS_DEFAULT,
 
-        /// <devdoc>
+        /// <summary>
         /// The item is disabled.
-        /// </devdoc>
+        /// </summary>
         Disabled = NativeMethods.ODS_DISABLED,
 
-        /// <devdoc>
+        /// <summary>
         /// The item has focus.
-        /// </devdoc>
+        /// </summary>
         Focus = NativeMethods.ODS_FOCUS,
         
-        /// <devdoc>
+        /// <summary>
         /// The item is grayed. Only menu controls use this value.
-        /// </devdoc>
+        /// </summary>
         Grayed = NativeMethods.ODS_GRAYED,
 
-        /// <devdoc>
+        /// <summary>
         /// The item is being hot-tracked.
-        /// </devdoc>
+        /// </summary>
         HotLight = NativeMethods.ODS_HOTLIGHT,
 
-        /// <devdoc>
+        /// <summary>
         /// The item is inactive.
-        /// </devdoc>
+        /// </summary>
         Inactive = NativeMethods.ODS_INACTIVE,
 
-        /// <devdoc>
+        /// <summary>
         /// The item displays without a keyboard accelarator.
-        /// </devdoc>
+        /// </summary>
         NoAccelerator = NativeMethods.ODS_NOACCEL,
 
-        /// <devdoc>
+        /// <summary>
         /// The item displays without the visual cue that indicates it has the focus.
-        /// </devdoc>
+        /// </summary>
         NoFocusRect = NativeMethods.ODS_NOFOCUSRECT,
 
-        /// <devdoc>
+        /// <summary>
         /// The item is selected.
-        /// </devdoc>
+        /// </summary>
         Selected = NativeMethods.ODS_SELECTED,
 
-        /// <devdoc>
+        /// <summary>
         /// The item is in its default visual state.
-        /// </devdoc>
+        /// </summary>
         None = 0,
     }
 }

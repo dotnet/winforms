@@ -2,63 +2,49 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
+using System.Drawing.Design;
+using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 
-namespace System.Windows.Forms {
-    using System.Runtime.Serialization;
-    using System.Runtime.Serialization.Formatters;
+namespace System.Windows.Forms
+{
+    /// <summary>
+    /// Implements an item of a <see cref='System.Windows.Forms.ListView'/>.
+    /// </summary>
+    [TypeConverterAttribute(typeof(ListViewItemConverter))]
+    [ToolboxItem(false)]
+    [DesignTimeVisible(false)]
+    [DefaultProperty(nameof(Text))]
+    [Serializable]
+    [SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly")]
+    public class ListViewItem : ICloneable, ISerializable
+    {
+        private const int MaxSubItems = 4096;
 
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Security; 
-    using System;
-    using System.Drawing;
-    using System.Drawing.Design;
-    using System.ComponentModel;
-    using System.IO;
-    using Microsoft.Win32;
-    using System.Collections;
-    using System.Collections.Specialized;
-    using System.Runtime.Remoting;
-    using System.Runtime.InteropServices;
-    using System.ComponentModel.Design.Serialization;
-    using System.Reflection;
-    using System.Globalization;
-    
-    /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem"]/*' />
-    /// <devdoc>
-    ///    <para>
-    ///       Implements an item of a <see cref='System.Windows.Forms.ListView'/>.
-    ///    </para>
-    /// </devdoc>
-    [
-    TypeConverterAttribute(typeof(ListViewItemConverter)),
-    ToolboxItem(false),
-    DesignTimeVisible(false),
-    DefaultProperty(nameof(Text)),
-    Serializable,    
-    SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly")
-    ]
-    public class ListViewItem : ICloneable, ISerializable {
-
-        private const int MAX_SUBITEMS = 4096;
-        
-        private static readonly BitVector32.Section StateSelectedSection         = BitVector32.CreateSection(1);
-        private static readonly BitVector32.Section StateImageMaskSet            = BitVector32.CreateSection(1, StateSelectedSection);
-        private static readonly BitVector32.Section StateWholeRowOneStyleSection = BitVector32.CreateSection(1, StateImageMaskSet);
-        private static readonly BitVector32.Section SavedStateImageIndexSection  = BitVector32.CreateSection(15, StateWholeRowOneStyleSection);
-        private static readonly BitVector32.Section SubItemCountSection          = BitVector32.CreateSection(MAX_SUBITEMS, SavedStateImageIndexSection);
+        private static readonly BitVector32.Section s_stateSelectedSection = BitVector32.CreateSection(1);
+        private static readonly BitVector32.Section s_stateImageMaskSet = BitVector32.CreateSection(1, s_stateSelectedSection);
+        private static readonly BitVector32.Section s_stateWholeRowOneStyleSection = BitVector32.CreateSection(1, s_stateImageMaskSet);
+        private static readonly BitVector32.Section s_avedStateImageIndexSection = BitVector32.CreateSection(15, s_stateWholeRowOneStyleSection);
+        private static readonly BitVector32.Section s_subItemCountSection = BitVector32.CreateSection(MaxSubItems, s_avedStateImageIndexSection);
 
         private int indentCount = 0;
-        private Point position = new Point(-1,-1);
-        
+        private Point position = new Point(-1, -1);
+
         internal ListView listView;
 
         internal ListViewGroup group;
         private string groupName;
-        
+
         private ListViewSubItemCollection listViewSubItemCollection = null;
         private ListViewSubItem[] subItems;
-        
+
         // we stash the last index we got as a seed to GetDisplayIndex.
         private int lastIndex = -1;
 
@@ -68,84 +54,77 @@ namespace System.Windows.Forms {
         private BitVector32 state = new BitVector32();
         private ListViewItemImageIndexer imageIndexer;
         private string toolTipText = string.Empty;
-        object userData;
+        private object userData;
 
         // We need a special way to defer to the ListView's image
         // list for indexing purposes.
-        internal class ListViewItemImageIndexer : ImageList.Indexer {
-           private ListViewItem owner;
+        internal class ListViewItemImageIndexer : ImageList.Indexer
+        {
+            private readonly ListViewItem _owner;
 
-           
-           /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ImageListType.ListViewItemImageIndexer"]/*' />
-            public ListViewItemImageIndexer(ListViewItem item) {
-              owner = item;
+
+            public ListViewItemImageIndexer(ListViewItem item)
+            {
+                _owner = item;
             }
 
-           
-           public override ImageList ImageList {
-                get { 
-                        if (owner != null) {
-                            return owner.ImageList;
-                        }
-                        return null;
-                    }
-                set { Debug.Assert(false, "We should never set the image list"); }
+
+            public override ImageList ImageList
+            {
+                get => _owner?.ImageList;
+                set => Debug.Fail("We should never set the image list");
             }
         }
 
-        
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem"]/*' />
-        public ListViewItem() {
+        public ListViewItem()
+        {
             StateSelected = false;
             UseItemStyleForSubItems = true;
             SavedStateImageIndex = -1;
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem1"]/*' />
-        /// <devdoc>
-        ///     Creates a ListViewItem object from an Stream.
-        ///     The Serialization constructor is protected, as per FxCop Microsoft.Usage, CA2229 Rule.
-        /// </devdoc>
-        [
-            SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // Changing Deserialize to be non-virtual
-                                                                                                    // would be a breaking change.
-        ]
-        protected ListViewItem(SerializationInfo info, StreamingContext context) : this() {
+        /// <summary>
+        /// Creates a ListViewItem object from an Stream.
+        /// </summary>
+        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Justification = "Changing this would be a breaking change")]
+        protected ListViewItem(SerializationInfo info, StreamingContext context) : this()
+        {
             Deserialize(info, context);
         }
-        
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem2"]/*' />
-        public ListViewItem(string text) : this(text, -1) {            
+
+        public ListViewItem(string text) : this(text, -1)
+        {
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem3"]/*' />
-        public ListViewItem(string text, int imageIndex) : this() {
-            this.ImageIndexer.Index = imageIndex;
+        public ListViewItem(string text, int imageIndex) : this()
+        {
+            ImageIndexer.Index = imageIndex;
             Text = text;
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem4"]/*' />
-        public ListViewItem(string[] items) : this(items, -1) {
+        public ListViewItem(string[] items) : this(items, -1)
+        {
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem5"]/*' />
-        public ListViewItem(string[] items, int imageIndex) : this() {
-
-            this.ImageIndexer.Index = imageIndex;
-            if (items != null && items.Length > 0) {
-                this.subItems = new ListViewSubItem[items.Length];
-                for (int i = 0; i < items.Length; i++) {
+        public ListViewItem(string[] items, int imageIndex) : this()
+        {
+            ImageIndexer.Index = imageIndex;
+            if (items != null && items.Length > 0)
+            {
+                subItems = new ListViewSubItem[items.Length];
+                for (int i = 0; i < items.Length; i++)
+                {
                     subItems[i] = new ListViewSubItem(this, items[i]);
                 }
-                this.SubItemCount = items.Length;
+                SubItemCount = items.Length;
             }
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem6"]/*' />
-        public ListViewItem(string[] items, int imageIndex, Color foreColor, Color backColor, Font font) : this(items, imageIndex) {
-            this.ForeColor = foreColor;
-            this.BackColor = backColor;
-            this.Font = font;
+        public ListViewItem(string[] items, int imageIndex, Color foreColor, Color backColor, Font font) : this(items, imageIndex)
+        {
+            ForeColor = foreColor;
+            BackColor = backColor;
+            Font = font;
         }
 
         public ListViewItem(ListViewSubItem[] subItems, int imageIndex) : this()
@@ -155,10 +134,10 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException(nameof(subItems));
             }
 
-            this.ImageIndexer.Index = imageIndex;
+            ImageIndexer.Index = imageIndex;
             this.subItems = subItems;
-            this.SubItemCount = this.subItems.Length;
-            
+            SubItemCount = subItems.Length;
+
             // Update the owner of these subitems
             for (int i = 0; i < subItems.Length; i++)
             {
@@ -170,69 +149,70 @@ namespace System.Windows.Forms {
                 subItems[i].owner = this;
             }
         }
-          
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem8"]/*' />
-        public ListViewItem(ListViewGroup group) : this() {
-            this.Group = group;
-        }        
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem9"]/*' />
-        public ListViewItem(string text, ListViewGroup group) : this(text) {
-            this.Group = group;
+        public ListViewItem(ListViewGroup group) : this()
+        {
+            Group = group;
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem10"]/*' />
-        public ListViewItem(string text, int imageIndex, ListViewGroup group) : this(text, imageIndex) {
-            this.Group = group;
+        public ListViewItem(string text, ListViewGroup group) : this(text)
+        {
+            Group = group;
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem11"]/*' />
-        public ListViewItem(string[] items, ListViewGroup group) : this(items) {
-            this.Group = group;
+        public ListViewItem(string text, int imageIndex, ListViewGroup group) : this(text, imageIndex)
+        {
+            Group = group;
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem12"]/*' />
-        public ListViewItem(string[] items, int imageIndex, ListViewGroup group) : this(items, imageIndex) {
-            this.Group = group;
+        public ListViewItem(string[] items, ListViewGroup group) : this(items)
+        {
+            Group = group;
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem13"]/*' />
+        public ListViewItem(string[] items, int imageIndex, ListViewGroup group) : this(items, imageIndex)
+        {
+            Group = group;
+        }
+
         public ListViewItem(string[] items, int imageIndex, Color foreColor, Color backColor, Font font, ListViewGroup group) :
-            this(items, imageIndex, foreColor, backColor, font) {
-            this.Group = group;
+            this(items, imageIndex, foreColor, backColor, font)
+        {
+            Group = group;
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem14"]/*' />
-        public ListViewItem(ListViewSubItem[] subItems, int imageIndex, ListViewGroup group) : this(subItems, imageIndex) {
-            this.Group = group;
+        public ListViewItem(ListViewSubItem[] subItems, int imageIndex, ListViewGroup group) : this(subItems, imageIndex)
+        {
+            Group = group;
         }
-        
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem15"]/*' />
-        public ListViewItem(string text, string imageKey) : this() {
-            this.ImageIndexer.Key = imageKey;
+
+        public ListViewItem(string text, string imageKey) : this()
+        {
+            ImageIndexer.Key = imageKey;
             Text = text;
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem16"]/*' />
-        public ListViewItem(string[] items, string imageKey) : this() {
-
-            this.ImageIndexer.Key = imageKey;
-            if (items != null && items.Length > 0) {
-                this.subItems = new ListViewSubItem[items.Length];
-                for (int i = 0; i < items.Length; i++) {
+        public ListViewItem(string[] items, string imageKey) : this()
+        {
+            ImageIndexer.Key = imageKey;
+            if (items != null && items.Length > 0)
+            {
+                subItems = new ListViewSubItem[items.Length];
+                for (int i = 0; i < items.Length; i++)
+                {
                     subItems[i] = new ListViewSubItem(this, items[i]);
                 }
-                this.SubItemCount = items.Length;
+                SubItemCount = items.Length;
             }
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem17"]/*' />
-        public ListViewItem(string[] items, string imageKey, Color foreColor, Color backColor, Font font) : this(items, imageKey) {
-            this.ForeColor = foreColor;
-            this.BackColor = backColor;
-            this.Font = font;
+        public ListViewItem(string[] items, string imageKey, Color foreColor, Color backColor, Font font) : this(items, imageKey)
+        {
+            ForeColor = foreColor;
+            BackColor = backColor;
+            Font = font;
         }
-        
+
         public ListViewItem(ListViewSubItem[] subItems, string imageKey) : this()
         {
             if (subItems == null)
@@ -240,10 +220,10 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException(nameof(subItems));
             }
 
-            this.ImageIndexer.Key = imageKey;
+            ImageIndexer.Key = imageKey;
             this.subItems = subItems;
-            this.SubItemCount = this.subItems.Length;
-            
+            SubItemCount = subItems.Length;
+
             // Update the owner of these subitems
             for (int i = 0; i < subItems.Length; i++)
             {
@@ -255,276 +235,283 @@ namespace System.Windows.Forms {
                 subItems[i].owner = this;
             }
         }
-          
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem19"]/*' />
-        public ListViewItem(string text, string imageKey, ListViewGroup group) : this(text, imageKey) {
-            this.Group = group;
+
+        public ListViewItem(string text, string imageKey, ListViewGroup group) : this(text, imageKey)
+        {
+            Group = group;
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem20"]/*' />
-        public ListViewItem(string[] items, string imageKey, ListViewGroup group) : this(items, imageKey) {
-            this.Group = group;
+        public ListViewItem(string[] items, string imageKey, ListViewGroup group) : this(items, imageKey)
+        {
+            Group = group;
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem21"]/*' />
         public ListViewItem(string[] items, string imageKey, Color foreColor, Color backColor, Font font, ListViewGroup group) :
-            this(items, imageKey, foreColor, backColor, font) {
-            this.Group = group;
+            this(items, imageKey, foreColor, backColor, font)
+        {
+            Group = group;
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem22"]/*' />
-        public ListViewItem(ListViewSubItem[] subItems, string imageKey, ListViewGroup group) : this(subItems, imageKey) {
-            this.Group = group;
+        public ListViewItem(ListViewSubItem[] subItems, string imageKey, ListViewGroup group) : this(subItems, imageKey)
+        {
+            Group = group;
         }
-        
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.BackColor"]/*' />
-        /// <devdoc>
-        ///     The font that this item will be displayed in. If its value is null, it will be displayed
-        ///     using the global font for the ListView control that hosts it.
-        /// </devdoc>
-        [
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRCategory(nameof(SR.CatAppearance))
-        ]
-        public Color BackColor {
-            get {
-                if (SubItemCount == 0) {
-                    if (listView != null) {
+
+        /// <summary>
+        /// The font that this item will be displayed in. If its value is null, it will be displayed
+        /// using the global font for the ListView control that hosts it.
+        /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        public Color BackColor
+        {
+            get
+            {
+                if (SubItemCount == 0)
+                {
+                    if (listView != null)
+                    {
                         return listView.BackColor;
                     }
+
                     return SystemColors.Window;
                 }
-                else {
+                else
+                {
                     return subItems[0].BackColor;
                 }
             }
-            set {
-                SubItems[0].BackColor = value;
-            }
+            set => SubItems[0].BackColor = value;
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.Bounds"]/*' />
-        /// <devdoc>
-        ///     Returns the ListViewItem's bounding rectangle, including subitems. The bounding rectangle is empty if
-        ///     the ListViewItem has not been added to a ListView control.
-        /// </devdoc>
+        /// <summary>
+        /// Returns the ListViewItem's bounding rectangle, including subitems. The bounding rectangle is empty if
+        /// the ListViewItem has not been added to a ListView control.
+        /// </summary>
         [Browsable(false)]
-        public Rectangle Bounds {
-            get {
-                if (listView != null) {
+        public Rectangle Bounds
+        {
+            get
+            {
+                if (listView != null)
+                {
                     return listView.GetItemRect(Index);
                 }
                 else
+                {
                     return new Rectangle();
+                }
             }
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.Checked"]/*' />
-        [
-        DefaultValue(false),
-        RefreshPropertiesAttribute(RefreshProperties.Repaint),
-        SRCategory(nameof(SR.CatAppearance))
-        ]
-        public bool Checked {
-            get {
-                return StateImageIndex > 0;
-            }
-
-            set {
-                if (Checked != value) {
-                    if (listView != null && listView.IsHandleCreated) {
+        [DefaultValue(false)]
+        [RefreshPropertiesAttribute(RefreshProperties.Repaint)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        public bool Checked
+        {
+            get => StateImageIndex > 0;
+            set
+            {
+                if (Checked != value)
+                {
+                    if (listView != null && listView.IsHandleCreated)
+                    {
                         StateImageIndex = value ? 1 : 0;
-             
+
                         // the setter for StateImageIndex calls ItemChecked handler
                         // thus need to verify validity of the listView again
-                        if ((this.listView != null) && !this.listView.UseCompatibleStateImageBehavior) {
-                            if (!listView.CheckBoxes) {
+                        if (listView != null && !this.listView.UseCompatibleStateImageBehavior)
+                        {
+                            if (!listView.CheckBoxes)
+                            {
                                 listView.UpdateSavedCheckedItems(this, value);
                             }
                         }
-                        
                     }
-                    else {
+                    else
+                    {
                         SavedStateImageIndex = value ? 1 : 0;
                     }
                 }
             }
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.Focused"]/*' />
-        /// <devdoc>
-        ///     Returns the focus state of the ListViewItem.
-        /// </devdoc>
-        [
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)
-        ]
-        public bool Focused {
-            get {
-                if (listView != null && listView.IsHandleCreated) {
-                    return(listView.GetItemState(Index, NativeMethods.LVIS_FOCUSED) != 0);
+        /// <summary>
+        /// Returns the focus state of the ListViewItem.
+        /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        public bool Focused
+        {
+            get
+            {
+                if (listView != null && listView.IsHandleCreated)
+                {
+                    return listView.GetItemState(Index, NativeMethods.LVIS_FOCUSED) != 0;
                 }
-                else return false;
+
+                return false;
             }
 
-            set {
-                if (listView != null && listView.IsHandleCreated) {
+            set
+            {
+                if (listView != null && listView.IsHandleCreated)
+                {
                     listView.SetItemState(Index, value ? NativeMethods.LVIS_FOCUSED : 0, NativeMethods.LVIS_FOCUSED);
                 }
             }
         }
-        
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.Font"]/*' />
-        [
-        Localizable(true),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRCategory(nameof(SR.CatAppearance))
-        ]
-        public Font Font {
-            get {
-                if (SubItemCount == 0) {
-                    if (listView != null) {
+
+        [Localizable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        public Font Font
+        {
+            get
+            {
+                if (SubItemCount == 0)
+                {
+                    if (listView != null)
+                    {
                         return listView.Font;
                     }
+
                     return Control.DefaultFont;
                 }
-                else {
+                else
+                {
                     return subItems[0].Font;
                 }
             }
-            set {
-                SubItems[0].Font = value;
-            }
+            set => SubItems[0].Font = value;
         }
-        
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ForeColor"]/*' />
-        [
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRCategory(nameof(SR.CatAppearance))
-        ]
-        public Color ForeColor {
-            get {
-                if (SubItemCount == 0) {
-                    if (listView != null) {
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        public Color ForeColor
+        {
+            get
+            {
+                if (SubItemCount == 0)
+                {
+                    if (listView != null)
+                    {
                         return listView.ForeColor;
                     }
+
                     return SystemColors.WindowText;
                 }
-                else {
+                else
+                {
                     return subItems[0].ForeColor;
                 }
             }
-            set {
+            set
+            {
                 SubItems[0].ForeColor = value;
             }
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.Group"]/*' />
-        /// <devdoc>
-        ///    <para>The group to which this item belongs</para>
-        /// </devdoc>
-        [
-            DefaultValue(null),
-            Localizable(true),
-            SRCategory(nameof(SR.CatBehavior))
-        ]
-        public ListViewGroup Group {
-            get
-            {                
-                return group;
-            }
+        [DefaultValue(null)]
+        [Localizable(true)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        public ListViewGroup Group
+        {
+            get => group;
             set
-            {                
-                if (group != value) {
-                    if (value != null) {
+            {
+                if (group != value)
+                {
+                    if (value != null)
+                    {
                         value.Items.Add(this);
                     }
-                    else {
+                    else
+                    {
                         group.Items.Remove(this);
                     }
                 }
-                Debug.Assert(this.group == value, "BUG: group member variable wasn't updated!");                
+
+                Debug.Assert(group == value, "BUG: group member variable wasn't updated!");
 
                 // If the user specifically sets the group then don't use the groupName again.
-                this.groupName = null;
+                groupName = null;
             }
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ImageIndex"]/*' />
-        /// <devdoc>
-        ///     Returns the ListViewItem's currently set image index        
-        /// </devdoc>
-        [
-        DefaultValue(-1), 
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        Localizable(true),
-        RefreshProperties(RefreshProperties.Repaint),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.ListViewItemImageIndexDescr)),
-        TypeConverterAttribute(typeof(NoneExcludedImageIndexConverter))
-        ]        
-        public int ImageIndex {
-            get {
-                if (ImageIndexer.Index != -1 && ImageList != null && ImageIndexer.Index >= ImageList.Images.Count) {
+        /// <summary>
+        /// Returns the ListViewItem's currently set image index
+        /// </summary>
+        [DefaultValue(-1)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Localizable(true)]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ListViewItemImageIndexDescr))]
+        [TypeConverterAttribute(typeof(NoneExcludedImageIndexConverter))]
+        public int ImageIndex
+        {
+            get
+            {
+                if (ImageIndexer.Index != -1 && ImageList != null && ImageIndexer.Index >= ImageList.Images.Count)
+                {
                     return ImageList.Images.Count - 1;
-                } 
-                return this.ImageIndexer.Index;
-            }
-            set {
-                if (value < -1) {
-                    throw new ArgumentOutOfRangeException(nameof(ImageIndex), string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", value.ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
                 }
-            
+
+                return ImageIndexer.Index;
+            }
+            set
+            {
+                if (value < -1)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, -1));
+                }
+
                 ImageIndexer.Index = value;
 
-                if (listView != null && listView.IsHandleCreated) {
+                if (listView != null && listView.IsHandleCreated)
+                {
                     listView.SetItemImage(Index, ImageIndexer.ActualIndex);
-               }
-            }
-        }
-
-        internal ListViewItemImageIndexer ImageIndexer {
-            get { 
-                if (imageIndexer == null)  {
-                    imageIndexer = new ListViewItemImageIndexer(this);
                 }
-                return imageIndexer;
             }
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ImageIndex"]/*' />
-        /// <devdoc>
-        ///     Returns the ListViewItem's currently set image index        
-        /// </devdoc>
-        [
-        DefaultValue(""), 
-        TypeConverterAttribute(typeof(ImageKeyConverter)),
-        Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        RefreshProperties(RefreshProperties.Repaint),
-        SRCategory(nameof(SR.CatBehavior)),
-        Localizable(true)
-        ]        
-        public string ImageKey {
-            get { 
-                return this.ImageIndexer.Key;
-            }
-            set {
-                   ImageIndexer.Key = value;
+        internal ListViewItemImageIndexer ImageIndexer => imageIndexer ?? (imageIndexer = new ListViewItemImageIndexer(this));
 
-                   if (listView != null && listView.IsHandleCreated) {
+        /// <summary>
+        /// Returns the ListViewItem's currently set image index
+        /// </summary>
+        [DefaultValue("")]
+        [TypeConverterAttribute(typeof(ImageKeyConverter))]
+        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Localizable(true)]
+        public string ImageKey
+        {
+            get => ImageIndexer.Key;
+            set
+            {
+                ImageIndexer.Key = value;
+
+                if (listView != null && listView.IsHandleCreated)
+                {
                     listView.SetItemImage(Index, ImageIndexer.ActualIndex);
-                   }
+                }
             }
         }
-        
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ImageList"]/*' />
+
         [Browsable(false)]
-        public ImageList ImageList {
-            get {
-                if (listView != null) {
-                    switch(listView.View) {
+        public ImageList ImageList
+        {
+            get
+            {
+                if (listView != null)
+                {
+                    switch (listView.View)
+                    {
                         case View.LargeIcon:
                         case View.Tile:
                             return listView.LargeImageList;
@@ -534,201 +521,209 @@ namespace System.Windows.Forms {
                             return listView.SmallImageList;
                     }
                 }
+
                 return null;
             }
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.IndentCount"]/*' />
-        [
-        DefaultValue(0),
-        SRDescription(nameof(SR.ListViewItemIndentCountDescr)),
-        SRCategory(nameof(SR.CatDisplay))
-        ]
-        public int IndentCount {
-            get {
-                return indentCount;
-            }
-            set {
-                if (value == indentCount)
-                    return;
-                if (value < 0) {
+        [DefaultValue(0)]
+        [SRDescription(nameof(SR.ListViewItemIndentCountDescr))]
+        [SRCategory(nameof(SR.CatDisplay))]
+        public int IndentCount
+        {
+            get => indentCount;
+            set
+            {
+                if (value < 0)
+                {
                     throw new ArgumentOutOfRangeException(nameof(IndentCount), SR.ListViewIndentCountCantBeNegative);
                 }
-                indentCount = value;
-                if (listView != null && listView.IsHandleCreated) {
-                    listView.SetItemIndentCount(Index, indentCount);
+
+                if (value != indentCount)
+                {
+                    indentCount = value;
+                    if (listView != null && listView.IsHandleCreated)
+                    {
+                        listView.SetItemIndentCount(Index, indentCount);
+                    }
                 }
             }
         }
 
-
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.Index"]/*' />
-        /// <devdoc>
-        ///     Returns ListViewItem's current index in the listview, or -1 if it has not been added to a ListView control.
-        /// </devdoc>
+        /// <summary>
+        /// Returns ListViewItem's current index in the listview, or -1 if it has not been added to a ListView control.
+        /// </summary>
         [Browsable(false)]
-        public int Index {
-            get {
-                if (listView != null) {
+        public int Index
+        {
+            get
+            {
+                if (listView != null)
+                {
                     // if the list is virtual, the ComCtrl control does not keep any information
                     // about any list view items, so we use our cache instead.
-                    if (!listView.VirtualMode) {
+                    if (!listView.VirtualMode)
+                    {
                         lastIndex = listView.GetDisplayIndex(this, lastIndex);
                     }
                     return lastIndex;
-                }   
-                else {
+                }
+                else
+                {
                     return -1;
                 }
             }
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListView"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Returns the ListView control that holds this ListViewItem. May be null if no
         /// control has been assigned yet.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
-        public ListView ListView {
-            get {
-                return listView;
-            }
-        }
+        public ListView ListView => listView;
 
-
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.Name"]/*' />
-        /// <devdoc>
-        ///     Name associated with this ListViewItem
-        /// </devdoc>
-        [
-        Localizable(true),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
-        public string Name {
-            get {
-                if (SubItemCount == 0) {
+        /// <summary>
+        /// Name associated with this ListViewItem
+        /// </summary>
+        [Localizable(true)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public string Name
+        {
+            get
+            {
+                if (SubItemCount == 0)
+                {
                     return string.Empty;
                 }
-                else {
+                else
+                {
                     return subItems[0].Name;
                 }
             }
-            set {
-                SubItems[0].Name = value;
-            }
+            set => SubItems[0].Name = value;
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.Position"]/*' />
-        [
-        SRCategory(nameof(SR.CatDisplay)),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)
-        ]
-        public Point Position {
-            get {
-                if (listView != null && listView.IsHandleCreated) {
+        [SRCategory(nameof(SR.CatDisplay))]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        public Point Position
+        {
+            get
+            {
+                if (listView != null && listView.IsHandleCreated)
+                {
                     position = listView.GetItemPosition(Index);
                 }
+
                 return position;
             }
-            set {
-                if (value.Equals(position))
-                    return;
-                position = value;
-                if (listView != null && listView.IsHandleCreated) {
-                    if (!listView.VirtualMode) {
-                        listView.SetItemPosition(Index, position.X, position.Y);
+            set
+            {
+                if (!value.Equals(position))
+                {
+                    position = value;
+                    if (listView != null && listView.IsHandleCreated)
+                    {
+                        if (!listView.VirtualMode)
+                        {
+                            listView.SetItemPosition(Index, position.X, position.Y);
+                        }
                     }
                 }
             }
         }
 
-        // the listView needs the raw encoding for the state image index when in VirtualMode
-        internal int RawStateImageIndex {
-            get {
-                return (this.SavedStateImageIndex + 1) << 12;
-            }
-        }
+        internal int RawStateImageIndex => (SavedStateImageIndex + 1) << 12;
 
-        /// <devdoc>
-        ///     Accessor for our state bit vector.
-        /// </devdoc>
-        private int SavedStateImageIndex {
-            get {
+        /// <summary>
+        /// Accessor for our state bit vector.
+        /// </summary>
+        private int SavedStateImageIndex
+        {
+            get
+            {
                 // State goes from zero to 15, but we need a negative
                 // number, so we store + 1.
-                return state[SavedStateImageIndexSection] - 1;
+                return state[s_avedStateImageIndexSection] - 1;
             }
-            set {
+            set
+            {
                 // flag whether we've set a value.
-                //
-                state[StateImageMaskSet] = (value == -1 ? 0 : 1);
+                state[s_stateImageMaskSet] = (value == -1 ? 0 : 1);
 
                 // push in the actual value
-                //
-                state[SavedStateImageIndexSection] = value + 1;
+                state[s_avedStateImageIndexSection] = value + 1;
             }
         }
-        
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.Selected"]/*' />
-        /// <devdoc>
-        ///     Treats the ListViewItem as a row of strings, and returns an array of those strings
-        /// </devdoc>
-        [
-        Browsable(false), 
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
-        public bool Selected {
-            get {
-                if (listView != null && listView.IsHandleCreated) {
-                    return(listView.GetItemState(Index, NativeMethods.LVIS_SELECTED) != 0);
+
+        /// <summary>
+        /// Treats the ListViewItem as a row of strings, and returns an array of those strings
+        /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public bool Selected
+        {
+            get
+            {
+                if (listView != null && listView.IsHandleCreated)
+                {
+                    return listView.GetItemState(Index, NativeMethods.LVIS_SELECTED) != 0;
                 }
-                else
-                    return StateSelected;
+
+                return StateSelected;
             }
-            set {
-                if (listView != null && listView.IsHandleCreated) {
-                    listView.SetItemState(Index, value ? NativeMethods.LVIS_SELECTED: 0, NativeMethods.LVIS_SELECTED);
+            set
+            {
+                if (listView != null && listView.IsHandleCreated)
+                {
+                    listView.SetItemState(Index, value ? NativeMethods.LVIS_SELECTED : 0, NativeMethods.LVIS_SELECTED);
 
                     // update comctl32's selection information.
                     listView.SetSelectionMark(Index);
                 }
-                else {
+                else
+                {
                     StateSelected = value;
-                    if (this.listView != null && this.listView.IsHandleCreated) {
-                        // APPCOMPAT: set the selected state on the list view item only if the list view's Handle is already created.
+                    if (listView != null && listView.IsHandleCreated)
+                    {
+                        // Set the selected state on the list view item only if the list view's Handle is already created.
                         listView.CacheSelectedStateForItem(this, value);
                     }
                 }
             }
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.StateImageIndex"]/*' />
-        [
-        Localizable(true),
-        TypeConverterAttribute(typeof(NoneExcludedImageIndexConverter)),
-        DefaultValue(-1),
-        SRDescription(nameof(SR.ListViewItemStateImageIndexDescr)),
-        SRCategory(nameof(SR.CatBehavior)),
-        RefreshProperties(RefreshProperties.Repaint),
-        Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        RelatedImageList("ListView.StateImageList")
-        ]
-        public int StateImageIndex {
-            get {
-                if (listView != null && listView.IsHandleCreated) {
+        [Localizable(true)]
+        [TypeConverterAttribute(typeof(NoneExcludedImageIndexConverter))]
+        [DefaultValue(-1)]
+        [SRDescription(nameof(SR.ListViewItemStateImageIndexDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [RelatedImageList("ListView.StateImageList")]
+        public int StateImageIndex
+        {
+            get
+            {
+                if (listView != null && listView.IsHandleCreated)
+                {
                     int state = listView.GetItemState(Index, NativeMethods.LVIS_STATEIMAGEMASK);
                     return ((state >> 12) - 1);   // index is 1-based
                 }
-                else return SavedStateImageIndex;
-            }
-            set {
-                if (value < -1 || value > 14)
-                    throw new ArgumentOutOfRangeException(nameof(StateImageIndex), string.Format(SR.InvalidArgument, "StateImageIndex", (value).ToString(CultureInfo.CurrentCulture)));
 
-                if (listView != null && listView.IsHandleCreated) {
-                    this.state[StateImageMaskSet] = (value == -1 ? 0 : 1);
+                return SavedStateImageIndex;
+            }
+            set
+            {
+                if (value < -1 || value > 14)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(StateImageIndex), value));
+                }
+
+                if (listView != null && listView.IsHandleCreated)
+                {
+                    this.state[s_stateImageMaskSet] = (value == -1 ? 0 : 1);
                     int state = ((value + 1) << 12);  // index is 1-based
                     listView.SetItemState(Index, state, NativeMethods.LVIS_STATEIMAGEMASK);
                 }
@@ -736,199 +731,178 @@ namespace System.Windows.Forms {
             }
         }
 
+        internal bool StateImageSet => (state[s_stateImageMaskSet] != 0);
 
-        internal bool StateImageSet {
-            get {
-                return (this.state[StateImageMaskSet] != 0);
-            }
+        /// <summary>
+        /// Accessor for our state bit vector.
+        /// </summary>
+        internal bool StateSelected
+        {
+            get => state[s_stateSelectedSection] == 1;
+            set => state[s_stateSelectedSection] = value ? 1 : 0;
         }
 
+        /// <summary>
+        /// Accessor for our state bit vector.
+        /// </summary>
+        private int SubItemCount
+        {
+            get => state[s_subItemCountSection];
+            set => state[s_subItemCountSection] = value;
+        }
 
-        /// <devdoc>
-        ///     Accessor for our state bit vector.
-        /// </devdoc>
-        internal bool StateSelected {
-            get {
-                return state[StateSelectedSection] == 1;
-            }
-            set {
-                state[StateSelectedSection] = value ? 1 : 0;
-            }
-        }
-        
-        /// <devdoc>
-        ///     Accessor for our state bit vector.
-        /// </devdoc>
-        private int SubItemCount {
-            get {
-                return state[SubItemCountSection];
-            }
-            set {
-                state[SubItemCountSection] = value;
-            }
-        }
-        
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.SubItems"]/*' />
-        [
-        SRCategory(nameof(SR.CatData)),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),        
-        SRDescription(nameof(SR.ListViewItemSubItemsDescr)),
-        Editor("System.Windows.Forms.Design.ListViewSubItemCollectionEditor, " + AssemblyRef.SystemDesign,typeof(UITypeEditor)),
-        ]
-        public ListViewSubItemCollection SubItems {
-            get {
-                if (SubItemCount == 0) {
+        [SRCategory(nameof(SR.CatData))]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ListViewItemSubItemsDescr))]
+        [Editor("System.Windows.Forms.Design.ListViewSubItemCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        public ListViewSubItemCollection SubItems
+        {
+            get
+            {
+                if (SubItemCount == 0)
+                {
                     subItems = new ListViewSubItem[1];
-                    subItems[0] = new ListViewSubItem(this, string.Empty);                        
+                    subItems[0] = new ListViewSubItem(this, string.Empty);
                     SubItemCount = 1;
                 }
-            
-                if (listViewSubItemCollection == null) {
-                    listViewSubItemCollection = new ListViewSubItemCollection(this);
-                }
-                return listViewSubItemCollection;
-            }
-        }
-        
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.Tag"]/*' />
-        [
-        SRCategory(nameof(SR.CatData)),
-        Localizable(false),
-        Bindable(true),
-        SRDescription(nameof(SR.ControlTagDescr)),
-        DefaultValue(null),
-        TypeConverter(typeof(StringConverter)),
-        ]
-        public object Tag {
-            get {
-                return userData;
-            }
-            set {
-                userData = value;
+
+                return listViewSubItemCollection ?? (listViewSubItemCollection = new ListViewSubItemCollection(this));
             }
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.Text"]/*' />
-        /// <devdoc>
-        ///     Text associated with this ListViewItem
-        /// </devdoc>
-        [
-        Localizable(true),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRCategory(nameof(SR.CatAppearance))
-        ]
-        public string Text {
-            get {
-                if (SubItemCount == 0) {
+        [SRCategory(nameof(SR.CatData))]
+        [Localizable(false)]
+        [Bindable(true)]
+        [SRDescription(nameof(SR.ControlTagDescr))]
+        [DefaultValue(null)]
+        [TypeConverter(typeof(StringConverter))]
+        public object Tag
+        {
+            get => userData;
+            set => userData = value;
+        }
+
+        /// <summary>
+        /// Text associated with this ListViewItem
+        /// </summary>
+        [Localizable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        public string Text
+        {
+            get
+            {
+                if (SubItemCount == 0)
+                {
                     return string.Empty;
                 }
-                else {
+                else
+                {
                     return subItems[0].Text;
                 }
             }
-            set {
-                SubItems[0].Text = value;
-            }
+            set => SubItems[0].Text = value;
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ToolTipText"]/*' />
-        /// <devdoc>
-        ///     Tool tip text associated with this ListViewItem
-        /// </devdoc>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue("")
-        ]
-        public string ToolTipText {
-            get {
-                return toolTipText;
-            }
-            set {
+        /// <summary>
+        /// Tool tip text associated with this ListViewItem
+        /// </summary>
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue("")]
+        public string ToolTipText
+        {
+            get => toolTipText;
+            set
+            {
                 if (value == null)
+                {
                     value = string.Empty;
-                if (WindowsFormsUtils.SafeCompareStrings(toolTipText, value, false /*ignoreCase*/)) {
-                    return;
                 }
 
-                toolTipText = value;
+                if (!WindowsFormsUtils.SafeCompareStrings(toolTipText, value, ignoreCase: false))
+                {
+                    toolTipText = value;
 
-                // tell the list view about this change
-                if (this.listView != null && this.listView.IsHandleCreated) {
-                    this.listView.ListViewItemToolTipChanged(this);
+                    // tell the list view about this change
+                    if (listView != null && listView.IsHandleCreated)
+                    {
+                        listView.ListViewItemToolTipChanged(this);
+                    }
                 }
             }
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.UseItemStyleForSubItems"]/*' />
-        /// <devdoc>
-        ///     Whether or not the font and coloring for the ListViewItem will be used for all of its subitems.
-        ///     If true, the ListViewItem style will be used when drawing the subitems.
-        ///     If false, the ListViewItem and its subitems will be drawn in their own individual styles
-        ///     if any have been set.
-        /// </devdoc>
-        [
-        DefaultValue(true),
-        SRCategory(nameof(SR.CatAppearance))
-        ]
-        public bool UseItemStyleForSubItems {
-            get {
-                return state[StateWholeRowOneStyleSection] == 1;
-            }
-            set {
-                state[StateWholeRowOneStyleSection] = value ? 1 : 0;
-            }
+        /// <summary>
+        /// Whether or not the font and coloring for the ListViewItem will be used for all of its subitems.
+        /// If true, the ListViewItem style will be used when drawing the subitems.
+        /// If false, the ListViewItem and its subitems will be drawn in their own individual styles
+        /// if any have been set.
+        /// </summary>
+        [DefaultValue(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        public bool UseItemStyleForSubItems
+        {
+            get => state[s_stateWholeRowOneStyleSection] == 1;
+            set => state[s_stateWholeRowOneStyleSection] = value ? 1 : 0;
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.BeginEdit"]/*' />
-        /// <devdoc>
-        ///     Initiate editing of the item's label.
-        ///     Only effective if LabelEdit property is true.
-        /// </devdoc>
-        public void BeginEdit() {
-            if (Index >= 0) {
+        /// <summary>
+        /// Initiate editing of the item's label. Only effective if LabelEdit property is true.
+        /// </summary>
+        public void BeginEdit()
+        {
+            if (Index >= 0)
+            {
                 ListView lv = ListView;
                 if (lv.LabelEdit == false)
+                {
                     throw new InvalidOperationException(SR.ListViewBeginEditFailed);
+                }
                 if (!lv.Focused)
-                    lv.FocusInternal();
+                {
+                    lv.Focus();
+                }
+
                 UnsafeNativeMethods.SendMessage(new HandleRef(lv, lv.Handle), NativeMethods.LVM_EDITLABEL, Index, 0);
             }
-        }                   
-                   
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.Clone"]/*' />
-        public virtual object Clone() {
+        }
+
+        public virtual object Clone()
+        {
             ListViewSubItem[] clonedSubItems = new ListViewSubItem[this.SubItems.Count];
-            for(int index=0; index < this.SubItems.Count; ++index) {
+            for (int index = 0; index < this.SubItems.Count; ++index)
+            {
                 ListViewSubItem subItem = this.SubItems[index];
-                clonedSubItems[index] = new ListViewSubItem(null, 
-                                                            subItem.Text, 
-                                                            subItem.ForeColor, 
+                clonedSubItems[index] = new ListViewSubItem(null,
+                                                            subItem.Text,
+                                                            subItem.ForeColor,
                                                             subItem.BackColor,
                                                             subItem.Font);
                 clonedSubItems[index].Tag = subItem.Tag;
             }
-        
+
             Type clonedType = this.GetType();
             ListViewItem newItem = null;
-            
-            if (clonedType == typeof(ListViewItem)) {
-                newItem = new ListViewItem(clonedSubItems, this.ImageIndexer.Index);
-            }
-            else { 
-                // 
 
+            if (clonedType == typeof(ListViewItem))
+            {
+                newItem = new ListViewItem(clonedSubItems, ImageIndexer.Index);
+            }
+            else
+            {
                 newItem = (ListViewItem)Activator.CreateInstance(clonedType);
             }
             newItem.subItems = clonedSubItems;
-            newItem.ImageIndexer.Index = this.ImageIndexer.Index;
+            newItem.ImageIndexer.Index = ImageIndexer.Index;
             newItem.SubItemCount = this.SubItemCount;
             newItem.Checked = this.Checked;
             newItem.UseItemStyleForSubItems = this.UseItemStyleForSubItems;
             newItem.Tag = this.Tag;
 
             // Only copy over the ImageKey if we're using it.
-            if (!string.IsNullOrEmpty(this.ImageIndexer.Key)) {
-                newItem.ImageIndexer.Key = this.ImageIndexer.Key;
+            if (!string.IsNullOrEmpty(ImageIndexer.Key))
+            {
+                newItem.ImageIndexer.Key = ImageIndexer.Key;
             }
 
             newItem.indentCount = this.indentCount;
@@ -939,290 +913,299 @@ namespace System.Windows.Forms {
             newItem.Font = this.Font;
             newItem.Text = this.Text;
             newItem.Group = this.Group;
-            
+
             return newItem;
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.EnsureVisible"]/*' />
-        /// <devdoc>
-        ///     Ensure that the item is visible, scrolling the view as necessary.
-        /// </devdoc>
-        public virtual void EnsureVisible() {
-            if (listView != null && listView.IsHandleCreated) {
+        /// <summary>
+        /// Ensure that the item is visible, scrolling the view as necessary.
+        /// </summary>
+        public virtual void EnsureVisible()
+        {
+            if (listView != null && listView.IsHandleCreated)
+            {
                 listView.EnsureVisible(Index);
             }
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.FindNearestItem"]/*' />
-        public ListViewItem FindNearestItem(SearchDirectionHint searchDirection) {
-            Rectangle r = this.Bounds;
-
-            switch (searchDirection) {
-                case SearchDirectionHint.Up: 
-                    return this.ListView.FindNearestItem(searchDirection, r.Left, r.Top);
+        public ListViewItem FindNearestItem(SearchDirectionHint searchDirection)
+        {
+            Rectangle r = Bounds;
+            switch (searchDirection)
+            {
+                case SearchDirectionHint.Up:
+                    return ListView.FindNearestItem(searchDirection, r.Left, r.Top);
                 case SearchDirectionHint.Down:
-                    return this.ListView.FindNearestItem(searchDirection, r.Left, r.Bottom);
+                    return ListView.FindNearestItem(searchDirection, r.Left, r.Bottom);
                 case SearchDirectionHint.Left:
-                    return this.ListView.FindNearestItem(searchDirection, r.Left, r.Top);
+                    return ListView.FindNearestItem(searchDirection, r.Left, r.Top);
                 case SearchDirectionHint.Right:
-                    return this.ListView.FindNearestItem(searchDirection, r.Right, r.Top);
-                default :
+                    return ListView.FindNearestItem(searchDirection, r.Right, r.Top);
+                default:
                     Debug.Fail("we handled all the 4 directions");
                     return null;
             }
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.GetBounds"]/*' />
-        /// <devdoc>
-        ///     Returns a specific portion of the ListViewItem's bounding rectangle.
-        ///     The rectangle returned is empty if the ListViewItem has not been added to a ListView control.
-        /// </devdoc>
-        public Rectangle GetBounds(ItemBoundsPortion portion) {
-            if (listView != null && listView.IsHandleCreated) {
+        /// <summary>
+        /// Returns a specific portion of the ListViewItem's bounding rectangle.
+        /// The rectangle returned is empty if the ListViewItem has not been added to a ListView control.
+        /// </summary>
+        public Rectangle GetBounds(ItemBoundsPortion portion)
+        {
+            if (listView != null && listView.IsHandleCreated)
+            {
                 return listView.GetItemRect(Index, portion);
             }
-            else return new Rectangle();
+
+            return new Rectangle();
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.GetSubItemAt"]/*' />
-        public ListViewSubItem GetSubItemAt(int x, int y) {
-            if (listView != null && listView.IsHandleCreated && listView.View == View.Details) {
-                int iItem = -1;
-                int iSubItem = -1;
-
-                listView.GetSubItemAt(x,y, out iItem, out iSubItem);
-
-                // 
-
-
-                if (iItem == this.Index && iSubItem != -1 && iSubItem < SubItems.Count) {
+        public ListViewSubItem GetSubItemAt(int x, int y)
+        {
+            if (listView != null && listView.IsHandleCreated && listView.View == View.Details)
+            {
+                listView.GetSubItemAt(x, y, out int iItem, out int iSubItem);
+                if (iItem == this.Index && iSubItem != -1 && iSubItem < SubItems.Count)
+                {
                     return SubItems[iSubItem];
-                } else {
+                }
+                else
+                {
                     return null;
                 }
-            } else {
-                return null;
             }
+
+            return null;
         }
-        
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.Host"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
-        internal void Host(ListView parent, int ID, int index) {
+
+        internal void Host(ListView parent, int id, int index)
+        {
             // Don't let the name "host" fool you -- Handle is not necessarily created
-            Debug.Assert(this.listView == null || !this.listView.VirtualMode, "ListViewItem::Host can't be used w/ a virtual item");
+            Debug.Assert(listView == null || !listView.VirtualMode, "ListViewItem::Host can't be used w/ a virtual item");
             Debug.Assert(parent == null || !parent.VirtualMode, "ListViewItem::Host can't be used w/ a virtual list");
-            
-            this.ID = ID;
+
+            ID = id;
             listView = parent;
 
             // If the index is valid, then the handle has been created.
-            if (index != -1) {
+            if (index != -1)
+            {
                 UpdateStateToListView(index);
             }
         }
 
-        /// <devdoc>
-        ///     This is used to map list view items w/ their respective groups
-        ///     in localized forms.
-        /// </devdoc>
-        internal void UpdateGroupFromName() {
-            Debug.Assert(this.listView != null, "This method is used only when items are parented in a list view");
-            Debug.Assert(!this.listView.VirtualMode, "we need to update the group only when the user specifies the list view items in localizable forms");
-            if (string.IsNullOrEmpty(this.groupName)) {
+        /// <summary>
+        /// This is used to map list view items w/ their respective groups in localized forms.
+        /// </summary>
+        internal void UpdateGroupFromName()
+        {
+            Debug.Assert(listView != null, "This method is used only when items are parented in a list view");
+            Debug.Assert(!listView.VirtualMode, "we need to update the group only when the user specifies the list view items in localizable forms");
+            if (string.IsNullOrEmpty(groupName))
+            {
                 return;
             }
 
-            ListViewGroup group = this.listView.Groups[this.groupName];
-            this.Group = group;
+            ListViewGroup group = listView.Groups[groupName];
+            Group = group;
 
             // Use the group name only once.
-            this.groupName = null;
+            groupName = null;
         }
 
-        internal void UpdateStateToListView(int index) {
-            NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM();
+        internal void UpdateStateToListView(int index)
+        {
+            var lvItem = new NativeMethods.LVITEM();
             UpdateStateToListView(index, ref lvItem, true);
         }
-        
-        /// <devdoc>
-        ///     Called when we have just pushed this item into a list view and we need
-        ///     to configure the list view's state for the item.  Use a valid index
-        ///     if you can, or use -1 if you can't.
-        /// </devdoc>
-        internal void UpdateStateToListView(int index, ref NativeMethods.LVITEM lvItem, bool updateOwner) {
 
+        /// <summary>
+        /// Called when we have just pushed this item into a list view and we need
+        /// to configure the list view's state for the item. Use a valid index
+        /// if you can, or use -1 if you can't.
+        /// </summary>
+        internal void UpdateStateToListView(int index, ref NativeMethods.LVITEM lvItem, bool updateOwner)
+        {
             Debug.Assert(listView.IsHandleCreated, "Should only invoke UpdateStateToListView when handle is created.");
-            
-            if (index == -1) {
+
+            if (index == -1)
+            {
                 index = Index;
             }
-            else {
+            else
+            {
                 lastIndex = index;
             }
-            
+
             // Update Item state in one shot
-            //
             int itemState = 0;
             int stateMask = 0;
-            
-            if (StateSelected) {
+            if (StateSelected)
+            {
                 itemState |= NativeMethods.LVIS_SELECTED;
                 stateMask |= NativeMethods.LVIS_SELECTED;
             }
-            
-            if (SavedStateImageIndex > -1) {
+
+            if (SavedStateImageIndex > -1)
+            {
                 itemState |= ((SavedStateImageIndex + 1) << 12);
                 stateMask |= NativeMethods.LVIS_STATEIMAGEMASK;
-            }                        
-            
+            }
+
             lvItem.mask |= NativeMethods.LVIF_STATE;
-            lvItem.iItem = index;                        
+            lvItem.iItem = index;
             lvItem.stateMask |= stateMask;
             lvItem.state |= itemState;
 
-            if (listView.GroupsEnabled) {
-                lvItem.mask |= NativeMethods.LVIF_GROUPID;                
+            if (listView.GroupsEnabled)
+            {
+                lvItem.mask |= NativeMethods.LVIF_GROUPID;
                 lvItem.iGroupId = listView.GetNativeGroupId(this);
-                
+
                 Debug.Assert(!updateOwner || listView.SendMessage(NativeMethods.LVM_ISGROUPVIEWENABLED, 0, 0) != IntPtr.Zero, "Groups not enabled");
                 Debug.Assert(!updateOwner || listView.SendMessage(NativeMethods.LVM_HASGROUP, lvItem.iGroupId, 0) != IntPtr.Zero, "Doesn't contain group id: " + lvItem.iGroupId.ToString(CultureInfo.InvariantCulture));
-            }            
+            }
 
-            if (updateOwner) {
+            if (updateOwner)
+            {
                 UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), NativeMethods.LVM_SETITEM, 0, ref lvItem);
             }
         }
-        
-        internal void UpdateStateFromListView(int displayIndex, bool checkSelection) {
-            if (listView != null && listView.IsHandleCreated && displayIndex != -1) {
 
+        internal void UpdateStateFromListView(int displayIndex, bool checkSelection)
+        {
+            if (listView != null && listView.IsHandleCreated && displayIndex != -1)
+            {
                 // Get information from comctl control
-                //
-                NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM();
+                var lvItem = new NativeMethods.LVITEM();
                 lvItem.mask = NativeMethods.LVIF_PARAM | NativeMethods.LVIF_STATE | NativeMethods.LVIF_GROUPID;
-             
-                if (checkSelection) {
+
+                if (checkSelection)
+                {
                     lvItem.stateMask = NativeMethods.LVIS_SELECTED;
                 }
-                
 
                 // we want to get all the information, including the state image mask
                 lvItem.stateMask |= NativeMethods.LVIS_STATEIMAGEMASK;
 
-                if (lvItem.stateMask == 0) {
+                if (lvItem.stateMask == 0)
+                {
                     // perf optimization: no work to do.
-                    //
                     return;
                 }
 
-
                 lvItem.iItem = displayIndex;
-                UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), NativeMethods.LVM_GETITEM, 0, ref lvItem);                
-                
+                UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), NativeMethods.LVM_GETITEM, 0, ref lvItem);
+
                 // Update this class' information
-                //
-                if (checkSelection) {
+                if (checkSelection)
+                {
                     StateSelected = (lvItem.state & NativeMethods.LVIS_SELECTED) != 0;
                 }
                 SavedStateImageIndex = ((lvItem.state & NativeMethods.LVIS_STATEIMAGEMASK) >> 12) - 1;
 
                 group = null;
-                foreach (ListViewGroup lvg in ListView.Groups) {
-                    if (lvg.ID == lvItem.iGroupId) {
+                foreach (ListViewGroup lvg in ListView.Groups)
+                {
+                    if (lvg.ID == lvItem.iGroupId)
+                    {
                         group = lvg;
                         break;
                     }
                 }
             }
         }
-        
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.UnHost"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
-        internal void UnHost(bool checkSelection) {
-            UnHost(Index, checkSelection);
-        }
 
-        internal void UnHost(int displayIndex, bool checkSelection) {
+        internal void UnHost(bool checkSelection) =>  UnHost(Index, checkSelection);
+
+        internal void UnHost(int displayIndex, bool checkSelection)
+        {
             UpdateStateFromListView(displayIndex, checkSelection);
-            
-            if (this.listView != null && (this.listView.Site == null || !this.listView.Site.DesignMode) && this.group != null) {
-                this.group.Items.Remove(this);
+
+            if (listView != null && (listView.Site == null || !listView.Site.DesignMode) && group != null)
+            {
+                group.Items.Remove(this);
             }
 
             // Make sure you do these last, as the first several lines depends on this information
             ID = -1;
-            listView = null;            
+            listView = null;
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.Remove"]/*' />
-        public virtual void Remove() {
-            if (listView != null) {
-                listView.Items.Remove(this);
-            }
-        }
+        public virtual void Remove() => listView?.Items.Remove(this);
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.Deserialize"]/*' />
-        protected virtual void Deserialize(SerializationInfo info, StreamingContext context) {
-
+        protected virtual void Deserialize(SerializationInfo info, StreamingContext context)
+        {
             bool foundSubItems = false;
 
             string imageKey = null;
             int imageIndex = -1;
-            
-            foreach (SerializationEntry entry in info) {
-                if (entry.Name == "Text") {
+
+            foreach (SerializationEntry entry in info)
+            {
+                if (entry.Name == "Text")
+                {
                     Text = info.GetString(entry.Name);
                 }
-                else if (entry.Name == "ImageIndex") {
+                else if (entry.Name == nameof(ImageIndex))
+                {
                     imageIndex = info.GetInt32(entry.Name);
                 }
-                else if (entry.Name == "ImageKey") { 
+                else if (entry.Name == "ImageKey")
+                {
                     imageKey = info.GetString(entry.Name);
                 }
-                else if (entry.Name == "SubItemCount") {
+                else if (entry.Name == "SubItemCount")
+                {
                     SubItemCount = info.GetInt32(entry.Name);
-                    // foundSubItems true only if count > 0
                     if (SubItemCount > 0)
                     {
                         foundSubItems = true;
                     }
                 }
-                else if (entry.Name == "BackColor") {
+                else if (entry.Name == "BackColor")
+                {
                     BackColor = (Color)info.GetValue(entry.Name, typeof(Color));
                 }
-                else if (entry.Name == "Checked") {
+                else if (entry.Name == "Checked")
+                {
                     Checked = info.GetBoolean(entry.Name);
                 }
-                else if (entry.Name == "Font") {
+                else if (entry.Name == "Font")
+                {
                     Font = (Font)info.GetValue(entry.Name, typeof(Font));
                 }
-                else if (entry.Name == "ForeColor") {
+                else if (entry.Name == "ForeColor")
+                {
                     ForeColor = (Color)info.GetValue(entry.Name, typeof(Color));
                 }
-                else if (entry.Name == "UseItemStyleForSubItems") {
+                else if (entry.Name == "UseItemStyleForSubItems")
+                {
                     UseItemStyleForSubItems = info.GetBoolean(entry.Name);
                 }
-                else if (entry.Name == "Group") {
-                    ListViewGroup group = (ListViewGroup) info.GetValue(entry.Name, typeof(ListViewGroup));
+                else if (entry.Name == "Group")
+                {
+                    ListViewGroup group = (ListViewGroup)info.GetValue(entry.Name, typeof(ListViewGroup));
                     this.groupName = group.Name;
                 }
             }
 
             // let image key take precidence
-            if (imageKey != null) {
-                ImageKey = imageKey;    
-            } 
-            else if (imageIndex != -1) {
+            if (imageKey != null)
+            {
+                ImageKey = imageKey;
+            }
+            else if (imageIndex != -1)
+            {
                 ImageIndex = imageIndex;
             }
 
-            if (foundSubItems) {
+            if (foundSubItems)
+            {
                 ListViewSubItem[] newItems = new ListViewSubItem[SubItemCount];
-                for (int i = 1; i < SubItemCount; i++) {
+                for (int i = 1; i < SubItemCount; i++)
+                {
                     ListViewSubItem newItem = (ListViewSubItem)info.GetValue("SubItem" + i.ToString(CultureInfo.InvariantCulture), typeof(ListViewSubItem));
                     newItem.owner = this;
                     newItems[i] = newItem;
@@ -1232,20 +1215,22 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.Serialize"]/*' />
-        /// <devdoc>
-        ///     Saves this ListViewItem object to the given data stream.
-        /// </devdoc>
-        /// 
-        protected virtual void Serialize(SerializationInfo info, StreamingContext context) {
+        /// <summary>
+        /// Saves this ListViewItem object to the given data stream.
+        /// </summary>
+        protected virtual void Serialize(SerializationInfo info, StreamingContext context)
+        {
             info.AddValue("Text", Text);
-            info.AddValue("ImageIndex", ImageIndexer.Index);  
-            if (!string.IsNullOrEmpty(ImageIndexer.Key)) {
+            info.AddValue(nameof(ImageIndex), ImageIndexer.Index);
+            if (!string.IsNullOrEmpty(ImageIndexer.Key))
+            {
                 info.AddValue("ImageKey", ImageIndexer.Key);
             }
-            if (SubItemCount > 1) {
+            if (SubItemCount > 1)
+            {
                 info.AddValue("SubItemCount", SubItemCount);
-                for (int i = 1; i < SubItemCount; i++) {
+                for (int i = 1; i < SubItemCount; i++)
+                {
                     info.AddValue("SubItem" + i.ToString(CultureInfo.InvariantCulture), subItems[i], typeof(ListViewSubItem));
                 }
             }
@@ -1254,456 +1239,418 @@ namespace System.Windows.Forms {
             info.AddValue("Font", Font);
             info.AddValue("ForeColor", ForeColor);
             info.AddValue("UseItemStyleForSubItems", UseItemStyleForSubItems);
-            if (this.Group != null) {
-                info.AddValue("Group", this.Group);
+            if (Group != null)
+            {
+                info.AddValue("Group", Group);
             }
         }
 
         // we need this function to set the index when the list view is in virtual mode.
         // the index of the list view item is used in ListView::set_TopItem property
-        internal void SetItemIndex(ListView listView, int index) {
+        internal void SetItemIndex(ListView listView, int index)
+        {
             Debug.Assert(listView != null && listView.VirtualMode, "ListViewItem::SetItemIndex should be used only when the list is virtual");
             Debug.Assert(index > -1, "can't set the index on a virtual list view item to -1");
             this.listView = listView;
             this.lastIndex = index;
         }
-        
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ShouldSerializeText"]/*' />
-        internal bool ShouldSerializeText() {
-            return false;
-        }
-        
-        private bool ShouldSerializePosition() {
-            return !this.position.Equals(new Point(-1,-1));
-        }
-        
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ToString"]/*' />
-        public override string ToString() {
-            return "ListViewItem: {" + Text + "}";
-        }
-        
-        // The ListItem's state (or a SubItem's state) has changed, so invalidate the ListView control
-        internal void InvalidateListView() {
-            if (listView != null && listView.IsHandleCreated) {
+
+        internal bool ShouldSerializeText() => false;
+
+        private bool ShouldSerializePosition() => !this.position.Equals(new Point(-1, -1));
+
+        public override string ToString() => "ListViewItem: {" + Text + "}";
+
+        internal void InvalidateListView()
+        {
+            // The ListItem's state (or a SubItem's state) has changed, so invalidate the ListView control
+            if (listView != null && listView.IsHandleCreated)
+            {
                 listView.Invalidate();
             }
         }
-        
-        internal void UpdateSubItems(int index){
-            UpdateSubItems(index, SubItemCount);
-        }
 
-        internal void UpdateSubItems(int index, int oldCount){
-            if (listView != null && listView.IsHandleCreated) {
+        internal void UpdateSubItems(int index) => UpdateSubItems(index, SubItemCount);
+
+        internal void UpdateSubItems(int index, int oldCount)
+        {
+            if (listView != null && listView.IsHandleCreated)
+            {
                 int subItemCount = SubItemCount;
-                
                 int itemIndex = Index;
-                    
-                if (index != -1) {
+                if (index != -1)
+                {
                     listView.SetItemText(itemIndex, index, subItems[index].Text);
                 }
-                else {
-                    for(int i=0; i < subItemCount; i++) {
+                else
+                {
+                    for (int i = 0; i < subItemCount; i++)
+                    {
                         listView.SetItemText(itemIndex, i, subItems[i].Text);
                     }
                 }
 
-                for (int i = subItemCount; i < oldCount; i++) {
+                for (int i = subItemCount; i < oldCount; i++)
+                {
                     listView.SetItemText(itemIndex, i, string.Empty);
                 }
             }
         }
-        
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ISerializable.GetObjectData"]/*' />
-        /// <internalonly/>        
-        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) {
+
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
             Serialize(info, context);
         }
-        
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItem"]/*' />
-        [
-            TypeConverterAttribute(typeof(ListViewSubItemConverter)),
-            ToolboxItem(false),
-            DesignTimeVisible(false),
-            DefaultProperty(nameof(Text)),
-            Serializable
-        ]
-        public class ListViewSubItem {
-        
+
+        [TypeConverterAttribute(typeof(ListViewSubItemConverter))]
+        [ToolboxItem(false)]
+        [DesignTimeVisible(false)]
+        [DefaultProperty(nameof(Text))]
+        [Serializable]
+        public class ListViewSubItem
+        {
+
             [NonSerialized]
             internal ListViewItem owner;
 
             private string text;
 
-            [OptionalField(VersionAdded=2)]
+            [OptionalField(VersionAdded = 2)]
             private string name = null;
 
             private SubItemStyle style;
 
-            [OptionalField(VersionAdded=2)]
+            [OptionalField(VersionAdded = 2)]
             private object userData;
-            
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItem.ListViewSubItem"]/*' />
-            public ListViewSubItem() {
+
+            public ListViewSubItem()
+            {
             }
-                
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItem.ListViewSubItem1"]/*' />
-            public ListViewSubItem(ListViewItem owner, string text) {
+
+            public ListViewSubItem(ListViewItem owner, string text)
+            {
                 this.owner = owner;
                 this.text = text;
             }
-            
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItem.ListViewSubItem2"]/*' />
-            public ListViewSubItem(ListViewItem owner, string text, Color foreColor, Color backColor, Font font) {
+
+            public ListViewSubItem(ListViewItem owner, string text, Color foreColor, Color backColor, Font font)
+            {
                 this.owner = owner;
                 this.text = text;
-                this.style = new SubItemStyle();
-                this.style.foreColor = foreColor;
-                this.style.backColor = backColor;
-                this.style.font = font;
+                style = new SubItemStyle();
+                style.foreColor = foreColor;
+                style.backColor = backColor;
+                style.font = font;
             }
 
 
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItem.BackColor"]/*' />
-            public Color BackColor {
-                get {
-                    if (style != null && style.backColor != Color.Empty) {
+            public Color BackColor
+            {
+                get
+                {
+                    if (style != null && style.backColor != Color.Empty)
+                    {
                         return style.backColor;
                     }
-                    
-                    if (owner != null && owner.listView != null) {
+
+                    if (owner != null && owner.listView != null)
+                    {
                         return owner.listView.BackColor;
                     }
-                    
+
                     return SystemColors.Window;
                 }
-                set {
-                    if (style == null) {
+                set
+                {
+                    if (style == null)
+                    {
                         style = new SubItemStyle();
                     }
-                    
-                    if (style.backColor != value) {
+
+                    if (style.backColor != value)
+                    {
                         style.backColor = value;
-                        if (owner != null) {
-                            owner.InvalidateListView();
-                        }
+                        owner?.InvalidateListView();
                     }
                 }
             }
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItem.Bounds"]/*' />
             [Browsable(false)]
-            public Rectangle Bounds {
-                get {
-                    if(owner != null && owner.listView != null && owner.listView.IsHandleCreated) {
+            public Rectangle Bounds
+            {
+                get
+                {
+                    if (owner != null && owner.listView != null && owner.listView.IsHandleCreated)
+                    {
                         return owner.listView.GetSubItemRect(owner.Index, owner.SubItems.IndexOf(this));
-                    } else {
+                    }
+                    else
+                    {
                         return Rectangle.Empty;
                     }
                 }
             }
 
-            internal bool CustomBackColor {
-                get {
-                    return style != null && !style.backColor.IsEmpty;
+            internal bool CustomBackColor
+            {
+                get
+                {
+                    Debug.Assert(style != null, "Should have checked CustomStyle");
+                    return !style.backColor.IsEmpty;
                 }
             }
 
-            internal bool CustomFont {
-                get {
-                    return style != null && style.font != null;
+            internal bool CustomFont
+            {
+                get
+                {
+                    Debug.Assert(style != null, "Should have checked CustomStyle");
+                    return style.font != null;
                 }
             }
 
-            internal bool CustomForeColor {
-                get {
-                    return style != null && !style.foreColor.IsEmpty;
+            internal bool CustomForeColor
+            {
+                get
+                {
+                    Debug.Assert(style != null, "Should have checked CustomStyle");
+                    return !style.foreColor.IsEmpty;
                 }
             }
 
-            internal bool CustomStyle {
-                get {
-                    return style != null;
-                }
-            }
-            
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItem.Font"]/*' />
-            [
-            Localizable(true)
-            ]
-            public Font Font {
-                get {
-                    if (style != null && style.font != null) {
+            internal bool CustomStyle => style != null;
+
+            [Localizable(true)]
+            public Font Font
+            {
+                get
+                {
+                    if (style != null && style.font != null)
+                    {
                         return style.font;
                     }
-                    
-                    if (owner != null && owner.listView != null) {
+
+                    if (owner != null && owner.listView != null)
+                    {
                         return owner.listView.Font;
                     }
-                    
+
                     return Control.DefaultFont;
                 }
-                set {
-                    if (style == null) {
+                set
+                {
+                    if (style == null)
+                    {
                         style = new SubItemStyle();
                     }
-                    
-                    if (style.font != value) {
+
+                    if (style.font != value)
+                    {
                         style.font = value;
-                        if (owner != null) {
-                            owner.InvalidateListView();
-                        }
+                        owner?.InvalidateListView();
                     }
                 }
             }
-            
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItem.ForeColor"]/*' />
-            public Color ForeColor {
-                get {
-                    if (style != null && style.foreColor != Color.Empty) {
+
+            public Color ForeColor
+            {
+                get
+                {
+                    if (style != null && style.foreColor != Color.Empty)
+                    {
                         return style.foreColor;
                     }
-                    
-                    if (owner != null && owner.listView != null) {
+
+                    if (owner != null && owner.listView != null)
+                    {
                         return owner.listView.ForeColor;
                     }
-                    
+
                     return SystemColors.WindowText;
                 }
-                set {
-                    if (style == null) {
+                set
+                {
+                    if (style == null)
+                    {
                         style = new SubItemStyle();
                     }
-                    
-                    if (style.foreColor != value) {
+
+                    if (style.foreColor != value)
+                    {
                         style.foreColor = value;
-                        if (owner != null) {
-                            owner.InvalidateListView();
-                        }
+                        owner?.InvalidateListView();
                     }
                 }
             }
 
-            /// <include file='doc\ListViewSubItem.uex' path='docs/doc[@for="ListViewSubItem.Tag"]/*' />
-            [
-            SRCategory(nameof(SR.CatData)),
-            Localizable(false),
-            Bindable(true),
-            SRDescription(nameof(SR.ControlTagDescr)),
-            DefaultValue(null),
-            TypeConverter(typeof(StringConverter)),
-            ]
-            public object Tag {
-                get {
-                    return userData;
-                }
-                set {
-                    userData = value;
-                }
+            [SRCategory(nameof(SR.CatData))]
+            [Localizable(false)]
+            [Bindable(true)]
+            [SRDescription(nameof(SR.ControlTagDescr))]
+            [DefaultValue(null)]
+            [TypeConverter(typeof(StringConverter))]
+            public object Tag
+            {
+                get => userData;
+                set => userData = value;
             }
-            
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItem.Text"]/*' />
-            [
-            Localizable(true)
-            ]
-            public string Text {
-                get {
-                    return text == null ? "" : text;
-                }
-                set {
+
+            [Localizable(true)]
+            public string Text
+            {
+                get => text ?? string.Empty;
+                set
+                {
                     text = value;
-                    if (owner != null) {
-                        owner.UpdateSubItems(-1);
-                    }
+                    owner?.UpdateSubItems(-1);
                 }
             }
 
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItem.Name"]/*' />
-            [
-            Localizable(true)
-            ]
-            public string Name {
-                get {
-                    return (name == null) ? "": name;
-                }
-                set {
+            [Localizable(true)]
+            public string Name
+            {
+                get => name ?? string.Empty;
+                set
+                {
                     name = value;
-                    if (owner != null) {
-                        owner.UpdateSubItems(-1);
-                    }
+                    owner?.UpdateSubItems(-1);
                 }
             }
 
-            //
-            // Fix for Serialization Breaking change from v1.* to v2.0
-            //
-            // see http://devdiv/SpecTool/SHADOW/Documents/Whidbey/Versioning/VersionTolerantSerializationGuidelines(1.1).doc
-            //
             [OnDeserializing]
-            private void OnDeserializing(StreamingContext ctx) {
+            private void OnDeserializing(StreamingContext ctx)
+            {
             }
 
             [OnDeserialized]
             [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]
-            private void OnDeserialized(StreamingContext ctx) {
-                this.name = null;
-                this.userData = null;
+            private void OnDeserialized(StreamingContext ctx)
+            {
+                name = null;
+                userData = null;
             }
 
             [OnSerializing]
-            private void OnSerializing(StreamingContext ctx) {
+            private void OnSerializing(StreamingContext ctx)
+            {
             }
 
             [OnSerialized]
-            private void OnSerialized(StreamingContext ctx) {
+            private void OnSerialized(StreamingContext ctx)
+            {
             }
 
-            //
-            // End fix for Serialization Breaking change from v1.* to v2.0
-            //
-            
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItem.ResetStyle"]/*' />
-            public void ResetStyle() {
-                if (style != null) {
+            public void ResetStyle()
+            {
+                if (style != null)
+                {
                     style = null;
-                    if (owner != null) {
-                        owner.InvalidateListView();                                                                    
-                    }
+                    owner?.InvalidateListView();
                 }
             }
 
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItem.ToString"]/*' />
-            public override string ToString() {
-                return "ListViewSubItem: {" + Text + "}";
-            }
-            
+            public override string ToString() => "ListViewSubItem: {" + Text + "}";
+
             [Serializable]
-            private class SubItemStyle {
+            private class SubItemStyle
+            {
                 public Color backColor = Color.Empty;
                 public Color foreColor = Color.Empty;
                 public Font font = null;
-            }            
+            }
         }
-        
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItemCollection"]/*' />
-        public class ListViewSubItemCollection : IList {
-            private ListViewItem owner;
 
+        public class ListViewSubItemCollection : IList
+        {
+            private ListViewItem _owner;
 
-            /// A caching mechanism for key accessor
-            /// We use an index here rather than control so that we don't have lifetime
-            /// issues by holding on to extra references.
-            private int lastAccessedIndex = -1;
-        
+            // A caching mechanism for key accessor
+            // We use an index here rather than control so that we don't have lifetime
+            // issues by holding on to extra references.
+            private int _lastAccessedIndex = -1;
 
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItemCollection.ListViewSubItemCollection"]/*' />
             public ListViewSubItemCollection(ListViewItem owner)
             {
-                this.owner = owner ?? throw new ArgumentNullException(nameof(owner));
+                _owner = owner ?? throw new ArgumentNullException(nameof(owner));
             }
-            
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItemCollection.Count"]/*' />
-            /// <devdoc>
-            ///     Returns the total number of items within the list view.
-            /// </devdoc>
+
+            /// <summary>
+            /// Returns the total number of items within the list view.
+            /// </summary>
             [Browsable(false)]
-            public int Count {
-                get {
-                    return owner.SubItemCount;
-                }
-            }
+            public int Count => _owner.SubItemCount;
 
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewSubItemCollection.ICollection.SyncRoot"]/*' />
-            /// <internalonly/>
-            object ICollection.SyncRoot {
-                get {
-                    return this;
-                }
-            }
+            object ICollection.SyncRoot => this;
 
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewSubItemCollection.ICollection.IsSynchronized"]/*' />
-            /// <internalonly/>
-            bool ICollection.IsSynchronized {
-                get {
-                    return true;
-                }
-            }
-            
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewSubItemCollection.IList.IsFixedSize"]/*' />
-            /// <internalonly/>
-            bool IList.IsFixedSize {
-                get {
-                    return false;
-                }
-            }
-            
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItemCollection.IsReadOnly"]/*' />
-            public bool IsReadOnly {
-                get {
-                    return false;
-                }
-            }
+            bool ICollection.IsSynchronized => true;
 
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItemCollection.this"]/*' />
-            /// <devdoc>
-            ///     Returns a ListViewSubItem given it's zero based index into the ListViewSubItemCollection.
-            /// </devdoc>
-            public ListViewSubItem this[int index] {
-                get {
-                    if (index < 0 || index >= Count)
-                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+            bool IList.IsFixedSize => false;
 
-                    return owner.subItems[index];
-                }
-                set {
+            public bool IsReadOnly => false;
+
+            /// <summary>
+            /// Returns a ListViewSubItem given it's zero based index into the ListViewSubItemCollection.
+            /// </summary>
+            public ListViewSubItem this[int index]
+            {
+                get
+                {
                     if (index < 0 || index >= Count)
                     {
-                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+                    }
+
+                    return _owner.subItems[index];
+                }
+                set
+                {
+                    if (index < 0 || index >= Count)
+                    {
+                        throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
                     if (value == null)
                     {
                         throw new ArgumentNullException(nameof(value));
                     }
 
-                    owner.subItems[index] = value;
-                    owner.UpdateSubItems(index);                    
+                    _owner.subItems[index] = value;
+                    _owner.UpdateSubItems(index);
                 }
             }
-            
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewSubItemCollection.IList.this"]/*' />
-            /// <internalonly/>
-            object IList.this[int index] {
-                get {
-                    return this[index];
-                }
-                set {
-                    if (value is ListViewSubItem) {
-                        this[index] = (ListViewSubItem)value;
+
+            object IList.this[int index]
+            {
+                get => this[index];
+                set
+                {
+                    if (!(value is ListViewSubItem item))
+                    {
+                        throw new ArgumentException(SR.ListViewBadListViewSubItem, nameof(value));
                     }
-                    else {
-                        throw new ArgumentException(SR.ListViewBadListViewSubItem,"value");
-                    }
+
+                    this[index] = item;
                 }
             }
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewSubItemCollection.this"]/*' />
-            /// <devdoc>
-            ///     <para>Retrieves the child control with the specified key.</para>
-            /// </devdoc>
-            public virtual ListViewSubItem this[string key] {
-                get {
+            /// <summary>
+            /// Retrieves the child control with the specified key.
+            /// </summary>
+            public virtual ListViewSubItem this[string key]
+            {
+                get
+                {
                     // We do not support null and empty string as valid keys.
-                    if (string.IsNullOrEmpty(key)){
+                    if (string.IsNullOrEmpty(key))
+                    {
                         return null;
                     }
 
                     // Search for the key in our collection
                     int index = IndexOfKey(key);
-                    if (IsValidIndex(index)) {
-                        return this[index];
-                    }
-                    else {
+                    if (!IsValidIndex(index))
+                    {
                         return null;
                     }
 
+                    return this[index];
                 }
             }
 
@@ -1715,237 +1662,240 @@ namespace System.Windows.Forms {
                 }
 
                 EnsureSubItemSpace(1, -1);
-                item.owner = this.owner;
-                owner.subItems[owner.SubItemCount] = item;
-                owner.UpdateSubItems(owner.SubItemCount++);
-                return item;    
-            }
-            
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewSubItemCollection.Add"]/*' />
-            public ListViewSubItem Add(string text) {
-                ListViewSubItem item = new ListViewSubItem(owner, text);
-                Add(item);                
+                item.owner = _owner;
+                _owner.subItems[_owner.SubItemCount] = item;
+                _owner.UpdateSubItems(_owner.SubItemCount++);
                 return item;
             }
-            
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewSubItemCollection.Add1"]/*' />
-            public ListViewSubItem Add(string text, Color foreColor, Color backColor, Font font) {
-                ListViewSubItem item = new ListViewSubItem(owner, text, foreColor, backColor, font);
-                Add(item);                
+
+            public ListViewSubItem Add(string text)
+            {
+                ListViewSubItem item = new ListViewSubItem(_owner, text);
+                Add(item);
                 return item;
             }
-            
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewSubItemCollection.AddRange"]/*' />
-            public void AddRange(ListViewSubItem[] items) {
-                if (items == null) {
+
+            public ListViewSubItem Add(string text, Color foreColor, Color backColor, Font font)
+            {
+                ListViewSubItem item = new ListViewSubItem(_owner, text, foreColor, backColor, font);
+                Add(item);
+                return item;
+            }
+
+            public void AddRange(ListViewSubItem[] items)
+            {
+                if (items == null)
+                {
                     throw new ArgumentNullException(nameof(items));
                 }
+
                 EnsureSubItemSpace(items.Length, -1);
-                
-                foreach(ListViewSubItem item in items) {
-                    if (item != null) {
-                        owner.subItems[owner.SubItemCount++] = item;
+                foreach (ListViewSubItem item in items)
+                {
+                    if (item != null)
+                    {
+                        _owner.subItems[_owner.SubItemCount++] = item;
                     }
                 }
-                
-                owner.UpdateSubItems(-1);
+
+                _owner.UpdateSubItems(-1);
             }
-            
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewSubItemCollection.AddRange1"]/*' />
-            public void AddRange(string[] items) {
-                if (items == null) {
+
+            public void AddRange(string[] items)
+            {
+                if (items == null)
+                {
                     throw new ArgumentNullException(nameof(items));
                 }
+
                 EnsureSubItemSpace(items.Length, -1);
-                
-                foreach(string item in items) {
-                    if (item != null) {
-                        owner.subItems[owner.SubItemCount++] = new ListViewSubItem(owner, item);
+                foreach (string item in items)
+                {
+                    if (item != null)
+                    {
+                        _owner.subItems[_owner.SubItemCount++] = new ListViewSubItem(_owner, item);
                     }
                 }
-                
-                owner.UpdateSubItems(-1);
+
+                _owner.UpdateSubItems(-1);
             }
-            
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewSubItemCollection.AddRange2"]/*' />
-            public void AddRange(string[] items, Color foreColor, Color backColor, Font font) {
-                if (items == null) {
+
+            public void AddRange(string[] items, Color foreColor, Color backColor, Font font)
+            {
+                if (items == null)
+                {
                     throw new ArgumentNullException(nameof(items));
                 }
+
                 EnsureSubItemSpace(items.Length, -1);
-                
-                foreach(string item in items) {
-                    if (item != null) {
-                        owner.subItems[owner.SubItemCount++] = new ListViewSubItem(owner, item, foreColor, backColor, font);
+                foreach (string item in items)
+                {
+                    if (item != null)
+                    {
+                        _owner.subItems[_owner.SubItemCount++] = new ListViewSubItem(_owner, item, foreColor, backColor, font);
                     }
                 }
-                
-                owner.UpdateSubItems(-1);
+
+                _owner.UpdateSubItems(-1);
             }
-            
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewSubItemCollection.IList.Add"]/*' />
-            /// <internalonly/>
-            int IList.Add(object item) {
-                if (item is ListViewSubItem) {
-                    return IndexOf(Add((ListViewSubItem)item));
-                }
-                else {
+
+            int IList.Add(object item)
+            {
+                if (!(item is ListViewSubItem itemValue))
+                {
                     throw new ArgumentException(SR.ListViewSubItemCollectionInvalidArgument, nameof(item));
                 }
-            }
-            
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItemCollection.Clear"]/*' />
-            public void Clear() {
-                int oldCount = owner.SubItemCount;
-                if (oldCount > 0) {
-                    owner.SubItemCount = 0;
-                    owner.UpdateSubItems(-1, oldCount);
-                }
-            }
-            
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItemCollection.Contains"]/*' />
-            public bool Contains(ListViewSubItem subItem) {
-                return IndexOf(subItem) != -1;
-            }
-            
 
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewSubItemCollection.IList.Contains"]/*' />
-            /// <internalonly/>
-            bool IList.Contains(object subItem) {
-                if (subItem is ListViewSubItem) {
-                    return Contains((ListViewSubItem)subItem);
+                return IndexOf(Add(itemValue));
+            }
+
+            public void Clear()
+            {
+                int oldCount = _owner.SubItemCount;
+                if (oldCount > 0)
+                {
+                    _owner.SubItemCount = 0;
+                    _owner.UpdateSubItems(-1, oldCount);
                 }
-                else {
+            }
+
+            public bool Contains(ListViewSubItem subItem) => IndexOf(subItem) != -1;
+
+            bool IList.Contains(object item)
+            {
+                if (!(item is ListViewSubItem itemValue))
+                {
                     return false;
                 }
+
+                return Contains(itemValue);
             }
 
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewSubItemCollection.ContainsKey"]/*' />
-            /// <devdoc>
-            ///     <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
-            /// </devdoc>
-            public virtual bool ContainsKey(string key) {
-                return IsValidIndex(IndexOfKey(key)); 
-            }
-            
-            /// <devdoc>
-            ///     Ensures that the sub item array has the given
-            ///     capacity.  If it doesn't, it enlarges the
-            ///     array until it does.  If index is -1, additional
-            ///     space is tacked onto the end.  If it is a valid
-            ///     insertion index into the array, this will move
-            ///     the array data to accomodate the space.
-            /// </devdoc>
-            private void EnsureSubItemSpace(int size, int index) {
-            
-                // Range check subItems.
-                if (owner.SubItemCount == ListViewItem.MAX_SUBITEMS) {
+            /// <summary>
+            /// Returns true if the collection contains an item with the specified key, false otherwise.
+            /// </summary>
+            public virtual bool ContainsKey(string key) => IsValidIndex(IndexOfKey(key));
+
+            /// <summary>
+            /// Ensures that the sub item array has the given
+            /// capacity. If it doesn't, it enlarges the
+            /// array until it does. If index is -1, additional
+            /// space is tacked onto the end. If it is a valid
+            /// insertion index into the array, this will move
+            /// the array data to accomodate the space.
+            /// </summary>
+            private void EnsureSubItemSpace(int size, int index)
+            {
+                if (_owner.SubItemCount == ListViewItem.MaxSubItems)
+                {
                     throw new InvalidOperationException(SR.ErrorCollectionFull);
                 }
-                
-                if (owner.subItems == null || owner.SubItemCount + size > owner.subItems.Length) {
-                
-                    // must grow array.  Don't do it just by size, though;
+
+                if (_owner.subItems == null || _owner.SubItemCount + size > _owner.subItems.Length)
+                {
+                    // Must grow array. Don't do it just by size, though;
                     // chunk it for efficiency.
-                    
-                    if (owner.subItems == null) {
+                    if (_owner.subItems == null)
+                    {
                         int newSize = (size > 4) ? size : 4;
-                        owner.subItems = new ListViewSubItem[newSize];
+                        _owner.subItems = new ListViewSubItem[newSize];
                     }
-                    else {
-                        int newSize = owner.subItems.Length * 2;
-                        while(newSize - owner.SubItemCount < size) {
+                    else
+                    {
+                        int newSize = _owner.subItems.Length * 2;
+                        while (newSize - _owner.SubItemCount < size)
+                        {
                             newSize *= 2;
                         }
-                        
+
                         ListViewSubItem[] newItems = new ListViewSubItem[newSize];
-                        
+
                         // Now, when copying to the member variable, use index
                         // if it was provided.
-                        //
-                        if (index != -1) {
-                            Array.Copy(owner.subItems, 0, newItems, 0, index);
-                            Array.Copy(owner.subItems, index, newItems, index + size, owner.SubItemCount - index);
+                        if (index != -1)
+                        {
+                            Array.Copy(_owner.subItems, 0, newItems, 0, index);
+                            Array.Copy(_owner.subItems, index, newItems, index + size, _owner.SubItemCount - index);
                         }
-                        else {
-                            Array.Copy(owner.subItems, newItems, owner.SubItemCount);
+                        else
+                        {
+                            Array.Copy(_owner.subItems, newItems, _owner.SubItemCount);
                         }
-                        owner.subItems = newItems;
+                        _owner.subItems = newItems;
                     }
                 }
-                else {
-                
-                    // We had plenty of room.  Just move the items if we need to
-                    //
-                    if (index != -1) {
-                        for(int i = owner.SubItemCount - 1; i >= index; i--) {
-                            owner.subItems[i + size] = owner.subItems[i];
+                else
+                {
+                    // We had plenty of room. Just move the items if we need to
+                    if (index != -1)
+                    {
+                        for (int i = _owner.SubItemCount - 1; i >= index; i--)
+                        {
+                            _owner.subItems[i + size] = _owner.subItems[i];
                         }
                     }
                 }
             }
-            
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItemCollection.IndexOf"]/*' />
-            public int IndexOf(ListViewSubItem subItem) {
-                for(int index=0; index < Count; ++index) {
-                    if (owner.subItems[index] == subItem) {
+
+            public int IndexOf(ListViewSubItem subItem)
+            {
+                for (int index = 0; index < Count; ++index)
+                {
+                    if (_owner.subItems[index] == subItem)
+                    {
                         return index;
                     }
-                }    
+                }
+
                 return -1;
             }
-            
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewSubItemCollection.IList.IndexOf"]/*' />
-            /// <internalonly/>
-            int IList.IndexOf(object subItem) {
-                if (subItem is ListViewSubItem) {
-                    return IndexOf((ListViewSubItem)subItem);
-                }
-                else {
+
+            int IList.IndexOf(object subItem)
+            {
+                if (!(subItem is ListViewSubItem subItemValue))
+                {
                     return -1;
                 }
-            }
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewSubItemCollection.this"]/*' />
-            /// <devdoc>
-            ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
-            /// </devdoc>
-            public virtual int  IndexOfKey(string key) {
-                  // Step 0 - Arg validation
-                  if (string.IsNullOrEmpty(key)){
-                        return -1; // we dont support empty or null keys.
-                  }
 
-                // step 1 - check the last cached item
-                if (IsValidIndex(lastAccessedIndex))
+                return IndexOf(subItemValue);
+            }
+
+            /// <summary>
+            /// The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.
+            /// </summary>
+            public virtual int IndexOfKey(string key)
+            {
+                if (string.IsNullOrEmpty(key))
                 {
-                    if (WindowsFormsUtils.SafeCompareStrings(this[lastAccessedIndex].Name, key, /* ignoreCase = */ true)) {
-                        return lastAccessedIndex;
+                    return -1;
+                }
+
+                if (IsValidIndex(_lastAccessedIndex))
+                {
+                    if (WindowsFormsUtils.SafeCompareStrings(this[_lastAccessedIndex].Name, key, ignoreCase: true))
+                    {
+                        return _lastAccessedIndex;
                     }
                 }
 
-                // step 2 - search for the item
-                for (int i = 0; i < this.Count; i ++) {
-                    if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, /* ignoreCase = */ true)) {
-                        lastAccessedIndex = i;
+                for (int i = 0; i < Count; i++)
+                {
+                    if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, ignoreCase: true))
+                    {
+                        _lastAccessedIndex = i;
                         return i;
                     }
                 }
 
-                // step 3 - we didn't find it.  Invalidate the last accessed index and return -1.
-                lastAccessedIndex = -1;
+                _lastAccessedIndex = -1;
                 return -1;
             }
 
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewSubItemCollection.IsValidIndex"]/*' />
-            /// <devdoc>
-            ///     <para>Determines if the index is valid for the collection.</para>
-            /// </devdoc>
-            /// <internalonly/> 
-            private bool IsValidIndex(int index) {
-                return ((index >= 0) && (index < this.Count));
-            }
-            
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItemCollection.Insert"]/*' />
+            /// <summary>
+            /// Determines if the index is valid for the collection.
+            /// </summary>
+            private bool IsValidIndex(int index) => ((index >= 0) && (index < Count));
+
             public void Insert(int index, ListViewSubItem item)
             {
                 if (index < 0 || index > Count)
@@ -1956,87 +1906,90 @@ namespace System.Windows.Forms {
                 {
                     throw new ArgumentNullException(nameof(item));
                 }
-                
-                item.owner = owner;
-                
+
+                item.owner = _owner;
+
                 EnsureSubItemSpace(1, index);
-            
+
                 // Insert new item
-                owner.subItems[index] = item;
-                owner.SubItemCount++;
-                owner.UpdateSubItems(-1);
+                _owner.subItems[index] = item;
+                _owner.SubItemCount++;
+                _owner.UpdateSubItems(-1);
             }
-            
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewSubItemCollection.IList.Insert"]/*' />
-            /// <internalonly/>
-            void IList.Insert(int index, object item) {
-                if (item is ListViewSubItem) {
-                    Insert(index, (ListViewSubItem)item);
+
+            void IList.Insert(int index, object item)
+            {
+                if (!(item is ListViewSubItem itemValue))
+                {
+                    throw new ArgumentException(SR.ListViewBadListViewSubItem, nameof(item));
                 }
-                else {
-                    throw new ArgumentException(SR.ListViewBadListViewSubItem,"item");
-                }
+
+                Insert(index, (ListViewSubItem)item);
             }
-            
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItemCollection.Remove"]/*' />
-            public void Remove(ListViewSubItem item) {
+
+            public void Remove(ListViewSubItem item)
+            {
                 int index = IndexOf(item);
-                if (index != -1) {                    
+                if (index != -1)
+                {
                     RemoveAt(index);
                 }
             }
-            
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewSubItemCollection.IList.Remove"]/*' />
-            /// <internalonly/>
-            void IList.Remove(object item) {
-                if (item is ListViewSubItem) {
-                    Remove((ListViewSubItem)item);
-                }                
+
+            void IList.Remove(object item)
+            {
+                if (item is ListViewSubItem itemValue)
+                {
+                    Remove(itemValue);
+                }
             }
-            
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItemCollection.RemoveAt"]/*' />
-            public void RemoveAt(int index) {
-            
-                if (index < 0 || index >= Count) {
+
+            public void RemoveAt(int index)
+            {
+                if (index < 0 || index >= Count)
+                {
                     throw new ArgumentOutOfRangeException(nameof(index));
                 }
-                
+
                 // Collapse the items
-                for (int i = index + 1; i < owner.SubItemCount; i++) {
-                    owner.subItems[i - 1] = owner.subItems[i];
+                for (int i = index + 1; i < _owner.SubItemCount; i++)
+                {
+                    _owner.subItems[i - 1] = _owner.subItems[i];
                 }
 
-                int oldCount = owner.SubItemCount;
-                owner.SubItemCount--;
-                owner.subItems[owner.SubItemCount] = null;
-                owner.UpdateSubItems(-1, oldCount);
+                int oldCount = _owner.SubItemCount;
+                _owner.SubItemCount--;
+                _owner.subItems[_owner.SubItemCount] = null;
+                _owner.UpdateSubItems(-1, oldCount);
             }
 
-          /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewSubItemCollection.RemoveByKey"]/*' />
-          /// <devdoc>
-          ///     <para>Removes the child control with the specified key.</para>
-          /// </devdoc>
-          public virtual void RemoveByKey(string key) {
+            /// <summary>
+            /// Removes the child control with the specified key.
+            /// </summary>
+            public virtual void RemoveByKey(string key)
+            {
                 int index = IndexOfKey(key);
-                if (IsValidIndex(index)) {
-                    RemoveAt(index); 
-                 }
-           }
-
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewSubItemCollection.ICollection.CopyTo"]/*' />
-            /// <internalonly/>
-            void ICollection.CopyTo(Array dest, int index) {
-                if (Count > 0) {
-                    System.Array.Copy(owner.subItems, 0, dest, index, Count);           
+                if (IsValidIndex(index))
+                {
+                    RemoveAt(index);
                 }
             }
 
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItemCollection.GetEnumerator"]/*' />
-            public IEnumerator GetEnumerator() {
-                if (owner.subItems != null) {
-                    return new WindowsFormsUtils.ArraySubsetEnumerator(owner.subItems, owner.SubItemCount);
-                }   
-                else 
+            void ICollection.CopyTo(Array dest, int index)
+            {
+                if (Count > 0)
+                {
+                    Array.Copy(_owner.subItems, 0, dest, index, Count);
+                }
+            }
+
+            public IEnumerator GetEnumerator()
+            {
+                if (_owner.subItems != null)
+                {
+                    return new WindowsFormsUtils.ArraySubsetEnumerator(_owner.subItems, _owner.SubItemCount);
+                }
+                else
                 {
                     return new ListViewSubItem[0].GetEnumerator();
                 }

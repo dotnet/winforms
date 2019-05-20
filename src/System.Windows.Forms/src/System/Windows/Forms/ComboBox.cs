@@ -7,7 +7,6 @@ namespace System.Windows.Forms {
     using Accessibility;
     using System.Runtime.Serialization.Formatters;
     using System.Threading;
-    using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
     using System.Diagnostics;
     using System;
@@ -27,15 +26,14 @@ namespace System.Windows.Forms {
     using System.Text;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Displays an editing field and a list, allowing the user to select from the
     ///       list or to enter new text. Displays only the editing field until the user
     ///       explicitly displays the list.
     ///
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -113,31 +111,28 @@ namespace System.Windows.Forms {
         // thus changing the windowText...
         // hence we should Fire the TextChanged event in such a scenario..
         // The string below is used for checking the window Text before and after the dropdown.
-        private string currentText = "";
+        private string currentText = string.Empty;
         private string lastTextChangedValue;
         private bool dropDown;
         private AutoCompleteDropDownFinder finder = new AutoCompleteDropDownFinder();
 
         private bool selectedValueChangedFired;
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.autoCompleteMode"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This stores the value for the autocomplete mode which can be either
         ///     None, AutoSuggest, AutoAppend or AutoSuggestAppend.
-        /// </devdoc>
+        /// </summary>
         private AutoCompleteMode autoCompleteMode = AutoCompleteMode.None;
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.autoCompleteSource"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This stores the value for the autoCompleteSource mode which can be one of the values
         ///     from AutoCompleteSource enum.
-        /// </devdoc>
+        /// </summary>
         private AutoCompleteSource autoCompleteSource = AutoCompleteSource.None;
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.autoCompleteCustomSource"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This stores the custom StringCollection required for the autoCompleteSource when its set to CustomSource.
-        /// </devdoc>
+        /// </summary>
         private AutoCompleteStringCollection autoCompleteCustomSource;
         private StringSource stringSource;
         private bool fromHandleCreate = false;
@@ -151,11 +146,10 @@ namespace System.Windows.Forms {
         // focusing on the list item after hiding the list.
         private bool dropDownWillBeClosed = false;
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ComboBox"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new ComboBox control.  The default style for the combo is
         ///     a regular DropDown Combo.
-        /// </devdoc>
+        /// </summary>
         public ComboBox() {
             SetStyle(ControlStyles.UserPaint |
                      ControlStyles.UseTextForAccessibility |
@@ -167,12 +161,11 @@ namespace System.Windows.Forms {
             SetState2(STATE2_USEPREFERREDSIZECACHE, true);  
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.AutoCompleteMode"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This is the AutoCompleteMode which can be either
         ///     None, AutoSuggest, AutoAppend or AutoSuggestAppend.
         ///     This property in conjunction with AutoCompleteSource enables the AutoComplete feature for ComboBox.
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(AutoCompleteMode.None),
         SRDescription(nameof(SR.ComboBoxAutoCompleteModeDescr)),
@@ -204,12 +197,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.AutoCompleteSource"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This is the AutoCompleteSource which can be one of the
         ///     values from AutoCompleteSource enumeration.
         ///     This property in conjunction with AutoCompleteMode enables the AutoComplete feature for ComboBox.
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(AutoCompleteSource.None),
         SRDescription(nameof(SR.ComboBoxAutoCompleteSourceDescr)),
@@ -249,11 +241,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.AutoCompleteCustomSource"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This is the AutoCompleteCustomSource which is custom StringCollection used when the
         ///     AutoCompleteSource is CustomSource.
-        /// </devdoc>
+        /// </summary>
         [
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
         Localizable(true),
@@ -286,11 +277,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.BackColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The background color of this control. This is an ambient property and
         ///     will always return a non-null value.
-        /// </devdoc>
+        /// </summary>
         public override Color BackColor {
             get {
                 if (ShouldSerializeBackColor()) {
@@ -305,7 +295,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.BackgroundImage"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
             get {
@@ -316,7 +305,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.BackgroundImageLayout"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -327,28 +315,16 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.BackgroundImageChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
-            remove {
-                base.BackgroundImageChanged -= value;
-            }
+            add => base.BackgroundImageChanged += value;
+            remove => base.BackgroundImageChanged -= value;
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.BackgroundImageLayoutChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
-            remove {
-                base.BackgroundImageLayoutChanged -= value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
+            remove => base.BackgroundImageLayoutChanged -= value;
         }
 
         internal ChildAccessibleObject ChildEditAccessibleObject {
@@ -382,14 +358,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.CreateParams"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the parameters needed to create the handle.  Inheriting classes
         ///     can override this to provide extra functionality.  They should not,
         ///     however, forget to call base.CreateParams() first to get the struct
         ///     filled up with the basic info.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected override CreateParams CreateParams {
             get {
                 CreateParams cp = base.CreateParams;
@@ -427,22 +401,20 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DefaultSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
+        /// </summary>
         protected override Size DefaultSize {
             get {
                 return new Size(121, PreferredHeight);
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DataSource"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The ListSource to consume as this ListBox's source of data.
         ///     When set, a user can not modify the Items collection.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatData)),
         DefaultValue(null),
@@ -460,11 +432,10 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DrawMode"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the value of the DrawMode property.  The DrawMode property
         ///     controls whether the control is drawn by Windows or by the user.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(DrawMode.Normal),
@@ -494,10 +465,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DropDownWidth"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the width of the drop down box in a combo box.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.ComboBoxDropDownWidthDescr))
@@ -517,7 +487,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value < 1) {
-                    throw new ArgumentOutOfRangeException(nameof(DropDownWidth), string.Format(SR.InvalidArgument, "DropDownWidth", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(DropDownWidth), value));
                 }
                 if (Properties.GetInteger(PropDropDownWidth) != value) {
                     Properties.SetInteger(PropDropDownWidth, value);
@@ -529,10 +499,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DropDownHeight"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Sets the Height of the drop down box in a combo box.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.ComboBoxDropDownHeightDescr)),
@@ -552,7 +521,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 1) {
-                    throw new ArgumentOutOfRangeException(nameof(DropDownHeight), string.Format(SR.InvalidArgument, "DropDownHeight", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(DropDownHeight), value));
                 }
                 if (Properties.GetInteger(PropDropDownHeight) != value) {
                     Properties.SetInteger(PropDropDownHeight, value);
@@ -564,10 +533,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DroppedDown"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Indicates whether the DropDown of the combo is  currently dropped down.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -593,14 +561,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.FlatStyle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or
         ///       sets
         ///       the flat style appearance of the button control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(FlatStyle.Standard),
@@ -621,10 +588,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.Focused"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns true if this control has focus.
-        /// </devdoc>
+        /// </summary>
         public override bool Focused {
             get {
                 if (base.Focused) return true;
@@ -633,12 +599,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ForeColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the foreground color of the control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override Color ForeColor {
             get {
                 if (ShouldSerializeForeColor()) {
@@ -653,13 +618,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.IntegralHeight"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Indicates if the combo should avoid showing partial Items.  If so,
         ///     then only full items will be displayed, and the list portion will be resized
         ///     to prevent partial items from being shown.  Otherwise, they will be
         ///     shown
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
@@ -679,14 +643,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ItemHeight"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the height of an item in the combo box. When drawMode is Normal
         ///     or OwnerDrawFixed, all items have the same height. When drawMode is
         ///     OwnerDrawVariable, this method returns the height that will be given
         ///     to new items added to the combo box. To determine the actual height of
         ///     an item, use the GetItemHeight() method with an integer parameter.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
@@ -722,7 +685,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value < 1) {
-                    throw new ArgumentOutOfRangeException(nameof(ItemHeight), string.Format(SR.InvalidArgument, "ItemHeight", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(ItemHeight), value));
                 }
 
                 ResetHeightCache();
@@ -736,10 +699,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.Items"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Collection of the items contained in this ComboBox.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatData)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
@@ -771,11 +733,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.MaxDropDownItems"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The maximum number of items to be shown in the dropdown portion
         ///     of the ComboBox.  This number can be between 1 and 100.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(8),
@@ -788,7 +749,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 1 || value > 100) {
-                    throw new ArgumentOutOfRangeException(nameof(MaxDropDownItems), string.Format(SR.InvalidBoundArgument, "MaxDropDownItems", (value).ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture), (100).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(MaxDropDownItems), value, 1, 100));
                 }
                 maxDropDownItems = (short)value;
             }
@@ -808,11 +769,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.MaxLength"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The maximum length of the text the user may type into the edit control
         ///     of a combo box.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(0),
@@ -832,10 +792,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.MouseIsOver"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     If the mouse is over the combobox, draw selection rect.
-        /// </devdoc>
+        /// </summary>
         internal bool MouseIsOver {
             get { return mouseOver; }
             set {
@@ -852,7 +811,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.Padding"]/*' />
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
@@ -868,16 +826,14 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add { base.PaddingChanged += value; }
-            remove { base.PaddingChanged -= value; }
-        }
+            add => base.PaddingChanged += value; 
+            remove => base.PaddingChanged -= value; }
             
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.PreferredHeight"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     ApplySizeConstraints calls into this method when DropDownStyles is DropDown and DropDownList.
         ///     This causes PreferredSize to be bounded by PreferredHeight in these two cases only.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -990,12 +946,11 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SelectedIndex"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The [zero based] index of the currently selected item in the combos list.
         ///     Note If the value of index is -1, then the ComboBox is
         ///     set to have no selection.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -1019,7 +974,7 @@ namespace System.Windows.Forms {
                     }
 
                     if (value < -1 || value >= itemCount) {
-                        throw new ArgumentOutOfRangeException(nameof(SelectedIndex), string.Format(SR.InvalidArgument, "SelectedIndex", (value).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SelectedIndex), value));
                     }
 
                     if (IsHandleCreated) {
@@ -1042,11 +997,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SelectedItem"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The handle to the object that is currently selected in the
         ///     combos list.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         Bindable(true),
@@ -1075,12 +1029,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SelectedText"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The selected text in the edit component of the ComboBox. If the
         ///     ComboBox has ComboBoxStyle.DROPDOWNLIST, the return is an empty
         ///     string ("").
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -1100,17 +1053,16 @@ namespace System.Windows.Forms {
                     if (IsHandleCreated) {
                         Debug.Assert(childEdit != null);
                         if (childEdit != null) {
-                            UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), NativeMethods.EM_REPLACESEL, NativeMethods.InvalidIntPtr, str);
+                            UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), Interop.EditMessages.EM_REPLACESEL, NativeMethods.InvalidIntPtr, str);
                         }
                     }
                 }
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SelectionLength"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The length, in characters, of the selection in the editbox.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -1129,10 +1081,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SelectionStart"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The [zero-based] index of the first character in the current text selection.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -1146,16 +1097,15 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException(nameof(SelectionStart), string.Format(SR.InvalidArgument, "SelectionStart", value.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SelectionStart), value));
                 }
                 Select(value, SelectionLength);
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.Sorted"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Indicates if the Combos list is sorted or not.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -1178,11 +1128,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DropDownStyle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The type of combo that we are right now.  The value would come
         ///     from the System.Windows.Forms.ComboBoxStyle enumeration.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(ComboBoxStyle.DropDown),
@@ -1229,7 +1178,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.Text"]/*' />
         [
         Localizable(true),
         Bindable(true)
@@ -1338,11 +1286,7 @@ namespace System.Windows.Forms {
             this.lastTextChangedValue = text;
         }
 
-        internal override bool SupportsUiaProviders {
-            get {
-                return AccessibilityImprovements.Level3;
-            }
-        }
+        internal override bool SupportsUiaProviders => true;
 
         // Returns true if using System AutoComplete
         private bool SystemAutoCompleteEnabled {
@@ -1352,42 +1296,25 @@ namespace System.Windows.Forms {
         }
 
         // Prevent this event from being displayed in the Property Grid.
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DoubleClick"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DoubleClick {
-            add {
-                base.DoubleClick += value;
-            }
-            remove {
-                base.DoubleClick -= value;
-            }
+            add => base.DoubleClick += value;
+            remove => base.DoubleClick -= value;
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DrawItem"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.drawItemEventDescr))]
         public event DrawItemEventHandler DrawItem {
-            add {
-                Events.AddHandler(EVENT_DRAWITEM, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_DRAWITEM, value);
-            }
+            add => Events.AddHandler(EVENT_DRAWITEM, value);
+            remove => Events.RemoveHandler(EVENT_DRAWITEM, value);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DropDown"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxOnDropDownDescr))]
         public event EventHandler DropDown {
-            add {
-                Events.AddHandler(EVENT_DROPDOWN, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_DROPDOWN, value);
-            }
+            add => Events.AddHandler(EVENT_DROPDOWN, value);
+            remove => Events.RemoveHandler(EVENT_DROPDOWN, value);
         }
 
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.MeasureItem"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.measureItemEventDescr))]
         public event MeasureItemEventHandler MeasureItem {
             add {
@@ -1401,93 +1328,60 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SelectedIndexChanged"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
         public event EventHandler SelectedIndexChanged {
-            add {
-                Events.AddHandler(EVENT_SELECTEDINDEXCHANGED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_SELECTEDINDEXCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_SELECTEDINDEXCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_SELECTEDINDEXCHANGED, value);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SelectionChangeCommitted"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.selectionChangeCommittedEventDescr))]
         public event EventHandler SelectionChangeCommitted {
-            add {
-                Events.AddHandler(EVENT_SELECTIONCHANGECOMMITTED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_SELECTIONCHANGECOMMITTED, value);
-            }
+            add => Events.AddHandler(EVENT_SELECTIONCHANGECOMMITTED, value);
+            remove => Events.RemoveHandler(EVENT_SELECTIONCHANGECOMMITTED, value);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DropDownStyleChanged"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxDropDownStyleChangedDescr))]
         public event EventHandler DropDownStyleChanged {
-            add {
-                Events.AddHandler(EVENT_DROPDOWNSTYLE, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_DROPDOWNSTYLE, value);
-            }
+            add => Events.AddHandler(EVENT_DROPDOWNSTYLE, value);
+            remove => Events.RemoveHandler(EVENT_DROPDOWNSTYLE, value);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnPaint"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     ComboBox Onpaint.
-        /// </devdoc>
-        /// <internalonly/><hideinheritance/>
+        /// </summary>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
-            add {
-                base.Paint += value;
-            }
-            remove {
-                base.Paint -= value;
-            }
+            add => base.Paint += value;
+            remove => base.Paint -= value;
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.TextUpdate"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>This will fire the TextUpdate Event on the ComboBox. This events fires when the Combobox gets the
         ///          CBN_EDITUPDATE notification.
         //     </para>
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.TextUpdate"]/*' />
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxOnTextUpdateDescr))]
         public event EventHandler TextUpdate {
-            add {
-                Events.AddHandler(EVENT_TEXTUPDATE, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_TEXTUPDATE, value);
-            }
+            add => Events.AddHandler(EVENT_TEXTUPDATE, value);
+            remove => Events.RemoveHandler(EVENT_TEXTUPDATE, value);
         }
 
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DropDownClosed"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     <para>This will fire the DropDownClosed Event on the ComboBox. This events fires when the Combobox gets the
         ///          CBN_CLOSEUP notification. This happens when the DropDown closes.
         //      </para>
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DropDownClosed"]/*' />
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxOnDropDownClosedDescr))]
         public event EventHandler DropDownClosed {
-            add {
-                Events.AddHandler(EVENT_DROPDOWNCLOSED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_DROPDOWNCLOSED, value);
-            }
+            add => Events.AddHandler(EVENT_DROPDOWNCLOSED, value);
+            remove => Events.RemoveHandler(EVENT_DROPDOWNCLOSED, value);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.AddItemsCore"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Performs the work of adding the specified items to the combobox
-        /// </devdoc>
+        /// </summary>
         [Obsolete("This method has been deprecated.  There is no replacement.  http://go.microsoft.com/fwlink/?linkid=14202")]
         protected virtual void AddItemsCore(object[] value) {
             int count = value == null ? 0 : value.Length;
@@ -1504,13 +1398,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.BeginUpdate"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Disables redrawing of the combo box. A call to beginUpdate() must be
         ///     balanced by a following call to endUpdate(). Following a call to
         ///     beginUpdate(), any redrawing caused by operations performed on the
         ///     combo box is deferred until the call to endUpdate().
-        /// </devdoc>
+        /// </summary>
         public void BeginUpdate() {
             updateCount++;
             BeginUpdateInternal();
@@ -1522,32 +1415,23 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level3) {
-                return new ComboBoxUiaProvider(this);
-            }
-            else if (AccessibilityImprovements.Level1) {
-                return new ComboBoxExAccessibleObject(this);
-            }
-            else {
-                return new ComboBoxAccessibleObject(this);
-            }
+            return new ComboBoxAccessibleObject(this);
         }
 
-         /// <devdoc>
-        /// </devdoc>
+         /// <summary>
+        /// </summary>
         internal bool UpdateNeeded()
         {
             return (updateCount == 0);
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     This procedure takes in the message, converts the Edit handle coordinates into Combo Box Coordinates
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         internal Point EditToComboboxMapping(Message m) {
             if (childEdit == null) {
                 return new Point(0, 0);
@@ -1571,15 +1455,14 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Subclassed window procedure for the edit and list child controls of the
         ///     combo box.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void ChildWndProc(ref Message m) {
 
             switch (m.Msg) {
-                case NativeMethods.WM_CHAR:
+                case Interop.WindowMessages.WM_CHAR:
                     if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == childListBox.Handle) {
                         DefChildWndProc(ref m);
                     }
@@ -1592,7 +1475,7 @@ namespace System.Windows.Forms {
                         }
                     }
                     break;
-                case NativeMethods.WM_SYSCHAR:
+                case Interop.WindowMessages.WM_SYSCHAR:
                     if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == childListBox.Handle) {
                         DefChildWndProc(ref m);
                     }
@@ -1605,8 +1488,8 @@ namespace System.Windows.Forms {
                         }
                     }
                     break;
-                case NativeMethods.WM_KEYDOWN:
-                case NativeMethods.WM_SYSKEYDOWN:
+                case Interop.WindowMessages.WM_KEYDOWN:
+                case Interop.WindowMessages.WM_SYSKEYDOWN:
                     if (SystemAutoCompleteEnabled && !ACNativeWindow.AutoCompleteActive) {
                         finder.FindDropDowns(false);
                     }
@@ -1636,12 +1519,12 @@ namespace System.Windows.Forms {
                     }
                     break;
 
-                case NativeMethods.WM_INPUTLANGCHANGE:
+                case Interop.WindowMessages.WM_INPUTLANGCHANGE:
                     DefChildWndProc( ref m ); 
                     break;
 
-                case NativeMethods.WM_KEYUP:
-                case NativeMethods.WM_SYSKEYUP:
+                case Interop.WindowMessages.WM_KEYUP:
+                case Interop.WindowMessages.WM_SYSKEYUP:
                     if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == childListBox.Handle) {
                         DefChildWndProc(ref m);
                     }
@@ -1658,7 +1541,7 @@ namespace System.Windows.Forms {
                     }
 
                     break;
-                case NativeMethods.WM_KILLFOCUS:
+                case Interop.WindowMessages.WM_KILLFOCUS:
                     // Consider - If we dont' have a childwndproc, then we don't get here, so we don't 
                     // update the cache. Do we need to? This happens when we have a DropDownList.
                     if (!DesignMode) {
@@ -1677,7 +1560,7 @@ namespace System.Windows.Forms {
                     }
 
                     break;
-                case NativeMethods.WM_SETFOCUS:
+                case Interop.WindowMessages.WM_SETFOCUS:
 
                     // Consider - If we dont' have a childwndproc, then we don't get here, so we don't 
                     // set the status. Do we need to? This happens when we have a DropDownList.
@@ -1686,7 +1569,7 @@ namespace System.Windows.Forms {
                     }
 
                     if (!HostedInWin32DialogManager) {
-                        IContainerControl c = GetContainerControlInternal();
+                        IContainerControl c = GetContainerControl();
                         if (c != null) {
                             ContainerControl container = c as ContainerControl;
                             if (container != null) {
@@ -1710,14 +1593,14 @@ namespace System.Windows.Forms {
                     }
                     break;
 
-                case NativeMethods.WM_SETFONT:
+                case Interop.WindowMessages.WM_SETFONT:
                     DefChildWndProc(ref m);
                     if (childEdit != null && m.HWnd == childEdit.Handle) {
-                        UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), NativeMethods.EM_SETMARGINS,
+                        UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), Interop.EditMessages.EM_SETMARGINS,
                                                   NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN, 0);
                     }
                     break;
-                case NativeMethods.WM_LBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
                     //the Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP...
                     //sequence for doubleclick...
                     //Set MouseEvents...
@@ -1733,7 +1616,7 @@ namespace System.Windows.Forms {
                     OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, Ptlc.X, Ptlc.Y, 0));
                     break;
 
-                case NativeMethods.WM_MBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_MBUTTONDBLCLK:
                     //the Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP...
                     //sequence for doubleclick...
                     //Set MouseEvents...
@@ -1749,7 +1632,7 @@ namespace System.Windows.Forms {
                     OnMouseDown(new MouseEventArgs(MouseButtons.Middle, 1, Ptmc.X, Ptmc.Y, 0));
                     break;
 
-                case NativeMethods.WM_RBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_RBUTTONDBLCLK:
                     //the Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP...
                     //sequence for doubleclick...
                     //Set MouseEvents...
@@ -1765,7 +1648,7 @@ namespace System.Windows.Forms {
                     OnMouseDown(new MouseEventArgs(MouseButtons.Right, 1, Ptrc.X, Ptrc.Y, 0));
                     break;
 
-                case NativeMethods.WM_LBUTTONDOWN:
+                case Interop.WindowMessages.WM_LBUTTONDOWN:
                     mousePressed = true;
                     mouseEvents = true;
                     //set the mouse capture .. this is the Child Wndproc..
@@ -1778,7 +1661,7 @@ namespace System.Windows.Forms {
 
                     OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, Ptl.X, Ptl.Y, 0));
                     break;
-                case NativeMethods.WM_LBUTTONUP:
+                case Interop.WindowMessages.WM_LBUTTONUP:
                     // Get the mouse location
                     //
                     NativeMethods.RECT r = new NativeMethods.RECT();
@@ -1816,7 +1699,7 @@ namespace System.Windows.Forms {
 
                     OnMouseUp(new MouseEventArgs(MouseButtons.Left, 1, pt.X, pt.Y, 0));
                     break;
-                case NativeMethods.WM_MBUTTONDOWN:
+                case Interop.WindowMessages.WM_MBUTTONDOWN:
                     mousePressed = true;
                     mouseEvents = true;
                     //set the mouse capture .. this is the Child Wndproc..
@@ -1829,7 +1712,7 @@ namespace System.Windows.Forms {
 
                     OnMouseDown(new MouseEventArgs(MouseButtons.Middle, 1, P.X, P.Y, 0));
                     break;
-                case NativeMethods.WM_RBUTTONDOWN:
+                case Interop.WindowMessages.WM_RBUTTONDOWN:
                     mousePressed = true;
                     mouseEvents = true;
 
@@ -1847,7 +1730,7 @@ namespace System.Windows.Forms {
 
                     OnMouseDown(new MouseEventArgs(MouseButtons.Right, 1, Pt.X, Pt.Y, 0));
                     break;
-                case NativeMethods.WM_MBUTTONUP:
+                case Interop.WindowMessages.WM_MBUTTONUP:
                     mousePressed = false;
                     mouseEvents = false;
                     //set the mouse capture .. this is the Child Wndproc..
@@ -1856,7 +1739,7 @@ namespace System.Windows.Forms {
                     DefChildWndProc(ref m);
                     OnMouseUp(new MouseEventArgs(MouseButtons.Middle, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
                     break;
-                case NativeMethods.WM_RBUTTONUP:
+                case Interop.WindowMessages.WM_RBUTTONUP:
                     mousePressed = false;
                     mouseEvents = false;
                     //set the mouse capture .. this is the Child Wndproc..
@@ -1871,17 +1754,17 @@ namespace System.Windows.Forms {
                     OnMouseUp(new MouseEventArgs(MouseButtons.Right, 1, ptRBtnUp.X, ptRBtnUp.Y, 0));
                     break;
 
-                case NativeMethods.WM_CONTEXTMENU:
+                case Interop.WindowMessages.WM_CONTEXTMENU:
                     // Forward context menu messages to the parent control
                     if (this.ContextMenu != null || this.ContextMenuStrip != null) {
-                        UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.WM_CONTEXTMENU, m.WParam, m.LParam);
+                        UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_CONTEXTMENU, m.WParam, m.LParam);
                     }
                     else {
                         DefChildWndProc(ref m);
                     }
                     break;
 
-                case NativeMethods.WM_MOUSEMOVE:
+                case Interop.WindowMessages.WM_MOUSEMOVE:
                     Point point = EditToComboboxMapping(m);
                     //Call the DefWndProc() so that mousemove messages get to the windows edit
                     //
@@ -1890,7 +1773,7 @@ namespace System.Windows.Forms {
                     OnMouseMove(new MouseEventArgs(MouseButtons, 0, point.X, point.Y, 0));
                     break;
 
-                case NativeMethods.WM_SETCURSOR:
+                case Interop.WindowMessages.WM_SETCURSOR:
                     if (Cursor != DefaultCursor && childEdit != null && m.HWnd == childEdit.Handle && NativeMethods.Util.LOWORD(m.LParam) == NativeMethods.HTCLIENT) {
                         Cursor.CurrentInternal = Cursor;
                     }
@@ -1899,7 +1782,7 @@ namespace System.Windows.Forms {
                     }
                     break;
 
-                case NativeMethods.WM_MOUSELEAVE:
+                case Interop.WindowMessages.WM_MOUSELEAVE:
                     DefChildWndProc(ref m);
                     OnMouseLeaveInternal(EventArgs.Empty);
                     break;
@@ -1936,15 +1819,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         private void DefChildWndProc(ref Message m) {
             if (childEdit != null) {
                 NativeWindow childWindow;
                 if (m.HWnd == childEdit.Handle) {
                     childWindow = childEdit;
-                } else if (AccessibilityImprovements.Level3 && m.HWnd == dropDownHandle) {
+                } else if (m.HWnd == dropDownHandle) {
                     childWindow = childDropDown;
                 }
                 else {
@@ -1960,7 +1842,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.Dispose"]/*' />
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 if (autoCompleteCustomSource != null) {
@@ -1978,13 +1859,12 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.EndUpdate"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Reenables redrawing of the combo box. A call to beginUpdate() must be
         ///     balanced by a following call to endUpdate(). Following a call to
         ///     beginUpdate(), any redrawing caused by operations performed on the
         ///     combo box is deferred until the call to endUpdate().
-        /// </devdoc>
+        /// </summary>
         public void EndUpdate() {
             updateCount--;
             if (updateCount == 0 && AutoCompleteSource == AutoCompleteSource.ListItems)
@@ -2001,81 +1881,46 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.FindString"]/*' />
-        /// <devdoc>
-        ///     Finds the first item in the combo box that starts with the given string.
-        ///     The search is not case sensitive.
-        /// </devdoc>
-        public int FindString(string s) {
-            return FindString(s, -1);
+        /// <summary>
+        /// Finds the first item in the combo box that starts with the given string.
+        /// The search is not case sensitive.
+        /// </summary>
+        public int FindString(string s) => FindString(s, startIndex: -1);
+
+        /// <summary>
+        /// Finds the first item after the given index which starts with the given string.
+        /// The search is not case sensitive.
+        /// </summary>
+        public int FindString(string s, int startIndex)
+        {
+            return FindStringInternal(s, itemsCollection, startIndex, exact: false, ignoreCase: true);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.FindString1"]/*' />
-        /// <devdoc>
-        ///     Finds the first item after the given index which starts with the given
-        ///     string. The search is not case sensitive.
-        /// </devdoc>
-        public int FindString(string s, int startIndex) {
-            if (s == null) {
-                return -1;
-            }
-
-            if (itemsCollection == null || itemsCollection.Count == 0) {
-                return -1;
-            }
-
-            // The last item in the list is still a valid starting point for a search.
-            if (startIndex < -1 || startIndex >= itemsCollection.Count) {
-                throw new ArgumentOutOfRangeException(nameof(startIndex));
-            }
-
-            // Always use the managed FindStringInternal instead of CB_FINDSTRING.
-            // The managed version correctly handles Turkish I.
-            //
-            return FindStringInternal(s, Items, startIndex, false);
+        /// <summary>
+        /// Finds the first item in the combo box that matches the given string.
+        /// The strings must match exactly, except for differences in casing.
+        /// </summary>
+        public int FindStringExact(string s) 
+        {
+            return FindStringExact(s, startIndex: -1, ignoreCase: true);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.FindStringExact"]/*' />
-        /// <devdoc>
-        ///     Finds the first item in the combo box that matches the given string.
-        ///     The strings must match exactly, except for differences in casing.
-        /// </devdoc>
-        public int FindStringExact(string s) {
-            return FindStringExact(s, -1, true);
+        /// <summary>
+        /// Finds the first item after the given index that matches the given string.
+        /// The strings must match exactly, except for differences in casing.
+        /// </summary>
+        public int FindStringExact(string s, int startIndex)
+        {
+            return FindStringExact(s, startIndex, ignoreCase: true);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.FindStringExact1"]/*' />
-        /// <devdoc>
-        ///     Finds the first item after the given index that matches the given
-        ///     string. The strings must match exactly, except for differences in
-        ///     casing.
-        /// </devdoc>
-        public int FindStringExact(string s, int startIndex) {
-            return FindStringExact(s, startIndex, true);
-        }
-
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.FindStringExact1"]/*' />
-        /// <devdoc>
-        ///     Finds the first item after the given index that matches the given
-        ///     string. The strings must match exactly, except for differences in
-        ///     casing.
-        /// </devdoc>
-        internal int FindStringExact(string s, int startIndex, bool ignorecase) {
-            if (s == null) return -1;
-
-            if (itemsCollection == null || itemsCollection.Count == 0) {
-                return -1;
-            }
-
-            // The last item in the list is still a valid starting point for a search.
-            if (startIndex < -1 || startIndex >= itemsCollection.Count) {
-                throw new ArgumentOutOfRangeException(nameof(startIndex));
-            }
-
-            // Always use the managed FindStringInternal instead of CB_FINDSTRINGEXACT.
-            // The managed version correctly handles Turkish I.
-            //
-            return FindStringInternal(s, Items, startIndex, true, ignorecase);
+        /// <summary>
+        /// Finds the first item after the given index that matches the given string.
+        /// The strings must match exactly, except for differences in casing.
+        /// </summary>
+        internal int FindStringExact(string s, int startIndex, bool ignoreCase)
+        {
+            return FindStringInternal(s, itemsCollection, startIndex, exact: true, ignoreCase);
         }
 
         // GetPreferredSize and SetBoundsCore call this method to allow controls to self impose
@@ -2101,12 +1946,11 @@ namespace System.Windows.Forms {
             base.ScaleControl(factor, specified);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.GetItemHeight"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the height of the given item in an OwnerDrawVariable style
         ///     combo box. This method should not be used for Normal or OwnerDrawFixed
         ///     style combo boxes.
-        /// </devdoc>
+        /// </summary>
         public int GetItemHeight(int index) {
 
             // This function is only relevant for OwnerDrawVariable
@@ -2115,7 +1959,7 @@ namespace System.Windows.Forms {
             }
 
             if (index < 0 || itemsCollection == null || index >= itemsCollection.Count) {
-                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
 
             if (IsHandleCreated) {
@@ -2144,13 +1988,13 @@ namespace System.Windows.Forms {
         }
 
         internal override IntPtr InitializeDCForWmCtlColor(IntPtr dc, int msg) {
-            if ((msg == NativeMethods.WM_CTLCOLORSTATIC) && !ShouldSerializeBackColor()) {
+            if ((msg == Interop.WindowMessages.WM_CTLCOLORSTATIC) && !ShouldSerializeBackColor()) {
                 // Let the Win32 Edit control handle background colors itself.
                 // This is necessary because a disabled edit control will display a different
                 // BackColor than when enabled.
                 return IntPtr.Zero;
             }
-            else if ((msg == NativeMethods.WM_CTLCOLORLISTBOX) && GetStyle(ControlStyles.UserPaint)) {
+            else if ((msg == Interop.WindowMessages.WM_CTLCOLORLISTBOX) && GetStyle(ControlStyles.UserPaint)) {
                 // Base class returns hollow brush when UserPaint style is set, to avoid flicker in
                 // main control. But when returning colors for child dropdown list, return normal ForeColor/BackColor,
                 // since hollow brush leaves the list background unpainted.
@@ -2166,12 +2010,12 @@ namespace System.Windows.Forms {
         // Returns true when the key processing needs to be intercepted to allow
         // auto-completion in DropDownList style.
         private bool InterceptAutoCompleteKeystroke(Message m) {
-            if (m.Msg == NativeMethods.WM_KEYDOWN) {
+            if (m.Msg == Interop.WindowMessages.WM_KEYDOWN) {
                 Debug.Assert((ModifierKeys & Keys.Alt) == 0);
                 // Keys.Delete only triggers a WM_KEYDOWN and WM_KEYUP, and no WM_CHAR. That's why it's treated separately.
                 if ((Keys)unchecked( (int) (long)m.WParam) == Keys.Delete) {
                     // Reset matching text and remove any selection
-                    this.MatchingText = "";
+                    this.MatchingText = string.Empty;
                     this.autoCompleteTimeStamp = DateTime.Now.Ticks;
                     if (this.Items.Count > 0) {
                         SelectedIndex = 0;
@@ -2179,14 +2023,14 @@ namespace System.Windows.Forms {
                     return false;
                 }
             }
-            else if (m.Msg == NativeMethods.WM_CHAR) {
+            else if (m.Msg == Interop.WindowMessages.WM_CHAR) {
                 Debug.Assert((ModifierKeys & Keys.Alt) == 0);
                 char keyChar = unchecked((char)(long)m.WParam);
                 if (keyChar == (char)Keys.Back) {
                     if (DateTime.Now.Ticks - this.autoCompleteTimeStamp > AutoCompleteTimeout ||
                         this.MatchingText.Length <= 1) {
                         // Reset matching text and remove any selection
-                        this.MatchingText = "";
+                        this.MatchingText = string.Empty;
                         if (this.Items.Count > 0) {
                             SelectedIndex = 0;
                         }
@@ -2200,7 +2044,7 @@ namespace System.Windows.Forms {
                     return false;
                 }
                 else if (keyChar == (char)Keys.Escape) {
-                    this.MatchingText = "";
+                    this.MatchingText = string.Empty;
                 }
 
                 string newMatchingText;
@@ -2244,13 +2088,11 @@ namespace System.Windows.Forms {
                                            NativeMethods.RDW_ALLCHILDREN);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.IsInputKey"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Determines if keyData is in input key that the control wants.
         ///     Overridden to return true for RETURN and ESCAPE when the combo box is
         ///     dropped down.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected override bool IsInputKey(Keys keyData) {
 
             Keys keyCode = keyData & (Keys.KeyCode | Keys.Alt);
@@ -2268,10 +2110,10 @@ namespace System.Windows.Forms {
             return base.IsInputKey(keyData);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Adds the given item to the native combo box.  This asserts if the handle hasn't been
         ///     created.
-        /// </devdoc>
+        /// </summary>
         private int NativeAdd(object item) {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
             int insertIndex = unchecked( (int) (long)SendMessage(NativeMethods.CB_ADDSTRING, 0, GetItemText(item)));
@@ -2281,9 +2123,9 @@ namespace System.Windows.Forms {
             return insertIndex;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Clears the contents of the combo box.
-        /// </devdoc>
+        /// </summary>
         private void NativeClear() {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
             string saved = null;
@@ -2296,9 +2138,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Get the text stored by the native control for the specified list item.
-        /// </devdoc>
+        /// </summary>
         private string NativeGetItemText(int index) {
             int len = unchecked( (int) (long)SendMessage(NativeMethods.CB_GETLBTEXTLEN, index, 0));
             StringBuilder sb = new StringBuilder(len + 1);
@@ -2306,10 +2148,10 @@ namespace System.Windows.Forms {
             return sb.ToString();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Inserts the given item to the native combo box at the index.  This asserts if the handle hasn't been
         ///     created or if the resulting insert index doesn't match the passed in index.
-        /// </devdoc>
+        /// </summary>
         private int NativeInsert(int index, object item) {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
             int insertIndex = unchecked( (int) (long)SendMessage(NativeMethods.CB_INSERTSTRING, index, GetItemText(item)));
@@ -2320,9 +2162,9 @@ namespace System.Windows.Forms {
             return insertIndex;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Removes the native item from the given index.
-        /// </devdoc>
+        /// </summary>
         private void NativeRemoveAt(int index) {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
 
@@ -2346,11 +2188,9 @@ namespace System.Windows.Forms {
                 WindowText = oldText;   //restore the window text
             }
         }
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.CreateHandle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Overridden to avoid multiple layouts during handle creation due to combobox size change
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
 
         protected override void CreateHandle()
         {
@@ -2360,13 +2200,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnHandleCreated"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Overridden to make sure all the items and styles get set up correctly.
         ///     Inheriting classes should not forget to call
         ///     base.OnHandleCreated()
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected override void OnHandleCreated(EventArgs e) {
 
             base.OnHandleCreated(e);
@@ -2402,7 +2240,7 @@ namespace System.Windows.Forms {
 
                     // set the initial margin for combobox to be zero (this is also done whenever the font is changed).
                     //
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), NativeMethods.EM_SETMARGINS,
+                    UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), Interop.EditMessages.EM_SETMARGINS,
                                               NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN, 0);
                 }
             }
@@ -2456,12 +2294,10 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnHandleDestroyed"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     We need to un-subclasses everything here.  Inheriting classes should
         ///     not forget to call base.OnHandleDestroyed()
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected override void OnHandleDestroyed(EventArgs e) {
             dropDownHandle = IntPtr.Zero;
             if (Disposing) {
@@ -2479,45 +2315,40 @@ namespace System.Windows.Forms {
             base.OnHandleDestroyed(e);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnDrawItem"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This is the code that actually fires the drawItem event.  Don't
         ///     forget to call base.onDrawItem() to ensure that drawItem events
         ///     are correctly fired at all other times.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnDrawItem(DrawItemEventArgs e) {
             DrawItemEventHandler handler = (DrawItemEventHandler)Events[EVENT_DRAWITEM];
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnDropDown"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This is the code that actually fires the dropDown event.  Don't
         ///     forget to call base.onDropDown() to ensure that dropDown events
         ///     are correctly fired at all other times.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnDropDown(EventArgs e) {
             EventHandler handler = (EventHandler)Events[EVENT_DROPDOWN];
             if (handler != null) handler(this, e);
 
-            if (AccessibilityImprovements.Level3) {
-                // Notify collapsed/expanded property change.
-                AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                    NativeMethods.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                    UnsafeNativeMethods.ExpandCollapseState.Collapsed,
-                    UnsafeNativeMethods.ExpandCollapseState.Expanded);
+            // Notify collapsed/expanded property change.
+            AccessibilityObject.RaiseAutomationPropertyChangedEvent(
+                NativeMethods.UIA_ExpandCollapseExpandCollapseStatePropertyId,
+                UnsafeNativeMethods.ExpandCollapseState.Collapsed,
+                UnsafeNativeMethods.ExpandCollapseState.Expanded);
 
-                var accessibleObject = AccessibilityObject as ComboBoxUiaProvider;
-                if (accessibleObject != null) {
-                    accessibleObject.SetComboBoxItemFocus();
-                }
+            var accessibleObject = AccessibilityObject as ComboBoxAccessibleObject;
+            if (accessibleObject != null) {
+                accessibleObject.SetComboBoxItemFocus();
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnKeyDown"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.ComboBox.KeyDown'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnKeyDown(KeyEventArgs e) {
             // Do Return/ESC handling
@@ -2537,12 +2368,10 @@ namespace System.Windows.Forms {
             base.OnKeyDown(e);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnKeyPress"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Key press event handler. Overridden to close up the combo box when the
         ///     user presses RETURN or ESCAPE.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected override void OnKeyPress(KeyPressEventArgs e) {
 
             base.OnKeyPress(e);
@@ -2564,37 +2393,34 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnMeasureItem"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This is the code that actually fires the measuereItem event.  Don't
         ///     forget to call base.onMeasureItem() to ensure that measureItem
         ///     events are correctly fired at all other times.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnMeasureItem(MeasureItemEventArgs e) {
             MeasureItemEventHandler handler = (MeasureItemEventHandler)Events[EVENT_MEASUREITEM];
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnMeasureItem"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///  If we have the style set to popup show mouse over
-        /// </devdoc>
+        /// </summary>
         protected override void OnMouseEnter(EventArgs e) {
             base.OnMouseEnter(e);
             MouseIsOver = true;
         }
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnMeasureItem"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///  If we have the style set to popup show mouse over
-        /// </devdoc>
+        /// </summary>
         protected override void OnMouseLeave(EventArgs e) {
             base.OnMouseLeave(e);
             MouseIsOver = false;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This internal helper allows us to call the committed function multiple times without worrying about double firing.
-        /// </devdoc>
+        /// </summary>
         private void OnSelectionChangeCommittedInternal(EventArgs e) {
             //There are cases where if we disable the combo while in this event handler, it sends the message again.
             //This is a recursion gaurd to ensure we only send one commit per user action.
@@ -2609,12 +2435,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnSelectionChangeCommitted"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This is the code that actually fires the SelectionChangeCommitted event.
         ///     Don't forget to call base.OnSelectionChangeCommitted() to ensure
         ///     that SelectionChangeCommitted events are correctly fired at all other times.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnSelectionChangeCommitted(EventArgs e) {
             EventHandler handler = (EventHandler)Events[EVENT_SELECTIONCHANGECOMMITTED];
             if (handler != null) handler(this, e);
@@ -2627,12 +2452,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnSelectedIndexChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This is the code that actually fires the selectedIndexChanged event.
         ///     Don't forget to call base.onSelectedIndexChanged() to ensure
         ///     that selectedIndexChanged events are correctly fired at all other times.
-        /// </devdoc>
+        /// </summary>
         protected override void OnSelectedIndexChanged(EventArgs e) {
             base.OnSelectedIndexChanged(e);
             EventHandler handler = (EventHandler)Events[EVENT_SELECTEDINDEXCHANGED];
@@ -2643,8 +2467,8 @@ namespace System.Windows.Forms {
                 // and reset the state to announce the selections later.
                 dropDownWillBeClosed = false;
             }
-            else if (AccessibilityImprovements.Level3) {
-                var accessibleObject = AccessibilityObject as ComboBoxUiaProvider;
+            else {
+                var accessibleObject = AccessibilityObject as ComboBoxAccessibleObject;
                 if (accessibleObject != null) {
 
                     // Announce DropDown- and DropDownList-styled ComboBox item selection using keyboard
@@ -2675,49 +2499,43 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnSelectedValueChanged"]/*' />
         protected override void OnSelectedValueChanged(EventArgs e) {
             base.OnSelectedValueChanged(e);
             selectedValueChangedFired = true;
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnSelectedItemChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This is the code that actually fires the selectedItemChanged event.
         ///     Don't forget to call base.onSelectedItemChanged() to ensure
         ///     that selectedItemChanged events are correctly fired at all other times.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnSelectedItemChanged(EventArgs e) {
             EventHandler handler = (EventHandler)Events[EVENT_SELECTEDITEMCHANGED];
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnDropDownStyleChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This is the code that actually fires the DropDownStyleChanged event.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnDropDownStyleChanged(EventArgs e) {
             EventHandler handler = (EventHandler)Events[EVENT_DROPDOWNSTYLE];
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnParentBackColorChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This method is called by the parent control when any property
         ///     changes on the parent. This can be overriden by inheriting
         ///     classes, however they must call base.OnParentPropertyChanged.
-        /// </devdoc>
+        /// </summary>
         protected override void OnParentBackColorChanged(EventArgs e) {
             base.OnParentBackColorChanged(e);
             if (DropDownStyle == ComboBoxStyle.Simple) Invalidate();
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnFontChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Indicates that a critical property, such as color or font has
         ///     changed.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected override void OnFontChanged(EventArgs e) {
             base.OnFontChanged(e);
             ResetHeightCache();
@@ -2748,30 +2566,24 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnBackColorChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Indicates that a critical property, such as color or font has
         ///     changed.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected override void OnBackColorChanged(EventArgs e) {
             base.OnBackColorChanged(e);
             UpdateControl(false);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnForeColorChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Indicates that a critical property, such as color or font has
         ///     changed.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected override void OnForeColorChanged(EventArgs e) {
             base.OnForeColorChanged(e);
             UpdateControl(false);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnGotFocus"]/*' />
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnGotFocus(EventArgs e) {
             if (!canFireLostFocus) {
@@ -2780,22 +2592,19 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnLostFocus"]/*' />
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnLostFocus(EventArgs e) {
             if (canFireLostFocus) {
                 if (this.AutoCompleteMode != AutoCompleteMode.None &&
                     this.AutoCompleteSource == AutoCompleteSource.ListItems &&
                     this.DropDownStyle == ComboBoxStyle.DropDownList) {
-                    this.MatchingText = "";
+                    this.MatchingText = string.Empty;
                 }
                 base.OnLostFocus(e);
                 canFireLostFocus = false;
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnTextChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnTextChanged(EventArgs e) {
             if (SystemAutoCompleteEnabled) {
@@ -2816,11 +2625,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnValidating"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.ComboBox.Validating'/>
         /// event.</para>
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnValidating(CancelEventArgs e) {
             if (SystemAutoCompleteEnabled) {
@@ -2850,10 +2658,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnResize"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.Resize'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnResize(EventArgs e) {
             base.OnResize(e);
             if (DropDownStyle == ComboBoxStyle.Simple) {
@@ -2862,7 +2669,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnDataSourceChanged"]/*' />
         protected override void OnDataSourceChanged(EventArgs e) {
             if (Sorted) {
                 if (DataSource != null && Created) {
@@ -2883,7 +2689,6 @@ namespace System.Windows.Forms {
             RefreshItems();
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnDisplayMemberChanged"]/*' />
         protected override void OnDisplayMemberChanged(EventArgs e) {
             base.OnDisplayMemberChanged(e);
 
@@ -2893,39 +2698,35 @@ namespace System.Windows.Forms {
             RefreshItems();
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnDropDownClosed"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This event is fired when the dropdown portion of the combobox is hidden.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnDropDownClosed(EventArgs e) {
             EventHandler handler = (EventHandler)Events[EVENT_DROPDOWNCLOSED];
             if (handler != null) handler(this, e);
 
-            if (AccessibilityImprovements.Level3) {
-                // Need to announce the focus on combo-box with new selected value on drop-down close.
-                // If do not do this focus in Level 3 stays on list item of unvisible list.
-                // This is necessary for DropDown style as edit should not take focus.
-                if (DropDownStyle == ComboBoxStyle.DropDown) {
-                    AccessibilityObject.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
-                }
-
-                // Notify Collapsed/expanded property change.
-                AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                    NativeMethods.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                    UnsafeNativeMethods.ExpandCollapseState.Expanded,
-                    UnsafeNativeMethods.ExpandCollapseState.Collapsed);
-
-                // Collapsing the DropDown, so reset the flag.
-                dropDownWillBeClosed = false;
+            // Need to announce the focus on combo-box with new selected value on drop-down close.
+            // If do not do this focus in Level 3 stays on list item of unvisible list.
+            // This is necessary for DropDown style as edit should not take focus.
+            if (DropDownStyle == ComboBoxStyle.DropDown) {
+                AccessibilityObject.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
             }
+
+            // Notify Collapsed/expanded property change.
+            AccessibilityObject.RaiseAutomationPropertyChangedEvent(
+                NativeMethods.UIA_ExpandCollapseExpandCollapseStatePropertyId,
+                UnsafeNativeMethods.ExpandCollapseState.Expanded,
+                UnsafeNativeMethods.ExpandCollapseState.Collapsed);
+
+            // Collapsing the DropDown, so reset the flag.
+            dropDownWillBeClosed = false;
         }
 
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnTextUpdate"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This event is fired when the edit portion of a combobox is about to display altered text.
         ///     This event is NOT fired if the TEXT property is programatically changed.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnTextUpdate(EventArgs e) {
             EventHandler handler = (EventHandler)Events[EVENT_TEXTUPDATE];
             if (handler != null) handler(this, e);
@@ -2958,7 +2759,6 @@ namespace System.Windows.Forms {
             return returnedValue;
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ProcessKeyEventArgs"]/*' />
         protected override bool ProcessKeyEventArgs(ref Message m) {
             if (this.AutoCompleteMode != AutoCompleteMode.None &&
                 this.AutoCompleteSource == AutoCompleteSource.ListItems &&
@@ -2974,11 +2774,9 @@ namespace System.Windows.Forms {
         private void ResetHeightCache() {
             prefHeightCache = -1;
         }
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.RefreshItems"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Reparses the objects, getting new text strings for them.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected override void RefreshItems() {
 
             // Save off the selection and the current collection.
@@ -3035,19 +2833,17 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.RefreshItem"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Reparses the object at the given index, getting new text string for it.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected override void RefreshItem(int index) {
             Items.SetItemInternal(index, Items[index]);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Release the ChildWindow object by un-subclassing the child edit and
         ///     list controls and freeing the root of the ChildWindow object.
-        /// </devdoc>
+        /// </summary>
         private void ReleaseChildWindow() {
 
             if (childEdit != null) {
@@ -3060,9 +2856,7 @@ namespace System.Windows.Forms {
             if (childListBox != null) {
 
                 // Need to notify UI Automation that it can safely remove all map entries that refer to the specified window.
-                if (AccessibilityImprovements.Level3) {
-                    ReleaseUiaProvider(childListBox.Handle);
-                }
+                ReleaseUiaProvider(childListBox.Handle);
 
                 childListBox.ReleaseHandle();
                 childListBox = null;
@@ -3071,9 +2865,7 @@ namespace System.Windows.Forms {
             if (childDropDown != null) {
 
                 // Need to notify UI Automation that it can safely remove all map entries that refer to the specified window.
-                if (AccessibilityImprovements.Level3) {
-                    ReleaseUiaProvider(childDropDown.Handle);
-                }
+                ReleaseUiaProvider(childDropDown.Handle);
 
                 childDropDown.ReleaseHandle();
                 childDropDown = null;
@@ -3083,7 +2875,7 @@ namespace System.Windows.Forms {
         internal override void ReleaseUiaProvider(IntPtr handle) {
             base.ReleaseUiaProvider(handle);
 
-            var uiaProvider = AccessibilityObject as ComboBoxUiaProvider;
+            var uiaProvider = AccessibilityObject as ComboBoxAccessibleObject;
             uiaProvider?.ResetListItemAccessibleObjects();
         }
 
@@ -3103,11 +2895,10 @@ namespace System.Windows.Forms {
             base.ResetText();
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SetAutoComplete"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Enables the AutoComplete feature for combobox depending on the properties set.
         ///     These properties are namely AutoCompleteMode, AutoCompleteSource and AutoCompleteCustomSource.
-        /// </devdoc>
+        /// </summary>
 	[SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         private void SetAutoComplete(bool reset, bool recreate) {
             if (!IsHandleCreated || childEdit == null) {
@@ -3180,25 +2971,19 @@ namespace System.Windows.Forms {
                     }
                 }
                 else {
-                    try {
-                        int mode = 0;
+                    int mode = 0;
 
-                        if (AutoCompleteMode == AutoCompleteMode.Suggest) {
-                            mode |= NativeMethods.AUTOSUGGEST | NativeMethods.AUTOAPPEND_OFF;
-                        }
-                        if (AutoCompleteMode == AutoCompleteMode.Append) {
-                            mode |= NativeMethods.AUTOAPPEND | NativeMethods.AUTOSUGGEST_OFF;
-                        }
-                        if (AutoCompleteMode == AutoCompleteMode.SuggestAppend) {
-                            mode |= NativeMethods.AUTOSUGGEST;
-                            mode |= NativeMethods.AUTOAPPEND;
-                        }
-                        int ret = SafeNativeMethods.SHAutoComplete(new HandleRef(this, childEdit.Handle), (int)AutoCompleteSource | mode);
+                    if (AutoCompleteMode == AutoCompleteMode.Suggest) {
+                        mode |= NativeMethods.AUTOSUGGEST | NativeMethods.AUTOAPPEND_OFF;
                     }
-                    catch (System.Security.SecurityException) {
-                        // If we don't have full trust, degrade gracefully. Allow the control to
-                        // function without auto-complete. Allow the app to continue running.
+                    if (AutoCompleteMode == AutoCompleteMode.Append) {
+                        mode |= NativeMethods.AUTOAPPEND | NativeMethods.AUTOSUGGEST_OFF;
                     }
+                    if (AutoCompleteMode == AutoCompleteMode.SuggestAppend) {
+                        mode |= NativeMethods.AUTOSUGGEST;
+                        mode |= NativeMethods.AUTOAPPEND;
+                    }
+                    int ret = SafeNativeMethods.SHAutoComplete(new HandleRef(this, childEdit.Handle), (int)AutoCompleteSource | mode);
                 }
             }
             else if (reset) {
@@ -3207,35 +2992,32 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.Select"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Selects the text in the editable portion of the ComboBox at the
         ///     from the given start index to the given end index.
-        /// </devdoc>
+        /// </summary>
         public void Select(int start, int length) {
             if (start < 0) {
-                throw new ArgumentOutOfRangeException(nameof(start), string.Format(SR.InvalidArgument, "start", start.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(start), start, string.Format(SR.InvalidArgument, nameof(start), start));
             }
             // the Length can be negative to support Selecting in the "reverse" direction..
             int end = start + length;
 
             // but end cannot be negative... this means Length is far negative...
             if (end < 0) {
-                throw new ArgumentOutOfRangeException(nameof(length), string.Format(SR.InvalidArgument, "length", length.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(length), length, string.Format(SR.InvalidArgument, nameof(length), length));
             }
 
             SendMessage(NativeMethods.CB_SETEDITSEL, 0, NativeMethods.Util.MAKELPARAM(start, end));
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SelectAll"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Selects all the text in the editable portion of the ComboBox.
-        /// </devdoc>
+        /// </summary>
         public void SelectAll() {
             Select(0, int.MaxValue);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SetBoundsCore"]/*' />
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
             // If we are changing height, store the requested height.
             // Requested height is used if the style is changed to simple.
@@ -3247,10 +3029,9 @@ namespace System.Windows.Forms {
             base.SetBoundsCore(x, y, width, height, specified);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SetItemsCore"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Performs the work of setting the specified items to the combobox
-        /// </devdoc>
+        /// </summary>
         protected override void SetItemsCore(IList value) {
             BeginUpdate();
             Items.ClearInternal();
@@ -3282,7 +3063,6 @@ namespace System.Windows.Forms {
             EndUpdate();
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SetItemCore"]/*' />
         protected override void SetItemCore(int index, object value) {
             Items.SetItemInternal(index, value);
         }
@@ -3295,35 +3075,31 @@ namespace System.Windows.Forms {
             return (Properties.ContainsInteger(PropDropDownWidth));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates whether the itemHeight property should be persisted.
-        /// </devdoc>
+        /// </summary>
         internal bool ShouldSerializeItemHeight() {
             return (Properties.ContainsInteger(PropItemHeight));
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ShouldSerializeText"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Determines if the Text property needs to be persisted.
-        /// </devdoc>
+        /// </summary>
         internal override bool ShouldSerializeText() {
             return SelectedIndex == -1 && base.ShouldSerializeText();
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ToString"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Provides some interesting info about this control in String form.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         public override string ToString() {
 
             string s = base.ToString();
-            return s + ", Items.Count: " + ((itemsCollection == null) ? (0).ToString(CultureInfo.CurrentCulture) : itemsCollection.Count.ToString(CultureInfo.CurrentCulture));
+            return s + ", Items.Count: " + ((itemsCollection == null) ? "0" : itemsCollection.Count.ToString(CultureInfo.CurrentCulture));
         }
 
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         private void UpdateDropDownHeight() {
             if (dropDownHandle != IntPtr.Zero) {
                 //Now use the DropDownHeight property instead of calculating the Height...
@@ -3338,12 +3114,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Manufactures a MeasureItemEventArgs for each item in the list to simulate
         ///     the combobox requesting the info. This gives the effect of allowing the
         ///     measureitem info to be updated at anytime.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void UpdateItemHeight() {
             if (!IsHandleCreated) {
                 // if we don't create control here we report item heights incorrectly later on.
@@ -3368,10 +3143,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Forces the text to be updated based on the current selection.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void UpdateText() {
             //           Fire text changed for dropdown combos when the selection
             //           changes, since the text really does change.  We've got
@@ -3399,14 +3173,13 @@ namespace System.Windows.Forms {
 
             if (DropDownStyle == ComboBoxStyle.DropDown) {
                 if (childEdit != null && childEdit.Handle != IntPtr.Zero) {
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), NativeMethods.WM_SETTEXT, IntPtr.Zero, s);
+                    UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), Interop.WindowMessages.WM_SETTEXT, IntPtr.Zero, s);
                 }
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         private void WmEraseBkgnd(ref Message m) {
             if ((DropDownStyle == ComboBoxStyle.Simple) && ParentInternal != null) {
                 NativeMethods.RECT rect = new NativeMethods.RECT();
@@ -3430,31 +3203,28 @@ namespace System.Windows.Forms {
             base.WndProc(ref m);
         }
 
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         private void WmParentNotify(ref Message m) {
             base.WndProc(ref m);
-            if (unchecked((int)(long)m.WParam) == (NativeMethods.WM_CREATE | 1000 << 16)) {
+            if (unchecked((int)(long)m.WParam) == (Interop.WindowMessages.WM_CREATE | 1000 << 16)) {
                 dropDownHandle = m.LParam;
 
-                if (AccessibilityImprovements.Level3) {
-                    // By some reason WmParentNotify with WM_DESTROY is not called before recreation.
-                    // So release the old references here.
-                    if (childDropDown != null) {
-                        // Need to notify UI Automation that it can safely remove all map entries that refer to the specified window.
-                        ReleaseUiaProvider(childListBox.Handle);
+                // By some reason WmParentNotify with WM_DESTROY is not called before recreation.
+                // So release the old references here.
+                if (childDropDown != null) {
+                    // Need to notify UI Automation that it can safely remove all map entries that refer to the specified window.
+                    ReleaseUiaProvider(childListBox.Handle);
 
-                        childDropDown.ReleaseHandle();
-                    }
-
-                    childDropDown = new ComboBoxChildNativeWindow(this, ChildWindowType.DropDownList);
-                    childDropDown.AssignHandle(dropDownHandle);
-
-                    // Reset the child list accessible object in case the the DDL is recreated.
-                    // For instance when dialog window containging the ComboBox is reopened.
-                    childListAccessibleObject = null;
+                    childDropDown.ReleaseHandle();
                 }
+
+                childDropDown = new ComboBoxChildNativeWindow(this, ChildWindowType.DropDownList);
+                childDropDown.AssignHandle(dropDownHandle);
+
+                // Reset the child list accessible object in case the the DDL is recreated.
+                // For instance when dialog window containging the ComboBox is reopened.
+                childListAccessibleObject = null;
             }
         }
 
@@ -3519,9 +3289,8 @@ namespace System.Windows.Forms {
         /// This internal version can be called from anywhere we might suspect text has changed
         /// it's fairly safe to call anywhere.
 
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         private void WmReflectCommand(ref Message m) {
             switch (NativeMethods.Util.HIWORD(m.WParam)) {
                 case NativeMethods.CBN_DBLCLK:
@@ -3558,9 +3327,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         private void WmReflectDrawItem(ref Message m) {
             NativeMethods.DRAWITEMSTRUCT dis = (NativeMethods.DRAWITEMSTRUCT)m.GetLParam(typeof(NativeMethods.DRAWITEMSTRUCT));
             IntPtr oldPal = SetUpPalette(dis.hDC, false /*force*/, false /*realize*/);
@@ -3583,9 +3351,8 @@ namespace System.Windows.Forms {
             m.Result = (IntPtr)1;
         }
 
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         private void WmReflectMeasureItem(ref Message m) {
             NativeMethods.MEASUREITEMSTRUCT mis = (NativeMethods.MEASUREITEMSTRUCT)m.GetLParam(typeof(NativeMethods.MEASUREITEMSTRUCT));
 
@@ -3605,18 +3372,16 @@ namespace System.Windows.Forms {
             m.Result = (IntPtr)1;
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.WndProc"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The comboboxs window procedure.  Inheritng classes can override this
         ///     to add extra functionality, but should not forget to call
         ///     base.wndProc(m); to ensure the combo continues to function properly.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 // We don't want to fire the focus events twice -
                 // once in the combobox and once in the ChildWndProc.
-                case NativeMethods.WM_SETFOCUS:
+                case Interop.WindowMessages.WM_SETFOCUS:
                     try {
                         fireSetFocus = false;
                         base.WndProc(ref m);
@@ -3626,7 +3391,7 @@ namespace System.Windows.Forms {
                         fireSetFocus = true;
                     }
                     break;
-                case NativeMethods.WM_KILLFOCUS:
+                case Interop.WindowMessages.WM_KILLFOCUS:
                     try {
                         fireLostFocus = false;
                         base.WndProc(ref m);
@@ -3642,7 +3407,7 @@ namespace System.Windows.Forms {
                         // as with Theming on.
                         
                         if (!Application.RenderWithVisualStyles && GetStyle(ControlStyles.UserPaint) == false && this.DropDownStyle == ComboBoxStyle.DropDownList && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup)) {
-                            UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), NativeMethods.WM_MOUSELEAVE, 0, 0);                            
+                            UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_MOUSELEAVE, 0, 0);                            
                         }
                     }
 
@@ -3650,30 +3415,30 @@ namespace System.Windows.Forms {
                         fireLostFocus = true;
                     }
                     break;
-                case NativeMethods.WM_CTLCOLOREDIT:
-                case NativeMethods.WM_CTLCOLORLISTBOX:
+                case Interop.WindowMessages.WM_CTLCOLOREDIT:
+                case Interop.WindowMessages.WM_CTLCOLORLISTBOX:
                     m.Result = InitializeDCForWmCtlColor(m.WParam, m.Msg);
                     break;
-                case NativeMethods.WM_ERASEBKGND:
+                case Interop.WindowMessages.WM_ERASEBKGND:
                     WmEraseBkgnd(ref m);
                     break;
-                case NativeMethods.WM_PARENTNOTIFY:
+                case Interop.WindowMessages.WM_PARENTNOTIFY:
                     WmParentNotify(ref m);
                     break;
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_COMMAND:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_COMMAND:
                     WmReflectCommand(ref m);
                     break;
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_DRAWITEM:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_DRAWITEM:
                     WmReflectDrawItem(ref m);
                     break;
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_MEASUREITEM:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_MEASUREITEM:
                     WmReflectMeasureItem(ref m);
                     break;
-                case NativeMethods.WM_LBUTTONDOWN:
+                case Interop.WindowMessages.WM_LBUTTONDOWN:
                     mouseEvents = true;
                     base.WndProc(ref m);
                     break;
-                case NativeMethods.WM_LBUTTONUP:
+                case Interop.WindowMessages.WM_LBUTTONUP:
                     // Get the mouse location
                     //
                     NativeMethods.RECT r = new NativeMethods.RECT();
@@ -3704,12 +3469,12 @@ namespace System.Windows.Forms {
                     }
                     break;
 
-                case NativeMethods.WM_MOUSELEAVE:
+                case Interop.WindowMessages.WM_MOUSELEAVE:
                     DefWndProc(ref m);
                     OnMouseLeaveInternal(EventArgs.Empty);
                     break;
 
-                case NativeMethods.WM_PAINT:
+                case Interop.WindowMessages.WM_PAINT:
                     if (GetStyle(ControlStyles.UserPaint) == false && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup)) {
 
                         using (WindowsRegion dr = new WindowsRegion(FlatComboBoxAdapter.dropDownRect)) {
@@ -3762,7 +3527,7 @@ namespace System.Windows.Forms {
                     
                     base.WndProc(ref m);
                     break;
-                case NativeMethods.WM_PRINTCLIENT: 
+                case Interop.WindowMessages.WM_PRINTCLIENT: 
                     // all the fancy stuff we do in OnPaint has to happen again in OnPrint.
                     if (GetStyle(ControlStyles.UserPaint) == false && FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup) {
                         DefWndProc(ref m);
@@ -3778,11 +3543,11 @@ namespace System.Windows.Forms {
                     }
                     base.WndProc(ref m);
                     return;                    
-                case NativeMethods.WM_SETCURSOR:
+                case Interop.WindowMessages.WM_SETCURSOR:
                     base.WndProc(ref m);
                     break;
 
-                case NativeMethods.WM_SETFONT:
+                case Interop.WindowMessages.WM_SETFONT:
                     //(
                     if (Width == 0) {
                         suppressNextWindosPos = true;
@@ -3791,14 +3556,14 @@ namespace System.Windows.Forms {
                     break;
 
 
-                case NativeMethods.WM_WINDOWPOSCHANGED:
+                case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
                     if (!suppressNextWindosPos) {
                         base.WndProc(ref m);
                     }
                     suppressNextWindosPos = false;
                     break;
 
-                case NativeMethods.WM_NCDESTROY:
+                case Interop.WindowMessages.WM_NCDESTROY:
                     base.WndProc(ref m);
                     ReleaseChildWindow();
                     break;
@@ -3814,9 +3579,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         [ComVisible(true)]
         private class ComboBoxChildNativeWindow : NativeWindow {
             private ComboBox _owner;
@@ -3830,10 +3594,10 @@ namespace System.Windows.Forms {
 
             protected override void WndProc(ref Message m) {
                 switch (m.Msg) {
-                    case NativeMethods.WM_GETOBJECT:
+                    case Interop.WindowMessages.WM_GETOBJECT:
                         WmGetObject(ref m);
                         return;
-                    case NativeMethods.WM_MOUSEMOVE:
+                    case Interop.WindowMessages.WM_MOUSEMOVE:
                         if (_childWindowType == ChildWindowType.DropDownList) {
 
                             // Need to track the selection change via mouse over to
@@ -3844,7 +3608,7 @@ namespace System.Windows.Forms {
                             DefWndProc(ref m);
                             object after = _owner.SelectedItem;
                             if (before != after) {
-                                (_owner.AccessibilityObject as ComboBoxUiaProvider).SetComboBoxItemFocus();
+                                (_owner.AccessibilityObject as ComboBoxAccessibleObject).SetComboBoxItemFocus();
                             }
                         }
                         break;
@@ -3870,7 +3634,7 @@ namespace System.Windows.Forms {
             }
 
             private void WmGetObject(ref Message m) {
-                if (AccessibilityImprovements.Level3 && m.LParam == (IntPtr)NativeMethods.UiaRootObjectId &&
+                if (m.LParam == (IntPtr)NativeMethods.UiaRootObjectId &&
                     // Managed UIAutomation providers are supplied for child list windows but not for the child edit window.
                     // Child list accessibility object provides all necessary patterns and UIAutomation notifications,
                     // so there is no need to native provider supplement.
@@ -3908,9 +3672,7 @@ namespace System.Windows.Forms {
                         UnsafeNativeMethods.IAccessibleInternal iacc = null;
 
                         if (_accessibilityObject == null) {
-                            wfAccessibleObject = AccessibilityImprovements.Level3
-                                ? GetChildAccessibleObject(_childWindowType)
-                                : new ChildAccessibleObject(_owner, Handle);
+                            wfAccessibleObject = GetChildAccessibleObject(_childWindowType);
                             _accessibilityObject = new InternalAccessibleObject(wfAccessibleObject);
                         }
                         iacc = (UnsafeNativeMethods.IAccessibleInternal)_accessibilityObject;
@@ -3962,7 +3724,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection"]/*' />
         [ListBindable(false)]
         public class ObjectCollection : IList {
 
@@ -3970,7 +3731,6 @@ namespace System.Windows.Forms {
             private ArrayList innerList;
             private IComparer comparer;
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.ObjectCollection"]/*' />
             public ObjectCollection(ComboBox owner) {
                 this.owner = owner;
             }
@@ -3993,49 +3753,40 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.Count"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the number of items.
-            /// </devdoc>
+            /// </summary>
             public int Count {
                 get {
                     return InnerList.Count;
                 }
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ObjectCollection.ICollection.SyncRoot"]/*' />
-            /// <internalonly/>
             object ICollection.SyncRoot {
                 get {
                     return this;
                 }
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ObjectCollection.ICollection.IsSynchronized"]/*' />
-            /// <internalonly/>
             bool ICollection.IsSynchronized {
                 get {
                     return false;
                 }
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ObjectCollection.IList.IsFixedSize"]/*' />
-            /// <internalonly/>
             bool IList.IsFixedSize {
                 get {
                     return false;
                 }
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.IsReadOnly"]/*' />
             public bool IsReadOnly {
                 get {
                     return false;
                 }
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.Add"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     Adds an item to the combo box. For an unsorted combo box, the item is
             ///     added to the end of the existing list of items. For a sorted combo box,
             ///     the item is inserted into the list according to its sorted position.
@@ -4043,7 +3794,7 @@ namespace System.Windows.Forms {
             ///     displayed in the combo box.
             ///     A SystemException occurs if there is insufficient space available to
             ///     store the new item.
-            /// </devdoc>
+            /// </summary>
 
             public int Add(object item)
             {
@@ -4103,13 +3854,10 @@ namespace System.Windows.Forms {
                 return index;
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ObjectCollection.IList.Add"]/*' />
-            /// <internalonly/>
             int IList.Add(object item) {
                 return Add(item);
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.AddRange"]/*' />
             public void AddRange(object[] items) {
                 owner.CheckNoDataSource();
                 owner.BeginUpdate();
@@ -4141,15 +3889,14 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.this"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the item with the specified index.
-            /// </devdoc>
+            /// </summary>
             [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public virtual object this[int index] {
                 get {
                     if (index < 0 || index >= InnerList.Count) {
-                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
 
                     return InnerList[index];
@@ -4160,10 +3907,9 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.Clear"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     Removes all items from the ComboBox.
-            /// </devdoc>
+            /// </summary>
             public void Clear() {
                 owner.CheckNoDataSource();
                 ClearInternal();
@@ -4183,34 +3929,28 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.Contains"]/*' />
             public bool Contains(object value) {
                 return IndexOf(value) != -1;
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.CopyTo"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     Copies the ComboBox Items collection to a destination array.
-            /// </devdoc>
+            /// </summary>
             public void CopyTo(object[] destination, int arrayIndex) {
                 InnerList.CopyTo(destination, arrayIndex);
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ObjectCollection.ICollection.CopyTo"]/*' />
-            /// <internalonly/>
             void ICollection.CopyTo(Array destination, int index) {
                 InnerList.CopyTo(destination, index);
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.GetEnumerator"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     Returns an enumerator for the ComboBox Items collection.
-            /// </devdoc>
+            /// </summary>
             public IEnumerator GetEnumerator() {
                 return InnerList.GetEnumerator();
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.IndexOf"]/*' />
             public int IndexOf(object value) {
                 if (value == null) {
                     throw new ArgumentNullException(nameof(value));
@@ -4219,8 +3959,7 @@ namespace System.Windows.Forms {
                 return InnerList.IndexOf(value);
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.Insert"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     Adds an item to the combo box. For an unsorted combo box, the item is
             ///     added to the end of the existing list of items. For a sorted combo box,
             ///     the item is inserted into the list according to its sorted position.
@@ -4228,7 +3967,7 @@ namespace System.Windows.Forms {
             ///     displayed in the combo box.
             ///     A SystemException occurs if there is insufficient space available to
             ///     store the new item.
-            /// </devdoc>
+            /// </summary>
             public void Insert(int index, object item) {
                 owner.CheckNoDataSource();
 
@@ -4237,7 +3976,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (index < 0 || index > InnerList.Count) {
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
                 // If the combo box is sorted, then nust treat this like an add
@@ -4271,15 +4010,14 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.RemoveAt"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     Removes an item from the ComboBox at the given index.
-            /// </devdoc>
+            /// </summary>
             public void RemoveAt(int index) {
                 owner.CheckNoDataSource();
 
                 if (index < 0 || index >= InnerList.Count) {
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
                 if (owner.IsHandleCreated) {
@@ -4296,11 +4034,10 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ObjectCollection.Remove"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     Removes the given item from the ComboBox, provided that it is
             ///     actually in the list.
-            /// </devdoc>
+            /// </summary>
             public void Remove(object value) {
 
                 int index = InnerList.IndexOf(value);
@@ -4316,7 +4053,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (index < 0 || index >= InnerList.Count) {
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
                 InnerList[index] = value;
@@ -4351,14 +4088,11 @@ namespace System.Windows.Forms {
 
         } // end ObjectCollection
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ChildAccessibleObject"]/*' />
-        /// <internalonly/>
         [ComVisible(true)]
         public class ChildAccessibleObject : AccessibleObject {
 
             ComboBox owner;
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ChildAccessibleObject.ChildAccessibleObject"]/*' />
             public ChildAccessibleObject(ComboBox owner, IntPtr handle) {
                 Debug.Assert(owner != null && owner.Handle != IntPtr.Zero, "ComboBox's handle hasn't been created");
 
@@ -4366,140 +4100,9 @@ namespace System.Windows.Forms {
                 UseStdAccessibleObjects(handle);
             }
 
-            /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ChildAccessibleObject.Name"]/*' />
             public override string Name {
                 get {
                     return owner.AccessibilityObject.Name;
-                }
-            }
-        }
-
-        /// <devdoc>
-        /// </devdoc>
-        [System.Runtime.InteropServices.ComVisible(true)]
-        internal class ComboBoxAccessibleObject : ControlAccessibleObject {
-
-            private const int COMBOBOX_ACC_ITEM_INDEX = 1;
-
-            public ComboBoxAccessibleObject(Control ownerControl)
-                : base(ownerControl) {
-            }
-
-            internal override string get_accNameInternal(object childID) {
-                this.ValidateChildID(ref childID);
-
-                if (childID != null && ((int)childID) == COMBOBOX_ACC_ITEM_INDEX) {
-                    return this.Name;
-                }
-                else {
-                    return base.get_accNameInternal(childID);
-                }
-            }
-
-            internal override string get_accKeyboardShortcutInternal(object childID) {
-                this.ValidateChildID(ref childID);
-                if (childID != null && ((int)childID) == COMBOBOX_ACC_ITEM_INDEX) {
-                    return this.KeyboardShortcut;
-                } else {
-                    return base.get_accKeyboardShortcutInternal(childID);
-                }
-            }
-        }
-
-        /// <devdoc>
-        /// </devdoc>
-        [ComVisible(true)]
-        internal class ComboBoxExAccessibleObject : ComboBoxAccessibleObject {
-
-            private ComboBox ownerItem = null;
-
-            private void ComboBoxDefaultAction(bool expand) {
-                if (ownerItem.DroppedDown != expand) {
-                    ownerItem.DroppedDown = expand;
-                }
-            }
-
-            public ComboBoxExAccessibleObject(ComboBox ownerControl)
-                : base(ownerControl) {
-                    ownerItem = ownerControl;
-            }
-
-            internal override bool IsIAccessibleExSupported() {
-                if (ownerItem != null) {
-                    return true;
-                }
-                return base.IsIAccessibleExSupported();
-            }
-
-            internal override bool IsPatternSupported(int patternId) {
-                if (patternId == NativeMethods.UIA_ExpandCollapsePatternId) {
-                    if (ownerItem.DropDownStyle == ComboBoxStyle.Simple) {
-                        return false;
-                    }
-                    return true;
-                }
-                else {
-                    if (patternId == NativeMethods.UIA_ValuePatternId) {
-                        if (ownerItem.DropDownStyle == ComboBoxStyle.DropDownList) {
-                            // NOTE: Initially the Value pattern is disabled for DropDownList in managed code,
-                            // but despite of this MSAA provides true (when Level < 3). When UIA mode is enabled,
-                            // Value pattern becomes disabled for the DropDownList and brings inconsistency.
-                            // At this time keeping 'return false;' commented out and preserving Value pattern
-                            // enabled in all cases: Level < 3 (by MSAA) and Level3 (by UIA).
-                            // return false;
-                            return AccessibilityImprovements.Level3;
-                        }
-                        return true;
-                    }
-                }
-                return base.IsPatternSupported(patternId);
-            }
-
-            internal override int[] RuntimeId {
-                get {
-                    if (ownerItem != null) {
-                        // we need to provide a unique ID
-                        // others are implementing this in the same manner
-                        // first item is static - 0x2a (RuntimeIDFirstItem)
-                        // second item can be anything, but here it is a hash
-
-                        var runtimeId = new int[3];
-                        runtimeId[0] = RuntimeIDFirstItem;
-                        runtimeId[1] = (int)(long)ownerItem.Handle;
-                        runtimeId[2] = ownerItem.GetHashCode();
-                        return runtimeId;
-                    }
-                    
-                    return base.RuntimeId;
-                }
-            }
-
-            internal override object GetPropertyValue(int propertyID) {
-
-                switch (propertyID) {
-                    case NativeMethods.UIA_NamePropertyId:
-                        return Name;
-                    case NativeMethods.UIA_IsExpandCollapsePatternAvailablePropertyId:
-                        return (object)this.IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
-                    case NativeMethods.UIA_IsValuePatternAvailablePropertyId:
-                        return (object)this.IsPatternSupported(NativeMethods.UIA_ValuePatternId);
-
-                    default:
-                        return base.GetPropertyValue(propertyID);
-                }
-            }
-            
-            internal override void Expand() {
-                ComboBoxDefaultAction(true);
-            }
-
-            internal override void Collapse() {
-                ComboBoxDefaultAction(false);
-            }
-
-            internal override UnsafeNativeMethods.ExpandCollapseState ExpandCollapseState {
-                get {
-                    return ownerItem.DroppedDown == true ? UnsafeNativeMethods.ExpandCollapseState.Expanded : UnsafeNativeMethods.ExpandCollapseState.Collapsed;
                 }
             }
         }
@@ -4771,22 +4374,131 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// ComboBox control accessible object for AccessibilityImprovements of Level 3 with UI Automation provider functionality.
-        /// This inherits from the base ComboBoxExAccessibleObject and ComboBoxAccessibleObject to have all base functionality.
+        /// ComboBox control accessible object with UI Automation provider functionality.
+        /// This inherits from the base ComboBoxExAccessibleObject and ComboBoxAccessibleObject
+        /// to have all base functionality.
         /// </summary>
         [ComVisible(true)]
-        internal class ComboBoxUiaProvider : ComboBoxExAccessibleObject {
+        internal class ComboBoxAccessibleObject : ControlAccessibleObject {
+            private const int COMBOBOX_ACC_ITEM_INDEX = 1;
+
             private ComboBoxChildDropDownButtonUiaProvider _dropDownButtonUiaProvider;
             private ComboBoxItemAccessibleObjectCollection _itemAccessibleObjects;
             private ComboBox _owningComboBox;
 
             /// <summary>
-            /// Initializes new instance of ComboBoxUiaProvider.
+            /// Initializes new instance of ComboBoxAccessibleObject.
             /// </summary>
             /// <param name="owningComboBox">The owning ComboBox control.</param>
-            public ComboBoxUiaProvider(ComboBox owningComboBox) : base(owningComboBox) {
+            public ComboBoxAccessibleObject(ComboBox owningComboBox) : base(owningComboBox)
+            {
                 _owningComboBox = owningComboBox;
                 _itemAccessibleObjects = new ComboBoxItemAccessibleObjectCollection(owningComboBox);
+            }
+
+            private void ComboBoxDefaultAction(bool expand)
+            {
+                if (_owningComboBox.DroppedDown != expand)
+                {
+                    _owningComboBox.DroppedDown = expand;
+                }
+            }
+
+            internal override bool IsIAccessibleExSupported()
+            {
+                if (_owningComboBox != null)
+                {
+                    return true;
+                }
+
+                return base.IsIAccessibleExSupported();
+            }
+
+            internal override bool IsPatternSupported(int patternId)
+            {
+                if (patternId == NativeMethods.UIA_ExpandCollapsePatternId)
+                {
+                    if (_owningComboBox.DropDownStyle == ComboBoxStyle.Simple)
+                    {
+                        return false;
+                    }
+                    return true;
+                }
+                else
+                {
+                    if (patternId == NativeMethods.UIA_ValuePatternId)
+                    {
+                        return true;
+                    }
+                }
+                return base.IsPatternSupported(patternId);
+            }
+
+            internal override int[] RuntimeId
+            {
+                get
+                {
+                    if (_owningComboBox != null)
+                    {
+                        // we need to provide a unique ID
+                        // others are implementing this in the same manner
+                        // first item is static - 0x2a (RuntimeIDFirstItem)
+                        // second item can be anything, but here it is a hash
+
+                        var runtimeId = new int[3];
+                        runtimeId[0] = RuntimeIDFirstItem;
+                        runtimeId[1] = (int)(long)_owningComboBox.Handle;
+                        runtimeId[2] = _owningComboBox.GetHashCode();
+                        return runtimeId;
+                    }
+
+                    return base.RuntimeId;
+                }
+            }
+
+            internal override void Expand()
+            {
+                ComboBoxDefaultAction(true);
+            }
+
+            internal override void Collapse()
+            {
+                ComboBoxDefaultAction(false);
+            }
+
+            internal override UnsafeNativeMethods.ExpandCollapseState ExpandCollapseState
+            {
+                get
+                {
+                    return _owningComboBox.DroppedDown == true ? UnsafeNativeMethods.ExpandCollapseState.Expanded : UnsafeNativeMethods.ExpandCollapseState.Collapsed;
+                }
+            }
+
+            internal override string get_accNameInternal(object childID)
+            {
+                this.ValidateChildID(ref childID);
+
+                if (childID != null && ((int)childID) == COMBOBOX_ACC_ITEM_INDEX)
+                {
+                    return this.Name;
+                }
+                else
+                {
+                    return base.get_accNameInternal(childID);
+                }
+            }
+
+            internal override string get_accKeyboardShortcutInternal(object childID)
+            {
+                this.ValidateChildID(ref childID);
+                if (childID != null && ((int)childID) == COMBOBOX_ACC_ITEM_INDEX)
+                {
+                    return this.KeyboardShortcut;
+                }
+                else
+                {
+                    return base.get_accKeyboardShortcutInternal(childID);
+                }
             }
 
             /// <summary>
@@ -4904,10 +4616,16 @@ namespace System.Windows.Forms {
                 switch (propertyID) {
                     case NativeMethods.UIA_ControlTypePropertyId:
                         return NativeMethods.UIA_ComboBoxControlTypeId;
+                    case NativeMethods.UIA_NamePropertyId:
+                        return Name;
                     case NativeMethods.UIA_HasKeyboardFocusPropertyId:
                         return _owningComboBox.Focused;
                     case NativeMethods.UIA_NativeWindowHandlePropertyId:
                         return _owningComboBox.Handle;
+                    case NativeMethods.UIA_IsExpandCollapsePatternAvailablePropertyId:
+                        return IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
+                    case NativeMethods.UIA_IsValuePatternAvailablePropertyId:
+                        return IsPatternSupported(NativeMethods.UIA_ValuePatternId);
 
                     default:
                         return base.GetPropertyValue(propertyID);
@@ -4983,19 +4701,19 @@ namespace System.Windows.Forms {
                             return null;
                         }
 
-                        var comboBoxUiaProvider = _owner.AccessibilityObject as ComboBoxUiaProvider;
-                        if (comboBoxUiaProvider != null) {
-                            int comboBoxChildFragmentCount = comboBoxUiaProvider.GetChildFragmentCount();
+                        var comboBoxAccessibleObject = _owner.AccessibilityObject as ComboBoxAccessibleObject;
+                        if (comboBoxAccessibleObject != null) {
+                            int comboBoxChildFragmentCount = comboBoxAccessibleObject.GetChildFragmentCount();
                             if (comboBoxChildFragmentCount > 1) { // DropDown button is next;
-                                return comboBoxUiaProvider.GetChildFragment(comboBoxChildFragmentCount - 1);
+                                return comboBoxAccessibleObject.GetChildFragment(comboBoxChildFragmentCount - 1);
                             }
                         }
 
                         return null;
                     case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
-                        comboBoxUiaProvider = _owner.AccessibilityObject as ComboBoxUiaProvider;
-                        if (comboBoxUiaProvider != null) {
-                            var firstComboBoxChildFragment = comboBoxUiaProvider.GetChildFragment(0);
+                        comboBoxAccessibleObject = _owner.AccessibilityObject as ComboBoxAccessibleObject;
+                        if (comboBoxAccessibleObject != null) {
+                            var firstComboBoxChildFragment = comboBoxAccessibleObject.GetChildFragment(0);
                             if (RuntimeId != firstComboBoxChildFragment.RuntimeId) {
                                 return firstComboBoxChildFragment;
                             }
@@ -5057,19 +4775,13 @@ namespace System.Windows.Forms {
 
             internal override UnsafeNativeMethods.IRawElementProviderSimple HostRawElementProvider {
                 get {
-                    if (AccessibilityImprovements.Level3) {
-                        UnsafeNativeMethods.IRawElementProviderSimple provider;
-                        UnsafeNativeMethods.UiaHostProviderFromHwnd(new HandleRef(this, _handle), out provider);
-                        return provider;
-                    }
-
-                    return base.HostRawElementProvider;
+                    UnsafeNativeMethods.IRawElementProviderSimple provider;
+                    UnsafeNativeMethods.UiaHostProviderFromHwnd(new HandleRef(this, _handle), out provider);
+                    return provider;
                 }
             }
 
-            internal override bool IsIAccessibleExSupported() {
-                return true;
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             /// <summary>
             /// Gets the runtime ID.
@@ -5112,17 +4824,15 @@ namespace System.Windows.Forms {
             /// <param name="y">Y coordinate.</param>
             /// <returns>The accessible object of corresponding element in the provided coordinates.</returns>
             internal override UnsafeNativeMethods.IRawElementProviderFragment ElementProviderFromPoint(double x, double y) {
-                if (AccessibilityImprovements.Level3) {
-                    var systemIAccessible = GetSystemIAccessibleInternal();
-                    if (systemIAccessible != null) {
-                        object result = systemIAccessible.accHitTest((int)x, (int)y);
-                        if (result is int) {
-                            int childId = (int)result;
-                            return GetChildFragment(childId - 1);
-                        }
-                        else {
-                            return null;
-                        }
+                var systemIAccessible = GetSystemIAccessibleInternal();
+                if (systemIAccessible != null) {
+                    object result = systemIAccessible.accHitTest((int)x, (int)y);
+                    if (result is int) {
+                        int childId = (int)result;
+                        return GetChildFragment(childId - 1);
+                    }
+                    else {
+                        return null;
                     }
                 }
 
@@ -5165,8 +4875,8 @@ namespace System.Windows.Forms {
                 }
 
                 var item = _owningComboBox.Items[index];
-                var comboBoxUiaProvider = _owningComboBox.AccessibilityObject as ComboBoxUiaProvider;
-                return comboBoxUiaProvider.ItemAccessibleObjects[item] as AccessibleObject;
+                var comboBoxAccessibleObject = _owningComboBox.AccessibilityObject as ComboBoxAccessibleObject;
+                return comboBoxAccessibleObject.ItemAccessibleObjects[item] as AccessibleObject;
             }
 
             public int GetChildFragmentCount() {
@@ -5269,13 +4979,9 @@ namespace System.Windows.Forms {
 
             internal override UnsafeNativeMethods.IRawElementProviderSimple HostRawElementProvider {
                 get {
-                    if (AccessibilityImprovements.Level3) {
-                        UnsafeNativeMethods.IRawElementProviderSimple provider;
-                        UnsafeNativeMethods.UiaHostProviderFromHwnd(new HandleRef(this, _childListControlhandle), out provider);
-                        return provider;
-                    }
-
-                    return base.HostRawElementProvider;
+                    UnsafeNativeMethods.IRawElementProviderSimple provider;
+                    UnsafeNativeMethods.UiaHostProviderFromHwnd(new HandleRef(this, _childListControlhandle), out provider);
+                    return provider;
                 }
             }
 
@@ -5365,19 +5071,19 @@ namespace System.Windows.Forms {
                     case UnsafeNativeMethods.NavigateDirection.Parent:
                         return _owner.AccessibilityObject;
                     case UnsafeNativeMethods.NavigateDirection.NextSibling:
-                        var comboBoxUiaProvider = _owner.AccessibilityObject as ComboBoxUiaProvider;
-                        if (comboBoxUiaProvider != null) {
-                            int comboBoxChildFragmentCount = comboBoxUiaProvider.GetChildFragmentCount();
+                        var comboBoxAccessibleObject = _owner.AccessibilityObject as ComboBoxAccessibleObject;
+                        if (comboBoxAccessibleObject != null) {
+                            int comboBoxChildFragmentCount = comboBoxAccessibleObject.GetChildFragmentCount();
                             if (comboBoxChildFragmentCount > 1) { // DropDown button is next;
-                                return comboBoxUiaProvider.GetChildFragment(comboBoxChildFragmentCount - 1);
+                                return comboBoxAccessibleObject.GetChildFragment(comboBoxChildFragmentCount - 1);
                             }
                         }
 
                         return null;
                     case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
-                        comboBoxUiaProvider = _owner.AccessibilityObject as ComboBoxUiaProvider;
-                        if (comboBoxUiaProvider != null) {
-                            var firstComboBoxChildFragment = comboBoxUiaProvider.GetChildFragment(0);
+                        comboBoxAccessibleObject = _owner.AccessibilityObject as ComboBoxAccessibleObject;
+                        if (comboBoxAccessibleObject != null) {
+                            var firstComboBoxChildFragment = comboBoxAccessibleObject.GetChildFragment(0);
                             if (RuntimeId != firstComboBoxChildFragment.RuntimeId) {
                                 return firstComboBoxChildFragment;
                             }
@@ -5529,11 +5235,11 @@ namespace System.Windows.Forms {
                     return _owner.AccessibilityObject;
                 }
                 else if (direction == UnsafeNativeMethods.NavigateDirection.PreviousSibling) {
-                    var comboBoxUiaProvider = _owner.AccessibilityObject as ComboBoxUiaProvider;
-                    if (comboBoxUiaProvider != null) {
-                        int comboBoxChildFragmentCount = comboBoxUiaProvider.GetChildFragmentCount();
+                    var comboBoxAccessibleObject = _owner.AccessibilityObject as ComboBoxAccessibleObject;
+                    if (comboBoxAccessibleObject != null) {
+                        int comboBoxChildFragmentCount = comboBoxAccessibleObject.GetChildFragmentCount();
                         if (comboBoxChildFragmentCount > 1) { // Text or edit is previous;
-                            return comboBoxUiaProvider.GetChildFragment(comboBoxChildFragmentCount - 1);
+                            return comboBoxAccessibleObject.GetChildFragment(comboBoxChildFragmentCount - 1);
                         }
                     }
 
@@ -5668,9 +5374,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///  This subclasses an autocomplete window so that we can determine if control is inside the AC wndproc.
-        /// </devdoc>
+        /// </summary>
         private sealed class ACNativeWindow : NativeWindow {
             static internal int inWndProcCnt;
             //this hashtable can contain null for those ACWindows we find, but are sure are not ours.
@@ -5726,7 +5432,7 @@ namespace System.Windows.Forms {
                     inWndProcCnt--;
                 }
 
-                if (m.Msg == NativeMethods.WM_NCDESTROY) {
+                if (m.Msg == Interop.WindowMessages.WM_NCDESTROY) {
                     Debug.Assert(ACWindows.ContainsKey(this.Handle));
                     ACWindows.Remove(this.Handle);   //so we do not leak ac windows.
                 }
@@ -5768,9 +5474,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///  This finds all autcomplete windows that belong to the active thread.
-        /// </devdoc>
+        /// </summary>
         private class AutoCompleteDropDownFinder {
             private const int MaxClassName = 256;
             private const string AutoCompleteClassName = "Auto-Suggest Dropdown";
@@ -5875,10 +5581,9 @@ namespace System.Windows.Forms {
                 return (combo.ClientRectangle == clientRect && combo.RightToLeft == origRightToLeft);                       
              }
 
-             /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DrawFlatCombo"]/*' />
-             /// <devdoc>
+             /// <summary>
              ///     Paints over the edges of the combo box to make it appear flat.
-             /// </devdoc>
+             /// </summary>
              public virtual void DrawFlatCombo(ComboBox comboBox, Graphics g) {
                  if (comboBox.DropDownStyle == ComboBoxStyle.Simple){
                      return;
@@ -5965,10 +5670,9 @@ namespace System.Windows.Forms {
            
              }
              
-             /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DrawFlatComboDropDown"]/*' />
-             /// <devdoc>
+             /// <summary>
              ///     Paints over the edges of the combo box to make it appear flat.
-             /// </devdoc>
+             /// </summary>
              
              protected virtual void DrawFlatComboDropDown(ComboBox comboBox, Graphics g, Rectangle dropDownRect) {
              

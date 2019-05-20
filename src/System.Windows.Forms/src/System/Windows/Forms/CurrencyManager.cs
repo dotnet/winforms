@@ -13,11 +13,10 @@ namespace System.Windows.Forms {
     using System.Reflection;
     using System.Globalization;
 
-    /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para>Manages the position and bindings of a
     ///       list.</para>
-    /// </devdoc>
+    /// </summary>
     public class CurrencyManager : BindingManagerBase {
 
         private object dataSource;
@@ -26,10 +25,8 @@ namespace System.Windows.Forms {
         private bool bound = false;
         private bool shouldBind = true;
         
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.listposition"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [
             SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields") // We can't make CurrencyManager.listposition internal
                                                                                             // because it would be a breaking change.
@@ -49,41 +46,29 @@ namespace System.Windows.Forms {
         private ItemChangedEventArgs resetEvent = new ItemChangedEventArgs(-1);
         private EventHandler onMetaDataChangedHandler;
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.finalType"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the type of the list.</para>
-        /// </devdoc>
+        /// </summary>
         protected Type finalType;
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.ItemChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the
         ///       current item has been
         ///       altered.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatData))]
         public event ItemChangedEventHandler ItemChanged {
-            add {
-                onItemChanged += value;
-            }
-            remove {
-                onItemChanged -= value;
-            }
+            add => onItemChanged += value;
+            remove => onItemChanged -= value;
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.ListChanged"]/*' />
         public event ListChangedEventHandler ListChanged {
-            add {
-                onListChanged += value;
-            }
-            remove {
-                onListChanged -= value;
-            }
+            add => onListChanged += value;
+            remove => onListChanged -= value;
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.CurrencyManager"]/*' />
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set the dataSource
                                                                                                     // it would be a breaking change.
@@ -92,10 +77,10 @@ namespace System.Windows.Forms {
             SetDataSource(dataSource);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets a value indicating
         ///       whether items can be added to the list.</para>
-        /// </devdoc>
+        /// </summary>
         internal bool AllowAdd {
             get {
                 if (list is IBindingList) {
@@ -107,10 +92,10 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets a value
         ///       indicating whether edits to the list are allowed.</para>
-        /// </devdoc>
+        /// </summary>
         internal bool AllowEdit {
             get {
                 if (list is IBindingList) {
@@ -122,9 +107,9 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets a value indicating whether items can be removed from the list.</para>
-        /// </devdoc>
+        /// </summary>
         internal bool AllowRemove {
             get {
                 if (list is IBindingList) {
@@ -136,10 +121,9 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.Count"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the number of items in the list.</para>
-        /// </devdoc>
+        /// </summary>
         public override int Count {
             get {
                 if (list == null)
@@ -149,10 +133,9 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.Current"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the current item in the list.</para>
-        /// </devdoc>
+        /// </summary>
         public override object Current {
             get {
                 return this[Position];
@@ -165,16 +148,16 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the data source of the list.</para>
-        /// </devdoc>
+        /// </summary>
         internal override object DataSource {
             get {
                 return dataSource;
             }
         }
 
-        internal override void SetDataSource(object dataSource) {
+        private protected override void SetDataSource(object dataSource) {
             if (this.dataSource != dataSource) {
                 Release();
                 this.dataSource = dataSource;
@@ -215,11 +198,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.IsBinding"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets a value indicating whether the list is bound to a data source.</para>
-        /// </devdoc>
+        /// </summary>
         internal override bool IsBinding {
             get {
                 return bound;
@@ -233,10 +214,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.List"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the list as an object.</para>
-        /// </devdoc>
+        /// </summary>
         public IList List {
             get {
                 // NOTE: do not change this to throw an exception if the list is not IBindingList.
@@ -249,10 +229,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.Position"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para> Gets or sets the position you are at within the list.</para>
-        /// </devdoc>
+        /// </summary>
         public override int Position {
             get {
                 return listposition;
@@ -273,9 +252,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets the object at the specified index.</para>
-        /// </devdoc>
+        /// </summary>
         internal object this[int index] {
             get {
                 if (index < 0 || index >= list.Count) {
@@ -291,7 +270,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.AddNew"]/*' />
         public override void AddNew() {
             IBindingList ibl = list as IBindingList;
             if (ibl != null) {
@@ -306,10 +284,9 @@ namespace System.Windows.Forms {
                                                                                                                     // true for pulling data from the controls
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.CancelCurrentEdit"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Cancels the current edit operation.</para>
-        /// </devdoc>
+        /// </summary>
         public override void CancelCurrentEdit() {
             if (Count > 0) {
                 object item = (Position >= 0 && Position < list.Count) ? list[Position] : null;
@@ -381,10 +358,9 @@ namespace System.Windows.Forms {
             }                
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.CheckEmpty"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Throws an exception if there is no list.</para>
-        /// </devdoc>
+        /// </summary>
         protected void CheckEmpty() {
             if (dataSource == null || list == null || list.Count == 0) {
                 throw new InvalidOperationException(SR.ListManagerEmptyList);
@@ -439,15 +415,13 @@ namespace System.Windows.Forms {
             return success;
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.RemoveAt"]/*' />
         public override void RemoveAt(int index) {
             list.RemoveAt(index);
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.EndCurrentEdit"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Ends the current edit operation.</para>
-        /// </devdoc>
+        /// </summary>
         public override void EndCurrentEdit() {
             if (Count > 0) {
                 bool success = CurrencyManager_PullData();
@@ -488,18 +462,18 @@ namespace System.Windows.Forms {
             throw new InvalidOperationException(SR.DataBindingPushDataException);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Sets the column to sort by, and the direction of the sort.</para>
-        /// </devdoc>
+        /// </summary>
         internal void SetSort(PropertyDescriptor property, ListSortDirection sortDirection) {
             if (list is IBindingList && ((IBindingList)list).SupportsSorting) {
                 ((IBindingList)list).ApplySort(property, sortDirection);
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets a <see cref='System.ComponentModel.PropertyDescriptor'/> for a CurrencyManager.</para>
-        /// </devdoc>
+        /// </summary>
         internal PropertyDescriptor GetSortProperty() {
             if ((list is IBindingList) && ((IBindingList)list).SupportsSorting) {
                 return ((IBindingList)list).SortProperty;
@@ -507,9 +481,9 @@ namespace System.Windows.Forms {
             return null;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the sort direction of a list.</para>
-        /// </devdoc>
+        /// </summary>
         internal ListSortDirection GetSortDirection() {
             if ((list is IBindingList) && ((IBindingList)list).SupportsSorting) {
                 return ((IBindingList)list).SortDirection;
@@ -517,9 +491,9 @@ namespace System.Windows.Forms {
             return ListSortDirection.Ascending;
         }
                 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Find the position of a desired list item.</para>
-        /// </devdoc>
+        /// </summary>
         internal int Find(PropertyDescriptor property, object key, bool keepIndex) {
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
@@ -540,9 +514,9 @@ namespace System.Windows.Forms {
             return -1;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the name of the list.</para>
-        /// </devdoc>
+        /// </summary>
         internal override string GetListName() {
             if (list is ITypedList) {
                 return ((ITypedList)list).GetListName(null);
@@ -552,10 +526,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.GetListName1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the name of the specified list.</para>
-        /// </devdoc>
+        /// </summary>
         protected internal override string GetListName(ArrayList listAccessors) {
             if (list is ITypedList) {
                 PropertyDescriptor[] properties = new PropertyDescriptor[listAccessors.Count];
@@ -565,24 +538,23 @@ namespace System.Windows.Forms {
             return "";            
         }
         
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         internal override PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors) {
             return ListBindingHelper.GetListItemProperties(this.list, listAccessors);
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.GetItemProperties"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets the <see cref='T:System.ComponentModel.PropertyDescriptorCollection'/> for
         ///    the list.</para>
-        /// </devdoc>
+        /// </summary>
         public override PropertyDescriptorCollection GetItemProperties() {
             return GetItemProperties(null);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets the <see cref='T:System.ComponentModel.PropertyDescriptorCollection'/> for the specified list.</para>
-        /// </devdoc>
+        /// </summary>
         private void List_ListChanged(object sender, System.ComponentModel.ListChangedEventArgs e) {
             // If you change the assert below, better change the 
             // code in the OnCurrentChanged that deals w/ firing the OnCurrentChanged event
@@ -672,7 +644,7 @@ namespace System.Windows.Forms {
                             // The position inside the currency manager is at the end of the list and the list still fired an ItemAdded event.
                             // This could be the second ItemAdded event that the DataView fires to signal that the AddNew operation was commited.
                             // We need to fire CurrentItemChanged event so that relatedCurrencyManagers update their lists.
-                            OnCurrentItemChanged(System.EventArgs.Empty);
+                            OnCurrentItemChanged(EventArgs.Empty);
                         }
 
                         if (listposition == -1) {
@@ -759,22 +731,16 @@ namespace System.Windows.Forms {
             Debug.Assert(lastGoodKnownRow == -1 || listposition == lastGoodKnownRow, "how did they get out of sync?");
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.MetaDataChanged"]/*' />
         [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly")] //Exists in Everett
         [SRCategory(nameof(SR.CatData))]
         public event EventHandler MetaDataChanged {
-            add {
-                onMetaDataChangedHandler += value;
-            }
-            remove {
-                onMetaDataChangedHandler -= value;
-            }
+            add => onMetaDataChangedHandler += value;
+            remove => onMetaDataChangedHandler -= value;
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.OnCurrentChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Causes the CurrentChanged event to occur. </para>
-        /// </devdoc>
+        /// </summary>
         internal protected override void OnCurrentChanged(EventArgs e) {
             if (!inChangeRecordState) {
                 Debug.WriteLineIf(CompModSwitches.DataView.TraceVerbose, "OnCurrentChanged() " + e.ToString());
@@ -795,14 +761,10 @@ namespace System.Windows.Forms {
                     //      a. FindGoodRow actually found a good row, so it can't be the one before the user changed the position: fire the onCurrentChanged
                     //      b. FindGoodRow did not find a good row: we should have gotten an exception so we should not even execute this code
                     if (!positionChanged ||(positionChanged && curLastGoodKnownRow != -1)) {
-                        if (onCurrentChangedHandler != null) {
-                            onCurrentChangedHandler(this, e);
-                        }
+                        onCurrentChangedHandler?.Invoke(this, e);
 
                         // we fire OnCurrentItemChanged event every time we fire the CurrentChanged + when a property of the Current item changed
-                        if (onCurrentItemChangedHandler != null) {
-                            onCurrentItemChangedHandler(this, e);
-                        }
+                        _onCurrentItemChangedHandler?.Invoke(this, e);
                     }
                 }
                 catch (Exception ex) {
@@ -813,16 +775,12 @@ namespace System.Windows.Forms {
 
         // this method should only be called when the currency manager receives the ListChangedType.ItemChanged event
         // and when the index of the ListChangedEventArgs == the position in the currency manager
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.OnCurrentItemChanged"]/*' />
-        internal protected override void OnCurrentItemChanged(EventArgs e) {
-            if (onCurrentItemChangedHandler != null) {
-                onCurrentItemChangedHandler(this, e);
-            }
+        protected internal override void OnCurrentItemChanged(EventArgs e) {
+            _onCurrentItemChangedHandler?.Invoke(this, e);
         }
         
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.OnItemChanged"]/*' />
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         protected virtual void OnItemChanged(ItemChangedEventArgs e) {
             // It is possible that CurrencyManager_PushData will change the position
             // in the list. in that case we have to fire OnPositionChanged event
@@ -858,9 +816,8 @@ namespace System.Windows.Forms {
                 onMetaDataChangedHandler(this,e);
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.OnPositionChanged"]/*' />
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         protected virtual void OnPositionChanged(EventArgs e) {
             // if (!inChangeRecordState) {
                 Debug.WriteLineIf(CompModSwitches.DataView.TraceVerbose, "OnPositionChanged(" + listposition.ToString(CultureInfo.InvariantCulture) + ") " + e.ToString());
@@ -874,12 +831,11 @@ namespace System.Windows.Forms {
             // }
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.Refresh"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Forces a repopulation of the CurrencyManager
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public void Refresh() { 
             if (list.Count > 0 ) {
                 if (listposition >= list.Count) {
@@ -896,11 +852,9 @@ namespace System.Windows.Forms {
             UnwireEvents(list);
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.ResumeBinding"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>Resumes binding of component properties to list items.</para>
-        /// </devdoc>
+        /// </summary>
         public override void ResumeBinding() {
             lastGoodKnownRow = -1;
             try {
@@ -918,11 +872,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.SuspendBinding"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>Suspends binding.</para>
-        /// </devdoc>
+        /// </summary>
         public override void SuspendBinding() {
             lastGoodKnownRow = -1;
             if (shouldBind) {
@@ -941,7 +893,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.UpdateIsBinding"]/*' />
         protected override void UpdateIsBinding() {
             UpdateIsBinding(true);
         }

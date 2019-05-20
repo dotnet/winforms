@@ -18,16 +18,14 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.Drawing.Design;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
     using System.Runtime.Serialization.Formatters;
     using System.Windows.Forms.Layout;
     using System.Globalization;
 
-    /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///     The TabControl.  This control has a lot of the functionality of a TabStrip
     ///     but manages a list of TabPages which are the 'pages' that appear on each tab.
-    /// </devdoc>
+    /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -85,15 +83,13 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.tabBaseReLayoutMessage"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This message is posted by the control to itself after a TabPage is
         ///     added to it.  On certain occasions, after items are added to a
         ///     TabControl in quick succession, TCM_ADJUSTRECT calls return the wrong
         ///     display rectangle.  When the message is received, the control calls
         ///     updateTabSelection() to layout the TabPages correctly.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private readonly int tabBaseReLayoutMessage = SafeNativeMethods.RegisterWindowMessage(Application.WindowMessagesVersion + "_TabBaseReLayout");
 
         //state
@@ -104,10 +100,9 @@ namespace System.Windows.Forms {
         private bool             rightToLeftLayout = false;
         private bool             skipUpdateSize;
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabControl"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Constructs a TabBase object, usually as the base class for a TabStrip or TabControl.
-        /// </devdoc>
+        /// </summary>
         public TabControl()
         : base() {
 
@@ -117,14 +112,13 @@ namespace System.Windows.Forms {
             SetStyle(ControlStyles.UserPaint, false);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Alignment"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns on what area of the control the tabs reside on (A TabAlignment value).
         ///     The possibilities are Top (the default), Bottom, Left, and Right.  When alignment
         ///     is left or right, the Multiline property is ignored and Multiline is implicitly on.
         ///     If the alignment is anything other than top, TabAppearance.FlatButtons degenerates
         ///     to TabAppearance.Buttons.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
@@ -152,13 +146,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Appearance"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Indicates whether the tabs in the tabstrip look like regular tabs, or if they look
         ///     like buttons as seen in the Windows 95 taskbar.
         ///     If the alignment is anything other than top, TabAppearance.FlatButtons degenerates
         ///     to TabAppearance.Buttons.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
@@ -192,7 +185,6 @@ namespace System.Windows.Forms {
         }
        
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.BackColor"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color BackColor {
             get {
@@ -205,19 +197,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.BackColorChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackColorChanged {
-            add {
-                base.BackColorChanged += value;
-            }
-            remove {
-                base.BackColorChanged -= value;
-            }
+            add => base.BackColorChanged += value;
+            remove => base.BackColorChanged -= value;
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.BackgroundImage"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
             get {
@@ -228,19 +213,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.BackgroundImageChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
-            remove {
-                base.BackgroundImageChanged -= value;
-            }
+            add => base.BackgroundImageChanged += value;
+            remove => base.BackgroundImageChanged -= value;
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.BackgroundImageLayout"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -251,34 +229,26 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.BackgroundImageLayoutChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
-            remove {
-                base.BackgroundImageLayoutChanged -= value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
+            remove => base.BackgroundImageLayoutChanged -= value;
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.DefaultSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
+        /// </summary>
         protected override Size DefaultSize {
             get {
                 return new Size(200, 100);
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.DoubleBuffered"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This property is overridden and hidden from statement completion
         ///     on controls that are based on Win32 Native Controls.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override bool DoubleBuffered {
             get {
@@ -289,7 +259,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ForeColor"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor {
             get {
@@ -300,26 +269,18 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ForeColorChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
-            add {
-                base.ForeColorChanged += value;
-            }
-            remove {
-                base.ForeColorChanged -= value;
-            }
+            add => base.ForeColorChanged += value;
+            remove => base.ForeColorChanged -= value;
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.CreateParams"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the parameters needed to create the handle.  Inheriting classes
         ///     can override this to provide extra functionality.  They should not,
         ///     however, forget to call base.getCreateParams() first to get the struct
         ///     filled up with the basic info.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected override CreateParams CreateParams {
             get {
                 CreateParams cp = base.CreateParams;
@@ -376,13 +337,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.DisplayRectangle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The rectangle that represents the Area of the tab strip not
         ///     taken up by the tabs, borders, or anything else owned by the Tab.  This
         ///     is typically the rectangle you want to use to place the individual
         ///     children of the tab strip.
-        /// </devdoc>
+        /// </summary>
         public override Rectangle DisplayRectangle {
             get {
 
@@ -427,10 +387,9 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.DrawMode"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The drawing mode of the tabs in the tab strip.  This will indicate
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(TabDrawMode.Normal),
@@ -454,10 +413,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.HotTrack"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Indicates whether the tabs visually change when the mouse passes over them.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -478,11 +436,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ImageList"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the imageList the control points at.  This is where tabs that have imageIndex
         ///     set will get there images from.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         RefreshProperties(RefreshProperties.Repaint),
@@ -522,11 +479,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ItemSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     By default, tabs will automatically size themselves to fit their icon, if any, and their label.
         ///     However, the tab size can be explicity set by setting this property.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
@@ -553,7 +509,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value.Width < 0 || value.Height < 0) {
-                    throw new ArgumentOutOfRangeException(nameof(ItemSize), string.Format(SR.InvalidArgument, "ItemSize", value.ToString()));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(ItemSize), value));
                 }
                 itemSize = value;
                 ApplyItemSize();
@@ -562,13 +518,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This private property is set by the TabPageCollection when the user calls "InsertItem".
         ///     The problem is when InsertItem is called then we add this item to the ControlsCollection (in addition to the TabPageCollection)
         ///     to keep both the collections is sync. But the controlCollection.Add is overriden to again ADD the item to the TabPageCollection.
         ///     So we keep this flag in order to aviod repeatd addition (only during insert)
         ///     When the Add ends ... we reset this flag.
-        /// </devdoc>
+        /// </summary>
         private bool InsertingItem {
             get {
                 return (bool)tabControlState[TABCONTROLSTATE_insertingItem];
@@ -578,14 +534,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Multiline"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Indicates if there can be more than one row of tabs.  By default [when
         ///     this property is false], if there are more tabs than available display
         ///     space, arrows are shown to let the user navigate between the extra
         ///     tabs, but only one row is shown.  If this property is set to true, then
         ///     Windows spills extra tabs over on to second rows.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -605,11 +560,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Padding"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The amount of padding around the items in the individual tabs.
         ///     You can specify both horizontal and vertical padding.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
@@ -620,10 +574,10 @@ namespace System.Windows.Forms {
                 return padding;
             }
             set {
-                //do some validation checking here, against min & max GridSize
-                //
-                if ( value.X < 0 || value.Y < 0 )
-                    throw new ArgumentOutOfRangeException(nameof(Padding), string.Format(SR.InvalidArgument, "Padding", value.ToString()));
+                if (value.X < 0 || value.Y < 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(Padding), value));
+                }
 
                 if (padding != value) {
                     padding = value;
@@ -634,13 +588,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.RightToLeftLayout"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
         //      and the RightToLeft is true, mirroring will be turned on on the form, and
         ///     control placement and text will be from right to left.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
@@ -665,13 +618,12 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.RowCount"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The number of rows currently being displayed in
         ///     the tab strip.  This is most commonly used when the Multline property
         ///     is 'true' and you want to know how many rows the tabs are currently
         ///     taking up.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
@@ -686,13 +638,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.SelectedIndex"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The index of the currently selected tab in the strip, if there
         ///     is one.  If the value is -1, there is currently no selection.  If the
         ///     value is 0 or greater, than the value is the index of the currently
         ///     selected tab.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         SRCategory(nameof(SR.CatBehavior)),
@@ -712,7 +663,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < -1) {
-                    throw new ArgumentOutOfRangeException(nameof(SelectedIndex), string.Format(SR.InvalidLowBoundArgumentEx, "SelectedIndex", value.ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectedIndex), value, -1));
                 }
 
                 if (SelectedIndex != value) {
@@ -756,12 +707,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.SelectedTab"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      The selection to the given tab, provided it .equals a tab in the
         ///      list.  The return value is the index of the tab that was selected,
         ///      or -1 if no tab was selected.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
@@ -794,14 +744,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.SizeMode"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     By default, tabs are big enough to display their text, and any space
         ///     on the right of the strip is left as such.  However, you can also
         ///     set it such that the tabs are stretched to fill out the right extent
         ///     of the strip, if necessary, or you can set it such that all tabs
         ///     the same width.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(TabSizeMode.Normal),
@@ -825,11 +774,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ShowToolTips"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Indicates whether tooltips are being shown for tabs that have tooltips set on
         ///     them.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -848,10 +796,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabCount"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the number of tabs in the strip
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Browsable(false),
@@ -862,10 +809,9 @@ namespace System.Windows.Forms {
             get { return tabPageCount;}
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPages"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the Collection of TabPages.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.TabControlTabsDescr)),
@@ -878,7 +824,6 @@ namespace System.Windows.Forms {
                 return tabCollection;
             }
         }
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Text"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
         public override string Text {
             get {
@@ -889,139 +834,91 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TextChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
-            remove {
-                base.TextChanged -= value;
-            }
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.DrawItem"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.drawItemEventDescr))]
         public event DrawItemEventHandler DrawItem {
-            add {
-                onDrawItem += value;
-            }
-            remove {
-                onDrawItem -= value;
-            }
+            add => onDrawItem += value;
+            remove => onDrawItem -= value;
         }
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.RightToLeftLayoutChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
-            add {
-                Events.AddHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
         }
 
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.SelectedIndexChanged"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
         public event EventHandler SelectedIndexChanged {
-            add {
-                onSelectedIndexChanged += value;
-            }
-            remove {
-                onSelectedIndexChanged -= value;
-            }
+            add => onSelectedIndexChanged += value;
+            remove => onSelectedIndexChanged -= value;
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Selecting"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Occurs before a tabpage is selected as the top tabPage.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.TabControlSelectingEventDescr))
         ]
         public event TabControlCancelEventHandler Selecting {
-            add {
-                Events.AddHandler(EVENT_SELECTING, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_SELECTING, value);
-            }
+            add => Events.AddHandler(EVENT_SELECTING, value);
+            remove => Events.RemoveHandler(EVENT_SELECTING, value);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Selected"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Occurs after a tabpage is selected as the top tabPage.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.TabControlSelectedEventDescr))
         ]
         public event TabControlEventHandler Selected {
-            add {
-                Events.AddHandler(EVENT_SELECTED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_SELECTED, value);
-            }
+            add => Events.AddHandler(EVENT_SELECTED, value);
+            remove => Events.RemoveHandler(EVENT_SELECTED, value);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Deselecting"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Occurs before the visible property of the top tabpage is set to false.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.TabControlDeselectingEventDescr))
         ]
         public event TabControlCancelEventHandler Deselecting {
-            add {
-                Events.AddHandler(EVENT_DESELECTING, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_DESELECTING, value);
-            }
+            add => Events.AddHandler(EVENT_DESELECTING, value);
+            remove => Events.RemoveHandler(EVENT_DESELECTING, value);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Deselected"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Occurs after the visible property of the top tabpage is set to false.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.TabControlDeselectedEventDescr))
         ]
         public event TabControlEventHandler Deselected {
-            add {
-                Events.AddHandler(EVENT_DESELECTED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_DESELECTED, value);
-            }
+            add => Events.AddHandler(EVENT_DESELECTED, value);
+            remove => Events.RemoveHandler(EVENT_DESELECTED, value);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnPaint"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     TabControl Onpaint.
-        /// </devdoc>
-        /// <internalonly/><hideinheritance/>
+        /// </summary>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
-            add {
-                base.Paint += value;
-            }
-            remove {
-                base.Paint -= value;
-            }
+            add => base.Paint += value;
+            remove => base.Paint -= value;
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.AddItem"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         internal int AddTabPage(TabPage tabPage, NativeMethods.TCITEM_T tcitem) {
             int index = AddNativeTabPage(tcitem);
             if (index >= 0) {
@@ -1037,10 +934,8 @@ namespace System.Windows.Forms {
             return index;
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ApplySize"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         internal void ApplyItemSize() {
             if (IsHandleCreated && ShouldSerializeItemSize()) {
                 SendMessage(NativeMethods.TCM_SETITEMSIZE, 0, (int)NativeMethods.Util.MAKELPARAM(itemSize.Width, itemSize.Height));
@@ -1048,26 +943,20 @@ namespace System.Windows.Forms {
             cachedDisplayRect = Rectangle.Empty;
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.BeginUpdate"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         internal void BeginUpdate() {
             BeginUpdateInternal();
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.CreateControlsInstance"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         protected override Control.ControlCollection CreateControlsInstance() {
             return new ControlCollection(this);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.CreateHandle"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         protected override void CreateHandle() {
             if (!RecreatingHandle) {
                 IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
@@ -1088,10 +977,9 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.DeselectTab"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Allows the user to specify the index in Tabcontrol.TabPageCollection of the tabpage to be hidden.
-        /// </devdoc>
+        /// </summary>
         public void DeselectTab(int index) {
             TabPage t = GetTabPage(index);
             if (SelectedTab == t) {
@@ -1104,10 +992,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.DeselectTab1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Allows the user to specify the tabpage in Tabcontrol.TabPageCollection  to be hidden.
-        /// </devdoc>
+        /// </summary>
         public void DeselectTab(TabPage tabPage) {
             if (tabPage == null) {
                 throw new ArgumentNullException(nameof(tabPage));
@@ -1117,10 +1004,9 @@ namespace System.Windows.Forms {
             DeselectTab(index);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.DeselectTab2"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Allows the user to specify the name of the tabpage in Tabcontrol.TabPageCollection to be hidden.
-        /// </devdoc>
+        /// </summary>
         public void DeselectTab(string tabPageName) {
             if (tabPageName == null) {
                 throw new ArgumentNullException(nameof(tabPageName));
@@ -1130,7 +1016,6 @@ namespace System.Windows.Forms {
             DeselectTab(tabPage);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Dispose"]/*' />
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 if (imageList != null) {
@@ -1159,10 +1044,8 @@ namespace System.Windows.Forms {
             return -1;
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.GetControl"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         public Control GetControl(int index) {
             return(Control) GetTabPage(index);
         }
@@ -1170,27 +1053,23 @@ namespace System.Windows.Forms {
         internal TabPage GetTabPage(int index) {
 
             if (index < 0 || index >= tabPageCount) {
-                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
             return tabPages[index];
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.GetItems"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This has package scope so that TabStrip and TabControl can call it.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected virtual object[] GetItems() {
             TabPage[] result = new TabPage[tabPageCount];
             if (tabPageCount > 0) Array.Copy(tabPages, 0, result, 0, tabPageCount);
             return result;
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.GetItems1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This has package scope so that TabStrip and TabControl can call it.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected virtual object[] GetItems(Type baseType) {
             object[] result = (object[]) Array.CreateInstance(baseType, tabPageCount);
             if (tabPageCount > 0) Array.Copy(tabPages, 0, result, 0, tabPageCount);
@@ -1201,13 +1080,12 @@ namespace System.Windows.Forms {
             return (TabPage[])GetItems();
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.GetTabRect"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the bounding rectangle for the given tab in the tab strip.
-        /// </devdoc>
+        /// </summary>
         public Rectangle GetTabRect(int index) {
             if (index < 0 || (index >= tabPageCount && !tabControlState[TABCONTROLSTATE_getTabRectfromItemSize])) {
-                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
             tabControlState[TABCONTROLSTATE_getTabRectfromItemSize] = false ;
             NativeMethods.RECT rect = new NativeMethods.RECT();
@@ -1221,10 +1099,8 @@ namespace System.Windows.Forms {
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.GetToolTipText"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         protected string GetToolTipText(object item) {
             return((TabPage)item).ToolTipText;
         }
@@ -1234,10 +1110,8 @@ namespace System.Windows.Forms {
                 SendMessage(NativeMethods.TCM_SETIMAGELIST, 0, ImageList.Handle);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Insert"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         internal void Insert(int index, TabPage tabPage) {
             if (tabPages == null) {
                 tabPages = new TabPage[4];
@@ -1259,15 +1133,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.InsertItem"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This function is used by the Insert Logic to insert a tabPage in the current TabPage in the TabPageCollection.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void InsertItem(int index, TabPage tabPage) {
 
             if (index < 0 || ((tabPages != null) && index > tabPageCount))
-                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             if (tabPage == null)
                 throw new ArgumentNullException(nameof(tabPage));
 
@@ -1281,10 +1153,9 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.IsInputKey"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Handling special input keys, such as pgup, pgdown, home, end, etc...
-        /// </devdoc>
+        /// </summary>
         protected override bool IsInputKey(Keys keyData) {
             if ((keyData & Keys.Alt) == Keys.Alt) return false;
             switch (keyData & Keys.KeyCode) {
@@ -1297,13 +1168,11 @@ namespace System.Windows.Forms {
             return base.IsInputKey(keyData);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnHandleCreated"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This is a notification that the handle has been created.
         ///     We do some work here to configure the handle.
         ///     Overriders should call base.OnHandleCreated()
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected override void OnHandleCreated(EventArgs e) {
 
             //Add the handle to hashtable for Ids ..
@@ -1359,7 +1228,6 @@ namespace System.Windows.Forms {
             UpdateTabSelection(false);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnHandleDestroyed"]/*' />
         protected override void OnHandleDestroyed(EventArgs e) {
             if (!Disposing) {
                 selectedIndex = SelectedIndex;
@@ -1376,20 +1244,18 @@ namespace System.Windows.Forms {
             base.OnHandleDestroyed(e);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnDrawItem"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Actually goes and fires the OnDrawItem event.  Inheriting controls
         ///     should use this to know when the event is fired [this is preferable to
         ///     adding an event handler on yourself for this event].  They should,
         ///     however, remember to call base.onDrawItem(e); to ensure the event is
         ///     still fired to external listeners
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnDrawItem(DrawItemEventArgs e) {
             if (onDrawItem != null) onDrawItem(this, e);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnEnter"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Actually goes and fires the OnLeave event.  Inheriting controls
         ///     should use this to know when the event is fired [this is preferable to
         ///     adding an event handler on yourself for this event].  They should,
@@ -1402,7 +1268,7 @@ namespace System.Windows.Forms {
         ///     Similary the Leave event should fire when the TabControl (and hence the TabPage) looses
         ///     Focus. To be Backward compatible we have added new bool which can be set to true
         ///     to the get the NEW SANE ENTER-LEAVE EVENTS ON THE TABPAGE.
-        /// </devdoc>
+        /// </summary>
         protected override void OnEnter(EventArgs e) {
             base.OnEnter (e);
             if (SelectedTab != null) {
@@ -1411,8 +1277,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnLeave"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Actually goes and fires the OnLeave event.  Inheriting controls
         ///     should use this to know when the event is fired [this is preferable to
         ///     adding an event handler on yourself for this event].  They should,
@@ -1425,7 +1290,7 @@ namespace System.Windows.Forms {
         ///     Similary the Leave event  should fire when the TabControl (and hence the TabPage) looses
         ///     Focus. To be Backward compatible we have added new bool which can be set to true
         ///     to the get the NEW SANE ENTER-LEAVE EVENTS ON THE TABPAGE.
-        /// </devdoc>
+        /// </summary>
         protected override void OnLeave(EventArgs e) {
             if (SelectedTab != null) {
                 SelectedTab.FireLeave(e);
@@ -1433,12 +1298,10 @@ namespace System.Windows.Forms {
             base.OnLeave(e);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnKeyDown"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     We override this to get tabbing functionality.
         ///     If overriding this, remember to call base.onKeyDown.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected override void OnKeyDown(KeyEventArgs ke) {
             if (ke.KeyCode == Keys.Tab && (ke.KeyData & Keys.Control) !=0) {
                 bool forward = (ke.KeyData & Keys.Shift) == 0;
@@ -1467,17 +1330,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnResize"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         protected override void OnResize(EventArgs e) {
             base.OnResize(e);
             cachedDisplayRect = Rectangle.Empty;
             UpdateTabSelection(false);
         }
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnRightToLeftLayoutChanged"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRightToLeftLayoutChanged(EventArgs e) {
             if (GetAnyDisposingInHierarchy()) {
@@ -1494,14 +1354,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnSelectedIndexChanged"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Actually goes and fires the onSelectedIndexChanged event.  Inheriting controls
         ///     should use this to know when the event is fired [this is preferable to
         ///     adding an event handler on yourself for this event].  They should,
         ///     however, remember to call base.onSelectedIndexChanged(e); to ensure the event is
         ///     still fired to external listeners
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnSelectedIndexChanged(EventArgs e) {
             int index = SelectedIndex;
             cachedDisplayRect = Rectangle.Empty;
@@ -1512,23 +1371,21 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnSelecting"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.TabControl.OnSelecting'/> event.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnSelecting(TabControlCancelEventArgs e) {
             TabControlCancelEventHandler handler = (TabControlCancelEventHandler)Events[EVENT_SELECTING];
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnSelected"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.TabControl.OnSelected'/> event.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnSelected(TabControlEventArgs e) {
             TabControlEventHandler handler = (TabControlEventHandler)Events[EVENT_SELECTED];
             if (handler != null) handler(this, e);
@@ -1540,12 +1397,11 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnDeselecting"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.TabControl.OnDeselecting'/> event.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnDeselecting(TabControlCancelEventArgs e) {
             TabControlCancelEventHandler handler = (TabControlCancelEventHandler)Events[EVENT_DESELECTING];
             if (handler != null) handler(this, e);
@@ -1553,12 +1409,11 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnDeselected"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.TabControl.OnDeselected'/> event.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnDeselected(TabControlEventArgs e) {
             TabControlEventHandler handler = (TabControlEventHandler)Events[EVENT_DESELECTED];
             if (handler != null) handler(this, e);
@@ -1569,20 +1424,16 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ProcessKeyPreview"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     We override this to get the Ctrl and Ctrl-Shift Tab functionality.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected override bool ProcessKeyPreview(ref Message m) {
             if (ProcessKeyEventArgs(ref m)) return true;
             return base.ProcessKeyPreview(ref m);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.UpdateSize"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         internal void UpdateSize() {
             if (this.skipUpdateSize) {
                 return;
@@ -1598,7 +1449,6 @@ namespace System.Windows.Forms {
             EndUpdate();
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnFontChanged"]/*' />
         protected override void OnFontChanged(EventArgs e) {
             base.OnFontChanged(e);
             cachedDisplayRect = Rectangle.Empty;
@@ -1639,7 +1489,6 @@ namespace System.Windows.Forms {
             UpdateSize();
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.RemoveAll"]/*' />
         protected void RemoveAll() {
             this.Controls.Clear();
 
@@ -1648,13 +1497,11 @@ namespace System.Windows.Forms {
             tabPageCount = 0;
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.RemoveItem"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         internal void RemoveTabPage(int index) {
             if (index < 0 || index >= tabPageCount)
-                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             tabPageCount--;
             if (index < tabPageCount) {
                 Array.Copy(tabPages, index + 1, tabPages, index, tabPageCount - index);
@@ -1683,24 +1530,20 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.SetToolTip"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         internal void SetToolTip(ToolTip toolTip, string controlToolTipText) {
             UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.TCM_SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
             controlTipText = controlToolTipText;
 
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.SetItem"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         internal void SetTabPage(int index, TabPage tabPage, NativeMethods.TCITEM_T tcitem) {
             if (index < 0 || index >= tabPageCount)
-                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             if (IsHandleCreated)
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TCM_SETITEM, index, tcitem);
             // Make the Updated tab page the currently selected tab page
@@ -1710,10 +1553,9 @@ namespace System.Windows.Forms {
             tabPages[index] = tabPage;
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.SelectTab"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Allows the user to specify the index in Tabcontrol.TabPageCollection of the tabpage to be shown.
-        /// </devdoc>
+        /// </summary>
         public void SelectTab(int index) {
             TabPage t = GetTabPage(index);
             if(t != null)
@@ -1722,10 +1564,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.SelectTab1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Allows the user to specify the tabpage in Tabcontrol.TabPageCollection  to be shown.
-        /// </devdoc>
+        /// </summary>
         public void SelectTab(TabPage tabPage) {
             if (tabPage == null) {
                 throw new ArgumentNullException(nameof(tabPage));
@@ -1735,10 +1576,9 @@ namespace System.Windows.Forms {
             SelectTab(index);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.SelectTab2"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Allows the user to specify the name of the tabpage in Tabcontrol.TabPageCollection to be shown.
-        /// </devdoc>
+        /// </summary>
         public void SelectTab(string tabPageName) {
             if (tabPageName == null) {
                 throw new ArgumentNullException(nameof(tabPageName));
@@ -1748,16 +1588,14 @@ namespace System.Windows.Forms {
             SelectTab(tabPage);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.SelectNextTab"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This is called by TabControl in response to the KeyDown event to override the selection of tabpages
         ///     for different key combinations.
         ///     Control + Tab selects the next tabpage.
         ///     Control + Shift + Tab selects the previous tabpage.
         ///     Control + PageDown selects the next tabpage.
         ///     Control + PageUp selects the previous tabpage.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         private void SelectNextTab(KeyEventArgs ke, bool forward) {
             // WmSelChanging actually changes focus to cause validations.
             // So cache in the Focused value so that we can reuse it later
@@ -1825,11 +1663,9 @@ namespace System.Windows.Forms {
             return !padding.Equals(DEFAULT_PADDING);
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ToString"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns a string representation for this control.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         public override string ToString() {
 
             string s = base.ToString();
@@ -1848,14 +1684,11 @@ namespace System.Windows.Forms {
             currentlyScaling = false;
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.UpdateTabSelection"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
+        /// </summary>
+        /// <summary>
         ///     Set the panel selections appropriately
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected void UpdateTabSelection(bool updateFocus) {
             if (IsHandleCreated) {
                 int index = SelectedIndex;
@@ -1890,23 +1723,23 @@ namespace System.Windows.Forms {
 
                             if (selectNext) {
                                 if (!ContainsFocus) {
-                                    IContainerControl c = GetContainerControlInternal();
+                                    IContainerControl c = GetContainerControl();
                                     if (c != null) {
                                         while (c.ActiveControl is ContainerControl) {
                                             c = (IContainerControl) c.ActiveControl;
                                         }
                                         if (c.ActiveControl != null)
                                         {
-                                            c.ActiveControl.FocusInternal();
+                                            c.ActiveControl.Focus();
                                         }
                                     }
                                 }
                             }
                             else {
-                                IContainerControl c = GetContainerControlInternal();
+                                IContainerControl c = GetContainerControl();
                                 if (c != null && !DesignMode) {
                                     if (c is ContainerControl) {
-                                        ((ContainerControl)c).SetActiveControlInternal(this);
+                                        ((ContainerControl)c).SetActiveControl(this);
                                     }
                                     else {
                                         c.ActiveControl = this;
@@ -1924,10 +1757,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnStyleChanged"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         protected override void OnStyleChanged(EventArgs e) {
             base.OnStyleChanged(e);
             cachedDisplayRect = Rectangle.Empty;
@@ -1936,10 +1767,8 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.UpdateTab"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         internal void UpdateTab(TabPage tabPage) {
             int index = FindTabPage(tabPage);
             SetTabPage(index, tabPage, tabPage.GetTCITEM());
@@ -1952,10 +1781,8 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.WmNeedText"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         private void WmNeedText(ref Message m) {
            
             NativeMethods.TOOLTIPTEXT ttt = (NativeMethods.TOOLTIPTEXT) m.GetLParam(typeof(NativeMethods.TOOLTIPTEXT));
@@ -1980,10 +1807,8 @@ namespace System.Windows.Forms {
            
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.WmReflectDrawItem"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         private void WmReflectDrawItem(ref Message m) {
 
             NativeMethods.DRAWITEMSTRUCT dis = (NativeMethods.DRAWITEMSTRUCT)m.GetLParam(typeof(NativeMethods.DRAWITEMSTRUCT));
@@ -1997,10 +1822,8 @@ namespace System.Windows.Forms {
             m.Result = (IntPtr)1;
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.WmSelChange"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         private bool WmSelChange() {
             TabControlCancelEventArgs tcc = new TabControlCancelEventArgs(this.SelectedTab, this.SelectedIndex, false, TabControlAction.Selecting);
             OnSelecting(tcc);
@@ -2016,15 +1839,13 @@ namespace System.Windows.Forms {
             return tcc.Cancel;
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.WmSelChanging"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         private bool WmSelChanging() {
-            IContainerControl c = GetContainerControlInternal();
+            IContainerControl c = GetContainerControl();
             if (c != null && !DesignMode) {
                 if (c is ContainerControl) {
-                    ((ContainerControl)c).SetActiveControlInternal(this);
+                    ((ContainerControl)c).SetActiveControl(this);
                 }
                 else {
                     c.ActiveControl = this;
@@ -2044,10 +1865,8 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.WmTabBaseReLayout"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         private void WmTabBaseReLayout(ref Message m) {
             BeginUpdate();
             cachedDisplayRect = Rectangle.Empty;
@@ -2066,26 +1885,24 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.WndProc"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The tab's window procedure.  Inheritng classes can override this
         ///     to add extra functionality, but should not forget to call
         ///     base.wndProc(m); to ensure the tab continues to function properly.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         protected override void WndProc(ref Message m) {
 
             switch (m.Msg) {
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_DRAWITEM:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_DRAWITEM:
                     WmReflectDrawItem(ref m);
                     break;
 
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_MEASUREITEM:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_MEASUREITEM:
                     // We use TCM_SETITEMSIZE instead
                     break;
 
-                case NativeMethods.WM_NOTIFY:
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFY:
+                case Interop.WindowMessages.WM_NOTIFY:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY:
                     NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR) m.GetLParam(typeof(NativeMethods.NMHDR));
                     switch (nmhdr.code) {
                         // new switch added to prevent the TabControl from changing to next TabPage ...
@@ -2140,7 +1957,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection"]/*' />
         public class TabPageCollection : IList {
             private TabControl owner;
             /// A caching mechanism for key accessor
@@ -2148,7 +1964,6 @@ namespace System.Windows.Forms {
             /// issues by holding on to extra references.
             private int lastAccessedIndex = -1;
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.TabPageCollection"]/*' />
             [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
             public TabPageCollection( TabControl owner ) {
                 if (owner == null) {
@@ -2157,7 +1972,6 @@ namespace System.Windows.Forms {
                 this.owner = owner;
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.this"]/*' />
             public virtual TabPage this[int index] {
                 get {
                     return owner.GetTabPage(index);
@@ -2167,8 +1981,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabPageCollection.IList.this"]/*' />
-            /// <internalonly/>
             object IList.this[int index] {
                 get {
                     return this[index];
@@ -2187,10 +1999,9 @@ namespace System.Windows.Forms {
                     }
                 }
             }
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.this"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     <para>Retrieves the child control with the specified key.</para>
-            /// </devdoc>
+            /// </summary>
             public virtual TabPage  this[string key] {
                 get {
                     // We do not support null and empty string as valid keys.
@@ -2211,7 +2022,6 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Count"]/*' />
             [Browsable(false)]
             public int Count {
                 get {
@@ -2219,38 +2029,30 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabPageCollection.ICollection.SyncRoot"]/*' />
-            /// <internalonly/>
             object ICollection.SyncRoot {
                 get {
                     return this;
                 }
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabPageCollection.ICollection.IsSynchronized"]/*' />
-            /// <internalonly/>
             bool ICollection.IsSynchronized {
                 get {
                     return false;
                 }
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabPageCollection.IList.IsFixedSize"]/*' />
-            /// <internalonly/>
             bool IList.IsFixedSize {
                 get {
                     return false;
                 }
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.IsReadOnly"]/*' />
             public bool IsReadOnly {
                 get {
                     return false;
                 }
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Add"]/*' />
             
             [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
             public void Add(TabPage value) {
@@ -2262,8 +2064,6 @@ namespace System.Windows.Forms {
                 owner.Controls.Add(value);
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabPageCollection.IList.Add"]/*' />
-            /// <internalonly/>
             [
                 SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // value is the name of the param passed in.
                                                                                                             // So we don't have to localize it.
@@ -2282,14 +2082,12 @@ namespace System.Windows.Forms {
 
             // <-- NEW ADD OVERLOADS FOR WHIDBEY
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Add1"]/*' />
             public void Add(string text) {
                 TabPage page = new TabPage();
                 page.Text = text;
                 Add(page);
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Add2"]/*' />
             public void Add(string key, string text) {
                 TabPage page = new TabPage();
                 page.Name = key;
@@ -2297,7 +2095,6 @@ namespace System.Windows.Forms {
                 Add(page);
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Add3"]/*' />
             public void Add(string key, string text, int imageIndex) {
                 TabPage page = new TabPage();
                 page.Name = key;
@@ -2306,7 +2103,6 @@ namespace System.Windows.Forms {
                 Add(page);
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Add4"]/*' />
             public void Add(string key, string text, string imageKey) {
                 TabPage page = new TabPage();
                 page.Name = key;
@@ -2317,7 +2113,6 @@ namespace System.Windows.Forms {
 
             // END - NEW ADD OVERLOADS FOR WHIDBEY -->
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.AddRange"]/*' />
             [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
             public void AddRange(TabPage[] pages) {
                 if (pages == null) {
@@ -2328,7 +2123,6 @@ namespace System.Windows.Forms {
                 }
              }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Contains"]/*' />
             [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
             public bool Contains(TabPage page) {
 
@@ -2340,8 +2134,6 @@ namespace System.Windows.Forms {
                 return IndexOf(page) != -1;
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabPageCollection.IList.Contains"]/*' />
-            /// <internalonly/>
             bool IList.Contains(object page) {
                 if (page is TabPage) {
                     return Contains((TabPage)page);
@@ -2351,16 +2143,14 @@ namespace System.Windows.Forms {
                 }
             }
 
-           /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.ContainsKey"]/*' />
-           /// <devdoc>
+           /// <summary>
            ///     <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
-           /// </devdoc>
+           /// </summary>
            public virtual bool ContainsKey(string key) {
                 return IsValidIndex(IndexOfKey(key));
            }
 
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.IndexOf"]/*' />
             [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
             public int IndexOf(TabPage page) {
 
@@ -2377,8 +2167,6 @@ namespace System.Windows.Forms {
                 return -1;
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabPageCollection.IList.IndexOf"]/*' />
-            /// <internalonly/>
             int IList.IndexOf(object page) {
                 if (page is TabPage) {
                     return IndexOf((TabPage)page);
@@ -2387,10 +2175,9 @@ namespace System.Windows.Forms {
                     return -1;
                 }
             }
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.this"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
-            /// </devdoc>
+            /// </summary>
             public virtual int  IndexOfKey(string key) {
                   // Step 0 - Arg validation
                 if (string.IsNullOrEmpty(key)){
@@ -2419,10 +2206,9 @@ namespace System.Windows.Forms {
            }
 
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="ToolBar.TabPageCollection.Insert"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///    <para>Inserts the supplied Tabpage at the given index.</para>
-            /// </devdoc>
+            /// </summary>
             public void Insert(int index, TabPage tabPage) {
                 owner.InsertItem(index, tabPage);
                 try {
@@ -2436,8 +2222,6 @@ namespace System.Windows.Forms {
                 owner.Controls.SetChildIndex(tabPage, index);
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabPageCollection.IList.Insert"]/*' />
-            /// <internalonly/>            
             [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
             [
                 SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // tabPage is the name of the param passed in.
@@ -2454,14 +2238,12 @@ namespace System.Windows.Forms {
 
             // <-- NEW INSERT OVERLOADS FOR WHIDBEY
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Insert1"]/*' />
             public void Insert(int index, string text) {
                 TabPage page = new TabPage();
                 page.Text = text;
                 Insert(index, page);
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Insert2"]/*' />
             public void Insert(int index, string key, string text) {
                 TabPage page = new TabPage();
                 page.Name = key;
@@ -2469,7 +2251,6 @@ namespace System.Windows.Forms {
                 Insert(index, page);
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Insert3"]/*' />
             public void Insert(int index, string key, string text, int imageIndex) {
                 TabPage page = new TabPage();
                 page.Name = key;
@@ -2479,7 +2260,6 @@ namespace System.Windows.Forms {
         		page.ImageIndex = imageIndex;
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Insert4"]/*' />
             public void Insert(int index, string key, string text, string imageKey) {
                 TabPage page = new TabPage();
                 page.Name = key;
@@ -2492,29 +2272,23 @@ namespace System.Windows.Forms {
             // END - NEW INSERT OVERLOADS FOR WHIDBEY -->
 
 
-           /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.IsValidIndex"]/*' />
-           /// <devdoc>
+           /// <summary>
            ///     <para>Determines if the index is valid for the collection.</para>
-           /// </devdoc>
-           /// <internalonly/>
+           /// </summary>
            private bool IsValidIndex(int index) {
               return ((index >= 0) && (index < this.Count));
            }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Clear"]/*' />
             public virtual void Clear() {
                 owner.RemoveAll();
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabPageCollection.ICollection.CopyTo"]/*' />
-            /// <internalonly/>
             void ICollection.CopyTo(Array dest, int index) {
                 if (Count > 0) {
                     System.Array.Copy(owner.GetTabPages(), 0, dest, index, Count);
                 }
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.GetEnumerator"]/*' />
             public IEnumerator GetEnumerator() {
                 TabPage[] tabPages = owner.GetTabPages();
                 if (tabPages != null) {
@@ -2525,7 +2299,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.Remove"]/*' />
             
             [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
             public void Remove(TabPage value) {
@@ -2537,24 +2310,20 @@ namespace System.Windows.Forms {
                 owner.Controls.Remove(value);
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabPageCollection.IList.Remove"]/*' />
-            /// <internalonly/>
             void IList.Remove(object value) {
                 if (value is TabPage) {
                     Remove((TabPage)value);
                 }
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.RemoveAt"]/*' />
             public void RemoveAt(int index) {
                 owner.Controls.RemoveAt(index);
             }
 
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.RemoveByKey"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     <para>Removes the child control with the specified key.</para>
-            /// </devdoc>
+            /// </summary>
             public virtual void RemoveByKey(string key) {
                 int index = IndexOfKey(key);
                 if (IsValidIndex(index)) {
@@ -2565,10 +2334,9 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ControlCollection"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Collection of controls...
-        /// </devdoc>
+        /// </summary>
         [ComVisible(false)]
         public new class ControlCollection : Control.ControlCollection {
 
@@ -2576,14 +2344,11 @@ namespace System.Windows.Forms {
 
             /*C#r: protected*/
 
-            /// <internalonly/>
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ControlCollection.ControlCollection"]/*' />
             public ControlCollection(TabControl owner)
             : base(owner) {
                 this.owner = owner;
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ControlCollection.Add"]/*' />
             public override void Add(Control value) {
                 if (!(value is TabPage)) {
                     throw new ArgumentException(string.Format(SR.TabControlInvalidTabPageType, value.GetType().Name));
@@ -2629,7 +2394,6 @@ namespace System.Windows.Forms {
 
             }
 
-            /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ControlCollection.Remove"]/*' />
             public override void Remove(Control value) {
                 base.Remove(value);
                 if (!(value is TabPage)) {

@@ -22,13 +22,12 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Globalization;
 
-    /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///     The ImageList is an object that stores a collection of Images, most
     ///     commonly used by other controls, such as the ListView, TreeView, or
     ///     Toolbar.  You can add either bitmaps or Icons to the ImageList, and the
     ///     other controls will be able to use the Images as they desire.
-    /// </devdoc>
+    /// </summary>
     [
     Designer("System.Windows.Forms.Design.ImageListDesigner, " + AssemblyRef.SystemDesign),
     ToolboxItemFilter("System.Windows.Forms"),
@@ -74,11 +73,10 @@ namespace System.Windows.Forms {
 
         private bool inAddRange = false;
 
-        /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageList"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new ImageList Control with a default image size of 16x16
         ///     pixels
-        /// </devdoc>
+        /// </summary>
         public ImageList() { // DO NOT DELETE -- AUTOMATION BP 1
             if (!isScalingInitialized) {
                 if (DpiHelper.IsScalingRequired) {
@@ -89,11 +87,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageList1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new ImageList Control with a default image size of 16x16
         ///     pixels and adds the ImageList to the passed in container.
-        /// </devdoc>
+        /// </summary>
         public ImageList(IContainer container) : this() {
             if (container == null) {
                 throw new ArgumentNullException(nameof(container));
@@ -149,10 +146,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ColorDepth"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the color depth of the imagelist.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.ImageListColorDepthDescr))
@@ -175,7 +171,7 @@ namespace System.Windows.Forms {
 
                 if (colorDepth != value) {
                     colorDepth = value;
-                    PerformRecreateHandle("ColorDepth");
+                    PerformRecreateHandle(nameof(ColorDepth));
                 }
             }
         }
@@ -187,11 +183,10 @@ namespace System.Windows.Forms {
             ColorDepth = ColorDepth.Depth8Bit;
         }
 
-        /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.Handle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The handle of the ImageList object.  This corresponds to a win32
         ///     HIMAGELIST Handle.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -206,10 +201,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.HandleCreated"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Whether or not the underlying Win32 handle has been created.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -219,7 +213,6 @@ namespace System.Windows.Forms {
             get { return nativeImageList != null; }
         }
 
-        /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.Images"]/*' />
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(null),
@@ -235,10 +228,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the size of the images in the ImageList
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
@@ -250,7 +242,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value.IsEmpty) {
-                    throw new ArgumentException(string.Format(SR.InvalidArgument, "ImageSize", "Size.Empty"));
+                    throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(ImageSize), "Size.Empty"), nameof(value));
                 }
 
                 // ImageList appears to consume an exponential amount of memory
@@ -258,16 +250,16 @@ namespace System.Windows.Forms {
                 // to keep people's systems from crashing.
                 //
                 if (value.Width <= 0 || value.Width > maxImageWidth) {
-                    throw new ArgumentOutOfRangeException(nameof(ImageSize), string.Format(SR.InvalidBoundArgument, "ImageSize.Width", value.Width.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture), maxImageWidth.ToString()));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, "ImageSize.Width", value.Width, 1, maxImageWidth));
                 }
 
                 if (value.Height <= 0 || value.Height > maxImageHeight) {
-                    throw new ArgumentOutOfRangeException(nameof(ImageSize), string.Format(SR.InvalidBoundArgument, "ImageSize.Height", value.Height.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture), maxImageHeight.ToString()));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, "ImageSize.Height", value.Height, 1, maxImageHeight));
                 }
 
                 if (imageSize.Width != value.Width || imageSize.Height != value.Height) {
                     imageSize = new Size(value.Width, value.Height);
-                    PerformRecreateHandle("ImageSize");
+                    PerformRecreateHandle(nameof(ImageSize));
                 }
             }
         }
@@ -276,10 +268,9 @@ namespace System.Windows.Forms {
             return (Images.Count==0);
         }
 
-        /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageStream"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns an ImageListStreamer, or null if the image list is empty.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DefaultValue(null),
@@ -336,7 +327,7 @@ namespace System.Windows.Forms {
 
                         Images.ResetKeys();
                         if (recreatingHandle) {
-                            OnRecreateHandle(new EventArgs());
+                            OnRecreateHandle(EventArgs.Empty);
                         }
                     }
                 }
@@ -349,7 +340,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.Tag"]/*' />
         [
         SRCategory(nameof(SR.CatData)),
         Localizable(false),
@@ -367,10 +357,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.TransparentColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     The color to treat as transparent.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.ImageListTransparentColorDescr))
@@ -390,27 +379,18 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.RecreateHandle"]/*' />
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         SRDescription(nameof(SR.ImageListOnRecreateHandleDescr))
         ]
         public event EventHandler RecreateHandle {
-            add {
-                recreateHandler += value;
-            }
-            remove {
-                recreateHandler -= value;
-            }
+            add => recreateHandler += value;
+            remove => recreateHandler -= value;
         }
 
         internal event EventHandler ChangeHandle {
-            add {
-                changeHandler += value;
-            }
-            remove {
-                changeHandler -= value;
-            }
+            add => changeHandler += value;
+            remove => changeHandler -= value;
         }
 
         //Creates a bitmap from the original image source..
@@ -494,12 +474,11 @@ namespace System.Windows.Forms {
             return index;
         }
 
-        /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.CreateHandle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Creates the underlying HIMAGELIST handle, and sets up all the
         ///     appropriate values with it.  Inheriting classes overriding this method
         ///     should not forget to call base.createHandle();
-        /// </devdoc>
+        /// </summary>
         private void CreateHandle() {
             Debug.Assert(nativeImageList == null, "Handle already created, this may be a source of temporary GDI leaks");
 
@@ -567,10 +546,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.Dispose"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Frees all resources assocaited with this component.
-        /// </devdoc>
+        /// </summary>
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 if(originals != null) { // we might own some of the stuff that's not been created yet
@@ -585,33 +563,30 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.Draw"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Draw the image indicated by the given index on the given Graphics
         ///     at the given location.
-        /// </devdoc>
+        /// </summary>
         public void Draw(Graphics g, Point pt, int index) {
             Draw(g, pt.X, pt.Y, index);
         }
 
-        /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.Draw1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Draw the image indicated by the given index on the given Graphics
         ///     at the given location.
-        /// </devdoc>
+        /// </summary>
         public void Draw(Graphics g, int x, int y, int index) {
             Draw(g, x, y, imageSize.Width, imageSize.Height, index);
         }
 
-        /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.Draw2"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Draw the image indicated by the given index using the location, size
         ///     and raster op code specified.  The image is stretched or compressed as
         ///     necessary to fit the bounds provided.
-        /// </devdoc>
+        /// </summary>
         public void Draw(Graphics g, int x, int y, int width, int height, int index) {
             if (index < 0 || index >= Images.Count)
-                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             IntPtr dc = g.GetHdc();
             try {
                 SafeNativeMethods.ImageList_DrawEx(new HandleRef(this, Handle), index, new HandleRef(g, dc), x, y,
@@ -668,16 +643,15 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.GetBitmap"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the image specified by the given index.  The bitmap returned is a
         ///     copy of the original image.
-        /// </devdoc>
+        /// </summary>
         // NOTE: forces handle creation, so doesn't return things from the original list
         
         private Bitmap GetBitmap(int index) {
             if (index < 0 || index >= Images.Count)
-                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
 
             Bitmap result=null;
 
@@ -746,14 +720,15 @@ namespace System.Windows.Forms {
             }
 
             // gpr: See Icon for description of fakeTransparencyColor
-            result.MakeTransparent(fakeTransparencyColor);
+            if (result.RawFormat.Guid != ImageFormat.Icon.Guid) {
+                result.MakeTransparent(fakeTransparencyColor);
+            }
             return result;
         }
 
 
 
 #if DEBUG_ONLY_APIS
-        /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.DebugOnly_GetMasterImage"]/*' />
         public Bitmap DebugOnly_GetMasterImage() {
             if (Images.Empty)
                 return null;
@@ -761,7 +736,6 @@ namespace System.Windows.Forms {
             return Image.FromHBITMAP(GetImageInfo(0).hbmImage);
         }
 
-        /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.DebugOnly_GetMasterMask"]/*' />
         public Bitmap DebugOnly_GetMasterMask() {
             if (Images.Empty)
                 return null;
@@ -770,10 +744,9 @@ namespace System.Windows.Forms {
         }
 #endif // DEBUG_ONLY_APIS
 
-        /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.OnRecreateHandle"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Called when the Handle property changes.
-        /// </devdoc>
+        /// </summary>
         private void OnRecreateHandle(EventArgs eventargs) {
             if (recreateHandler != null) {
                 recreateHandler(this, eventargs);
@@ -787,14 +760,13 @@ namespace System.Windows.Forms {
         }
 
 #if false
-        /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.PutImageInTempBitmap"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Copies the image at the specified index into the temporary Bitmap object.
         ///     The temporary Bitmap object is used for stuff that the Windows ImageList
         ///     control doesn't support, such as stretching images or copying images from
         ///     different image lists.  Since bitmap creation is expensive, the same instance
         ///     of the temporary Bitmap is reused.
-        /// </devdoc>
+        /// </summary>
         private void PutImageInTempBitmap(int index, bool useSnapshot) {
             Debug.Assert(!useSnapshot || himlTemp != 0, "Where's himlTemp?");
 
@@ -802,7 +774,7 @@ namespace System.Windows.Forms {
             int count = SafeNativeMethods.ImageList_GetImageCount(handleUse);
 
             if (index < 0 || index >= count)
-                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString()));
+                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
 
             if (temp != null) {
                 Size size = temp.Size;
@@ -859,7 +831,7 @@ namespace System.Windows.Forms {
 
             DestroyHandle();
             CreateHandle();
-            OnRecreateHandle(new EventArgs());
+            OnRecreateHandle(EventArgs.Empty);
         }
 
         private void ResetImageSize() {
@@ -875,11 +847,9 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ToString"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns a string representation for this control.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         public override string ToString() {
             string s = base.ToString();
             if (Images != null) {
@@ -975,7 +945,6 @@ namespace System.Windows.Forms {
 
 
         // Everything other than set_All, Add, and Clear will force handle creation.
-        /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection"]/*' />
         [
         Editor("System.Windows.Forms.Design.ImageCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
         ]
@@ -988,11 +957,10 @@ namespace System.Windows.Forms {
             /// issues by holding on to extra references.
             private int lastAccessedIndex = -1;
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.Keys"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///  <para>Returns the keys in the image list - images without keys return String.Empty.
             ///  </para>
-            /// </devdoc>
+            /// </summary>
             public StringCollection Keys {
                 get {
                     // pass back a copy of the current state.
@@ -1028,7 +996,6 @@ namespace System.Windows.Forms {
                 Debug.Assert( (owner.originals == null) == (owner.HandleCreated), " Either we should have the original images, or the handle should be created");
             }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection.Count"]/*' />
             [Browsable(false)]
             public int Count {
                 
@@ -1050,60 +1017,51 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.ICollection.SyncRoot"]/*' />
-            /// <internalonly/>
             object ICollection.SyncRoot {
                 get {
                     return this;
                 }
             }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.ICollection.IsSynchronized"]/*' />
-            /// <internalonly/>
             bool ICollection.IsSynchronized {
                 get {
                     return false;
                 }
             }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.IList.IsFixedSize"]/*' />
-            /// <internalonly/>
             bool IList.IsFixedSize {
                 get {
                     return false;
                 }
             }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection.IsReadOnly"]/*' />
             public bool IsReadOnly {
                 get {
                     return false;
                 }
             }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection.Empty"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Determines if the ImageList has any images, without forcing a handle creation.
-            /// </devdoc>
+            /// </summary>
             public bool Empty {
                 get  {
                     return Count == 0;
                 }
             }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection.this"]/*' />
             [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public Image this[int index] {
                 
                 
                 get {
                     if (index < 0 || index >= Count)
-                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     return owner.GetBitmap(index);
                 }
                 set {
                     if (index < 0 || index >= Count)
-                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
 
                     if (value == null) {
                         throw new ArgumentNullException(nameof(value));
@@ -1116,7 +1074,7 @@ namespace System.Windows.Forms {
                     Bitmap bitmap = (Bitmap)value;
 
                     bool ownsImage = false;
-                    if (owner.UseTransparentColor) {
+                    if (owner.UseTransparentColor && bitmap.RawFormat.Guid != ImageFormat.Icon.Guid) {
                         // Since there's no ImageList_ReplaceMasked, we need to generate
                         // a transparent bitmap
                         Bitmap source = bitmap;
@@ -1143,8 +1101,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.IList.this"]/*' />
-            /// <internalonly/>
             object IList.this[int index] {
                 
                 
@@ -1161,10 +1117,9 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.this"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     <para>Retrieves the child control with the specified key.</para>
-            /// </devdoc>
+            /// </summary>
             public Image this[string key] {
                 
                 
@@ -1187,10 +1142,9 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.Add4"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     <para>Adds an image to the end of the image list with a key accessor.</para>
-            /// </devdoc>
+            /// </summary>
             public void Add(string key, Image image) {
                 Debug.Assert((this.Count == imageInfoCollection.Count), "The count of these two collections should be equal.");
 
@@ -1204,10 +1158,9 @@ namespace System.Windows.Forms {
 
             }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.Add3"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     <para>Adds an icon to the end of the image list with a key accessor.</para>
-            /// </devdoc>
+            /// </summary>
             public void Add(string key, Icon icon) {
                 Debug.Assert((this.Count == imageInfoCollection.Count), "The count of these two collections should be equal.");
 
@@ -1223,8 +1176,6 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.IList.Add"]/*' />
-            /// <internalonly/>
             int IList.Add(object value) {
                 if (value is Image) {
                     Add((Image)value);
@@ -1235,7 +1186,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection.Add"]/*' />
             public void Add(Icon value) {
                 if (value == null) {
                     throw new ArgumentNullException(nameof(value));
@@ -1244,10 +1194,9 @@ namespace System.Windows.Forms {
                 // changing it now is a breaking change, so we have to keep track of this specific icon and dispose that
             }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection.Add1"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     Add the given image to the ImageList.
-            /// </devdoc>
+            /// </summary>
             public void Add(Image value) {
                 if (value == null) {
                     throw new ArgumentNullException(nameof(value));
@@ -1256,12 +1205,11 @@ namespace System.Windows.Forms {
                 Add(original, null);
             }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection.Add2"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     Add the given image to the ImageList, using the given color
             ///     to generate the mask. The number of images to add is inferred from
             ///     the width of the given image.
-            /// </devdoc>
+            /// </summary>
             public int Add(Image value, Color transparentColor) {
                 if (value == null) {
                     throw new ArgumentNullException(nameof(value));
@@ -1320,12 +1268,11 @@ namespace System.Windows.Forms {
                 }
 
                 if (!owner.inAddRange)
-                    owner.OnChangeHandle(new EventArgs());
+                    owner.OnChangeHandle(EventArgs.Empty);
 
                 return index;
             }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageListCollection.AddRange"]/*' />
             public void AddRange(Image[] images) {
                 if (images == null) {
                     throw new ArgumentNullException(nameof(images));
@@ -1335,14 +1282,13 @@ namespace System.Windows.Forms {
                     Add(image);
                 }
                 owner.inAddRange = false;
-                owner.OnChangeHandle(new EventArgs());
+                owner.OnChangeHandle(EventArgs.Empty);
              }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection.AddStrip"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     Add an image strip the given image to the ImageList.  A strip is a single Image
             ///     which is treated as multiple images arranged side-by-side.
-            /// </devdoc>
+            /// </summary>
             public int AddStrip(Image value) {
 
                 if (value == null) {
@@ -1363,10 +1309,9 @@ namespace System.Windows.Forms {
                 return Add(original, null);
             }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection.Clear"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     Remove all images and masks from the ImageList.
-            /// </devdoc>
+            /// </summary>
             public void Clear() {
                 AssertInvariant();
                 if (owner.originals != null)
@@ -1377,17 +1322,14 @@ namespace System.Windows.Forms {
                 if (owner.HandleCreated)
                     SafeNativeMethods.ImageList_Remove(new HandleRef(owner, owner.Handle), -1);
 
-                owner.OnChangeHandle(new EventArgs());
+                owner.OnChangeHandle(EventArgs.Empty);
             }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection.Contains"]/*' />
             [EditorBrowsable(EditorBrowsableState.Never)]
             public bool Contains(Image image) {
                 throw new NotSupportedException();
             }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.IList.Contains"]/*' />
-            /// <internalonly/>
             bool IList.Contains(object image) {
                 if (image is Image) {
                     return Contains((Image)image);
@@ -1397,22 +1339,18 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.ContainsKey"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
-            /// </devdoc>
+            /// </summary>
             public bool ContainsKey(string key) {
                return IsValidIndex(IndexOfKey(key));
             }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection.IndexOf"]/*' />
             [EditorBrowsable(EditorBrowsableState.Never)]
             public int IndexOf(Image image) {
                 throw new NotSupportedException();
             }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.IList.IndexOf"]/*' />
-            /// <internalonly/>
             int IList.IndexOf(object image) {
                 if (image is Image) {
                     return IndexOf((Image)image);
@@ -1422,11 +1360,10 @@ namespace System.Windows.Forms {
                 }
             }
 
-           /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.IndexOfKey"]/*' />
-           /// <devdoc>
+           /// <summary>
            ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase,
            ///           if found; otherwise, -1.</para>
-           /// </devdoc>
+           /// </summary>
            public int  IndexOfKey(string key) {
                 // Step 0 - Arg validation
                 if ((key == null) || (key.Length == 0)){
@@ -1459,23 +1396,17 @@ namespace System.Windows.Forms {
 
 
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.IList.Insert"]/*' />
-            /// <internalonly/>
             void IList.Insert(int index, object value) {
                 throw new NotSupportedException();
             }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.IsValidIndex"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     <para>Determines if the index is valid for the collection.</para>
-            /// </devdoc>
-            /// <internalonly/>
+            /// </summary>
             private bool IsValidIndex(int index) {
                 return ((index >= 0) && (index < this.Count));
             }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.ICollection.CopyTo"]/*' />
-            /// <internalonly/>
             void ICollection.CopyTo(Array dest, int index) {
                 AssertInvariant();
                 for (int i = 0; i < Count; ++i) {
@@ -1483,7 +1414,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection.GetEnumerator"]/*' />
             public IEnumerator GetEnumerator() {
                 // Forces handle creation
 
@@ -1495,25 +1425,21 @@ namespace System.Windows.Forms {
                 return images.GetEnumerator();
             }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection.Remove"]/*' />
             [EditorBrowsable(EditorBrowsableState.Never)]
             public void Remove(Image image) {
                 throw new NotSupportedException();
             }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.IList.Remove"]/*' />
-            /// <internalonly/>
             void IList.Remove(object image) {
                 if (image is Image) {
                     Remove((Image)image);
-                    owner.OnChangeHandle(new EventArgs());
+                    owner.OnChangeHandle(EventArgs.Empty);
                 }
             }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection.RemoveAt"]/*' />
             public void RemoveAt(int index) {
                 if (index < 0 || index >= Count)
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
 
                 AssertInvariant();
                 bool ok = SafeNativeMethods.ImageList_Remove(new HandleRef(owner, owner.Handle), index);
@@ -1522,16 +1448,15 @@ namespace System.Windows.Forms {
                 } else {
                     if ((imageInfoCollection != null) && (index >= 0  && index < imageInfoCollection.Count)) {
                          imageInfoCollection.RemoveAt(index);
-                         owner.OnChangeHandle(new EventArgs());
+                         owner.OnChangeHandle(EventArgs.Empty);
                     }
                 }
              }
 
 
-          /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.RemoveByKey"]/*' />
-          /// <devdoc>
+          /// <summary>
           ///     <para>Removes the child control with the specified key.</para>
-          /// </devdoc>
+          /// </summary>
           public void RemoveByKey(string key) {
                 int index = IndexOfKey(key);
                 if (IsValidIndex(index)) {
@@ -1539,10 +1464,9 @@ namespace System.Windows.Forms {
                 }
            }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.SetKeyName"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///     <para>Sets/Resets the key accessor for an image already in the image list.</para>
-            /// </devdoc>
+            /// </summary>
             public void SetKeyName(int index, string name) {
                 if (!IsValidIndex(index)) {
                     throw new IndexOutOfRangeException(); // 
@@ -1555,8 +1479,6 @@ namespace System.Windows.Forms {
                 ((ImageInfo)imageInfoCollection[index]).Name = name;
             }
 
-            /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageInfo"]/*' />
-            /// <internalonly/>
             internal class ImageInfo {
                 private string name;
                 public ImageInfo() {
@@ -1571,20 +1493,16 @@ namespace System.Windows.Forms {
         } // end class ImageCollection
     }
 
-    /// <include file='doc\ImageListConverter.uex' path='docs/doc[@for="ImageListConverter"]/*' />
-    /// <internalonly/>
     internal class ImageListConverter : ComponentConverter {
 
         public ImageListConverter() : base(typeof(ImageList)) {
         }
 
-        /// <include file='doc\ImageListConverter.uex' path='docs/doc[@for="ImageListConverter.GetPropertiesSupported"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets a value indicating
         ///       whether this object supports properties using the
         ///       specified context.</para>
-        /// </devdoc>
+        /// </summary>
         public override bool GetPropertiesSupported(ITypeDescriptorContext context) {
             return true;
         }

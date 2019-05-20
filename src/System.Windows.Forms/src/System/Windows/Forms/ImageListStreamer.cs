@@ -15,9 +15,8 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Globalization;
 
-    /// <include file='doc\ImageListStreamer.uex' path='docs/doc[@for="ImageListStreamer"]/*' />
-    /// <devdoc>
-    /// </devdoc>
+    /// <summary>
+    /// </summary>
     [Serializable]
     public sealed class ImageListStreamer : ISerializable, IDisposable {
     
@@ -87,10 +86,10 @@ namespace System.Windows.Forms {
             }
         }
              
-        /// <devdoc>
+        /// <summary>
         ///     Compresses the given input, returning a new array that represents
         ///     the compressed data.
-        /// </devdoc>
+        /// </summary>
         private byte[] Compress(byte[] input) {
         
             int finalLength = 0;
@@ -148,10 +147,10 @@ namespace System.Windows.Forms {
             return output;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     Decompresses the given input, returning a new array that represents
         ///     the uncompressed data.
-        /// </devdoc>
+        /// </summary>
         private byte[] Decompress(byte[] input) {
             
             int finalLength = 0;
@@ -199,7 +198,6 @@ namespace System.Windows.Forms {
             return output;
         }
 
-        /// <include file='doc\ImageListStreamer.uex' path='docs/doc[@for="ImageListStreamer.GetObjectData"]/*' />
         public void /*cpr: ISerializable*/GetObjectData(SerializationInfo si, StreamingContext context) {
             MemoryStream stream = new MemoryStream();
 
@@ -217,8 +215,6 @@ namespace System.Windows.Forms {
             si.AddValue("Data", Compress(stream.ToArray()));
         }
 
-        /// <include file='doc\ImageListStreamer.uex' path='docs/doc[@for="ImageListStreamer.GetNativeImageList"]/*' />
-        /// <internalonly/>
         internal ImageList.NativeImageList GetNativeImageList() {
             return nativeImageList;
         }
@@ -239,10 +235,9 @@ namespace System.Windows.Forms {
             return SafeNativeMethods.ImageList_Write(new HandleRef(this, imagelistHandle), new UnsafeNativeMethods.ComStreamFromDataStream(stream));
         }
 
-        /// <include file='doc\ImageListStreamer.uex' path='docs/doc[@for="ImageListStreamer.GetNativeImageList"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Disposes the native image list handle.
-        /// </devdoc>
+        /// </summary>
         public void Dispose() {
             Dispose(true);
             GC.SuppressFinalize(this);

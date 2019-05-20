@@ -8,23 +8,23 @@ namespace System.Windows.Forms
 {
     public class ToolStripContentPanelRenderEventArgs : EventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// This class represents all the information to render the toolStrip
-        /// </devdoc>        
+        /// </summary>        
         public ToolStripContentPanelRenderEventArgs(Graphics g, ToolStripContentPanel contentPanel)
         {
             Graphics = g;
             ToolStripContentPanel = contentPanel;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The graphics object to draw with
-        /// </devdoc>
+        /// </summary>
         public Graphics Graphics { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Represents which toolStrip was affected by the click
-        /// </devdoc>
+        /// </summary>
         public ToolStripContentPanel ToolStripContentPanel { get; }
 
         public bool Handled { get; set; }

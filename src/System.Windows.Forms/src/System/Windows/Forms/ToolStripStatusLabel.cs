@@ -2,28 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Drawing.Design;
-    using System.Diagnostics;
-    using System.Windows.Forms.ButtonInternal;
-    using System.Security.Permissions;
-    using System.Security;
-    using System.Windows.Forms.Layout; 
-    using System.Windows.Forms.Design; 
-    using System.Runtime.InteropServices;
-    using Automation;
-   
+using System.ComponentModel;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.Automation;
+using System.Windows.Forms.Design;
+using System.Windows.Forms.Layout;
 
-    /// <include file='doc\ToolStripStatusLabel.uex' path='docs/doc[@for="ToolStripStatusLabel"]/*' />
-    /// <devdoc>
-    /// A non selectable winbar item
-    /// </devdoc>
+namespace System.Windows.Forms
+{
+    /// <summary>
+    /// A non selectable ToolStrip item
+    /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.StatusStrip)]
-    public class ToolStripStatusLabel : ToolStripLabel, IAutomationLiveRegion {
-
+    public class ToolStripStatusLabel : ToolStripLabel, IAutomationLiveRegion
+    {
         private static readonly Padding defaultMargin = new Padding(0, 3, 0, 2);
         private Padding scaledDefaultMargin = defaultMargin;
 
@@ -33,10 +26,9 @@ namespace System.Windows.Forms {
         private AutomationLiveSetting liveSetting;
 
 
-        /// <include file='doc\ToolStripStatusLabel.uex' path='docs/doc[@for="ToolStripStatusLabel.ToolStripStatusLabel"]/*' />
-        /// <devdoc>
-        /// A non selectable winbar item
-        /// </devdoc>
+        /// <summary>
+        /// A non selectable ToolStrip item
+        /// </summary>
         public ToolStripStatusLabel() {
             Initialize();
         }
@@ -66,17 +58,13 @@ namespace System.Windows.Forms {
         /// AccessibleObject for this ToolStripStatusLabel instance.
         /// </returns>
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level3) {
-                return new ToolStripStatusLabelAccessibleObject(this);
-            }
-
-            return base.CreateAccessibilityInstance();
+            return new ToolStripStatusLabelAccessibleObject(this);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Creates an instance of the object that defines how image and text
         /// gets laid out in the ToolStripItem
-        /// </devdoc>
+        /// </summary>
         internal override ToolStripItemInternalLayout CreateInternalLayout() {
             return new ToolStripStatusLabelLayout(this);
         }
@@ -93,7 +81,6 @@ namespace System.Windows.Forms {
        }
 
 
-        /// <include file='doc\ToolStripStatusLabel.uex' path='docs/doc[@for="ToolStripStatusLabel.BorderStyle"]/*' />
         [
         DefaultValue(Border3DStyle.Flat),
         SRDescription(nameof(SR.ToolStripStatusLabelBorderStyleDescr)),
@@ -127,7 +114,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripStatusLabel.uex' path='docs/doc[@for="ToolStripStatusLabel.BorderSides"]/*' />
         [
         DefaultValue(ToolStripStatusLabelBorderSides.None),
         SRDescription(nameof(SR.ToolStripStatusLabelBorderSidesDescr)),
@@ -147,9 +133,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Called by all constructors of ToolStripButton.
-        /// </devdoc>
+        /// </summary>
         private void Initialize()
         {
             if (DpiHelper.IsScalingRequirementMet) {
@@ -206,7 +192,7 @@ namespace System.Windows.Forms {
 
         protected override void OnTextChanged(EventArgs e) {
             base.OnTextChanged(e);
-            if (AccessibilityImprovements.Level3 && LiveSetting != AutomationLiveSetting.Off) {
+            if (LiveSetting != AutomationLiveSetting.Off) {
                 AccessibilityObject.RaiseLiveRegionChanged();
             }
         }
@@ -222,10 +208,9 @@ namespace System.Windows.Forms {
 
 
         
-        /// <include file='doc\ToolStripStatusLabel.uex' path='docs/doc[@for="ToolStripStatusLabel.OnPaint"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Inheriting classes should override this method to handle this event.
-        /// </devdoc>
+        /// </summary>
         protected override void OnPaint(System.Windows.Forms.PaintEventArgs e) {
 
             if (this.Owner != null) {
@@ -271,11 +256,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///  This class performs internal layout for the "split button button" portion of a split button.
         ///  Its main job is to make sure the inner button has the same parent as the split button, so
         ///  that layout can be performed using the correct graphics context.
-        /// </devdoc>
+        /// </summary>
         private class ToolStripStatusLabelLayout : ToolStripItemInternalLayout {
 
              ToolStripStatusLabel owner;

@@ -7,7 +7,7 @@
 #define GDI_FONT_CACHE_TRACK
 #endif
 
-#if WINFORMS_NAMESPACE
+#if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
 #elif DRAWING_NAMESPACE
 namespace System.Drawing.Internal
@@ -17,17 +17,16 @@ namespace System.Experimental.Gdi
 {
     using System;
     using System.Collections.Generic;
-    using System.Internal;
     using System.Diagnostics;
     using System.Drawing;
     using System.Threading;
     using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     ///     Keeps a cache of some graphics primitives.
     ///     Created to improve performance of TextRenderer.MeasureText methods that don't receive a WindowsGraphics.
     ///     This class mantains a cache of MRU WindowsFont objects in the process.
-    /// </devdoc>
+    /// </summary>
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
 #else
@@ -38,7 +37,7 @@ namespace System.Experimental.Gdi
         [ThreadStatic] 
         private static ClientUtils.WeakRefCollection activeDeviceContexts;
 
-        /// <devdoc>
+        /// <summary>
         /// WindowsGraphicsCacheManager needs to track DeviceContext
         /// objects so it can ask them if a font is in use before they 
         /// it's deleted.  

@@ -11,10 +11,9 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.ButtonInternal;
         
 
-    /// <include file='doc\ToolStripScrollButton.uex' path='docs/doc[@for="ToolStripScrollButton"]/*' />
-    /// <devdoc>
-    /// A non selectable winbar item
-    /// </devdoc>
+    /// <summary>
+    /// A non selectable ToolStrip item
+    /// </summary>
     internal class ToolStripScrollButton : ToolStripControlHost {
         private bool up = true;
 
@@ -42,10 +41,10 @@ namespace System.Windows.Forms {
             return label;
         }
 
-         /// <devdoc>
+         /// <summary>
          /// Deriving classes can override this to configure a default size for their control.
          /// This is more efficient than setting the size in the control's constructor.
-         /// </devdoc>
+         /// </summary>
          protected internal override Padding DefaultMargin {
              get {
                  return Padding.Empty;
@@ -60,9 +59,7 @@ namespace System.Windows.Forms {
          private static Image DownImage {
             get { 
                 if (downScrollImage == null) {
-                      downScrollImage = new Bitmap(typeof(ToolStripScrollButton), "ScrollButtonDown.bmp"); 
-                      downScrollImage.MakeTransparent(Color.White);
-
+                    downScrollImage = DpiHelper.GetBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonDown");
                 }
                 return downScrollImage;
             }
@@ -78,9 +75,7 @@ namespace System.Windows.Forms {
         private static Image UpImage {
             get { 
                 if (upScrollImage == null) {
-                      upScrollImage = new Bitmap(typeof(ToolStripScrollButton), "ScrollButtonUp.bmp"); 
-                      upScrollImage.MakeTransparent(Color.White);
-
+                    upScrollImage = DpiHelper.GetBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonUp");
                 }
                 return upScrollImage;
             }
@@ -176,7 +171,7 @@ namespace System.Windows.Forms {
 
             protected override void WndProc(ref Message m) {
 
-                if (m.Msg >= NativeMethods.WM_KEYFIRST && m.Msg <= NativeMethods.WM_KEYLAST) {
+                if (m.Msg >= Interop.WindowMessages.WM_KEYFIRST && m.Msg <= Interop.WindowMessages.WM_KEYLAST) {
                     // 
 
                     DefWndProc(ref m);

@@ -4,7 +4,6 @@
 
 namespace System.Windows.Forms {
     using System.Text;
-    using System.Runtime.Remoting;
     using System;
     using System.Collections;
     using System.Windows.Forms;
@@ -237,10 +236,9 @@ namespace System.Windows.Forms {
         // =        Methods
         // =------------------------------------------------------------------
 
-        /// <include file='doc\DataGridParentRows.uex' path='docs/doc[@for="DataGridParentRows.AddParent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Adds a DataGridState object to the top of the list of parents.
-        /// </devdoc>
+        /// </summary>
         internal void AddParent(DataGridState dgs) {
             CurrencyManager childDataSource = (CurrencyManager) dataGrid.BindingContext[dgs.DataSource, dgs.DataMember];
             parents.Add(dgs);
@@ -273,10 +271,9 @@ namespace System.Windows.Forms {
             gridLinePen.Dispose();
         }
 
-        /// <include file='doc\DataGridParentRows.uex' path='docs/doc[@for="DataGridParentRows.GetTopParent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the top most parent in the list of parents.
-        /// </devdoc>
+        /// </summary>
         internal DataGridState GetTopParent() {
             if (parentsCount < 1) {
                 return null;
@@ -284,18 +281,16 @@ namespace System.Windows.Forms {
             return(DataGridState)(((ICloneable)(parents[parentsCount-1])).Clone());
         }
 
-        /// <include file='doc\DataGridParentRows.uex' path='docs/doc[@for="DataGridParentRows.IsEmpty"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Determines if there are any parent rows contained in this object.
-        /// </devdoc>
+        /// </summary>
         internal bool IsEmpty() {
             return parentsCount == 0;
         }
 
-        /// <include file='doc\DataGridParentRows.uex' path='docs/doc[@for="DataGridParentRows.PopTop"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Similar to GetTopParent() but also removes it.
-        /// </devdoc>
+        /// </summary>
         internal DataGridState PopTop() {
             if (parentsCount < 1) {
                 return null;
@@ -526,10 +521,9 @@ namespace System.Windows.Forms {
             Invalidate();
         }
 
-        /// <include file='doc\DataGridParentRows.uex' path='docs/doc[@for="DataGridParentRows.Paint"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Paints the parent rows
-        /// </devdoc>
+        /// </summary>
         internal void Paint(Graphics g, Rectangle visualbounds, bool alignRight) {
             Rectangle bounds = visualbounds;
             // Paint the border around our bounds
@@ -728,29 +722,27 @@ namespace System.Windows.Forms {
             }
         }
 
-        private Bitmap GetBitmap(string bitmapName, Color transparentColor) {
-            Bitmap b = null;
+        private Bitmap GetBitmap(string bitmapName) {
             try {
-                b = new Bitmap(typeof(DataGridParentRows), bitmapName);
-                b.MakeTransparent(transparentColor);
+                return DpiHelper.GetBitmapFromIcon(typeof(DataGridParentRows), bitmapName);
             }
             catch (Exception e) {
                 Debug.Fail("Failed to load bitmap: " + bitmapName, e.ToString());
+                return null;
             }
-            return b;
         }
 
         private Bitmap GetRightArrowBitmap()
         {
             if (rightArrow == null)
-                rightArrow = GetBitmap("DataGridParentRows.RightArrow.bmp", Color.White);
+                rightArrow = GetBitmap("DataGridParentRows.RightArrow");
             return rightArrow;
         }
 
         private Bitmap GetLeftArrowBitmap()
         {
             if (leftArrow == null)
-                leftArrow = GetBitmap("DataGridParentRows.LeftArrow.bmp", Color.White);
+                leftArrow = GetBitmap("DataGridParentRows.LeftArrow");
             return leftArrow;
         }
 
@@ -965,11 +957,10 @@ namespace System.Windows.Forms {
             return cx;
         }
 
-        /// <include file='doc\DataGridParentRows.uex' path='docs/doc[@for="DataGridParentRows.PaintText"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///      Draws on the screen the text. It is used only to paint the Table Name and the column Names
         ///      Returns the width of bounding rectangle that was passed in
-        /// </devdoc>
+        /// </summary>
         private int PaintText(Graphics g, Rectangle textBounds, string text, Font font, bool bold, bool alignToRight) {
             Font textFont = font;
             if (bold)
@@ -1115,11 +1106,10 @@ namespace System.Windows.Forms {
                 return owner.parentsCount;
             }
 
-            /// <include file='doc\DataGridParentRows.uex' path='docs/doc[@for="DataGridParentRows.DataGridParentRowsAccessibleObject.GetFocused"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Returns the currently focused child, if any.
             ///      Returns this if the object itself is focused.
-            /// </devdoc>
+            /// </summary>
             public override AccessibleObject GetFocused() {
                 return null;
             }
@@ -1156,10 +1146,9 @@ namespace System.Windows.Forms {
                 return null;
             }
 
-            /// <include file='doc\DataGridParentRows.uex' path='docs/doc[@for="DataGridParentRows.DataGridParentRowsAccessibleObject.Navigate"]/*' />
-            /// <devdoc>
+            /// <summary>
             ///      Navigate to the next or previous grid entry.
-            /// </devdoc>
+            /// </summary>
             public override AccessibleObject Navigate(AccessibleNavigation navdir) {
                 switch (navdir) {
                     case AccessibleNavigation.Right:

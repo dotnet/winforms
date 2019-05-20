@@ -35,9 +35,9 @@ namespace System.Windows.Forms {
             SetStyle(ControlStyles.ResizeRedraw | ControlStyles.SupportsTransparentBackColor, true);
         }
 
-         /// <devdoc>
+         /// <summary>
          ///     Allows the control to optionally shrink when AutoSize is true.
-         /// </devdoc>
+         /// </summary>
          [
          EditorBrowsable(EditorBrowsableState.Never),
          DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -125,12 +125,8 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new event EventHandler AutoSizeChanged{
-            add {
-                base.AutoSizeChanged += value;
-            }
-            remove {
-                base.AutoSizeChanged -= value;
-            }
+            add => base.AutoSizeChanged += value;
+            remove => base.AutoSizeChanged -= value;
         }
 
         [
@@ -144,12 +140,8 @@ namespace System.Windows.Forms {
   
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler CausesValidationChanged {
-            add {
-                base.CausesValidationChanged += value;
-            }
-            remove {
-                base.CausesValidationChanged -= value;
-            }
+            add => base.CausesValidationChanged += value;
+            remove => base.CausesValidationChanged -= value;
         }
 
         [
@@ -169,22 +161,14 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new event EventHandler DockChanged {
-           add {
-                base.DockChanged += value;
-            }
-            remove {
-                base.DockChanged -= value;
-            }
+           add => base.DockChanged += value;
+            remove => base.DockChanged -= value;
         }
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolStripContentPanelOnLoadDescr))]
         public event EventHandler Load {
-            add {
-                Events.AddHandler(EventLoad, value);
-            }
-            remove {
-                Events.RemoveHandler(EventLoad, value);
-            }
+            add => Events.AddHandler(EventLoad, value);
+            remove => Events.RemoveHandler(EventLoad, value);
         }
 
         [
@@ -201,12 +185,8 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new event EventHandler LocationChanged {
-           add {
-                base.LocationChanged += value;
-            }
-            remove {
-                base.LocationChanged -= value;
-            }
+           add => base.LocationChanged += value;
+            remove => base.LocationChanged -= value;
         }
 
         [
@@ -259,12 +239,8 @@ namespace System.Windows.Forms {
         
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler TabIndexChanged {
-            add {
-                base.TabIndexChanged += value;
-            }
-            remove {
-                base.TabIndexChanged -= value;
-            }
+            add => base.TabIndexChanged += value;
+            remove => base.TabIndexChanged -= value;
         }
 
         [
@@ -283,12 +259,8 @@ namespace System.Windows.Forms {
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler TabStopChanged {
-            add {
-                base.TabStopChanged += value;
-            }
-            remove {
-                base.TabStopChanged -= value;
-            }
+            add => base.TabStopChanged += value;
+            remove => base.TabStopChanged -= value;
         }
 
         private ToolStripRendererSwitcher RendererSwitcher {
@@ -316,7 +288,6 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.DrawMode"]/*' />
         [
         SRDescription(nameof(SR.ToolStripRenderModeDescr)),
         SRCategory(nameof(SR.CatAppearance)),
@@ -333,12 +304,8 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripRendererChanged))]
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         public event EventHandler RendererChanged {
-            add {
-                Events.AddHandler(EventRendererChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventRendererChanged, value);
-            }
+            add => Events.AddHandler(EventRendererChanged, value);
+            remove => Events.RemoveHandler(EventRendererChanged, value);
         }
 
         private void HandleRendererChanged(object sender, EventArgs e) {
@@ -372,7 +339,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnDefaultRendererChanged"]/*' />
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         protected virtual void OnRendererChanged(EventArgs e) {
 

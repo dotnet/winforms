@@ -13,12 +13,11 @@ using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
 
 
-    /// <include file='doc\GroupBoxRenderer.uex' path='docs/doc[@for="GroupBoxRenderer"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       This is a rendering class for the GroupBox control.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     public sealed class GroupBoxRenderer {
 
         //Make this per-thread, so that different threads can safely use these methods.
@@ -32,14 +31,13 @@ using Microsoft.Win32;
         private GroupBoxRenderer() {
         }
 
-        /// <include file='doc\ButtonRenderer.uex' path='docs/doc[@for="ButtonRenderer.RenderMatchingApplicationState"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///      If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to 
         /// determine how to render.
         ///      If this property is false, the renderer will always render with visualstyles.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static bool RenderMatchingApplicationState {
             get {
                 return renderMatchingApplicationState;
@@ -55,12 +53,11 @@ using Microsoft.Win32;
             }
         }
 
-        /// <include file='doc\GroupBoxRenderer.uex' path='docs/doc[@for="GroupBoxRenderer.IsBackgroundPartiallyTransparent"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Returns true if the background corresponding to the given state is partially transparent, else false.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static bool IsBackgroundPartiallyTransparent(GroupBoxState state) {
            if (RenderWithVisualStyles) {
                InitializeRenderer((int)state);
@@ -71,13 +68,12 @@ using Microsoft.Win32;
            }
         }
         
-        /// <include file='doc\GroupBoxRenderer.uex' path='docs/doc[@for="GroupBoxRenderer.DrawParentBackground"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       This is just a convenience wrapper for VisualStyleRenderer.DrawThemeParentBackground. For downlevel,
         ///       this isn't required and does nothing.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // Using Graphics instead of IDeviceContext intentionally
         ]
@@ -88,12 +84,11 @@ using Microsoft.Win32;
            }
         }
 
-        /// <include file='doc\GroupBoxRenderer.uex' path='docs/doc[@for="GroupBoxRenderer.DrawGroupBox"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a GroupBox control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void DrawGroupBox(Graphics g, Rectangle bounds, GroupBoxState state) {
             if (RenderWithVisualStyles)
                 DrawThemedGroupBoxNoText(g, bounds, state);
@@ -101,32 +96,29 @@ using Microsoft.Win32;
                 DrawUnthemedGroupBoxNoText(g, bounds, state);
         }
 
-        /// <include file='doc\GroupBoxRenderer.uex' path='docs/doc[@for="GroupBoxRenderer.DrawGroupBox1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a GroupBox control. Uses the text color specified by the theme.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void DrawGroupBox(Graphics g, Rectangle bounds, string groupBoxText, Font font, GroupBoxState state) {
             DrawGroupBox(g, bounds, groupBoxText, font, TextFormatFlags.Top | TextFormatFlags.Left, state);
         }
 
-        /// <include file='doc\GroupBoxRenderer.uex' path='docs/doc[@for="GroupBoxRenderer.DrawGroupBox2"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a GroupBox control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void DrawGroupBox(Graphics g, Rectangle bounds, string groupBoxText, Font font, Color textColor, GroupBoxState state) {
             DrawGroupBox(g, bounds, groupBoxText, font, textColor, TextFormatFlags.Top | TextFormatFlags.Left, state);
         }
 
-        /// <include file='doc\GroupBoxRenderer.uex' path='docs/doc[@for="GroupBoxRenderer.DrawGroupBox3"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a GroupBox control. Uses the text color specified by the theme.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void DrawGroupBox(Graphics g, Rectangle bounds, string groupBoxText, Font font, TextFormatFlags flags, GroupBoxState state) {
             if (RenderWithVisualStyles)
                 DrawThemedGroupBoxWithText(g, bounds, groupBoxText, font, DefaultTextColor(state), flags, state);
@@ -134,12 +126,11 @@ using Microsoft.Win32;
                 DrawUnthemedGroupBoxWithText(g, bounds, groupBoxText, font, DefaultTextColor(state), flags, state);
         }
 
-        /// <include file='doc\GroupBoxRenderer.uex' path='docs/doc[@for="GroupBoxRenderer.DrawGroupBox4"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a GroupBox control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void DrawGroupBox(Graphics g, Rectangle bounds, string groupBoxText, Font font, Color textColor, TextFormatFlags flags, GroupBoxState state) {
             if (RenderWithVisualStyles)
                 DrawThemedGroupBoxWithText(g, bounds, groupBoxText, font, textColor, flags, state);
@@ -150,7 +141,6 @@ using Microsoft.Win32;
         /// <summary>
         ///     Draws a themed GroupBox with no text label.
         /// </summary>
-        /// <internalonly/>
         private static void DrawThemedGroupBoxNoText(Graphics g, Rectangle bounds, GroupBoxState state) {
             InitializeRenderer((int)state);
             visualStyleRenderer.DrawBackground(g, bounds);
@@ -159,7 +149,6 @@ using Microsoft.Win32;
         /// <summary>
         ///     Draws a themed GroupBox with a text label.
         /// </summary>
-        /// <internalonly/>
         private static void DrawThemedGroupBoxWithText(Graphics g, Rectangle bounds, string groupBoxText, Font font, Color textColor, TextFormatFlags flags, GroupBoxState state) {
             InitializeRenderer((int)state);
 
@@ -218,7 +207,6 @@ using Microsoft.Win32;
         /// <summary>
         ///     Draws an un-themed GroupBox with no text label.
         /// </summary>
-        /// <internalonly/>
         private static void DrawUnthemedGroupBoxNoText(Graphics g, Rectangle bounds, GroupBoxState state) {
             Color backColor = SystemColors.Control;         
             Pen light = new Pen(ControlPaint.Light(backColor, 1.0f));
@@ -254,7 +242,6 @@ using Microsoft.Win32;
         ///     Draws an un-themed GroupBox with a text label.
         ///     Variation of the logic in GroupBox.DrawGroupBox().
         /// </summary>
-        /// <internalonly/>
         private static void DrawUnthemedGroupBoxWithText(Graphics g, Rectangle bounds, string groupBoxText, Font font, Color textColor, TextFormatFlags flags, GroupBoxState state) {
             // Calculate text area, and render text inside it
             Rectangle textBounds = bounds;
@@ -318,8 +305,7 @@ using Microsoft.Win32;
 
         private static void InitializeRenderer(int state) {
             int part = GroupBoxElement.Part;
-            if (AccessibilityImprovements.Level2
-                && SystemInformation.HighContrast
+            if (SystemInformation.HighContrast
                 && ((GroupBoxState)state == GroupBoxState.Disabled)
                 && VisualStyleRenderer.IsCombinationDefined(GroupBoxElement.ClassName, VisualStyleElement.Button.GroupBox.HighContrastDisabledPart)) {
                     part = VisualStyleElement.Button.GroupBox.HighContrastDisabledPart;

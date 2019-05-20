@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 namespace System.Windows.Forms {
-    using System.Runtime.Remoting;
 
     using System;
     
@@ -18,10 +17,9 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn"]/*' />
-    /// <devdoc>
+    /// <summary>
     /// <para>Hosts a System.Windows.Forms.TextBox control in a cell of a System.Windows.Forms.DataGridColumnStyle for editing strings.</para>
-    /// </devdoc>
+    /// </summary>
     public class DataGridTextBoxColumn : DataGridColumnStyle {
 
         // ui State
@@ -40,11 +38,10 @@ namespace System.Windows.Forms {
         private string oldValue = null;
         private int editRow = -1;
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.DataGridTextBoxColumn"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of the System.Windows.Forms.DataGridTextBoxColumn
         /// class.</para>
-        /// </devdoc>
+        /// </summary>
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set format
                                                                                                     // it would be a breaking change.
@@ -52,11 +49,10 @@ namespace System.Windows.Forms {
         public DataGridTextBoxColumn() : this(null, null) {
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.DataGridTextBoxColumn1"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of a System.Windows.Forms.DataGridTextBoxColumn with
         ///    a specified System.Data.DataColumn.</para>
-        /// </devdoc>
+        /// </summary>
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set format
                                                                                                     // it would be a breaking change.
@@ -65,18 +61,16 @@ namespace System.Windows.Forms {
         : this(prop, null, false) {
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.DataGridTextBoxColumn2"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of a System.Windows.Forms.DataGridTextBoxColumn. with
         ///    the specified System.Data.DataColumn and System.Windows.Forms.ComponentModel.Format.</para>
-        /// </devdoc>
+        /// </summary>
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set format
                                                                                                     // it would be a breaking change.
         ]
         public DataGridTextBoxColumn(PropertyDescriptor prop, string format) : this(prop, format, false){}
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.DataGridTextBoxColumn3"]/*' />
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set format
                                                                                                     // it would be a breaking change.
@@ -90,7 +84,6 @@ namespace System.Windows.Forms {
             this.Format = format;
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.DataGridTextBoxColumn4"]/*' />
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set format
                                                                                                     // it would be a breaking change.
@@ -102,10 +95,9 @@ namespace System.Windows.Forms {
         // =        Properties
         // =------------------------------------------------------------------
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.TextBox"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets the hosted System.Windows.Forms.TextBox control.</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
         public virtual TextBox TextBox {
             get {
@@ -113,7 +105,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.KeyPress"]/*' />
         internal override bool KeyPress(int rowNum, Keys keyData) {
             if (edit.IsInEditOrNavigateMode)
                 return base.KeyPress(rowNum, keyData);
@@ -124,13 +115,12 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.SetDataGridInColumn"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Adds a System.Windows.Forms.TextBox control to the System.Windows.Forms.DataGrid control's System.Windows.Forms.Control.ControlCollection
         ///       .
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void SetDataGridInColumn(DataGrid value) {
             base.SetDataGridInColumn(value);
             if (edit.ParentInternal != null) {
@@ -157,11 +147,10 @@ namespace System.Windows.Forms {
         }
         */
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.PropertyDescriptor"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets or sets the System.Windows.Forms.ComponentModel.Format for the System.Windows.Forms.DataGridTextBoxColumn
         /// .</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRDescription(nameof(SR.FormatControlFormatDescr)),
         DefaultValue(null)
@@ -180,7 +169,6 @@ namespace System.Windows.Forms {
 
         // add the corresponding value Editor: rip one from the valueEditor for the DisplayMember in the 
         // format object
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.Format"]/*' />
         [DefaultValue(null), Editor("System.Windows.Forms.Design.DataGridColumnStyleFormatEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor))]
         public string Format {
             get {
@@ -188,7 +176,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value == null)
-                    value = "";
+                    value = string.Empty;
                 if (format == null || !format.Equals(value)) {
                     this.format = value;
 
@@ -205,7 +193,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.FormatInfo"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public IFormatProvider FormatInfo {
             get {
@@ -217,7 +204,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.ReadOnly"]/*' />
         public override bool ReadOnly {
             get {
                 return base.ReadOnly;
@@ -242,24 +228,22 @@ namespace System.Windows.Forms {
         }
 
         // will hide the edit control
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.ConcedeFocus"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Informs the column the focus is being conceded.</para>
-        /// </devdoc>
+        /// </summary>
         protected internal override void ConcedeFocus() {
             edit.Bounds = Rectangle.Empty;
             // edit.Visible = false;
             // HideEditBox();
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.HideEditBox"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Hides the System.Windows.Forms.TextBox
         ///       control and moves the focus to the System.Windows.Forms.DataGrid
         ///       control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected void HideEditBox() {
             bool wasFocused = edit.Focused;
             edit.Visible = false;
@@ -279,12 +263,11 @@ namespace System.Windows.Forms {
             // however, in that situation, we are left w/ the editColumn which is not parented.
             // the grid will call Edit to reset the EditColumn
             if (wasFocused && this.DataGridTableStyle != null && this.DataGridTableStyle.DataGrid != null && this.DataGridTableStyle.DataGrid.CanFocus) {
-                this.DataGridTableStyle.DataGrid.FocusInternal();
+                this.DataGridTableStyle.DataGrid.Focus();
                 Debug.Assert(!edit.Focused, "the edit control just conceeded focus to the dataGrid");
             }
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.UpdateUI"]/*' />
         protected internal override void UpdateUI(CurrencyManager source, int rowNum, string displayText)
         {
             edit.Text = GetText(GetColumnValueAtRow(source, rowNum));
@@ -293,23 +276,21 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.EndEdit"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Ends an edit operation on the System.Windows.Forms.DataGridColumnStyle
         /// .</para>
-        /// </devdoc>
+        /// </summary>
         protected void EndEdit() {
             edit.IsInEditOrNavigateMode = true;
             DebugOut("Ending Edit");
             Invalidate();
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.GetPreferredSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Returns the optimum width and
         ///       height of the cell in a specified row relative
         ///       to the specified value.</para>
-        /// </devdoc>
+        /// </summary>
         protected internal override Size GetPreferredSize(Graphics g, object value) {
             Size extents = Size.Ceiling(g.MeasureString(GetText(value), DataGridTableStyle.DataGrid.Font));
             extents.Width += xMargin*2 + this.DataGridTableStyle.GridLineWidth;
@@ -317,22 +298,20 @@ namespace System.Windows.Forms {
             return extents;
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.GetMinimumHeight"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets the height of a cell in a System.Windows.Forms.DataGridColumnStyle
         ///       .
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected internal override int GetMinimumHeight() {
             // why + 3? cause we have to give some way to the edit box.
             return FontHeight + yMargin + 3;
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.GetPreferredHeight"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the height to be used in for automatically resizing columns.</para>
-        /// </devdoc>
+        /// </summary>
         protected internal override int GetPreferredHeight(Graphics g, object value) {
             int newLineIndex = 0;
             int newLines = 0;
@@ -346,12 +325,11 @@ namespace System.Windows.Forms {
             return FontHeight * newLines + yMargin;
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.Abort"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initiates a request to interrupt an edit procedure.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected internal override void Abort(int rowNum) {
             RollBack();
             HideEditBox();
@@ -359,12 +337,11 @@ namespace System.Windows.Forms {
         }
 
         // used for Alt0 functionality
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.EnterNullValue"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Enters a <see langword='null '/>in the column.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected internal override void EnterNullValue() {
             if (this.ReadOnly)
                 return;
@@ -387,12 +364,11 @@ namespace System.Windows.Forms {
                 this.DataGridTableStyle.DataGrid.ColumnStartedEditing(edit.Bounds);
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.Commit"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Inititates a request to complete an editing procedure.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected internal override bool Commit(CurrencyManager dataSource, int rowNum) {
             // always hide the edit box
             // HideEditBox();
@@ -436,10 +412,9 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.Edit"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Prepares a cell for editing.</para>
-        /// </devdoc>
+        /// </summary>
         protected internal override void Edit(CurrencyManager source,
                                     int rowNum,
                                     Rectangle bounds,
@@ -480,7 +455,7 @@ namespace System.Windows.Forms {
 
             edit.RightToLeft = this.DataGridTableStyle.DataGrid.RightToLeft;
 
-            edit.FocusInternal();
+            edit.Focus();
 
             editRow = rowNum;
 
@@ -524,52 +499,47 @@ namespace System.Windows.Forms {
             return(value != null ? value.ToString() : "");
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.Paint"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Paints the a System.Windows.Forms.DataGridColumnStyle with the specified System.Drawing.Graphics,
         /// System.Drawing.Rectangle, DataView.Rectangle, and row number. </para>
-        /// </devdoc>
+        /// </summary>
         protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum) {
             Paint(g, bounds, source, rowNum, false);
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.Paint1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Paints a System.Windows.Forms.DataGridColumnStyle with the specified System.Drawing.Graphics, System.Drawing.Rectangle, DataView, row number, and alignment.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum, bool alignToRight) {
             string text = GetText(GetColumnValueAtRow(source, rowNum));
             PaintText(g, bounds, text, alignToRight);
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.Paint2"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// <para>Paints a System.Windows.Forms.DataGridColumnStyle with the specified System.Drawing.Graphics,
         /// System.Drawing.Rectangle, DataView.Rectangle, row number, background color, 
         ///    and foreground color..</para>
-        /// </devdoc>
+        /// </summary>
         protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum,
                                      Brush backBrush, Brush foreBrush, bool alignToRight) {
             string text = GetText(GetColumnValueAtRow(source, rowNum));
             PaintText(g, bounds, text, backBrush, foreBrush, alignToRight);
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.PaintText"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Draws the text and
         ///       rectangle at the given location with the specified alignment.</para>
-        /// </devdoc>
+        /// </summary>
         protected void PaintText(Graphics g, Rectangle bounds, string text, bool alignToRight) {
             PaintText(g, bounds, text, this.DataGridTableStyle.BackBrush, this.DataGridTableStyle.ForeBrush, alignToRight);
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.PaintText1"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>Draws the text and rectangle at the specified location with the
         ///       specified colors and alignment.</para>
-        /// </devdoc>
+        /// </summary>
         protected void PaintText(Graphics g, Rectangle textBounds, string text, Brush backBrush, Brush foreBrush, bool alignToRight) {
             /*
             if (edit.Visible)
@@ -603,7 +573,6 @@ namespace System.Windows.Forms {
             edit.Text = oldValue;
         }
 
-        /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.ReleaseHostedControl"]/*' />
         protected internal override void ReleaseHostedControl() {
             if (edit.ParentInternal != null) {
                 edit.ParentInternal.Controls.Remove(edit);

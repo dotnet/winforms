@@ -15,22 +15,20 @@ namespace System.Windows.Forms {
     using System.Runtime.Versioning;
     using Microsoft.Win32;
 
-    /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Represents
     ///       a common dialog box that displays a list of fonts that are currently installed
     ///       on
     ///       the system.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     [
     DefaultEvent(nameof(Apply)),
     DefaultProperty(nameof(Font)),
     SRDescription(nameof(SR.DescriptionFontDialog))
     ]
     public class FontDialog : CommonDialog {
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.EventApply"]/*' />
         protected static readonly object EventApply = new object();
 
         private const int defaultMinSize = 0;
@@ -44,13 +42,12 @@ namespace System.Windows.Forms {
         private bool showColor = false;
         private bool usingDefaultIndirectColor = false;
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.FontDialog"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.FontDialog'/>
         ///       class.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not call Reset
                                                                                                     // it would be a breaking change.
@@ -59,13 +56,12 @@ namespace System.Windows.Forms {
             Reset();
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.AllowSimulations"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box allows graphics device interface
         ///       (GDI) font simulations.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
@@ -81,12 +77,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.AllowVectorFonts"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box allows vector font selections.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
@@ -102,14 +97,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.AllowVerticalFonts"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether
         ///       the dialog box displays both vertical and horizontal fonts or only
         ///       horizontal fonts.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
@@ -125,15 +119,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.AllowScriptChange"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets
         ///       or sets a value indicating whether the user can change the character set specified
         ///       in the Script combo box to display a character set other than the one
         ///       currently displayed.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
@@ -149,12 +142,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.Color"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating the selected font color.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatData)), 
         SRDescription(nameof(SR.FnDcolorDescr)),
@@ -181,13 +173,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.FixedPitchOnly"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets
         ///       a value indicating whether the dialog box allows only the selection of fixed-pitch fonts.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -203,12 +194,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.Font"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating the selected font.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatData)), 
         SRDescription(nameof(SR.FnDfontDescr))
@@ -234,13 +224,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.FontMustExist"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box specifies an error condition if the
         ///       user attempts to select a font or style that does not exist.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -256,13 +245,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.MaxSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the maximum
         ///       point size a user can select.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatData)), 
         DefaultValue(defaultMaxSize),
@@ -284,12 +272,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.MinSize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating the minimum point size a user can select.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatData)), 
         DefaultValue(defaultMinSize),
@@ -311,27 +298,24 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.Options"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets the value passed to CHOOSEFONT.Flags.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected int Options {
             get {
                 return options;
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.ScriptsOnly"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a
         ///       value indicating whether the dialog box allows selection of fonts for all non-OEM and Symbol character
         ///       sets, as well as the ----n National Standards Institute (ANSI) character set.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -346,12 +330,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.ShowApply"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box contains an Apply button.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -366,12 +349,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.ShowColor"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box displays the color choice.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -386,13 +368,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.ShowEffects"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box contains controls that allow the
         ///       user to specify strikethrough, underline, and text color options.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
@@ -407,12 +388,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.ShowHelp"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box displays a Help button.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -427,46 +407,38 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.Apply"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Occurs when the user clicks the Apply button in the font
         ///       dialog box.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.FnDapplyDescr))]
         public event EventHandler Apply {
-            add {
-                Events.AddHandler(EventApply, value);
-            }
-            remove {
-                Events.RemoveHandler(EventApply, value);
-            }
+            add => Events.AddHandler(EventApply, value);
+            remove => Events.RemoveHandler(EventApply, value);
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.GetOption"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Returns the state of the given option flag.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         internal bool GetOption(int option) {
             return(options & option) != 0;
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.HookProc"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Specifies the common dialog box hook procedure that is overridden to add
         ///       specific functionality to a common dialog box.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override IntPtr HookProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam) {
             
             switch (msg) {
-                case NativeMethods.WM_COMMAND:
+                case Interop.WindowMessages.WM_COMMAND:
                     if ((int)wparam == 0x402) {
                         NativeMethods.LOGFONT lf = new NativeMethods.LOGFONT();
-                        UnsafeNativeMethods.SendMessage(new HandleRef(null, hWnd), NativeMethods.WM_CHOOSEFONT_GETLOGFONT, 0, lf);
+                        UnsafeNativeMethods.SendMessage(new HandleRef(null, hWnd), Interop.WindowMessages.WM_CHOOSEFONT_GETLOGFONT, 0, lf);
                         UpdateFont(lf);
                         int index = (int)UnsafeNativeMethods.SendDlgItemMessage(new HandleRef(null, hWnd), 0x473, NativeMethods.CB_GETCURSEL, IntPtr.Zero, IntPtr.Zero);
                         if (index != NativeMethods.CB_ERR) {
@@ -488,7 +460,7 @@ namespace System.Windows.Forms {
                         }
                     }
                     break;
-                case NativeMethods.WM_INITDIALOG:
+                case Interop.WindowMessages.WM_INITDIALOG:
                     if (!showColor) {
                         IntPtr hWndCtl = UnsafeNativeMethods.GetDlgItem(new HandleRef(null, hWnd), NativeMethods.cmb4);
                         SafeNativeMethods.ShowWindow(new HandleRef(null, hWndCtl), NativeMethods.SW_HIDE);
@@ -501,23 +473,21 @@ namespace System.Windows.Forms {
             return base.HookProc(hWnd, msg, wparam, lparam);
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.OnApply"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.FontDialog.Apply'/> event.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnApply(EventArgs e) {
             EventHandler handler = (EventHandler)Events[EventApply];
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.Reset"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Resets all dialog box options to their default values.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override void Reset() {
             options = NativeMethods.CF_SCREENFONTS | NativeMethods.CF_EFFECTS;
             font = null;
@@ -533,16 +503,14 @@ namespace System.Windows.Forms {
             font = null;
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.RunDialog"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       The actual implementation of running the dialog. Inheriting classes
         ///       should override this if they want to add more functionality, and call
         ///       base.runDialog() if necessary
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override bool RunDialog(IntPtr hWndOwner) {
             NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(this.HookProc);
             NativeMethods.CHOOSEFONT cf = new NativeMethods.CHOOSEFONT();
@@ -561,10 +529,10 @@ namespace System.Windows.Forms {
 
             IntPtr logFontPtr = IntPtr.Zero;
             try {
-                logFontPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(NativeMethods.LOGFONT)));
+                logFontPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf<NativeMethods.LOGFONT>());
                 Marshal.StructureToPtr(lf, logFontPtr, false);
 
-                cf.lStructSize = Marshal.SizeOf(typeof(NativeMethods.CHOOSEFONT));
+                cf.lStructSize = Marshal.SizeOf<NativeMethods.CHOOSEFONT>();
                 cf.hwndOwner = hWndOwner;
                 cf.hDC = IntPtr.Zero;
                 cf.lpLogFont = logFontPtr;
@@ -597,8 +565,7 @@ namespace System.Windows.Forms {
                 if (!SafeNativeMethods.ChooseFont(cf)) return false;
 
 
-                NativeMethods.LOGFONT lfReturned = null;
-                lfReturned = (NativeMethods.LOGFONT)UnsafeNativeMethods.PtrToStructure(logFontPtr, typeof(NativeMethods.LOGFONT));
+                NativeMethods.LOGFONT lfReturned = Marshal.PtrToStructure<NativeMethods.LOGFONT>(logFontPtr);
 
                 if (lfReturned.lfFaceName != null && lfReturned.lfFaceName.Length > 0) {
                     lf = lfReturned;
@@ -614,11 +581,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.SetOption"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Sets the given option to the given boolean value.
-        /// </devdoc>
-        /// <internalonly/>
+        /// </summary>
         internal void SetOption(int option, bool value) {
             if (value) {
                 options |= option;
@@ -628,35 +593,30 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.ShouldSerializeFont"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Indicates whether the <see cref='System.Windows.Forms.FontDialog.Font'/> property should be
         ///       persisted.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         private bool ShouldSerializeFont() {
             return !Font.Equals(Control.DefaultFont);
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.ToString"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Retrieves a string that includes the name of the current font selected in
         ///       the dialog box.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override string ToString() {
             string s = base.ToString();
             return s + ",  Font: " + Font.ToString();
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.UpdateColor"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         private void UpdateColor(int rgb) {
             if (ColorTranslator.ToWin32(color) != rgb) {
                 color = ColorTranslator.FromOle(rgb);
@@ -664,10 +624,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.UpdateFont"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// </summary>
         private void UpdateFont(NativeMethods.LOGFONT lf) {
             IntPtr screenDC = UnsafeNativeMethods.GetDC(NativeMethods.NullHandleRef);
             try {
