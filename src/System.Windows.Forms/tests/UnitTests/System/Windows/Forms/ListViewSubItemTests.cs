@@ -93,6 +93,46 @@ namespace System.Windows.Forms.Tests
 
             var subItem = new ListViewItem.ListViewSubItem(item, "text");
             Assert.Equal(Color.Red, subItem.BackColor);
+
+            // Remove from the list view.
+            listView.Items.Remove(item);
+            Assert.Equal(SystemColors.Window, subItem.BackColor);
+        }
+
+        [Fact]
+        public void ListViewSubItem_BackColor_GetWithListViewItem_ReturnsEqual()
+        {
+            var item = new ListViewItem
+            {
+                BackColor = Color.Red
+            };
+            var subItem = new ListViewItem.ListViewSubItem(item, "text");
+            Assert.Equal(SystemColors.Window, subItem.BackColor);
+
+            // Remove from the list view item.
+            item.SubItems.Remove(subItem);
+            Assert.Equal(SystemColors.Window, subItem.BackColor);
+        }
+
+        [Fact]
+        public void ListViewSubItem_BackColor_GetWithListViewItemWithListView_ReturnsEqual()
+        {
+            var listView = new ListView
+            {
+                BackColor = Color.Red
+            };
+            var item = new ListViewItem
+            {
+                BackColor = Color.Blue
+            };
+            listView.Items.Add(item);
+            var subItem = new ListViewItem.ListViewSubItem();
+            item.SubItems.Add(subItem);
+            Assert.Equal(Color.Red, subItem.BackColor);
+
+            // Remove from the list view item.
+            item.SubItems.Remove(subItem);
+            Assert.Equal(SystemColors.Window, subItem.BackColor);
         }
 
         public static IEnumerable<object[]> BackColor_Set_TestData()
@@ -109,6 +149,55 @@ namespace System.Windows.Forms.Tests
             {
                 BackColor = value
             };
+            Assert.Equal(expected, subItem.BackColor);
+            
+            // Set same.
+            subItem.BackColor = value;
+            Assert.Equal(expected, subItem.BackColor);
+        }
+
+        public static IEnumerable<object[]> BackColor_SetWithListView_TestData()
+        {
+            yield return new object[] { Color.Green, Color.Green };
+            yield return new object[] { Color.Empty, Color.Red };
+        }
+
+        [Theory]
+        [MemberData(nameof(BackColor_SetWithListView_TestData))]
+        public void ListViewSubItem_BackColor_SetWithListViewItemWithListView_GetReturnsExpected(Color value, Color expected)
+        {
+            var listView = new ListView
+            {
+                BackColor = Color.Red
+            };
+            var item = new ListViewItem
+            {
+                BackColor = Color.Blue
+            };
+            listView.Items.Add(item);
+            var subItem = new ListViewItem.ListViewSubItem();
+            item.SubItems.Add(subItem);
+            
+            subItem.BackColor = value;
+            Assert.Equal(expected, subItem.BackColor);
+            
+            // Set same.
+            subItem.BackColor = value;
+            Assert.Equal(expected, subItem.BackColor);
+        }
+
+        [Theory]
+        [MemberData(nameof(BackColor_Set_TestData))]
+        public void ListViewSubItem_BackColor_SetWithListViewItem_GetReturnsExpected(Color value, Color expected)
+        {
+            var item = new ListViewItem
+            {
+                BackColor = Color.Blue
+            };
+            var subItem = new ListViewItem.ListViewSubItem();
+            item.SubItems.Add(subItem);
+            
+            subItem.BackColor = value;
             Assert.Equal(expected, subItem.BackColor);
             
             // Set same.
@@ -140,22 +229,100 @@ namespace System.Windows.Forms.Tests
 
             var subItem = new ListViewItem.ListViewSubItem(item, "text");
             Assert.Equal(SystemFonts.MenuFont, subItem.Font);
+
+            // Remove from the list view.
+            listView.Items.Remove(item);
+            Assert.Equal(SystemColors.Window, subItem.BackColor);
         }
 
-        public static IEnumerable<object[]> Font_Set_TestData()
+        [Fact]
+        public void ListViewSubItem_Font_GetWithListViewItem_ReturnsEqual()
         {
-            yield return new object[] { SystemFonts.MenuFont };
-            yield return new object[] { null };
+            var item = new ListViewItem
+            {
+                Font = SystemFonts.DialogFont
+            };
+            var subItem = new ListViewItem.ListViewSubItem(item, "text");
+            Assert.Equal(Control.DefaultFont, subItem.Font);
+
+            // Remove from the list view item.
+            item.SubItems.Remove(subItem);
+            Assert.Equal(Control.DefaultFont, subItem.Font);
+        }
+
+        [Fact]
+        public void ListViewSubItem_Font_GetWithListViewItemWithListView_ReturnsEqual()
+        {
+            var listView = new ListView
+            {
+                Font = SystemFonts.CaptionFont
+            };
+            var item = new ListViewItem
+            {
+                Font = SystemFonts.DialogFont
+            };
+            listView.Items.Add(item);
+
+            var subItem = new ListViewItem.ListViewSubItem();
+            item.SubItems.Add(subItem);
+            Assert.Equal(SystemFonts.CaptionFont, subItem.Font);
+
+            // Remove from the list view item.
+            item.SubItems.Remove(subItem);
+            Assert.Equal(Control.DefaultFont, subItem.Font);
         }
 
         [Theory]
-        [MemberData(nameof(Font_Set_TestData))]
+        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
         public void ListViewSubItem_Font_Set_GetReturnsExpected(Font value)
         {
             var subItem = new ListViewItem.ListViewSubItem
             {
                 Font = value
             };
+            Assert.Same(value ?? Control.DefaultFont, subItem.Font);
+            
+            // Set same.
+            subItem.Font = value;
+            Assert.Same(value ?? Control.DefaultFont, subItem.Font);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        public void ListViewSubItem_Font_SetWithListViewItemWithListView_GetReturnsExpected(Font value)
+        {
+            var listView = new ListView
+            {
+                Font = SystemFonts.CaptionFont
+            };
+            var item = new ListViewItem
+            {
+                Font = SystemFonts.DialogFont
+            };
+            listView.Items.Add(item);
+            var subItem = new ListViewItem.ListViewSubItem();
+            item.SubItems.Add(subItem);
+
+            subItem.Font = value;
+            Assert.Equal(value ?? SystemFonts.CaptionFont, subItem.Font);
+            
+            // Set same.
+            subItem.Font = value;
+            Assert.Equal(value ?? SystemFonts.CaptionFont, subItem.Font);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        public void ListViewSubItem_Font_SetWithListViewItem_GetReturnsExpected(Font value)
+        {
+            var item = new ListViewItem
+            {
+                Font = SystemFonts.DialogFont
+            };
+            var subItem = new ListViewItem.ListViewSubItem();
+            item.SubItems.Add(subItem);
+            
+            subItem.Font = value;
             Assert.Equal(value ?? Control.DefaultFont, subItem.Font);
             
             // Set same.
@@ -175,6 +342,46 @@ namespace System.Windows.Forms.Tests
 
             var subItem = new ListViewItem.ListViewSubItem(item, "text");
             Assert.Equal(Color.Red, subItem.ForeColor);
+
+            // Remove from the list view.
+            listView.Items.Remove(item);
+            Assert.Equal(SystemColors.WindowText, subItem.ForeColor);
+        }
+
+        [Fact]
+        public void ListViewSubItem_ForeColor_GetWithListViewItem_ReturnsEqual()
+        {
+            var item = new ListViewItem
+            {
+                ForeColor = Color.Red
+            };
+            var subItem = new ListViewItem.ListViewSubItem(item, "text");
+            Assert.Equal(SystemColors.WindowText, subItem.ForeColor);
+
+            // Remove from the list view item.
+            item.SubItems.Remove(subItem);
+            Assert.Equal(SystemColors.WindowText, subItem.ForeColor);
+        }
+
+        [Fact]
+        public void ListViewSubItem_ForeColor_GetWithListViewItemWithListView_ReturnsEqual()
+        {
+            var listView = new ListView
+            {
+                ForeColor = Color.Red
+            };
+            var item = new ListViewItem
+            {
+                ForeColor = Color.Blue
+            };
+            listView.Items.Add(item);
+            var subItem = new ListViewItem.ListViewSubItem();
+            item.SubItems.Add(subItem);
+            Assert.Equal(Color.Red, subItem.ForeColor);
+
+            // Remove from the list view item.
+            item.SubItems.Remove(subItem);
+            Assert.Equal(SystemColors.WindowText, subItem.ForeColor);
         }
 
         public static IEnumerable<object[]> ForeColor_Set_TestData()
@@ -191,6 +398,54 @@ namespace System.Windows.Forms.Tests
             {
                 ForeColor = value
             };
+            Assert.Equal(expected, subItem.ForeColor);
+            
+            // Set same.
+            subItem.ForeColor = value;
+            Assert.Equal(expected, subItem.ForeColor);
+        }
+        public static IEnumerable<object[]> ForeColor_SetWithListView_TestData()
+        {
+            yield return new object[] { Color.Green, Color.Green };
+            yield return new object[] { Color.Empty, Color.Red };
+        }
+
+        [Theory]
+        [MemberData(nameof(ForeColor_SetWithListView_TestData))]
+        public void ListViewSubItem_ForeColor_SetWithListViewItemWithListView_GetReturnsExpected(Color value, Color expected)
+        {
+            var listView = new ListView
+            {
+                ForeColor = Color.Red
+            };
+            var item = new ListViewItem
+            {
+                ForeColor = Color.Blue
+            };
+            listView.Items.Add(item);
+            var subItem = new ListViewItem.ListViewSubItem();
+            item.SubItems.Add(subItem);
+            
+            subItem.ForeColor = value;
+            Assert.Equal(expected, subItem.ForeColor);
+            
+            // Set same.
+            subItem.ForeColor = value;
+            Assert.Equal(expected, subItem.ForeColor);
+        }
+
+        [Theory]
+        [MemberData(nameof(ForeColor_Set_TestData))]
+        public void ListViewSubItem_ForeColor_SetWithListViewItem_GetReturnsExpected(Color value, Color expected)
+        {
+            var item = new ListViewItem
+            {
+                ForeColor = Color.Blue
+            };
+            var subItem = new ListViewItem.ListViewSubItem();
+            item.SubItems.Add(subItem);
+            
+            subItem.ForeColor = value;
             Assert.Equal(expected, subItem.ForeColor);
             
             // Set same.

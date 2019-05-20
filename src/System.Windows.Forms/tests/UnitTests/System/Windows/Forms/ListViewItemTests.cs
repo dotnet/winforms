@@ -854,6 +854,23 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetColorTheoryData))]
+        public void ListViewItem_BackColor_GetWithOwner_ReturnsExpected(Color value)
+        {
+            var listView = new ListView
+            {
+                BackColor = value
+            };
+            var item = new ListViewItem();
+            listView.Items.Add(item);
+            Assert.Equal(value, item.BackColor);
+
+            // Remove item.
+            listView.Items.Remove(item);
+            Assert.Equal(SystemColors.Window, item.BackColor);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetColorTheoryData))]
         public void ListViewItem_BackColor_Set_GetReturnsExpected(Color value)
         {
             var item = new ListViewItem
@@ -861,6 +878,27 @@ namespace System.Windows.Forms.Tests
                 BackColor = value
             };
             Assert.Equal(value, item.BackColor);
+
+            // Set same.
+            item.BackColor = value;
+            Assert.Equal(value, item.BackColor);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetColorTheoryData))]
+        public void ListViewItem_ForeColor_GetWithOwner_ReturnsExpected(Color value)
+        {
+            var listView = new ListView
+            {
+                ForeColor = value
+            };
+            var item = new ListViewItem();
+            listView.Items.Add(item);
+            Assert.Equal(value, item.ForeColor);
+
+            // Remove item.
+            listView.Items.Remove(item);
+            Assert.Equal(SystemColors.WindowText, item.ForeColor);
         }
 
         [Theory]
@@ -872,6 +910,77 @@ namespace System.Windows.Forms.Tests
                 ForeColor = value
             };
             Assert.Equal(value, item.ForeColor);
+
+            // Set same.
+            item.ForeColor = value;
+            Assert.Equal(value, item.ForeColor);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetColorTheoryData))]
+        public void ListViewItem_ForeColor_SetWithOwner_GetReturnsExpected(Color value)
+        {
+            var listView = new ListView();
+            var item = new ListViewItem();
+            listView.Items.Add(item);
+            
+            item.ForeColor = value;
+            Assert.Equal(value, item.ForeColor);
+
+            // Set same.
+            item.ForeColor = value;
+            Assert.Equal(value, item.ForeColor);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        public void ListViewItem_Font_GetWithOwner_ReturnsExpected(Font value)
+        {
+            var listView = new ListView
+            {
+                Font = value
+            };
+            var item = new ListViewItem();
+            listView.Items.Add(item);
+            Assert.Equal(value ?? Control.DefaultFont, item.Font);
+
+            // Remove item.
+            listView.Items.Remove(item);
+            Assert.Equal(Control.DefaultFont, item.Font);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        public void ListViewItem_Font_Set_GetReturnsExpected(Font value)
+        {
+            var item = new ListViewItem
+            {
+                Font = value
+            };
+            Assert.Equal(value ?? Control.DefaultFont, item.Font);
+
+            // Set same.
+            item.Font = value;
+            Assert.Equal(value ?? Control.DefaultFont, item.Font);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        public void ListViewItem_Font_SetWithOwner_GetReturnsExpected(Font value)
+        {
+            var listView = new ListView
+            {
+                Font = SystemFonts.CaptionFont
+            };
+            var item = new ListViewItem();
+            listView.Items.Add(item);
+            
+            item.Font = value;
+            Assert.Equal(value ?? SystemFonts.CaptionFont, item.Font);
+
+            // Set same.
+            item.Font = value;
+            Assert.Equal(value ?? SystemFonts.CaptionFont, item.Font);
         }
 
         [Fact]
