@@ -4,19 +4,19 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Determines which child controls in a ContainerControl will be validated
     /// by the <see cref='ContainerControl.ValidateChildren'/> method.
-    /// </devdoc>
+    /// </summary>
     [Flags]
     public enum ValidationConstraints
     {
-        /// <devdoc>
+        /// <summary>
         /// All child controls and their descendants are validated.
-        /// </devdoc>
+        /// </summary>
         None = 0x00,
 
-        /// <devdoc>
+        /// <summary>
         /// Child control must be selectable to be validated.
         ///
         /// Note: This flag allows validation of a control that has the
@@ -24,28 +24,28 @@ namespace System.Windows.Forms
         /// even when that control is currently unselectable because it has been
         /// disabled or hidden. To prevent validation of selectable controls that
         /// are currently disabled or hidden,
-        /// </devdoc>
+        /// </summary>
         Selectable = 0x01,
 
-        /// <devdoc>
+        /// <summary>
         /// Child control must be enabled to be validated (Control.Enabled = true).
-        /// </devdoc>
+        /// </summary>
         Enabled = 0x02,
 
-        /// <devdoc>
+        /// <summary>
         /// Child control must be visible to be validated (Control.Visible = true).
-        /// </devdoc>
+        /// </summary>
         Visible = 0x04,
 
-        /// <devdoc>
+        /// <summary>
         /// Child control must be a tab stops to be validated (Control.TabStop = true).
-        /// </devdoc>
+        /// </summary>
         TabStop = 0x08,
 
-        /// <devdoc>
+        /// <summary>
         /// Only immediate children of container control are validated.
         /// Descendants are not validated.
-        /// </devdoc>
+        /// </summary>
         ImmediateChildren = 0x10,
     }
 }

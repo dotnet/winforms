@@ -23,11 +23,11 @@ namespace System.Experimental.Gdi
     using Microsoft.Win32;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     ///     Keeps a cache of some graphics primitives.
     ///     Created to improve performance of TextRenderer.MeasureText methods that don't receive a WindowsGraphics.
     ///     This class mantains a cache of MRU WindowsFont objects in the process.
-    /// </devdoc>
+    /// </summary>
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
 #else
@@ -49,23 +49,23 @@ namespace System.Experimental.Gdi
         [ThreadStatic]
         private static List<KeyValuePair<Font, WindowsFont>> windowsFontCache;        
 
-        /// <devdoc>
+        /// <summary>
         ///     Static constructor since this is a utility class.
-        /// </devdoc>
+        /// </summary>
         static WindowsGraphicsCacheManager()
         {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Class is never instantiated, private constructor prevents the compiler from generating a default constructor.
-        /// </devdoc>
+        /// </summary>
         private WindowsGraphicsCacheManager()
         {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Initializes the WindowsFontCache object.
-        /// </devdoc>
+        /// </summary>
         private static List<KeyValuePair<Font, WindowsFont>> WindowsFontCache 
         {
             get 
@@ -80,12 +80,12 @@ namespace System.Experimental.Gdi
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     Get the cached screen (primary monitor) memory dc.  
         ///     Users of this class should always use this property to get the WindowsGraphics and never cache it, it could be mistakenly
         ///     disposed and we would recreate it if needed.  
         ///     Users should not dispose of the WindowsGraphics so it can be reused for the lifetime of the thread.
-        /// </devdoc>
+        /// </summary>
         public static WindowsGraphics MeasurementGraphics
         {
             
@@ -115,10 +115,10 @@ namespace System.Experimental.Gdi
 #endif
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Get the cached WindowsFont associated with the specified font if one exists, otherwise create one and
         ///     add it to the cache.
-        /// </devdoc>
+        /// </summary>
         
         
         public static WindowsFont GetWindowsFont(Font font)
@@ -256,17 +256,17 @@ namespace System.Experimental.Gdi
         /// The following methods are not needed in production code since the cached objects are meant to be reused and should not be explicitly disposed, 
         /// left here for testing purposes.
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         public static void Reset()
         {
             ResetFontCache();
             ResetMeasurementGraphics();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Dispose of all cached WindowsFont objects and reset the collection.
-        /// </devdoc>
+        /// </summary>
         public static void ResetFontCache()
         {
             if( WindowsFontCache.Count > 0 )
@@ -285,9 +285,9 @@ namespace System.Experimental.Gdi
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Dispose of cached memory dc.
-        /// </devdoc>
+        /// </summary>
         public static void ResetMeasurementGraphics()
         {
             if( measurementGraphics != null )

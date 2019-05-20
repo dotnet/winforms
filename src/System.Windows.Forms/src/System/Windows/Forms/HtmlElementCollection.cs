@@ -108,9 +108,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the total number of elements in the collection.
-        /// </devdoc>
+        /// </summary>
         public int Count {
             get {
                 if (this.NativeHtmlElementCollection != null) {

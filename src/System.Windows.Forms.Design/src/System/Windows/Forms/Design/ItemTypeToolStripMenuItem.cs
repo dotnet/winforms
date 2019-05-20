@@ -7,9 +7,9 @@ using System.Drawing.Design;
 
 namespace System.Windows.Forms.Design
 {
-    /// <devdoc>
+    /// <summary>
 	/// Associates Type with ToolStripMenuItem.
-	/// </devdoc>
+	/// </summary>
 	internal class ItemTypeToolStripMenuItem : ToolStripMenuItem
     {
         private static readonly string s_systemWindowsFormsNamespace = typeof(ToolStripItem).Namespace;

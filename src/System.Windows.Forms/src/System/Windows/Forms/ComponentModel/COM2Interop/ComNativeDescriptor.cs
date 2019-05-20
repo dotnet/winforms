@@ -14,31 +14,31 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.ComponentModel.Design;
     using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     ///     Top level mapping layer between COM Object and TypeDescriptor.
     ///
-    /// </devdoc>
+    /// </summary>
     internal class ComNativeDescriptor : TypeDescriptionProvider {
       
         private static ComNativeDescriptor handler = null;
 
         private AttributeCollection staticAttrs = new AttributeCollection(new Attribute[]{BrowsableAttribute.Yes, DesignTimeVisibleAttribute.No});
 
-        /// <devdoc>
+        /// <summary>
         /// Our collection of Object managers (Com2Properties) for native properties
-        /// </devdoc>
+        /// </summary>
         private WeakHashtable  nativeProps = new WeakHashtable();
         
-        /// <devdoc>
+        /// <summary>
         /// Our collection of browsing handlers, which are stateless and shared across objects.
-        /// </devdoc>
+        /// </summary>
         private Hashtable         extendedBrowsingHandlers = new Hashtable();
         
-        /// <devdoc>
+        /// <summary>
         /// We increment this every time we look at an Object, at specified
         /// intervals, we run through the properies list to see if we should
         /// delete any.
-        /// </devdoc>
+        /// </summary>
         private int               clearCount  = 0;
         private const  int        CLEAR_INTERVAL = 25;
 
@@ -63,7 +63,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     This method returns a custom type descriptor for the given type / object.  
         ///     The objectType parameter is always valid, but the instance parameter may 
         ///     be null if no instance was passed to TypeDescriptor.  The method should 
@@ -75,7 +75,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         ///     if no parent provider was passed.  If a parent provider was passed, 
         ///     this method will invoke the parent provider's GetTypeDescriptor 
         ///     method.
-        /// </devdoc>
+        /// </summary>
         public override ICustomTypeDescriptor GetTypeDescriptor(Type objectType, object instance)
         {
             return new ComTypeDescriptor(this, instance);
@@ -223,10 +223,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return NativeMethods.E_FAIL;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Checks if the given dispid matches the dispid that the Object would like to specify
         /// as its identification proeprty (Name, ID, etc).
-        /// </devdoc>
+        /// </summary>
         internal bool IsNameDispId(object obj, int dispid) {
             if (obj == null || !obj.GetType().IsCOMObject) {
                 return false;
@@ -234,9 +234,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return dispid == Com2TypeInfoProcessor.GetNameDispId((UnsafeNativeMethods.IDispatch)obj);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Checks all our property manages to see if any have become invalid.
-        /// </devdoc>
+        /// </summary>
         private void CheckClear(object component) {
             
             // walk the list every so many calls
@@ -283,9 +283,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the properties manager for an Object.
-        /// </devdoc>
+        /// </summary>
         private Com2Properties GetPropsInfo(object component) {
             // check caches if necessary
             //
@@ -308,9 +308,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return propsInfo;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Got attributes?
-        /// </devdoc>
+        /// </summary>
         internal AttributeCollection GetAttributes(object component) {
 
             ArrayList attrs = new ArrayList();
@@ -337,9 +337,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Default Property, please
-        /// </devdoc>
+        /// </summary>
         internal PropertyDescriptor GetDefaultProperty(object component) {
             CheckClear(component);
 
@@ -362,9 +362,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Props!
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]
         internal PropertyDescriptorCollection GetProperties(object component, Attribute[] attributes) {
             
@@ -386,9 +386,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Fired when the property info gets disposed.
-        /// </devdoc>        
+        /// </summary>        
         private void OnPropsInfoDisposed(object sender, EventArgs e) {
 
             Com2Properties propsInfo = sender as Com2Properties;
@@ -426,10 +426,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Looks at at value's type and creates an editor based on that.  We use this to decide which editor to use
         /// for a generic variant.
-        /// </devdoc>
+        /// </summary>
         internal static void ResolveVariantTypeConverterAndTypeEditor(object propertyValue, ref TypeConverter currentConverter, Type editorType, ref object currentEditor) {
 
             object curValue = propertyValue;
@@ -446,114 +446,114 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This type descriptor sits on top of a ComNativeDescriptor
-        /// </devdoc>
+        /// </summary>
         private sealed class ComTypeDescriptor : ICustomTypeDescriptor
         {
             private ComNativeDescriptor         _handler;
             private object                      _instance;
 
-            /// <devdoc>
+            /// <summary>
             ///     Creates a new WalkingTypeDescriptor.
-            /// </devdoc>
+            /// </summary>
             internal ComTypeDescriptor(ComNativeDescriptor handler, object instance)
             {
                 _handler = handler;
                 _instance = instance;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     ICustomTypeDescriptor implementation.
-            /// </devdoc>
+            /// </summary>
             AttributeCollection ICustomTypeDescriptor.GetAttributes()
             {
                 return _handler.GetAttributes(_instance);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     ICustomTypeDescriptor implementation.
-            /// </devdoc>
+            /// </summary>
             string ICustomTypeDescriptor.GetClassName()
             {
                 return _handler.GetClassName(_instance);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     ICustomTypeDescriptor implementation.
-            /// </devdoc>
+            /// </summary>
             string ICustomTypeDescriptor.GetComponentName()
             {
                 return _handler.GetName(_instance);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     ICustomTypeDescriptor implementation.
-            /// </devdoc>
+            /// </summary>
             TypeConverter ICustomTypeDescriptor.GetConverter()
             {
                 return _handler.GetConverter(_instance);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     ICustomTypeDescriptor implementation.
-            /// </devdoc>
+            /// </summary>
             EventDescriptor ICustomTypeDescriptor.GetDefaultEvent()
             {
                 return _handler.GetDefaultEvent(_instance);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     ICustomTypeDescriptor implementation.
-            /// </devdoc>
+            /// </summary>
             PropertyDescriptor ICustomTypeDescriptor.GetDefaultProperty()
             {
                 return _handler.GetDefaultProperty(_instance);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     ICustomTypeDescriptor implementation.
-            /// </devdoc>
+            /// </summary>
             object ICustomTypeDescriptor.GetEditor(Type editorBaseType)
             {
                 return _handler.GetEditor(_instance, editorBaseType);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     ICustomTypeDescriptor implementation.
-            /// </devdoc>
+            /// </summary>
             EventDescriptorCollection ICustomTypeDescriptor.GetEvents()
             {
                 return _handler.GetEvents(_instance);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     ICustomTypeDescriptor implementation.
-            /// </devdoc>
+            /// </summary>
             EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[] attributes)
             {
                 return _handler.GetEvents(_instance, attributes);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     ICustomTypeDescriptor implementation.
-            /// </devdoc>
+            /// </summary>
             PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties()
             {
                 return _handler.GetProperties(_instance, null);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     ICustomTypeDescriptor implementation.
-            /// </devdoc>
+            /// </summary>
             PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[] attributes)
             {
                 return _handler.GetProperties(_instance, attributes);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     ICustomTypeDescriptor implementation.
-            /// </devdoc>
+            /// </summary>
             object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor pd)
             {
                 return _instance;

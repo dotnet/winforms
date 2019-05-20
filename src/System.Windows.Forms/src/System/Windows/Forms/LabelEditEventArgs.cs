@@ -4,46 +4,46 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.ListView.LabelEdit'/> event.
-    /// </devdoc>
+    /// </summary>
     public class LabelEditEventArgs : EventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.LabelEditEventArgs'/>
         /// class with the specified index to the <see cref='System.Windows.Forms.ListViewItem'/>
         /// to edit.
-        /// </devdoc>
+        /// </summary>
         public LabelEditEventArgs(int item) : this(item, null)
         {
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.LabelEditEventArgs'/>
         /// class with the specified index to the <see cref='System.Windows.Forms.ListViewItem'/>
         /// being edited and the new text for the label of the <see cref='System.Windows.Forms.ListViewItem'/>.
-        /// </devdoc>
+        /// </summary>
         public LabelEditEventArgs(int item, string label)
         {
             Item = item;
             Label = label;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the zero-based index of the <see cref='System.Windows.Forms.ListViewItem'/> containing
         /// the label to edit.
-        /// </devdoc>
+        /// </summary>
         public int Item { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the new text assigned to the label of the <see cref='System.Windows.Forms.ListViewItem'/>.
-        /// </devdoc>
+        /// </summary>
         public string Label { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets or sets a value indicating whether changes made to the label of the
         /// <see cref='System.Windows.Forms.ListViewItem'/> should be canceled.
-        /// </devdoc>
+        /// </summary>
         public bool CancelEdit { get; set; }
     }
 }

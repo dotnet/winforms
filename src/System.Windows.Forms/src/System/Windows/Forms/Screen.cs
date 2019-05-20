@@ -15,31 +15,31 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using Internal;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Represents a display device or
     ///       multiple display devices on a single system.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     public class Screen {
 
         readonly IntPtr hmonitor;
-        /// <devdoc>         
+        /// <summary>         
         ///     Bounds of the screen         
-        /// </devdoc>         
+        /// </summary>         
         readonly Rectangle    bounds;
-        /// <devdoc>         
+        /// <summary>         
         ///     Available working area on the screen. This excludes taskbars and other         
         ///     docked windows.         
-        /// </devdoc>         
+        /// </summary>         
         private Rectangle    workingArea = Rectangle.Empty;
-        /// <devdoc>         
+        /// <summary>         
         ///     Set to true if this screen is the primary monitor         
-        /// </devdoc>         
+        /// </summary>         
         readonly bool         primary;
-        /// <devdoc>         
+        /// <summary>         
         ///     Device name associated with this monitor         
-        /// </devdoc>         
+        /// </summary>         
         readonly string       deviceName;
 
         readonly int          bitDepth;
@@ -102,11 +102,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets an array of all of the displays on the system.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static Screen[] AllScreens {
             get {
                 if (screens == null) {
@@ -138,57 +138,57 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets Bits per Pixel value.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public int BitsPerPixel {
             get {
                 return bitDepth;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets the bounds of the display.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public Rectangle Bounds {
             get {
                 return bounds;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets the device name associated with a display.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public string DeviceName {
             get {
                 return deviceName;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets a value indicating whether a particular display is
         ///       the primary device.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public bool Primary {
             get {
                 return primary;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets the
         ///       primary display.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static Screen PrimaryScreen {
             get {
                 if (multiMonitorSupport) {
@@ -206,11 +206,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets the working area of the screen.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public Rectangle WorkingArea {
             get {
 
@@ -237,10 +237,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Screen instances call this property to determine
         ///     if their WorkingArea cache needs to be invalidated.
-        /// </devdoc>
+        /// </summary>
         private static int DesktopChangedCount {
             get {
                 if (desktopChangedCount == -1) {
@@ -262,12 +262,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Specifies a value that indicates whether the specified object is equal to
         ///       this one.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override bool Equals(object obj) {
             if (obj is Screen) {
                 Screen comp = (Screen)obj;
@@ -278,13 +278,13 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Retrieves a <see cref='System.Windows.Forms.Screen'/>
         ///       for the monitor that contains the specified point.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static Screen FromPoint(Point point) {
             if (multiMonitorSupport) {
                 NativeMethods.POINTSTRUCT pt = new NativeMethods.POINTSTRUCT(point.X, point.Y);
@@ -295,14 +295,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Retrieves a <see cref='System.Windows.Forms.Screen'/>
         ///       for the monitor that contains the
         ///       largest region of the rectangle.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static Screen FromRectangle(Rectangle rect) {
             if (multiMonitorSupport) {
                 NativeMethods.RECT rc = NativeMethods.RECT.FromXYWH(rect.X, rect.Y, rect.Width, rect.Height);
@@ -313,16 +313,16 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieves a <see cref='System.Windows.Forms.Screen'/> for the monitor that contains
         /// the largest region of the window of the control.
-        /// </devdoc>
+        /// </summary>
         public static Screen FromControl(Control control) => FromHandle(control.Handle);
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieves a <see cref='System.Windows.Forms.Screen'/> for the monitor that contains
         /// the largest region of the window.
-        /// </devdoc>
+        /// </summary>
         public static Screen FromHandle(IntPtr hwnd)
         {
             if (multiMonitorSupport)
@@ -335,79 +335,79 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Retrieves the working area for the monitor that is closest to the
         ///       specified point.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static Rectangle GetWorkingArea(Point pt) {
             return Screen.FromPoint(pt).WorkingArea;
         }
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Retrieves the working area for the monitor that contains the largest region
         ///       of the specified rectangle.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static Rectangle GetWorkingArea(Rectangle rect) {
             return Screen.FromRectangle(rect).WorkingArea;
         }
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Retrieves the working area for the monitor that contains the largest
         ///       region of the specified control.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static Rectangle GetWorkingArea(Control ctl) {
             return Screen.FromControl(ctl).WorkingArea;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Retrieves the bounds of the monitor that is closest to the specified
         ///       point.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static Rectangle GetBounds(Point pt) {
             return Screen.FromPoint(pt).Bounds;
         }
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Retrieves the bounds of the monitor that contains the largest region of the
         ///       specified rectangle.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static Rectangle GetBounds(Rectangle rect) {
             return Screen.FromRectangle(rect).Bounds;
         }
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Retrieves the bounds of the monitor
         ///       that contains the largest region of the specified control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static Rectangle GetBounds(Control ctl) {
             return Screen.FromControl(ctl).Bounds;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Computes and retrieves a hash code for an object.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override int GetHashCode() {
             return(int)hmonitor;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Called by the SystemEvents class when our display settings are
         ///     changing.  We cache screen information and at this point we must
         ///     invalidate our cache.
-        /// </devdoc>
+        /// </summary>
         private static void OnDisplaySettingsChanging(object sender, EventArgs e) {
 
             // Now that we've responded to this event, we don't need it again until
@@ -420,11 +420,11 @@ namespace System.Windows.Forms {
             screens = null;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Called by the SystemEvents class when our display settings have
         ///     changed.  Here, we increment a static counter that Screen instances
         ///     can check against to invalidate their cache.
-        /// </devdoc>
+        /// </summary>
         private static void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e) {
 
             if (e.Category == UserPreferenceCategory.Desktop) {
@@ -432,18 +432,18 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Retrieves a string representing this object.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override string ToString() {
             return GetType().Name + "[Bounds=" + bounds.ToString() + " WorkingArea=" + WorkingArea.ToString() + " Primary=" + primary.ToString() + " DeviceName=" + deviceName;
         }
 
 
-        /// <devdoc>         
-        /// </devdoc>         
+        /// <summary>         
+        /// </summary>         
         private class MonitorEnumCallback {
             public ArrayList screens = new ArrayList();
 

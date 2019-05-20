@@ -10,8 +10,8 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using Microsoft.Win32;
 
-    /// <devdoc>
-    /// </devdoc>
+    /// <summary>
+    /// </summary>
     internal static class RichTextBoxConstants {
 
         // flags for enum that we don't want public

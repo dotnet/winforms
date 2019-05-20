@@ -17,9 +17,9 @@ namespace System.Windows.Forms {
     using System.Collections;
     using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>Represents a Windows up-down control that displays string values.</para>
-    /// </devdoc>
+    /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -38,9 +38,9 @@ namespace System.Windows.Forms {
         //
         //////////////////////////////////////////////////////////////
 
-        /// <devdoc>
+        /// <summary>
         ///     Allowable strings for the domain updown.
-        /// </devdoc>
+        /// </summary>
 
         private DomainUpDownItemCollection domainItems = null;
 
@@ -54,11 +54,11 @@ namespace System.Windows.Forms {
 
         private bool inSort = false;
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.DomainUpDown'/> class.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public DomainUpDown() : base() {   
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
             SetState2(STATE2_USEPREFERREDSIZECACHE, true);  
@@ -67,12 +67,12 @@ namespace System.Windows.Forms {
                 
         // Properties
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets the collection of objects assigned to the
         ///       up-down control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatData)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
@@ -108,11 +108,11 @@ namespace System.Windows.Forms {
             add => base.PaddingChanged += value; 
             remove => base.PaddingChanged -= value; }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the index value of the selected item.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         DefaultValue(-1),
@@ -141,13 +141,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the selected item based on the index value
         ///       of the selected item in the
         ///       collection.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -178,11 +178,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the item collection is sorted.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -202,12 +202,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the collection of items continues to
         ///       the first or last item if the user continues past the end of the list.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Localizable(true),
@@ -230,31 +230,31 @@ namespace System.Windows.Forms {
         //
         //////////////////////////////////////////////////////////////
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Occurs when the <see cref='System.Windows.Forms.DomainUpDown.SelectedItem'/> property has
         ///       been changed.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.DomainUpDownOnSelectedItemChangedDescr))]
         public event EventHandler SelectedItemChanged {
             add => onSelectedItemChanged += value;
             remove => onSelectedItemChanged -= value;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    Constructs the new instance of the accessibility object for this control. Subclasses
         ///    should not call base.CreateAccessibilityObject.
-        /// </devdoc>
+        /// </summary>
         protected override AccessibleObject CreateAccessibilityInstance() {
             return new DomainUpDownAccessibleObject(this);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays the next item in the object collection.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override void DownButton() {
 
             // Make sure domain values exist, and there are >0 items
@@ -289,13 +289,13 @@ namespace System.Windows.Forms {
                         
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Tries to find a match of the supplied text in the domain list.
         ///     If complete is true, a complete match is required for success
         ///     (i.e. the supplied text is the same length as the matched domain value)
         ///     Returns the index in the domain list if the match is successful,
         ///     returns -1 otherwise.
-        /// </devdoc>
+        /// </summary>
 
         internal int MatchIndex(string text, bool complete) {
             return MatchIndex(text, complete, domainIndex);
@@ -355,22 +355,22 @@ namespace System.Windows.Forms {
             return matchIndex;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       In the case of a DomainUpDown, the handler for changing
         ///       values is called OnSelectedItemChanged - so just forward it to that
         ///       function.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnChanged(object source, EventArgs e) {
             OnSelectedItemChanged(source, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Handles the <see cref='System.Windows.Forms.Control.KeyPress'/>
         /// event, using the input character to find the next matching item in our 
         /// item collection.</para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnTextBoxKeyPress(object source, KeyPressEventArgs e) {
             if (ReadOnly) {
                 char[] character = new char[] { e.KeyChar };
@@ -398,11 +398,11 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.DomainUpDown.SelectedItemChanged'/> event.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected void OnSelectedItemChanged(object source, EventArgs e) {
 
             // Call the event handler
@@ -411,9 +411,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Selects the item in the domain list at the given index
-        /// </devdoc>
+        /// </summary>
         private void SelectIndex(int index) {
 
             // Sanity check index
@@ -441,9 +441,9 @@ namespace System.Windows.Forms {
             Debug.Assert(domainIndex >=0 || UserEdit == true, "UserEdit should be true when domainIndex < 0 " + UserEdit);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sorts the domain values
-        /// </devdoc>
+        /// </summary>
         private void SortDomainItems() {
             if (inSort)
                 return;
@@ -475,9 +475,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Provides some interesting info about this control in String form.
-        /// </devdoc>
+        /// </summary>
         public override string ToString() {
 
             string s = base.ToString();
@@ -489,11 +489,11 @@ namespace System.Windows.Forms {
             return s;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Displays the previous item in the collection.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override void UpButton() {
 
             // Make sure domain values exist, and there are >0 items
@@ -532,11 +532,11 @@ namespace System.Windows.Forms {
             }
         }
        
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Updates the text in the up-down control to display the selected item.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void UpdateEditText() {
 
             Debug.Assert(!UserEdit, "UserEdit should be false");
@@ -560,10 +560,10 @@ namespace System.Windows.Forms {
 
         // DomainUpDown collection class
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Encapsulates a collection of objects for use by the <see cref='System.Windows.Forms.DomainUpDown'/>
         /// class.</para>
-        /// </devdoc>
+        /// </summary>
         public class DomainUpDownItemCollection : ArrayList {
             DomainUpDown owner;
 
@@ -572,8 +572,8 @@ namespace System.Windows.Forms {
                 this.owner = owner;
             }
 
-            /// <devdoc>
-            /// </devdoc>
+            /// <summary>
+            /// </summary>
             [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public override object this[int index] {
                 get {
@@ -593,8 +593,8 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
-            /// </devdoc>
+            /// <summary>
+            /// </summary>
             public override int Add(object item) {
                 // Overridden to perform sorting after adding an item
 
@@ -605,8 +605,8 @@ namespace System.Windows.Forms {
                 return ret;
             }
 
-            /// <devdoc>
-            /// </devdoc>
+            /// <summary>
+            /// </summary>
             public override void Remove(object item) {
                 int index = IndexOf(item);
                 
@@ -618,8 +618,8 @@ namespace System.Windows.Forms {
                 }
             }
             
-            /// <devdoc>
-            /// </devdoc>
+            /// <summary>
+            /// </summary>
             public override void RemoveAt(int item) {
                 // Overridden to update the domain index if neccessary
                 base.RemoveAt(item);
@@ -635,8 +635,8 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
-            /// </devdoc>
+            /// <summary>
+            /// </summary>
             public override void Insert(int index, object item) {
                 base.Insert(index, item);
                 if (owner.Sorted) {
@@ -645,8 +645,8 @@ namespace System.Windows.Forms {
             }
         } // end class DomainUpDownItemCollection
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         private sealed class DomainUpDownItemCompare : IComparer {
 
             public int Compare(object p, object q) {
@@ -659,15 +659,15 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [System.Runtime.InteropServices.ComVisible(true)]        
         public class DomainUpDownAccessibleObject : ControlAccessibleObject {
 
             private DomainItemListAccessibleObject itemList;
             
-            /// <devdoc>
-            /// </devdoc>
+            /// <summary>
+            /// </summary>
             public DomainUpDownAccessibleObject(Control owner) : base(owner) {
             }
 
@@ -705,8 +705,8 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
-            /// </devdoc>
+            /// <summary>
+            /// </summary>
             public override AccessibleObject GetChild(int index) {
                 switch(index) {
                     // TextBox child
@@ -726,8 +726,8 @@ namespace System.Windows.Forms {
                 return null;
             }
 
-            /// <devdoc>
-            /// </devdoc>
+            /// <summary>
+            /// </summary>
             public override int GetChildCount() {
                 return 3;
             }
@@ -787,8 +787,8 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [System.Runtime.InteropServices.ComVisible(true)]        
         public class DomainItemAccessibleObject : AccessibleObject {
 

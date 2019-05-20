@@ -10,9 +10,9 @@ namespace System.Drawing.Internal
 namespace System.Experimental.Gdi
 #endif
 {
-    /// <devdoc>
+    /// <summary>
     ///    Device capability indexes - See Win32 GetDeviceCaps().
-    /// </devdoc>
+    /// </summary>
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
 #else

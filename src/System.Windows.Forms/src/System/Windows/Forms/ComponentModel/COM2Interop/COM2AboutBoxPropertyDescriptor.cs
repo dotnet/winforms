@@ -24,9 +24,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                                                                                       new ParenthesizePropertyNameAttribute(true)}, true, typeof(string), null, false) {
         }
     
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the type of the component this PropertyDescriptor is bound to.
-        /// </devdoc>
+        /// </summary>
         public override Type ComponentType {
             get {
                return typeof(UnsafeNativeMethods.IDispatch);
@@ -34,9 +34,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
         
         
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the type converter for this property.
-        /// </devdoc>
+        /// </summary>
         public override TypeConverter Converter {
             get {
                 if (converter == null) {
@@ -45,39 +45,39 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 return converter;
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///     Indicates whether this property is read only.
-        /// </devdoc>
+        /// </summary>
         public override bool IsReadOnly { 
             get {
                return true;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the type of the property.
-        /// </devdoc>
+        /// </summary>
         public override Type PropertyType {
             get {
                return typeof(string);
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     Indicates whether reset will change the value of the component.  If there
         ///     is a DefaultValueAttribute, then this will return true if getValue returns
         ///     something different than the default value.  If there is a reset method and
         ///     a shouldPersist method, this will return what shouldPersist returns.
         ///     If there is just a reset method, this always returns true.  If none of these
         ///     cases apply, this returns false.
-        /// </devdoc>
+        /// </summary>
         public override bool CanResetValue(object component) {
             return false;
         }
     
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves an editor of the requested type.
-        /// </devdoc>
+        /// </summary>
         public override object GetEditor(Type editorBaseType) {
             if (editorBaseType == typeof(UITypeEditor)) {
                 if (editor == null) {
@@ -88,40 +88,40 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return editor;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the current value of the property on component,
         ///     invoking the getXXX method.  An exception in the getXXX
         ///     method will pass through.
-        /// </devdoc>
+        /// </summary>
         public override object GetValue(object component) {
             return "";
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Will reset the default value for this property on the component.  If
         ///     there was a default value passed in as a DefaultValueAttribute, that
         ///     value will be set as the value of the property on the component.  If
         ///     there was no default value passed in, a ResetXXX method will be looked
         ///     for.  If one is found, it will be invoked.  If one is not found, this
         ///     is a nop.
-        /// </devdoc>
+        /// </summary>
         public override void ResetValue(object component){
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This will set value to be the new value of this property on the
         ///     component by invoking the setXXX method on the component.  If the
         ///     value specified is invalid, the component should throw an exception
         ///     which will be passed up.  The component designer should design the
         ///     property so that getXXX following a setXXX should return the value
         ///     passed in if no exception was thrown in the setXXX call.
-        /// </devdoc>        
+        /// </summary>        
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
         public override void SetValue(object component, object value) {
             throw new ArgumentException();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates whether the value of this property needs to be persisted. In
         ///     other words, it indicates whether the state of the property is distinct
         ///     from when the component is first instantiated. If there is a default
@@ -131,17 +131,17 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         ///     these routes fail, true will be returned.
         ///
         ///     If this returns false, a tool should not persist this property's value.
-        /// </devdoc>
+        /// </summary>
         public override bool ShouldSerializeValue(object component) {
             return false;
         }
         
         public class AboutBoxUITypeEditor : UITypeEditor {
-            /// <devdoc>
+            /// <summary>
             ///      Edits the given object value using the editor style provided by
             ///      GetEditorStyle.  A service provider is provided so that any
             ///      required editing services can be obtained.
-            /// </devdoc>
+            /// </summary>
             public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value) {
                      object component = context.Instance;
                      
@@ -163,10 +163,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                      return value;
             }
             
-            /// <devdoc>
+            /// <summary>
             ///      Retrieves the editing style of the Edit method.  If the method
             ///      is not supported, this will return None.
-            /// </devdoc>
+            /// </summary>
             public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) {
                      return UITypeEditorEditStyle.Modal;
             }

@@ -9,14 +9,14 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides information about a DpiChanged event.
-    /// </devdoc>
+    /// </summary>
     public sealed class DpiChangedEventArgs : CancelEventArgs
     {
         /// <devdov>
         /// Parameter units are pixels(dots) per inch.
-        /// </devdoc>
+        /// </summary>
         internal DpiChangedEventArgs(int old, Message m)
         {
             DeviceDpiOld = old;

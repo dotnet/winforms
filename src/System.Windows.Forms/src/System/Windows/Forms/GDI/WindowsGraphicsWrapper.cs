@@ -10,18 +10,18 @@ namespace System.Windows.Forms
     using System.Diagnostics;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     ///     This class wrapps a WindowsGraphics and is provided to be able to manipulate WindowsGraphics objects 
     ///     created from a Graphics object in the same way as one created from any other IDeviceContext object,
     ///     which could be a custom one.
     ///     This class was designed to help TextRenderer determine how to create the underlying WindowsGraphics.
-    /// </devdoc>
+    /// </summary>
     internal sealed class WindowsGraphicsWrapper : IDisposable
     {
         IDeviceContext idc;
         WindowsGraphics wg;
 
-        /// <devdoc>
+        /// <summary>
         ///     Constructor that determines how to create the WindowsGraphics, there are three posible cases
         ///     for the IDeviceContext object type:
         ///     1. It is a Graphics object: In this case we need to check the TextFormatFlags to determine whether
@@ -34,7 +34,7 @@ namespace System.Windows.Forms
         ///     3. It is a custom IDeviceContext object:
         ///        In this case we create the WindowsGraphics from the native DC by calling IDeviceContext.GetHdc,
         ///        on dispose we need to call IDeviceContext.ReleaseHdc.
-        /// </devdoc>
+        /// </summary>
         
         
         public WindowsGraphicsWrapper( IDeviceContext idc, TextFormatFlags flags)

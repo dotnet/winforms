@@ -32,10 +32,10 @@ namespace System.Windows.Forms
         {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new DataGridViewAdvancedBorderStyle. The specified owner will
         ///     be notified when the values are changed.
-        /// </devdoc>
+        /// </summary>
         internal DataGridViewAdvancedBorderStyle(DataGridView owner, 
             DataGridViewAdvancedCellBorderStyle banned1, 
             DataGridViewAdvancedCellBorderStyle banned2,

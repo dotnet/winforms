@@ -17,9 +17,9 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <devdoc>
+    /// <summary>
     /// <para>Hosts a System.Windows.Forms.TextBox control in a cell of a System.Windows.Forms.DataGridColumnStyle for editing strings.</para>
-    /// </devdoc>
+    /// </summary>
     public class DataGridTextBoxColumn : DataGridColumnStyle {
 
         // ui State
@@ -38,10 +38,10 @@ namespace System.Windows.Forms {
         private string oldValue = null;
         private int editRow = -1;
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of the System.Windows.Forms.DataGridTextBoxColumn
         /// class.</para>
-        /// </devdoc>
+        /// </summary>
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set format
                                                                                                     // it would be a breaking change.
@@ -49,10 +49,10 @@ namespace System.Windows.Forms {
         public DataGridTextBoxColumn() : this(null, null) {
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of a System.Windows.Forms.DataGridTextBoxColumn with
         ///    a specified System.Data.DataColumn.</para>
-        /// </devdoc>
+        /// </summary>
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set format
                                                                                                     // it would be a breaking change.
@@ -61,10 +61,10 @@ namespace System.Windows.Forms {
         : this(prop, null, false) {
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of a System.Windows.Forms.DataGridTextBoxColumn. with
         ///    the specified System.Data.DataColumn and System.Windows.Forms.ComponentModel.Format.</para>
-        /// </devdoc>
+        /// </summary>
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set format
                                                                                                     // it would be a breaking change.
@@ -95,9 +95,9 @@ namespace System.Windows.Forms {
         // =        Properties
         // =------------------------------------------------------------------
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets the hosted System.Windows.Forms.TextBox control.</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
         public virtual TextBox TextBox {
             get {
@@ -115,12 +115,12 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Adds a System.Windows.Forms.TextBox control to the System.Windows.Forms.DataGrid control's System.Windows.Forms.Control.ControlCollection
         ///       .
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void SetDataGridInColumn(DataGrid value) {
             base.SetDataGridInColumn(value);
             if (edit.ParentInternal != null) {
@@ -147,10 +147,10 @@ namespace System.Windows.Forms {
         }
         */
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets or sets the System.Windows.Forms.ComponentModel.Format for the System.Windows.Forms.DataGridTextBoxColumn
         /// .</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRDescription(nameof(SR.FormatControlFormatDescr)),
         DefaultValue(null)
@@ -228,22 +228,22 @@ namespace System.Windows.Forms {
         }
 
         // will hide the edit control
-        /// <devdoc>
+        /// <summary>
         ///    <para>Informs the column the focus is being conceded.</para>
-        /// </devdoc>
+        /// </summary>
         protected internal override void ConcedeFocus() {
             edit.Bounds = Rectangle.Empty;
             // edit.Visible = false;
             // HideEditBox();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Hides the System.Windows.Forms.TextBox
         ///       control and moves the focus to the System.Windows.Forms.DataGrid
         ///       control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected void HideEditBox() {
             bool wasFocused = edit.Focused;
             edit.Visible = false;
@@ -276,21 +276,21 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Ends an edit operation on the System.Windows.Forms.DataGridColumnStyle
         /// .</para>
-        /// </devdoc>
+        /// </summary>
         protected void EndEdit() {
             edit.IsInEditOrNavigateMode = true;
             DebugOut("Ending Edit");
             Invalidate();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Returns the optimum width and
         ///       height of the cell in a specified row relative
         ///       to the specified value.</para>
-        /// </devdoc>
+        /// </summary>
         protected internal override Size GetPreferredSize(Graphics g, object value) {
             Size extents = Size.Ceiling(g.MeasureString(GetText(value), DataGridTableStyle.DataGrid.Font));
             extents.Width += xMargin*2 + this.DataGridTableStyle.GridLineWidth;
@@ -298,20 +298,20 @@ namespace System.Windows.Forms {
             return extents;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets the height of a cell in a System.Windows.Forms.DataGridColumnStyle
         ///       .
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected internal override int GetMinimumHeight() {
             // why + 3? cause we have to give some way to the edit box.
             return FontHeight + yMargin + 3;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the height to be used in for automatically resizing columns.</para>
-        /// </devdoc>
+        /// </summary>
         protected internal override int GetPreferredHeight(Graphics g, object value) {
             int newLineIndex = 0;
             int newLines = 0;
@@ -325,11 +325,11 @@ namespace System.Windows.Forms {
             return FontHeight * newLines + yMargin;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initiates a request to interrupt an edit procedure.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected internal override void Abort(int rowNum) {
             RollBack();
             HideEditBox();
@@ -337,11 +337,11 @@ namespace System.Windows.Forms {
         }
 
         // used for Alt0 functionality
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Enters a <see langword='null '/>in the column.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected internal override void EnterNullValue() {
             if (this.ReadOnly)
                 return;
@@ -364,11 +364,11 @@ namespace System.Windows.Forms {
                 this.DataGridTableStyle.DataGrid.ColumnStartedEditing(edit.Bounds);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Inititates a request to complete an editing procedure.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected internal override bool Commit(CurrencyManager dataSource, int rowNum) {
             // always hide the edit box
             // HideEditBox();
@@ -412,9 +412,9 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Prepares a cell for editing.</para>
-        /// </devdoc>
+        /// </summary>
         protected internal override void Edit(CurrencyManager source,
                                     int rowNum,
                                     Rectangle bounds,
@@ -499,47 +499,47 @@ namespace System.Windows.Forms {
             return(value != null ? value.ToString() : "");
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Paints the a System.Windows.Forms.DataGridColumnStyle with the specified System.Drawing.Graphics,
         /// System.Drawing.Rectangle, DataView.Rectangle, and row number. </para>
-        /// </devdoc>
+        /// </summary>
         protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum) {
             Paint(g, bounds, source, rowNum, false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Paints a System.Windows.Forms.DataGridColumnStyle with the specified System.Drawing.Graphics, System.Drawing.Rectangle, DataView, row number, and alignment.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum, bool alignToRight) {
             string text = GetText(GetColumnValueAtRow(source, rowNum));
             PaintText(g, bounds, text, alignToRight);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Paints a System.Windows.Forms.DataGridColumnStyle with the specified System.Drawing.Graphics,
         /// System.Drawing.Rectangle, DataView.Rectangle, row number, background color, 
         ///    and foreground color..</para>
-        /// </devdoc>
+        /// </summary>
         protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum,
                                      Brush backBrush, Brush foreBrush, bool alignToRight) {
             string text = GetText(GetColumnValueAtRow(source, rowNum));
             PaintText(g, bounds, text, backBrush, foreBrush, alignToRight);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Draws the text and
         ///       rectangle at the given location with the specified alignment.</para>
-        /// </devdoc>
+        /// </summary>
         protected void PaintText(Graphics g, Rectangle bounds, string text, bool alignToRight) {
             PaintText(g, bounds, text, this.DataGridTableStyle.BackBrush, this.DataGridTableStyle.ForeBrush, alignToRight);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Draws the text and rectangle at the specified location with the
         ///       specified colors and alignment.</para>
-        /// </devdoc>
+        /// </summary>
         protected void PaintText(Graphics g, Rectangle textBounds, string text, Brush backBrush, Brush foreBrush, bool alignToRight) {
             /*
             if (edit.Visible)

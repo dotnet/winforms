@@ -4,10 +4,10 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Represents the method that handles the  <see langword='Select'/>,
     /// <see langword='Selecting'/> event of a <see cref='System.Windows.Forms.TabControl'/>
-    /// </devdoc>
+    /// </summary>
     public delegate void TabControlEventHandler(object sender, TabControlEventArgs e);
 }
 

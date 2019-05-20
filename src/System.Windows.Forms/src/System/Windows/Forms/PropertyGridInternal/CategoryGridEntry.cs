@@ -64,9 +64,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
         
           
-        /// <devdoc>
+        /// <summary>
         /// Returns true if this GridEntry has a value field in the right hand column.
-        /// </devdoc>
+        /// </summary>
         internal override bool HasValue {
             get {
                return false;
@@ -173,10 +173,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the owner of the current value.  This is usually the value of the
         /// root entry, which is the object being browsed
-        /// </devdoc>
+        /// </summary>
         public override object GetChildValueOwner(GridEntry childEntry) {
             return ParentGridEntry.GetChildValueOwner(childEntry);
         }

@@ -10,9 +10,9 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Windows.Forms.Layout;
     
-    /// <devdoc>
+    /// <summary>
     /// Base class for ToolStripItems that display DropDown windows.
-    /// </devdoc>
+    /// </summary>
     [Designer("System.Windows.Forms.Design.ToolStripMenuItemDesigner, " + AssemblyRef.SystemDesign)]
     [DefaultProperty(nameof(DropDownItems))]
     public abstract class ToolStripDropDownItem : ToolStripItem {
@@ -25,9 +25,9 @@ namespace System.Windows.Forms {
         private static readonly object EventDropDownClosed               = new object();
         private static readonly object EventDropDownItemClicked               = new object();
         
-        /// <devdoc>
+        /// <summary>
         /// Protected ctor so you can't create one of these without deriving from it.
-        /// </devdoc>
+        /// </summary>
         protected ToolStripDropDownItem() {
         }
 
@@ -45,9 +45,9 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// The ToolStripDropDown that will be displayed when this item is clicked.
-        /// </devdoc>
+        /// </summary>
         [
         TypeConverter(typeof(ReferenceConverter)),
         SRCategory(nameof(SR.CatData)),
@@ -163,9 +163,9 @@ namespace System.Windows.Forms {
         }
 
     
-        /// <devdoc>
+        /// <summary>
         /// Occurs when the dropdown is closed
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAction)),
         SRDescription(nameof(SR.ToolStripDropDownClosedDecr))
@@ -195,9 +195,9 @@ namespace System.Windows.Forms {
             add => Events.AddHandler(EventDropDownShow, value);
             remove => Events.RemoveHandler(EventDropDownShow, value);
         }   
-        /// <devdoc>
+        /// <summary>
         /// Occurs when the dropdown is opened
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAction)),
         SRDescription(nameof(SR.ToolStripDropDownOpenedDescr))
@@ -207,9 +207,9 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EventDropDownOpened, value);
         }   
 
-        /// <devdoc>
+        /// <summary>
         /// Returns the DropDown's items collection.
-        /// </devdoc>
+        /// </summary>
         [
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
         SRCategory(nameof(SR.CatData)),
@@ -221,9 +221,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Occurs when the dropdown is opened
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         public event ToolStripItemClickedEventHandler DropDownItemClicked {
             add => Events.AddHandler(EventDropDownItemClicked, value);
@@ -323,9 +323,9 @@ namespace System.Windows.Forms {
         private void DropDown_ItemClicked(object sender, ToolStripItemClickedEventArgs e) {
             OnDropDownItemClicked(e);
         }
-        /// <devdoc>
+        /// <summary>
         /// Make sure we unhook dropdown events.
-        /// </devdoc>
+        /// </summary>
         protected override void Dispose(bool disposing)
         {
             if (this.dropDown != null) {
@@ -373,9 +373,9 @@ namespace System.Windows.Forms {
         
 
         
-        /// <devdoc>
+        /// <summary>
         /// Hides the DropDown, if it is visible.  
-        /// </devdoc>
+        /// </summary>
         public void HideDropDown() {
             // consider - CloseEventArgs to prevent shutting down.
             OnDropDownHide(EventArgs.Empty);
@@ -426,18 +426,18 @@ namespace System.Windows.Forms {
                 DropDown.DoLayoutIfHandleCreated(new ToolStripItemEventArgs(this));
             }
         }
-        /// <devdoc>
+        /// <summary>
         /// Called as a response to HideDropDown
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnDropDownHide(EventArgs e) {
             this.Invalidate();
 
             EventHandler handler = (EventHandler)Events[EventDropDownHide];
             if (handler != null) handler(this, e);
         }
-        /// <devdoc>
+        /// <summary>
         /// Last chance to stick in the DropDown before it is shown.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnDropDownShow(EventArgs e) {
             EventHandler handler = (EventHandler)Events[EventDropDownShow];
             if (handler != null) { 
@@ -445,9 +445,9 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         /// called when the default item is clicked
-        /// </devdoc>
+        /// </summary>
         protected internal virtual void OnDropDownOpened(System.EventArgs e) {
             // only send the event if we're the thing that currently owns the DropDown.
                          
@@ -457,9 +457,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// called when the default item is clicked
-        /// </devdoc>
+        /// </summary>
         protected internal virtual void OnDropDownClosed(System.EventArgs e) {
             // only send the event if we're the thing that currently owns the DropDown.
             this.Invalidate();  
@@ -477,9 +477,9 @@ namespace System.Windows.Forms {
 
        
 
-        /// <devdoc>
+        /// <summary>
         /// called when the default item is clicked
-        /// </devdoc>
+        /// </summary>
         protected internal virtual void OnDropDownItemClicked(ToolStripItemClickedEventArgs e) {
             // only send the event if we're the thing that currently owns the DropDown.
             
@@ -602,9 +602,9 @@ namespace System.Windows.Forms {
     
         }
         
-        /// <devdoc>
+        /// <summary>
         /// Shows the DropDown, if one is set.
-        /// </devdoc>
+        /// </summary>
         public void ShowDropDown() {
             this.ShowDropDown(false);
         }

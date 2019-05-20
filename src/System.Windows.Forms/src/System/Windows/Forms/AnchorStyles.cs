@@ -7,36 +7,36 @@ using System.Drawing.Design;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies how a control anchors to the edges of its container.
-    /// </devdoc>
+    /// </summary>
     [Editor("System.Windows.Forms.Design.AnchorEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
     [Flags]
     public enum AnchorStyles
     {
-        /// <devdoc>
+        /// <summary>
         /// The control is anchored to the top edge of its container.
-        /// </devdoc>
+        /// </summary>
         Top = 0x01,
 
-        /// <devdoc>
+        /// <summary>
         /// The control is anchored to the bottom edge of its container.
-        /// </devdoc>
+        /// </summary>
         Bottom = 0x02,
 
-        /// <devdoc>
+        /// <summary>
         /// The control is anchored to the left edge of its container.
-        /// </devdoc>
+        /// </summary>
         Left = 0x04,
 
-        /// <devdoc>
+        /// <summary>
         /// The control is anchored to the right edge of its container.
-        /// </devdoc>
+        /// </summary>
         Right = 0x08,
 
-        /// <devdoc>
+        /// <summary>
         /// The control is not anchored to any edges of its container.
-        /// </devdoc>
+        /// </summary>
         None = 0,
     }
 }

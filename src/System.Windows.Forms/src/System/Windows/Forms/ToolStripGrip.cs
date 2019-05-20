@@ -42,10 +42,10 @@ namespace System.Windows.Forms {
             SupportsItemClick = false;
         }
 
-	    /// <devdoc>
+	    /// <summary>
         /// Deriving classes can override this to configure a default size for their control.
         /// This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
+        /// </summary>
         protected internal override Padding DefaultMargin {
             get {
                 return scaledDefaultPadding;

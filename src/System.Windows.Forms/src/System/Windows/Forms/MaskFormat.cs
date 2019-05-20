@@ -4,9 +4,9 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Enum defining inclusion of special characters.
-    /// </devdoc>
+    /// </summary>
     public enum MaskFormat
     {
         IncludePrompt = 0x0001,

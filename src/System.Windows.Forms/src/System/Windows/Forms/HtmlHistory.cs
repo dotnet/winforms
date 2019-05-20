@@ -67,18 +67,18 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Go to a specific Uri in the history</para>
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings")]
         public void Go(Uri url)
         {
             Go(url.ToString());
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Go to a specific url(string) in the history</para>
-        /// </devdoc>
+        /// </summary>
         /// Note: We intentionally have a string overload (apparently Mort wants one).  We don't have 
         /// string overloads call Uri overloads because that breaks Uris that aren't fully qualified 
         /// (things like "www.microsoft.com") that the underlying objects support and we don't want to 
@@ -90,9 +90,9 @@ namespace System.Windows.Forms {
             this.NativeOmHistory.Go(ref loc);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Go to the specified position in the history list</para>
-        /// </devdoc>
+        /// </summary>
         public void Go(int relativePosition) {
             object loc = (object)relativePosition;
             this.NativeOmHistory.Go(ref loc);

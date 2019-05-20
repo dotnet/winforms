@@ -109,9 +109,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Name of the NativeHtmlWindow</para>
-        /// </devdoc>
+        /// </summary>
         public string Name
         {
             get
@@ -151,9 +151,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets size for the window</para>
-        /// </devdoc>
+        /// </summary>
         public Size Size
         {
             get
@@ -228,17 +228,17 @@ namespace System.Windows.Forms
             this.NativeHtmlWindow.Focus();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Moves the Window to the position requested</para>
-        /// </devdoc>
+        /// </summary>
         public void MoveTo(int x, int y)
         {
             this.NativeHtmlWindow.MoveTo(x, y);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Moves the Window to the point requested</para>
-        /// </devdoc>
+        /// </summary>
         public void MoveTo(Point point)
         {
             this.NativeHtmlWindow.MoveTo(point.X, point.Y);
@@ -303,33 +303,33 @@ namespace System.Windows.Forms
             this.NativeHtmlWindow.Blur();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Resize the window to the width/height requested</para>
-        /// </devdoc>
+        /// </summary>
         public void ResizeTo(int width, int height)
         {
             this.NativeHtmlWindow.ResizeTo(width, height);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Resize the window to the Size requested</para>
-        /// </devdoc>
+        /// </summary>
         public void ResizeTo(Size size)
         {
             this.NativeHtmlWindow.ResizeTo(size.Width, size.Height);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Scroll the window to the position requested</para>
-        /// </devdoc>
+        /// </summary>
         public void ScrollTo(int x, int y)
         {
             this.NativeHtmlWindow.ScrollTo(x, y);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Scroll the window to the point requested</para>
-        /// </devdoc>
+        /// </summary>
         public void ScrollTo(Point point)
         {
             this.NativeHtmlWindow.ScrollTo(point.X, point.Y);
@@ -468,7 +468,7 @@ namespace System.Windows.Forms
 
 
 
-        ///<devdoc>
+        ///<summary>
         /// HtmlWindowShim - this is the glue between the DOM eventing mechanisms
         ///                  and our CLR callbacks.  
         ///             
@@ -480,7 +480,7 @@ namespace System.Windows.Forms
         ///                                 for a method named DISPID=0.  For each event that's subscribed, we create 
         ///                                 a new HtmlToClrEventProxy, detect the callback and fire the corresponding
         ///                                 CLR event.
-        ///</devdoc>
+        ///</summary>
         internal class HtmlWindowShim : HtmlShim
         {
             private AxHost.ConnectionPointCookie cookie;

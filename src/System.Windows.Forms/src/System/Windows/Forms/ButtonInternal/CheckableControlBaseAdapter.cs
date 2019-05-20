@@ -11,9 +11,9 @@ namespace System.Windows.Forms.ButtonInternal {
     using System.Drawing.Text;
     using System.Windows.Forms;
 
-    /// <devdoc>
+    /// <summary>
     ///     Common class for RadioButtonBaseAdapter and CheckBoxBaseAdapter
-    /// </devdoc>
+    /// </summary>
     internal abstract class CheckableControlBaseAdapter   : ButtonBaseAdapter {
         private const int standardCheckSize = 13;
         private ButtonBaseAdapter buttonAdapter;

@@ -21,13 +21,13 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms.VisualStyles {
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Encapsulates the class, part and state of the "element" you wish to draw using
     ///       the VisualStyleRenderer. 
     ///       Usage pattern is something like this: new VisualStyleRenderer(VisualStyleElement.Window.Caption.Active);
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     public class VisualStyleElement {
         internal static readonly int Count = 25; //UPDATE THIS WHEN CLASSES ARE ADDED/REMOVED!
         private string className;

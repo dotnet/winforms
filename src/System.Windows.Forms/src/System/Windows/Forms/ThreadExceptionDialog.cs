@@ -338,9 +338,9 @@ namespace System.Windows.Forms {
             detailsButton.Image = detailsVisible ? collapseImage : expandImage;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Hide the property
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -357,9 +357,9 @@ namespace System.Windows.Forms {
             remove => base.AutoSizeChanged -= value;
         }                
 
-        /// <devdoc>
+        /// <summary>
         ///     Called when the details button is clicked.
-        /// </devdoc>
+        /// </summary>
         private void DetailsClick(object sender, EventArgs eventargs) {
             int delta = details.Height + scaledHeightPadding;
             if (detailsVisible) delta = -delta;

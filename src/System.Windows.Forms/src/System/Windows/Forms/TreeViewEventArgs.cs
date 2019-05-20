@@ -14,11 +14,11 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
 
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Provides data for the <see cref='System.Windows.Forms.TreeView.OnAfterCheck'/>, <see cref='System.Windows.Forms.TreeView.AfterCollapse'/>, <see cref='System.Windows.Forms.TreeView.AfterExpand'/>, or <see cref='System.Windows.Forms.TreeView.AfterSelect'/> event.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     public class TreeViewEventArgs : EventArgs {
         TreeNode node;
         TreeViewAction action = TreeViewAction.Unknown;
@@ -38,9 +38,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      An event specific action-flag.
-        /// </devdoc>
+        /// </summary>
         public TreeViewAction Action {
             get {
                 return action;

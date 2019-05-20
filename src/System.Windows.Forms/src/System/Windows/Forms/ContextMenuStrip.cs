@@ -8,7 +8,7 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Drawing;
     using System.Runtime.InteropServices;
-    /// <devdoc/> this class is just a conceptual wrapper around ToolStripDropDownMenu. </devdoc>
+    /// <devdoc/> this class is just a conceptual wrapper around ToolStripDropDownMenu. </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -17,9 +17,9 @@ namespace System.Windows.Forms {
     ]
     public class ContextMenuStrip : ToolStripDropDownMenu {
 
-        /// <devdoc>
+        /// <summary>
         /// Summary of ContextMenuStrip.
-        /// </devdoc>
+        /// </summary>
         public ContextMenuStrip(IContainer container) : base() {
             // this constructor ensures ContextMenuStrip is disposed properly since its not parented to the form.
             if (container == null) {

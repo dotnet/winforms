@@ -10,11 +10,11 @@ namespace System.Windows.Forms {
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///      Called when the background of the ToolStrip is being rendered
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip | ToolStripItemDesignerAvailability.ContextMenuStrip)]
     public class ToolStripSeparator : ToolStripItem {
             private const int ToolStrip_SEPARATORTHICKNESS = 6;
@@ -76,10 +76,10 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <devdoc>
+            /// <summary>
             ///     Deriving classes can override this to configure a default size for their control.
             ///     This is more efficient than setting the size in the control's constructor.
-            /// </devdoc>
+            /// </summary>
             protected override Size DefaultSize {
                 get {
                     return new Size(ToolStrip_SEPARATORTHICKNESS, ToolStrip_SEPARATORTHICKNESS);
@@ -434,9 +434,9 @@ namespace System.Windows.Forms {
                 base.SetBounds(rect); 
             }
 
-            /// <devdoc>
+            /// <summary>
             /// An implementation of AccessibleChild for use with ToolStripItems        
-            /// </devdoc>
+            /// </summary>
             [System.Runtime.InteropServices.ComVisible(true)]        
             internal class ToolStripSeparatorAccessibleObject : ToolStripItemAccessibleObject {
                 private ToolStripSeparator ownerItem = null;

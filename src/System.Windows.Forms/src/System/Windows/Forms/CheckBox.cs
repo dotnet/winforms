@@ -22,10 +22,10 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Globalization;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para> Represents a Windows
     ///       check box.</para>
-    /// </devdoc>
+    /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -55,11 +55,11 @@ namespace System.Windows.Forms {
         internal int flatSystemStylePaddingWidth = FlatSystemStylePaddingWidth;
         internal int flatSystemStyleMinimumHeight = FlatSystemStyleMinimumHeight;
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.CheckBox'/> class.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public CheckBox()
         : base() {
 
@@ -88,11 +88,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets
         ///       or sets the value that determines the appearance of a
         ///       check box control.</para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(Appearance.Normal),
         Localizable(true),
@@ -131,11 +131,11 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_APPEARANCECHANGED, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets or sets a value indicating whether the <see cref='System.Windows.Forms.CheckBox.Checked'/> or <see cref='System.Windows.Forms.CheckBox.CheckState'/>
         /// value and the check box's appearance are automatically
         /// changed when it is clicked.</para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(true),
         SRCategory(nameof(SR.CatBehavior)),
@@ -151,14 +151,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets
         ///       the horizontal and vertical alignment of a check box on a check box
         ///       control.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         Bindable(true),
         Localizable(true),
@@ -188,14 +188,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets
         ///       or sets a value indicating whether the
         ///       check box
         ///       is checked.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         Bindable(true),
         SettingsBindable(true),
@@ -216,10 +216,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets
         ///       or sets a value indicating whether the check box is checked.</para>
-        /// </devdoc>
+        /// </summary>
         [
         Bindable(true),
         SRCategory(nameof(SR.CatAppearance)),
@@ -270,13 +270,13 @@ namespace System.Windows.Forms {
             remove => base.MouseDoubleClick -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets the information used to create the handle for the
         ///    <see cref='System.Windows.Forms.CheckBox'/>
         ///    control.
         /// </para>
-        /// </devdoc>
+        /// </summary>
         protected override CreateParams CreateParams {
             get {
                 CreateParams cp = base.CreateParams;
@@ -303,10 +303,10 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
+        /// </summary>
         protected override Size DefaultSize {
             get {
                 return new Size(104, 24);
@@ -346,8 +346,8 @@ namespace System.Windows.Forms {
             return size + Padding.Size;
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         internal override Rectangle OverChangeRectangle {
             get {
                 if (Appearance == Appearance.Button) {
@@ -367,8 +367,8 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         internal override Rectangle DownChangeRectangle {
             get {
                 if (Appearance == Appearance.Button || FlatStyle == FlatStyle.System) {
@@ -381,13 +381,13 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating the alignment of the
         ///       text on the checkbox control.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         Localizable(true),
         DefaultValue(ContentAlignment.MiddleLeft)
@@ -401,10 +401,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets a value indicating
         ///       whether the check box will allow three check states rather than two.</para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(false),
         SRCategory(nameof(SR.CatBehavior)),
@@ -419,34 +419,34 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the
         ///       value of the <see cref='System.Windows.Forms.CheckBox.Checked'/>
         ///       property changes.</para>
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckedChangedDescr))]
         public event EventHandler CheckedChanged {
             add => Events.AddHandler(EVENT_CHECKEDCHANGED, value);
             remove => Events.RemoveHandler(EVENT_CHECKEDCHANGED, value);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the
         ///       value of the <see cref='System.Windows.Forms.CheckBox.CheckState'/>
         ///       property changes.</para>
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckStateChangedDescr))]
         public event EventHandler CheckStateChanged {
             add => Events.AddHandler(EVENT_CHECKSTATECHANGED, value);
             remove => Events.RemoveHandler(EVENT_CHECKSTATECHANGED, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Constructs the new instance of the accessibility object for this control. Subclasses
         ///       should not call base.CreateAccessibilityObject.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override AccessibleObject CreateAccessibilityInstance() {
             return new CheckBoxAccessibleObject(this);
         }
@@ -458,10 +458,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.CheckBox.CheckedChanged'/>
         /// event.</para>
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnCheckedChanged(EventArgs e) {
             // accessibility stuff
             if (this.FlatStyle == FlatStyle.System) {
@@ -479,9 +479,9 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this,e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.CheckBox.CheckStateChanged'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnCheckStateChanged(EventArgs e) {
             if (OwnerDraw) {
                 Refresh();
@@ -491,7 +491,7 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this,e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Fires the event indicating that the control has been clicked.
         ///       Inheriting controls should use this in favour of actually listening to
@@ -499,7 +499,7 @@ namespace System.Windows.Forms {
         ///       ensure that the event is still fired for external listeners.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnClick(EventArgs e) {
             if (autoCheck) {
                 switch (CheckState) {
@@ -529,10 +529,10 @@ namespace System.Windows.Forms {
             base.OnClick(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     We override this to ensure that the control's click values are set up
         ///     correctly.
-        /// </devdoc>
+        /// </summary>
         protected override void OnHandleCreated(EventArgs e) {
             base.OnHandleCreated(e);
             
@@ -545,10 +545,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     We override this to ensure that press '+' or '=' checks the box,
         ///     while pressing '-' unchecks the box
-        /// </devdoc>
+        /// </summary>
         protected override void OnKeyDown(KeyEventArgs e) {
             /*
             if (Enabled) {
@@ -563,12 +563,12 @@ namespace System.Windows.Forms {
             base.OnKeyDown(e);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnMouseUp'/> event.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent) {
             if (mevent.Button == MouseButtons.Left && MouseIsPressed) {
                 // It's best not to have the mouse captured while running Click events
@@ -601,9 +601,9 @@ namespace System.Windows.Forms {
             return new CheckBoxStandardAdapter(this);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Overridden to handle mnemonics properly.
-        /// </devdoc>
+        /// </summary>
         protected internal override bool ProcessMnemonic(char charCode) {
             if (UseMnemonic && IsMnemonic(charCode, Text) && CanSelect) {
                 if (Focus()) {
@@ -620,10 +620,10 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Provides some interesting information for the CheckBox control in
         ///     String form.
-        /// </devdoc>
+        /// </summary>
         public override string ToString() {
 
             string s = base.ToString();
@@ -632,8 +632,8 @@ namespace System.Windows.Forms {
             return s + ", CheckState: " + checkState.ToString(CultureInfo.InvariantCulture);
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [System.Runtime.InteropServices.ComVisible(true)]        
         public class CheckBoxAccessibleObject : ButtonBaseAccessibleObject {
 

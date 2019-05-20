@@ -4825,12 +4825,12 @@ namespace System.Windows.Forms {
         ]
         public interface IMsoComponentManager {
 
-        /// <devdoc>
+        /// <summary>
         ///      Return in *ppvObj an implementation of interface iid for service
         ///      guidService (same as IServiceProvider::QueryService).
         ///      Return NOERROR if the requested service is supported, otherwise return
         ///      NULL in *ppvObj and an appropriate error (eg E_FAIL, E_NOINTERFACE).
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         int QueryService(
             ref Guid guidService,
@@ -4838,12 +4838,12 @@ namespace System.Windows.Forms {
             [MarshalAs(UnmanagedType.Interface)] 
             out object ppvObj);
 
-        /// <devdoc>
+        /// <summary>
         ///      Standard FDebugMessage method.
         ///      Since IMsoComponentManager is a reference counted interface, 
         ///      MsoDWGetChkMemCounter should be used when processing the 
         ///      msodmWriteBe message.
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         bool FDebugMessage(
             IntPtr hInst, 
@@ -4851,39 +4851,39 @@ namespace System.Windows.Forms {
             IntPtr wParam, 
             IntPtr lParam);
 
-        /// <devdoc>
+        /// <summary>
         ///      Register component piComponent and its registration info pcrinfo with
         ///      this component manager.  Return in *pdwComponentID a cookie which will
         ///      identify the component when it calls other IMsoComponentManager
         ///      methods.
         ///      Return TRUE if successful, FALSE otherwise.
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         bool FRegisterComponent(
             IMsoComponent component,
             NativeMethods.MSOCRINFOSTRUCT pcrinfo,
             out IntPtr dwComponentID);
 
-        /// <devdoc>
+        /// <summary>
         ///      Undo the registration of the component identified by dwComponentID
         ///      (the cookie returned from the FRegisterComponent method).
         ///      Return TRUE if successful, FALSE otherwise.
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         bool FRevokeComponent(IntPtr dwComponentID);
 
-        /// <devdoc>
+        /// <summary>
         ///      Update the registration info of the component identified by
         ///      dwComponentID (the cookie returned from FRegisterComponent) with the
         ///      new registration information pcrinfo.
         ///      Typically this is used to update the idle time registration data, but
         ///      can be used to update other registration data as well.
         ///      Return TRUE if successful, FALSE otherwise.
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         bool FUpdateComponentRegistration(IntPtr dwComponentID,NativeMethods.MSOCRINFOSTRUCT pcrinfo);
 
-        /// <devdoc>
+        /// <summary>
         ///      Notify component manager that component identified by dwComponentID
         ///      (cookie returned from FRegisterComponent) has been activated.
         ///      The active component gets the  chance to process messages before they
@@ -4894,11 +4894,11 @@ namespace System.Windows.Forms {
         ///      msoerrACompIsXActive (comp usually need not take any special action
         ///      in this case).
         ///      Return TRUE if successful.
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         bool FOnComponentActivate(IntPtr dwComponentID);
 
-        /// <devdoc>
+        /// <summary>
         ///      Called to inform component manager that  component identified by 
         ///      dwComponentID (cookie returned from FRegisterComponent) wishes
         ///      to perform a tracking operation (such as mouse tracking).
@@ -4914,11 +4914,11 @@ namespace System.Windows.Forms {
         ///              time via IMsoComponent::FDoIdle.
         ///      Note: there can only be one tracking component at a time.
         ///      Return TRUE if successful, FALSE otherwise.
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         bool FSetTrackingComponent(IntPtr dwComponentID, [In, MarshalAs(UnmanagedType.Bool)] bool fTrack);
 
-        /// <devdoc>
+        /// <summary>
         ///      Notify component manager that component identified by dwComponentID
         ///      (cookie returned from FRegisterComponent) is entering the state
         ///      identified by uStateID (msocstateXXX value).  (For convenience when
@@ -4952,11 +4952,11 @@ namespace System.Windows.Forms {
         ///      Note: inplace objects should not call this method with
         ///      uStateID == msocstateModal when entering modal state. Such objects
         ///      should call IOleInPlaceFrame::EnableModeless instead.
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         void OnComponentEnterState(IntPtr dwComponentID,int uStateID,int uContext,int cpicmExclude,/* IMsoComponentManger** */ int rgpicmExclude,int dwReserved);
 
-        /// <devdoc>
+        /// <summary>
         ///      Notify component manager that component identified by dwComponentID
         ///      (cookie returned from FRegisterComponent) is exiting the state
         ///      identified by uStateID (a msocstateXXX value).  (For convenience when
@@ -4977,7 +4977,7 @@ namespace System.Windows.Forms {
         ///      
         ///      Note: n calls to this method are symmetric with n calls to 
         ///      OnComponentEnterState (see OnComponentEnterState comments, above).
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         bool FOnComponentExitState(
             IntPtr dwComponentID,
@@ -4986,24 +4986,24 @@ namespace System.Windows.Forms {
             int cpicmExclude, 
             /* IMsoComponentManager** */ int rgpicmExclude);
 
-        /// <devdoc>
+        /// <summary>
         ///      Return TRUE if the state identified by uStateID (a msocstateXXX value)
         ///      is in effect at the root of this component manager's state context, 
         ///      FALSE otherwise (see "Comments on State Contexts", above).
         ///      pvoid is reserved for future use and should be NULL.
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         bool FInState(int uStateID,/* PVOID */ IntPtr pvoid);
 
-        /// <devdoc>
+        /// <summary>
         ///      Called periodically by a component during IMsoComponent::FDoIdle.
         ///      Return TRUE if component can continue its idle time processing, 
         ///      FALSE if not (in which case component returns from FDoIdle.) 
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         bool FContinueIdle();
 
-        /// <devdoc>
+        /// <summary>
         ///      Component identified by dwComponentID (cookie returned from 
         ///      FRegisterComponent) wishes to push a message loop for reason uReason.
         ///      uReason is one the values from the msoloop enumeration (above).
@@ -5018,11 +5018,11 @@ namespace System.Windows.Forms {
         ///      FALSE if it had to terminate the loop for some other reason.  In the 
         ///      latter case, component should perform any necessary action (such as 
         ///      cleanup).
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         bool FPushMessageLoop(IntPtr dwComponentID,int uReason,/* PVOID */ int pvLoopData);
 
-        /// <devdoc>
+        /// <summary>
         ///      Cause the component manager to create a "sub" component manager, which
         ///      will be one of its children in the hierarchical tree of component
         ///      managers used to maintiain state contexts (see "Comments on State
@@ -5034,7 +5034,7 @@ namespace System.Windows.Forms {
         ///      will delegate its IMsoComponentManager::QueryService calls. 
         ///      (see objext.h or docobj.h for definition of IServiceProvider).
         ///      Returns TRUE if successful.
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         bool FCreateSubComponentManager(
             [MarshalAs(UnmanagedType.Interface)]
@@ -5044,18 +5044,18 @@ namespace System.Windows.Forms {
             ref Guid riid,
             out IntPtr ppvObj);
 
-        /// <devdoc>
+        /// <summary>
         ///      Return in *ppicm an AddRef'ed ptr to this component manager's parent
         ///      in the hierarchical tree of component managers used to maintain state
         ///      contexts (see "Comments on State       Contexts", above).
         ///      Returns TRUE if the parent is returned, FALSE if no parent exists or
         ///      some error occurred.
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         bool FGetParentComponentManager(
             out IMsoComponentManager ppicm);
 
-        /// <devdoc>
+        /// <summary>
         ///      Return in *ppic an AddRef'ed ptr to the current active or tracking
         ///      component (as indicated by dwgac (a msogacXXX value)), and
         ///      its registration information in *pcrinfo.  ppic and/or pcrinfo can be
@@ -5064,7 +5064,7 @@ namespace System.Windows.Forms {
         ///      Returns TRUE if the component indicated by dwgac exists, FALSE if no 
         ///      such component exists or some error occurred.
         ///      dwReserved is reserved for future use and should be zero.
-        /// </devdoc>
+        /// </summary>
         [PreserveSig]
         bool FGetActiveComponent(
         int dwgac,
@@ -5080,12 +5080,12 @@ namespace System.Windows.Forms {
         ]
         public interface IMsoComponent {
 
-            /// <devdoc>
+            /// <summary>
             ///      Standard FDebugMessage method.
             ///      Since IMsoComponentManager is a reference counted interface, 
             ///      MsoDWGetChkMemCounter should be used when processing the 
             ///      msodmWriteBe message.
-            /// </devdoc>
+            /// </summary>
             [PreserveSig]
             bool FDebugMessage(
                 IntPtr hInst, 
@@ -5093,16 +5093,16 @@ namespace System.Windows.Forms {
                 IntPtr wParam, 
                 IntPtr lParam);
 
-            /// <devdoc>
+            /// <summary>
             ///      Give component a chance to process the message pMsg before it is
             ///      translated and dispatched. Component can do TranslateAccelerator
             ///      do IsDialogMessage, modify pMsg, or take some other action.
             ///      Return TRUE if the message is consumed, FALSE otherwise.
-            /// </devdoc>
+            /// </summary>
             [PreserveSig]
             bool FPreTranslateMessage(ref NativeMethods.MSG msg);            
 
-            /// <devdoc>  
+            /// <summary>  
             ///      Notify component when app enters or exits (as indicated by fEnter)
             ///      the state identified by uStateID (a value from olecstate enumeration).
             ///      Component should take action depending on value of uStateID
@@ -5117,13 +5117,13 @@ namespace System.Windows.Forms {
             ///     (incremented when this method is called with TRUE fEnter, decremented
             ///     when called with FALSE fEnter), the counter should not be decremented
             ///     for FALSE fEnter if it is already at zero.)  
-            /// </devdoc>
+            /// </summary>
             [PreserveSig]
             void OnEnterState(
                 int uStateID,
                 bool fEnter);
 
-            /// <devdoc>  
+            /// <summary>  
             ///      Notify component when the host application gains or loses activation.
             ///     If fActive is TRUE, the host app is being activated and dwOtherThreadID
             ///      is the ID of the thread owning the window being deactivated.
@@ -5132,20 +5132,20 @@ namespace System.Windows.Forms {
             ///      activated.
             ///      Note: this method is not called when both the window being activated
             ///      and the one being deactivated belong to the host app.
-            /// </devdoc>
+            /// </summary>
             [PreserveSig]
             void OnAppActivate(
                 bool fActive,
                 int dwOtherThreadID);                
 
-            /// <devdoc>      
+            /// <summary>      
             ///      Notify the active component that it has lost its active status because
             ///      the host or another component has become active.
-            /// </devdoc>
+            /// </summary>
             [PreserveSig]
             void OnLoseActivation();
 
-            /// <devdoc> 
+            /// <summary> 
             ///      Notify component when a new object is being activated.
             ///      If pic is non-NULL, then it is the component that is being activated.
             ///      In this case, fSameComponent is TRUE if pic is the same component as
@@ -5178,7 +5178,7 @@ namespace System.Windows.Forms {
             ///      ExclusiveActive mode ends, indicated by a future call to 
             ///      OnActivationChange with ExclusiveActivation bit not set or with NULL
             ///      pcrinfo.
-            /// </devdoc>
+            /// </summary>
             [PreserveSig]
             void OnActivationChange(
                 IMsoComponent component,
@@ -5188,7 +5188,7 @@ namespace System.Windows.Forms {
                 int pchostinfo,
                 int dwReserved);
 
-            /// <devdoc> 
+            /// <summary> 
             ///      Give component a chance to do idle time tasks.  grfidlef is a group of
             ///      bit flags taken from the enumeration of oleidlef values (above),
             ///      indicating the type of idle tasks to perform.  
@@ -5203,13 +5203,13 @@ namespace System.Windows.Forms {
             ///      Note: If this method is called on while component is performing a 
             ///      tracking operation, component should only perform idle time tasks that
             ///      it deems are appropriate to perform during tracking.
-            /// </devdoc>
+            /// </summary>
             [PreserveSig]
             bool FDoIdle(
                 int grfidlef);            
 
 
-            /// <devdoc>         
+            /// <summary>         
             ///      Called during each iteration of a message loop that the component
             ///      pushed. uReason and pvLoopData are the reason and the component private 
             ///      data that were passed to IOleComponentManager::FPushMessageLoop.
@@ -5222,7 +5222,7 @@ namespace System.Windows.Forms {
             ///      Return TRUE if the message loop should continue, FALSE otherwise.
             ///      If FALSE is returned, the component manager terminates the loop without
             ///      removing pMsgPeeked from the queue. 
-            /// </devdoc>
+            /// </summary>
             [PreserveSig]
             bool FContinueMessageLoop(
                 int uReason,
@@ -5230,7 +5230,7 @@ namespace System.Windows.Forms {
                 [MarshalAs(UnmanagedType.LPArray)] NativeMethods.MSG[] pMsgPeeked);            
 
 
-            /// <devdoc> 
+            /// <summary> 
             ///      Called when component manager wishes to know if the component is in a
             ///      state in which it can terminate.  If fPromptUser is FALSE, component
             ///      should simply return TRUE if it can terminate, FALSE otherwise.
@@ -5239,27 +5239,27 @@ namespace System.Windows.Forms {
             ///      user, either 1.) asking user if it can terminate and returning TRUE
             ///      or FALSE appropriately, or 2.) giving an indication as to why it
             ///      cannot terminate and returning FALSE. 
-            /// </devdoc>
+            /// </summary>
             [PreserveSig]
             bool FQueryTerminate(
                 bool fPromptUser);
 
-            /// <devdoc>     
+            /// <summary>     
             ///      Called when component manager wishes to terminate the component's
             ///      registration.  Component should revoke its registration with component
             ///      manager, release references to component manager and perform any
             ///      necessary cleanup. 
-            /// </devdoc>
+            /// </summary>
             [PreserveSig]
             void Terminate();
 
-            /// <devdoc> 
+            /// <summary> 
             ///      Called to retrieve a window associated with the component, as specified
             ///      by dwWhich, a olecWindowXXX value (see olecWindow, above).
             ///      dwReserved is reserved for future use and should be zero.
             ///      Component should return the desired window or NULL if no such window
             ///      exists. 
-            /// </devdoc>
+            /// </summary>
             
             [PreserveSig]
             IntPtr HwndGetWindow(
@@ -7701,9 +7701,9 @@ namespace System.Windows.Forms {
                     int cySrc);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This class provides static methods to create, activate and deactivate the theming scope.
-        /// </devdoc>
+        /// </summary>
         internal class ThemingScope
         {
             private static ACTCTX enableThemingActivationContext;
@@ -7711,10 +7711,10 @@ namespace System.Windows.Forms {
             private static IntPtr hActCtx;
             private static bool contextCreationSucceeded;
 
-            /// <devdoc>
+            /// <summary>
             /// We now use explicitactivate everywhere and use this method to determine if we
             /// really need to activate the activationcontext.  This should be pretty fast.
-            /// </devdoc>
+            /// </summary>
             
             
             private static bool IsContextActive()
@@ -7728,12 +7728,12 @@ namespace System.Windows.Forms {
                 return false;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Activate() does nothing if a theming context is already active on the current thread, which is good
             ///     for perf reasons. However, in some cases, like in the Timer callback, we need to put another context
             ///     on the stack even if one is already present. In such cases, this method helps - you get to manage
             ///     the cookie yourself though.
-            /// </devdoc>
+            /// </summary>
             
             
             public static IntPtr Activate()
@@ -7755,9 +7755,9 @@ namespace System.Windows.Forms {
                 return userCookie;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Use this to deactivate a context activated by calling ExplicitActivate.
-            /// </devdoc>
+            /// </summary>
             public static IntPtr Deactivate(IntPtr userCookie)
             {
                 if (userCookie != IntPtr.Zero && OSFeature.Feature.IsPresent(OSFeature.Themes))

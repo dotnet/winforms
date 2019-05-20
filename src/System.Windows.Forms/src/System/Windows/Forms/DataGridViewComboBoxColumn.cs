@@ -522,9 +522,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para></para>
-        /// </devdoc>
+        /// </summary>
         public override string ToString() 
         {
             StringBuilder sb = new StringBuilder(64);

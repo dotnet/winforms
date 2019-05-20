@@ -17,14 +17,14 @@ namespace System.Resources {
     using System.Collections;
     using System.Resources;
 
-    /// <devdoc>
+    /// <summary>
     ///     ResX resource set.
-    /// </devdoc>
+    /// </summary>
     public class ResXResourceSet : ResourceSet {
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a resource set for the specified file.
-        /// </devdoc>
+        /// </summary>
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // Shipped like this in Everett.
         ]
@@ -32,9 +32,9 @@ namespace System.Resources {
             ReadResources();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a resource set for the specified stream.
-        /// </devdoc>
+        /// </summary>
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // Shipped like this in Everett.
         ]
@@ -42,16 +42,16 @@ namespace System.Resources {
             ReadResources();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Gets the default reader type associated with this set.
-        /// </devdoc>
+        /// </summary>
         public override Type GetDefaultReader() {
             return typeof(ResXResourceReader);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Gets the default writer type associated with this set.
-        /// </devdoc>
+        /// </summary>
         public override Type GetDefaultWriter() {
             return typeof(ResXResourceWriter);
         }

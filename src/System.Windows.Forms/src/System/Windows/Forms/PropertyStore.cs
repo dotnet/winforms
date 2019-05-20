@@ -8,11 +8,11 @@ using System.Drawing;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// This is a small class that can efficiently store property values.
     /// It tries to optimize for size first, "get" access second, and
     /// "set" access third.
-    /// </devdoc>
+    /// </summary>
     internal class PropertyStore
     {
         private static int s_currentKey;
@@ -20,36 +20,36 @@ namespace System.Windows.Forms
         private IntegerEntry[] s_intEntries;
         private ObjectEntry[] s_objEntries;
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieves an integer value from our property list.
         /// This will set value to zero and return false if the
         /// list does not contain the given key.
-        /// </devdoc>
+        /// </summary>
         public bool ContainsInteger(int key)
         {
             GetInteger(key, out bool found);
             return found;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieves an integer value from our property list.
         /// This will set value to zero and return false if the
         /// list does not contain the given key.
-        /// </devdoc>
+        /// </summary>
         public bool ContainsObject(int key)
         {
             GetObject(key, out bool found);
             return found;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Creates a new key for this property store. This is NOT
         /// guarded by any thread safety so if you are calling it on
         /// multiple threads you should guard. For our purposes,
         /// we're fine because this is designed to be called in a class
         /// initializer, and we never have the same class hierarchy
         /// initializing on multiple threads at once.
-        /// </devdoc>
+        /// </summary>
         public static int CreateKey() => s_currentKey++;
 
         public Color GetColor(int key) => GetColor(key, out _);
@@ -134,18 +134,18 @@ namespace System.Windows.Forms
             return Rectangle.Empty;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieves an integer value from our property list.
         /// This will set value to zero and return false if the
         /// list does not contain the given key.
-        /// </devdoc>
+        /// </summary>
         public int GetInteger(int key) =>  GetInteger(key, out _);
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieves an integer value from our property list.
         /// This will set value to zero and return false if the
         /// list does not contain the given key.
-        /// </devdoc>
+        /// </summary>
         public int GetInteger(int key, out bool found)
         {
             short keyIndex = SplitKey(key, out short element);
@@ -180,18 +180,18 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieves an object value from our property list.
         /// This will set value to null and return false if the
         /// list does not contain the given key.
-        /// </devdoc>
+        /// </summary>
         public object GetObject(int key) => GetObject(key, out _);
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieves an object value from our property list.
         /// This will set value to null and return false if the
         /// list does not contain the given key.
-        /// </devdoc>
+        /// </summary>
         public object GetObject(int key, out bool found)
         {
             short keyIndex = SplitKey(key, out short element);
@@ -226,14 +226,14 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Locates the requested entry in our array if entries. This does
         /// not do the mask check to see if the entry is currently being used,
         /// but it does locate the entry. If the entry is found, this returns
         /// true and fills in index and element. If the entry is not found,
         /// this returns false. If the entry is not found, index will contain
         /// the insert point at which one would add a new element.
-        /// </devdoc>
+        /// </summary>
         private bool LocateIntegerEntry(short entryKey, out int index)
         {
             if (s_intEntries == null)
@@ -341,14 +341,14 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Locates the requested entry in our array if entries. This does
         /// not do the mask check to see if the entry is currently being used,
         /// but it does locate the entry. If the entry is found, this returns
         /// true and fills in index and element. If the entry is not found,
         /// this returns false. If the entry is not found, index will contain
         /// the insert point at which one would add a new element.
-        /// </devdoc>
+        /// </summary>
         private bool LocateObjectEntry(short entryKey, out int index)
         {
             if (s_objEntries != null)
@@ -459,9 +459,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Removes the given key from the array
-        /// </devdoc>
+        /// </summary>
         public void RemoveInteger(int key)
         {
             short entryKey = SplitKey(key, out short element);
@@ -524,9 +524,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Removes the given key from the array
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public void RemoveObject(int key)
         {
@@ -688,9 +688,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Stores the given value in the key.
-        /// </devdoc>
+        /// </summary>
         public void SetInteger(int key, int value)
         {
             short entryKey = SplitKey(key, out short element);
@@ -749,9 +749,9 @@ namespace System.Windows.Forms
             s_intEntries[index].Mask = (short)((1 << element) | (ushort)(s_intEntries[index].Mask));
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Stores the given value in the key.
-        /// </devdoc>
+        /// </summary>
         public void SetObject(int key, object value)
         {
             short entryKey = SplitKey(key, out short element);
@@ -810,9 +810,9 @@ namespace System.Windows.Forms
             s_objEntries[index].Mask = (short)((ushort)(s_objEntries[index].Mask) | (1 << element));
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Takes the given key and splits it into an index and an element.
-        /// </devdoc>
+        /// </summary>
         private short SplitKey(int key, out short element)
         {
             element = (short)(key & 0x00000003);
@@ -888,13 +888,13 @@ namespace System.Windows.Forms
             Debug.Assert(index == idx, "GetObjEntry in property store broken. index is " + index + " while is should be " + idx + "length of the array is " + length);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Stores the relationship between a key and a value.
         /// We do not want to be so inefficient that we require
         /// four bytes for each four byte property, so use an algorithm
         /// that uses the bottom two bits of the key to identify
         /// one of four elements in an entry.
-        /// </devdoc>
+        /// </summary>
         private struct IntegerEntry
         {
             public short Key;
@@ -905,13 +905,13 @@ namespace System.Windows.Forms
             public int Value4;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Stores the relationship between a key and a value.
         /// We do not want to be so inefficient that we require
         /// four bytes for each four byte property, so use an algorithm
         /// that uses the bottom two bits of the key to identify
         /// one of four elements in an entry.
-        /// </devdoc>
+        /// </summary>
         private struct ObjectEntry
         {
             public short Key;
