@@ -10,7 +10,7 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
   </ProductDependencies>
   <ToolsetDependencies>
     <!-- Core Setup for coherency -->
-    <Dependency Name="Microsoft.NETCore.App" Version="3.0.0-preview6-27719-07">
+    <Dependency Name="Microsoft.NETCore.App" Version="3.0.0-preview6-27719-08">
       <Uri>https://github.com/dotnet/core-setup</Uri>
       <Sha>b2e5aefb3be193fbe5ebb880a74a2a28987d32f0</Sha>
     </Dependency>
