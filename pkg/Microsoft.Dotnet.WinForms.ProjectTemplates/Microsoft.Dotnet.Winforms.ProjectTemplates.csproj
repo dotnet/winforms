@@ -6,6 +6,9 @@
     <TargetFramework>$(TargetFrameworkName)$(TargetFrameworkVersion)</TargetFramework>
     <EnableDefaultItems>false</EnableDefaultItems>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    
+    <!-- Opt-out repo features -->
+    <UsingToolXliff>false</UsingToolXliff>
   </PropertyGroup>
 
   <!-- This is a Packaging Project -->
