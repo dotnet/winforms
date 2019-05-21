@@ -354,23 +354,19 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(context);
         }
 
-        public static IEnumerable<object[]> Contains_DataSource_TestData()
+        [Fact]
+        public void BindingContext_Contains_DataSource_ReturnsExpected()
         {
             var context = new BindingContext();
             var source = new BindingSource();
             var dataSource = new DataSource();
             context.Add(dataSource, source.CurrencyManager);
-            yield return new object[] { context, dataSource, true };
-            yield return new object[] { context, 1, false };
-        }
-
-        [Theory]
-        [MemberData(nameof(Contains_DataSource_TestData))]
-        public void BindingContext_Contains_DataSource_ReturnsExpected(BindingContext context, object dataSource, bool expected)
-        {
-            Assert.Equal(expected, context.Contains(dataSource));
-            Assert.Equal(expected, context.Contains(dataSource, null));
-            Assert.Equal(expected, context.Contains(dataSource, string.Empty));
+            Assert.True(context.Contains(dataSource));
+            Assert.True(context.Contains(dataSource, null));
+            Assert.True(context.Contains(dataSource, string.Empty));
+            Assert.False(context.Contains(1));
+            Assert.False(context.Contains(1, null));
+            Assert.False(context.Contains(1, string.Empty));
         }
 
 
