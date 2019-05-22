@@ -22,9 +22,6 @@ namespace System.Windows.Forms
 
         private static OSFeature _feature = null;
 
-        private static bool _themeSupportTested = false;
-        private static bool _themeSupport = false;
-
         /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.OSFeature'/> class.
         /// </summary>
@@ -43,31 +40,10 @@ namespace System.Windows.Forms
         /// </summary>
         public override Version GetVersionPresent(object feature)
         {
-            if (feature == LayeredWindows)
+            // These are always supported on platforms that .NET Core supports.
+            if (feature == LayeredWindows || feature == Themes)
             {
                 return new Version(0, 0, 0, 0);
-            }
-            else if (feature == Themes)
-            {
-                if (!_themeSupportTested)
-                {
-                    try
-                    {
-                        SafeNativeMethods.IsAppThemed();
-                        _themeSupport = true;
-                    }
-                    catch
-                    {
-                        _themeSupport = false;
-                    }
-
-                    _themeSupportTested = true;
-                }
-
-                if (_themeSupport)
-                {
-                    return new Version(0, 0, 0, 0);
-                }
             }
 
             return null;
