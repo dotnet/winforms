@@ -8071,59 +8071,6 @@ namespace System.Windows.Forms
             }
         }
 
-        // ClickOnce related interop
-        [StructLayout(LayoutKind.Sequential)]
-        internal class PROCESS_INFORMATION
-        {
-            [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
-            public IntPtr hProcess = IntPtr.Zero;
-            [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
-            public IntPtr hThread = IntPtr.Zero;
-            public int dwProcessId = 0;
-            public int dwThreadId = 0;
-
-            // Note this will guarantee we will always free the handles
-            // so unless you duplicate the handles from PROCESS_INFORMATION class
-            // do not close those handles.
-            ~PROCESS_INFORMATION()
-            {
-                Close();
-            }
-
-            [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
-            internal void Close()
-            {
-                if (hProcess != (IntPtr)0 && hProcess != (IntPtr)INVALID_HANDLE_VALUE)
-                {
-                    CloseHandle(new HandleRef(this, hProcess));
-                    hProcess = INVALID_HANDLE_VALUE;
-                }
-
-                if (hThread != (IntPtr)0 && hThread != (IntPtr)INVALID_HANDLE_VALUE)
-                {
-                    CloseHandle(new HandleRef(this, hThread));
-                    hThread = INVALID_HANDLE_VALUE;
-                }
-            }
-
-            [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
-            private static readonly IntPtr INVALID_HANDLE_VALUE = new IntPtr(-1);
-
-            [DllImport(ExternDll.Kernel32, ExactSpelling = true, CharSet = CharSet.Auto, SetLastError = true)]
-
-            private static extern bool CloseHandle(HandleRef handle);
-        }
-
-        [DllImport(ExternDll.Clr, CharSet = CharSet.Unicode, PreserveSig = false, SetLastError = false, BestFitMapping = false, ExactSpelling = true)]
-
-        internal static extern void CorLaunchApplication(uint hostType,
-            string applicationFullName,
-            int manifestPathsCount,
-            string[] manifestPaths,
-            int activationDataCount,
-            string[] activationData,
-            PROCESS_INFORMATION processInformation);
-
         // UIAutomationCore methods
 
         [DllImport(ExternDll.UiaCore, CharSet = CharSet.Unicode)]
