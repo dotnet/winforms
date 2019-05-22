@@ -178,6 +178,39 @@ namespace WinForms.Common.Tests
             return data;
         }
 
+        public static TheoryData<string, string, int> GetCtrlBackspaceData()
+        {
+            var data = new TheoryData<string, string, int>();
+            data.Add("aaa", "", 0);
+            data.Add("---", "", 0);
+            data.Add(" aaa", "", 0);
+            data.Add(" ---", "", 0);
+            data.Add("aaa---", "", 0);
+            data.Add("---aaa", "---", 0);
+            data.Add("aaa---aaa", "aaa---", 0);
+            data.Add("---aaa---", "---", 0);
+            data.Add("a-a", "a-", 0);
+            data.Add("-a-", "", 0);
+            data.Add("--a-", "--", 0);
+            data.Add("abc", "c", -1);
+            data.Add("a,1-b", "a,b", -1);
+            return data;
+        }
+
+        public static TheoryData<string, string, int> GetCtrlBackspaceRepeatedData()
+        {
+            var data = new TheoryData<string, string, int>();
+            data.Add("aaa", "", 2);
+            data.Add("---", "", 2);
+            data.Add("aaa---aaa", "", 2);
+            data.Add("---aaa---", "", 2);
+            data.Add("aaa bbb", "", 2);
+            data.Add("aaa bbb ccc", "aaa ", 2);
+            data.Add("aaa --- ccc", "", 2);
+            data.Add("1 2 3 4 5 6 7 8 9 0", "1 ", 9);
+            return data;
+        }
+
         public static TheoryData<char> GetCharTheoryData()
         {
             var data = new TheoryData<char>();
