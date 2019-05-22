@@ -129,7 +129,7 @@
       </trans-unit>
       <trans-unit id="MultilineStringEditorWatermark">
         <source>Press Enter to begin a new line.\r\nPress Ctrl+Enter to accept Text.</source>
-        <target state="new">Press Enter to begin a new line.\r\nPress Ctrl+Enter to accept Text.</target>
+        <target state="translated">按 Enter 开始新行。\r\n按 Ctrl+Enter 接受文本。</target>
         <note />
       </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">

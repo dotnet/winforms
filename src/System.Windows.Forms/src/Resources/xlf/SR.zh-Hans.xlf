@@ -5182,7 +5182,7 @@ just-in-time (JIT) debugging instead of this dialog box.
       </trans-unit>
       <trans-unit id="ExDlgOk">
         <source>OK</source>
-        <target state="translated">OK</target>
+        <target state="translated">确定</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgQuit">

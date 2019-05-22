@@ -5182,7 +5182,7 @@ hakkında detaylı bilgi için bu iletinin sonuna bakın.
       </trans-unit>
       <trans-unit id="ExDlgOk">
         <source>OK</source>
-        <target state="translated">OK</target>
+        <target state="translated">Tamam</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgQuit">
