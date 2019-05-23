@@ -10,9 +10,9 @@ namespace System.Drawing.Internal
 namespace System.Experimental.Gdi
 #endif
 {
-    /// <devdoc>
+    /// <summary>
     ///     Represent the device type the context refers to.
-    /// </devdoc>
+    /// </summary>
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
 #else

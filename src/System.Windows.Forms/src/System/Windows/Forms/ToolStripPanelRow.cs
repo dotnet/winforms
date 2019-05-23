@@ -95,9 +95,9 @@ namespace System.Windows.Forms {
         }
 
             
-        /// <devdoc>
+        /// <summary>
         /// Collection of child controls.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), SRDescription(nameof(SR.ControlControlsDescr))]
         internal ToolStripPanelRowControlCollection ControlsInternal {
             get {
@@ -213,11 +213,11 @@ namespace System.Windows.Forms {
             }         
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves our internal property storage object. If you have a property
         ///     whose value is not always set, you should store it in here to save
         ///     space.
-        /// </devdoc>
+        /// </summary>
         internal PropertyStore Properties {
             get {
                 return propertyStore;
@@ -248,10 +248,10 @@ namespace System.Windows.Forms {
         }
 #endif
 
-        /// <devdoc>
+        /// <summary>
         /// returns true if there is enough space to "raft" the control
         /// ow returns false
-        /// </devdoc>
+        /// </summary>
         public bool CanMove(ToolStrip toolStripToDrag) {
             return !ToolStripPanel.Locked && !Locked && RowManager.CanMove(toolStripToDrag);
         }
@@ -587,17 +587,17 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         ArrangedElementCollection IArrangedElement.Children {
             get {
                 return Cells;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Should not be exposed as this returns an unexposed type.
-        /// </devdoc>
+        /// </summary>
         IArrangedElement IArrangedElement.Container {
             get {
                 return this.ToolStripPanel;
@@ -804,10 +804,10 @@ namespace System.Windows.Forms {
                 
             }
           
-            /// <devdoc>
+            /// <summary>
             /// grows all controls after the index to be their preferred size.
             /// reports back how much space was used.
-            /// </devdoc>
+            /// </summary>
             protected virtual int GrowControlsAfter(int index, int growBy) {
                if (growBy < 0) {
                    Debug.Fail("why was a negative number given to growControlsAfter?");
@@ -831,10 +831,10 @@ namespace System.Windows.Forms {
                return growBy - spaceToFree;
             }
 
-            /// <devdoc>
+            /// <summary>
             /// grows all controls before the index to be their preferred size.
             /// reports back how much space was used.
-            /// </devdoc>
+            /// </summary>
             protected virtual int GrowControlsBefore(int index, int growBy) {
                if (growBy < 0) {
                    Debug.Fail("why was a negative number given to growControlsAfter?");
@@ -933,10 +933,10 @@ namespace System.Windows.Forms {
                 }
             }
             
-            /// <devdoc>
+            /// <summary>
             ///  returns true if there is enough space to "raft" the control
             ///  ow returns false
-            /// </devdoc>
+            /// </summary>
             public override bool CanMove(ToolStrip toolStripToDrag) {
 
                 if (base.CanMove(toolStripToDrag)) {
@@ -1444,10 +1444,10 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///  returns true if there is enough space to "raft" the control
             ///  ow returns false
-            /// </devdoc>
+            /// </summary>
             public override bool CanMove(ToolStrip toolStripToDrag) {
 
                  if (base.CanMove(toolStripToDrag)) {
@@ -1930,7 +1930,7 @@ namespace System.Windows.Forms {
       
         
 
-        /// <devdoc>
+        /// <summary>
         /// ToolStripPanelRowControlCollection
         ///
         /// this class represents the collection of controls on a particular row.
@@ -1946,7 +1946,7 @@ namespace System.Windows.Forms {
         /// the ToolStripPanel.Control collection  as the ToolStripPanel.Control collection
         /// is responsible for parenting and unparenting the controls (ToolStripPanelRows do NOT derive from 
         /// Control and thus are NOT hwnd backed).
-        /// </devdoc>
+        /// </summary>
         internal class ToolStripPanelRowControlCollection : ArrangedElementCollection, IList, IEnumerable {
             private ToolStripPanelRow owner;
             private ArrangedElementCollection cellCollection;
@@ -2119,9 +2119,9 @@ namespace System.Windows.Forms {
                 OnAdd(control, index);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///  Do proper cleanup of ownership, etc.
-            /// </devdoc>
+            /// </summary>
             private void OnAfterRemove(Control control, int index) {
                 if (owner != null) {
                     // unfortunately we dont know the index of the control in the ToolStripPanel's 

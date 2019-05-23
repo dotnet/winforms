@@ -7,23 +7,23 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides the base functionality for creating collections.
-    /// </devdoc>
+    /// </summary>
     public class BaseCollection : MarshalByRefObject, ICollection {
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the total number of elements in a collection.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public virtual int Count => List.Count;
 
         public void CopyTo(Array ar, int index) => List.CopyTo(ar, index);
 
-        /// <devdoc>
+        /// <summary>
         /// Gets an IEnumerator for the collection.
-        /// </devdoc>
+        /// </summary>
         public IEnumerator GetEnumerator() => List.GetEnumerator();
 
         [Browsable(false)]

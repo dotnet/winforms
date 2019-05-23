@@ -12,9 +12,9 @@ namespace System.Windows.Forms
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>Identifies a cell in the dataGridView.</para>
-    /// </devdoc>
+    /// </summary>
     /// 
     public class DataGridViewHeaderCell : DataGridViewCell
     {
@@ -635,11 +635,11 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets the row Index and column Index of the cell.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override string ToString()
         {
             return "DataGridViewHeaderCell { ColumnIndex=" + this.ColumnIndex.ToString(CultureInfo.CurrentCulture) + ", RowIndex=" + this.RowIndex.ToString(CultureInfo.CurrentCulture) + " }";

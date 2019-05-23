@@ -10,9 +10,9 @@ namespace System.Windows.Forms
     using System.Windows.Forms;
     using System.ComponentModel;
 
-    /// <devdoc>
+    /// <summary>
     /// <para>Represents a linked list of integers</para>
-    /// </devdoc>
+    /// </summary>
     internal class DataGridViewIntLinkedList : IEnumerable
     {
         private DataGridViewIntLinkedListElement lastAccessedElement;
@@ -203,9 +203,9 @@ namespace System.Windows.Forms
         }
     }
 
-    /// <devdoc>
+    /// <summary>
     /// <para>Represents an emunerator of elements in a <see cref='System.Windows.Forms.DataGridViewIntLinkedList'/>  linked list.</para>
-    /// </devdoc>
+    /// </summary>
     internal class DataGridViewIntLinkedListEnumerator : IEnumerator
     {
         private DataGridViewIntLinkedListElement headElement;
@@ -250,9 +250,9 @@ namespace System.Windows.Forms
         }
     }
 
-    /// <devdoc>
+    /// <summary>
     /// <para>Represents an element in a <see cref='System.Windows.Forms.DataGridViewIntLinkedList'/> linked list.</para>
-    /// </devdoc>
+    /// </summary>
     internal class DataGridViewIntLinkedListElement
     {
         private int integer;

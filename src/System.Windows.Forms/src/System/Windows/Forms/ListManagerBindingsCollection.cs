@@ -7,18 +7,18 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// BindingsCollection is a collection of bindings for a Control. It has Add/Remove capabilities,
     /// as well as an All array property, enumeration, etc.
-    /// </devdoc>
+    /// </summary>
     [DefaultEvent(nameof(CollectionChanged))]
     internal class ListManagerBindingsCollection : BindingsCollection
     {
         private BindingManagerBase _bindingManagerBase;
 
-        /// <devdoc>
+        /// <summary>
         /// ColumnsCollection constructor.  Used only by DataSource.
-        /// </devdoc>
+        /// </summary>
         internal ListManagerBindingsCollection(BindingManagerBase bindingManagerBase) : base()
         {
             Debug.Assert(bindingManagerBase != null, "How could a listmanagerbindingscollection not have a bindingManagerBase associated with it!");

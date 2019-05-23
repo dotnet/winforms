@@ -10,11 +10,11 @@ using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       This is a rendering class for the TrackBar control.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     public sealed class TrackBarRenderer {
 
        //Make this per-thread, so that different threads can safely use these methods.
@@ -26,23 +26,23 @@ using Microsoft.Win32;
        private TrackBarRenderer() {
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Returns true if this class is supported for the current OS and user/application settings, 
        ///       otherwise returns false.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        public static bool IsSupported {
            get {
                return VisualStyleRenderer.IsSupported; // no downlevel support
            }
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a horizontal track.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")] // Using Graphics instead of IDeviceContext intentionally
        public static void DrawHorizontalTrack(Graphics g, Rectangle bounds) {
            InitializeRenderer(VisualStyleElement.TrackBar.Track.Normal, 1);
@@ -50,11 +50,11 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a vertical track.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")] // Using Graphics instead of IDeviceContext intentionally
        public static void DrawVerticalTrack(Graphics g, Rectangle bounds) {
            InitializeRenderer(VisualStyleElement.TrackBar.TrackVertical.Normal, 1);
@@ -62,11 +62,11 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a horizontal thumb.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")] // Using Graphics instead of IDeviceContext intentionally
        public static void DrawHorizontalThumb(Graphics g, Rectangle bounds, TrackBarThumbState state) {
            InitializeRenderer(VisualStyleElement.TrackBar.Thumb.Normal, (int)state);
@@ -74,11 +74,11 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a vertical thumb.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")] // Using Graphics instead of IDeviceContext intentionally
        public static void DrawVerticalThumb(Graphics g, Rectangle bounds, TrackBarThumbState state) {
            InitializeRenderer(VisualStyleElement.TrackBar.ThumbVertical.Normal, (int)state);
@@ -86,11 +86,11 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a constant size left pointing thumb centered in the given bounds.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")] // Using Graphics instead of IDeviceContext intentionally
        public static void DrawLeftPointingThumb(Graphics g, Rectangle bounds, TrackBarThumbState state) {
            InitializeRenderer(VisualStyleElement.TrackBar.ThumbLeft.Normal, (int)state);
@@ -98,11 +98,11 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a constant size right pointing thumb centered in the given bounds.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")] // Using Graphics instead of IDeviceContext intentionally
        public static void DrawRightPointingThumb(Graphics g, Rectangle bounds, TrackBarThumbState state) {
            InitializeRenderer(VisualStyleElement.TrackBar.ThumbRight.Normal, (int)state);
@@ -110,11 +110,11 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a constant size top pointing thumb centered in the given bounds.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")] // Using Graphics instead of IDeviceContext intentionally
        public static void DrawTopPointingThumb(Graphics g, Rectangle bounds, TrackBarThumbState state) {
            InitializeRenderer(VisualStyleElement.TrackBar.ThumbTop.Normal, (int)state);
@@ -122,11 +122,11 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a constant size bottom pointing thumb centered in the given bounds.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")] // Using Graphics instead of IDeviceContext intentionally
        public static void DrawBottomPointingThumb(Graphics g, Rectangle bounds, TrackBarThumbState state) {
            InitializeRenderer(VisualStyleElement.TrackBar.ThumbBottom.Normal, (int)state);
@@ -134,11 +134,11 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a horizontal tick.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")] // PM team has reviewed and decided on naming changes already
        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")] // Using Graphics instead of IDeviceContext intentionally
        public static void DrawHorizontalTicks(Graphics g, Rectangle bounds, int numTicks, EdgeStyle edgeStyle) {
@@ -164,11 +164,11 @@ using Microsoft.Win32;
            }
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a vertical tick.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]  // PM team has reviewed and decided on naming changes already
        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")] // Using Graphics instead of IDeviceContext intentionally
         public static void DrawVerticalTicks(Graphics g, Rectangle bounds, int numTicks, EdgeStyle edgeStyle) {
@@ -194,11 +194,11 @@ using Microsoft.Win32;
            }
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Returns the size of a left pointing thumb.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")] // Using Graphics instead of IDeviceContext intentionally
        public static Size GetLeftPointingThumbSize(Graphics g, TrackBarThumbState state) {
            InitializeRenderer(VisualStyleElement.TrackBar.ThumbLeft.Normal, (int)state);
@@ -206,11 +206,11 @@ using Microsoft.Win32;
            return (visualStyleRenderer.GetPartSize(g, ThemeSizeType.True));
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Returns the size of a right pointing thumb.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")] // Using Graphics instead of IDeviceContext intentionally
        public static Size GetRightPointingThumbSize(Graphics g, TrackBarThumbState state) {
            InitializeRenderer(VisualStyleElement.TrackBar.ThumbRight.Normal, (int)state);
@@ -218,11 +218,11 @@ using Microsoft.Win32;
            return (visualStyleRenderer.GetPartSize(g, ThemeSizeType.True));
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Returns the size of a top pointing thumb.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")] // Using Graphics instead of IDeviceContext intentionally
        public static Size GetTopPointingThumbSize(Graphics g, TrackBarThumbState state) {
            InitializeRenderer(VisualStyleElement.TrackBar.ThumbTop.Normal, (int)state);
@@ -230,11 +230,11 @@ using Microsoft.Win32;
            return (visualStyleRenderer.GetPartSize(g, ThemeSizeType.True));
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Returns the size of a bottom pointing thumb.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")] // Using Graphics instead of IDeviceContext intentionally
        public static Size GetBottomPointingThumbSize(Graphics g, TrackBarThumbState state) {
            InitializeRenderer(VisualStyleElement.TrackBar.ThumbBottom.Normal, (int)state);

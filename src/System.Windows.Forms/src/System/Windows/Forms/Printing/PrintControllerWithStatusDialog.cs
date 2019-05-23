@@ -26,12 +26,12 @@ namespace System.Windows.Forms {
             this.underlyingController = underlyingController;
             this.dialogTitle = dialogTitle;
         }
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       This is new public property which notifies if this controller is used for PrintPreview.. so get the underlying Controller 
         ///       and return its IsPreview Property.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override bool IsPreview {
             get {
                 if (underlyingController != null)
@@ -42,11 +42,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Implements StartPrint by delegating to the underlying controller.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override void OnStartPrint(PrintDocument document, PrintEventArgs e) {
             base.OnStartPrint(document, e);
 
@@ -77,11 +77,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Implements StartPage by delegating to the underlying controller.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override Graphics OnStartPage(PrintDocument document, PrintPageEventArgs e) {
             base.OnStartPage(document, e);
 
@@ -95,11 +95,11 @@ namespace System.Windows.Forms {
             return result;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Implements EndPage by delegating to the underlying controller.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override void OnEndPage(PrintDocument document, PrintPageEventArgs e) {
             underlyingController.OnEndPage(document, e);
             if (backgroundThread != null && backgroundThread.canceled) {
@@ -110,11 +110,11 @@ namespace System.Windows.Forms {
             base.OnEndPage(document, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Implements EndPrint by delegating to the underlying controller.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override void OnEndPrint(PrintDocument document, PrintEventArgs e) {
             underlyingController.OnEndPrint(document, e);
             if (backgroundThread != null && backgroundThread.canceled) {
@@ -216,10 +216,10 @@ namespace System.Windows.Forms {
                 this.MinimumSize = Size;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Tells whether the current resources for this dll have been
             ///     localized for a RTL language.
-            /// </devdoc>
+            /// </summary>
             private static bool IsRTLResources {
                 get {
                     return SR.RTL != "RTL_False";

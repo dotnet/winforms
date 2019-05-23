@@ -4,9 +4,9 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Represents the method that handles the <see langword='Deselect'/>,
     /// <see langword='Deselecting'/> event of a <see cref='System.Windows.Forms.TabControl'/>
-    /// </devdoc>
+    /// </summary>
     public delegate void TabControlCancelEventHandler(object sender, TabControlCancelEventArgs e);
 }

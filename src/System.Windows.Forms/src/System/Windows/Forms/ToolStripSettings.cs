@@ -13,9 +13,9 @@ namespace System.Windows.Forms {
     using System.Text;
     using System.Text.RegularExpressions;
 
-    /// <devdoc> 
+    /// <summary> 
     ///     A settings class used by the ToolStripManager to save toolstrip settings.
-    /// </devdoc>
+    /// </summary>
     internal class ToolStripSettings : ApplicationSettingsBase {
 
         internal ToolStripSettings(string settingsKey) : base(settingsKey) {}
@@ -101,10 +101,10 @@ namespace System.Windows.Forms {
         }
     }
 
-    /// <devdoc> 
+    /// <summary> 
     ///     Helper class used by ToolStripManager that implements most of the logic to save out and apply
     ///     settings for toolstrips on a form.
-    /// </devdoc>
+    /// </summary>
     internal class ToolStripSettingsManager {
         private Form form;
         private string formKey;
@@ -356,9 +356,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc> 
+        /// <summary> 
         ///     Light weight structure that captures the properties we want to save as settings.
-        /// </devdoc>
+        /// </summary>
         private struct SettingsStub {
             public bool     Visible;
             public string   ToolStripPanelName;

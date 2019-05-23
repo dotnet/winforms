@@ -536,12 +536,12 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns a default location for showing the context menu.  This
         /// location is the center of the active property label in the grid, and
         /// is used useful to position the context menu when the menu is invoked
         /// via the keyboard.
-        /// </devdoc>
+        /// </summary>
         public Point ContextMenuDefaultLocation {
             get {
                 // get the rect for the currently selected prop name, find the middle
@@ -606,12 +606,12 @@ namespace System.Windows.Forms.PropertyGridInternal {
         */
 
         /*
-        /// <devdoc>
+        /// <summary>
         /// Returns the currently selected property name.
         /// If no property or a category name is selected, "" is returned.
         /// If the category is a sub property, it is concatenated onto its
         /// parent property name with a ".".
-        /// </devdoc>
+        /// </summary>
         public string SelectedPropertyName {
             get {
                 if (selectedGridEntry == null) {
@@ -679,10 +679,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
         */
         
-        /// <devdoc>
+        /// <summary>
         /// Returns or sets the IServiceProvider the PropertyGridView will use to obtain
         /// services.  This may be null.
-        /// </devdoc>
+        /// </summary>
         public IServiceProvider ServiceProvider {
             get { 
                return serviceProvider;
@@ -892,10 +892,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
             tipInfo = -1;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Closes a previously opened drop down.  This should be called by the
         ///      drop down when the user does something that should close it.
-        /// </devdoc>
+        /// </summary>
         public void /* IWindowsFormsEditorService. */ CloseDropDown() {
             CloseDropDownInternal(true);
         }
@@ -1061,10 +1061,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return cProps;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Constructs the new instance of the accessibility object for this control. Subclasses
         ///     should not call base.CreateAccessibilityObject.
-        /// </devdoc>
+        /// </summary>
         protected override AccessibleObject CreateAccessibilityInstance() {
             return new PropertyGridViewAccessibleObject(this, ownerGrid);
         }
@@ -1597,14 +1597,14 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return(int)(InternalLabelWidth * (labelRatio - 1));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Displays the provided control in a drop down.  When possible, the
         ///      current dimensions of the control will be respected.  If this is not possible
         ///      for the current screen layout the control may be resized, so it should
         ///      be implemented using appropriate docking and anchoring so it will resize
         ///      nicely.  If the user performs an action that would cause the drop down
         ///      to prematurely disappear the control will be hidden.
-        /// </devdoc>
+        /// </summary>
         public void /* cpr IWindowsFormsEditorService. */ DropDownControl(Control ctl) {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose,  "PropertyGridView:DropDownControl");
             Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose,  "DropDownControl(ctl = " + ctl.GetType().Name + ")");
@@ -1933,10 +1933,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return pos;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// returns an array of IPE specifying the current heirarchy of ipes from the given
         /// gridEntry through its parents to the root.
-        /// </devdoc>
+        /// </summary>
         private GridEntryCollection GetGridEntryHierarchy(GridEntry gridEntry) {
             if (gridEntry == null) {
                 return null;
@@ -2087,11 +2087,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return !ScrollBar.Visible;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns a string containing test info about a given GridEntry. Requires an offset into the top-level
         /// entry collection (ie. nested entries are not accessible). Or specify -1 to get info for the current
         /// selected entry (which can be any entry, top-level or nested).
-        /// </devdoc>
+        /// </summary>
         public virtual string GetTestingInfo(int entry) {
             GridEntry gridEntry = (entry < 0) ? GetGridEntryFromRow(selectedRow) : GetGridEntryFromOffset(entry);
 
@@ -2159,9 +2159,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
      
-        /// <devdoc>
+        /// <summary>
         ///     Overridden to handle TAB key.
-        /// </devdoc>
+        /// </summary>
         protected override bool IsInputKey(Keys keyData) {
             switch (keyData & Keys.KeyCode) {
                 case Keys.Escape:
@@ -4810,11 +4810,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return sbChange;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Shows the given dialog, and returns its dialog result.  You should always
         ///      use this method rather than showing the dialog directly, as this will
         ///      properly position the dialog and provide it a dialog owner.
-        /// </devdoc>
+        /// </summary>
         public DialogResult /* IWindowsFormsEditorService. */ ShowDialog(Form dialog) {
             // try to shift down if sitting right on top of existing owner.
             if (dialog.StartPosition == FormStartPosition.CenterScreen) {
@@ -5434,11 +5434,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             /// This gets set to true if there isn't enough space below the currently selected
             /// row for the drop down, so it appears above the row.  In this case, we make the resize
             /// grip appear at the top left.
-            /// </devdoc>
+            /// </summary>
             public bool ResizeUp  {
            
                 set {
@@ -5495,12 +5495,12 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             /// Get an InstanceCreationEditor for this entry.  First, we look on the property type, and if we
             /// don't find that we'll go up to the editor type itself.  That way people can associate the InstanceCreationEditor with
             /// the type of DropDown UIType Editor.
             ///
-            /// </devdoc>
+            /// </summary>
             private InstanceCreationEditor GetInstanceCreationEditor(PropertyDescriptorGridEntry entry) {
 
                 if (entry == null) {
@@ -5527,11 +5527,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return editor;
             }
 
-            /// <devdoc>
+            /// <summary>
             /// Get a glyph for sizing the lower left hand grip.  The code in ControlPaint only does lower-right glyphs
             /// so we do some GDI+ magic to take that glyph and mirror it.  That way we can still share the code (in case it changes for theming, etc),
             /// not have any special cases, and possibly solve world hunger.  
-            /// </devdoc>
+            /// </summary>
             
             
             private Bitmap GetSizeGripGlyph(Graphics g) {
@@ -5578,14 +5578,14 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
             }
             
-            /// <devdoc>
+            /// <summary>
             ///    General purpose method, based on Control.Contains()...
             ///
             ///    Determines whether a given window (specified using native window handle)
             ///    is a descendant of this control. This catches both contained descendants
             ///    and 'owned' windows such as modal dialogs. Using window handles rather
             ///    than Control objects allows it to catch un-managed windows as well.
-            /// </devdoc>
+            /// </summary>
             private bool OwnsWindow(IntPtr hWnd) {
                 while (hWnd != IntPtr.Zero) {
                     hWnd = UnsafeNativeMethods.GetWindowLong(new HandleRef(null, hWnd), NativeMethods.GWL_HWNDPARENT);
@@ -5662,9 +5662,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
             }
             
-            /// <devdoc>
+            /// <summary>
             /// Just figure out what kind of sizing we would do at a given drag location.
-            /// </devdoc>
+            /// </summary>
             private int MoveTypeFromPoint(int x, int y) 
             {
                 Rectangle bGripRect = new Rectangle(0, Height - ResizeGripSize, ResizeGripSize, ResizeGripSize);
@@ -5688,9 +5688,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return MoveTypeNone;
             }
     
-            /// <devdoc>
+            /// <summary>
             /// Decide if we're going to be sizing at the given point, and if so, Capture and safe our current state.
-            /// </devdoc>
+            /// </summary>
             protected override void OnMouseDown(MouseEventArgs e)
             {
                 if (e.Button == MouseButtons.Left) {
@@ -5708,9 +5708,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 base.OnMouseDown (e);
             }
     
-            /// <devdoc>
+            /// <summary>
             /// Either set the cursor or do a move, depending on what our currentMoveType is/
-            /// </devdoc>
+            /// </summary>
             protected override void OnMouseMove(MouseEventArgs e)
             {     
                 // not moving so just set the cursor.
@@ -5812,9 +5812,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             /// Just paint and draw our glyph.
-            /// </devdoc>
+            /// </summary>
             protected override void OnPaint(PaintEventArgs pe) 
             {
                 base.OnPaint(pe);
@@ -6504,9 +6504,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
     
     
 
-            /// <devdoc>
+            /// <summary>
             ///     Overridden to handle TAB key.
-            /// </devdoc>
+            /// </summary>
             protected override bool IsInputKey(Keys keyData) {
                 switch (keyData & Keys.KeyCode) {
                     case Keys.Escape:
@@ -6522,9 +6522,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return base.IsInputKey(keyData);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Overridden to handle TAB key.
-            /// </devdoc>
+            /// </summary>
             protected override bool IsInputChar(char keyChar) {
                 switch ((Keys)(int)keyChar) {
                     case Keys.Tab:
@@ -6639,10 +6639,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
 
 
-            /// <devdoc>
+            /// <summary>
             ///      Overrides Control.ProcessDialogKey to handle the Escape and Return
             ///      keys.
-            /// </devdoc>
+            /// </summary>
             protected override bool ProcessDialogKey(Keys keyData) {
 
                 // We don't do anything with modified keys here.
@@ -6962,9 +6962,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }  
                     
 
-            /// <devdoc>
+            /// <summary>
             ///     Sets up the needed windows hooks to catch messages.
-            /// </devdoc>
+            /// </summary>
             
             
             private void HookMouse() {
@@ -6992,9 +6992,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
             }
             
-            /// <devdoc>
+            /// <summary>
             ///     HookProc used for catch mouse messages.
-            /// </devdoc>
+            /// </summary>
             private IntPtr MouseHookProc(int nCode, IntPtr wparam, IntPtr lparam) {
                 GC.KeepAlive(this);
                 if (nCode == NativeMethods.HC_ACTION) {
@@ -7020,9 +7020,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return UnsafeNativeMethods.CallNextHookEx(new HandleRef(this, mouseHookHandle), nCode, wparam, lparam);
             }
             
-            /// <devdoc>
+            /// <summary>
             ///     Removes the windowshook that was installed.
-            /// </devdoc>
+            /// </summary>
             private void UnhookMouse() {
                 GC.KeepAlive(this);
                 // Locking 'this' here is ok since this is an internal class.
@@ -7105,9 +7105,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return false;
             }
             
-              /// <devdoc>
+              /// <summary>
             ///     Forwards messageHook calls to ToolTip.messageHookProc
-            /// </devdoc>
+            /// </summary>
             private class MouseHookObject {
                 internal WeakReference reference;
 
@@ -7131,19 +7131,19 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The accessible object class for a PropertyGridView. The child accessible objects
         ///     are accessible objects corresponding to the property grid entries.        
-        /// </devdoc>
+        /// </summary>
         [System.Runtime.InteropServices.ComVisible(true)]        
         internal class PropertyGridViewAccessibleObject : ControlAccessibleObject {
 
             private PropertyGridView _owningPropertyGridView;
             private PropertyGrid _parentPropertyGrid;
 
-            /// <devdoc>
+            /// <summary>
             ///     Construct a PropertyGridViewAccessibleObject
-            /// </devdoc>
+            /// </summary>
             public PropertyGridViewAccessibleObject(PropertyGridView owner, PropertyGrid parentPropertyGrid) : base(owner) {
                 _owningPropertyGridView = owner;
                 _parentPropertyGrid = parentPropertyGrid;
@@ -7470,11 +7470,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return null;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Get the accessible child at the given index.
             ///      The accessible children of a PropertyGridView are accessible objects
             ///      corresponding to the property grid entries.
-            /// </devdoc>
+            /// </summary>
             public override AccessibleObject GetChild(int index) {
 
                 GridEntryCollection properties = ((PropertyGridView)Owner).AccessibilityGetGridEntries();
@@ -7486,11 +7486,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Get the number of accessible children.
             ///      The accessible children of a PropertyGridView are accessible objects
             ///      corresponding to the property grid entries.
-            /// </devdoc>
+            /// </summary>
             public override int GetChildCount() {
                 GridEntryCollection properties = ((PropertyGridView)Owner).AccessibilityGetGridEntries();
 
@@ -7502,9 +7502,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Get the accessible object for the currently focused grid entry.
-            /// </devdoc>
+            /// </summary>
             public override AccessibleObject GetFocused() {
             
                 GridEntry gridEntry = ((PropertyGridView)Owner).SelectedGridEntry;
@@ -7514,9 +7514,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return null;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Get the accessible object for the currently selected grid entry.
-            /// </devdoc>
+            /// </summary>
             public override AccessibleObject GetSelected() {
                 GridEntry gridEntry = ((PropertyGridView)Owner).SelectedGridEntry;
                 if (gridEntry != null) {
@@ -7527,11 +7527,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
 
 
-            /// <devdoc>
+            /// <summary>
             ///      Get the accessible child at the given screen location.
             ///      The accessible children of a PropertyGridView are accessible objects
             ///      corresponding to the property grid entries.
-            /// </devdoc>
+            /// </summary>
             public override AccessibleObject HitTest(int x, int y) {
 
                 // Convert to client coordinates
@@ -7557,9 +7557,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return null;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Navigate to another object.
-            /// </devdoc>
+            /// </summary>
             public override AccessibleObject Navigate(AccessibleNavigation navdir) {
 
                 if (GetChildCount() > 0) {

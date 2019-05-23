@@ -12,10 +12,10 @@ namespace System.Windows.Forms
     using System.Globalization;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <devdoc>
+    /// <summary>
     /// <para>Represents a collection of selected <see cref='System.Windows.Forms.DataGridViewCell'/> objects in the <see cref='System.Windows.Forms.DataGridView'/> 
     /// control.</para>
-    /// </devdoc>
+    /// </summary>
     [
         ListBindable(false),
         SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface") // Consider adding an IList<DataGridViewSelectedRowCollection> implementation
@@ -120,9 +120,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Adds a <see cref='System.Windows.Forms.DataGridViewCell'/> to this collection.</para>
-        /// </devdoc>
+        /// </summary>
         internal int Add(DataGridViewRow dataGridViewRow)
         {
             return this.items.Add(dataGridViewRow);
@@ -156,9 +156,9 @@ namespace System.Windows.Forms
             throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Checks to see if a DataGridViewCell is contained in this collection.
-        /// </devdoc>
+        /// </summary>
         public bool Contains(DataGridViewRow dataGridViewRow)
         {
             return this.items.IndexOf(dataGridViewRow) != -1;

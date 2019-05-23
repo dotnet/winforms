@@ -13,10 +13,10 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Collections.Specialized;
     
-    /// <devdoc>
+    /// <summary>
     ///      TreeViewImageIndexConverter is a class that can be used to convert
     ///      image index values one data type to another.
-    /// </devdoc>
+    /// </summary>
     public class TreeViewImageIndexConverter : ImageIndexConverter {
 
         protected override bool IncludeNoneAsStandardValue {
@@ -25,11 +25,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Converts the given value object to a 32-bit signed integer object.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
 
             string strValue = value as string;
@@ -46,13 +46,13 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call
         ///      to ToString on the object if the object is valid and if the destination
         ///      type is string.  If this cannot convert to the desitnation type, this will
         ///      throw a NotSupportedException.
-        /// </devdoc>
+        /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
             if (destinationType == null) {
                 throw new ArgumentNullException(nameof(destinationType));
@@ -72,12 +72,12 @@ namespace System.Windows.Forms {
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves a collection containing a set of standard values
         ///      for the data type this validator is designed for.  This
         ///      will return null if the data type does not support a
         ///      standard set of values.
-        /// </devdoc>
+        /// </summary>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context) {
             if (context != null && context.Instance != null) {
                 object instance = context.Instance;

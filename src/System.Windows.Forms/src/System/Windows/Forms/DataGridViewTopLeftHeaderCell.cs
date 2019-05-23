@@ -11,9 +11,9 @@ namespace System.Windows.Forms
     using System.ComponentModel;
     using System.Windows.Forms.Internal;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para></para>
-    /// </devdoc>
+    /// </summary>
     public class DataGridViewTopLeftHeaderCell : DataGridViewColumnHeaderCell
     {
         private static readonly VisualStyleElement HeaderElement = VisualStyleElement.Header.Item.Normal;
@@ -416,9 +416,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para></para>
-        /// </devdoc>
+        /// </summary>
         public override string ToString() 
         {
             return "DataGridViewTopLeftHeaderCell";

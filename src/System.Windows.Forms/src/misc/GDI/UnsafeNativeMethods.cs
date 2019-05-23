@@ -37,10 +37,10 @@ namespace System.Experimental.Gdi
             return hdc;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     NOTE: DeleteDC is to be used to delete the hdc created from CreateCompatibleDC ONLY.  All other hdcs should be
         ///     deleted with DeleteHDC.
-        /// </devdoc>
+        /// </summary>
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "DeleteDC", CharSet = CharSet.Auto)]
         
         public static extern bool IntDeleteDC(HandleRef hDC);
@@ -92,10 +92,10 @@ namespace System.Experimental.Gdi
             return hdc;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     CreateCompatibleDC requires to add a GDI handle instead of an HDC handle to avoid perf penalty in HandleCollector.
         ///     The hdc obtained from this method needs to be deleted with DeleteDC instead of DeleteHDC.
-        /// </devdoc>
+        /// </summary>
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "CreateCompatibleDC", CharSet = CharSet.Auto)]
         
         public static extern IntPtr IntCreateCompatibleDC(HandleRef hDC);

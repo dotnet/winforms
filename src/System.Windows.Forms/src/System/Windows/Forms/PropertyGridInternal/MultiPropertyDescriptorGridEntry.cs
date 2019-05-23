@@ -143,9 +143,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return temp;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns the text value of this property.
-        /// </devdoc>
+        /// </summary>
         public override string GetPropertyTextValue(object value) {
 
             bool allEqual = true;

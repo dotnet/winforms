@@ -6,15 +6,15 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.LinkLabel.OnLinkClicked'/> event.
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
     public class LinkLabelLinkClickedEventArgs : EventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.LinkLabelLinkClickedEventArgs'/> class, given the link.
-        /// </devdoc>
+        /// </summary>
         public LinkLabelLinkClickedEventArgs(LinkLabel.Link link) : this(link, MouseButtons.Left)
         {
         }
@@ -25,14 +25,14 @@ namespace System.Windows.Forms
             Button = button;
         }
         
-        /// <devdoc>
+        /// <summary>
         /// Gets the <see cref='System.Windows.Forms.LinkLabel.Link'/> that was clicked.
-        /// </devdoc>
+        /// </summary>
         public LinkLabel.Link Link { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the mouseButton which causes the link to be clicked
-        /// </devdoc>
+        /// </summary>
         public MouseButtons Button { get; }
     }
 }

@@ -11,11 +11,11 @@ using System.Threading;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// RegisterDropTarget requires an HWND to back it's IDropTargets. Since some ToolStripItems
     /// do not have HWNDS, this guy's got to figure out who the event was really supposed
     /// to go to and pass it on to it. 
-    /// </devdoc>
+    /// </summary>
     internal class ToolStripDropTargetManager : IDropTarget
     {
         private IDropTarget lastDropTarget;
@@ -32,9 +32,9 @@ namespace System.Windows.Forms
         internal static readonly TraceSwitch DragDropDebug;
 #endif
 
-        /// <devdoc>
+        /// <summary>
         /// Summary of ToolStripDropTargetManager.
-        /// </devdoc>
+        /// </summary>
         /// <param name=owner></param>	
         public ToolStripDropTargetManager(ToolStrip owner) {
             this.owner = owner;
@@ -43,18 +43,18 @@ namespace System.Windows.Forms
             }
         }
     
-        /// <devdoc>
+        /// <summary>
         /// Summary of EnsureRegistered.
-        /// </devdoc>
+        /// </summary>
         /// <param name=dropTarget></param>	
         public void EnsureRegistered(IDropTarget dropTarget) {
             Debug.WriteLineIf(DragDropDebug.TraceVerbose, "Ensuring drop target registered");  
             SetAcceptDrops(true);	
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Summary of EnsureUnRegistered.
-        /// </devdoc>
+        /// </summary>
         /// <param name=dropTarget></param>	
         public void EnsureUnRegistered(IDropTarget dropTarget) {
         
@@ -74,17 +74,17 @@ namespace System.Windows.Forms
             owner.DropTargetManager = null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Takes a screen point and converts it into an item. May return null.
-        /// </devdoc>
+        /// </summary>
         /// <param name=x></param>
         /// <param name=y></param>	
         private ToolStripItem FindItemAtPoint(int x, int y) {
             return owner.GetItemAt(owner.PointToClient(new Point(x,y)));
         }	
-        /// <devdoc>
+        /// <summary>
         /// Summary of OnDragEnter.
-        /// </devdoc>
+        /// </summary>
         /// <param name=e></param>	
         public void OnDragEnter(DragEventArgs e) {
 			Debug.WriteLineIf(DragDropDebug.TraceVerbose, "[DRAG ENTER] ==============");
@@ -135,9 +135,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Summary of OnDragOver.
-        /// </devdoc>
+        /// </summary>
         /// <param name=e></param>	
         public void OnDragOver(DragEventArgs e) {
 
@@ -185,9 +185,9 @@ namespace System.Windows.Forms
 				
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Summary of OnDragLeave.
-        /// </devdoc>
+        /// </summary>
         /// <param name=e></param>	
         public void OnDragLeave(System.EventArgs e) {
             Debug.WriteLineIf(DragDropDebug.TraceVerbose, "[DRAG LEAVE] ==============");
@@ -208,9 +208,9 @@ namespace System.Windows.Forms
             lastDropTarget = null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Summary of OnDragDrop.
-        /// </devdoc>
+        /// </summary>
         /// <param name=e></param>	
         public void OnDragDrop(DragEventArgs e) {
             Debug.WriteLineIf(DragDropDebug.TraceVerbose, "[DRAG DROP] ==============");
@@ -228,9 +228,9 @@ namespace System.Windows.Forms
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Used to actually register the control as a drop target.
-        /// </devdoc>
+        /// </summary>
         /// <param name=accept></param>	
         private void SetAcceptDrops(bool accept) {
              if (accept && owner.IsHandleCreated) {
@@ -272,12 +272,12 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// if we have a new active item, fire drag leave and
         /// enter.  This corresponds to the case where you 
         /// are dragging between items and havent actually
         /// left the ToolStrip's client area.
-        /// </devdoc>
+        /// </summary>
         /// <param name=newTarget></param>
         /// <param name=e></param>	
         private void UpdateDropTarget(IDropTarget newTarget, DragEventArgs e) {

@@ -76,9 +76,9 @@ namespace System.Windows.Forms
             SetBoundsCore(bounds.X, bounds.Y, bounds.Width, bounds.Height, specified);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Summary of CreateLayoutEngine.
-        /// </devdoc>
+        /// </summary>
         /// <param name=item></param>
         public override LayoutEngine LayoutEngine {
             get {

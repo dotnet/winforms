@@ -7,16 +7,16 @@ using System.Globalization;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// OpacityConverter is a class that can be used to convert opacity values from one
     /// data type to another. Access this class through the TypeDescriptor.
-    /// </devdoc>
+    /// </summary>
     public class OpacityConverter : TypeConverter
     {
-        /// <devdoc>
+        /// <summary>
         /// Determines if this converter can convert an object in the given source
         /// type to the native type of the converter.
-        /// </devdoc>
+        /// </summary>
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
             if (sourceType == typeof(string))
@@ -27,9 +27,9 @@ namespace System.Windows.Forms
             return base.CanConvertFrom(context, sourceType);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Converts the given object to the converter's native type.
-        /// </devdoc>
+        /// </summary>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
             if (value is string valueString)
@@ -80,13 +80,13 @@ namespace System.Windows.Forms
             return base.ConvertFrom(context, culture, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Converts the given object to another type. The most common types to convert
         /// are to and from a string object. The default implementation will make a call
         /// to ToString on the object if the object is valid and if the destination
         /// type is string. If this cannot convert to the desitnation type, this will
         /// throw a NotSupportedException.
-        /// </devdoc>
+        /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
             if (value is double val && destinationType == typeof(string))

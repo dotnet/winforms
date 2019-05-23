@@ -6,16 +6,16 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for splitter events.
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
     public class SplitterEventArgs : EventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// Initializes an instance of the <see cref='System.Windows.Forms.SplitterEventArgs'/> class with the specified coordinates
         /// of the mouse pointer and the upper-left corner of the <see cref='System.Windows.Forms.Splitter'/>.
-        /// </devdoc>
+        /// </summary>
         public SplitterEventArgs(int x, int y, int splitX, int splitY)
         {
             X = x;
@@ -24,24 +24,24 @@ namespace System.Windows.Forms
             SplitY = splitY;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the x-coordinate of the mouse pointer (in client coordinates).
-        /// </devdoc>
+        /// </summary>
         public int X { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the y-coordinate of the mouse pointer (in client coordinates).
-        /// </devdoc>
+        /// </summary>
         public int Y { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the x-coordinate of the upper-left corner of the <see cref='System.Windows.Forms.Splitter'/> (in client coordinates).
-        /// </devdoc>
+        /// </summary>
         public int SplitX { get; set; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the y-coordinate of the upper-left corner of the <see cref='System.Windows.Forms.Splitter'/> (in client coordinates).
-        /// </devdoc>
+        /// </summary>
         public int SplitY { get; set; }
     }
 }

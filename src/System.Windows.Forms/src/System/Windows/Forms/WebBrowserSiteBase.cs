@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// This class implements the necessary interfaces required for an ActiveX site.
     ///
     /// This class is public, but has an internal constructor so that external
@@ -20,7 +20,7 @@ namespace System.Windows.Forms
     /// All implementations of the site interface methods are private, which
     /// means that inheritors who want to override even a single method of one
     /// of these interfaces will have to implement the whole interface.
-    /// </devdoc>
+    /// </summary>
     public class WebBrowserSiteBase
         : UnsafeNativeMethods.IOleControlSite, UnsafeNativeMethods.IOleClientSite, UnsafeNativeMethods.IOleInPlaceSite, UnsafeNativeMethods.ISimpleFrameSite, UnsafeNativeMethods.IPropertyNotifySink, IDisposable
     {
@@ -39,21 +39,21 @@ namespace System.Windows.Forms
             this.host = h;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         /// Dispose(release the cookie)
         ///     </para>
-        /// </devdoc>
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         /// Release the cookie if we're disposing
         ///     </para>
-        /// </devdoc>
+        /// </summary>
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
@@ -61,11 +61,11 @@ namespace System.Windows.Forms
                 StopEvents();
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         /// Retrieves the WebBrowserBase object set in the constructor.
         ///     </para>
-        /// </devdoc>
+        /// </summary>
         internal WebBrowserBase Host {
             get {
                 return this.host;

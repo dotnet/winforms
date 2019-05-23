@@ -24,9 +24,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
     using System.Drawing.Drawing2D;
     using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     ///     Base Entry for properties to be displayed in properties window.
-    /// </devdoc>
+    /// </summary>
     internal abstract class GridEntry : GridItem, ITypeDescriptorContext {
 
         protected static readonly Point InvalidPoint = new Point(int.MinValue, int.MinValue);
@@ -188,10 +188,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return new GridEntryAccessibleObject(this);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// specify that this grid entry should be allowed to be merged for.
         /// multi-select.
-        /// </devdoc>
+        /// </summary>
         public virtual bool AllowMerge {
             get {
                 return true;
@@ -210,17 +210,17 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the value of the background brush to use.  Override
         /// this member to cause the entry to paint it's background in a different color.
         /// The base implementation returns null.
-        /// </devdoc>
+        /// </summary>
         protected virtual Brush GetBackgroundBrush(Graphics g) {
             return GridEntryHost.GetBackgroundBrush(g);
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         protected virtual Color LabelTextColor {
             get {
                 if (this.ShouldRenderReadOnly) {
@@ -232,9 +232,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The set of attributes that will be used for browse filtering
-        /// </devdoc>
+        /// </summary>
         public virtual AttributeCollection BrowsableAttributes {
             get{
                 if (parentPE != null) {
@@ -247,12 +247,12 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the component that is invoking the
         ///      method on the formatter object.  This may
         ///      return null if there is no component
         ///      responsible for the call.
-        /// </devdoc>
+        /// </summary>
         public virtual IComponent Component {
             get {
                 object owner = GetValueOwner();
@@ -273,13 +273,13 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the container that contains the
         ///      set of objects this formatter may work
         ///      with.  It may return null if there is no
         ///      container, or of the formatter should not
         ///      use any outside objects.
-        /// </devdoc>
+        /// </summary>
         public virtual IContainer Container {
             get {
                 IComponent component = Component;
@@ -344,10 +344,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns the default child GridEntry of this item.  Usually the default property
         /// of the target object.
-        /// </devdoc>
+        /// </summary>
         internal virtual GridEntry DefaultChild {
             get {
                 return null;
@@ -541,9 +541,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Checks if the entry is currently expanded
-        /// </devdoc>
+        /// </summary>
         public bool Focus {
             get{
                 return this.hasFocus;
@@ -581,10 +581,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns the label including the object name, and properties.  For example, the value
         /// of the Font size property on a Button called Button1 would be "Button1.Font.Size"
-        /// </devdoc>
+        /// </summary>
         public string FullLabel {
             get {
                 string str = null;
@@ -636,19 +636,19 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns true if this GridEntry has a value field in the right hand column.
-        /// </devdoc>
+        /// </summary>
         internal virtual bool HasValue {
             get {
                 return true;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves the keyword that the VS help dynamic help window will
         ///     use when this IPE is selected.
-        /// </devdoc>
+        /// </summary>
         public virtual string HelpKeyword {
             get {
                 string keyWord = null;
@@ -720,12 +720,12 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the component that is invoking the
         ///      method on the formatter object.  This may
         ///      return null if there is no component
         ///      responsible for the call.
-        /// </devdoc>
+        /// </summary>
         public virtual object Instance {
             get {
                 object owner = GetValueOwner();
@@ -743,9 +743,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the PropertyDescriptor that is surfacing the given object/
-        /// </devdoc>
+        /// </summary>
         public override PropertyDescriptor PropertyDescriptor {
             get {
                 return null;
@@ -754,9 +754,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         
 
-        /// <devdoc>
+        /// <summary>
         /// Returns the pixel indent of the current GridEntry's label.
-        /// </devdoc>
+        /// </summary>
         internal virtual int PropertyLabelIndent {
             get {
                 int borderWidth = this.GridEntryHost.GetOutlineIconSize() + OUTLINE_ICON_PADDING;
@@ -792,10 +792,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns rect that the outline icon (+ or - or arrow) will be drawn into, relative
         /// to the upper left corner of the GridEntry.
-        /// </devdoc>
+        /// </summary>
         public Rectangle OutlineRect {
             get {
                 if (!outlineRect.IsEmpty) {
@@ -855,19 +855,19 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns category name of the current property
-        /// </devdoc>
+        /// </summary>
         public virtual string PropertyCategory {
             get {
                 return CategoryAttribute.Default.Category;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns "depth" of this property.  That is, how many parent's between
         /// this property and the root property.  The root property has a depth of -1.
-        /// </devdoc>
+        /// </summary>
         public virtual int PropertyDepth {
             get {
                 return propertyDepth;
@@ -875,37 +875,37 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Returns the description helpstring for this GridEntry.
-        /// </devdoc>
+        /// </summary>
         public virtual string PropertyDescription {
             get {
                 return null;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns the label of this property.  Usually
         /// this is the property name.
-        /// </devdoc>
+        /// </summary>
         public virtual string PropertyLabel {
             get {
                 return null;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns non-localized name of this property.
-        /// </devdoc>
+        /// </summary>
         public virtual string PropertyName {
             get {
                 return this.PropertyLabel;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns the Type of the value of this GridEntry, or null if the value is null.
-        /// </devdoc>
+        /// </summary>
         public virtual Type PropertyType {
             get {
                 object obj = this.PropertyValue;
@@ -918,10 +918,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets or sets the value for the property that is represented
         /// by this GridEntry.
-        /// </devdoc>
+        /// </summary>
         public virtual object PropertyValue{
             get {
                 if (cacheItems != null) {
@@ -945,9 +945,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns the type converter for this entry.
-        /// </devdoc>
+        /// </summary>
         internal virtual TypeConverter TypeConverter {
             get {
                 if (converter == null) {
@@ -963,10 +963,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns the type editor for this entry.  This may return null if there
         /// is no type editor.
-        /// </devdoc>
+        /// </summary>
         internal virtual UITypeEditor UITypeEditor {
             get {
                 if (editor == null && this.PropertyType != null) {
@@ -1008,58 +1008,58 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Add an event handler to be invoked when the label portion of
         /// the prop entry is clicked
-        /// </devdoc>
+        /// </summary>
         public virtual void AddOnLabelClick(EventHandler h) {
             AddEventHandler(EVENT_LABEL_CLICK, h);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Add an event handler to be invoked when the label portion of
         /// the prop entry is double
-        /// </devdoc>
+        /// </summary>
         public virtual void AddOnLabelDoubleClick(EventHandler h) {
             AddEventHandler(EVENT_LABEL_DBLCLICK, h);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Add an event handler to be invoked when the value portion of
         /// the prop entry is clicked
-        /// </devdoc>
+        /// </summary>
         public virtual void AddOnValueClick(EventHandler h) {
             AddEventHandler(EVENT_VALUE_CLICK, h);
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Add an event handler to be invoked when the value portion of
         /// the prop entry is double-clicked
-        /// </devdoc>
+        /// </summary>
         public virtual void AddOnValueDoubleClick(EventHandler h) {
             AddEventHandler(EVENT_VALUE_DBLCLICK, h);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Add an event handler to be invoked when the outline icone portion of
         /// the prop entry is clicked
-        /// </devdoc>
+        /// </summary>
         public virtual void AddOnOutlineClick(EventHandler h) {
             AddEventHandler(EVENT_OUTLINE_CLICK, h);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Add an event handler to be invoked when the outline icone portion of
         /// the prop entry is double clicked
-        /// </devdoc>
+        /// </summary>
         public virtual void AddOnOutlineDoubleClick(EventHandler h) {
             AddEventHandler(EVENT_OUTLINE_DBLCLICK, h);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Add an event handler to be invoked when the children grid entries are re-created.
-        /// </devdoc>
+        /// </summary>
         public virtual void AddOnRecreateChildren(GridEntryRecreateChildrenEventHandler h) {
             AddEventHandler(EVENT_RECREATE_CHILDREN, h);
         }
@@ -1081,9 +1081,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
                }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Converts the given string of text to a value.
-        /// </devdoc>
+        /// </summary>
         public object ConvertTextToValue(string text) {
             if (TypeConverter.CanConvertFrom(this, typeof(string))) {
                 return TypeConverter.ConvertFromString(this, text);
@@ -1091,9 +1091,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return text;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Create the base prop entries given an object or set of objects
-        /// </devdoc>
+        /// </summary>
         internal static IRootGridEntry Create(PropertyGridView view, object[] rgobjs, IServiceProvider baseProvider, IDesignerHost currentHost, PropertyTab tab, PropertySort initialSortType) {
             IRootGridEntry pe = null;
 
@@ -1121,16 +1121,16 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return pe;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Populates the children of this grid entry
-        /// </devdoc>
+        /// </summary>
         protected virtual bool CreateChildren() {
             return CreateChildren(false);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Populates the children of this grid entry
-        /// </devdoc>
+        /// </summary>
         protected virtual bool CreateChildren(bool diffOldChildren) {
 
             Debug.Assert(!Disposed, "Why are we creating children after we are disposed?");
@@ -1227,9 +1227,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Disposes the array of children
-        /// </devdoc>
+        /// </summary>
         public virtual void DisposeChildren() {
             if (childCollection != null) {
                 childCollection.Dispose();
@@ -1243,9 +1243,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Invokes the type editor for editing this item.
-        /// </devdoc>
+        /// </summary>
         internal virtual void EditPropertyValue(PropertyGridView iva) {
             if (UITypeEditor != null) {
                 try {
@@ -1296,9 +1296,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Tests two GridEntries for equality
-        /// </devdoc>
+        /// </summary>
         public override bool Equals(object obj) {
 
             if (NonParentEquals(obj)) {
@@ -1307,9 +1307,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Searches for a value of a given property for a value editor user
-        /// </devdoc>
+        /// </summary>
         public virtual object FindPropertyValue(string propertyName, Type propertyType) {
             object owner = GetValueOwner();
             PropertyDescriptor property = TypeDescriptor.GetProperties(owner)[propertyName];
@@ -1323,18 +1323,18 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns the index of a child GridEntry
-        /// </devdoc>
+        /// </summary>
         internal virtual int GetChildIndex(GridEntry pe) {
             return this.Children.GetEntry(pe);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the components that own the current value.  This is usually the value of the
         /// root entry, which is the object being browsed.  Walks up the GridEntry tree
         /// looking for an owner that is an IComponent
-        /// </devdoc>
+        /// </summary>
         public virtual IComponent[] GetComponents() {
             IComponent component = Component;
             if (component != null) {
@@ -1386,10 +1386,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
             else 
                 return false;
         }
-        /// <devdoc>
+        /// <summary>
         /// Gets the owner of the current value.  This is usually the value of the
         /// root entry, which is the object being browsed
-        /// </devdoc>
+        /// </summary>
         public virtual object GetValueOwner() {
             if (parentPE == null) {
                 return this.PropertyValue;
@@ -1398,10 +1398,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return parentPE.GetChildValueOwner(this);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the owners of the current value.  This is usually the value of the
         /// root entry, which is the objects being browsed for a multiselect item
-        /// </devdoc>
+        /// </summary>
         public virtual object[] GetValueOwners() {
             object owner = GetValueOwner();
             if (owner != null) {
@@ -1410,10 +1410,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets the owner of the current value.  This is usually the value of the
         /// root entry, which is the object being browsed
-        /// </devdoc>
+        /// </summary>
         public virtual object GetChildValueOwner(GridEntry childEntry) {
 
             /*// make sure this is one of our children
@@ -1429,9 +1429,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return this.PropertyValue;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns a string with info about the currently selected GridEntry
-        /// </devdoc>
+        /// </summary>
         public virtual string GetTestingInfo() {
             string str = "object = (";
             string textVal = GetPropertyTextValue();
@@ -1451,16 +1451,16 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return str;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieves the type of the value for this GridEntry
-        /// </devdoc>
+        /// </summary>
         public virtual Type GetValueType() {
             return this.PropertyType;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns the child GridEntries for this item.
-        /// </devdoc>
+        /// </summary>
         protected virtual GridEntry[] GetPropEntries(GridEntry peParent, object obj, Type objType) {
 
 
@@ -1635,9 +1635,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return entries;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Resets the current item
-        /// </devdoc>
+        /// </summary>
         public virtual void ResetPropertyValue() {
             NotifyValue(NOTIFY_RESET);
             Refresh();
@@ -1670,31 +1670,31 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
         */
 
-        /// <devdoc>
+        /// <summary>
         /// Returns if the property can be reset
-        /// </devdoc>
+        /// </summary>
         public virtual bool CanResetPropertyValue() {
             return NotifyValue(NOTIFY_CAN_RESET);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Called when the item is double clicked.
-        /// </devdoc>
+        /// </summary>
         public virtual bool DoubleClickPropertyValue() {
             return NotifyValue(NOTIFY_DBL_CLICK);
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Returns the text value of this property.
-        /// </devdoc>
+        /// </summary>
         public virtual string GetPropertyTextValue() {
             return GetPropertyTextValue(this.PropertyValue);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns the text value of this property.
-        /// </devdoc>
+        /// </summary>
         public virtual string GetPropertyTextValue(object value) {
             string str = null;
 
@@ -1714,9 +1714,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return str;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns the text values of this property.
-        /// </devdoc>
+        /// </summary>
         public virtual object[] GetPropertyValueList() {
             ICollection values = TypeConverter.GetStandardValues(this);
             if (values != null) {
@@ -1738,9 +1738,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return(int)(h1 ^ ((h2 << 13) | (h2 >> 19)) ^ ((h3 << 26) | (h3 >> 6)));
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Checks if a given flag is set
-        /// </devdoc>
+        /// </summary>
         protected virtual bool GetFlagSet(int flag) {
             return((flag & Flags) != 0);
         }
@@ -1759,11 +1759,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return GridEntryHost.GetBaseHfont();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the requested service.  This may
         ///      return null if the requested service is not
         ///      available.
-        /// </devdoc>
+        /// </summary>
         public virtual object GetService(Type serviceType) {
         
             if (serviceType == typeof(GridItem)) {
@@ -1787,11 +1787,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Paints the label portion of this GridEntry into the given Graphics object.  This
         /// is called by the GridEntry host (the PropertyGridView) when this GridEntry is
         /// to be painted.
-        /// </devdoc>
+        /// </summary>
         public virtual void PaintLabel(System.Drawing.Graphics g, Rectangle rect, Rectangle clipRect, bool selected, bool paintFullLabel) {
             PropertyGridView gridHost = this.GridEntryHost;
             Debug.Assert(gridHost != null, "No propEntryHost");
@@ -1896,11 +1896,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
             PaintOutline(g, rect);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Paints the outline portion of this GridEntry into the given Graphics object.  This
         /// is called by the GridEntry host (the PropertyGridView) when this GridEntry is
         /// to be painted.
-        /// </devdoc>
+        /// </summary>
         public virtual void PaintOutline(System.Drawing.Graphics g, Rectangle r) {
             // draw tree-view glyphs as triangles on Vista and Windows afterword
             // when Vistual style is enabled
@@ -2011,11 +2011,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Paints the value portion of this GridEntry into the given Graphics object.  This
         /// is called by the GridEntry host (the PropertyGridView) when this GridEntry is
         /// to be painted.
-        /// </devdoc>
+        /// </summary>
         public virtual void PaintValue(object val, System.Drawing.Graphics g, Rectangle rect, Rectangle clipRect, PaintValueFlags paintFlags) { 
             PropertyGridView gridHost = this.GridEntryHost;
             Debug.Assert(gridHost != null, "No propEntryHost");
@@ -2202,27 +2202,27 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Called when the label portion of this GridEntry is clicked.
         /// Default implmentation fired the event to any listeners, so be sure
         /// to call base.OnLabelClick(e) if this is overrideen.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnLabelClick(EventArgs e) {
             RaiseEvent(EVENT_LABEL_CLICK, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Called when the label portion of this GridEntry is double-clicked.
         /// Default implmentation fired the event to any listeners, so be sure
         /// to call base.OnLabelDoubleClick(e) if this is overrideen.
-        /// </devdoc>
+        /// </summary>
         protected virtual void         OnLabelDoubleClick(EventArgs e) {
             RaiseEvent(EVENT_LABEL_DBLCLICK, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Called when the GridEntry is clicked.
-        /// </devdoc>
+        /// </summary>
         public virtual bool OnMouseClick(int x, int y, int count, MouseButtons button) {
             // where are we at?
             PropertyGridView gridHost = this.GridEntryHost;
@@ -2276,48 +2276,48 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Called when the outline icon portion of this GridEntry is clicked.
         /// Default implmentation fired the event to any listeners, so be sure
         /// to call base.OnOutlineClick(e) if this is overrideen.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnOutlineClick(EventArgs e) {
             RaiseEvent(EVENT_OUTLINE_CLICK, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Called when the outline icon portion of this GridEntry is double-clicked.
         /// Default implmentation fired the event to any listeners, so be sure
         /// to call base.OnOutlineDoubleClick(e) if this is overrideen.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnOutlineDoubleClick(EventArgs e) {
             RaiseEvent(EVENT_OUTLINE_DBLCLICK, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Called when RecreateChildren is called.
         /// Default implmentation fired the event to any listeners, so be sure
         /// to call base.OnOutlineDoubleClick(e) if this is overrideen.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnRecreateChildren(GridEntryRecreateChildrenEventArgs e) {
             Delegate handler = GetEventHandler(EVENT_RECREATE_CHILDREN);
             if (handler != null) ((GridEntryRecreateChildrenEventHandler)handler)(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Called when the value portion of this GridEntry is clicked.
         /// Default implmentation fired the event to any listeners, so be sure
         /// to call base.OnValueClick(e) if this is overrideen.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnValueClick(EventArgs e) {
             RaiseEvent(EVENT_VALUE_CLICK, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Called when the value portion of this GridEntry is clicked.
         /// Default implmentation fired the event to any listeners, so be sure
         /// to call base.OnValueDoubleClick(e) if this is overrideen.
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnValueDoubleClick(EventArgs e) {
             RaiseEvent(EVENT_VALUE_DBLCLICK, e);
         }
@@ -2328,24 +2328,24 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return NotifyValue(NOTIFY_RETURN);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Sets the specified flag
-        /// </devdoc>
+        /// </summary>
         protected virtual void SetFlag(int flag, bool fVal) {
             SetFlag(flag, (fVal ? flag : 0));
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Sets the default child of this entry, given a valid value mask.
-        /// </devdoc>
+        /// </summary>
         protected virtual void SetFlag(int flag_valid, int flag, bool fVal) {
             SetFlag(flag_valid | flag,
                     flag_valid | (fVal ? flag : 0));
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Sets the value of a flag
-        /// </devdoc>
+        /// </summary>
         protected virtual void SetFlag(int flag, int val) {
             Flags = (Flags & ~(flag)) | val;
         }
@@ -2364,9 +2364,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Checks if this value should be persisited.
-        /// </devdoc>
+        /// </summary>
         internal virtual bool ShouldSerializePropertyValue() {
             
             if (cacheItems != null) {
@@ -2416,16 +2416,16 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return props;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Sends a notify message to this GridEntry, and returns the success result
-        /// </devdoc>
+        /// </summary>
         internal virtual bool NotifyValueGivenParent(object obj, int type) {
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Sends a notify message to the child GridEntry, and returns the success result
-        /// </devdoc>
+        /// </summary>
         internal virtual bool NotifyChildValue(GridEntry pe, int type) {
             
             return pe.NotifyValueGivenParent(pe.GetValueOwner(),type);
@@ -2467,9 +2467,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             OnRecreateChildren(new GridEntryRecreateChildrenEventArgs(oldCount, VisibleChildCount));
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Refresh the current GridEntry's value and it's children
-        /// </devdoc>
+        /// </summary>
         public virtual void Refresh() {
 
             Type type = this.PropertyType;
@@ -2544,9 +2544,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             ClearCachedValues();
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Sets the value of this GridEntry from text
-        /// </devdoc>
+        /// </summary>
         public virtual bool SetPropertyTextValue(string str) {
             bool fChildrenPrior = (childCollection != null && childCollection.Count > 0);
             this.PropertyValue = ConvertTextToValue(str);
@@ -2618,8 +2618,8 @@ namespace System.Windows.Forms.PropertyGridInternal {
             eventList = null;
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         private sealed class EventEntry {
             internal EventEntry next;
             internal object key;
@@ -2907,10 +2907,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }                
             }
 
-            /// <devdoc>
+            /// <summary>
             ///      Returns the currently focused child, if any.
             ///      Returns this if the object itself is focused.
-            /// </devdoc>
+            /// </summary>
             public override AccessibleObject GetFocused() {
 
                 if (owner.Focus) {
@@ -2922,9 +2922,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
 
 
-            /// <devdoc>
+            /// <summary>
             ///      Navigate to the next or previous grid entry.
-            /// </devdoc>
+            /// </summary>
             public override AccessibleObject Navigate(AccessibleNavigation navdir) {
 
                 PropertyGridView.PropertyGridViewAccessibleObject parent =

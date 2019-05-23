@@ -188,9 +188,9 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Called from ToolStripManager.ProcessMenuKey.  Fires MenuActivate event and sets focus.
-        /// </devdoc>
+        /// </summary>
         internal bool OnMenuKey() {
             if (!(Focused || ContainsFocus)) {
                 Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ProcessMenuKey] set focus to menustrip");
@@ -233,9 +233,9 @@ namespace System.Windows.Forms {
 
 
         }
-        /// <devdoc>
+        /// <summary>
         /// Summary of WndProc.
-        /// </devdoc>
+        /// </summary>
         /// <param name=m></param>
         protected override void WndProc(ref Message m) {
 

@@ -17,11 +17,11 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Windows.Forms.Internal;
 
-    /// <devdoc>
+    /// <summary>
     ///      The ControlPaint class provides a series of methods that can be used to
     ///      paint common Windows UI pieces. Many windows forms controls use this class to paint
     ///      their UI elements.
-    /// </devdoc>
+    /// </summary>
     public sealed class ControlPaint {
         [ThreadStatic]
         private static Bitmap       checkImage;         // image used to render checkmarks
@@ -162,12 +162,12 @@ namespace System.Windows.Forms {
             return address;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a 16-bit color bitmap.
         ///     Sadly, this must be public for the designer to get at it.
         ///     From MSDN: 
         ///       This member supports the .NET Framework infrastructure and is not intended to be used directly from your code.
-        /// </devdoc>
+        /// </summary>
         public static IntPtr CreateHBitmap16Bit(Bitmap bitmap, Color background) {
             IntPtr hBitmap;
             Size size = bitmap.Size;
@@ -214,13 +214,13 @@ namespace System.Windows.Forms {
             return hBitmap;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a Win32 HBITMAP out of the image. You are responsible for
         ///     de-allocating the HBITMAP with Windows.DeleteObject(handle).
         ///     If the image uses transparency, the background will be filled with the specified color.
         ///     From MSDN:
         ///         This member supports the .NET Framework infrastructure and is not intended to be used directly from your code.
-        /// </devdoc>
+        /// </summary>
         public static IntPtr CreateHBitmapTransparencyMask(Bitmap bitmap) {
             if (bitmap == null) {
                 throw new ArgumentNullException(nameof(bitmap));
@@ -263,13 +263,13 @@ namespace System.Windows.Forms {
             return mask;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a Win32 HBITMAP out of the image. You are responsible for
         ///     de-allocating the HBITMAP with Windows.DeleteObject(handle).
         ///     If the image uses transparency, the background will be filled with the specified color.
         ///     From MSDN:
         ///       This member supports the .NET Framework infrastructure and is not intended to be used directly from your code.
-        /// </devdoc>
+        /// </summary>
         public static IntPtr CreateHBitmapColorMask(Bitmap bitmap, IntPtr monochromeMask) {
             Size size = bitmap.Size;
 
@@ -342,9 +342,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Draws a border of the specified style and color to the given graphics.
-        /// </devdoc>
+        /// </summary>
         private static DashStyle BorderStyleToDashStyle(ButtonBorderStyle borderStyle) {
             switch (borderStyle) {
                 case ButtonBorderStyle.Dotted: return DashStyle.Dot;
@@ -356,23 +356,23 @@ namespace System.Windows.Forms {
             }
         } 
 
-        /// <devdoc>
+        /// <summary>
         ///      Creates a new color that is a object of the given color.
-        /// </devdoc>
+        /// </summary>
         public static Color Dark(Color baseColor, float percOfDarkDark) {
             return new HLSColor(baseColor).Darker(percOfDarkDark);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Creates a new color that is a object of the given color.
-        /// </devdoc>
+        /// </summary>
         public static Color Dark(Color baseColor) {
             return new HLSColor(baseColor).Darker(0.5f);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Creates a new color that is a object of the given color.
-        /// </devdoc>
+        /// </summary>
         public static Color DarkDark(Color baseColor) {
             return new HLSColor(baseColor).Darker(1.0f);
         }
@@ -384,11 +384,11 @@ namespace System.Windows.Forms {
             return (hc1.Luminosity < hc2.Luminosity);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Used by PrintToMetaFileRecursive overrides (Label, Panel) to manually
         ///     paint borders for UserPaint controls that were relying on
         ///     their window style to provide their borders.
-        /// </devdoc>
+        /// </summary>
         internal static void PrintBorder(Graphics graphics, Rectangle bounds, BorderStyle style, Border3DStyle b3dStyle) {
             if (graphics == null) {
                 throw new ArgumentNullException(nameof(graphics));
@@ -511,9 +511,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Draws a border of the specified style and color to the given graphics.
-        /// </devdoc>
+        /// </summary>
         public static void DrawBorder(Graphics graphics, Rectangle bounds,
                                       Color leftColor, int leftWidth, ButtonBorderStyle leftStyle,
                                       Color topColor, int topWidth, ButtonBorderStyle topStyle,
@@ -843,56 +843,56 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a 3D style border at the given rectangle. The default 3D style of
         ///     Etched is used.
-        /// </devdoc>
+        /// </summary>
         public static void DrawBorder3D(Graphics graphics, Rectangle rectangle) {
             DrawBorder3D(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, Border3DStyle.Etched,
                          Border3DSide.Left | Border3DSide.Top | Border3DSide.Right | Border3DSide.Bottom);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a 3D style border at the given rectangle. You may specify the style
         ///     of the 3D appearance.
-        /// </devdoc>
+        /// </summary>
         public static void DrawBorder3D(Graphics graphics, Rectangle rectangle, Border3DStyle style) {
             DrawBorder3D(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, style,
                          Border3DSide.Left | Border3DSide.Top | Border3DSide.Right | Border3DSide.Bottom);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a 3D style border at the given rectangle. You may specify the style
         ///     of the 3D appearance, and which sides of the 3D rectangle you wish to
         ///     draw.
-        /// </devdoc>
+        /// </summary>
         public static void DrawBorder3D(Graphics graphics, Rectangle rectangle, Border3DStyle style, Border3DSide sides) {
             DrawBorder3D(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, style, sides);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a 3D style border at the given rectangle. The default 3D style of
         ///     ETCHED is used.
-        /// </devdoc>
+        /// </summary>
         public static void DrawBorder3D(Graphics graphics, int x, int y, int width, int height) {
             DrawBorder3D(graphics, x, y, width, height, Border3DStyle.Etched,
                          Border3DSide.Left | Border3DSide.Top | Border3DSide.Right | Border3DSide.Bottom);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a 3D style border at the given rectangle. You may specify the style
         ///     of the 3D appearance.
-        /// </devdoc>
+        /// </summary>
         public static void DrawBorder3D(Graphics graphics, int x, int y, int width, int height, Border3DStyle style) {
             DrawBorder3D(graphics, x, y, width, height, style,
                          Border3DSide.Left | Border3DSide.Top | Border3DSide.Right | Border3DSide.Bottom);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a 3D style border at the given rectangle. You may specify the style
         ///     of the 3D appearance, and which sides of the 3D rectangle you wish to
         ///     draw.
-        /// </devdoc>
+        /// </summary>
         public static void DrawBorder3D(Graphics graphics, int x, int y, int width, int height, Border3DStyle style, Border3DSide sides) {
             if (graphics == null) {
                 throw new ArgumentNullException(nameof(graphics));
@@ -924,11 +924,11 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     Helper function that draws a more complex border. This is used by DrawBorder for less common
         ///     rendering cases. We split DrawBorder into DrawBorderSimple and DrawBorderComplex so we maximize
         ///     the % of the function call. It is less performant to have large functions that do many things.
-        /// </devdoc>
+        /// </summary>
         private static void DrawBorderComplex(Graphics graphics, Rectangle bounds, Color color, ButtonBorderStyle style) {
             if (graphics == null) {
                 throw new ArgumentNullException(nameof(graphics));
@@ -1027,9 +1027,9 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     Helper function that draws a simple border. This is used by DrawBorder for the most common rendering cases.
-        /// </devdoc>
+        /// </summary>
         private static void DrawBorderSimple(Graphics graphics, Rectangle bounds, Color color, ButtonBorderStyle style) {
             // Common case: system color with solid pen
             if (graphics == null) {
@@ -1054,46 +1054,46 @@ namespace System.Windows.Forms {
             }
          }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a Win32 button control in the given rectangle with the given state.
-        /// </devdoc>
+        /// </summary>
         public static void DrawButton(Graphics graphics, Rectangle rectangle, ButtonState state) {
             DrawButton(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, state);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a Win32 button control in the given rectangle with the given state.
-        /// </devdoc>
+        /// </summary>
         public static void DrawButton(Graphics graphics, int x, int y, int width, int height, ButtonState state) {
             DrawFrameControl(graphics, x, y, width, height, NativeMethods.DFC_BUTTON,
                              NativeMethods.DFCS_BUTTONPUSH | (int) state, Color.Empty, Color.Empty);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a Win32 window caption button in the given rectangle with the given state.
-        /// </devdoc>
+        /// </summary>
         public static void DrawCaptionButton(Graphics graphics, Rectangle rectangle, CaptionButton button, ButtonState state) {
             DrawCaptionButton(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, button, state);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a Win32 window caption button in the given rectangle with the given state.
-        /// </devdoc>
+        /// </summary>
         public static void DrawCaptionButton(Graphics graphics, int x, int y, int width, int height, CaptionButton button, ButtonState state) {
             DrawFrameControl(graphics, x, y, width, height, NativeMethods.DFC_CAPTION,
                              (int) button | (int) state, Color.Empty, Color.Empty);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a Win32 checkbox control in the given rectangle with the given state.
-        /// </devdoc>
+        /// </summary>
         public static void DrawCheckBox(Graphics graphics, Rectangle rectangle, ButtonState state) {
             DrawCheckBox(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, state);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a Win32 checkbox control in the given rectangle with the given state.
-        /// </devdoc>
+        /// </summary>
         public static void DrawCheckBox(Graphics graphics, int x, int y, int width, int height, ButtonState state) {
             // We overwrite the windows checkbox
             if ((state & ButtonState.Flat) == ButtonState.Flat) {
@@ -1105,24 +1105,24 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws the drop down button of a Win32 combo box in the given rectangle with the given state.
-        /// </devdoc>
+        /// </summary>
         public static void DrawComboButton(Graphics graphics, Rectangle rectangle, ButtonState state) {
             DrawComboButton(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, state);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws the drop down button of a Win32 combo box in the given rectangle with the given state.
-        /// </devdoc>
+        /// </summary>
         public static void DrawComboButton(Graphics graphics, int x, int y, int width, int height, ButtonState state) {
             DrawFrameControl(graphics, x, y, width, height, NativeMethods.DFC_SCROLL,
                              NativeMethods.DFCS_SCROLLCOMBOBOX | (int) state, Color.Empty, Color.Empty);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a container control grab handle glyph inside the given rectangle.
-        /// </devdoc>
+        /// </summary>
         public static void DrawContainerGrabHandle(Graphics graphics, Rectangle bounds) {
 
             if (graphics == null) {
@@ -1165,9 +1165,9 @@ namespace System.Windows.Forms {
             graphics.DrawLine(pen, midx - 2, bounds.Bottom - 4, midx+2, bounds.Bottom - 4);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a flat checkbox.
-        /// </devdoc>
+        /// </summary>
         private static void DrawFlatCheckBox(Graphics graphics, Rectangle rectangle, ButtonState state) {
             // Background color of checkbox
             //
@@ -1183,11 +1183,11 @@ namespace System.Windows.Forms {
             DrawFlatCheckBox(graphics, rectangle, foreground, background, state);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a Win32 checkbox control in the given rectangle with the given state. This
         ///     draws a flat looking check box that is suitable for use in list boxes, etc. We
         ///     custom draw this because the windows version is soooo ugly.
-        /// </devdoc>
+        /// </summary>
         private static void DrawFlatCheckBox(Graphics graphics, Rectangle rectangle, Color foreground, Brush background, ButtonState state) {
             if (graphics == null) {
                 throw new ArgumentNullException(nameof(graphics));
@@ -1241,18 +1241,18 @@ namespace System.Windows.Forms {
             graphics.DrawRectangle(pen, offsetRectangle.X, offsetRectangle.Y, offsetRectangle.Width - 1, offsetRectangle.Height - 1);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Draws a focus rectangle. A focus rectangle is a dotted rectangle that Windows
         ///      uses to indicate what control has the current keyboard focus.
-        /// </devdoc>
+        /// </summary>
         public static void DrawFocusRectangle(Graphics graphics, Rectangle rectangle) {
             DrawFocusRectangle(graphics, rectangle, SystemColors.ControlText, SystemColors.Control);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Draws a focus rectangle. A focus rectangle is a dotted rectangle that Windows
         ///      uses to indicate what control has the current keyboard focus.
-        /// </devdoc>
+        /// </summary>
         public static void DrawFocusRectangle(Graphics graphics, Rectangle rectangle, Color foreColor, Color backColor) {
             DrawFocusRectangle(graphics, rectangle, backColor, false);
         }
@@ -1275,9 +1275,9 @@ namespace System.Windows.Forms {
                     rectangle);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a win32 frame control.
-        /// </devdoc>
+        /// </summary>
         private static void DrawFrameControl(Graphics graphics, int x, int y, int width, int height, 
                                              int kind, int state, Color foreColor, Color backColor) {
             if (graphics == null) {
@@ -1318,11 +1318,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Draws a standard selection grab handle with the given dimensions. Grab
         ///      handles are used by components to indicate to the user that they can
         ///      be directly maniupulated.
-        /// </devdoc>
+        /// </summary>
         public static void DrawGrabHandle(Graphics graphics, Rectangle rectangle, bool primary, bool enabled) {
             Pen pen;
             Brush brush;
@@ -1371,9 +1371,9 @@ namespace System.Windows.Forms {
             graphics.DrawRectangle(pen, rectangle);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Draws a grid of one pixel dots in the given rectangle.
-        /// </devdoc>
+        /// </summary>
         public static void DrawGrid(Graphics graphics, Rectangle area, Size pixelsBetweenDots, Color backColor) {
 
             if (graphics == null) {
@@ -1468,16 +1468,16 @@ namespace System.Windows.Forms {
             attributes.Dispose();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws an image and makes it look disabled.
-        /// </devdoc>
+        /// </summary>
         public static void DrawImageDisabled(Graphics graphics, Image image, int x, int y, Color background) {
             DrawImageDisabled(graphics, image, new Rectangle(x, y, image.Width, image.Height), background, false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws an image and makes it look disabled.
-        /// </devdoc>
+        /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]        
         internal static void DrawImageDisabled(Graphics graphics, Image image, Rectangle imageBounds, Color background, bool unscaledImage) {
             if (graphics == null) {
@@ -1583,9 +1583,9 @@ namespace System.Windows.Forms {
 #endif
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a locked selection frame around the given rectangle.
-        /// </devdoc>
+        /// </summary>
         public static void DrawLockedFrame(Graphics graphics, Rectangle rectangle, bool primary) {
             Pen pen;
 
@@ -1614,42 +1614,42 @@ namespace System.Windows.Forms {
             graphics.DrawRectangle(pen, rectangle.X, rectangle.Y, rectangle.Width - 1, rectangle.Height - 1);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a menu glyph for a Win32 menu in the given rectangle with the given state.
-        /// </devdoc>
+        /// </summary>
         public static void DrawMenuGlyph(Graphics graphics, Rectangle rectangle, MenuGlyph glyph) {
             DrawMenuGlyph(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, glyph);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a menu glyph for a Win32 menu in the given rectangle with the given state.
         ///     White color is replaced with backColor, Black is replaced with foreColor.
-        /// </devdoc>
+        /// </summary>
         public static void DrawMenuGlyph(Graphics graphics, Rectangle rectangle, MenuGlyph glyph, Color foreColor, Color backColor)
         {
             DrawMenuGlyph(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, glyph, foreColor, backColor);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a menu glyph for a Win32 menu in the given rectangle with the given state.
-        /// </devdoc>
+        /// </summary>
         public static void DrawMenuGlyph(Graphics graphics, int x, int y, int width, int height, MenuGlyph glyph) {
             DrawFrameControl(graphics, x, y, width, height, NativeMethods.DFC_MENU, 
                              (int) glyph, Color.Empty, Color.Empty);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a menu glyph for a Win32 menu in the given rectangle with the given state.
         ///     White color is replaced with backColor, Black is replaced with foreColor.
-        /// </devdoc>
+        /// </summary>
         public static void DrawMenuGlyph(Graphics graphics, int x, int y, int width, int height, MenuGlyph glyph, Color foreColor, Color backColor)
         {
             DrawFrameControl(graphics, x, y, width, height, NativeMethods.DFC_MENU, (int)glyph, foreColor, backColor);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a Win32 3-state checkbox control in the given rectangle with the given state.
-        /// </devdoc>
+        /// </summary>
         public static void DrawMixedCheckBox(Graphics graphics, Rectangle rectangle, ButtonState state) {
             DrawMixedCheckBox(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, state);
         }
@@ -1659,27 +1659,27 @@ namespace System.Windows.Forms {
                              NativeMethods.DFCS_BUTTON3STATE | (int) state, Color.Empty, Color.Empty);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a Win32 radio button in the given rectangle with the given state.
-        /// </devdoc>
+        /// </summary>
         public static void DrawRadioButton(Graphics graphics, Rectangle rectangle, ButtonState state) {
             DrawRadioButton(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, state);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a Win32 radio button in the given rectangle with the given state.
-        /// </devdoc>
+        /// </summary>
         public static void DrawRadioButton(Graphics graphics, int x, int y, int width, int height, ButtonState state) {
             DrawFrameControl(graphics, x, y, width, height, NativeMethods.DFC_BUTTON,
                              NativeMethods.DFCS_BUTTONRADIO | ((int)state), Color.Empty, Color.Empty);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Draws a rectangular frame on the screen. The operation of this can be
         ///      "reversed" by drawing the same rectangle again. This is similar to
         ///      inverting a region of the screen except that it behaves better for
         ///      a wider variety of colors.
-        /// </devdoc>
+        /// </summary>
         public static void DrawReversibleFrame(Rectangle rectangle, Color backColor, FrameStyle style) {
             int rop2;
             Color graphicsColor;
@@ -1725,10 +1725,10 @@ namespace System.Windows.Forms {
             UnsafeNativeMethods.ReleaseDC(NativeMethods.NullHandleRef, new HandleRef(null, dc));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Draws a reversible line on the screen. A reversible line can
         ///      be erased by just drawing over it again.
-        /// </devdoc>
+        /// </summary>
         public static void DrawReversibleLine(Point start, Point end, Color backColor) {
             int rop2 = GetColorRop(backColor, 
                                    0xA, // RasterOp.PEN.Invert().XorWith(RasterOp.TARGET), 
@@ -1752,25 +1752,25 @@ namespace System.Windows.Forms {
             UnsafeNativeMethods.ReleaseDC(NativeMethods.NullHandleRef, new HandleRef(null, dc));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a button for a Win32 scroll bar in the given rectangle with the given state.
-        /// </devdoc>
+        /// </summary>
         public static void DrawScrollButton(Graphics graphics, Rectangle rectangle, ScrollButton button, ButtonState state) {
             DrawScrollButton(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, button, state);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a button for a Win32 scroll bar in the given rectangle with the given state.
-        /// </devdoc>
+        /// </summary>
         public static void DrawScrollButton(Graphics graphics, int x, int y, int width, int height, ScrollButton button, ButtonState state) {
             DrawFrameControl(graphics, x, y, width, height, NativeMethods.DFC_SCROLL,
                              (int)button | (int)state, Color.Empty, Color.Empty);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Draws a standard selection frame. A selection frame is a frame that is
         ///      drawn around a selected component at design time.
-        /// </devdoc>
+        /// </summary>
         public static void DrawSelectionFrame(Graphics graphics, bool active, Rectangle outsideRect, Rectangle insideRect, Color backColor) {
             if (graphics == null) {
                 throw new ArgumentNullException(nameof(graphics));
@@ -1790,18 +1790,18 @@ namespace System.Windows.Forms {
             graphics.Clip = clip;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Draws a size grip at the given location. The color of the size grip is based
         ///      on the given background color.
-        /// </devdoc>
+        /// </summary>
         public static void DrawSizeGrip(Graphics graphics, Color backColor, Rectangle bounds) {
             DrawSizeGrip(graphics, backColor, bounds.X, bounds.Y, bounds.Width, bounds.Height);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Draws a size grip at the given location. The color of the size grip is based
         ///      on the given background color.
-        /// </devdoc>
+        /// </summary>
         public static void DrawSizeGrip(Graphics graphics, Color backColor, int x, int y, int width, int height) {
 
             // Note: We don't paint any background to facilitate transparency, background images, etc...
@@ -1826,9 +1826,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a string in the style appropriate for disabled items.
-        /// </devdoc>
+        /// </summary>
         public static void DrawStringDisabled(Graphics graphics, string s, Font font,
                                               Color color, RectangleF layoutRectangle,
                                               StringFormat format) {
@@ -1855,9 +1855,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a string in the style appropriate for disabled items, using GDI-based TextRenderer.
-        /// </devdoc>
+        /// </summary>
         public static void DrawStringDisabled(IDeviceContext dc, string s, Font font, 
                                               Color color, Rectangle layoutRectangle,
                                               TextFormatFlags format) {
@@ -1879,9 +1879,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Draws a string in the style appropriate for disabled items.
-        /// </devdoc>
+        /// </summary>
         public static void DrawVisualStyleBorder(Graphics graphics, Rectangle bounds) {
             if (graphics == null) {
                 throw new ArgumentNullException(nameof(graphics));
@@ -1891,12 +1891,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Draws a filled rectangle on the screen. The operation of this can be
         ///      "reversed" by drawing the same rectangle again. This is similar to
         ///      inverting a region of the screen except that it behaves better for
         ///      a wider variety of colors.
-        /// </devdoc>
+        /// </summary>
         public static void FillReversibleRectangle(Rectangle rectangle, Color backColor) {
             int rop3 = GetColorRop(backColor, 
                                    0xa50065, // RasterOp.BRUSH.Invert().XorWith(RasterOp.TARGET), 
@@ -2006,10 +2006,10 @@ namespace System.Windows.Forms {
             return changed;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This makes a choice from a set of raster op codes, based on the color given. If the
         ///     color is considered to be "dark", the raster op provided by dark will be returned.
-        /// </devdoc>
+        /// </summary>
         private static int GetColorRop(Color color, int darkROP, int lightROP) {
             if (color.GetBrightness() < .5) {
                 return darkROP;
@@ -2017,9 +2017,9 @@ namespace System.Windows.Forms {
             return lightROP;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the brush used to draw active objects.
-        /// </devdoc>
+        /// </summary>
         private static Brush GetActiveBrush(Color backColor) {
             Color brushColor;
 
@@ -2067,10 +2067,10 @@ namespace System.Windows.Forms {
             return frameBrushActive;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the pen used to draw a focus rectangle around a control. The focus
         ///      rectangle is typically drawn when the control has keyboard focus.
-        /// </devdoc>
+        /// </summary>
         private static Pen GetFocusPen(Color baseColor, bool odds, bool highContrast) {
             if (focusPen == null ||
                 (!highContrast && focusPenColor.GetBrightness() <= .5 && baseColor.GetBrightness() <= .5) ||
@@ -2132,9 +2132,9 @@ namespace System.Windows.Forms {
             return odds ? focusPen : focusPenInvert;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the brush used to draw selected objects.
-        /// </devdoc>
+        /// </summary>
         private static Brush GetSelectedBrush(Color backColor) {
             Color brushColor;
 
@@ -2183,9 +2183,9 @@ namespace System.Windows.Forms {
             return frameBrushSelected;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Converts an infinite value to "1".
-        /// </devdoc>
+        /// </summary>
         private static float InfinityToOne(float value) {
             if (value == float.NegativeInfinity || value == float.PositiveInfinity) {
                 return 1.0f;
@@ -2193,30 +2193,30 @@ namespace System.Windows.Forms {
             return value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Inverts the given color.
-        /// </devdoc>
+        /// </summary>
         private static Color InvertColor(Color color) {
             return Color.FromArgb(color.A, (byte)~color.R, (byte)~color.G, (byte)~color.B);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Creates a new color that is a object of the given color.
-        /// </devdoc>
+        /// </summary>
         public static Color Light(Color baseColor, float percOfLightLight) {
             return new HLSColor(baseColor).Lighter(percOfLightLight);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Creates a new color that is a object of the given color.
-        /// </devdoc>
+        /// </summary>
         public static Color Light(Color baseColor) {
             return new HLSColor(baseColor).Lighter(0.5f);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Creates a new color that is a object of the given color.
-        /// </devdoc>
+        /// </summary>
         public static Color LightLight(Color baseColor) {
             return new HLSColor(baseColor).Lighter(1.0f);
         }
@@ -2586,9 +2586,9 @@ namespace System.Windows.Forms {
         }
         */
 
-        /// <devdoc>
+        /// <summary>
         ///     Get StringFormat object for rendering text using GDI+ (Graphics).
-        /// </devdoc>
+        /// </summary>
         internal static StringFormat CreateStringFormat( Control ctl, ContentAlignment textAlign, bool showEllipsis, bool useMnemonic ) {
 
             StringFormat stringFormat = ControlPaint.StringFormatForAlignment( textAlign );
@@ -2622,9 +2622,9 @@ namespace System.Windows.Forms {
             return stringFormat;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Get TextFormatFlags flags for rendering text using GDI (TextRenderer).
-        /// </devdoc>
+        /// </summary>
         internal static TextFormatFlags CreateTextFormatFlags(Control ctl, ContentAlignment textAlign, bool showEllipsis, bool useMnemonic ) {
 
             textAlign = ctl.RtlTranslateContent( textAlign );
@@ -2657,9 +2657,9 @@ namespace System.Windows.Forms {
             return flags;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Logic copied from Windows sources to copy the lightening and darkening of colors.
-        /// </devdoc>
+        /// </summary>
         private struct HLSColor {
             private const int ShadowAdj         = -333;
             private const int HilightAdj        = 500;
@@ -2676,8 +2676,8 @@ namespace System.Windows.Forms {
 
             private bool isSystemColors_Control;
 
-            /// <devdoc>
-            /// </devdoc>
+            /// <summary>
+            /// </summary>
             public HLSColor(Color color) {
                 isSystemColors_Control = (color.ToKnownColor() == SystemColors.Control.ToKnownColor());
                 int r = color.R;
@@ -2726,8 +2726,8 @@ namespace System.Windows.Forms {
             }
 
             /* Unused
-            /// <devdoc>
-            /// </devdoc>
+            /// <summary>
+            /// </summary>
             public int Hue {
                 get {
                     return hue;
@@ -2735,8 +2735,8 @@ namespace System.Windows.Forms {
             }
             */
 
-            /// <devdoc>
-            /// </devdoc>
+            /// <summary>
+            /// </summary>
             public int Luminosity {
                 get {
                     return luminosity;
@@ -2744,8 +2744,8 @@ namespace System.Windows.Forms {
             }
 
             /* Unused
-            /// <devdoc>
-            /// </devdoc>
+            /// <summary>
+            /// </summary>
             public int Saturation {
                 get {
                     return saturation;
@@ -2753,8 +2753,8 @@ namespace System.Windows.Forms {
             }
             */
 
-            /// <devdoc>
-            /// </devdoc>
+            /// <summary>
+            /// </summary>
             public Color Darker(float percDarker) {
                 if (isSystemColors_Control) {
                     // With the usual color scheme, ControlDark/DarkDark is not exactly
@@ -2819,8 +2819,8 @@ namespace System.Windows.Forms {
                 return hue << 6 | saturation << 2 | luminosity;
             }
     
-            /// <devdoc>
-            /// </devdoc>
+            /// <summary>
+            /// </summary>
             public Color Lighter(float percLighter) {
                 if (isSystemColors_Control) {
                     // With the usual color scheme, ControlLight/LightLight is not exactly
@@ -2863,14 +2863,14 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
-            /// </devdoc>
+            /// <summary>
+            /// </summary>
             private int NewLuma(int n, bool scale) {
                 return NewLuma(luminosity, n, scale);
             }
 
-            /// <devdoc>
-            /// </devdoc>
+            /// <summary>
+            /// </summary>
             private int NewLuma(int luminosity, int n, bool scale) {
                 if (n == 0)
                     return luminosity;
@@ -2895,8 +2895,8 @@ namespace System.Windows.Forms {
                 return newLum;
             }
 
-            /// <devdoc>
-            /// </devdoc>
+            /// <summary>
+            /// </summary>
             private Color ColorFromHLS(int hue, int luminosity, int saturation) {
                 byte r,g,b;                      /* RGB component values */
                 int magic1,magic2;       /* calculated magic numbers (really!) */
@@ -2923,8 +2923,8 @@ namespace System.Windows.Forms {
                 return Color.FromArgb(r,g,b);
             }
 
-            /// <devdoc>
-            /// </devdoc>
+            /// <summary>
+            /// </summary>
             private int HueToRGB(int n1, int n2, int hue) {
                 /* range check: note values passed add/subtract thirds of range */
 

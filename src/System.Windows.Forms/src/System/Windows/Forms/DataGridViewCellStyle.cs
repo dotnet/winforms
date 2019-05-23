@@ -37,11 +37,11 @@ namespace System.Windows.Forms
         private PropertyStore propertyStore;          // Contains all properties that are not always set.
         private DataGridView dataGridView;
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewCellStyle'/> class.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public DataGridViewCellStyle()
         {
             this.propertyStore = new PropertyStore();

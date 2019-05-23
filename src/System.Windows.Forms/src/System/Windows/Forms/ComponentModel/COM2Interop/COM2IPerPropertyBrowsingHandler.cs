@@ -55,10 +55,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing.   HideProperty
         /// such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
-        /// </devdoc>
+        /// </summary>
         private void OnGetBaseAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent) {
             NativeMethods.IPerPropertyBrowsing target = sender.TargetObject as NativeMethods.IPerPropertyBrowsing;
             if (target != null) {
@@ -214,9 +214,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 this.arraysFetched = false;
              }
 
-             /// <devdoc>
+             /// <summary>
              /// Retrieve a copy of the value array
-             /// </devdoc>
+             /// </summary>
              public override object[] Values {
                 get {
                     EnsureArrays();
@@ -224,9 +224,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 }
              }
     
-             /// <devdoc>
+             /// <summary>
              /// Retrieve a copy of the nme array.
-             /// </devdoc>
+             /// </summary>
              public override string[] Names {
                 get {
                     EnsureArrays();

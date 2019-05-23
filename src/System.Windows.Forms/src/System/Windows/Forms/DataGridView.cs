@@ -410,9 +410,9 @@ namespace System.Windows.Forms
         internal bool dataStoreAccessAllowed = true;
 #pragma warning restore 0414
 #endif
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataGridView'/> class.</para>
-        /// </devdoc>
+        /// </summary>
         public DataGridView()
         {
             SetStyle(ControlStyles.UserPaint | 
@@ -829,12 +829,12 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWALLOWUSERTOORDERCOLUMNSCHANGED, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a global value indicating if the dataGridView's columns are resizable with the mouse.
         ///       The resizable aspect of a column can be overridden by DataGridViewColumn.Resizable.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             DefaultValue(true),
             SRCategory(nameof(SR.CatBehavior)),
@@ -866,12 +866,12 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWALLOWUSERTORESIZECOLUMNSCHANGED, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a global value indicating if the dataGridView's rows are resizable with the mouse.
         ///       The resizable aspect of a row can be overridden by DataGridViewRow.Resizable.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             DefaultValue(true),
             SRCategory(nameof(SR.CatBehavior)),
@@ -962,10 +962,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -996,9 +996,9 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWAUTOGENERATECOLUMNSCHANGED, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Overriding base implementation for perf gains. </para>
-        /// </devdoc>
+        /// </summary>
         public override bool AutoSize
         {
             get
@@ -1012,11 +1012,11 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Gets or sets the columns' autosizing mode. Standard inheritance model is used:
         ///           Columns with AutoSizeMode property set to NotSet will use this auto size mode.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             DefaultValue(DataGridViewAutoSizeColumnsMode.None),
             SRCategory(nameof(SR.CatLayout)),
@@ -1090,9 +1090,9 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWAUTOSIZECOLUMNSMODECHANGED, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Gets or sets the rows' autosizing mode. </para>
-        /// </devdoc>
+        /// </summary>
         [
             DefaultValue(DataGridViewAutoSizeRowsMode.None),
             SRCategory(nameof(SR.CatLayout)),
@@ -1178,9 +1178,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets the background color of the dataGridView.</para>
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatAppearance)),
             SRDescription(nameof(SR.DataGridViewBackgroundColorDescr))
@@ -1869,11 +1869,11 @@ namespace System.Windows.Forms
             return this.ColumnHeadersHeightSizeMode != DataGridViewColumnHeadersHeightSizeMode.AutoSize && defaultColumnHeadersHeight != this.ColumnHeadersHeight;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value that determines the behavior for adjusting the column headers height.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             DefaultValue(DataGridViewColumnHeadersHeightSizeMode.EnableResizing),
             RefreshProperties(RefreshProperties.All),
@@ -1926,12 +1926,12 @@ namespace System.Windows.Forms
         /// </summary>
         internal bool TextBoxControlWasDetached { get; set; }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets
         ///       or sets a value indicating if the dataGridView's column headers are visible.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatAppearance)),
             DefaultValue(true),
@@ -2481,10 +2481,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the client rect of the display area of the control.
         ///     The DataGridView control return its client rectangle minus the potential scrollbars.
-        /// </devdoc>
+        /// </summary>
         public override Rectangle DisplayRectangle {
             get {
                 Rectangle rectDisplay = this.ClientRectangle;
@@ -2644,12 +2644,12 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///     Determines whether the DataGridView's header cells render using XP theming visual styles or not
         ///     when visual styles are enabled in the application.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatAppearance)),
             DefaultValue(true),
@@ -3060,9 +3060,9 @@ namespace System.Windows.Forms
             remove => base.FontChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets the grid color of the dataGridView (when Single mode is used).</para>
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatAppearance)),
             SRDescription(nameof(SR.DataGridViewGridColorDescr))
@@ -3934,12 +3934,12 @@ namespace System.Windows.Forms
             remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERSDEFAULTCELLSTYLECHANGED, value);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the dataGridView's row headers are
         ///       visible.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatAppearance)),
             DefaultValue(true),
@@ -4052,11 +4052,11 @@ namespace System.Windows.Forms
                    defaultRowHeadersWidth != this.RowHeadersWidth;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value that determines the behavior for adjusting the row headers width.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             DefaultValue(DataGridViewRowHeadersWidthSizeMode.EnableResizing),
             RefreshProperties(RefreshProperties.All),
@@ -4209,9 +4209,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Possible return values are given by the ScrollBars enumeration.
-        /// </devdoc>
+        /// </summary>
         [
             DefaultValue(ScrollBars.Both), 
             Localizable(true), 
@@ -4658,10 +4658,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatBehavior)), 
             DefaultValue(false), 
@@ -4883,10 +4883,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatBehavior)),
             DefaultValue(false),

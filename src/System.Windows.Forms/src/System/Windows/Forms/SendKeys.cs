@@ -15,9 +15,9 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Globalization;
     
-    /// <devdoc>
+    /// <summary>
     ///    <para>Provides methods for sending keystrokes to an application.</para>
-    /// </devdoc>
+    /// </summary>
     public class SendKeys {
         private const int  HAVESHIFT = 0;
         private const int  HAVECTRL  = 1;
@@ -86,21 +86,21 @@ namespace System.Windows.Forms {
         private const int  CTRLKEYSCAN   = 0x0200;
         private const int  ALTKEYSCAN    = 0x0400;
 
-        /// <devdoc>
+        /// <summary>
         ///     should we stop using the hook?
-        /// </devdoc>
+        /// </summary>
         private static bool stopHook;
 
-        /// <devdoc>
+        /// <summary>
         ///     HHOOK
-        /// </devdoc>
+        /// </summary>
         private static IntPtr hhook;
 
         private static NativeMethods.HookProc hook;
 
-        /// <devdoc>
+        /// <summary>
         ///     vector of events that we have yet to post to the journaling hook.
-        /// </devdoc>
+        /// </summary>
         private static Queue events;
 
         private static bool fStartNewChar;
@@ -130,16 +130,16 @@ namespace System.Windows.Forms {
             messageWindow.CreateControl();
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     private constructor to prevent people from creating one of these.  they
         ///     should use public static methods
-        /// </devdoc>
+        /// </summary>
         private SendKeys() {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     adds an event to our list of events for the hook
-        /// </devdoc>
+        /// </summary>
         private static void AddEvent(SKEvent skevent) {
 
             if (events == null) {
@@ -185,9 +185,9 @@ namespace System.Windows.Forms {
             return fStartNewChar;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     given the vk, add the appropriate messages for it
-        /// </devdoc>
+        /// </summary>
         private static void AddMsgsForVK(int vk, int repeat, bool altnoctrldown, IntPtr hwnd) {
             for (int i = 0; i < repeat; i++) {
                 AddEvent(new SKEvent(altnoctrldown ? Interop.WindowMessages.WM_SYSKEYDOWN : Interop.WindowMessages.WM_KEYDOWN, vk, fStartNewChar, hwnd));
@@ -196,10 +196,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     called whenever there is a closing parenthesis, or the end of a
         ///     character.  This generates events for the end of a modifier.
-        /// </devdoc>
+        /// </summary>
         private static void CancelMods(int [] haveKeys, int level, IntPtr hwnd) {
             if (haveKeys[HAVESHIFT] == level) {
                 AddEvent(new SKEvent(Interop.WindowMessages.WM_KEYUP, (int)Keys.ShiftKey, false, hwnd));
@@ -215,9 +215,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     install the hook.  quite easy
-        /// </devdoc>
+        /// </summary>
         private static void InstallHook() {
             if (hhook == IntPtr.Zero) {
                 hook = new NativeMethods.HookProc(new SendKeysHookProc().Callback);
@@ -283,10 +283,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     tells us to shut down the server, perhaps if we're shutting down and the
         ///     hook is still running
-        /// </devdoc>
+        /// </summary>
         private static void JournalCancel() {
             if (hhook != IntPtr.Zero) {
                 stopHook = false;
@@ -307,11 +307,11 @@ namespace System.Windows.Forms {
             UnsafeNativeMethods.SetKeyboardState(keystate);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     before we do a sendkeys, we want to  clear the state
         ///     of a couple of keys [capslock, numlock, scrolllock] so they don't
         ///     interfere.
-        /// </devdoc>
+        /// </summary>
         private static void ClearKeyboardState() {
 
             byte [] keystate = GetKeyboardState();
@@ -323,10 +323,10 @@ namespace System.Windows.Forms {
             SetKeyboardState(keystate);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     given the string, match the keyword to a VK.  return -1 if it don't match
         ///     nuthin'
-        /// </devdoc>
+        /// </summary>
         private static int MatchKeyword(string keyword) {
             for (int i = 0; i < keywords.Length; i++)
                 if (string.Equals(keywords[i].keyword, keyword, StringComparison.OrdinalIgnoreCase))
@@ -335,11 +335,11 @@ namespace System.Windows.Forms {
             return -1;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This event is raised from Application when each window thread
         ///     termiantes.  It gives us a chance to uninstall our journal
         ///     hook if we had one installed.
-        /// </devdoc>
+        /// </summary>
         private static void OnThreadExit(object sender, EventArgs e) {
             try {
                 UninstallJournalingHook();
@@ -348,10 +348,10 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     parse the string the user has given us, and generate the appropriate
         ///     events for the journaling hook
-        /// </devdoc>
+        /// </summary>
         private static void ParseKeys(string keys, IntPtr hwnd) {
 
             int i = 0;
@@ -824,16 +824,16 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Sends keystrokes to the active application.</para>
-        /// </devdoc>
+        /// </summary>
         public static void Send(string keys) {
             Send(keys, null, false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sends keystrokes to the active application.
-        /// </devdoc>
+        /// </summary>
 
 
         // WARNING: this method will never work if control != null, because while
@@ -910,18 +910,18 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Sends the given keys to the active application, and then waits for
         ///       the messages to be processed.</para>
-        /// </devdoc>
+        /// </summary>
         public static void SendWait(string keys) {
             SendWait(keys, null);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sends the given keys to the active application, and then waits for
         ///     the messages to be processed.
-        /// </devdoc>
+        /// </summary>
 
 
         // WARNING: this method will never work if control != null, because while
@@ -932,9 +932,9 @@ namespace System.Windows.Forms {
             Send(keys, control, true);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Processes all the Windows messages currently in the message queue.</para>
-        /// </devdoc>
+        /// </summary>
         public static void Flush() {
             Application.DoEvents();
             while (events != null && events.Count > 0) {
@@ -942,9 +942,9 @@ namespace System.Windows.Forms {
             }
         }
     
-        /// <devdoc>
+        /// <summary>
         ///     cleans up and uninstalls the hook
-        /// </devdoc>
+        /// </summary>
         private static void UninstallJournalingHook() {
             if (hhook != IntPtr.Zero) {
                 stopHook = false;
@@ -956,9 +956,9 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     SendKeys creates a window to monitor WM_CANCELJOURNAL messages.
-        /// </devdoc>
+        /// </summary>
         private class SKWindow : Control {
         
             public SKWindow() {
@@ -979,9 +979,9 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     helps us hold information about the various events we're going to journal
-        /// </devdoc>
+        /// </summary>
         private class SKEvent {
             internal int wm;
             internal int paramL;
@@ -1003,9 +1003,9 @@ namespace System.Windows.Forms {
             }
         }
     
-        /// <devdoc>
+        /// <summary>
         ///     holds a keyword and the associated VK_ for it
-        /// </devdoc>
+        /// </summary>
         private class KeywordVk {
             internal string keyword;
             internal int    vk;
@@ -1016,9 +1016,9 @@ namespace System.Windows.Forms {
             }
         }
     
-        /// <devdoc>
+        /// <summary>
         ///     this class is our callback for the journaling hook we install
-        /// </devdoc>
+        /// </summary>
         private class SendKeysHookProc {
 
             // Microsoft:  There appears to be a timing issue where setting and removing and then setting

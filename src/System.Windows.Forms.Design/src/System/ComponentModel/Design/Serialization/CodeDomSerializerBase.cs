@@ -50,10 +50,10 @@ namespace System.ComponentModel.Design.Serialization
             return manager.CreateInstance(type, parameters, name, addToContainer);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This routine returns the correct typename given a CodeTypeReference.  It expands the child typenames
         /// and builds up the clr formatted generic name.  If its not a generic, it just returns BaseType.
-        /// </devdoc>
+        /// </summary>
         internal static string GetTypeNameFromCodeTypeReference(IDesignerSerializationManager manager, CodeTypeReference typeref)
         {
             //we do this to avoid an extra gettype for the usual nongeneric case.
@@ -843,11 +843,11 @@ namespace System.ComponentModel.Design.Serialization
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This is a helper method that will deserialize a given expression.  It deserializes
         ///     the statement by interpreting and executing the CodeDom expression, returning
         ///     the results.
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         [SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
         protected object DeserializeExpression(IDesignerSerializationManager manager, string name, CodeExpression expression)

@@ -11,10 +11,10 @@ namespace System.Windows.Forms {
         public MdiWindowListItemConverter(Type type) : base(type) {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets a collection of standard values for the data type this validator is
         ///       designed for.</para>
-        /// </devdoc>
+        /// </summary>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context) {
             MenuStrip menu = context.Instance as MenuStrip;
             if (menu != null)

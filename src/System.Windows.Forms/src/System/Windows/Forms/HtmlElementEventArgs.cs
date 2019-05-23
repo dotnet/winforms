@@ -64,22 +64,22 @@ namespace System.Windows.Forms
 
         public int KeyPressedCode => NativeHTMLEventObj.GetKeyCode();
 
-        /// <devdoc>
+        /// <summary>
         /// Indicates whether the Alt key was pressed, if this information is 
         /// provided to the IHtmlEventObj
-        /// </devdoc>
+        /// </summary>
         public bool AltKeyPressed => NativeHTMLEventObj.GetAltKey();
 
-        /// <devdoc>
+        /// <summary>
         /// Indicates whether the Ctrl key was pressed, if this information is 
         /// provided to the IHtmlEventObj
-        /// </devdoc>
+        /// </summary>
         public bool CtrlKeyPressed => NativeHTMLEventObj.GetCtrlKey();
 
-        /// <devdoc>
+        /// <summary>
         /// Indicates whether the Shift key was pressed, if this information is 
         /// provided to the IHtmlEventObj
-        /// </devdoc>
+        /// </summary>
         public bool ShiftKeyPressed => NativeHTMLEventObj.GetShiftKey();
 
         public string EventType => NativeHTMLEventObj.GetEventType();

@@ -11,11 +11,11 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.Runtime.InteropServices;
 
-    /// <devdoc>
+    /// <summary>
     ///     This class is used to put context menus on your form and show them for
     ///     controls at runtime.  It basically acts like a regular Menu control,
     ///     but can be set for the ContextMenu property that most controls have.
-    /// </devdoc>
+    /// </summary>
     [
     DefaultEvent(nameof(Popup)),
     ]
@@ -27,24 +27,24 @@ namespace System.Windows.Forms {
         
         private RightToLeft rightToLeft = System.Windows.Forms.RightToLeft.Inherit;
     
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new ContextMenu object with no items in it by default.
-        /// </devdoc>
+        /// </summary>
         public ContextMenu()
             : base(null) {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a ContextMenu object with the given MenuItems.
-        /// </devdoc>
+        /// </summary>
         public ContextMenu(MenuItem[] menuItems)
             : base(menuItems) {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The last control that was acted upon that resulted in this context
         ///     menu being displayed.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -62,20 +62,20 @@ namespace System.Windows.Forms {
             remove => onPopup -= value;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    Fires when the context menu collapses.
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.ContextMenuCollapseDescr))]
         public event EventHandler Collapse {
             add => onCollapse += value;
             remove => onCollapse -= value;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
         ///     text alignment and reading order will be from right to left.
-        /// </devdoc>
+        /// </summary>
         // Add a DefaultValue attribute so that the Reset context menu becomes
         // available in the Property Grid but the default value remains No.
         [
@@ -116,26 +116,26 @@ namespace System.Windows.Forms {
                 return (rightToLeft == System.Windows.Forms.RightToLeft.Yes);
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///     Fires the popup event
-        /// </devdoc>
+        /// </summary>
         protected internal virtual void OnPopup(EventArgs e) {
             if (onPopup != null) {
                 onPopup(this, e);
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Fires the collapse event
-        /// </devdoc>
+        /// </summary>
         protected internal virtual void OnCollapse(EventArgs e) {
             if (onCollapse != null) {
                 onCollapse(this, e);
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         protected internal virtual bool ProcessCmdKey(ref Message msg, Keys keyData, Control control) {
             sourceControl = control;
             return ProcessCmdKey(ref msg, keyData);
@@ -145,9 +145,9 @@ namespace System.Windows.Forms {
         	RightToLeft = RightToLeft.No;	
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     Returns true if the RightToLeft should be persisted in code gen.
-        /// </devdoc>
+        /// </summary>
         internal virtual bool ShouldSerializeRightToLeft() {
             if (System.Windows.Forms.RightToLeft.Inherit == rightToLeft) {
                 return false;
@@ -155,18 +155,18 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Displays the context menu at the specified position.  This method
         ///     doesn't return until the menu is dismissed.
-        /// </devdoc>
+        /// </summary>
         public void Show(Control control, Point pos) {
             Show(control, pos, NativeMethods.TPM_VERTICAL | NativeMethods.TPM_RIGHTBUTTON);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Displays the context menu at the specified position.  This method
         ///     doesn't return until the menu is dismissed.
-        /// </devdoc>
+        /// </summary>
         public void Show(Control control, Point pos, LeftRightAlignment alignment)  {
 
             // This code below looks wrong but it's correct. 

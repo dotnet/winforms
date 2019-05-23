@@ -15,9 +15,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     internal class Com2IDispatchConverter : Com2ExtendedTypeConverter{
         Com2PropertyDescriptor propDesc;
 
-        /// <devdoc>
+        /// <summary>
         ///     What we return textually for null.
-        /// </devdoc>
+        /// </summary>
         protected static readonly string none = SR.toStringNone;
 
         private bool allowExpand;
@@ -34,30 +34,30 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
              this.allowExpand = allowExpand;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///      Determines if this converter can convert an object in the given source
         ///      type to the native type of the converter.
-        /// </devdoc>
+        /// </summary>
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) {
             return false;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///      Determines if this converter can convert an object to the given destination
         ///      type.
-        /// </devdoc>
+        /// </summary>
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType) {
             return destinationType == typeof(string);
         }
         
         
-        /// <devdoc>
+        /// <summary>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call
         ///      to ToString on the object if the object is valid and if the destination
         ///      type is string.  If this cannot convert to the desitnation type, this will
         ///      throw a NotSupportedException.
-        /// </devdoc>
+        /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
             if (destinationType == typeof(string)){
                if (value == null){
@@ -82,10 +82,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return TypeDescriptor.GetProperties(value, attributes);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///      Determines if this object supports properties.  By default, this
         ///      is false.
-        /// </devdoc>
+        /// </summary>
         public override bool GetPropertiesSupported(ITypeDescriptorContext context) {
             return this.allowExpand;
         }

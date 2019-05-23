@@ -18,11 +18,11 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Implements the basic functionality required by a button control.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     [
         ComVisible(true),
         ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -57,12 +57,12 @@ namespace System.Windows.Forms {
 
         private bool isEnableVisualStyleBackgroundSet = false;
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.ButtonBase'/> class.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected ButtonBase() {
             // If Button doesn't want double-clicks, we should introduce a StandardDoubleClick style.
             // Checkboxes probably want double-click's, and RadioButtons certainly do
@@ -83,10 +83,10 @@ namespace System.Windows.Forms {
             SetFlag(FlagShowToolTip, false);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> This property controls the activation handling of bleedover for the text that 
         ///    extends beyond the width of the button. </para>
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatBehavior)),
             DefaultValue(false),
@@ -112,9 +112,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates whether the control is automatically resized to fit its contents
-        /// </devdoc>
+        /// </summary>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public override bool AutoSize {
@@ -138,10 +138,10 @@ namespace System.Windows.Forms {
             remove => base.AutoSizeChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The background color of this control. This is an ambient property and
         ///     will always return a non-null value.
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatAppearance)),
             SRDescription(nameof(SR.ControlBackColorDescr))
@@ -168,10 +168,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
+        /// </summary>
         protected override Size DefaultSize {
             get {
                 return new Size(75, 23);
@@ -241,13 +241,13 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or
         ///       sets
         ///       the flat style appearance of the button control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             SRCategory(nameof(SR.CatAppearance)),
             DefaultValue(FlatStyle.Standard),
@@ -269,8 +269,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [
             Browsable(true),
             SRCategory(nameof(SR.CatAppearance)),
@@ -287,12 +287,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the image
         ///       that is displayed on a button control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             SRDescription(nameof(SR.ButtonImageDescr)),
             Localizable(true),
@@ -336,11 +336,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the alignment of the image on the button control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             DefaultValue(ContentAlignment.MiddleCenter),
             Localizable(true),
@@ -363,12 +363,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the image list index value of the image
         ///       displayed on the button control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             TypeConverterAttribute(typeof(ImageIndexConverter)),
             Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
@@ -402,12 +402,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the image list index key of the image
         ///       displayed on the button control.  Note - setting this unsets the ImageIndex
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             TypeConverterAttribute(typeof(ImageKeyConverter)),
             Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
@@ -436,11 +436,11 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.ImageList'/> that contains the <see cref='System.Drawing.Image'/> displayed on a button control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             DefaultValue(null),
             SRDescription(nameof(SR.ButtonImageListDescr)),
@@ -500,9 +500,9 @@ namespace System.Windows.Forms {
             remove => base.ImeModeChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Specifies whether the control is willing to process mnemonics when hosted in an container ActiveX (Ax Sourcing).  
-        /// </devdoc>
+        /// </summary>
         internal override bool IsMnemonicsListenerAxSourced 
         {
             get{
@@ -510,7 +510,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         ///         The area of the button encompassing any changes between the button's
         ///     resting appearance and its appearance when the mouse is over it.
@@ -520,7 +520,7 @@ namespace System.Windows.Forms {
         ///     or your button may not paint correctly or may have flicker. Returning
         ///     ClientRectangle is safe for correct painting but may still cause flicker.
         ///     </para>
-        /// </devdoc>
+        /// </summary>
         internal virtual Rectangle OverChangeRectangle {
             get {
                 if (FlatStyle == FlatStyle.Standard) {
@@ -540,7 +540,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     <para>
         ///         The area of the button encompassing any changes between the button's
         ///     appearance when the mouse is over it but not pressed and when it is pressed.
@@ -550,7 +550,7 @@ namespace System.Windows.Forms {
         ///     or your button may not paint correctly or may have flicker. Returning
         ///     ClientRectangle is safe for correct painting but may still cause flicker.
         ///     </para>
-        /// </devdoc>
+        /// </summary>
         internal virtual Rectangle DownChangeRectangle {
             get {
                 return ClientRectangle;
@@ -580,9 +580,9 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <devdoc>
+        /// <summary>
         ///     Indicates whether the tooltip should be shown
-        /// </devdoc>   
+        /// </summary>   
         internal bool ShowToolTip {
             get {
                 return GetFlag(FlagShowToolTip);
@@ -605,11 +605,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the alignment of the text on the button control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
             DefaultValue(ContentAlignment.MiddleCenter),
             Localizable(true),
@@ -660,10 +660,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets a value indicating whether an ampersand (&amp;) included in the text of
         ///       the control.</para>
-        /// </devdoc>
+        /// </summary>
         [
             SRDescription(nameof(SR.ButtonUseMnemonicDescr)),
             DefaultValue(true),
@@ -714,8 +714,8 @@ namespace System.Windows.Forms {
             ImageList = null;
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 StopAnimate();
@@ -741,21 +741,21 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnGotFocus'/> event.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnGotFocus(EventArgs e) {
             base.OnGotFocus(e);
             Invalidate();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnLostFocus'/> event.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnLostFocus(EventArgs e) {
             base.OnLostFocus(e);
 
@@ -766,11 +766,11 @@ namespace System.Windows.Forms {
             Invalidate();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseEnter'/> event.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnMouseEnter(EventArgs eventargs) {
             Debug.Assert(Enabled, "ButtonBase.OnMouseEnter should not be called if the button is disabled");
             SetFlag(FlagMouseOver, true);
@@ -783,11 +783,11 @@ namespace System.Windows.Forms {
             base.OnMouseEnter(eventargs);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseLeave'/> event.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnMouseLeave(EventArgs eventargs) {
             SetFlag(FlagMouseOver, false);    
             if (textToolTip != null) {
@@ -799,11 +799,11 @@ namespace System.Windows.Forms {
             base.OnMouseLeave(eventargs);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseMove'/> event.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnMouseMove(MouseEventArgs mevent) {
             Debug.Assert(Enabled, "ButtonBase.OnMouseMove should not be called if the button is disabled");
             if (mevent.Button != MouseButtons.None && GetFlag(FlagMousePressed)) {
@@ -826,11 +826,11 @@ namespace System.Windows.Forms {
             base.OnMouseMove(mevent);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseDown'/> event.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnMouseDown(MouseEventArgs mevent) {
             Debug.Assert(Enabled, "ButtonBase.OnMouseDown should not be called if the button is disabled");
             if (mevent.Button == MouseButtons.Left) {
@@ -843,21 +843,21 @@ namespace System.Windows.Forms {
             base.OnMouseDown(mevent);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnMouseUp'/> event.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent) {
             base.OnMouseUp(mevent);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Used for quick re-painting of the button after the pressed state.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected void ResetFlagsandPaint() {
             SetFlag(FlagMousePressed, false);
             SetFlag(FlagMouseDown, false);
@@ -865,9 +865,9 @@ namespace System.Windows.Forms {
             Update();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Central paint dispatcher to one of the three styles of painting.
-        /// </devdoc>
+        /// </summary>
         private void PaintControl(PaintEventArgs pevent) {        
             Debug.Assert(GetStyle(ControlStyles.UserPaint), "Shouldn't be in PaintControl when control is not UserPaint style");
             Adapter.Paint(pevent);
@@ -979,12 +979,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnKeyDown'/> event.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnKeyDown(KeyEventArgs kevent) {
             Debug.Assert(Enabled, "ButtonBase.OnKeyDown should not be called if the button is disabled");
             if (kevent.KeyData == Keys.Space) {
@@ -1006,12 +1006,12 @@ namespace System.Windows.Forms {
             base.OnKeyDown(kevent);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnKeyUp'/> event.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnKeyUp(KeyEventArgs kevent) {
             if (GetFlag(FlagMouseDown) && !ValidationCancelled) {
                 if (OwnerDraw) {
@@ -1035,12 +1035,12 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnPaint'/> event.
         ///       
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnPaint(PaintEventArgs pevent) {
             if( AutoEllipsis ){
                 Size preferredSize = PreferredSize;
@@ -1099,9 +1099,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
-        /// </devdoc>
+        /// </summary>
         [
             DefaultValue(false),
             SRCategory(nameof(SR.CatBehavior)),
@@ -1116,11 +1116,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines whether the control supports rendering text using GDI+ and GDI.
         ///     This is provided for container controls to iterate through its children to set UseCompatibleTextRendering to the same
         ///     value if the child control supports it.
-        /// </devdoc>
+        /// </summary>
         internal override bool SupportsUseCompatibleTextRendering {
             get {
                 return true;

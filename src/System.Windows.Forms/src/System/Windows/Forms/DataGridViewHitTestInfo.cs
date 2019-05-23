@@ -21,10 +21,10 @@ namespace System.Windows.Forms
             internal int rowStart;
             internal int colStart;
 
-            /// <devdoc>
+            /// <summary>
             /// <para>Allows the <see cref='System.Windows.Forms.DataGridView.HitTestInfo'/> object to inform you the 
             ///    extent of the grid.</para>
-            /// </devdoc>
+            /// </summary>
             public static readonly HitTestInfo Nowhere = new HitTestInfo();
 
             internal HitTestInfo()
@@ -37,9 +37,9 @@ namespace System.Windows.Forms
                 this.adjacentRow = this.adjacentCol = -1;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///    <para>Gets the number of the clicked column.</para>
-            /// </devdoc>
+            /// </summary>
             public int ColumnIndex
             {
                 get 
@@ -48,10 +48,10 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///    <para>Gets the
             ///       number of the clicked row.</para>
-            /// </devdoc>
+            /// </summary>
             public int RowIndex
             {
                 get 
@@ -60,9 +60,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///    <para>Gets the left edge of the column.</para>
-            /// </devdoc>
+            /// </summary>
             public int ColumnX
             {
                 get 
@@ -71,9 +71,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///    <para>Gets the top edge of the row.</para>
-            /// </devdoc>
+            /// </summary>
             public int RowY
             {
                 get 
@@ -82,10 +82,10 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             /// <para>Gets the part of the <see cref='System.Windows.Forms.DataGridView'/> control, other than the row or column, that was 
             ///    clicked.</para>
-            /// </devdoc>
+            /// </summary>
             public DataGridViewHitTestType Type
             {
                 get 
@@ -94,9 +94,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///    <para>Indicates whether two objects are identical.</para>
-            /// </devdoc>
+            /// </summary>
             public override bool Equals(object value) 
             {
                 HitTestInfo hti = value as HitTestInfo;
@@ -109,14 +109,14 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            /// <devdoc>
+            /// <summary>
             /// <para>Gets the hash code for the <see cref='System.Windows.Forms.DataGridView.HitTestInfo'/> instance.</para>
-            /// </devdoc>
+            /// </summary>
             public override int GetHashCode() => HashCode.Combine(type, row, col);
 
-            /// <devdoc>
+            /// <summary>
             ///    <para>Gets the type, column number and row number.</para>
-            /// </devdoc>
+            /// </summary>
             public override string ToString() 
             {
                 return "{ Type:" + type.ToString() + ", Column:" + col.ToString(CultureInfo.CurrentCulture) + ", Row:" + row.ToString(CultureInfo.CurrentCulture) + " }";

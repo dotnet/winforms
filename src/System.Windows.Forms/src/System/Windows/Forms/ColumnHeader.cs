@@ -16,13 +16,13 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;    
     using System.Globalization;
     
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Displays a single column header in a <see cref='System.Windows.Forms.ListView'/>
     ///       control.
     ///
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     [
     ToolboxItem(false),
     DesignTimeVisible(false),
@@ -65,23 +65,23 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new ColumnHeader object
-        /// </devdoc>
+        /// </summary>
         public ColumnHeader() {
             imageIndexer = new ColumnHeaderImageListIndexer(this);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new ColumnHeader object
-        /// </devdoc>
+        /// </summary>
         public ColumnHeader(int imageIndex) : this () {
             this.ImageIndex = imageIndex;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new ColumnHeader object
-        /// </devdoc>
+        /// </summary>
         public ColumnHeader(string imageKey) : this () {
             this.ImageKey = imageKey;
         }
@@ -160,11 +160,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The index of this column.  This index does not necessarily correspond
         ///     to the current visual position of the column in the ListView, because the
         ///     user may orerder columns if the allowColumnReorder property is true.
-        /// </devdoc>
+        /// </summary>
         [ Browsable(false)]
         public int Index {
             get {
@@ -233,9 +233,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the ListView control that this column is displayed in.  May be null
-        /// </devdoc>
+        /// </summary>
         [ Browsable(false) ]
         public ListView ListView {
             get {
@@ -243,9 +243,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The Name of the column header
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         SRDescription(nameof(SR.ColumnHeaderNameDescr))
@@ -268,9 +268,9 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The text displayed in the column header
-        /// </devdoc>
+        /// </summary>
         [
         Localizable(true),
         SRDescription(nameof(SR.ColumnCaption))
@@ -293,9 +293,9 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The horizontal alignment of the text contained in this column
-        /// </devdoc>
+        /// </summary>
         [
         SRDescription(nameof(SR.ColumnAlignment)),
         Localizable(true),
@@ -357,9 +357,9 @@ namespace System.Windows.Forms {
                 return width;
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///     The width of the column in pixels.
-        /// </devdoc>
+        /// </summary>
         [
         SRDescription(nameof(SR.ColumnWidth)),
         Localizable(true),
@@ -405,9 +405,9 @@ namespace System.Windows.Forms {
         }
         
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates an identical ColumnHeader, unattached to any ListView
-        /// </devdoc>
+        /// </summary>
         public object Clone() {
             Type clonedType = this.GetType();
             ColumnHeader columnHeader = null;
@@ -461,9 +461,9 @@ namespace System.Windows.Forms {
             return(text != null);
         }
         
-        /// <devdoc>
+        /// <summary>
         ///     Returns a string representation of this column header
-        /// </devdoc>
+        /// </summary>
         public override string ToString() {
             return "ColumnHeader: Text: " + Text;
         }

@@ -12,10 +12,10 @@ namespace System.Windows.Forms {
     using System.Drawing.Printing;
     using System.Runtime.InteropServices;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para> Allows users to select a printer and choose which
     ///       portions of the document to print.</para>
-    /// </devdoc>
+    /// </summary>
     [DefaultProperty(nameof(Document))]
     [SRDescription(nameof(SR.DescriptionPrintDialog))]
     [Designer("System.Windows.Forms.Design.PrintDialogDesigner, " + AssemblyRef.SystemDesign)]
@@ -38,9 +38,9 @@ namespace System.Windows.Forms {
         private bool showHelp;
         private bool showNetwork;
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.PrintDialog'/> class.</para>
-        /// </devdoc>
+        /// </summary>
         public PrintDialog() {
             Reset();
         }
@@ -61,11 +61,11 @@ namespace System.Windows.Forms {
         }
         
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the Pages option button is enabled.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -76,9 +76,9 @@ namespace System.Windows.Forms {
             set { allowPages = value;}
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets a value indicating whether the Print to file check box is enabled.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
@@ -89,11 +89,11 @@ namespace System.Windows.Forms {
             set { allowPrintToFile = value;}
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the From... To... Page option button is enabled.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -104,11 +104,11 @@ namespace System.Windows.Forms {
             set { allowSelection = value;}
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating the <see cref='System.Drawing.Printing.PrintDocument'/> used to obtain <see cref='System.Drawing.Printing.PrinterSettings'/>.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatData)), 
         DefaultValue(null),
@@ -134,12 +134,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the <see cref='System.Drawing.Printing.PrinterSettings'/> the
         ///       dialog box will be modifying.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatData)), 
         DefaultValue(null),
@@ -165,9 +165,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets a value indicating whether the Print to file check box is checked.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -178,11 +178,11 @@ namespace System.Windows.Forms {
             set { printToFile = value;}
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the Help button is displayed.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -193,11 +193,11 @@ namespace System.Windows.Forms {
             set { showHelp = value;}
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the Network button is displayed.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
@@ -269,12 +269,12 @@ namespace System.Windows.Forms {
             return flags;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Resets all options, the last selected printer, and the page
         ///       settings to their default values.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override void Reset() {
             allowCurrentPage = false;
             allowPages = false;

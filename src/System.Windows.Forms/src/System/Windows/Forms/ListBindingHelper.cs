@@ -12,8 +12,8 @@ namespace System.Windows.Forms {
     using System.Reflection;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <devdoc>
-    /// </devdoc>
+    /// <summary>
+    /// </summary>
     public static class ListBindingHelper {
 
         private static Attribute[] browsableAttribute;
@@ -481,7 +481,7 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// 
         /// Returns info about the 'indexer' property on the specified type. The presence of an indexer is used to
         /// determine that the type represents a collection or list. The return type of that indexer is used to
@@ -495,7 +495,7 @@ namespace System.Windows.Forms {
         /// NOTE: A special rule is also enforced here - we only want to consider using the typed indexer on list
         /// based types, ie. types we already know are supposed to be treated as lists (rather than list items).
         ///
-        /// </devdoc>
+        /// </summary>
         private static PropertyInfo GetTypedIndexer(Type type)
         {
             PropertyInfo indexer = null;

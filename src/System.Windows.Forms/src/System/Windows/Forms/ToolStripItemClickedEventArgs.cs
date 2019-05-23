@@ -6,17 +6,17 @@ namespace System.Windows.Forms
 {
     public class ToolStripItemClickedEventArgs : EventArgs
     {
-        /// <devdoc>
+        /// <summary>
         /// This class represents event args a ToolStrip can use when an item has been clicked.
-        /// </devdoc>
+        /// </summary>
         public ToolStripItemClickedEventArgs(ToolStripItem clickedItem)
         {
             ClickedItem = clickedItem;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Represents the item that was clicked on the toolStrip.
-        /// </devdoc>
+        /// </summary>
         public ToolStripItem ClickedItem { get; }
     }
 }

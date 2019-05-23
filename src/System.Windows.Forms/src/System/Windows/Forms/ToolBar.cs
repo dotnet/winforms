@@ -15,9 +15,9 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Globalization;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>Represents a Windows toolbar.</para>
-    /// </devdoc>
+    /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -29,58 +29,58 @@ namespace System.Windows.Forms {
 
         private ToolBarButtonCollection buttonsCollection;
 
-        /// <devdoc>
+        /// <summary>
         ///     The size of a button in the ToolBar
-        /// </devdoc>
+        /// </summary>
         internal Size buttonSize = System.Drawing.Size.Empty;
 
-        /// <devdoc>
+        /// <summary>
         ///     This is used by our autoSizing support.
-        /// </devdoc>
+        /// </summary>
         private int requestedSize;
-        /// <devdoc>
+        /// <summary>
         ///     This represents the width of the drop down arrow we have if the
         ///     DropDownArrows property is true.  this value is used by the ToolBarButton
         ///     objects to compute their size
-        /// </devdoc>
+        /// </summary>
         internal const int DDARROW_WIDTH = 15;
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates what our appearance will be.  This will either be normal
         ///     or flat.
-        /// </devdoc>
+        /// </summary>
         private ToolBarAppearance appearance = ToolBarAppearance.Normal;
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates whether or not we have a border
-        /// </devdoc>
+        /// </summary>
         private BorderStyle borderStyle = System.Windows.Forms.BorderStyle.None;
 
-        /// <devdoc>
+        /// <summary>
         ///     The array of buttons we're working with.
-        /// </devdoc>
+        /// </summary>
         private ToolBarButton [] buttons;
 
-        /// <devdoc>
+        /// <summary>
         ///     The number of buttons we're working with
-        /// </devdoc>
+        /// </summary>
         private int buttonCount = 0;
 
-        /// <devdoc>
+        /// <summary>
         ///     Indicates if text captions should go underneath images in buttons or
         ///     to the right of them
-        /// </devdoc>
+        /// </summary>
         private ToolBarTextAlign textAlign = ToolBarTextAlign.Underneath;
 
-        /// <devdoc>
+        /// <summary>
         ///     The ImageList object that contains the main images for our control.
-        /// </devdoc>
+        /// </summary>
         private ImageList imageList = null;
 
-        /// <devdoc>
+        /// <summary>
         ///     The maximum width of buttons currently being displayed.  This is needed
         ///     by our autoSizing code.  If this value is -1, it needs to be recomputed.
-        /// </devdoc>
+        /// </summary>
         private int maxWidth = -1;
         private int hotItem = -1;
 
@@ -103,9 +103,9 @@ namespace System.Windows.Forms {
         private ToolBarButtonClickEventHandler onButtonDropDown = null;
 
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.ToolBar'/> class.</para>
-        /// </devdoc>
+        /// </summary>
         public ToolBar()
         : base() {
 
@@ -124,10 +124,10 @@ namespace System.Windows.Forms {
             buttonsCollection = new ToolBarButtonCollection(this);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets the appearance of the toolbar
         ///       control and its buttons.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(ToolBarAppearance.Normal),
@@ -152,11 +152,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Indicates whether the toolbar
         ///       adjusts its size automatically based on the size of the buttons and the
         ///       dock style.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
@@ -201,8 +201,8 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color BackColor {
             get {
@@ -251,10 +251,10 @@ namespace System.Windows.Forms {
             remove => base.BackgroundImageLayoutChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Gets or sets
         ///       the border style of the toolbar control.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(BorderStyle.None),
@@ -282,10 +282,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para> A collection of <see cref='System.Windows.Forms.ToolBarButton'/> controls assigned to the
         ///    toolbar control. The property is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
@@ -299,10 +299,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets
         ///       the size of the buttons on the toolbar control.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         RefreshProperties(RefreshProperties.All),
@@ -347,12 +347,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the parameters needed to create the handle.  Inheriting classes
         ///     can override this to provide extra functionality.  They should not,
         ///     however, forget to get base.CreateParams first to get the struct
         ///     filled up with the basic info.
-        /// </devdoc>
+        /// </summary>
         protected override CreateParams CreateParams {
             get {
                 CreateParams cp = base.CreateParams;
@@ -405,20 +405,20 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
+        /// </summary>
         protected override Size DefaultSize {
             get {
                 return new Size(100, 22);
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Gets or sets a value indicating
         ///       whether the toolbar displays a divider.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(true),
@@ -438,12 +438,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Sets the way in which this ToolBar is docked to its parent. We need to
         ///       override this to ensure autoSizing works correctly
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         Localizable(true),
         DefaultValue(DockStyle.Top)
@@ -472,10 +472,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This property is overridden and hidden from statement completion
         ///     on controls that are based on Win32 Native Controls.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override bool DoubleBuffered {
             get {
@@ -486,10 +486,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets or sets a value indicating whether drop-down buttons on a
         ///       toolbar display down arrows.</para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(false),
         SRCategory(nameof(SR.CatAppearance)),
@@ -510,8 +510,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor {
             get {
@@ -528,10 +528,10 @@ namespace System.Windows.Forms {
             remove => base.ForeColorChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Gets or sets the collection of images available to the toolbar button
         ///       controls.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(null),
@@ -564,10 +564,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the size of the images in the image list assigned to the
         ///       toolbar.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
@@ -601,10 +601,10 @@ namespace System.Windows.Forms {
             remove => base.ImeModeChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The preferred height for this ToolBar control.  This is
         ///     used by the AutoSizing code.
-        /// </devdoc>
+        /// </summary>
         internal int PreferredHeight {
             get {
                 int height = 0;
@@ -661,13 +661,13 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The preferred width for this ToolBar control.  This is
         ///     used by AutoSizing code.
         ///     NOTE!!!!!!!!! This function assumes it's only going to get called
         ///     if the control is docked left or right [ie, it really
         ///     just returns a max width]
-        /// </devdoc>
+        /// </summary>
         internal int PreferredWidth {
             get {
                 int width;
@@ -702,8 +702,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override RightToLeft RightToLeft {
             get {
@@ -720,10 +720,10 @@ namespace System.Windows.Forms {
             remove => base.RightToLeftChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// We need to track the current scale factor so that we can tell the
         ///  unmanaged control how to scale its buttons.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void ScaleCore(float dx, float dy) {
             currentScaleDX = dx;
@@ -732,21 +732,21 @@ namespace System.Windows.Forms {
             UpdateButtons();
         }
 
-        /// <devdoc>
+        /// <summary>
         /// We need to track the current scale factor so that we can tell the
         ///  unmanaged control how to scale its buttons.
-        /// </devdoc>
+        /// </summary>
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified) {
             currentScaleDX = factor.Width;
             currentScaleDY = factor.Height;
             base.ScaleControl(factor, specified);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the toolbar displays a
         ///       tool tip for each button.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -766,8 +766,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [DefaultValue(false)]
         new public bool TabStop {
             get {
@@ -778,8 +778,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         Bindable(false),
@@ -800,11 +800,11 @@ namespace System.Windows.Forms {
             remove => base.TextChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Gets or sets the alignment of text in relation to each
         ///       image displayed on
         ///       the toolbar button controls.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(ToolBarTextAlign.Underneath),
@@ -827,13 +827,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Gets
         ///       or sets a value
         ///       indicating whether the toolbar buttons wrap to the next line if the
         ///       toolbar becomes too small to display all the buttons
         ///       on the same line.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
@@ -852,27 +852,27 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when a <see cref='System.Windows.Forms.ToolBarButton'/> on the <see cref='System.Windows.Forms.ToolBar'/> is clicked.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolBarButtonClickDescr))]
         public event ToolBarButtonClickEventHandler ButtonClick {
             add => onButtonClick += value;
             remove => onButtonClick -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when a drop-down style <see cref='System.Windows.Forms.ToolBarButton'/> or its down arrow is clicked.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolBarButtonDropDownDescr))]
         public event ToolBarButtonClickEventHandler ButtonDropDown {
             add => onButtonDropDown += value;
             remove => onButtonDropDown -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     ToolBar Onpaint.
-        /// </devdoc>
+        /// </summary>
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
@@ -880,10 +880,10 @@ namespace System.Windows.Forms {
             remove => base.Paint -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Adjusts the height or width of the ToolBar to make sure we have enough
         ///     room to show the buttons.
-        /// </devdoc>
+        /// </summary>
         // we pass in a value for dock rather than calling Dock ourselves
         // because we can't change Dock until the size has been properly adjusted.
         private void AdjustSize(DockStyle dock) {
@@ -901,17 +901,17 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This routine lets us change a bunch of things about the toolbar without
         ///     having each operation wait for the paint to complete.  This must be
         ///     matched up with a call to endUpdate().
-        /// </devdoc>
+        /// </summary>
         internal void BeginUpdate() {
             BeginUpdateInternal();
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         protected override void CreateHandle() {
             if (!RecreatingHandle) {
                 IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
@@ -927,16 +927,16 @@ namespace System.Windows.Forms {
             base.CreateHandle();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Resets the imageList to null.  We wire this method up to the imageList's
         ///     Dispose event, so that we don't hang onto an imageList that's gone away.
-        /// </devdoc>
+        /// </summary>
         private void DetachImageList(object sender, EventArgs e) {
             ImageList = null;
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 // 
@@ -972,21 +972,21 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This routine lets us change a bunch of things about the toolbar without
         ///     having each operation wait for the paint to complete.  This must be
         ///     matched up with a call to beginUpdate().
-        /// </devdoc>
+        /// </summary>
         internal void EndUpdate() {
             EndUpdateInternal();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Forces the button sizes based on various different things.  The default
         ///     ToolBar button sizing rules are pretty primitive and this tends to be
         ///     a little better, and lets us actually show things like DropDown Arrows
         ///     for ToolBars
-        /// </devdoc>
+        /// </summary>
         private void ForceButtonWidths() {
 
             if (buttons != null && buttonSize.IsEmpty && IsHandleCreated) {
@@ -1016,8 +1016,8 @@ namespace System.Windows.Forms {
                 RecreateHandle();
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         private void Insert(int index, ToolBarButton button) {
 
             button.parent = this;
@@ -1038,9 +1038,9 @@ namespace System.Windows.Forms {
             buttonCount++;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Inserts a button at a given location on the toolbar control.</para>
-        /// </devdoc>
+        /// </summary>
         private void InsertButton(int index, ToolBarButton value) {
 
             if (value == null)
@@ -1059,9 +1059,9 @@ namespace System.Windows.Forms {
             UpdateButtons();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Adds a button to the ToolBar
-        /// </devdoc>
+        /// </summary>
         private int InternalAddButton(ToolBarButton button) {
             if (button == null)
                 throw new ArgumentNullException(nameof(button));
@@ -1070,10 +1070,10 @@ namespace System.Windows.Forms {
             return index;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Changes the data for a button in the ToolBar, and then does the appropriate
         ///     work to update the ToolBar control.
-        /// </devdoc>
+        /// </summary>
         internal void InternalSetButton(int index, ToolBarButton value, bool recreate, bool updateText) {
 
             // tragically, there doesn't appear to be a way to remove the
@@ -1108,29 +1108,29 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.ToolBar.ButtonClick'/>
         /// event.</para>
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnButtonClick(ToolBarButtonClickEventArgs e) {
             if (onButtonClick != null) onButtonClick(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.ToolBar.ButtonDropDown'/>
         /// event.</para>
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnButtonDropDown(ToolBarButtonClickEventArgs e) {
             if (onButtonDropDown != null) onButtonDropDown(this, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Overridden from the control class so we can add all the buttons
         ///       and do whatever work needs to be done.
         ///       Don't forget to call base.OnHandleCreated.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnHandleCreated(EventArgs e) {
             base.OnHandleCreated(e);
 
@@ -1164,22 +1164,22 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       The control is being resized. Make sure the width/height are correct.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnResize(EventArgs e) {
             base.OnResize(e);
             if (Wrappable) AdjustSize(Dock);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Overridden to ensure that the buttons and the control resize properly
         ///       whenever the font changes.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnFontChanged(EventArgs e) {
             base.OnFontChanged(e);
             if (IsHandleCreated) {
@@ -1193,9 +1193,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sets all the button data into the ToolBar control
-        /// </devdoc>
+        /// </summary>
         private void RealizeButtons() {
             if (buttons != null) {
                 IntPtr ptbbuttons = IntPtr.Zero;
@@ -1253,8 +1253,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         private void RemoveAt(int index) {
             buttons[index].parent = null;
             buttons[index].stringIndex = (IntPtr)(-1);
@@ -1266,10 +1266,10 @@ namespace System.Windows.Forms {
             buttons[buttonCount] = null;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Resets the toolbar buttons to the minimum
         ///       size. </para>
-        /// </devdoc>
+        /// </summary>
         private void ResetButtonSize() {
             buttonSize = Size.Empty;
             RecreateHandle();
@@ -1281,9 +1281,9 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Overrides Control.setBoundsCore to enforce AutoSize.
-        /// </devdoc>
+        /// </summary>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
             int originalHeight = height;
             int originalWidth = width;
@@ -1315,24 +1315,24 @@ namespace System.Windows.Forms {
             base.SetBoundsCore(x, y, width, height, specified);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.ToolBar.ButtonSize'/> property needs to be persisted.</para>
-        /// </devdoc>
+        /// </summary>
         private bool ShouldSerializeButtonSize() {
             return !buttonSize.IsEmpty;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
-        /// </devdoc>
+        /// </summary>
         internal void SetToolTip(ToolTip toolTip) {
             UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.TB_SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
 
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns a string representation for this control.
-        /// </devdoc>
+        /// </summary>
         public override string ToString() {
 
             string s = base.ToString();
@@ -1342,21 +1342,21 @@ namespace System.Windows.Forms {
             return s;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Updates all the information in the ToolBar.  Tragically, the win32
         ///     control is pretty flakey, and the only real choice here is to recreate
         ///     the handle and re-realize all the buttons.
-        /// </devdoc>
+        /// </summary>
         internal void UpdateButtons() {
             if (IsHandleCreated) {
                 RecreateHandle();
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The button clicked was a dropdown button.  If it has a menu specified,
         ///     show it now.  Otherwise, fire an onButtonDropDown event.
-        /// </devdoc>
+        /// </summary>
         private void WmNotifyDropDown(ref Message m) {
             NativeMethods.NMTOOLBAR nmTB = (NativeMethods.NMTOOLBAR)m.GetLParam(typeof(NativeMethods.NMTOOLBAR));
 
@@ -1448,8 +1448,8 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         private void WmReflectCommand(ref Message m) {
 
             int id = NativeMethods.Util.LOWORD(m.WParam);
@@ -1465,8 +1465,8 @@ namespace System.Windows.Forms {
             ResetMouseEventArgs();
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case Interop.WindowMessages.WM_COMMAND + Interop.WindowMessages.WM_REFLECT:
@@ -1560,10 +1560,10 @@ namespace System.Windows.Forms {
             base.WndProc(ref m);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Encapsulates a collection of <see cref='System.Windows.Forms.ToolBarButton'/> controls for use by the
         /// <see cref='System.Windows.Forms.ToolBar'/> class. </para>
-        /// </devdoc>
+        /// </summary>
         public class ToolBarButtonCollection : IList {
 
             private ToolBar owner;
@@ -1574,17 +1574,17 @@ namespace System.Windows.Forms {
             private int lastAccessedIndex = -1;
 
 
-            /// <devdoc>
+            /// <summary>
             /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.ToolBar.ToolBarButtonCollection'/> class and assigns it to the specified toolbar.</para>
-            /// </devdoc>
+            /// </summary>
             public ToolBarButtonCollection(ToolBar owner) {
                 this.owner = owner;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///    <para>Gets or sets the toolbar button at the specified indexed location in the
             ///       toolbar button collection.</para>
-            /// </devdoc>
+            /// </summary>
             public virtual ToolBarButton this[int index] {
                 get {
                     if (index < 0 || ((owner.buttons != null) && (index >= owner.buttonCount)))
@@ -1619,9 +1619,9 @@ namespace System.Windows.Forms {
                     }
                 }
             }
-            /// <devdoc>
+            /// <summary>
             ///     <para>Retrieves the child control with the specified key.</para>
-            /// </devdoc>
+            /// </summary>
             public virtual ToolBarButton this[string key] {
                 get {
                     // We do not support null and empty string as valid keys.
@@ -1640,9 +1640,9 @@ namespace System.Windows.Forms {
 
                 }
             }
-            /// <devdoc>
+            /// <summary>
             ///    <para> Gets the number of buttons in the toolbar button collection.</para>
-            /// </devdoc>
+            /// </summary>
             [Browsable(false)]
             public int Count {
                 get {
@@ -1674,10 +1674,10 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///    <para>Adds a new toolbar button to
             ///       the end of the toolbar button collection.</para>
-            /// </devdoc>
+            /// </summary>
             public int Add(ToolBarButton button) {
 
                 int index = owner.InternalAddButton(button);
@@ -1720,10 +1720,10 @@ namespace System.Windows.Forms {
             }
 
 
-            /// <devdoc>
+            /// <summary>
             ///    <para>Removes
             ///       all buttons from the toolbar button collection.</para>
-            /// </devdoc>
+            /// </summary>
             public void Clear() {
 
                 if (owner.buttons == null) {
@@ -1758,9 +1758,9 @@ namespace System.Windows.Forms {
             }
 
 
-           /// <devdoc>
+           /// <summary>
            ///     <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
-           /// </devdoc>
+           /// </summary>
            public virtual bool ContainsKey(string key) {
                return IsValidIndex(IndexOfKey(key));
            }
@@ -1790,9 +1790,9 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
-            /// </devdoc>
+            /// </summary>
             public virtual int  IndexOfKey(string key) {
                   // Step 0 - Arg validation
                   if (string.IsNullOrEmpty(key)){
@@ -1834,16 +1834,16 @@ namespace System.Windows.Forms {
             }
 
 
-           /// <devdoc>
+           /// <summary>
            ///     <para>Determines if the index is valid for the collection.</para>
-           /// </devdoc>
+           /// </summary>
            private bool IsValidIndex(int index) {
                return ((index >= 0) && (index < this.Count));
             }
-            /// <devdoc>
+            /// <summary>
             ///    <para>Removes
             ///       a given button from the toolbar button collection.</para>
-            /// </devdoc>
+            /// </summary>
             public void RemoveAt(int index) {
                 int count = (owner.buttons == null) ? 0 : owner.buttonCount;
 
@@ -1861,9 +1861,9 @@ namespace System.Windows.Forms {
 
 
 
-           /// <devdoc>
+           /// <summary>
            ///     <para>Removes the child control with the specified key.</para>
-           /// </devdoc>
+           /// </summary>
            public virtual void RemoveByKey(string key) {
                 int index = IndexOfKey(key);
                 if (IsValidIndex(index)) {
@@ -1884,10 +1884,10 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///    <para>Returns an enumerator that can be used to iterate
             ///       through the toolbar button collection.</para>
-            /// </devdoc>
+            /// </summary>
             public IEnumerator GetEnumerator() {
                 return new WindowsFormsUtils.ArraySubsetEnumerator(owner.buttons, owner.buttonCount);
             }
