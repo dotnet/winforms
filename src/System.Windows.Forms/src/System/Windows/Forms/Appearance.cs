@@ -6,20 +6,20 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies the appearance of a control.
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
     public enum Appearance
     {
-        /// <devdoc>
+        /// <summary>
         /// The default appearance defined by the control class.
-        /// </devdoc>
+        /// </summary>
         Normal = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// The appearance of a Windows button.
-        /// </devdoc>
+        /// </summary>
         Button = 1,
     }
 }

@@ -10,7 +10,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using Microsoft.Win32;
     using System.Globalization;
 
-    /// <devdoc>
+    /// <summary>
     /// This class mimics a clr enum that we can create at runtime.
     /// It associates an array of names with an array of values and converts
     /// between them.
@@ -22,35 +22,35 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     /// which translates to VT_UI4, and they specify their values as VT_I4 (which is a common
     /// mistake), they won't compare properly and values can't be updated.
     /// By comparing strings, we avoid this problem and add flexiblity to the system.
-    /// </devdoc>
+    /// </summary>
     internal class Com2Enum {
 
-        /// <devdoc>
+        /// <summary>
         /// Our array of value string names
-        /// </devdoc>
+        /// </summary>
         private string[] names;
 
 
-        /// <devdoc>
+        /// <summary>
         /// Our values
-        /// </devdoc>
+        /// </summary>
         private object[] values;
 
 
 
-        /// <devdoc>
+        /// <summary>
         /// Our cached array of value.ToString()'s
-        /// </devdoc>
+        /// </summary>
         private string[] stringValues;
 
-        /// <devdoc>
+        /// <summary>
         /// Should we allow values besides what's in the listbox?
-        /// </devdoc>
+        /// </summary>
         private bool    allowUnknownValues;
 
-        /// <devdoc>
+        /// <summary>
         /// Our one and only ctor
-        /// </devdoc>
+        /// </summary>
         public Com2Enum(string[] names, object[] values, bool allowUnknownValues) {
 
             this.allowUnknownValues = allowUnknownValues;
@@ -65,36 +65,36 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             PopulateArrays(names, values);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Can this enum be values other than the strict enum?
-        /// </devdoc>
+        /// </summary>
         public bool IsStrictEnum {
             get {
                 return !this.allowUnknownValues;
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieve a copy of the value array
-        /// </devdoc>
+        /// </summary>
         public virtual object[] Values {
             get {
                 return(object[])this.values.Clone();
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieve a copy of the nme array.
-        /// </devdoc>
+        /// </summary>
         public virtual string[] Names {
             get {
                 return(string[])this.names.Clone();
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Associate a string to the appropriate value.
-        /// </devdoc>
+        /// </summary>
         public virtual object FromString(string s) {
             int bestMatch = -1;
         
@@ -132,9 +132,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Retrieves the string name of a given value.
-        /// </devdoc>
+        /// </summary>
         public virtual string ToString(object v) {
             if (v != null) {
 

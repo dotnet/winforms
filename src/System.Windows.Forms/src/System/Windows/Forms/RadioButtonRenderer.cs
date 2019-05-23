@@ -11,12 +11,12 @@ using System.Windows.Forms.Internal;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       This is a rendering class for the RadioButton control. It works downlevel too (obviously
     ///       without visual styles applied.)
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     public sealed class RadioButtonRenderer {
 
        //Make this per-thread, so that different threads can safely use these methods.
@@ -29,13 +29,13 @@ using Microsoft.Win32;
        private RadioButtonRenderer() {
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///      If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to 
        /// determine how to render.
        ///      If this property is false, the renderer will always render with visualstyles.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        public static bool RenderMatchingApplicationState {
            get {
                return renderMatchingApplicationState;
@@ -51,11 +51,11 @@ using Microsoft.Win32;
            }
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Returns true if the background corresponding to the given state is partially transparent, else false.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        public static bool IsBackgroundPartiallyTransparent(RadioButtonState state) {
            if (RenderWithVisualStyles) {
                InitializeRenderer((int)state);
@@ -67,12 +67,12 @@ using Microsoft.Win32;
            }
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       This is just a convenience wrapper for VisualStyleRenderer.DrawThemeParentBackground. For downlevel,
        ///       this isn't required and does nothing.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        [
            SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // Using Graphics instead of IDeviceContext intentionally
        ]
@@ -84,11 +84,11 @@ using Microsoft.Win32;
            }
        }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a RadioButton control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void DrawRadioButton(Graphics g, Point glyphLocation, RadioButtonState state) {
             DrawRadioButton(g, glyphLocation, state, IntPtr.Zero);
         }
@@ -106,22 +106,22 @@ using Microsoft.Win32;
            }
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a RadioButton control.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        public static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string radioButtonText, Font font, bool focused, RadioButtonState state) {
            DrawRadioButton(g, glyphLocation, textBounds, radioButtonText, font,
                       TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine, 
                       focused, state);
        }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a RadioButton control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string radioButtonText, Font font, TextFormatFlags flags, bool focused, RadioButtonState state) {
             DrawRadioButton(g, glyphLocation, textBounds, radioButtonText, font, flags, focused, state, IntPtr.Zero);
         }
@@ -148,11 +148,11 @@ using Microsoft.Win32;
            }
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a RadioButton control.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        public static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string radioButtonText, Font font, Image image, Rectangle imageBounds, bool focused, RadioButtonState state) {
            DrawRadioButton(g, glyphLocation, textBounds, radioButtonText, font,
                       TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine, 
@@ -161,11 +161,11 @@ using Microsoft.Win32;
 
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Renders a RadioButton control.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string radioButtonText, Font font, TextFormatFlags flags, Image image, Rectangle imageBounds, bool focused, RadioButtonState state) {
             DrawRadioButton(g, glyphLocation, textBounds, radioButtonText, font, flags, image, imageBounds, focused, state, IntPtr.Zero);
         }
@@ -195,11 +195,11 @@ using Microsoft.Win32;
            }
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Returns the size of the RadioButton glyph.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        [
            SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // Using Graphics instead of IDeviceContext intentionally
        ]

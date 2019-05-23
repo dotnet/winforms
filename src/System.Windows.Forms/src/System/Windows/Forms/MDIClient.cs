@@ -17,11 +17,11 @@ namespace System.Windows.Forms {
     using System.Threading;
     using System.Windows.Forms;
     
-    /// <devdoc>
+    /// <summary>
     ///    <para> 
     ///       Summary to
     ///       Come</para>
-    /// </devdoc>
+    /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -36,18 +36,18 @@ namespace System.Windows.Forms {
         private ArrayList children = new ArrayList();
 
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a new MdiClient.
-        /// </devdoc>
+        /// </summary>
         public MdiClient() : base() {
             SetStyle(ControlStyles.Selectable, false);
             BackColor = SystemColors.AppWorkspace;
             Dock = DockStyle.Fill;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Use parent's BackgroundImage if our BackgroundImage isn't set.
-        /// </devdoc>
+        /// </summary>
         [
         Localizable(true)
         ]
@@ -84,8 +84,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         protected override CreateParams CreateParams {
             get {
                 CreateParams cp = base.CreateParams;
@@ -119,11 +119,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The list of MDI children contained. This list
         ///     will be sorted by the order in which the children were
         ///     added to the form, not the current ZOrder.
-        /// </devdoc>
+        /// </summary>
         public Form[] MdiChildren {
             get {
                 Form[] temp = new Form[children.Count];
@@ -136,10 +136,10 @@ namespace System.Windows.Forms {
             return new ControlCollection(this);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Arranges the MDI child forms according to value, which should be a
         ///     member of the MdiLayout enum.
-        /// </devdoc>
+        /// </summary>
         public void LayoutMdi(MdiLayout value) {
             if (Handle == IntPtr.Zero)
                 return;
@@ -161,8 +161,8 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         protected override void OnResize(EventArgs e) {
             ISite site = (ParentInternal == null) ? null : ParentInternal.Site;
             if (site != null && site.DesignMode && Handle != IntPtr.Zero) {
@@ -172,9 +172,9 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <devdoc>
+        /// <summary>
         ///     Performs the work of scaling the entire control and any child controls.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void ScaleCore(float dx, float dy) {
 
@@ -195,9 +195,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Scale this form.  Form overrides this to enforce a maximum / minimum size.
-        /// </devdoc>
+        /// </summary>
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified) {
             // never scale X and Y of an MDI client form
             specified &= ~BoundsSpecified.Location;
@@ -250,11 +250,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This code is required to set the correct window region during the resize of the Form at design time.
         /// There is case when the form contains a MainMenu and also has IsMdiContainer property set, in which, the MdiClient fails to 
         /// resize and hence draw the correct backcolor.
-        /// </devdoc>
+        /// </summary>
         private void SetWindowRgn() {
             IntPtr rgn1 = IntPtr.Zero;
             IntPtr rgn2 = IntPtr.Zero;
@@ -310,8 +310,8 @@ namespace System.Windows.Forms {
         }
         
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 
@@ -356,9 +356,9 @@ namespace System.Windows.Forms {
             base.OnInvokedSetScrollPosition(sender, e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Collection of controls...
-        /// </devdoc>
+        /// </summary>
         [ComVisible(false)]
         new public class ControlCollection : Control.ControlCollection {
             private MdiClient owner;
@@ -370,7 +370,7 @@ namespace System.Windows.Forms {
                 this.owner = owner;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Adds a control to the MDI Container. This child must be
             ///     a Form that is marked as an MDI Child to be added to the
             ///     container. You should not call this directly, but rather
@@ -383,7 +383,7 @@ namespace System.Windows.Forms {
             ///     Form child = new ChildForm();
             ///     child.setMdiParent(this);
             /// </code>
-            /// </devdoc>
+            /// </summary>
             public override void Add(Control value) {
                 if (value == null) {
                     return;
@@ -398,9 +398,9 @@ namespace System.Windows.Forms {
                 base.Add(value);
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Removes a child control.
-            /// </devdoc>
+            /// </summary>
             public override void Remove(Control value) {
                 owner.children.Remove(value);
                 base.Remove(value);

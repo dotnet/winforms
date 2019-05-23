@@ -4,54 +4,54 @@
 
 namespace System.Windows.Forms {
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Specifies how a control should be docked by default when added through the designer.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class DockingAttribute : Attribute {
         private DockingBehavior dockingBehavior;
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Default constructor.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public DockingAttribute() {
             this.dockingBehavior = DockingBehavior.Never;
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Constructor.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public DockingAttribute(DockingBehavior dockingBehavior) {
             this.dockingBehavior = dockingBehavior;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>
         ///    Specifies the default value for the <see cref='System.ComponentModel.DockingAttribute'/>.
         ///    This <see langword='static '/>field is read-only.
         /// </para>
-        /// </devdoc>
+        /// </summary>
         public static readonly DockingAttribute Default = new DockingAttribute();
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       DockingBehavior property.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public DockingBehavior DockingBehavior {
             get {
                 return dockingBehavior;
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         public override bool Equals(object obj) {
             if (obj == this) {
                 return true;
@@ -66,8 +66,8 @@ namespace System.Windows.Forms {
             return dockingBehavior.GetHashCode();
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         public override bool IsDefaultAttribute() {
             return (this.Equals(Default));
         }

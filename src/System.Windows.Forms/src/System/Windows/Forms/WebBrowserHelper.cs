@@ -11,11 +11,11 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// This class contains static properties/methods that are internal.
     /// It also has types that make sense only for ActiveX hosting classes.
     /// In other words, this is a helper class for the ActiveX hosting classes.
-    /// </devdoc>
+    /// </summary>
     internal static class WebBrowserHelper
     {
         // Enumeration of the different states of the ActiveX control

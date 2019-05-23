@@ -285,9 +285,9 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EventRendererChanged, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Collection of child controls.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
@@ -418,11 +418,11 @@ namespace System.Windows.Forms {
 
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Disposes of the resources (other than memory) used by
         ///       the <see cref='System.Windows.Forms.ContainerControl'/>
         ///       .</para>
-        /// </devdoc>
+        /// </summary>
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 ToolStripManager.ToolStripPanels.Remove(this);
@@ -574,9 +574,9 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         /// We want to Set ToolStripPanel at DesignTime when the ToolStripPanel is added to the Form,
-        /// </devdoc>
+        /// </summary>
         protected override void OnParentChanged(EventArgs e) {
             PerformUpdate();
             base.OnParentChanged(e);
@@ -1134,10 +1134,10 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Given a point within the ToolStripPanel client area -
         /// it returns the row.  If no such row exists, returns null
-        /// </devdoc>
+        /// </summary>
         public ToolStripPanelRow PointToRow(Point clientLocation) {
             // PERF: since we're using the PropertyStore for this.RowsInternal, its actually
             // faster to use foreach.
@@ -1266,9 +1266,9 @@ namespace System.Windows.Forms {
                 AddRange(value);
             }
 
-            /// <devdoc>
+            /// <summary>
             /// <para></para>
-            /// </devdoc>
+            /// </summary>
             public new virtual ToolStripPanelRow this[int index] {
                 get {
                     return (ToolStripPanelRow)(InnerList[index]);
@@ -1385,9 +1385,9 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///  Do proper cleanup of ownership, etc.
-            /// </devdoc>
+            /// </summary>
             private void OnAfterRemove(ToolStripPanelRow row) {
               
 #if DEBUG                    

@@ -16,9 +16,9 @@ namespace System.Windows.Forms
     using System.Globalization;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para></para>
-    /// </devdoc>
+    /// </summary>
     public class DataGridViewRowHeaderCell : DataGridViewHeaderCell
     {
         private static readonly VisualStyleElement HeaderElement = VisualStyleElement.Header.Item.Normal;
@@ -1130,9 +1130,9 @@ namespace System.Windows.Forms
             return true;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para></para>
-        /// </devdoc>
+        /// </summary>
         public override string ToString()
         {
             return "DataGridViewRowHeaderCell { RowIndex=" + RowIndex.ToString(CultureInfo.CurrentCulture) + " }";

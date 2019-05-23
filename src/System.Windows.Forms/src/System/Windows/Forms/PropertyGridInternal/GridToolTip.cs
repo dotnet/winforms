@@ -86,9 +86,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///     The createParams to create the window.
-        /// </devdoc>
+        /// </summary>
         protected override  CreateParams CreateParams {
             get {
                 NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX();

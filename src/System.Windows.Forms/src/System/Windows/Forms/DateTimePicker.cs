@@ -19,9 +19,9 @@ namespace System.Windows.Forms {
 
     using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     ///     Date/DateTime picker control
-    /// </devdoc>
+    /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -32,21 +32,21 @@ namespace System.Windows.Forms {
     SRDescription(nameof(SR.DescriptionDateTimePicker))
     ]
     public class DateTimePicker : Control {
-        /// <devdoc>
+        /// <summary>
         ///    <para>Specifies the default title back color. This field is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         protected static readonly Color DefaultTitleBackColor = SystemColors.ActiveCaption;
-        /// <devdoc>
+        /// <summary>
         ///    <para>Specifies the default foreground color. This field is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         protected static readonly Color DefaultTitleForeColor = SystemColors.ActiveCaptionText;
-        /// <devdoc>
+        /// <summary>
         ///    <para>Specifies the default month background color. This field is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         protected static readonly Color DefaultMonthBackColor = SystemColors.Window;
-        /// <devdoc>
+        /// <summary>
         ///    <para>Specifies the default trailing forground color. This field is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         protected static readonly Color DefaultTrailingForeColor = SystemColors.GrayText;
 
         private static readonly object EVENT_FORMATCHANGED = new object();
@@ -62,25 +62,25 @@ namespace System.Windows.Forms {
         // We need to restrict the available dates because of limitations in the comctl
         // DateTime and MonthCalendar controls
         //
-        /// <devdoc>
+        /// <summary>
         ///    <para>Specifies the minimum date value. This field is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public static readonly DateTime MinDateTime = new DateTime(1753, 1, 1);
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Specifies the maximum date value. This field is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public static readonly DateTime MaxDateTime = new DateTime(9998, 12, 31);
 
         private int                             style;
         private short                           prefHeightCache = -1;
 
-        /// <devdoc>
+        /// <summary>
         ///     validTime determines whether the CheckBox in the DTP is checked.  The CheckBox is only
         ///     displayed when ShowCheckBox is true.
-        /// </devdoc>
+        /// </summary>
         private bool                            validTime = true;
 
         // DateTime changeover: DateTime is a value class, not an object, so we need to keep track
@@ -110,9 +110,9 @@ namespace System.Windows.Forms {
 
         private bool                            rightToLeftLayout = false;
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DateTimePicker'/> class.</para>
-        /// </devdoc>
+        /// </summary>
         public DateTimePicker()
         : base() {
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
@@ -187,9 +187,9 @@ namespace System.Windows.Forms {
             remove => base.BackgroundImageLayoutChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The current value of the CalendarForeColor property.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.DateTimePickerCalendarForeColorDescr))
@@ -211,9 +211,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The current value of the CalendarFont property.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
@@ -252,9 +252,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The current value of the CalendarTitleBackColor property.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.DateTimePickerCalendarTitleBackColorDescr))
@@ -276,9 +276,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The current value of the CalendarTitleForeColor property.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.DateTimePickerCalendarTitleForeColorDescr))
@@ -300,9 +300,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The current value of the CalendarTrailingForeColor property.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.DateTimePickerCalendarTrailingForeColorDescr))
@@ -324,9 +324,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     The current value of the CalendarMonthBackground property.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.DateTimePickerCalendarMonthBackgroundDescr))
@@ -348,9 +348,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Indicates whether the <see cref='System.Windows.Forms.DateTimePicker.Value'/> property has been set.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
@@ -399,9 +399,9 @@ namespace System.Windows.Forms {
             add => base.Click += value; 
             remove => base.Click -= value; }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the CreateParams used to create this window.
-        /// </devdoc>
+        /// </summary>
         protected override CreateParams CreateParams {
             get {
                 CreateParams cp = base.CreateParams;
@@ -435,9 +435,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the custom format.
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(null),
         Localizable(true),
@@ -464,20 +464,20 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
+        /// </summary>
         protected override Size DefaultSize {
             get {
                 return new Size(200, PreferredHeight);
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This property is overridden and hidden from statement completion
         ///     on controls that are based on Win32 Native Controls.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override bool DoubleBuffered {
             get {
@@ -496,10 +496,10 @@ namespace System.Windows.Forms {
             add => base.DoubleClick += value; 
             remove => base.DoubleClick -= value; }
 
-        /// <devdoc>
+        /// <summary>
         ///     The current value of the dropDownAlign property.  The calendar
         ///     dropDown can be aligned to the left or right of the control.
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(LeftRightAlignment.Left),
         SRCategory(nameof(SR.CatAppearance)),
@@ -544,10 +544,10 @@ namespace System.Windows.Forms {
             remove => base.ForeColorChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the current value of the format property. This determines the
         ///     style of format the date is displayed in.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         RefreshProperties(RefreshProperties.Repaint),
@@ -581,9 +581,9 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_FORMATCHANGED, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     DateTimePicker Paint.
-        /// </devdoc>
+        /// </summary>
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
@@ -621,10 +621,10 @@ namespace System.Windows.Forms {
 
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Indicates the maximum date and time
         ///       selectable in the control.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.DateTimePickerMaxDateDescr))
@@ -656,9 +656,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Specifies the maximum date value. This property is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         public static DateTime MaximumDateTime {
 		get {
                  DateTime maxSupportedDateTime = CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime;
@@ -670,10 +670,10 @@ namespace System.Windows.Forms {
              }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Indicates the minimum date and time
         ///       selectable in the control.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.DateTimePickerMinDateDescr))
@@ -712,9 +712,9 @@ namespace System.Windows.Forms {
         // that time.  We do this even for cultures that don't use the Gregorian calendar -- we're not
         // really that worried about calendars for >250 years ago.
         //
-        /// <devdoc>
+        /// <summary>
         ///    <para>Specifies the minimum date value. This property is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         public static DateTime MinimumDateTime {
              get {
                  DateTime minSupportedDateTime = CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime;
@@ -760,9 +760,9 @@ namespace System.Windows.Forms {
             add => base.PaddingChanged += value; 
             remove => base.PaddingChanged -= value; }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates the preferred height of the DateTimePicker control. This property is read-only.</para>
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -783,12 +783,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
         //      and the RightToLeft is true, mirroring will be turned on on the form, and
         ///     control placement and text will be from right to left.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
@@ -813,11 +813,11 @@ namespace System.Windows.Forms {
 
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Indicates whether a check box is displayed to toggle the NoValueSelected property
         ///       value.</para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(false),
         SRCategory(nameof(SR.CatAppearance)),
@@ -832,10 +832,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Indicates
         ///       whether an up-down control is used to adjust the time values.</para>
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(false),
         SRCategory(nameof(SR.CatAppearance)),
@@ -852,11 +852,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Overrides Text to allow for setting of the value via a string.  Also, returns
         ///     a formatted Value when getting the text.  The DateTime class will throw
         ///     an exception if the string (value) being passed in is invalid.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override string Text {
             get {
@@ -880,9 +880,9 @@ namespace System.Windows.Forms {
             remove => base.TextChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Indicates the DateTime value assigned to the control.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Bindable(true),
@@ -934,9 +934,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the dropdown calendar is dismissed and disappears.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.DateTimePickerOnCloseUpDescr))]
         public event EventHandler CloseUp {
             add => onCloseUp += value;
@@ -950,9 +950,9 @@ namespace System.Windows.Forms {
             remove => onRightToLeftLayoutChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the value for the control changes.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.valueChangedEventDescr))]
         public event EventHandler ValueChanged {
             add => onValueChanged += value;
@@ -960,9 +960,9 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Occurs when the drop down calendar is shown.</para>
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.DateTimePickerOnDropDownDescr))]
         public event EventHandler DropDown {
             add => onDropDown += value;
@@ -979,9 +979,9 @@ namespace System.Windows.Forms {
             return new DateTimePickerAccessibleObject(this);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates the physical window handle.
-        /// </devdoc>
+        /// </summary>
         protected override void CreateHandle() {
             if (!RecreatingHandle) {
                 IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
@@ -1025,9 +1025,9 @@ namespace System.Windows.Forms {
             SetRange();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Destroys the physical window handle.
-        /// </devdoc>
+        /// </summary>
         protected override void DestroyHandle() {
             value = Value;
             base.DestroyHandle();
@@ -1054,9 +1054,9 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///      Handling special input keys, such as pgup, pgdown, home, end, etc...
-        /// </devdoc>
+        /// </summary>
         protected override bool IsInputKey(Keys keyData) {
             if ((keyData & Keys.Alt) == Keys.Alt) return false;
             switch (keyData & Keys.KeyCode) {
@@ -1069,17 +1069,17 @@ namespace System.Windows.Forms {
             return base.IsInputKey(keyData);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.DateTimePicker.CloseUp'/>
         /// event.</para>
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnCloseUp(EventArgs eventargs) {
             if (onCloseUp != null) onCloseUp(this, eventargs);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.DateTimePicker.DropDown'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnDropDown(EventArgs eventargs) {
             if (onDropDown != null) {
                 onDropDown(this, eventargs);
@@ -1094,27 +1094,27 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Add/remove SystemEvents in OnHandleCreated/Destroyed for robustness</para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
             SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(this.MarshaledUserPreferenceChanged);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Add/remove SystemEvents in OnHandleCreated/Destroyed for robustness</para>
-        /// </devdoc>
+        /// </summary>
         protected override void OnHandleDestroyed(EventArgs e)
         {
             SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(this.MarshaledUserPreferenceChanged);
             base.OnHandleDestroyed(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.DateTimePicker.ValueChanged'/> event.</para>
-        /// </devdoc>
+        /// </summary>
         protected virtual void OnValueChanged(EventArgs eventargs) {
             if (onValueChanged != null) {
                 onValueChanged(this, eventargs);
@@ -1137,9 +1137,9 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    Occurs when a property for the control changes.
-        /// </devdoc>
+        /// </summary>
         protected override void OnFontChanged(EventArgs e) {
             base.OnFontChanged(e);
 
@@ -1178,31 +1178,31 @@ namespace System.Windows.Forms {
             CalendarTrailingForeColor = DefaultTrailingForeColor;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Resets the <see cref='System.Windows.Forms.DateTimePicker.Format'/> property to its default
         ///    value.</para>
-        /// </devdoc>
+        /// </summary>
         private void ResetFormat() {
             Format = DateTimePickerFormat.Long;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Resets the <see cref='System.Windows.Forms.DateTimePicker.MaxDate'/> property to its default value. </para>
-        /// </devdoc>
+        /// </summary>
         private void ResetMaxDate() {
             MaxDate = MaximumDateTime;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Resets the <see cref='System.Windows.Forms.DateTimePicker.MinDate'/> property to its default value. </para>
-        /// </devdoc>
+        /// </summary>
         private void ResetMinDate() {
             MinDate = MinimumDateTime;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para> Resets the <see cref='System.Windows.Forms.DateTimePicker.Value'/> property to its default value.</para>
-        /// </devdoc>
+        /// </summary>
         private void ResetValue() {
 
             // always update on reset with ShowNone = false -- as it'll take the current time.
@@ -1231,27 +1231,27 @@ namespace System.Windows.Forms {
             OnTextChanged(EventArgs.Empty);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     If the handle has been created, this applies the color to the control
-        /// </devdoc>
+        /// </summary>
         private void SetControlColor(int colorIndex, Color value) {
             if (IsHandleCreated) {
                 SendMessage(NativeMethods.DTM_SETMCCOLOR, colorIndex, ColorTranslator.ToWin32(value));
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     If the handle has been created, this applies the font to the control.
-        /// </devdoc>
+        /// </summary>
         private void SetControlCalendarFont() {
             if (IsHandleCreated) {
                 SendMessage(NativeMethods.DTM_SETMCFONT, CalendarFontHandle, NativeMethods.InvalidIntPtr);
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Applies all the colors to the control.
-        /// </devdoc>
+        /// </summary>
         private void SetAllControlColors() {
             SetControlColor(NativeMethods.MCSC_MONTHBK, calendarMonthBackground);
             SetControlColor(NativeMethods.MCSC_TEXT, calendarForeColor);
@@ -1260,10 +1260,10 @@ namespace System.Windows.Forms {
             SetControlColor(NativeMethods.MCSC_TRAILINGTEXT, calendarTrailingText);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Updates the window handle with the min/max ranges if it has been
         ///     created.
-        /// </devdoc>
+        /// </summary>
         private void SetRange() {
             SetRange(EffectiveMinDate(min), EffectiveMaxDate(max));
         }
@@ -1297,9 +1297,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Turns on or off a given style bit
-        /// </devdoc>
+        /// </summary>
         private void SetStyleBit(bool flag, int bit) {
             if (((style & bit) != 0) == flag) return;
 
@@ -1317,89 +1317,89 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para> Determines if the <see cref='System.Windows.Forms.DateTimePicker.CalendarForeColor'/> property needs to be
         ///    persisted.</para>
-        /// </devdoc>
+        /// </summary>
         private bool ShouldSerializeCalendarForeColor() {
             return !CalendarForeColor.Equals(DefaultForeColor);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.DateTimePicker.CalendarFont'/> property needs to be persisted.</para>
-        /// </devdoc>
+        /// </summary>
         private bool ShouldSerializeCalendarFont() {
             return calendarFont != null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.DateTimePicker.CalendarTitleBackColor'/> property needs to be persisted.</para>
-        /// </devdoc>
+        /// </summary>
         private bool ShouldSerializeCalendarTitleBackColor() {
             return !calendarTitleBackColor.Equals(DefaultTitleBackColor);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.DateTimePicker.CalendarTitleForeColor'/> property needs to be persisted.</para>
-        /// </devdoc>
+        /// </summary>
         private bool ShouldSerializeCalendarTitleForeColor() {
             return !calendarTitleForeColor.Equals(DefaultTitleForeColor);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.DateTimePicker.CalendarTrailingForeColor'/> property needs to be persisted.</para>
-        /// </devdoc>
+        /// </summary>
         private bool ShouldSerializeCalendarTrailingForeColor() {
             return !calendarTrailingText.Equals(DefaultTrailingForeColor);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.DateTimePicker.CalendarMonthBackground'/> property needs to be persisted.</para>
-        /// </devdoc>
+        /// </summary>
         private bool ShouldSerializeCalendarMonthBackground() {
             return !calendarMonthBackground.Equals(DefaultMonthBackColor);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.DateTimePicker.MaxDate'/> property needs to be persisted.</para>
-        /// </devdoc>
+        /// </summary>
         private bool ShouldSerializeMaxDate() {
             return max != MaximumDateTime && max != DateTime.MaxValue;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.DateTimePicker.MinDate'/> property needs to be persisted.</para>
-        /// </devdoc>
+        /// </summary>
         private bool ShouldSerializeMinDate() {
             return min != MinimumDateTime && min != DateTime.MinValue;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.DateTimePicker.Value'/> property needs to be persisted.</para>
-        /// </devdoc>
+        /// </summary>
         private bool ShouldSerializeValue() {
             return userHasSetValue;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Determines if the <see cref='System.Windows.Forms.DateTimePicker.Format'/> property needs to be persisted.</para>
-        /// </devdoc>
+        /// </summary>
         private bool ShouldSerializeFormat() {
             return(Format != DateTimePickerFormat.Long);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the control as a string
-        /// </devdoc>
+        /// </summary>
         public override string ToString() {
 
             string s = base.ToString();
             return s + ", Value: " + FormatDateTime(Value);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Forces a repaint of the updown control if it is displayed.
-        /// </devdoc>
+        /// </summary>
         private void UpdateUpDown() {
             // The upDown control doesn't repaint correctly.
             //
@@ -1431,16 +1431,16 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the DTN_CLOSEUP notification
-        /// </devdoc>
+        /// </summary>
         private void WmCloseUp(ref Message m) {
             OnCloseUp(EventArgs.Empty);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the DTN_DATETIMECHANGE notification
-        /// </devdoc>
+        /// </summary>
         private void WmDateTimeChange(ref Message m) {
             NativeMethods.NMDATETIMECHANGE nmdtc = (NativeMethods.NMDATETIMECHANGE)m.GetLParam(typeof(NativeMethods.NMDATETIMECHANGE));
             DateTime temp = value;
@@ -1459,9 +1459,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the DTN_DROPDOWN notification
-        /// </devdoc>
+        /// </summary>
         private void WmDropDown(ref Message m) {
 
             if (this.RightToLeftLayout == true && this.RightToLeft == RightToLeft.Yes) {
@@ -1476,17 +1476,17 @@ namespace System.Windows.Forms {
             OnDropDown(EventArgs.Empty);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles system color changes
-        /// </devdoc>
+        /// </summary>
         protected override void OnSystemColorsChanged(EventArgs e) {
             SetAllControlColors();
             base.OnSystemColorsChanged(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Handles the WM_COMMAND messages reflected from the parent control.
-        /// </devdoc>
+        /// </summary>
         private void WmReflectCommand(ref Message m) {
             if (m.HWnd == Handle) {
 
@@ -1505,9 +1505,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Overrided wndProc
-        /// </devdoc>
+        /// </summary>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case Interop.WindowMessages.WM_LBUTTONDOWN:
@@ -1530,10 +1530,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Takes a DateTime value and returns a SYSTEMTIME struct
         ///     Note: 1 second granularity
-        /// </devdoc>
+        /// </summary>
         internal static NativeMethods.SYSTEMTIME DateTimeToSysTime(DateTime time) {
             NativeMethods.SYSTEMTIME sys = new NativeMethods.SYSTEMTIME();
             sys.wYear = (short)time.Year;
@@ -1547,16 +1547,16 @@ namespace System.Windows.Forms {
             return sys;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Takes a SYSTEMTIME struct and returns a DateTime value
         ///     Note: 1 second granularity.
-        /// </devdoc>
+        /// </summary>
         internal static DateTime SysTimeToDateTime(NativeMethods.SYSTEMTIME s) {
             return new DateTime(s.wYear, s.wMonth, s.wDay, s.wHour, s.wMinute, s.wSecond);
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         private sealed class EnumChildren {
             public IntPtr hwndFound = IntPtr.Zero;
 

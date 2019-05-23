@@ -9,7 +9,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.Globalization;
     using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     /// This is the base class for handlers for Com2 extended browsing interface
     /// such as IPerPropertyBrowsing, etc.
     ///
@@ -19,13 +19,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     ///
     /// See Com2Properties for the array of handler classes to interface classes
     /// where handlers should be registered.
-    /// </devdoc>
+    /// </summary>
     internal class Com2IVsPerPropertyBrowsingHandler: Com2ExtendedBrowsingHandler {
 
-         /// <devdoc>
+         /// <summary>
          /// The interface that this handler managers
          /// such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
-         /// </devdoc>
+         /// </summary>
          public override Type Interface {
             get {
                return typeof(NativeMethods.IVsPerPropertyBrowsing);
@@ -41,11 +41,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return false;
          }
 
-         /// <devdoc>
+         /// <summary>
          /// Called to setup the property handlers on a given properties
          /// In this method, the handler will add listeners to the events that
          /// the Com2PropertyDescriptor surfaces that it cares about.
-         /// </devdoc>
+         /// </summary>
          public override void SetupPropertyHandlers(Com2PropertyDescriptor[] propDesc){
                if (propDesc == null){
                   return;
@@ -81,10 +81,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
          }
 
 
-         /// <devdoc>
+         /// <summary>
          /// Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing.   HideProperty
          /// such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
-         /// </devdoc>
+         /// </summary>
          private void OnGetDynamicAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent){
 
                if (sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing){
@@ -131,9 +131,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                Debug.Assert(sender.TargetObject == null || sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
          }
 
-         /// <devdoc>
+         /// <summary>
          /// Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo (part 2)
-         /// </devdoc>
+         /// </summary>
          private void OnGetDisplayName(Com2PropertyDescriptor sender, GetNameItemEvent nameItem){
                if (sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing){
                   NativeMethods.IVsPerPropertyBrowsing vsObj = (NativeMethods.IVsPerPropertyBrowsing)sender.TargetObject;
@@ -148,9 +148,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                Debug.Assert(sender.TargetObject == null || sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
          }
 
-         /// <devdoc>
+         /// <summary>
          /// Here is where we handle IVsPerPropertyBrowsing.IsPropertyReadOnly
-         /// </devdoc>
+         /// </summary>
          private void OnGetIsReadOnly(Com2PropertyDescriptor sender, GetBoolValueEvent gbvevent){
                if (sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing){
                   NativeMethods.IVsPerPropertyBrowsing vsObj = (NativeMethods.IVsPerPropertyBrowsing)sender.TargetObject;
@@ -165,9 +165,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                }
          }
          
-         /// <devdoc>
+         /// <summary>
          /// Here is where we handle IVsPerPropertyBrowsing.DisplayChildProperties
-         /// </devdoc>
+         /// </summary>
          private void OnGetTypeConverterAndTypeEditor(Com2PropertyDescriptor sender, GetTypeConverterAndTypeEditorEvent gveevent) {
             if (sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing){
 

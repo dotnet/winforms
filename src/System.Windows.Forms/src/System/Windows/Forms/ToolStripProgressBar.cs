@@ -35,9 +35,9 @@ namespace System.Windows.Forms
             this.Name = name;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Create a strongly typed accessor for the class
-        /// </devdoc>
+        /// </summary>
         /// <value></value>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ProgressBar ProgressBar {
@@ -74,9 +74,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Specify what size you want the item to start out at
-        /// </devdoc>
+        /// </summary>
         /// <value></value>
         protected override System.Drawing.Size DefaultSize {
             get {              
@@ -84,9 +84,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Specify how far from the edges you want to be
-        /// </devdoc>
+        /// </summary>
         /// <value></value>
         protected internal override Padding DefaultMargin {
             get {
@@ -139,12 +139,12 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
         //      and the RightToLeft is true, mirroring will be turned on on the form, and
         ///     control placement and text will be from right to left.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
@@ -162,9 +162,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Wrap some commonly used properties
-        /// </devdoc>
+        /// </summary>
         /// <value></value>
         [
         DefaultValue(10),
@@ -180,9 +180,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Wrap some commonly used properties
-        /// </devdoc>
+        /// </summary>
         /// <value></value>
         [
         DefaultValue(ProgressBarStyle.Blocks),
@@ -198,9 +198,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Hide the property.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false), 
         EditorBrowsable(EditorBrowsableState.Never), 
@@ -219,9 +219,9 @@ namespace System.Windows.Forms
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Wrap some commonly used properties
-        /// </devdoc>
+        /// </summary>
         /// <value></value>
         [
         DefaultValue(0),
@@ -286,9 +286,9 @@ namespace System.Windows.Forms
 
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Hide the event.</para>
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
@@ -299,9 +299,9 @@ namespace System.Windows.Forms
             remove => base.KeyDown -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Hide the event.</para>
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
@@ -312,9 +312,9 @@ namespace System.Windows.Forms
             remove => base.KeyPress -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Hide the event.</para>
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
@@ -324,9 +324,9 @@ namespace System.Windows.Forms
             add => base.KeyUp += value;
             remove => base.KeyUp -= value;
         }
-        /// <devdoc>
+        /// <summary>
         /// <para>Hide the event.</para>
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
@@ -337,9 +337,9 @@ namespace System.Windows.Forms
             remove => base.LocationChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Hide the event.</para>
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
@@ -356,9 +356,9 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EventRightToLeftLayoutChanged, value);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Hide the event.</para>
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
@@ -370,9 +370,9 @@ namespace System.Windows.Forms
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Hide the event.</para>
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
@@ -383,9 +383,9 @@ namespace System.Windows.Forms
             remove => base.Validated -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Hide the event.</para>
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)

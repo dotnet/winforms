@@ -24,7 +24,7 @@ namespace System.Experimental.Gdi
     using System.Drawing.Drawing2D;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     ///     WindowsGraphics is a library for rendering text and drawing using GDI; it was
     ///     created to address performance and compatibility issues found in GDI+ Graphics
     ///     class.
@@ -35,7 +35,7 @@ namespace System.Experimental.Gdi
     ///     The underlying hdc is always saved and restored on dispose so external HDCs won't
     ///     be modified by WindowsGraphics.  So we don't need to restore previous objects into 
     ///     the dc in method calls.
-    ///</devdoc>
+    ///</summary>
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
 #else
@@ -63,11 +63,11 @@ namespace System.Experimental.Gdi
             //this.disposeDc = false; // the dc is not owned by this object.
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a WindowsGraphics from a memory DeviceContext object compatible with the primary screen device.
         ///     This object is suitable for performing text measuring but not for drawing into it because it does 
         ///     not have a backup bitmap.
-        /// </devdoc>
+        /// </summary>
         
         
         public static WindowsGraphics CreateMeasurementWindowsGraphics()
@@ -79,11 +79,11 @@ namespace System.Experimental.Gdi
             return wg;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a WindowsGraphics from a memory DeviceContext object compatible with the a screen device.
         ///     This object is suitable for performing text measuring but not for drawing into it because it does 
         ///     not have a backup bitmap.
-        /// </devdoc>
+        /// </summary>
         
         
         public static WindowsGraphics CreateMeasurementWindowsGraphics(IntPtr screenDC)
@@ -117,7 +117,7 @@ namespace System.Experimental.Gdi
             return wg;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Creates a WindowsGraphics object from a Graphics object.  Clipping and coordinate transforms
         ///     are preserved.
         ///     
@@ -139,7 +139,7 @@ namespace System.Experimental.Gdi
         ///     (But the state changes between the GetHdc and ReleaseHdc are not applied to the Graphics).
         ///     Please note that this only applies the HDC created graphics, for Bitmap derived graphics, GetHdc creates a new DIBSection and 
         ///     things get a lot more complicated.
-        /// </devdoc>
+        /// </summary>
         
         
         public static WindowsGraphics FromGraphics(Graphics g)

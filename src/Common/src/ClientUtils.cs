@@ -254,7 +254,7 @@
            }
         #endif
 
-        /// <devdoc>
+        /// <summary>
         ///   WeakRefCollection - a collection that holds onto weak references
         ///
         ///   Essentially you pass in the object as it is, and under the covers
@@ -269,7 +269,7 @@
         ///   to make sure dead refs are removed.
         ///   -----------------------------------------------------------------
         ///
-        /// </devdoc>        
+        /// </summary>        
 #if DRAWING_DESIGN_NAMESPACE || WINFORMS_PUBLIC_GRAPHICS_LIBRARY || DRAWING_NAMESPACE
         internal class WeakRefCollection : IList {
             private int refCheckThreshold = int.MaxValue; // this means this is disabled by default.

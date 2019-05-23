@@ -441,11 +441,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// true if the commands pane will be can be made visible
         /// for the currently selected objects.  Objects that
         /// expose verbs can show commands.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         SRDescription(nameof(SR.PropertyGridCanShowCommandsDesc))]
         public virtual bool CanShowCommands {
@@ -454,9 +454,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The text used color for category headings. The background color is determined by the LineColor property.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridCategoryForeColorDesc)),
@@ -474,9 +474,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The background color for the hot commands region.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridCommandsBackColorDesc))
@@ -491,9 +491,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The forground color for the hot commands region.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridCommandsForeColorDesc))
@@ -508,9 +508,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The link color for the hot commands region.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridCommandsLinkColorDesc))
@@ -524,9 +524,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The active link color for the hot commands region.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridCommandsActiveLinkColorDesc))
@@ -540,9 +540,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The color for the hot commands region when the link is disabled.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridCommandsDisabledLinkColorDesc))
@@ -556,9 +556,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>The border color for the hot commands region</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridCommandsBorderColorDesc)),
@@ -573,9 +573,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns true if the commands pane is currently shown.
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public virtual bool CommandsVisible {
             get {
@@ -583,10 +583,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns true if the commands pane will be shown for objects
         /// that expose verbs.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(true),
@@ -607,12 +607,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns a default location for showing the context menu.  This
         /// location is the center of the active property label in the grid, and
         /// is used useful to position the context menu when the menu is invoked
         /// via the keyboard.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -623,9 +623,9 @@ namespace System.Windows.Forms {
             }
         }
         
-         /// <devdoc>
+         /// <summary>
         ///     Collection of child controls.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never), 
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
@@ -717,9 +717,9 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         /// The background color for the help region.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridHelpBackColorDesc)),
@@ -734,9 +734,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The forground color for the help region.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridHelpForeColorDesc)),
@@ -751,9 +751,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>The border color for the help region</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridHelpBorderColorDesc)),
@@ -768,9 +768,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Sets or gets the visiblity state of the help pane.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(true),
@@ -818,9 +818,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Background color for Highlighted text.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridSelectedItemWithFocusBackColorDesc)),
@@ -839,9 +839,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Foreground color for Highlighted (selected) text.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridSelectedItemWithFocusForeColorDesc)),
@@ -860,9 +860,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Foreground color for disabled text in the Grid View</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridDisabledItemForeColorDesc)),
@@ -878,9 +878,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Color for the horizontal splitter line separating property categories.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridCategorySplitterColorDesc)),
@@ -898,9 +898,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Enable/Disable use of VisualStyle glyph for PropertyGrid node expansion.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridCanShowVisualStyleGlyphsDesc)),
@@ -964,10 +964,10 @@ namespace System.Windows.Forms {
             add => base.PaddingChanged += value; 
             remove => base.PaddingChanged -= value; }
 
-        /// <devdoc>
+        /// <summary>
         /// Sets or gets the current property sort type, which can be
         /// PropertySort.Categorized or PropertySort.Alphabetical.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(PropertySort.CategorizedAlphabetical),
@@ -1026,11 +1026,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Sets a single Object into the grid to be browsed.  If multiple
         /// objects are being browsed, this property will return the first
         /// one in the list.  If no objects are selected, null is returned.
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(null),
         SRDescription(nameof(SR.PropertyGridSelectedObjectDesc)),
@@ -1421,9 +1421,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Sets or gets the visiblity state of the toolStrip.
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(true),
@@ -1493,9 +1493,9 @@ namespace System.Windows.Forms {
             }
         }
   
-        /// <devdoc>
+        /// <summary>
         ///    <para>Border color for the property grid view.</para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.PropertyGridViewBorderColorDesc)),
@@ -1584,7 +1584,7 @@ namespace System.Windows.Forms {
             remove => base.MouseLeave -= value;
         }
 
-        /// <devdoc> Event that is fired when a property value is modified.</devdoc>
+        /// <summary> Event that is fired when a property value is modified.</summary>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridPropertyValueChangedDescr))]
         public event PropertyValueChangedEventHandler PropertyValueChanged {
             add => Events.AddHandler(EventPropertyValueChanged, value);
@@ -1596,21 +1596,21 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EventComComponentNameChanged, value);
         }
         
-        /// <devdoc> Event that is fired when the current view tab is changed, such as changing from Properties to Events</devdoc>
+        /// <summary> Event that is fired when the current view tab is changed, such as changing from Properties to Events</summary>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridPropertyTabchangedDescr))]
         public event PropertyTabChangedEventHandler PropertyTabChanged {
             add => Events.AddHandler(EventPropertyTabChanged, value);
             remove => Events.RemoveHandler(EventPropertyTabChanged, value);
         }
         
-        /// <devdoc> Event that is fired when the sort mode is changed.</devdoc>
+        /// <summary> Event that is fired when the sort mode is changed.</summary>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridPropertySortChangedDescr))]
         public event EventHandler PropertySortChanged {
             add => Events.AddHandler(EventPropertySortChanged, value);
             remove => Events.RemoveHandler(EventPropertySortChanged, value);
         }
         
-        /// <devdoc> Event that is fired when the selected GridItem is changed</devdoc>
+        /// <summary> Event that is fired when the selected GridItem is changed</summary>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridSelectedGridItemChangedDescr))]
         public event SelectedGridItemChangedEventHandler SelectedGridItemChanged {
             add => Events.AddHandler(EventSelectedGridItemChanged, value);
@@ -1735,7 +1735,7 @@ namespace System.Windows.Forms {
             }
         }        
         
-        /// <devdoc> Collapses all the nodes in the PropertyGrid</devdoc>
+        /// <summary> Collapses all the nodes in the PropertyGrid</summary>
         public void CollapseAllGridItems() {
             gridView.RecursivelyExpand(peMain, false, false, -1);
         }
@@ -1753,10 +1753,10 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Clears the tabs of the given scope or smaller.
         /// tabScope must be PropertyTabScope.Component or PropertyTabScope.Document.
-        /// </devdoc>
+        /// </summary>
         internal void ClearTabs(PropertyTabScope tabScope) {
             if (tabScope < PropertyTabScope.Document) {
                 throw new ArgumentException(SR.PropertyGridTabScope);
@@ -2487,10 +2487,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Called when a property on an Ole32 Object changes.
         /// See IPropertyNotifySink::OnChanged
-        /// </devdoc>
+        /// </summary>
         void UnsafeNativeMethods.IPropertyNotifySink.OnChanged(int dispID) {
             // we don't want the grid's own property sets doing this, but if we're getting
             // an OnChanged that isn't the DispID of the property we're currently changing,
@@ -2524,10 +2524,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// We forward messages from several of our children
         /// to our mouse move so we can put up the spliter over their borders
-        /// </devdoc>
+        /// </summary>
         private void OnChildMouseMove(object sender, MouseEventArgs me) {
             Point newPt = Point.Empty;
             if (ShouldForwardChildMouseMessage((Control)sender, me, ref newPt)) {
@@ -2537,10 +2537,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// We forward messages from several of our children
         /// to our mouse move so we can put up the spliter over their borders
-        /// </devdoc>
+        /// </summary>
         private void OnChildMouseDown(object sender, MouseEventArgs me) {
             Point newPt = Point.Empty;
 
@@ -2644,8 +2644,8 @@ namespace System.Windows.Forms {
             Refresh();
        }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         internal void OnGridViewMouseWheel(MouseEventArgs e) {
             this.OnMouseWheel(e);
         }
@@ -2936,11 +2936,11 @@ namespace System.Windows.Forms {
             base.OnMouseUp(me);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Called when a property on an Ole32 Object that is tagged
         /// with "requestedit" is about to be edited.
         /// See IPropertyNotifySink::OnRequestEdit
-        /// </devdoc>
+        /// </summary>
         int UnsafeNativeMethods.IPropertyNotifySink.OnRequestEdit(int dispID) {
             // we don't do anything here...
             return NativeMethods.S_OK;
@@ -3405,9 +3405,9 @@ namespace System.Windows.Forms {
 
 */
         
-        /// <devdoc>
+        /// <summary>
         /// Returns the last child control that can take focus
-        /// </devdoc>
+        /// </summary>
         protected override bool ProcessDialogKey(Keys keyData)
         {
             switch (keyData & Keys.KeyCode) {
@@ -3589,10 +3589,10 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Refreshes the tabs of the given scope by deleting them and requerying objects and documents
         /// for them.
-        /// </devdoc>
+        /// </summary>
         public void RefreshTabs(PropertyTabScope tabScope) {
             
             if (tabScope < PropertyTabScope.Document) {
@@ -4198,9 +4198,9 @@ namespace System.Windows.Forms {
             UpdatePropertiesViewTabVisibility();            
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This 16x16 Bitmap is applied to the button which orders properties alphabetically.
-        /// </devdoc>      
+        /// </summary>      
         [
         Browsable(false), 
         EditorBrowsable(EditorBrowsableState.Advanced),
@@ -4212,9 +4212,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This 16x16 Bitmap is applied to the button which displays properties under the assigned categories.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false), 
         EditorBrowsable(EditorBrowsableState.Advanced),
@@ -4226,9 +4226,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This 16x16 Bitmap is applied to the button which displays property page in the designer pane.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(false), 
         EditorBrowsable(EditorBrowsableState.Advanced),
@@ -4260,12 +4260,12 @@ namespace System.Windows.Forms {
             return hotcommands.Label.ShouldSerializeDisabledLinkColor();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///  Sinks the property notify events on all the objects we are currently
         ///  browsing.
         ///
         ///  See IPropertyNotifySink
-        /// </devdoc>
+        /// </summary>
         private void SinkPropertyNotifyEvents() {
             // first clear any existing sinks.
             for (int i = 0;connectionPointCookies != null && i < connectionPointCookies.Length; i++) {
@@ -4390,9 +4390,9 @@ namespace System.Windows.Forms {
             gridView.Invalidate();
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(false),
         SRCategory(nameof(SR.CatBehavior)),
@@ -4415,11 +4415,11 @@ namespace System.Windows.Forms {
         /// </summary>
         internal override bool SupportsUiaProviders => true;
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines whether the control supports rendering text using GDI+ and GDI.
         ///     This is provided for container controls to iterate through its children to set UseCompatibleTextRendering to the same
         ///     value if the child control supports it.
-        /// </devdoc>
+        /// </summary>
         internal override bool SupportsUseCompatibleTextRendering {
             get {
                 return true;
@@ -4705,9 +4705,9 @@ namespace System.Windows.Forms {
                 this.owner = owner;
             }
             
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the number of member attributes.
-            /// </devdoc>
+            /// </summary>
             public int Count {
                 get {
                     if (owner == null) {
@@ -4729,9 +4729,9 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <devdoc>
+            /// <summary>
             ///     Retrieves the member attribute with the specified index.
-            /// </devdoc>
+            /// </summary>
             public PropertyTab this[int index] {
                 get {
                     if (owner == null) {
@@ -4755,10 +4755,10 @@ namespace System.Windows.Forms {
                 owner.AddTab(propertyTabType, tabScope);
             }
             
-            /// <devdoc>
+            /// <summary>
             /// Clears the tabs of the given scope or smaller.
             /// tabScope must be PropertyTabScope.Component or PropertyTabScope.Document.
-            /// </devdoc>
+            /// </summary>
             public void Clear(PropertyTabScope tabScope) {
                 if (owner == null) {
                     throw new InvalidOperationException(SR.PropertyGridPropertyTabCollectionReadOnly);
@@ -4775,9 +4775,9 @@ namespace System.Windows.Forms {
                     System.Array.Copy(owner.viewTabs, 0, dest, index, owner.viewTabs.Length);
                 }
             }
-            /// <devdoc>
+            /// <summary>
             ///      Creates and retrieves a new enumerator for this collection.
-            /// </devdoc>
+            /// </summary>
             public IEnumerator GetEnumerator() {
                 if (owner == null) {
                     return new PropertyTab[0].GetEnumerator();
@@ -4795,7 +4795,7 @@ namespace System.Windows.Forms {
     
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     An unimplemented interface.  What is this?  It is an interface that nobody ever
         ///     implements, of course? Where and why would it be used?  Why, to find cross-process
         ///     remoted objects, of course!  If a well-known object comes in from a cross process
@@ -4810,7 +4810,7 @@ namespace System.Windows.Forms {
         ///     presence of an interface.  We do that all over the place here, so we do a check
         ///     during parameter validation to see if an object implements IUnimplemented.  If it
         ///     does, we know that what we really have is a lying remoting proxy, and we bail.
-        /// </devdoc>
+        /// </summary>
         private interface IUnimplemented {}
 
 
@@ -4844,9 +4844,9 @@ namespace System.Windows.Forms {
             }
         }
     
-        /// <devdoc>
+        /// <summary>
         ///     Helper class to support rendering text using either GDI or GDI+.
-        /// </devdoc>
+        /// </summary>
         internal static class MeasureTextHelper{
             public static SizeF MeasureText(PropertyGrid owner, Graphics g, string text, Font font ){
                 return MeasureTextSimple(owner, g, text, font, new SizeF(0,0));

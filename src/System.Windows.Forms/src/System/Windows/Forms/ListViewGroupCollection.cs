@@ -128,7 +128,6 @@ namespace System.Windows.Forms
                 return -1;
             }
 
-            // Will throw InvalidOperationException if group contains items which are parented by another listView.
             CheckListViewItems(group);
             group.ListView = _listView;
             int index = List.Add(group);
@@ -259,6 +258,7 @@ namespace System.Windows.Forms
                 return;
             }
 
+            CheckListViewItems(group);
             group.ListView = _listView;
             List.Insert(index, group);
             if (_listView.IsHandleCreated)

@@ -17,7 +17,7 @@ namespace System.Windows.Forms {
     using System.Reflection;
     using System.Runtime.Serialization;
     
-    /// <devdoc>this is a wrapper class to expose interesting properties of TableLayout</devdoc>
+    /// <summary>this is a wrapper class to expose interesting properties of TableLayout</summary>
     [
      TypeConverter(typeof(TableLayoutSettingsTypeConverter)),
      Serializable
@@ -66,7 +66,7 @@ namespace System.Windows.Forms {
         }
         
 
-        /// <devdoc> internal as this is a TableLayoutPanel feature only </devdoc>
+        /// <summary> internal as this is a TableLayoutPanel feature only </summary>
         [DefaultValue(TableLayoutPanelCellBorderStyle.None), SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.TableLayoutPanelCellBorderStyleDescr))]
         internal TableLayoutPanelCellBorderStyle CellBorderStyle {
             get { return _borderStyle; }
@@ -89,11 +89,11 @@ namespace System.Windows.Forms {
             get { return TableLayout.GetContainerInfo(Owner).CellBorderWidth; }
         }
         
-        /// <devdoc>
+        /// <summary>
         /// This sets the maximum number of columns allowed on this table instead of allocating
         /// actual spaces for these columns. So it is OK to set ColumnCount to Int32.MaxValue without
         /// causing out of memory exception
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.GridPanelColumnsDescr))]
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(0)]
@@ -116,11 +116,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// This sets the maximum number of rows allowed on this table instead of allocating
         /// actual spaces for these rows. So it is OK to set RowCount to Int32.MaxValue without
         /// causing out of memory exception
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.GridPanelRowsDescr))]
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(0)]
@@ -173,11 +173,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///       Specifies if a TableLayoutPanel will gain additional rows or columns once its existing cells
         ///       become full.  If the value is 'FixedSize' then the TableLayoutPanel will throw an exception
         ///       when the TableLayoutPanel is over-filled.
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.TableLayoutPanelGrowStyleDescr))]
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(TableLayoutPanelGrowStyle.AddRows)]
@@ -318,9 +318,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Get the row position of the element
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.GridPanelRowDescr))]
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(-1)]
@@ -343,11 +343,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Set the row position of the element
         /// If we set the row position to -1, it will automatically switch the control from 
         /// absolutely positioned to non-absolutely positioned
-        /// </devdoc>
+        /// </summary>
         public void SetRow(object control, int row)
         {
             if (control == null)
@@ -362,9 +362,9 @@ namespace System.Windows.Forms {
             SetCellPosition(control, row, -1, rowSpecified: true, colSpecified: false);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Get the column position of the element
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.TableLayoutSettingsGetCellPositionDescr))]
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(-1)]
@@ -378,9 +378,9 @@ namespace System.Windows.Forms {
             return new TableLayoutPanelCellPosition(GetColumn(control), GetRow(control));
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Set the column position of the element
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.TableLayoutSettingsSetCellPositionDescr))]
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(-1)]
@@ -394,9 +394,9 @@ namespace System.Windows.Forms {
             SetCellPosition(control, cellPosition.Row, cellPosition.Column, rowSpecified: true, colSpecified: true);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Get the column position of the element
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.GridPanelColumnDescr))]
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(-1)]
@@ -419,11 +419,11 @@ namespace System.Windows.Forms {
            }
         }
         
-        /// <devdoc>
+        /// <summary>
         /// Set the column position of the element
         /// If we set the column position to -1, it will automatically switch the control from 
         /// absolutely positioned to non-absolutely positioned
-        /// </devdoc>
+        /// </summary>
         public void SetColumn(object control, int column)
         {
             if (control == null)
@@ -480,9 +480,9 @@ namespace System.Windows.Forms {
             }
         }
         
-        ///<devdoc>
+        ///<summary>
         /// Get the element which covers the specified row and column. return null if we can't find one
-        ///</devdoc>
+        ///</summary>
         internal IArrangedElement GetControlFromPosition (int column, int row)
         {
             return TableLayout.GetControlFromPosition(Owner, column, row);
@@ -552,9 +552,9 @@ namespace System.Windows.Forms {
             }
         }
     
-        /// <devdoc> TableLayoutSettingsStub 
+        /// <summary> TableLayoutSettingsStub 
         ///               contains information about 
-        /// </devdoc>
+        /// </summary>
         private class TableLayoutSettingsStub {
        
             private static ControlInformation DefaultControlInfo = new ControlInformation(null, -1, -1, 1, 1); 
@@ -566,13 +566,13 @@ namespace System.Windows.Forms {
             public TableLayoutSettingsStub() {
             }
 
-            /// <devdoc> ApplySettings - applies settings from the stub into a full-fledged
+            /// <summary> ApplySettings - applies settings from the stub into a full-fledged
             ///          TableLayoutSettings.
             ///
             ///          NOTE: this is a one-time only operation - there is data loss to the stub
             ///          as a result of calling this function. we hand as much over to the other guy
             ///          so we dont have to reallocate anything
-            /// </devdoc>
+            /// </summary>
             internal void ApplySettings(TableLayoutSettings settings) {
                 //
                 // apply row,column,rowspan,colspan

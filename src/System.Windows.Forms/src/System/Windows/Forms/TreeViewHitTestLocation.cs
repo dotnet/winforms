@@ -6,66 +6,66 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies the return value for HITTEST on treeview.
-    /// </devdoc>
+    /// </summary>
     [Flags]
     [ComVisible(true)]
     public enum TreeViewHitTestLocations
     {
-        /// <devdoc>
+        /// <summary>
         /// No Information.
-        /// </devdoc>
+        /// </summary>
         None = NativeMethods.TVHT_NOWHERE,
 
-        /// <devdoc>
+        /// <summary>
         /// On Image.
-        /// </devdoc>
+        /// </summary>
         Image = NativeMethods.TVHT_ONITEMICON,
 
-        /// <devdoc>
+        /// <summary>
         /// On Label.
-        /// </devdoc>
+        /// </summary>
         Label = NativeMethods.TVHT_ONITEMLABEL,
 
-        /// <devdoc>
+        /// <summary>
         /// Indent.
-        /// </devdoc>
+        /// </summary>
         Indent = NativeMethods.TVHT_ONITEMINDENT,
 
-        /// <devdoc>
+        /// <summary>
         /// AboveClientArea.
-        /// </devdoc>
+        /// </summary>
         AboveClientArea =  NativeMethods.TVHT_ABOVE,
 
-        /// <devdoc>
+        /// <summary>
         /// BelowClientArea.
-        /// </devdoc>
+        /// </summary>
         BelowClientArea = NativeMethods.TVHT_BELOW,
 
-        /// <devdoc>
+        /// <summary>
         /// LeftOfClientArea.
-        /// </devdoc>
+        /// </summary>
         LeftOfClientArea = NativeMethods.TVHT_TOLEFT,
 
-        /// <devdoc>
+        /// <summary>
         /// RightOfClientArea.
-        /// </devdoc>
+        /// </summary>
         RightOfClientArea = NativeMethods.TVHT_TORIGHT,
 
-        /// <devdoc>
+        /// <summary>
         /// RightOfNode.
-        /// </devdoc>
+        /// </summary>
         RightOfLabel =   NativeMethods.TVHT_ONITEMRIGHT,
 
-        /// <devdoc>
+        /// <summary>
         /// StateImage.
-        /// </devdoc>
+        /// </summary>
         StateImage = NativeMethods.TVHT_ONITEMSTATEICON,
 
-        /// <devdoc>
+        /// <summary>
         ///      PlusMinus.
-        /// </devdoc>
+        /// </summary>
         PlusMinus = NativeMethods.TVHT_ONITEMBUTTON,
     }
 }

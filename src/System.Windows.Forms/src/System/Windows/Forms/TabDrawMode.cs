@@ -4,22 +4,22 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// The TabStrip and TabControl both support ownerdraw functionality, but
     /// only one type, in which you can paint the tabs individually.  This
     /// enumeration contains the valid values for it's drawMode property.
-    /// </devdoc>
+    /// </summary>
     public enum TabDrawMode
     {
-        /// <devdoc>
+        /// <summary>
         /// All the items in the control are painted by the system and are of the
         /// same size
-        /// </devdoc>
+        /// </summary>
         Normal = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// The user paints the items in the control manually
-        /// </devdoc>
+        /// </summary>
         OwnerDrawFixed = 1,
     }
 }

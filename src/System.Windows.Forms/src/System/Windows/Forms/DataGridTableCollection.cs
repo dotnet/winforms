@@ -12,10 +12,10 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Globalization;
     
-    /// <devdoc>
+    /// <summary>
     /// <para>Represents a collection of <see cref='System.Windows.Forms.DataGridTableStyle'/> objects in the <see cref='System.Windows.Forms.DataGrid'/> 
     /// control.</para>
-    /// </devdoc>
+    /// </summary>
     [ListBindable(false)]
     public class GridTableStylesCollection : BaseCollection ,IList {
         CollectionChangeEventHandler onCollectionChanged;
@@ -107,18 +107,18 @@ namespace System.Windows.Forms {
         }
         */
 
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the DataGridTable with the specified index.
-        /// </devdoc>
+        /// </summary>
         public DataGridTableStyle this[int index] {
             get {
                 return (DataGridTableStyle)items[index];
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the DataGridTable with the name provided.
-        /// </devdoc>
+        /// </summary>
         public DataGridTableStyle this[string tableName] {
             get {
                 if (tableName == null)
@@ -142,9 +142,9 @@ namespace System.Windows.Forms {
                     throw new ArgumentException(SR.DataGridTableStyleDuplicateMappingName, "table");
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Adds a <see cref='System.Windows.Forms.DataGridTableStyle'/> to this collection.</para>
-        /// </devdoc>
+        /// </summary>
         public virtual int Add(DataGridTableStyle table) {
             // set the rowHeaderWidth on the newly added table to at least the minimum value
             // on its owner
@@ -193,18 +193,18 @@ namespace System.Windows.Forms {
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Checks to see if a DataGridTableStyle is contained in this collection.
-        /// </devdoc>
+        /// </summary>
         public bool Contains(DataGridTableStyle table) {
             int index = items.IndexOf(table);
             return index != -1;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Checks to see if a <see cref='System.Windows.Forms.DataGridTableStyle'/> with the given name
         ///    is contained in this collection.</para>
-        /// </devdoc>
+        /// </summary>
         public bool Contains(string name) {
             int itemCount = items.Count;
             for (int i = 0; i < itemCount; ++i) {

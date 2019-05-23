@@ -9,14 +9,14 @@ namespace System.Windows.Forms {
     using System.Collections;
     using System.Diagnostics;
     
-    /// <devdoc>
+    /// <summary>
     ///  HtmlShimManager - this class manages the shims for HtmlWindows, HtmlDocuments, and HtmlElements.
     ///  essentially we need a long-lasting object to call back on events from the web browser, and the 
     ///  manager is the one in charge of making sure this list stays around as long as needed.  
     ///
     ///  When a HtmlWindow unloads we prune our list of corresponding document, window, and element shims.
     ///
-    /// </devdoc>
+    /// </summary>
     internal sealed class HtmlShimManager :IDisposable {
 
             private Dictionary<HtmlWindow, HtmlWindow.HtmlWindowShim> htmlWindowShims;
@@ -26,9 +26,9 @@ namespace System.Windows.Forms {
             internal HtmlShimManager() {
             }
 
-            /// <devdoc> AddDocumentShim - adds a HtmlDocumentShim to list of shims to manage 
+            /// <summary> AddDocumentShim - adds a HtmlDocumentShim to list of shims to manage 
             ///   Can create a WindowShim as a side effect so it knows when to self prune from the list.
-            ///</devdoc>
+            ///</summary>
             public void AddDocumentShim(HtmlDocument doc) {
                HtmlDocument.HtmlDocumentShim shim = null;
                
@@ -47,8 +47,8 @@ namespace System.Windows.Forms {
                
            }
     
-            /// <devdoc> AddWindowShim - adds a HtmlWindowShim to list of shims to manage 
-            ///</devdoc>
+            /// <summary> AddWindowShim - adds a HtmlWindowShim to list of shims to manage 
+            ///</summary>
 
             public void AddWindowShim(HtmlWindow window) {
                 HtmlWindow.HtmlWindowShim shim = null;
@@ -67,9 +67,9 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <devdoc> AddElementShim - adds a HtmlDocumentShim to list of shims to manage 
+            /// <summary> AddElementShim - adds a HtmlDocumentShim to list of shims to manage 
             ///   Can create a WindowShim as a side effect so it knows when to self prune from the list.
-            ///</devdoc>
+            ///</summary>
             public void AddElementShim(HtmlElement element) {
                 HtmlElement.HtmlElementShim shim = null;
 
@@ -131,10 +131,10 @@ namespace System.Windows.Forms {
                     }
                 }
             }
-            /// <devdoc>
+            /// <summary>
             /// HtmlWindowShim calls back on us when it has unloaded the page.  At this point we need to 
             /// walk through our lists and make sure we've cleaned up
-            /// </devdoc>
+            /// </summary>
             internal void OnWindowUnloaded(HtmlWindow unloadedWindow) {
                 Debug.Assert(unloadedWindow != null, "Why are we calling this with a null window?");
                 if (unloadedWindow != null) {

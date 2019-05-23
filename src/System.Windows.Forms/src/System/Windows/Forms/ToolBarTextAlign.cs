@@ -4,19 +4,19 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Specifies the alignment of text on the toolbar button control.
-    /// </devdoc>
+    /// </summary>
     public enum ToolBarTextAlign
     {
-        /// <devdoc>
+        /// <summary>
         /// The text is aligned underneath the toolbar button image.
-        /// </devdoc>
+        /// </summary>
         Underneath = 0,
 
-        /// <devdoc>
+        /// <summary>
         /// The text is aligned to the right of the toolbar button image.
-        /// </devdoc>
+        /// </summary>
         Right = 1,
     }
 }

@@ -16,12 +16,12 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Stores the <see cref='System.Windows.Forms.StatusBar'/>
     ///       control panel's information.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     [
     ToolboxItem(false),
     DesignTimeVisible(false),
@@ -56,21 +56,21 @@ namespace System.Windows.Forms {
 
         private object userData;
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initializes a new default instance of the <see cref='System.Windows.Forms.StatusBarPanel'/> class.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public StatusBarPanel() {
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.StatusBarPanel.Alignment'/>
         ///       property.
         ///
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(HorizontalAlignment.Left),
@@ -94,13 +94,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.StatusBarPanel.AutoSize'/>
         ///       property.
         ///
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(StatusBarPanelAutoSize.None),
@@ -125,14 +125,14 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.StatusBarPanel.BorderStyle'/>
         ///
         ///       property.
         ///
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(System.Windows.Forms.StatusBarPanelBorderStyle.Sunken),
@@ -158,21 +158,21 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         internal bool Created {
             get {
                 return this.parent != null && this.parent.ArePanelsRealized();
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the <see cref='System.Windows.Forms.StatusBarPanel.Icon'/>
         ///       property.
         ///
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(null),
@@ -208,11 +208,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Expose index internally
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         internal int Index
         {
             get
@@ -224,13 +224,13 @@ namespace System.Windows.Forms {
                 index = value;
             }
         }
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the minimum width the <see cref='System.Windows.Forms.StatusBarPanel'/> can be within the <see cref='System.Windows.Forms.StatusBar'/>
         ///       control.
         ///
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(DEFAULTMINWIDTH),
@@ -258,11 +258,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the name of the panel.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
 	[
         SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
@@ -280,14 +280,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Represents the <see cref='System.Windows.Forms.StatusBar'/>
         ///       control which hosts the
         ///       panel.
         ///
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false)]
         public StatusBar Parent {
             get {
@@ -295,11 +295,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Expose a direct setter for parent internally
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         internal StatusBar ParentInternal
         {
             set
@@ -308,11 +308,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Expose right internally
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         internal int Right
         {
             get
@@ -325,12 +325,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the style of the panel.
         ///
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(StatusBarPanelStyle.Text),
@@ -370,11 +370,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the text of the panel.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
@@ -409,12 +409,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets
         ///       or sets the panel's tool tip text.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
         Localizable(true),
@@ -451,13 +451,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets the width of the <see cref='System.Windows.Forms.StatusBarPanel'/> within the <see cref='System.Windows.Forms.StatusBar'/>
         ///       control.
         ///
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [
         Localizable(true),
         SRCategory(nameof(SR.CatAppearance)),
@@ -477,15 +477,15 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Handles tasks required when the control is being initialized.
-        /// </devdoc>
+        /// </summary>
         public void BeginInit() {
             initializing = true;
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 if (parent != null) {
@@ -498,9 +498,9 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Called when initialization of the control is complete.
-        /// </devdoc>
+        /// </summary>
         public void EndInit() {
             initializing = false;
 
@@ -509,9 +509,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Gets the width of the contents of the panel
-        /// </devdoc>
+        /// </summary>
         internal int GetContentsWidth(bool newPanel) {
             string text;
             if (newPanel) {
@@ -534,17 +534,17 @@ namespace System.Windows.Forms {
             return Math.Max(width, minWidth);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the index of the panel by making the parent control search
         ///     for it within its list.
-        /// </devdoc>
+        /// </summary>
         private int GetIndex() {
             return index;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Sets all the properties for this panel.
-        /// </devdoc>
+        /// </summary>
         internal void Realize() {
             if (Created) {
                 string text;
@@ -656,12 +656,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Retrieves a string that contains information about the
         ///       panel.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override string ToString() {
             return "StatusBarPanel: {" + Text + "}";
         }

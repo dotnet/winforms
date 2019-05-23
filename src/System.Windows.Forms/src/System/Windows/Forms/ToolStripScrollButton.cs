@@ -11,9 +11,9 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.ButtonInternal;
         
 
-    /// <devdoc>
+    /// <summary>
     /// A non selectable ToolStrip item
-    /// </devdoc>
+    /// </summary>
     internal class ToolStripScrollButton : ToolStripControlHost {
         private bool up = true;
 
@@ -41,10 +41,10 @@ namespace System.Windows.Forms {
             return label;
         }
 
-         /// <devdoc>
+         /// <summary>
          /// Deriving classes can override this to configure a default size for their control.
          /// This is more efficient than setting the size in the control's constructor.
-         /// </devdoc>
+         /// </summary>
          protected internal override Padding DefaultMargin {
              get {
                  return Padding.Empty;

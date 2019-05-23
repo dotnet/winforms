@@ -5,9 +5,9 @@
 namespace System.Windows.Forms {
 
 
-    /// <devdoc>
+    /// <summary>
     ///      Just returns false for IncludeNoneAsStandardValue
-    /// </devdoc>
+    /// </summary>
     internal sealed class NoneExcludedImageIndexConverter : ImageIndexConverter {
 
         protected override bool IncludeNoneAsStandardValue {

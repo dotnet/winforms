@@ -10,9 +10,9 @@ namespace System.Windows.Forms
     using System.Windows.Forms;
     using System.ComponentModel;
 
-    /// <devdoc>
+    /// <summary>
     /// <para>Represents a linked list of <see cref='System.Windows.Forms.DataGridViewCell'/> objects</para>
-    /// </devdoc>
+    /// </summary>
     internal class DataGridViewCellLinkedList : IEnumerable
     {
         private DataGridViewCellLinkedListElement lastAccessedElement;
@@ -203,9 +203,9 @@ namespace System.Windows.Forms
         }
     }
 
-    /// <devdoc>
+    /// <summary>
     /// <para>Represents an emunerator of elements in a <see cref='System.Windows.Forms.DataGridViewCellLinkedList'/>  linked list.</para>
-    /// </devdoc>
+    /// </summary>
     internal class DataGridViewCellLinkedListEnumerator : IEnumerator
     {
         private DataGridViewCellLinkedListElement headElement;
@@ -250,9 +250,9 @@ namespace System.Windows.Forms
         }
     }
 
-    /// <devdoc>
+    /// <summary>
     /// <para>Represents an element in a <see cref='System.Windows.Forms.DataGridViewCellLinkedList'/> linked list.</para>
-    /// </devdoc>
+    /// </summary>
     internal class DataGridViewCellLinkedListElement
     {
         private DataGridViewCell dataGridViewCell;

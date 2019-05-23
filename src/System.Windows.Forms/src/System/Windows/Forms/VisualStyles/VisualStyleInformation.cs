@@ -15,7 +15,7 @@ namespace System.Windows.Forms.VisualStyles {
     using System.Diagnostics.CodeAnalysis;
     
 
-    /// <devdoc>
+    /// <summary>
     ///    <para> 
     ///         Provides information about the current visual style. 
     ///         NOTE: 
@@ -24,30 +24,30 @@ namespace System.Windows.Forms.VisualStyles {
     ///         2) A subset of these use VisualStyleRenderer objects, so they are
     ///            not meaningful unless VisualStyleRenderer.IsSupported is true.
     ///   </para>
-    /// </devdoc>
+    /// </summary>
     public static class VisualStyleInformation {
 
         //Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
         private static VisualStyleRenderer visualStyleRenderer = null;
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Used to find whether visual styles are supported by the current OS. Same as 
         ///       using the OSFeature class to see if themes are supported.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static bool IsSupportedByOS {
             get {
                 return (OSFeature.Feature.IsPresent(OSFeature.Themes));
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> 
         ///     Returns true if a visual style has currently been applied by the user, else false.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public static bool IsEnabledByUser {
             get {
                 if (!IsSupportedByOS) {
@@ -70,9 +70,9 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    The current visual style's color scheme name.
-        /// </devdoc>
+        /// </summary>
         public static string ColorScheme {
             get {
                 if (IsEnabledByUser) {
@@ -85,9 +85,9 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    The current visual style's size name.
-        /// </devdoc>
+        /// </summary>
         public static string Size {
             get {
                 if (IsEnabledByUser) {
@@ -100,9 +100,9 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    The current visual style's display name.
-        /// </devdoc>
+        /// </summary>
         public static string DisplayName {
             get {
                 if (IsEnabledByUser) {
@@ -115,9 +115,9 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    The current visual style's company.
-        /// </devdoc>
+        /// </summary>
         public static string Company {
             get {
                 if (IsEnabledByUser) {
@@ -130,9 +130,9 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    The name of the current visual style's author.
-        /// </devdoc>
+        /// </summary>
         public static string Author {
             get {
                 if (IsEnabledByUser) {
@@ -145,9 +145,9 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    The current visual style's copyright information.
-        /// </devdoc>
+        /// </summary>
         public static string Copyright {
             get {
                 if (IsEnabledByUser) {
@@ -160,9 +160,9 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    The current visual style's url.
-        /// </devdoc>
+        /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1056:UriPropertiesShouldNotBeStrings")]
         public static string Url {
             [SuppressMessage("Microsoft.Design", "CA1054:UriParametersShouldNotBeStrings")]
@@ -177,9 +177,9 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    The current visual style's version.
-        /// </devdoc>
+        /// </summary>
         public static string Version {
             get {
                 if (IsEnabledByUser) {
@@ -192,9 +192,9 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    The current visual style's description.
-        /// </devdoc>
+        /// </summary>
         public static string Description {
             get {
                 if (IsEnabledByUser) {
@@ -207,9 +207,9 @@ namespace System.Windows.Forms.VisualStyles {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Returns true if the current theme supports flat menus, else false.
-        /// </devdoc>
+        /// </summary>
         public static bool SupportsFlatMenus {
             get {
                 if (Application.RenderWithVisualStyles) {
@@ -227,9 +227,9 @@ namespace System.Windows.Forms.VisualStyles {
             }            
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    The minimum color depth supported by the current visual style.
-        /// </devdoc>
+        /// </summary>
         public static int MinimumColorDepth {
             get {
                 if (Application.RenderWithVisualStyles) {
@@ -250,9 +250,9 @@ namespace System.Windows.Forms.VisualStyles {
             }            
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Border Color that Windows renders for controls like TextBox and ComboBox.
-        /// </devdoc>
+        /// </summary>
         public static Color TextControlBorder {
             get {
                 if (Application.RenderWithVisualStyles) {
@@ -271,9 +271,9 @@ namespace System.Windows.Forms.VisualStyles {
         }
 
 
-        /// <devdoc>
+        /// <summary>
         ///    This is the color buttons and tab pages are highlighted with when they are moused over on themed OS.
-        /// </devdoc>
+        /// </summary>
         public static Color ControlHighlightHot {
             get {
                 if (Application.RenderWithVisualStyles) {

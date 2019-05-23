@@ -55,9 +55,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns the total number of elements in the collection.
-        /// </devdoc>
+        /// </summary>
         public int Count {
             get {
                 return this.NativeHTMLFramesCollection2.GetLength();

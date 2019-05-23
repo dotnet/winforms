@@ -7,9 +7,9 @@ namespace System.Windows.Forms {
 
     using System.Diagnostics;
     
-    /// <devdoc>
+    /// <summary>
     ///    <para>Represents the method that will handle the 
     ///    <see langword='Invoke '/> event for a method.</para>
-    /// </devdoc>
+    /// </summary>
     public delegate void MethodInvoker();
 }

@@ -9,8 +9,8 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Windows.Forms.Layout;
 
-    /// <devdoc>
-    /// </devdoc>
+    /// <summary>
+    /// </summary>
     [TypeConverter(typeof(FlatButtonAppearanceConverter))]
     public class FlatButtonAppearance {
 
@@ -26,9 +26,9 @@ namespace System.Windows.Forms {
             this.owner = owner;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the size, in pixels of the border around the button.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(true),
         ApplicableToButton(),
@@ -56,9 +56,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the border around the button.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(true),
         ApplicableToButton(),
@@ -84,10 +84,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the client area
         ///     of the button when the button state is checked and the mouse cursor is NOT within the bounds of the control.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(true),
         NotifyParentProperty(true),
@@ -108,10 +108,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the client area
         ///     of the button when the mouse cursor is within the bounds of the control and the left button is pressed.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(true),
         ApplicableToButton(),
@@ -133,10 +133,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the client
         ///     area of the button when the mouse cursor is within the bounds of the control.
-        /// </devdoc>
+        /// </summary>
         [
         Browsable(true),
         ApplicableToButton(),

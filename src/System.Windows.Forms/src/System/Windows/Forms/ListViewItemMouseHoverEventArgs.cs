@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides data for the <see cref='System.Windows.Forms.ListView.OnItemMouseHover'/> event.
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
     public class ListViewItemMouseHoverEventArgs : EventArgs
     {

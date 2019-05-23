@@ -17,13 +17,13 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       Encapsulates
     ///       a standard Windows(r) group
     ///       box.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -37,11 +37,11 @@ namespace System.Windows.Forms {
         Font cachedFont;
         FlatStyle flatStyle = FlatStyle.Standard;
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.GroupBox'/> class.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public GroupBox() : base() {
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
             SetState2(STATE2_USEPREFERREDSIZECACHE, true);  
@@ -55,12 +55,12 @@ namespace System.Windows.Forms {
             TabStop = false;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the control will allow drag and
         ///       drop operations and events to be used.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public override bool AllowDrop {
             get {
@@ -71,9 +71,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para> Override to re-expose AutoSize.</para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public override bool AutoSize
@@ -96,9 +96,9 @@ namespace System.Windows.Forms {
             remove => base.AutoSizeChanged -= value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Allows the control to optionally shrink when AutoSize is true.
-        /// </devdoc>
+        /// </summary>
         [
         SRDescription(nameof(SR.ControlAutoSizeModeDescr)),
         SRCategory(nameof(SR.CatLayout)),        
@@ -149,32 +149,32 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Set the default Padding to 3 so that it is consistent with Everett
-        /// </devdoc>
+        /// </summary>
         protected override Padding DefaultPadding {
             get {
                 return new Padding(3);
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
+        /// </summary>
         protected override Size DefaultSize {
             get {
                 return new Size(200, 100);
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets a rectangle that represents the
         ///       dimensions of the <see cref='System.Windows.Forms.GroupBox'/>
         ///       .
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public override Rectangle DisplayRectangle {
             get {
                 Size size = ClientSize;
@@ -249,14 +249,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the user may
         ///       press the TAB key to give the focus to the <see cref='System.Windows.Forms.GroupBox'/>
         ///       .
         ///
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         new public bool TabStop {
             get {
@@ -300,9 +300,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
-        /// </devdoc>
+        /// </summary>
         [
         DefaultValue(false),
         SRCategory(nameof(SR.CatBehavior)),
@@ -317,11 +317,11 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines whether the control supports rendering text using GDI+ and GDI.
         ///     This is provided for container controls to iterate through its children to set UseCompatibleTextRendering to the same
         ///     value if the child control supports it.
-        /// </devdoc>
+        /// </summary>
         internal override bool SupportsUseCompatibleTextRendering {
             get {
                 return true;
@@ -601,8 +601,8 @@ namespace System.Windows.Forms {
             return prefSize + totalPadding;
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         protected override void OnFontChanged(EventArgs e) {
             fontHeight = -1;
             cachedFont = null;
@@ -610,10 +610,10 @@ namespace System.Windows.Forms {
             base.OnFontChanged(e);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     We use this to process mnemonics and send them on to the first child
         ///     control.
-        /// </devdoc>
+        /// </summary>
         protected internal override bool ProcessMnemonic(char charCode) {
             if (IsMnemonic(charCode, Text) && CanProcessMnemonic()) {
                 SelectNextControl(null, true, true, true, false);
@@ -636,9 +636,9 @@ namespace System.Windows.Forms {
 
         internal override bool SupportsUiaProviders => true;
 
-        /// <devdoc>
+        /// <summary>
         ///     Returns a string representation for this control.
-        /// </devdoc>
+        /// </summary>
         public override string ToString() {
 
             string s = base.ToString();

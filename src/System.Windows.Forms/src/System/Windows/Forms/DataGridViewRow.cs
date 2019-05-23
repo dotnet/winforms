@@ -12,9 +12,9 @@ using System.Windows.Forms.VisualStyles;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Identifies a row in the dataGridView.
-    /// </devdoc>
+    /// </summary>
     [TypeConverterAttribute(typeof(DataGridViewRowConverter))]
     public class DataGridViewRow : DataGridViewBand
     {
@@ -28,9 +28,9 @@ namespace System.Windows.Forms
 
         private DataGridViewCellCollection _rowCells;
 
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewRow'/> class.
-        /// </devdoc>
+        /// </summary>
         public DataGridViewRow() : base()
         {
             _bandIsRow = true;
@@ -1107,10 +1107,10 @@ namespace System.Windows.Forms
             SetValuesInternal(values);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Constructs the new instance of the Cells collection objects. Subclasses
         /// should not call base.CreateCellsInstance.
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual DataGridViewCellCollection CreateCellsInstance()
         {

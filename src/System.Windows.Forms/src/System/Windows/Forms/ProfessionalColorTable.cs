@@ -69,9 +69,9 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <devdoc> when this is specified, professional colors picks from SystemColors rather than colors
+        /// <summary> when this is specified, professional colors picks from SystemColors rather than colors
         ///          that match the current theme.  If theming is not turned on, we'll fall back to SystemColors.
-        /// </devdoc>
+        /// </summary>
         public bool UseSystemColors {
             get {
                 return useSystemColors;

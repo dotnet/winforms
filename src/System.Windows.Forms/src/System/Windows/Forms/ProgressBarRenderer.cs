@@ -10,11 +10,11 @@ using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
 
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///       This is a rendering class for the ProgressBar control.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     public sealed class ProgressBarRenderer {
 
        //Make this per-thread, so that different threads can safely use these methods.
@@ -25,23 +25,23 @@ using Microsoft.Win32;
        private ProgressBarRenderer() {
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Returns true if this class is supported for the current OS and user/application settings, 
        ///       otherwise returns false.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        public static bool IsSupported {
            get {
                return VisualStyleRenderer.IsSupported; // no downlevel support
            }
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a horizontal bar.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        [
            SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // Using Graphics instead of IDeviceContext intentionally
        ]
@@ -51,11 +51,11 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a vertical bar.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        [
            SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // Using Graphics instead of IDeviceContext intentionally
        ]
@@ -65,11 +65,11 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a number of constant size horizontal chunks in the given bounds.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        [
            SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // Using Graphics instead of IDeviceContext intentionally
        ]
@@ -79,11 +79,11 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Renders a number of constant size vertical chunks in the given bounds.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        [
            SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters") // Using Graphics instead of IDeviceContext intentionally
        ]
@@ -93,11 +93,11 @@ using Microsoft.Win32;
            visualStyleRenderer.DrawBackground(g, bounds);
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Returns the  width/height of a single horizontal/vertical progress bar chunk.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        public static int ChunkThickness {
            get {
                InitializeRenderer(VisualStyleElement.ProgressBar.Chunk.Normal);
@@ -106,11 +106,11 @@ using Microsoft.Win32;
            }
        }
 
-       /// <devdoc>
+       /// <summary>
        ///    <para>
        ///       Returns the  width/height of the space between horizontal/vertical progress bar chunks.
        ///    </para>
-       /// </devdoc>
+       /// </summary>
        public static int ChunkSpaceThickness {
            get {
                InitializeRenderer(VisualStyleElement.ProgressBar.Chunk.Normal);

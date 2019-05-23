@@ -10,9 +10,9 @@ using System.Text;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Identifies a band or column in the dataGridView.
-    /// </devdoc>
+    /// </summary>
     public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
     {
         private static readonly int s_propContextMenuStrip = PropertyStore.CreateKey();
@@ -32,9 +32,9 @@ namespace System.Windows.Forms
         private int _bandIndex;
         internal bool _bandIsRow;
 
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewBand'/> class.
-        /// </devdoc>
+        /// </summary>
         internal DataGridViewBand()
         {
             _propertyStore = new PropertyStore();

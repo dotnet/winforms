@@ -10,11 +10,11 @@ namespace System.Windows.Forms
     using System.Diagnostics;
 
     
-    /// <devdoc>
+    /// <summary>
     ///    <para>
     ///     This class provides API for drawing GDI text.
     ///    </para>
-    /// </devdoc>
+    /// </summary>
     public sealed class TextRenderer
     {
         //cannot instantiate

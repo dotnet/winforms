@@ -14,10 +14,10 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Globalization;
 
-    /// <devdoc>
+    /// <summary>
     /// <para>Represents a collection of System.Windows.Forms.DataGridColumnStyle objects in the <see cref='System.Windows.Forms.DataGrid'/>
     /// control.</para>
-    /// </devdoc>
+    /// </summary>
     [
     Editor("System.Windows.Forms.Design.DataGridColumnCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
     ListBindable(false)
@@ -99,9 +99,9 @@ namespace System.Windows.Forms {
             this.isDefault = isDefault;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>Gets the list of items in the collection.</para>
-        /// </devdoc>
+        /// </summary>
         protected override ArrayList List {
             get {
                 return items;
@@ -145,19 +145,19 @@ namespace System.Windows.Forms {
         }
         */
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets the System.Windows.Forms.DataGridColumnStyle at a specified index.</para>
-        /// </devdoc>
+        /// </summary>
         public DataGridColumnStyle this[int index] {
             get {
                 return (DataGridColumnStyle)items[index];
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets the System.Windows.Forms.DataGridColumnStyle
         /// with the specified name.</para>
-        /// </devdoc>
+        /// </summary>
         public DataGridColumnStyle this[string columnName] {
             // PM team has reviewed and decided on naming changes already
             [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
@@ -184,10 +184,10 @@ namespace System.Windows.Forms {
             return null;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets the System.Windows.Forms.DataGridColumnStyle associated with the
         ///    specified <see cref='System.Data.DataColumn'/>.</para>
-        /// </devdoc>
+        /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1043:UseIntegralOrStringArgumentForIndexers")]
         public DataGridColumnStyle this[PropertyDescriptor propertyDesciptor] {
             [
@@ -210,9 +210,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Adds a System.Windows.Forms.DataGridColumnStyle to the System.Windows.Forms.GridColumnStylesCollection</para>
-        /// </devdoc>
+        /// </summary>
 
         internal void CheckForMappingNameDuplicates(DataGridColumnStyle column) {
             if (string.IsNullOrEmpty(column.MappingName))
@@ -284,9 +284,9 @@ namespace System.Windows.Forms {
             items.Clear();
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Occurs when a change is made to the System.Windows.Forms.GridColumnStylesCollection.</para>
-        /// </devdoc>
+        /// </summary>
         public event CollectionChangeEventHandler CollectionChanged {
             add => onCollectionChanged += value;
             remove => onCollectionChanged -= value;
@@ -300,31 +300,31 @@ namespace System.Windows.Forms {
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets a value indicating whether the System.Windows.Forms.GridColumnStylesCollection contains a System.Windows.Forms.DataGridColumnStyle associated with the
         ///       specified <see cref='System.Data.DataColumn'/>.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public bool Contains(PropertyDescriptor propertyDescriptor) {
             return this[propertyDescriptor] != null;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets a value indicating whether the System.Windows.Forms.GridColumnsStyleCollection contains the specified System.Windows.Forms.DataGridColumnStyle.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public bool Contains(DataGridColumnStyle column) {
             int index = items.IndexOf(column);
             return index != -1;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    <para>
         ///       Gets a value indicating whether the System.Windows.Forms.GridColumnsStyleCollection contains the System.Windows.Forms.DataGridColumnStyle with the specified name.
         ///    </para>
-        /// </devdoc>
+        /// </summary>
         public bool Contains(string name) {
             IEnumerator e = items.GetEnumerator();
             while (e.MoveNext()) {
@@ -436,9 +436,9 @@ namespace System.Windows.Forms {
         }
         */
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Gets the index of a specified System.Windows.Forms.DataGridColumnStyle.</para>
-        /// </devdoc>
+        /// </summary>
         public int IndexOf(DataGridColumnStyle element) {
             int itemCount = items.Count;
             for (int i = 0; i < itemCount; ++i) {
@@ -449,9 +449,9 @@ namespace System.Windows.Forms {
             return -1;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Raises the System.Windows.Forms.GridColumnsCollection.CollectionChanged event.</para>
-        /// </devdoc>
+        /// </summary>
         protected void OnCollectionChanged(CollectionChangeEventArgs e) {
             if (onCollectionChanged != null)
                 onCollectionChanged(this, e);
@@ -462,9 +462,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Removes the specified System.Windows.Forms.DataGridColumnStyle from the System.Windows.Forms.GridColumnsStyleCollection.</para>
-        /// </devdoc>
+        /// </summary>
         public void Remove(DataGridColumnStyle column) {
             if (this.isDefault) {
                 throw new ArgumentException(SR.DataGridDefaultColumnCollectionChanged);
@@ -483,9 +483,9 @@ namespace System.Windows.Forms {
                 RemoveAt(columnIndex);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// <para>Removes the System.Windows.Forms.DataGridColumnStyle with the specified index from the System.Windows.Forms.GridColumnsStyleCollection.</para>
-        /// </devdoc>
+        /// </summary>
         public void RemoveAt(int index) {
             if (this.isDefault) {
                 throw new ArgumentException(SR.DataGridDefaultColumnCollectionChanged);

@@ -6,7 +6,7 @@ namespace System.Windows.Forms
 {
 	using System;
 
-	/// </devdoc>
+	/// </summary>
         internal class DropSource : UnsafeNativeMethods.IOleDropSource {
 
             private const int DragDropSDrop    = 0x00040100;

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
@@ -434,7 +433,6 @@ namespace System.ComponentModel.Design.Serialization
                                 if (baseType == serializerType && da.SerializerTypeName != null && da.SerializerTypeName.Length > 0)
                                 {
                                     Type type = GetRuntimeType(da.SerializerTypeName);
-                                    Debug.Assert(type != null, "Type " + objectType.FullName + " has a serializer that we couldn't bind to: " + da.SerializerTypeName);
                                     if (type != null)
                                     {
                                         serializer = Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance, null, null, null);
@@ -528,7 +526,7 @@ namespace System.ComponentModel.Design.Serialization
                 if (GetService(typeof(TypeDescriptionProviderService)) is TypeDescriptionProviderService typeProviderService)
                 {
                     TypeDescriptionProvider typeProvider = typeProviderService.GetProvider(type);
-                    if (!typeProvider.IsSupportedType(type))
+                    if (typeProvider != null && !typeProvider.IsSupportedType(type))
                     {
                         type = null;
                     }
@@ -589,7 +587,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
                 finally
                 {
-                    serializationCompleteEventHandler?.Invoke(this, EventArgs.Empty);
+                    serializationCompleteEventHandler?.Invoke(this, e);
                 }
             }
             finally
@@ -826,8 +824,13 @@ namespace System.ComponentModel.Design.Serialization
             while (t == null)
             {
                 t = GetType(typeName);
-                if (t == null && typeName != null && typeName.Length > 0)
+                if (t == null)
                 {
+                    if (string.IsNullOrEmpty(typeName))
+                    {
+                        break;
+                    }
+
                     int dotIndex = typeName.LastIndexOf('.');
                     if (dotIndex == -1 || dotIndex == typeName.Length - 1)
                     {
@@ -884,12 +887,12 @@ namespace System.ComponentModel.Design.Serialization
 
             if (instancesByName[name] != null)
             {
-                throw new ArgumentException(string.Format(SR.SerializationManagerNameInUse, name));
+                throw new ArgumentException(string.Format(SR.SerializationManagerNameInUse, name), nameof(name));
             }
 
             if (namesByInstance[instance] != null)
             {
-                throw new ArgumentException(string.Format(SR.SerializationManagerObjectHasName, name, (string)namesByInstance[instance]));
+                throw new ArgumentException(string.Format(SR.SerializationManagerObjectHasName, name, (string)namesByInstance[instance]), nameof(instance));
             }
             instancesByName[name] = instance;
             namesByInstance[instance] = name;
