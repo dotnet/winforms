@@ -627,7 +627,7 @@ namespace System.Windows.Forms.Design
         }
 
         bool ISelectionUIHandler.QueryBeginDrag(object[] components, SelectionRules rules, int initialX, int initialY) => DragHandler.QueryBeginDrag(components, rules, initialX, initialY);
-        
+
         void ISelectionUIHandler.ShowContextMenu(IComponent component)
         {
             Point cur = Control.MousePosition;
@@ -658,7 +658,7 @@ namespace System.Windows.Forms.Design
         }
 
         void ISelectionUIHandler.OleDragEnter(DragEventArgs de) => GetOleDragHandler().DoOleDragEnter(de);
-        
+
         void ISelectionUIHandler.OleDragDrop(DragEventArgs de) => GetOleDragHandler().DoOleDragDrop(de);
 
         void ISelectionUIHandler.OleDragOver(DragEventArgs de) => GetOleDragHandler().DoOleDragOver(de);
@@ -749,7 +749,7 @@ namespace System.Windows.Forms.Design
                 return true;
             }
             Type designerType = GetDesignerType(compType, typeof(IDesigner));
-            return ! (typeof(ControlDesigner).IsAssignableFrom(designerType));
+            return !(typeof(ControlDesigner).IsAssignableFrom(designerType));
         }
 
         private Type GetDesignerType(Type t, Type designerBaseType)

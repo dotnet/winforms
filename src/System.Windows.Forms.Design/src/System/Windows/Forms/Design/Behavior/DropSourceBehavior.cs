@@ -260,7 +260,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 //between containers
                 dragSource.Controls.Remove(currentControl);
-                currentControl.Visible = true;              
+                currentControl.Visible = true;
                 dragTarget.Controls.Add(currentControl);
             }
         }
@@ -798,7 +798,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     invalidDragRegion.Translate(mouseLoc.X - initialMouseLoc.X + lastSnapOffset.X, mouseLoc.Y - initialMouseLoc.Y + lastSnapOffset.Y);
                     invalidDragRegion.Complement(newImageRect);
-                    invalidDragRegion.Union(invalidRegion);            
+                    invalidDragRegion.Union(invalidRegion);
                     behaviorServiceTarget.Invalidate(invalidDragRegion);
                 }
                 invalidRegion.Dispose();

@@ -10,56 +10,56 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Reflection;
 
-namespace System.ComponentModel.Design.Serialization 
+namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
     ///     Code model serializer for enum types.
     /// </summary>
-    internal class EnumCodeDomSerializer : CodeDomSerializer 
+    internal class EnumCodeDomSerializer : CodeDomSerializer
     {
         private static EnumCodeDomSerializer s_defaultSerializer;
-        
+
         /// <summary>
         ///     Retrieves a default static instance of this serializer.
         /// </summary>
-        internal new static EnumCodeDomSerializer Default 
+        internal new static EnumCodeDomSerializer Default
         {
-            get 
+            get
             {
-                if (s_defaultSerializer == null) 
+                if (s_defaultSerializer == null)
                 {
                     s_defaultSerializer = new EnumCodeDomSerializer();
                 }
                 return s_defaultSerializer;
             }
         }
-        
+
         /// <summary>
         ///     Serializes the given object into a CodeDom object.
         /// </summary>
-        public override object Serialize(IDesignerSerializationManager manager, object value) 
+        public override object Serialize(IDesignerSerializationManager manager, object value)
         {
             CodeExpression expression = null;
 
-            using (TraceScope("EnumCodeDomSerializer::" + nameof(Serialize))) 
+            using (TraceScope("EnumCodeDomSerializer::" + nameof(Serialize)))
             {
-                Trace("Type: {0}",  (value == null ? "(null)" : value.GetType().Name));
-                if (value is Enum) 
+                Trace("Type: {0}", (value == null ? "(null)" : value.GetType().Name));
+                if (value is Enum)
                 {
                     bool needCast = false;
                     Enum[] values;
                     TypeConverter converter = TypeDescriptor.GetConverter(value);
-                    if (converter != null && converter.CanConvertTo(typeof(Enum[]))) 
+                    if (converter != null && converter.CanConvertTo(typeof(Enum[])))
                     {
                         values = (Enum[])converter.ConvertTo(value, typeof(Enum[]));
                         needCast = (values.Length > 1);
                     }
-                    else 
+                    else
                     {
-                        values = new Enum[] {(Enum)value};
+                        values = new Enum[] { (Enum)value };
                         needCast = true;
                     }
-                    
+
                     // EnumConverter (and anything that is overridden to support enums)
                     // should be providing us a conversion to Enum[] for flag styles.  
                     // If it doesn't, we will emit a warning and just do a cast from the enum value.
@@ -77,18 +77,18 @@ namespace System.ComponentModel.Design.Serialization
                     // representation for its values. Hardcoding is okay in this case, since all we want is
                     // the enum's field name. Simply doing ToString() will not give us any validation.
                     TypeConverter enumConverter = new EnumConverter(value.GetType());
-                    foreach (Enum term in values) 
+                    foreach (Enum term in values)
                     {
                         string termString = (enumConverter != null) ? enumConverter.ConvertToString(term) : null;
                         CodeExpression newExpression = !String.IsNullOrEmpty(termString) ? new CodeFieldReferenceExpression(enumType, termString) : null;
 
-                        if (newExpression != null) 
+                        if (newExpression != null)
                         {
-                            if (expression == null) 
+                            if (expression == null)
                             {
                                 expression = newExpression;
                             }
-                            else 
+                            else
                             {
                                 expression = new CodeBinaryOperatorExpression(expression, CodeBinaryOperatorType.BitwiseOr, newExpression);
                             }
@@ -97,12 +97,12 @@ namespace System.ComponentModel.Design.Serialization
 
                     // If we had to combine multiple names, wrap the result in an appropriate cast.
                     //
-                    if (expression != null && needCast) 
+                    if (expression != null && needCast)
                     {
                         expression = new CodeCastExpression(value.GetType(), expression);
                     }
                 }
-                else 
+                else
                 {
                     Debug.Fail("Enum serializer called for non-enum object.");
                     TraceError("Enum serializer called for non-enum object {0}", (value == null ? "(null)" : value.GetType().Name));

@@ -42,7 +42,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 throw new ArgumentNullException(nameof(manager));
             }
-            if (type == null) 
+            if (type == null)
             {
                 throw new ArgumentNullException(nameof(type));
             }
@@ -148,11 +148,11 @@ namespace System.ComponentModel.Design.Serialization
 
         internal static void Error(IDesignerSerializationManager manager, string exceptionText, string helpLink)
         {
-            if (manager == null) 
+            if (manager == null)
             {
                 throw new ArgumentNullException(nameof(manager));
             }
-            if (exceptionText == null) 
+            if (exceptionText == null)
             {
                 throw new ArgumentNullException(nameof(exceptionText));
             }
@@ -462,7 +462,8 @@ namespace System.ComponentModel.Design.Serialization
         internal static IDisposable TraceScope(string name)
         {
 #if DEBUG
-            if (traceScope == null) traceScope = new Stack();
+            if (traceScope == null)
+                traceScope = new Stack();
             Trace(name);
             traceScope.Push(name);
 #endif
@@ -472,7 +473,8 @@ namespace System.ComponentModel.Design.Serialization
         [Conditional("DEBUG")]
         internal static void TraceIf(bool condition, string message, params object[] values)
         {
-            if (condition) Trace(message, values);
+            if (condition)
+                Trace(message, values);
         }
 
         [Conditional("DEBUG")]
@@ -483,7 +485,8 @@ namespace System.ComponentModel.Design.Serialization
                 int indent = 0;
                 int oldIndent = Debug.IndentLevel;
 
-                if (traceScope != null) indent = traceScope.Count;
+                if (traceScope != null)
+                    indent = traceScope.Count;
                 try
                 {
                     Debug.IndentLevel = indent;
@@ -500,7 +503,8 @@ namespace System.ComponentModel.Design.Serialization
         {
             public void Dispose()
             {
-                if (traceScope != null) traceScope.Pop();
+                if (traceScope != null)
+                    traceScope.Pop();
             }
         }
 
@@ -1530,7 +1534,7 @@ namespace System.ComponentModel.Design.Serialization
         {
 
             // "Binary" operator type is actually a combination of several types of operators: boolean, binary  and math.  Group them into categories here.
-            CodeBinaryOperatorType[] booleanOperators = new CodeBinaryOperatorType[] 
+            CodeBinaryOperatorType[] booleanOperators = new CodeBinaryOperatorType[]
             {
                 CodeBinaryOperatorType.IdentityInequality,
                 CodeBinaryOperatorType.IdentityEquality,
@@ -1543,7 +1547,7 @@ namespace System.ComponentModel.Design.Serialization
                 CodeBinaryOperatorType.GreaterThanOrEqual
             };
 
-            CodeBinaryOperatorType[] mathOperators = new CodeBinaryOperatorType[] 
+            CodeBinaryOperatorType[] mathOperators = new CodeBinaryOperatorType[]
             {
                 CodeBinaryOperatorType.Add,
                 CodeBinaryOperatorType.Subtract,
@@ -1552,7 +1556,7 @@ namespace System.ComponentModel.Design.Serialization
                 CodeBinaryOperatorType.Modulus
             };
 
-            CodeBinaryOperatorType[] binaryOperators = new CodeBinaryOperatorType[] 
+            CodeBinaryOperatorType[] binaryOperators = new CodeBinaryOperatorType[]
             {
                 CodeBinaryOperatorType.BitwiseOr,
                 CodeBinaryOperatorType.BitwiseAnd
@@ -1634,117 +1638,117 @@ namespace System.ComponentModel.Design.Serialization
             switch (compatibleTypes[maxIndex])
             {
                 case TypeCode.Byte:
-                {
-                    byte leftValue = left.ToByte(null);
-                    byte rightValue = right.ToByte(null);
-                    if (op == CodeBinaryOperatorType.BitwiseOr)
                     {
-                        result = leftValue | rightValue;
+                        byte leftValue = left.ToByte(null);
+                        byte rightValue = right.ToByte(null);
+                        if (op == CodeBinaryOperatorType.BitwiseOr)
+                        {
+                            result = leftValue | rightValue;
+                        }
+                        else
+                        {
+                            result = leftValue & rightValue;
+                        }
+                        break;
                     }
-                    else
-                    {
-                        result = leftValue & rightValue;
-                    }
-                    break;
-                }
                 case TypeCode.Char:
-                {
-                    char leftValue = left.ToChar(null);
-                    char rightValue = right.ToChar(null);
-                    if (op == CodeBinaryOperatorType.BitwiseOr)
                     {
-                        result = leftValue | rightValue;
+                        char leftValue = left.ToChar(null);
+                        char rightValue = right.ToChar(null);
+                        if (op == CodeBinaryOperatorType.BitwiseOr)
+                        {
+                            result = leftValue | rightValue;
+                        }
+                        else
+                        {
+                            result = leftValue & rightValue;
+                        }
+                        break;
                     }
-                    else
-                    {
-                        result = leftValue & rightValue;
-                    }
-                    break;
-                }
                 case TypeCode.Int16:
-                {
-                    short leftValue = left.ToInt16(null);
-                    short rightValue = right.ToInt16(null);
-                    if (op == CodeBinaryOperatorType.BitwiseOr)
                     {
-                        result = (short)((ushort)leftValue | (ushort)rightValue);
+                        short leftValue = left.ToInt16(null);
+                        short rightValue = right.ToInt16(null);
+                        if (op == CodeBinaryOperatorType.BitwiseOr)
+                        {
+                            result = (short)((ushort)leftValue | (ushort)rightValue);
+                        }
+                        else
+                        {
+                            result = leftValue & rightValue;
+                        }
+                        break;
                     }
-                    else
-                    {
-                        result = leftValue & rightValue;
-                    }
-                    break;
-                }
                 case TypeCode.UInt16:
-                {
-                    ushort leftValue = left.ToUInt16(null);
-                    ushort rightValue = right.ToUInt16(null);
-                    if (op == CodeBinaryOperatorType.BitwiseOr)
                     {
-                        result = leftValue | rightValue;
+                        ushort leftValue = left.ToUInt16(null);
+                        ushort rightValue = right.ToUInt16(null);
+                        if (op == CodeBinaryOperatorType.BitwiseOr)
+                        {
+                            result = leftValue | rightValue;
+                        }
+                        else
+                        {
+                            result = leftValue & rightValue;
+                        }
+                        break;
                     }
-                    else
-                    {
-                        result = leftValue & rightValue;
-                    }
-                    break;
-                }
                 case TypeCode.Int32:
-                {
-                    int leftValue = left.ToInt32(null);
-                    int rightValue = right.ToInt32(null);
-                    if (op == CodeBinaryOperatorType.BitwiseOr)
                     {
-                        result = leftValue | rightValue;
+                        int leftValue = left.ToInt32(null);
+                        int rightValue = right.ToInt32(null);
+                        if (op == CodeBinaryOperatorType.BitwiseOr)
+                        {
+                            result = leftValue | rightValue;
+                        }
+                        else
+                        {
+                            result = leftValue & rightValue;
+                        }
+                        break;
                     }
-                    else
-                    {
-                        result = leftValue & rightValue;
-                    }
-                    break;
-                }
                 case TypeCode.UInt32:
-                {
-                    uint leftValue = left.ToUInt32(null);
-                    uint rightValue = right.ToUInt32(null);
-                    if (op == CodeBinaryOperatorType.BitwiseOr)
                     {
-                        result = leftValue | rightValue;
+                        uint leftValue = left.ToUInt32(null);
+                        uint rightValue = right.ToUInt32(null);
+                        if (op == CodeBinaryOperatorType.BitwiseOr)
+                        {
+                            result = leftValue | rightValue;
+                        }
+                        else
+                        {
+                            result = leftValue & rightValue;
+                        }
+                        break;
                     }
-                    else
-                    {
-                        result = leftValue & rightValue;
-                    }
-                    break;
-                }
                 case TypeCode.Int64:
-                {
-                    long leftValue = left.ToInt64(null);
-                    long rightValue = right.ToInt64(null);
-                    if (op == CodeBinaryOperatorType.BitwiseOr)
                     {
-                        result = leftValue | rightValue;
+                        long leftValue = left.ToInt64(null);
+                        long rightValue = right.ToInt64(null);
+                        if (op == CodeBinaryOperatorType.BitwiseOr)
+                        {
+                            result = leftValue | rightValue;
+                        }
+                        else
+                        {
+                            result = leftValue & rightValue;
+                        }
+                        break;
                     }
-                    else
-                    {
-                        result = leftValue & rightValue;
-                    }
-                    break;
-                }
                 case TypeCode.UInt64:
-                {
-                    ulong leftValue = left.ToUInt64(null);
-                    ulong rightValue = right.ToUInt64(null);
-                    if (op == CodeBinaryOperatorType.BitwiseOr)
                     {
-                        result = leftValue | rightValue;
+                        ulong leftValue = left.ToUInt64(null);
+                        ulong rightValue = right.ToUInt64(null);
+                        if (op == CodeBinaryOperatorType.BitwiseOr)
+                        {
+                            result = leftValue | rightValue;
+                        }
+                        else
+                        {
+                            result = leftValue & rightValue;
+                        }
+                        break;
                     }
-                    else
-                    {
-                        result = leftValue & rightValue;
-                    }
-                    break;
-                }
             }
 
             if (result != left && left is Enum)
@@ -1799,31 +1803,31 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (op == CodeBinaryOperatorType.Add)
             {
-                    string leftString = left as string;
-                    string rightString = right as string;
+                string leftString = left as string;
+                string rightString = right as string;
 
-                    if (leftString == null && left is Char)
-                    {
-                        leftString = left.ToString();
-                    }
+                if (leftString == null && left is Char)
+                {
+                    leftString = left.ToString();
+                }
 
-                    if (rightString == null && right is Char)
-                    {
-                        rightString = right.ToString();
-                    }
+                if (rightString == null && right is Char)
+                {
+                    rightString = right.ToString();
+                }
 
-                    if (leftString != null && rightString != null)
-                    {
-                        return leftString + rightString;
-                    }
-                    else
-                    {
-                        Debug.Fail("Addition operator not supported for this type");
-                    }
+                if (leftString != null && rightString != null)
+                {
+                    return leftString + rightString;
+                }
+                else
+                {
+                    Debug.Fail("Addition operator not supported for this type");
+                }
             }
             else
             {
-                    Debug.Fail("Math operators are not supported");
+                Debug.Fail("Math operators are not supported");
             }
             return left;
         }
@@ -1888,7 +1892,7 @@ namespace System.ComponentModel.Design.Serialization
         [Conditional("DEBUG")]
         internal static void TraceWarningIf(bool condition, string message, params object[] values)
         {
-            if (condition) 
+            if (condition)
             {
                 TraceWarning(message, values);
             }
@@ -2290,8 +2294,10 @@ namespace System.ComponentModel.Design.Serialization
         protected bool IsSerialized(IDesignerSerializationManager manager, object value, bool honorPreset)
         {
             bool hasExpression = false;
-            if (manager == null) throw new ArgumentNullException(nameof(manager));
-            if (value == null) throw new ArgumentNullException(nameof(value));
+            if (manager == null)
+                throw new ArgumentNullException(nameof(manager));
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
 
             // Is the expression part of a prior SetExpression call?
             if (manager.Context[typeof(ExpressionTable)] is ExpressionTable table && table.GetExpression(value) != null && (!honorPreset || !table.ContainsPresetExpression(value)))
@@ -2311,8 +2317,10 @@ namespace System.ComponentModel.Design.Serialization
         protected CodeExpression SerializeCreationExpression(IDesignerSerializationManager manager, object value, out bool isComplete)
         {
             isComplete = false;
-            if (manager == null) throw new ArgumentNullException(nameof(manager));
-            if (value == null) throw new ArgumentNullException(nameof(value));
+            if (manager == null)
+                throw new ArgumentNullException(nameof(manager));
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
 
             TypeConverter converter = TypeDescriptor.GetConverter(value);
             // See if there is an ExpressionContext with a preset value we're interested in.  If so, that will dictate our creation expression.
@@ -2492,11 +2500,11 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected string GetUniqueName(IDesignerSerializationManager manager, object value)
         {
-            if (manager == null) 
+            if (manager == null)
             {
                 throw new ArgumentNullException(nameof(manager));
             }
-            if (value == null) 
+            if (value == null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
@@ -2543,10 +2551,14 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected void SerializeEvent(IDesignerSerializationManager manager, CodeStatementCollection statements, object value, EventDescriptor descriptor)
         {
-            if (manager == null) throw new ArgumentNullException(nameof(manager));
-            if (statements == null) throw new ArgumentNullException(nameof(statements));
-            if (value == null) throw new ArgumentNullException(nameof(value));
-            if (descriptor == null) throw new ArgumentNullException(nameof(descriptor));
+            if (manager == null)
+                throw new ArgumentNullException(nameof(manager));
+            if (statements == null)
+                throw new ArgumentNullException(nameof(statements));
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+            if (descriptor == null)
+                throw new ArgumentNullException(nameof(descriptor));
 
             using (TraceScope("CodeDomSerializerBase::" + nameof(SerializeEvent)))
             {
@@ -2708,10 +2720,14 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected void SerializeProperty(IDesignerSerializationManager manager, CodeStatementCollection statements, object value, PropertyDescriptor propertyToSerialize)
         {
-            if (manager == null) throw new ArgumentNullException(nameof(manager));
-            if (value == null) throw new ArgumentNullException(nameof(value));
-            if (propertyToSerialize == null) throw new ArgumentNullException(nameof(propertyToSerialize));
-            if (statements == null) throw new ArgumentNullException(nameof(statements));
+            if (manager == null)
+                throw new ArgumentNullException(nameof(manager));
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+            if (propertyToSerialize == null)
+                throw new ArgumentNullException(nameof(propertyToSerialize));
+            if (statements == null)
+                throw new ArgumentNullException(nameof(statements));
 
             Trace("CodeDomSerializerBase::" + nameof(SerializeProperty) + " {0}", propertyToSerialize.Name);
             // Now look for a MemberCodeDomSerializer for the property.  If we can't find one, then we can't serialize the property
@@ -3051,9 +3067,12 @@ namespace System.ComponentModel.Design.Serialization
         [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]
         protected void SetExpression(IDesignerSerializationManager manager, object value, CodeExpression expression, bool isPreset)
         {
-            if (manager == null) throw new ArgumentNullException(nameof(manager));
-            if (value == null) throw new ArgumentNullException(nameof(value));
-            if (expression == null) throw new ArgumentNullException(nameof(expression));
+            if (manager == null)
+                throw new ArgumentNullException(nameof(manager));
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+            if (expression == null)
+                throw new ArgumentNullException(nameof(expression));
 
             ExpressionTable table = (ExpressionTable)manager.Context[typeof(ExpressionTable)];
             if (table == null)

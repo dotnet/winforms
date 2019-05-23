@@ -154,11 +154,11 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected override object DeserializeInstance(IDesignerSerializationManager manager, Type type, object[] parameters, string name, bool addToContainer)
         {
-            if (manager == null) 
+            if (manager == null)
             {
                 throw new ArgumentNullException(nameof(manager));
             }
-            if (type == null) 
+            if (type == null)
             {
                 throw new ArgumentNullException(nameof(type));
             }
@@ -683,7 +683,8 @@ namespace System.ComponentModel.Design.Serialization
             {
                 Debug.Assert(name != null, "name is null");
                 // If there is no parent culture, treat that as being different from the parent's resource, which results in the "normal" code path for the caller.
-                if (ReadCulture.Equals(CultureInfo.InvariantCulture)) return CompareValue.Different;
+                if (ReadCulture.Equals(CultureInfo.InvariantCulture))
+                    return CompareValue.Different;
 
                 CultureInfo culture = ReadCulture;
                 for (; ; )
@@ -750,7 +751,7 @@ namespace System.ComponentModel.Design.Serialization
                     if (culture == CultureInfo.InvariantCulture)
                     {
                         se = new SerializationException(
-                            
+
                             string.Format(SR.SerializerResourceExceptionInvariant, message), e);
                     }
                     else

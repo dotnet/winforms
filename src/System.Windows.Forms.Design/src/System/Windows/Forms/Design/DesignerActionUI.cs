@@ -315,7 +315,7 @@ namespace System.ComponentModel.Design
             DesignerActionGlyph glyph = GetDesignerActionGlyph(comp);
             if (glyph != null)
             {
-                VerifyGlyphIsInAdorner(glyph); 
+                VerifyGlyphIsInAdorner(glyph);
                 // this could happen when a verb change state or suddendly a control gets a new action in the panel and we are the primary selection in that case there would not be a glyph active in the adorner to be shown because we update that on selection change. We have to do that here too. Sad really...                   
                 RecreatePanel(glyph); // recreate the DAP itself
                 UpdateDAPLocation(comp, glyph); // reposition the thing
@@ -706,7 +706,7 @@ namespace System.ComponentModel.Design
             // check that the panel will have at least it's parent glyph visible on the adorner window
             if (_behaviorService != null &&
                 _behaviorService.AdornerWindowControl.DisplayRectangle.IntersectsWith(glyph.Bounds))
-            {               
+            {
                 if (_mainParentWindow != null && _mainParentWindow.Handle != IntPtr.Zero)
                 {
                     Debug.WriteLineIf(s_designeActionPanelTraceSwitch.TraceVerbose, "Assigning owner to mainParentWindow");
@@ -951,11 +951,12 @@ namespace System.ComponentModel.Design
         {
             Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[WindowOwnsWindow] Testing if " + hWndOwner.ToString("x") + " is a owned by " + hWndDescendant.ToString("x") + "... ");
 #if DEBUG
-            if (DesignerActionUI.DropDownVisibilityDebug.TraceVerbose) {
+            if (DesignerActionUI.DropDownVisibilityDebug.TraceVerbose)
+            {
                 Debug.WriteLine("\t\tOWNER: " + GetControlInformation(hWndOwner));
                 Debug.WriteLine("\t\tOWNEE: " + GetControlInformation(hWndDescendant));
                 IntPtr claimedOwnerHwnd = UnsafeNativeMethods.GetWindowLong(new HandleRef(null, hWndDescendant), NativeMethods.GWL_HWNDPARENT);
-                Debug.WriteLine("OWNEE's CLAIMED OWNER: "+ GetControlInformation(claimedOwnerHwnd));
+                Debug.WriteLine("OWNEE's CLAIMED OWNER: " + GetControlInformation(claimedOwnerHwnd));
             }
 #endif
             if (hWndDescendant == hWndOwner)
@@ -989,20 +990,24 @@ namespace System.ComponentModel.Design
                 return "Handle is IntPtr.Zero";
             }
 #if DEBUG
-	     if (!DesignerActionUI.DropDownVisibilityDebug.TraceVerbose) {
+            if (!DesignerActionUI.DropDownVisibilityDebug.TraceVerbose)
+            {
                 return string.Empty;
-             }
+            }
 
-             string windowText = Interop.User32.GetWindowText(new HandleRef(null, hwnd));
-             string typeOfControl = "Unknown";
-             string nameOfControl = string.Empty;
-             Control c = Control.FromHandle(hwnd);
-             if (c != null) {
+            string windowText = Interop.User32.GetWindowText(new HandleRef(null, hwnd));
+            string typeOfControl = "Unknown";
+            string nameOfControl = string.Empty;
+            Control c = Control.FromHandle(hwnd);
+            if (c != null)
+            {
                 typeOfControl = c.GetType().Name;
-                if (!string.IsNullOrEmpty(c.Name)) {
+                if (!string.IsNullOrEmpty(c.Name))
+                {
                     nameOfControl += c.Name;
                 }
-                else {
+                else
+                {
                     nameOfControl += "Unknown";
                     // some extra debug info for toolstripdropdowns...
                     if (c is ToolStripDropDown dd)
@@ -1013,8 +1018,8 @@ namespace System.ComponentModel.Design
                         }
                     }
                 }
-             }
-             return windowText + "\r\n\t\t\tType: [" + typeOfControl + "] Name: [" + nameOfControl + "]";
+            }
+            return windowText + "\r\n\t\t\tType: [" + typeOfControl + "] Name: [" + nameOfControl + "]";
 #else
             return string.Empty;
 #endif

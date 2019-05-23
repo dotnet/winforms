@@ -1307,23 +1307,23 @@ namespace System.Windows.Forms.Design.Behavior
             private readonly BehaviorService _owner; // ptr back to the behavior service
             private readonly IMenuCommandService _menuService; // core service used for most implementations of the IMCS interface
             private readonly Stack<CommandID> _currentCommands = new Stack<CommandID>();
-         
+
             public MenuCommandHandler(BehaviorService owner, IMenuCommandService menuService)
             {
                 _owner = owner;
                 _menuService = menuService;
             }
-          
+
             public IMenuCommandService MenuService
             {
                 get => _menuService;
             }
-          
+
             void IMenuCommandService.AddCommand(MenuCommand command)
             {
                 _menuService.AddCommand(command);
             }
-           
+
             void IMenuCommandService.RemoveVerb(DesignerVerb verb)
             {
                 _menuService.RemoveVerb(verb);
@@ -1333,7 +1333,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 _menuService.RemoveCommand(command);
             }
-         
+
             MenuCommand IMenuCommandService.FindCommand(CommandID commandID)
             {
                 try
@@ -1355,17 +1355,17 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 return _menuService.GlobalInvoke(commandID);
             }
-          
+
             void IMenuCommandService.ShowContextMenu(CommandID menuID, int x, int y)
             {
                 _menuService.ShowContextMenu(menuID, x, y);
             }
-          
+
             void IMenuCommandService.AddVerb(DesignerVerb verb)
             {
                 _menuService.AddVerb(verb);
             }
-           
+
             DesignerVerbCollection IMenuCommandService.Verbs
             {
                 get => _menuService.Verbs;
@@ -1406,15 +1406,18 @@ namespace System.Windows.Forms.Design.Behavior
             return menuService.FindCommand(commandID);
         }
 
-        private Behavior GetAppropriateBehavior(Glyph g) {
-            if (_behaviorStack != null && _behaviorStack.Count > 0) {
+        private Behavior GetAppropriateBehavior(Glyph g)
+        {
+            if (_behaviorStack != null && _behaviorStack.Count > 0)
+            {
                 return _behaviorStack[0] as Behavior;
             }
-            
-            if (g != null && g.Behavior != null) {
+
+            if (g != null && g.Behavior != null)
+            {
                 return g.Behavior;
             }
-            
+
             return null;
         }
 

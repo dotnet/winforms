@@ -123,12 +123,12 @@ namespace System.Windows.Forms.Design
                 //Add event Handlers
                 imageToolStripMenuItem.Click += new EventHandler(OnImageToolStripMenuItemClick);
                 enabledToolStripMenuItem = CreateBooleanItem("E&nabled", "Enabled");
-                this.AddRange(new ToolStripItem[] { imageToolStripMenuItem, enabledToolStripMenuItem});
+                this.AddRange(new ToolStripItem[] { imageToolStripMenuItem, enabledToolStripMenuItem });
                 if (selectedItem is ToolStripMenuItem)
                 {
                     checkedToolStripMenuItem = CreateBooleanItem("C&hecked", "Checked");
                     showShortcutKeysToolStripMenuItem = CreateBooleanItem("ShowShortcut&Keys", "ShowShortcutKeys");
-                    this.AddRange(new System.Windows.Forms.ToolStripItem[] { checkedToolStripMenuItem, showShortcutKeysToolStripMenuItem});
+                    this.AddRange(new System.Windows.Forms.ToolStripItem[] { checkedToolStripMenuItem, showShortcutKeysToolStripMenuItem });
                 }
                 else
                 {
@@ -152,10 +152,10 @@ namespace System.Windows.Forms.Design
                     imageTextStyleToolStripMenuItem = CreateEnumValueItem("DisplayStyle", "ImageAndText", ToolStripItemDisplayStyle.ImageAndText);
                     // alignmentToolStripMenuItem
                     alignmentToolStripMenuItem = CreatePropertyBasedItem("Ali&gnment", "Alignment", "alignment.bmp");
-                    alignmentToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { leftToolStripMenuItem, rightToolStripMenuItem});
+                    alignmentToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { leftToolStripMenuItem, rightToolStripMenuItem });
                     // displayStyleToolStripMenuItem
                     displayStyleToolStripMenuItem = CreatePropertyBasedItem("Displa&yStyle", "DisplayStyle", "displaystyle.bmp");
-                    displayStyleToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { noneStyleToolStripMenuItem, textStyleToolStripMenuItem, imageStyleToolStripMenuItem, imageTextStyleToolStripMenuItem});
+                    displayStyleToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { noneStyleToolStripMenuItem, textStyleToolStripMenuItem, imageStyleToolStripMenuItem, imageTextStyleToolStripMenuItem });
 
                     if (serviceProvider.GetService(typeof(IUIService)) is IUIService uis)
                     {
@@ -193,7 +193,7 @@ namespace System.Windows.Forms.Design
                 DropDown = ToolStripDesignerUtils.GetNewItemDropDown(ParentTool, currentItem, new EventHandler(AddNewItemClick), false, serviceProvider, true)
             };
 
-            this.AddRange(new System.Windows.Forms.ToolStripItem[] { convertToolStripMenuItem, insertToolStripMenuItem});
+            this.AddRange(new System.Windows.Forms.ToolStripItem[] { convertToolStripMenuItem, insertToolStripMenuItem });
 
             if (currentItem is ToolStripDropDownItem)
             {

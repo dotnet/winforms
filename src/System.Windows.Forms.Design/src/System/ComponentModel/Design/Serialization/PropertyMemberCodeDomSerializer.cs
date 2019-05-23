@@ -8,20 +8,20 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Reflection;
 
-namespace System.ComponentModel.Design.Serialization 
+namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
     ///    A MemberCodeDomSerializer for properties.
     /// </summary>
-    internal sealed class PropertyMemberCodeDomSerializer : MemberCodeDomSerializer 
+    internal sealed class PropertyMemberCodeDomSerializer : MemberCodeDomSerializer
     {
         private static PropertyMemberCodeDomSerializer s_default;
 
-        internal static PropertyMemberCodeDomSerializer Default 
+        internal static PropertyMemberCodeDomSerializer Default
         {
-            get 
+            get
             {
-                if (s_default == null) 
+                if (s_default == null)
                 {
                     s_default = new PropertyMemberCodeDomSerializer();
                 }
@@ -36,7 +36,7 @@ namespace System.ComponentModel.Design.Serialization
         ///     This will look for an AmbientValueAttribute and use it if it can.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
-        private object GetPropertyValue(IDesignerSerializationManager manager, PropertyDescriptor property, object value, out bool validValue) 
+        private object GetPropertyValue(IDesignerSerializationManager manager, PropertyDescriptor property, object value, out bool validValue)
         {
             object propertyValue = null;
             validValue = true;
@@ -50,7 +50,7 @@ namespace System.ComponentModel.Design.Serialization
                     AmbientValueAttribute attr = (AmbientValueAttribute)property.Attributes[typeof(AmbientValueAttribute)];
 
                     if (attr != null)
-                    {                        
+                    {
                         return attr.Value;
                     }
                     else
@@ -58,25 +58,25 @@ namespace System.ComponentModel.Design.Serialization
                         DefaultValueAttribute defAttr = (DefaultValueAttribute)property.Attributes[typeof(DefaultValueAttribute)];
 
                         if (defAttr != null)
-                        {                    
+                        {
                             return defAttr.Value;
                         }
                         else
                         {
                             // nope, we're not valid...
                             //
-                            validValue = false;                            
+                            validValue = false;
                         }
                     }
                 }
-                propertyValue = property.GetValue(value);                
+                propertyValue = property.GetValue(value);
             }
             catch (Exception e)
             {
                 // something failed -- we don't have a valid value
-                validValue = false;   
+                validValue = false;
 
-                manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerPropertyGenFailed, property.Name, e.Message), manager));             
+                manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerPropertyGenFailed, property.Name, e.Message), manager));
             }
 
             if ((propertyValue != null) && (!propertyValue.GetType().IsValueType) && !(propertyValue is Type))
@@ -98,71 +98,71 @@ namespace System.ComponentModel.Design.Serialization
             return propertyValue;
 
         }
-        
+
         /// <summary>
         ///    This method actually performs the serialization.  When the member is serialized
         ///    the necessary statements will be added to the statements collection.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
-        public override void Serialize(IDesignerSerializationManager manager, object value, MemberDescriptor descriptor, CodeStatementCollection statements) 
+        public override void Serialize(IDesignerSerializationManager manager, object value, MemberDescriptor descriptor, CodeStatementCollection statements)
         {
             PropertyDescriptor propertyToSerialize = descriptor as PropertyDescriptor;
 
-            if (manager == null) 
-            { 
+            if (manager == null)
+            {
                 throw new ArgumentNullException(nameof(manager));
             }
-            if (value == null) 
-            { 
+            if (value == null)
+            {
                 throw new ArgumentNullException(nameof(value));
             }
-            if (propertyToSerialize == null) 
-            { 
+            if (propertyToSerialize == null)
+            {
                 throw new ArgumentNullException(nameof(descriptor));
             }
-            if (statements == null) 
-            { 
+            if (statements == null)
+            {
                 throw new ArgumentNullException(nameof(statements));
             }
-            
-            try 
+
+            try
             {
                 ExtenderProvidedPropertyAttribute exAttr = (ExtenderProvidedPropertyAttribute)propertyToSerialize.Attributes[typeof(ExtenderProvidedPropertyAttribute)];
                 bool isExtender = (exAttr != null && exAttr.Provider != null);
                 bool serializeContents = propertyToSerialize.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content);
 
                 CodeDomSerializer.Trace("Serializing property {0}", propertyToSerialize.Name);
-                if (serializeContents) 
+                if (serializeContents)
                 {
                     SerializeContentProperty(manager, value, propertyToSerialize, isExtender, statements);
                 }
-                else if (isExtender) 
+                else if (isExtender)
                 {
                     SerializeExtenderProperty(manager, value, propertyToSerialize, statements);
                 }
-                else 
+                else
                 {
                     SerializeNormalProperty(manager, value, propertyToSerialize, statements);
                 }
             }
-            catch (Exception e) 
+            catch (Exception e)
             {
                 // Since we usually go through reflection, don't 
                 // show what our engine does, show what caused 
                 // the problem.
-                if (e is TargetInvocationException) 
+                if (e is TargetInvocationException)
                 {
                     e = e.InnerException;
                 }
-                
-                manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerPropertyGenFailed, propertyToSerialize.Name, e.Message), manager));             
+
+                manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerPropertyGenFailed, propertyToSerialize.Name, e.Message), manager));
             }
         }
 
         /// <summary>
         ///     This serializes the given property on this object as a content property.
         /// </summary>
-        private void SerializeContentProperty(IDesignerSerializationManager manager, object value, PropertyDescriptor property, bool isExtender, CodeStatementCollection statements) 
+        private void SerializeContentProperty(IDesignerSerializationManager manager, object value, PropertyDescriptor property, bool isExtender, CodeStatementCollection statements)
         {
             CodeDomSerializer.Trace("Property is marked as Visibility.Content.  Recursing.");
 
@@ -174,38 +174,38 @@ namespace System.ComponentModel.Design.Serialization
             //
             CodeDomSerializer serializer = null;
 
-            if (propertyValue == null) 
+            if (propertyValue == null)
             {
                 CodeDomSerializer.TraceError("Property {0} is marked as Visibility.Content but it is returning null.", property.Name);
 
                 string name = manager.GetName(value);
 
-                if (name == null) 
+                if (name == null)
                 {
                     name = value.GetType().FullName;
                 }
 
                 manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerNullNestedProperty, name, property.Name), manager));
             }
-            else 
+            else
             {
                 serializer = (CodeDomSerializer)manager.GetSerializer(propertyValue.GetType(), typeof(CodeDomSerializer));
-                if (serializer != null) 
+                if (serializer != null)
                 {
                     // Create a property reference expression and push it on the context stack.
                     // This allows the serializer to gain some context as to what it should be
                     // serializing.
                     CodeExpression target = SerializeToExpression(manager, value);
 
-                    if (target == null) 
+                    if (target == null)
                     {
                         CodeDomSerializer.TraceWarning("Unable to convert value to expression object");
                     }
-                    else 
+                    else
                     {
                         CodeExpression propertyRef = null;
 
-                        if (isExtender) 
+                        if (isExtender)
                         {
                             CodeDomSerializer.Trace("Content property is an extender.");
                             ExtenderProvidedPropertyAttribute exAttr = (ExtenderProvidedPropertyAttribute)property.Attributes[typeof(ExtenderProvidedPropertyAttribute)];
@@ -217,7 +217,7 @@ namespace System.ComponentModel.Design.Serialization
 
                             CodeDomSerializer.TraceWarningIf(extender == null, "Extender object {0} could not be serialized.", manager.GetName(exAttr.Provider));
                             CodeDomSerializer.TraceWarningIf(extended == null, "Extended object {0} could not be serialized.", manager.GetName(value));
-                            if (extender != null && extended != null) 
+                            if (extender != null && extended != null)
                             {
                                 CodeMethodReferenceExpression methodRef = new CodeMethodReferenceExpression(extender, "Get" + property.Name);
                                 CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression();
@@ -226,32 +226,32 @@ namespace System.ComponentModel.Design.Serialization
                                 propertyRef = methodInvoke;
                             }
                         }
-                        else 
+                        else
                         {
                             propertyRef = new CodePropertyReferenceExpression(target, property.Name);
                         }
 
-                        if (propertyRef != null) 
+                        if (propertyRef != null)
                         {
                             ExpressionContext tree = new ExpressionContext(propertyRef, property.PropertyType, value, propertyValue);
                             manager.Context.Push(tree);
 
                             object result = null;
 
-                            try 
+                            try
                             {
                                 SerializeAbsoluteContext absolute = (SerializeAbsoluteContext)manager.Context[typeof(SerializeAbsoluteContext)];
-                                
-                                if (IsSerialized(manager, propertyValue, absolute != null)) 
+
+                                if (IsSerialized(manager, propertyValue, absolute != null))
                                 {
                                     result = GetExpression(manager, propertyValue);
                                 }
-                                else 
+                                else
                                 {
                                     result = serializer.Serialize(manager, propertyValue);
                                 }
                             }
-                            finally 
+                            finally
                             {
                                 Debug.Assert(manager.Context.Current == tree, "Serializer added a context it didn't remove.");
                                 manager.Context.Pop();
@@ -259,18 +259,18 @@ namespace System.ComponentModel.Design.Serialization
 
                             CodeStatementCollection csc = result as CodeStatementCollection;
 
-                            if (csc != null) 
+                            if (csc != null)
                             {
-                                foreach (CodeStatement statement in csc) 
+                                foreach (CodeStatement statement in csc)
                                 {
                                     statements.Add(statement);
                                 }
                             }
-                            else 
+                            else
                             {
                                 CodeStatement cs = result as CodeStatement;
 
-                                if (cs != null) 
+                                if (cs != null)
                                 {
                                     statements.Add(cs);
                                 }
@@ -278,7 +278,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
                     }
                 }
-                else 
+                else
                 {
                     CodeDomSerializer.TraceError("Property {0} is marked as Visibilty.Content but there is no serializer for it.", property.Name);
 
@@ -290,11 +290,11 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///     This serializes the given property on this object.
         /// </summary>
-        private void SerializeExtenderProperty(IDesignerSerializationManager manager, object value, PropertyDescriptor property, CodeStatementCollection statements) 
+        private void SerializeExtenderProperty(IDesignerSerializationManager manager, object value, PropertyDescriptor property, CodeStatementCollection statements)
         {
             AttributeCollection attributes = property.Attributes;
 
-            using (CodeDomSerializer.TraceScope("PropertyMemberCodeDomSerializer::" + nameof(SerializeExtenderProperty))) 
+            using (CodeDomSerializer.TraceScope("PropertyMemberCodeDomSerializer::" + nameof(SerializeExtenderProperty)))
             {
                 ExtenderProvidedPropertyAttribute exAttr = (ExtenderProvidedPropertyAttribute)attributes[typeof(ExtenderProvidedPropertyAttribute)];
 
@@ -305,7 +305,7 @@ namespace System.ComponentModel.Design.Serialization
 
                 CodeDomSerializer.TraceWarningIf(extender == null, "Extender object {0} could not be serialized.", manager.GetName(exAttr.Provider));
                 CodeDomSerializer.TraceWarningIf(extended == null, "Extended object {0} could not be serialized.", manager.GetName(value));
-                if (extender != null && extended != null) 
+                if (extender != null && extended != null)
                 {
                     CodeMethodReferenceExpression methodRef = new CodeMethodReferenceExpression(extender, "Set" + property.Name);
                     bool validValue;
@@ -314,11 +314,12 @@ namespace System.ComponentModel.Design.Serialization
 
                     // Serialize the value of this property into a code expression.  If we can't get one,
                     // then we won't serialize the property.
-                    if (validValue) 
+                    if (validValue)
                     {
                         ExpressionContext tree = null;
 
-                        if (propValue != value) {
+                        if (propValue != value)
+                        {
                             // make sure the value isn't the object or we'll end up printing
                             // this property instead of the value.
                             tree = new ExpressionContext(methodRef, property.PropertyType, value);
@@ -329,9 +330,9 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             serializedPropertyValue = SerializeToExpression(manager, propValue);
                         }
-                        finally 
+                        finally
                         {
-                            if (tree != null) 
+                            if (tree != null)
                             {
                                 Debug.Assert(manager.Context.Current == tree, "Context stack corrupted.");
                                 manager.Context.Pop();
@@ -339,7 +340,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
                     }
 
-                    if (serializedPropertyValue != null) 
+                    if (serializedPropertyValue != null)
                     {
                         CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression();
 
@@ -355,15 +356,15 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///     This serializes the given property on this object.
         /// </summary>
-        private void SerializeNormalProperty(IDesignerSerializationManager manager, object value, PropertyDescriptor property, CodeStatementCollection statements) 
+        private void SerializeNormalProperty(IDesignerSerializationManager manager, object value, PropertyDescriptor property, CodeStatementCollection statements)
         {
 
-            using (CodeDomSerializer.TraceScope("CodeDomSerializer::" + nameof(SerializeProperty))) 
+            using (CodeDomSerializer.TraceScope("CodeDomSerializer::" + nameof(SerializeProperty)))
             {
                 CodeExpression target = SerializeToExpression(manager, value);
 
                 CodeDomSerializer.TraceWarningIf(target == null, "Unable to serialize target for property {0}", property.Name);
-                if (target != null) 
+                if (target != null)
                 {
                     CodeExpression propertyRef = new CodePropertyReferenceExpression(target, property.Name);
 
@@ -375,34 +376,34 @@ namespace System.ComponentModel.Design.Serialization
                     // it isn't, then we're serialize ourselves.
                     MemberRelationshipService relationships = manager.GetService(typeof(MemberRelationshipService)) as MemberRelationshipService;
 
-                    if (relationships != null) 
+                    if (relationships != null)
                     {
                         MemberRelationship relationship = relationships[value, property];
 
-                        if (relationship != MemberRelationship.Empty) 
+                        if (relationship != MemberRelationship.Empty)
                         {
                             CodeExpression rhsTarget = SerializeToExpression(manager, relationship.Owner);
 
-                            if (rhsTarget != null) 
+                            if (rhsTarget != null)
                             {
                                 serializedPropertyValue = new CodePropertyReferenceExpression(rhsTarget, relationship.Member.Name);
                             }
                         }
                     }
 
-                    if (serializedPropertyValue == null) 
+                    if (serializedPropertyValue == null)
                     {
                         // Serialize the value of this property into a code expression.  If we can't get one,
                         // then we won't serialize the property.
                         //
                         bool validValue;
                         object propValue = GetPropertyValue(manager, property, value, out validValue);
-    
-                        if (validValue) 
+
+                        if (validValue)
                         {
                             ExpressionContext tree = null;
 
-                            if (propValue != value) 
+                            if (propValue != value)
                             {
                                 // make sure the value isn't the object or we'll end up printing
                                 // this property instead of the value.
@@ -410,13 +411,13 @@ namespace System.ComponentModel.Design.Serialization
                                 manager.Context.Push(tree);
                             }
 
-                            try 
+                            try
                             {
                                 serializedPropertyValue = SerializeToExpression(manager, propValue);
                             }
-                            finally 
+                            finally
                             {
-                                if (tree != null) 
+                                if (tree != null)
                                 {
                                     Debug.Assert(manager.Context.Current == tree, "Context stack corrupted.");
                                     manager.Context.Pop();
@@ -425,7 +426,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
                     }
 
-                    if (serializedPropertyValue != null) 
+                    if (serializedPropertyValue != null)
                     {
                         CodeAssignStatement assign = new CodeAssignStatement(propertyRef, serializedPropertyValue);
                         statements.Add(assign);
@@ -443,34 +444,34 @@ namespace System.ComponentModel.Design.Serialization
 
             PropertyDescriptor propertyToSerialize = descriptor as PropertyDescriptor;
 
-            if (manager == null) 
+            if (manager == null)
             {
                 throw new ArgumentNullException(nameof(manager));
             }
-            if (value == null) 
+            if (value == null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
-            if (propertyToSerialize == null) 
+            if (propertyToSerialize == null)
             {
                 throw new ArgumentNullException(nameof(descriptor));
             }
 
             bool shouldSerializeProperty = propertyToSerialize.ShouldSerializeValue(value);
-            
-            if (!shouldSerializeProperty) 
+
+            if (!shouldSerializeProperty)
             {
                 SerializeAbsoluteContext absolute = (SerializeAbsoluteContext)manager.Context[typeof(SerializeAbsoluteContext)];
 
-                if (absolute != null && absolute.ShouldSerialize(propertyToSerialize)) 
-                {                    
-                    
+                if (absolute != null && absolute.ShouldSerialize(propertyToSerialize))
+                {
+
                     // For ReadOnly properties, we only want to override the value returned from 
                     // ShouldSerializeValue() if the property is marked with DesignerSerializationVisibilityAttribute(Content).
                     // Consider the case of a property with just a getter - we only want to serialize those                    
                     // if they're marked in this way (see ReflectPropertyDescriptor::ShouldSerializeValue())
-                    if (!propertyToSerialize.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content)) 
-                    {                        
+                    if (!propertyToSerialize.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content))
+                    {
                         shouldSerializeProperty = false; // it's already false at this point, but this is clearer.
                     }
                     else
@@ -480,10 +481,10 @@ namespace System.ComponentModel.Design.Serialization
                 }
             }
 
-            if (shouldSerializeProperty) 
+            if (shouldSerializeProperty)
             {
                 bool isDesignTime = propertyToSerialize.Attributes.Contains(DesignOnlyAttribute.Yes);
-                if (!isDesignTime) 
+                if (!isDesignTime)
                 {
                     return true;
                 }
@@ -494,11 +495,11 @@ namespace System.ComponentModel.Design.Serialization
 
             MemberRelationshipService relationships = manager.GetService(typeof(MemberRelationshipService)) as MemberRelationshipService;
 
-            if (relationships != null) 
+            if (relationships != null)
             {
                 MemberRelationship relationship = relationships[value, descriptor];
 
-                if (relationship != MemberRelationship.Empty) 
+                if (relationship != MemberRelationship.Empty)
                 {
                     return true;
                 }

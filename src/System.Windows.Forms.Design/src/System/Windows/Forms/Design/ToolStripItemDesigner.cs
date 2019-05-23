@@ -87,12 +87,12 @@ namespace System.Windows.Forms.Design
                 if (selSvc.SelectionCount > 1)
                 {
                     toolStripContextMenu.GroupOrdering.Clear();
-                    toolStripContextMenu.GroupOrdering.AddRange(new string[] { StandardGroups.Code, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties});
+                    toolStripContextMenu.GroupOrdering.AddRange(new string[] { StandardGroups.Code, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties });
                 }
                 else
                 {
                     toolStripContextMenu.GroupOrdering.Clear();
-                    toolStripContextMenu.GroupOrdering.AddRange(new string[] { StandardGroups.Code, StandardGroups.Custom, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties});
+                    toolStripContextMenu.GroupOrdering.AddRange(new string[] { StandardGroups.Code, StandardGroups.Custom, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties });
                     toolStripContextMenu.Text = "CustomContextMenu";
                     if (toolStripItemCustomMenuItemCollection == null)
                     {

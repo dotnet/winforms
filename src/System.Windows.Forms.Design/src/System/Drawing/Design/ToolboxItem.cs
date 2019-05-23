@@ -39,7 +39,8 @@ namespace System.Drawing.Design
         /// <summary>
         /// Initializes a new instance of the ToolboxItem class.
         /// </summary>
-        public ToolboxItem() {
+        public ToolboxItem()
+        {
             if (!s_isScalingInitialized)
             {
                 if (DpiHelper.IsScalingRequired)

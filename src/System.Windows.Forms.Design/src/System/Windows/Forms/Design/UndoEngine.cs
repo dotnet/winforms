@@ -97,7 +97,7 @@ namespace System.ComponentModel.Design
         public bool Enabled
         {
             get => _enabled;
-            set =>  _enabled = value;
+            set => _enabled = value;
         }
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace System.ComponentModel.Design
 
         internal IComponentChangeService ComponentChangeService
         {
-            get =>_componentChangeService;
+            get => _componentChangeService;
         }
 
         /// <summary>
@@ -462,7 +462,7 @@ namespace System.ComponentModel.Design
                             }
 
                             if (obj != null && object.ReferenceEquals(obj, e.Component))
-                            {                         
+                            {
                                 if (propsToUpdate == null)
                                 {
                                     propsToUpdate = new List<ReferencingComponent>();
@@ -580,7 +580,7 @@ namespace System.ComponentModel.Design
                 {
                     name = string.Empty;
                 }
-    
+
                 UndoEngine.Trace("Creating undo unit '{0}'", name);
 
                 Name = name;
@@ -785,13 +785,16 @@ namespace System.ComponentModel.Design
 #if DEBUG
                         string name = UndoEngine.GetName(e.Component, false);
                         string memberName = "(none)";
-                        if (e.Member != null && e.Member.Name != null) {
-                            memberName = e.Member.Name;                        
+                        if (e.Member != null && e.Member.Name != null)
+                        {
+                            memberName = e.Member.Name;
                         }
-                        if (name != null) {
+                        if (name != null)
+                        {
                             Debug.WriteLineIf(s_traceUndo.TraceVerbose && hasChange, "Adding second ChangeEvent for " + name + " Member: " + memberName);
                         }
-                        else {
+                        else
+                        {
                             Debug.Fail("UndoEngine: GetName is failing on successive calls");
                         }
 #endif

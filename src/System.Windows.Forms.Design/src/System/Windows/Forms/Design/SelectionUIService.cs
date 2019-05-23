@@ -886,7 +886,7 @@ namespace System.Windows.Forms.Design
         event ContainerSelectorActiveEventHandler ISelectionUIService.ContainerSelectorActive
         {
             add => _containerSelectorActive += value;
-            remove =>  _containerSelectorActive -= value;
+            remove => _containerSelectorActive -= value;
         }
 
         /// <summary>
@@ -1782,7 +1782,7 @@ namespace System.Windows.Forms.Design
                 if (!_innerRect.IsEmpty)
                 {
                     _innerRect = _selUIsvc.RectangleToClient(_innerRect);
-                    Rectangle rcOuterNew = new Rectangle( _innerRect.X - GRABHANDLE_WIDTH, _innerRect.Y - GRABHANDLE_HEIGHT, _innerRect.Width + 2 * GRABHANDLE_WIDTH, _innerRect.Height + 2 * GRABHANDLE_HEIGHT);
+                    Rectangle rcOuterNew = new Rectangle(_innerRect.X - GRABHANDLE_WIDTH, _innerRect.Y - GRABHANDLE_HEIGHT, _innerRect.Width + 2 * GRABHANDLE_WIDTH, _innerRect.Height + 2 * GRABHANDLE_HEIGHT);
                     if (_outerRect.IsEmpty || !_outerRect.Equals(rcOuterNew))
                     {
                         if (!_outerRect.IsEmpty)

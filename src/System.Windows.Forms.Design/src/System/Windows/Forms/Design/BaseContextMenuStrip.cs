@@ -204,7 +204,7 @@ namespace System.Windows.Forms.Design
                     ForeColor = (Color)uis.Styles["VsColorPanelText"];
                 }
             }
-            GroupOrdering.AddRange(new string[] { StandardGroups.Code, StandardGroups.ZORder, StandardGroups.Grid, StandardGroups.Lock, StandardGroups.Verbs, StandardGroups.Custom, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties});
+            GroupOrdering.AddRange(new string[] { StandardGroups.Code, StandardGroups.ZORder, StandardGroups.Grid, StandardGroups.Lock, StandardGroups.Verbs, StandardGroups.Custom, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties });
             // ADD MENUITEMS
             AddCodeMenuItem();
             AddZorderMenuItem();

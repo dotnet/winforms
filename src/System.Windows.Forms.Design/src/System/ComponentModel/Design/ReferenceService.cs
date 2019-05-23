@@ -54,7 +54,7 @@ namespace System.ComponentModel.Design
             {
                 if (property.IsReadOnly)
                 {
-                    CreateReferences( string.Format(CultureInfo.CurrentCulture, "{0}.{1}", trailingName, property.Name), property.GetValue(reference), sitedComponent);
+                    CreateReferences(string.Format(CultureInfo.CurrentCulture, "{0}.{1}", trailingName, property.Name), property.GetValue(reference), sitedComponent);
                 }
             }
         }

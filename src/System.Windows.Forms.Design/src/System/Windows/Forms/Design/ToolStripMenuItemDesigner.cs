@@ -2576,7 +2576,7 @@ namespace System.Windows.Forms.Design
                 }
                 return null;
             }
-  
+
             /// <summary>
             /// Overrides Glyph::Paint - this implementation does nothing.
             /// </summary>

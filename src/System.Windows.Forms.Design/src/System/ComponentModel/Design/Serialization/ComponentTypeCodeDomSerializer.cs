@@ -9,22 +9,22 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace System.ComponentModel.Design.Serialization 
-{   
+namespace System.ComponentModel.Design.Serialization
+{
     /// <summary>
     ///     This class performs the same tasks as a CodeDomSerializer only serializing an object through this class defines a new type.
     /// </summary>
-    internal class ComponentTypeCodeDomSerializer : TypeCodeDomSerializer 
+    internal class ComponentTypeCodeDomSerializer : TypeCodeDomSerializer
     {
         private static object _initMethodKey = new object();
         private const string _initMethodName = "InitializeComponent";
         private static ComponentTypeCodeDomSerializer s_default;
 
-        internal new static ComponentTypeCodeDomSerializer Default 
+        internal new static ComponentTypeCodeDomSerializer Default
         {
-            get 
+            get
             {
-                if (s_default == null) 
+                if (s_default == null)
                 {
                     s_default = new ComponentTypeCodeDomSerializer();
                 }
@@ -37,26 +37,26 @@ namespace System.ComponentModel.Design.Serialization
         ///    This method returns the method to emit all of the initialization code to for the given member.  
         ///    The default implementation returns an empty constructor.
         /// </summary>
-        protected override CodeMemberMethod GetInitializeMethod(IDesignerSerializationManager manager, CodeTypeDeclaration typeDecl, object value) 
+        protected override CodeMemberMethod GetInitializeMethod(IDesignerSerializationManager manager, CodeTypeDeclaration typeDecl, object value)
         {
-            if (manager == null) 
+            if (manager == null)
             {
                 throw new ArgumentNullException(nameof(manager));
             }
 
-            if (typeDecl == null) 
+            if (typeDecl == null)
             {
                 throw new ArgumentNullException(nameof(typeDecl));
             }
 
-            if (value == null) 
+            if (value == null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
 
             CodeMemberMethod method = typeDecl.UserData[_initMethodKey] as CodeMemberMethod;
 
-            if (method == null) 
+            if (method == null)
             {
                 method = new CodeMemberMethod();
                 method.Name = _initMethodName;
@@ -77,19 +77,19 @@ namespace System.ComponentModel.Design.Serialization
         ///    This method returns an array of methods that need to be interpreted during deserialization.  
         ///    The default implementation returns a single element array with the constructor in it.
         /// </summary>
-        protected override CodeMemberMethod[] GetInitializeMethods(IDesignerSerializationManager manager, CodeTypeDeclaration typeDecl) 
+        protected override CodeMemberMethod[] GetInitializeMethods(IDesignerSerializationManager manager, CodeTypeDeclaration typeDecl)
         {
-            if (manager == null) 
+            if (manager == null)
             {
                 throw new ArgumentNullException(nameof(manager));
             }
 
-            if (typeDecl == null) 
+            if (typeDecl == null)
             {
                 throw new ArgumentNullException(nameof(typeDecl));
             }
 
-            foreach (CodeTypeMember member in typeDecl.Members) 
+            foreach (CodeTypeMember member in typeDecl.Members)
             {
                 CodeMemberMethod method = member as CodeMemberMethod;
 
@@ -97,11 +97,11 @@ namespace System.ComponentModel.Design.Serialization
                 // method.Parameters causes OnMethodPopulateParameters callback and therefore it is much more 
                 // expensive than method.Name.Equals
 
-                if (method != null && method.Name.Equals(_initMethodName) && method.Parameters.Count == 0 ) 
+                if (method != null && method.Name.Equals(_initMethodName) && method.Parameters.Count == 0)
                 {
-                    return new CodeMemberMethod[] 
-                    { 
-                        method 
+                    return new CodeMemberMethod[]
+                    {
+                        method
                     };
                 }
             }

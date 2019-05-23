@@ -1506,7 +1506,7 @@ namespace System.ComponentModel.Design
         {
             private CheckBox _checkBox;
 
-            public CheckBoxPropertyLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel): base(serviceProvider, actionPanel)
+            public CheckBoxPropertyLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel) : base(serviceProvider, actionPanel)
             {
             }
 
@@ -1523,7 +1523,7 @@ namespace System.ComponentModel.Design
                 controls.Add(_checkBox);
             }
 
-            public sealed override void Focus() =>  _checkBox.Focus();
+            public sealed override void Focus() => _checkBox.Focus();
 
             public override Size LayoutControls(int top, int width, bool measureOnly)
             {
@@ -2447,7 +2447,7 @@ namespace System.ComponentModel.Design
                 {
                     try
                     {
-                        UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle),  NativeMethods.GWL_HWNDPARENT, new HandleRef(parent, parent.Handle));
+                        UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_HWNDPARENT, new HandleRef(parent, parent.Handle));
                         // Lifted directly from Form.ShowDialog()...
                         IntPtr hWndCapture = UnsafeNativeMethods.GetCapture();
                         if (hWndCapture != IntPtr.Zero)

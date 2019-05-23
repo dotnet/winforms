@@ -86,7 +86,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public void Add(IComponent comp, DesignerActionList actionList)
         {
-            Add(comp, new DesignerActionListCollection( new[] { actionList } ));
+            Add(comp, new DesignerActionListCollection(new[] { actionList }));
         }
 
         /// <summary>
