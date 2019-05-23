@@ -387,7 +387,7 @@ namespace System.ComponentModel.Design.Tests
         public static IEnumerable<object[]> DestroyInstance_NormalObject_TestData()
         {
             yield return new object[] { null };
-            yield return new object[] { new object()  };
+            yield return new object[] { new object() };
         }
 
         [Theory]
@@ -435,7 +435,7 @@ namespace System.ComponentModel.Design.Tests
             editor.DestroyInstance(mockComponent.Object);
             mockComponent.Verify(c => c.Dispose(), Times.Once());
         }
-        
+
         [Fact]
         public void CollectionEditor_DestroyInstance_WithContextWithInvalidHost_CallsDestroyComponent()
         {
@@ -493,7 +493,7 @@ namespace System.ComponentModel.Design.Tests
             mockComponent
                 .Setup(c => c.Dispose())
                 .Verifiable();
-            
+
             var editor = new SubCollectionEditor(null);
             editor.DestroyInstance(mockComponent.Object);
             mockComponent.Verify(c => c.Dispose(), Times.Once());
@@ -506,7 +506,7 @@ namespace System.ComponentModel.Design.Tests
             mockDisposable
                 .Setup(d => d.Dispose())
                 .Verifiable();
-            
+
             var editor = new SubCollectionEditor(null);
             editor.DestroyInstance(mockDisposable.Object);
             mockDisposable.Verify(d => d.Dispose(), Times.Once());
@@ -693,7 +693,7 @@ namespace System.ComponentModel.Design.Tests
             mockEditorService
                 .Setup(s => s.ShowDialog(It.IsAny<Form>()))
                 .Returns(DialogResult.OK);
-            
+
             var mockChangeService = new Mock<IComponentChangeService>(MockBehavior.Strict);
 
             var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
@@ -825,12 +825,12 @@ namespace System.ComponentModel.Design.Tests
             var editor = new SubCollectionEditor(type);
             Assert.Equal(expected, editor.GetDisplayText(value));
         }
-        
+
         [Fact]
         public void CollectionEditor_GetDisplayText_ValueDoesntMatchCollectionType_ThrowsTargetException()
         {
             var editor = new SubCollectionEditor(typeof(ClassWithStringDefaultProperty));
-            TargetInvocationException ex = Assert.Throws<TargetInvocationException>(() => editor.GetDisplayText(new ClassWithNonStringDefaultProperty())); 
+            TargetInvocationException ex = Assert.Throws<TargetInvocationException>(() => editor.GetDisplayText(new ClassWithNonStringDefaultProperty()));
             Assert.IsType<TargetException>(ex.InnerException);
         }
 
@@ -840,7 +840,7 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { new object(), new object[0] };
             yield return new object[] { new ArrayList { 1, 2, 3 }, new object[] { 1, 2, 3, } };
         }
-        
+
         [Theory]
         [MemberData(nameof(GetItems_TestData))]
         public void CollectionEditor_GetItems_Invoke_ReturnsExpected(object editValue, object[] expected)
@@ -915,12 +915,12 @@ namespace System.ComponentModel.Design.Tests
 
         public static IEnumerable<object[]> SetItems_TestData()
         {
-            yield return new object[] { null, new object[] { 1, 2, 3}, null };
+            yield return new object[] { null, new object[] { 1, 2, 3 }, null };
             yield return new object[] { null, new object[0], null };
             yield return new object[] { null, null, null };
 
             var o = new object();
-            yield return new object[] { o, new object[] { 1, 2, 3}, o };
+            yield return new object[] { o, new object[] { 1, 2, 3 }, o };
             yield return new object[] { o, new object[0], o };
             yield return new object[] { o, null, o };
 
@@ -1051,7 +1051,7 @@ namespace System.ComponentModel.Design.Tests
             public new Type CreateCollectionItemType() => base.CreateCollectionItemType();
 
             public new object CreateInstance(Type itemType) => base.CreateInstance(itemType);
-            
+
             public new Type[] CreateNewItemTypes() => base.CreateNewItemTypes();
 
             public new void DestroyInstance(object instance) => base.DestroyInstance(instance);

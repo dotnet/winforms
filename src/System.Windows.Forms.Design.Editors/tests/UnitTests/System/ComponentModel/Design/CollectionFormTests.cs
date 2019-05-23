@@ -488,7 +488,8 @@ namespace System.ComponentModel.Design.Tests
             var editor = new SubCollectionEditor(null);
             var form = new SubCollectionForm(editor);
             Assert.True(form.CanSelectMultipleInstances());
-        }        public static IEnumerable<object[]> InvalidDesignerHost_TestData()
+        }
+        public static IEnumerable<object[]> InvalidDesignerHost_TestData()
         {
             yield return new object[] { null };
             yield return new object[] { new object() };
@@ -865,7 +866,7 @@ namespace System.ComponentModel.Design.Tests
             public new bool CanRemoveInstance(object value) => base.CanRemoveInstance(value);
 
             public new bool CanSelectMultipleInstances() => base.CanSelectMultipleInstances();
-            
+
             public new object CreateInstance(Type itemType) => base.CreateInstance(itemType);
 
             public new void DestroyInstance(object instance) => base.DestroyInstance(instance);
@@ -873,7 +874,7 @@ namespace System.ComponentModel.Design.Tests
             public new void DisplayError(Exception e) => base.DisplayError(e);
 
             public new object GetService(Type serviceType) => base.GetService(serviceType);
-            
+
             public new DialogResult ShowEditorDialog(IWindowsFormsEditorService edSvc) => base.ShowEditorDialog(edSvc);
 
             public int OnEditValueChangedCallCount { get; set; }

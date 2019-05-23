@@ -34,7 +34,8 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void ObjectSelectorEditor_GetEditStyle() {
+        public void ObjectSelectorEditor_GetEditStyle()
+        {
             var underTest = GetNewObjectSelectorEditor();
 
             Assert.Equal(UITypeEditorEditStyle.DropDown, underTest.GetEditStyle(null));
@@ -59,7 +60,8 @@ namespace System.ComponentModel.Design.Tests
             return subObjectSelector ? new TestObjectSelectorEditor(subObjectSelector) : new TestObjectSelectorEditor();
         }
 
-        private class TestObjectSelectorEditor : ObjectSelectorEditor {
+        private class TestObjectSelectorEditor : ObjectSelectorEditor
+        {
             public TestObjectSelectorEditor()
             {
             }
@@ -68,7 +70,8 @@ namespace System.ComponentModel.Design.Tests
             }
         }
 
-        private ObjectSelectorEditor.Selector GetNewSelector() {
+        private ObjectSelectorEditor.Selector GetNewSelector()
+        {
             return new ObjectSelectorEditor.Selector(GetNewObjectSelectorEditor());
         }
     }
