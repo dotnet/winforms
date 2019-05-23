@@ -138,7 +138,7 @@ namespace System.Drawing.Design
 
             public ColorPalette(ColorUI colorUI, Color[] customColors)
             {
-                
+
                 if (!isScalingInitialized)
                 {
                     if (DpiHelper.IsScalingRequired)

@@ -287,8 +287,8 @@ namespace System.ComponentModel.Design
                     {
                         Rectangle workingArea = Screen.GetWorkingArea(this);
                         _minimumSize = new Size(
-                            (int)Math.Min(Math.Ceiling(WatermarkSize.Width * 1.75), workingArea.Width / 3 ),
-                            (int)Math.Min( Font.Height * 10, workingArea.Height / 3 ));
+                            (int)Math.Min(Math.Ceiling(WatermarkSize.Width * 1.75), workingArea.Width / 3),
+                            (int)Math.Min(Font.Height * 10, workingArea.Height / 3));
                     }
                     return _minimumSize;
                 }
@@ -306,7 +306,8 @@ namespace System.ComponentModel.Design
             public void ProcessSurrogateFonts(int start, int length)
             {
                 string value = Text;
-                if (value == null) return;
+                if (value == null)
+                    return;
 
                 int[] surrogates = StringInfo.ParseCombiningCharacters(value);
                 if (surrogates.Length != value.Length)
@@ -393,7 +394,7 @@ namespace System.ComponentModel.Design
                         // See how much space we should reserve for watermark
                         using (Graphics g = CreateGraphics())
                         {
-                            size = g.MeasureString( SR.MultilineStringEditorWatermark, Font);
+                            size = g.MeasureString(SR.MultilineStringEditorWatermark, Font);
                         }
                         _watermarkSize = new Size((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height));
                     }
@@ -435,14 +436,14 @@ namespace System.ComponentModel.Design
                 switch (m.Msg)
                 {
                     case Interop.WindowMessages.WM_PAINT:
-                    {
-                        if (ShouldShowWatermark)
                         {
-                            using Graphics g = CreateGraphics();
-                            g.DrawString(SR.MultilineStringEditorWatermark, Font, WatermarkBrush, new RectangleF(0.0f, 0.0f, ClientSize.Width, ClientSize.Height), _watermarkFormat);
+                            if (ShouldShowWatermark)
+                            {
+                                using Graphics g = CreateGraphics();
+                                g.DrawString(SR.MultilineStringEditorWatermark, Font, WatermarkBrush, new RectangleF(0.0f, 0.0f, ClientSize.Width, ClientSize.Height), _watermarkFormat);
+                            }
+                            break;
                         }
-                        break;
-                    }
                 }
             }
             #endregion

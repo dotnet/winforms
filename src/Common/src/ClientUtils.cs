@@ -7,12 +7,12 @@
 namespace System.Windows.Forms
 #elif DRAWING_NAMESPACE
     namespace System.Drawing
-#elif WINFORMS_PUBLIC_GRAPHICS_LIBRARY 
+#elif WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     namespace System.Internal
 #elif SYSTEM_NAMESPACE
     namespace System
 #else
-   namespace System.Windows.Forms 
+namespace System.Windows.Forms
 #endif
 {
     using System;
@@ -501,7 +501,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            #region IList Members
+        #region IList Members
             public void Clear() { InnerList.Clear(); }
             public bool IsFixedSize { get { return InnerList.IsFixedSize; } }
             public bool Contains(object value) { return InnerList.Contains(CreateWeakRefObject(value)); }
@@ -517,22 +517,22 @@ namespace System.Windows.Forms
                 }
                 return InnerList.Add(CreateWeakRefObject(value));
             }
-            #endregion
+        #endregion
 
-            #region ICollection Members
+        #region ICollection Members
             public int Count { get { return InnerList.Count; } }
             object ICollection.SyncRoot { get { return InnerList.SyncRoot; } }
             public bool IsReadOnly { get { return InnerList.IsReadOnly; } }
             public void CopyTo(Array array, int index) { InnerList.CopyTo(array, index); }
             bool ICollection.IsSynchronized { get { return InnerList.IsSynchronized; } }
-            #endregion
+        #endregion
 
-            #region IEnumerable Members
+        #region IEnumerable Members
             public IEnumerator GetEnumerator()
             {
                 return InnerList.GetEnumerator();
             }
-            #endregion
+        #endregion
 
             /// <summary>
             ///     Wraps a weak ref object.

@@ -55,7 +55,7 @@ namespace System.Windows.Forms.Design
         public const int EC_LEFTMARGIN = 0x0001;
         public const int EC_RIGHTMARGIN = 0x0002;
         public const int IDOK = 1;
-        
+
         public const int VK_PROCESSKEY = 0xE5;
 
         public const int STGM_READ = 0x00000000;

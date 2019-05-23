@@ -32,7 +32,8 @@ namespace System.Windows.Forms.Design
 
                 if (edSvc != null)
                 {
-                    if (dockUI == null) dockUI = new DockUI(this);
+                    if (dockUI == null)
+                        dockUI = new DockUI(this);
                     dockUI.Start(edSvc, value);
                     edSvc.DropDownControl(dockUI);
                     value = dockUI.Value;
@@ -104,7 +105,7 @@ namespace System.Windows.Forms.Design
                 upDownOrder = new[] { top, fill, bottom, none };
                 leftRightOrder = new[] { left, fill, right };
                 tabOrder = new[] { top, left, fill, right, bottom, none };
-                
+
                 if (!isScalingInitialized)
                 {
                     if (DpiHelper.IsScalingRequired)
@@ -122,7 +123,7 @@ namespace System.Windows.Forms.Design
                     }
 
                     isScalingInitialized = true;
-            }
+                }
 
                 InitializeComponent();
             }
@@ -145,7 +146,8 @@ namespace System.Windows.Forms.Design
                     return DockStyle.Bottom;
                 if (right == btn)
                     return DockStyle.Right;
-                if (fill == btn) return DockStyle.Fill;
+                if (fill == btn)
+                    return DockStyle.Fill;
                 return DockStyle.None;
             }
 
@@ -247,7 +249,8 @@ namespace System.Windows.Forms.Design
             private void OnClick(object sender, EventArgs eventargs)
             {
                 DockStyle val = GetDock((CheckBox)sender);
-                if (val >= 0) Value = val;
+                if (val >= 0)
+                    Value = val;
                 Teardown();
             }
 
@@ -325,7 +328,8 @@ namespace System.Windows.Forms.Design
 
                 e.Handled = true;
 
-                if (target != null && target != sender) target.Focus();
+                if (target != null && target != sender)
+                    target.Focus();
             }
 
             public void Start(IWindowsFormsEditorService edSvc, object value)

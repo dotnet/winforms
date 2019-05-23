@@ -32,7 +32,8 @@ namespace System.Drawing.Design
         {
             object returnValue = value;
 
-            if (provider == null) return value;
+            if (provider == null)
+                return value;
             IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
 
             if (edSvc != null)

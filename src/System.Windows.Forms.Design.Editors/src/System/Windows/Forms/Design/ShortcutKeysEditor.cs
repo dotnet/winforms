@@ -39,7 +39,8 @@ namespace System.Windows.Forms.Design
                     shortcutKeysUI.Start(edSvc, value);
                     edSvc.DropDownControl(shortcutKeysUI);
 
-                    if (shortcutKeysUI.Value != null) value = shortcutKeysUI.Value;
+                    if (shortcutKeysUI.Value != null)
+                        value = shortcutKeysUI.Value;
                     shortcutKeysUI.End();
                 }
             }
@@ -135,7 +136,8 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    if (keysConverter == null) keysConverter = TypeDescriptor.GetConverter(typeof(Keys));
+                    if (keysConverter == null)
+                        keysConverter = TypeDescriptor.GetConverter(typeof(Keys));
                     Debug.Assert(keysConverter != null);
                     return keysConverter;
                 }
@@ -148,7 +150,8 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    if (((Keys)currentValue & Keys.KeyCode) == 0) return Keys.None;
+                    if (((Keys)currentValue & Keys.KeyCode) == 0)
+                        return Keys.None;
                     return currentValue;
                 }
             }
@@ -287,7 +290,8 @@ namespace System.Windows.Forms.Design
                 cmbKey.Margin = new Padding(12, 4, 3, 3);
                 cmbKey.Padding = cmbKey.Margin;
 
-                foreach (Keys keyCode in validKeys) cmbKey.Items.Add(KeysConverter.ConvertToString(keyCode));
+                foreach (Keys keyCode in validKeys)
+                    cmbKey.Items.Add(KeysConverter.ConvertToString(keyCode));
                 cmbKey.SelectedIndexChanged += cmbKey_SelectedIndexChanged;
 
                 // 
@@ -438,12 +442,16 @@ namespace System.Windows.Forms.Design
             /// </summary>
             private void UpdateCurrentValue()
             {
-                if (!updateCurrentValue) return;
+                if (!updateCurrentValue)
+                    return;
                 int cmbKeySelectedIndex = cmbKey.SelectedIndex;
                 Keys valueKeys = Keys.None;
-                if (chkCtrl.Checked) valueKeys |= Keys.Control;
-                if (chkAlt.Checked) valueKeys |= Keys.Alt;
-                if (chkShift.Checked) valueKeys |= Keys.Shift;
+                if (chkCtrl.Checked)
+                    valueKeys |= Keys.Control;
+                if (chkAlt.Checked)
+                    valueKeys |= Keys.Alt;
+                if (chkShift.Checked)
+                    valueKeys |= Keys.Shift;
                 if (unknownKeyCode != Keys.None && cmbKeySelectedIndex == 0)
                     valueKeys |= unknownKeyCode;
                 else if (cmbKeySelectedIndex != -1)

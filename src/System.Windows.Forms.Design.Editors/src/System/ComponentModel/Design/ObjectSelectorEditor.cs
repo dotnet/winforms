@@ -19,7 +19,7 @@ namespace System.ComponentModel.Design
         protected object prevValue = null;
         protected object currValue = null;
         private Selector _selector = null;
-        
+
         /// <summary>
         ///     Default constructor for ObjectSelectorEditor
         /// </summary>
@@ -34,7 +34,7 @@ namespace System.ComponentModel.Design
         {
             SubObjectSelector = subObjectSelector;
         }
-        
+
         /// <summary>
         /// Edits the given object value using the editor style provided by ObjectSelectorEditor.GetEditStyle.
         /// </summary>
@@ -68,7 +68,7 @@ namespace System.ComponentModel.Design
 
             return value;
         }
-        
+
         /// <summary>
         /// Modify a WinForms TreeView control to use the new Explorer style theme
         /// </summary>
@@ -98,12 +98,12 @@ namespace System.ComponentModel.Design
         {
             NativeMethods.SendMessage(handle, NativeMethods.TVM_SETEXTENDEDSTYLE, new IntPtr(mask), new IntPtr(extendedStyle));
         }
-        
+
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
             return UITypeEditorEditStyle.DropDown;
         }
-        
+
         protected internal bool EqualsToValue(object value)
         {
             if (value == currValue)
@@ -111,7 +111,7 @@ namespace System.ComponentModel.Design
             else
                 return false;
         }
-        
+
         protected virtual void FillTreeWithData(Selector selector, ITypeDescriptorContext context, IServiceProvider provider)
         {
             selector.Clear();
@@ -124,7 +124,7 @@ namespace System.ComponentModel.Design
         {
             currValue = value;
         }
-        
+
         public class Selector : TreeView
         {
             private readonly ObjectSelectorEditor _editor = null;
@@ -149,7 +149,7 @@ namespace System.ComponentModel.Design
 
                 AfterSelect += new TreeViewEventHandler(OnAfterSelect);
             }
-            
+
             /// <summary>
             ///     Adds a Node with given label and value to the parent, provided the parent is not null;
             ///     Otherwise, adds that node to the Nodes TreeNodeCollection. Returns the new node.
@@ -185,7 +185,7 @@ namespace System.ComponentModel.Design
                 }
                 return false;
             }
-            
+
             /// <summary>
             ///     Clears the TreeNodeCollection and sets clickSeen to false
             /// </summary>
@@ -194,7 +194,7 @@ namespace System.ComponentModel.Design
                 clickSeen = false;
                 Nodes.Clear();
             }
-            
+
             protected void OnAfterSelect(object sender, TreeViewEventArgs e)
             {
                 if (clickSeen)
@@ -203,7 +203,7 @@ namespace System.ComponentModel.Design
                     clickSeen = false;
                 }
             }
-            
+
             protected override void OnKeyDown(KeyEventArgs e)
             {
                 Keys key = e.KeyCode;
@@ -224,7 +224,7 @@ namespace System.ComponentModel.Design
                 }
                 base.OnKeyDown(e);
             }
-            
+
             protected override void OnKeyPress(KeyPressEventArgs e)
             {
                 switch (e.KeyChar)
@@ -235,7 +235,7 @@ namespace System.ComponentModel.Design
                 }
                 base.OnKeyPress(e);
             }
-            
+
             protected override void OnNodeMouseClick(TreeNodeMouseClickEventArgs e)
             {
                 // we won't get an OnAfterSelect if it's already selected, so use this instead
@@ -245,7 +245,7 @@ namespace System.ComponentModel.Design
                 }
                 base.OnNodeMouseClick(e);
             }
-            
+
             /// <summary>
             ///     Sets the selection
             /// </summary>
@@ -287,7 +287,7 @@ namespace System.ComponentModel.Design
                 }
                 return false;
             }
-            
+
             /// <summary>
             ///     Sets the internal IWindowsFormsEditorService to the given edSvc, and calls SetSelection on the given value
             /// </summary>
@@ -297,7 +297,7 @@ namespace System.ComponentModel.Design
                 clickSeen = false;
                 SetSelection(value, Nodes);
             }
-            
+
             /// <summary>
             ///     Sets the internal IWindowsFormsEditorService to null
             /// </summary>
@@ -305,7 +305,7 @@ namespace System.ComponentModel.Design
             {
                 _edSvc = null;
             }
-            
+
             protected override void WndProc(ref Message m)
             {
                 switch (m.Msg)
@@ -330,7 +330,7 @@ namespace System.ComponentModel.Design
                 base.WndProc(ref m);
             }
         }
-        
+
         /// Suppressed because although the type implements ISerializable --its on the base class and this class
         /// is not modifying the stream to include its local information.  Therefore, we should not publicly advertise this as
         /// Serializable unless explicitly required.
@@ -338,7 +338,7 @@ namespace System.ComponentModel.Design
         public class SelectorNode : TreeNode
         {
             public object value = null;
-            
+
             /// <summary>
             ///     Sets label and value to given.
             /// </summary>

@@ -32,7 +32,8 @@ namespace System.Windows.Forms.Design
 
             if (edSvc != null)
             {
-                if (anchorUI == null) anchorUI = new AnchorUI(this);
+                if (anchorUI == null)
+                    anchorUI = new AnchorUI(this);
                 anchorUI.Start(edSvc, value);
                 edSvc.DropDownControl(anchorUI);
                 value = anchorUI.Value;
@@ -90,10 +91,14 @@ namespace System.Windows.Forms.Design
             public virtual AnchorStyles GetSelectedAnchor()
             {
                 AnchorStyles baseVar = 0;
-                if (left.GetSolid()) baseVar |= AnchorStyles.Left;
-                if (top.GetSolid()) baseVar |= AnchorStyles.Top;
-                if (bottom.GetSolid()) baseVar |= AnchorStyles.Bottom;
-                if (right.GetSolid()) baseVar |= AnchorStyles.Right;
+                if (left.GetSolid())
+                    baseVar |= AnchorStyles.Left;
+                if (top.GetSolid())
+                    baseVar |= AnchorStyles.Top;
+                if (bottom.GetSolid())
+                    baseVar |= AnchorStyles.Bottom;
+                if (right.GetSolid())
+                    baseVar |= AnchorStyles.Right;
                 return baseVar;
             }
 
@@ -189,7 +194,8 @@ namespace System.Windows.Forms.Design
 
             private void Teardown(bool saveAnchor)
             {
-                if (!saveAnchor) Value = oldAnchor;
+                if (!saveAnchor)
+                    Value = oldAnchor;
                 edSvc.CloseDropDown();
             }
 
@@ -362,7 +368,8 @@ namespace System.Windows.Forms.Design
                         {
                             AccessibleStates state = base.State;
 
-                            if (((SpringControl)Owner).GetSolid()) state |= AccessibleStates.Selected;
+                            if (((SpringControl)Owner).GetSolid())
+                                state |= AccessibleStates.Selected;
 
                             return state;
                         }

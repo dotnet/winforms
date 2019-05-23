@@ -115,7 +115,7 @@ namespace System.Windows.Forms.Design
                     char[] displayName = ArrayPool<char>.Shared.Rent(Interop.Kernel32.MAX_PATH + 1);
                     try
                     {
-                        fixed (char *pDisplayName = displayName)
+                        fixed (char* pDisplayName = displayName)
                         {
                             var bi = new Interop.Shell32.BROWSEINFO();
                             bi.pidlRoot = listHandle;
