@@ -34,20 +34,23 @@ namespace System.Experimental.Gdi
 #endif
     static class DeviceContexts
     {
-        [ThreadStatic] 
+        [ThreadStatic]
         private static ClientUtils.WeakRefCollection activeDeviceContexts;
 
         /// <summary>
         /// WindowsGraphicsCacheManager needs to track DeviceContext
         /// objects so it can ask them if a font is in use before they 
         /// it's deleted.  
-        internal static void AddDeviceContext(DeviceContext dc) {
-            if (activeDeviceContexts == null) {
+        internal static void AddDeviceContext(DeviceContext dc)
+        {
+            if (activeDeviceContexts == null)
+            {
                 activeDeviceContexts = new ClientUtils.WeakRefCollection();
                 activeDeviceContexts.RefCheckThreshold = 20;
             }
 
-            if (!activeDeviceContexts.Contains(dc)) {
+            if (!activeDeviceContexts.Contains(dc))
+            {
                 dc.Disposing += new EventHandler(OnDcDisposing);
                 activeDeviceContexts.Add(dc);
             }
@@ -63,30 +66,36 @@ namespace System.Experimental.Gdi
                 RemoveDeviceContext(dc);
             }
         }
-        
-        internal static void RemoveDeviceContext(DeviceContext dc) {
-            if (activeDeviceContexts == null) {
+
+        internal static void RemoveDeviceContext(DeviceContext dc)
+        {
+            if (activeDeviceContexts == null)
+            {
                 return;
             }
             activeDeviceContexts.RemoveByHashCode(dc);
         }
 
- #if !DRAWING_NAMESPACE
-        internal static bool IsFontInUse(WindowsFont wf) {
-            if (wf == null) {
+#if !DRAWING_NAMESPACE
+        internal static bool IsFontInUse(WindowsFont wf)
+        {
+            if (wf == null)
+            {
                 return false;
             }
-            
-            for (int i = 0; i < activeDeviceContexts.Count; i++) {
+
+            for (int i = 0; i < activeDeviceContexts.Count; i++)
+            {
                 DeviceContext dc = activeDeviceContexts[i] as DeviceContext;
-                if (dc != null && (dc.ActiveFont == wf || dc.IsFontOnContextStack(wf))) {
+                if (dc != null && (dc.ActiveFont == wf || dc.IsFontOnContextStack(wf)))
+                {
                     return true;
                 }
             }
 
             return false;
         }
- #endif
- 
+#endif
+
     }
 }

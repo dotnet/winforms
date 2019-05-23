@@ -61,7 +61,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (DataGridViewTextBoxEditingControl) this.Properties.GetObject(PropTextBoxCellEditingTextBox);
+                return (DataGridViewTextBoxEditingControl)this.Properties.GetObject(PropTextBoxCellEditingTextBox);
             }
             set
             {
@@ -132,11 +132,11 @@ namespace System.Windows.Forms
         {
             DataGridViewTextBoxCell dataGridViewCell;
             Type thisType = this.GetType();
-            if(thisType == cellType) //performance improvement
+            if (thisType == cellType) //performance improvement
             {
                 dataGridViewCell = new DataGridViewTextBoxCell();
             }
-            else 
+            else
             {
                 // 
 
@@ -249,7 +249,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    string editedFormattedValue = (string) ((IDataGridViewEditingControl) txtEditingControl).GetEditingControlFormattedValue(DataGridViewDataErrorContexts.Formatting);
+                    string editedFormattedValue = (string)((IDataGridViewEditingControl)txtEditingControl).GetEditingControlFormattedValue(DataGridViewDataErrorContexts.Formatting);
                     if (string.IsNullOrEmpty(editedFormattedValue))
                     {
                         editedFormattedValue = " ";
@@ -429,34 +429,34 @@ namespace System.Windows.Forms
                 switch (freeDimension)
                 {
                     case DataGridViewFreeDimension.Width:
-                    {
-                        preferredSize = new Size(DataGridViewCell.MeasureTextWidth(graphics, 
-                                                                                   formattedString,
-                                                                                   cellStyle.Font,
-                                                                                   Math.Max(1, constraintSize.Height - borderAndPaddingHeights - DATAGRIDVIEWTEXTBOXCELL_verticalTextMarginTopWithWrapping - DATAGRIDVIEWTEXTBOXCELL_verticalTextMarginBottom),
-                                                                                   flags),
-                                                 0);
-                        break;
-                    }
+                        {
+                            preferredSize = new Size(DataGridViewCell.MeasureTextWidth(graphics,
+                                                                                       formattedString,
+                                                                                       cellStyle.Font,
+                                                                                       Math.Max(1, constraintSize.Height - borderAndPaddingHeights - DATAGRIDVIEWTEXTBOXCELL_verticalTextMarginTopWithWrapping - DATAGRIDVIEWTEXTBOXCELL_verticalTextMarginBottom),
+                                                                                       flags),
+                                                     0);
+                            break;
+                        }
                     case DataGridViewFreeDimension.Height:
-                    {
-                        preferredSize = new Size(0,
-                                                 DataGridViewCell.MeasureTextHeight(graphics, 
-                                                                                    formattedString,
-                                                                                    cellStyle.Font,
-                                                                                    Math.Max(1, constraintSize.Width - borderAndPaddingWidths - DATAGRIDVIEWTEXTBOXCELL_horizontalTextMarginLeft - DATAGRIDVIEWTEXTBOXCELL_horizontalTextMarginRight),
-                                                                                    flags));
-                        break;
-                    }
+                        {
+                            preferredSize = new Size(0,
+                                                     DataGridViewCell.MeasureTextHeight(graphics,
+                                                                                        formattedString,
+                                                                                        cellStyle.Font,
+                                                                                        Math.Max(1, constraintSize.Width - borderAndPaddingWidths - DATAGRIDVIEWTEXTBOXCELL_horizontalTextMarginLeft - DATAGRIDVIEWTEXTBOXCELL_horizontalTextMarginRight),
+                                                                                        flags));
+                            break;
+                        }
                     default:
-                    {
-                        preferredSize = DataGridViewCell.MeasureTextPreferredSize(graphics, 
-                                                                                  formattedString, 
-                                                                                  cellStyle.Font, 
-                                                                                  5.0F, 
-                                                                                  flags);
-                        break;
-                    }
+                        {
+                            preferredSize = DataGridViewCell.MeasureTextPreferredSize(graphics,
+                                                                                      formattedString,
+                                                                                      cellStyle.Font,
+                                                                                      5.0F,
+                                                                                      flags);
+                            break;
+                        }
                 }
             }
             else
@@ -464,22 +464,22 @@ namespace System.Windows.Forms
                 switch (freeDimension)
                 {
                     case DataGridViewFreeDimension.Width:
-                    {
-                        preferredSize = new Size(DataGridViewCell.MeasureTextSize(graphics, formattedString, cellStyle.Font, flags).Width, 
-                                                 0);
-                        break;
-                    }
+                        {
+                            preferredSize = new Size(DataGridViewCell.MeasureTextSize(graphics, formattedString, cellStyle.Font, flags).Width,
+                                                     0);
+                            break;
+                        }
                     case DataGridViewFreeDimension.Height:
-                    {
-                        preferredSize = new Size(0,
-                                                 DataGridViewCell.MeasureTextSize(graphics, formattedString, cellStyle.Font, flags).Height);
-                        break;
-                    }
+                        {
+                            preferredSize = new Size(0,
+                                                     DataGridViewCell.MeasureTextSize(graphics, formattedString, cellStyle.Font, flags).Height);
+                            break;
+                        }
                     default:
-                    {
-                        preferredSize = DataGridViewCell.MeasureTextSize(graphics, formattedString, cellStyle.Font, flags);
-                        break;
-                    }
+                        {
+                            preferredSize = DataGridViewCell.MeasureTextSize(graphics, formattedString, cellStyle.Font, flags);
+                            break;
+                        }
                 }
             }
 
@@ -593,9 +593,9 @@ namespace System.Windows.Forms
             return rowIndex != -1 && this.EditingTextBox != null && rowIndex == ((IDataGridViewEditingControl)this.EditingTextBox).EditingControlRowIndex;
         }
 
-        protected override void Paint(Graphics graphics, 
+        protected override void Paint(Graphics graphics,
             Rectangle clipBounds,
-            Rectangle cellBounds, 
+            Rectangle cellBounds,
             int rowIndex,
             DataGridViewElementStates cellState,
             object value,
@@ -610,9 +610,9 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(cellStyle));
             }
 
-            PaintPrivate(graphics, 
+            PaintPrivate(graphics,
                 clipBounds,
-                cellBounds, 
+                cellBounds,
                 rowIndex,
                 cellState,
                 formattedValue,
@@ -633,9 +633,9 @@ namespace System.Windows.Forms
         // if computeContentBounds is true then PaintPrivate returns the contentBounds
         // else if computeErrorIconBounds is true then PaintPrivate returns the errorIconBounds
         // else it returns Rectangle.Empty;
-        private Rectangle PaintPrivate(Graphics graphics, 
+        private Rectangle PaintPrivate(Graphics graphics,
             Rectangle clipBounds,
-            Rectangle cellBounds, 
+            Rectangle cellBounds,
             int rowIndex,
             DataGridViewElementStates cellState,
             object formattedValue,
@@ -672,7 +672,7 @@ namespace System.Windows.Forms
             valBounds.Height -= borderWidths.Bottom;
 
             SolidBrush br;
-            
+
             Point ptCurrentCell = this.DataGridView.CurrentCellAddress;
             bool cellCurrent = ptCurrentCell.X == this.ColumnIndex && ptCurrentCell.Y == rowIndex;
             bool cellEdited = cellCurrent && this.DataGridView.EditingControl != null;
@@ -709,10 +709,10 @@ namespace System.Windows.Forms
             if (paint && cellCurrent && !cellEdited)
             {
                 // Draw focus rectangle
-                if (DataGridViewCell.PaintFocus(paintParts) && 
-                    this.DataGridView.ShowFocusCues && 
-                    this.DataGridView.Focused && 
-                    valBounds.Width > 0 && 
+                if (DataGridViewCell.PaintFocus(paintParts) &&
+                    this.DataGridView.ShowFocusCues &&
+                    this.DataGridView.Focused &&
+                    valBounds.Width > 0 &&
                     valBounds.Height > 0)
                 {
                     ControlPaint.DrawFocusRectangle(graphics, valBounds, Color.Empty, br.Color);
@@ -775,20 +775,20 @@ namespace System.Windows.Forms
             return resultBounds;
         }
 
-        public override void PositionEditingControl(bool setLocation, 
-                                                    bool setSize, 
-                                                    Rectangle cellBounds, 
-                                                    Rectangle cellClip, 
-                                                    DataGridViewCellStyle cellStyle, 
-                                                    bool singleVerticalBorderAdded, 
-                                                    bool singleHorizontalBorderAdded, 
-                                                    bool isFirstDisplayedColumn, 
+        public override void PositionEditingControl(bool setLocation,
+                                                    bool setSize,
+                                                    Rectangle cellBounds,
+                                                    Rectangle cellClip,
+                                                    DataGridViewCellStyle cellStyle,
+                                                    bool singleVerticalBorderAdded,
+                                                    bool singleHorizontalBorderAdded,
+                                                    bool isFirstDisplayedColumn,
                                                     bool isFirstDisplayedRow)
         {
-            Rectangle editingControlBounds = PositionEditingPanel(cellBounds, 
-                                                        cellClip, 
-                                                        cellStyle, 
-                                                        singleVerticalBorderAdded, 
+            Rectangle editingControlBounds = PositionEditingPanel(cellBounds,
+                                                        cellClip,
+                                                        cellStyle,
+                                                        singleVerticalBorderAdded,
                                                         singleHorizontalBorderAdded,
                                                         isFirstDisplayedColumn,
                                                         isFirstDisplayedRow);

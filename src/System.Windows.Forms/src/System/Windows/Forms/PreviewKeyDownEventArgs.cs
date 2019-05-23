@@ -15,7 +15,7 @@ namespace System.Windows.Forms
         {
             KeyData = keyData;
         }
-       
+
         /// <summary>
         /// Gets the key data for a <see cref='System.Windows.Forms.Control.KeyDown'/>
         /// or <see cref='System.Windows.Forms.Control.KeyUp'/> event.
@@ -38,12 +38,12 @@ namespace System.Windows.Forms
             [SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible")] // Keys is discontiguous so we have to use Enum.IsDefined.
             get
             {
-                Keys keyGenerated =  KeyData & Keys.KeyCode;
-                if (!Enum.IsDefined(typeof(Keys),(int)keyGenerated))
+                Keys keyGenerated = KeyData & Keys.KeyCode;
+                if (!Enum.IsDefined(typeof(Keys), (int)keyGenerated))
                 {
                     return Keys.None;
                 }
-                
+
                 return keyGenerated;
             }
         }

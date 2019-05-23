@@ -51,13 +51,13 @@ namespace System.Windows.Forms
             {
                 ConstructorInfo ctor;
                 // Should we use the subitem constructor?
-                for(int i = 1; i < item.SubItems.Count; ++i)
+                for (int i = 1; i < item.SubItems.Count; ++i)
                 {
                     if (item.SubItems[i].CustomStyle)
                     {
                         if (!string.IsNullOrEmpty(item.ImageKey))
                         {
-                            ctor = typeof(ListViewItem).GetConstructor(new Type[] { typeof(ListViewItem.ListViewSubItem[]), typeof(string)});
+                            ctor = typeof(ListViewItem).GetConstructor(new Type[] { typeof(ListViewItem.ListViewSubItem[]), typeof(string) });
                             Debug.Assert(ctor != null, "Expected the constructor to exist.");
                             ListViewItem.ListViewSubItem[] subItemArray = new ListViewItem.ListViewSubItem[item.SubItems.Count];
                             ((ICollection)item.SubItems).CopyTo(subItemArray, 0);
@@ -65,7 +65,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            ctor = typeof(ListViewItem).GetConstructor(new Type[] { typeof(ListViewItem.ListViewSubItem[]), typeof(int)});
+                            ctor = typeof(ListViewItem).GetConstructor(new Type[] { typeof(ListViewItem.ListViewSubItem[]), typeof(int) });
                             Debug.Assert(ctor != null, "Expected the constructor to exist.");
                             ListViewItem.ListViewSubItem[] subItemArray = new ListViewItem.ListViewSubItem[item.SubItems.Count];
                             ((ICollection)item.SubItems).CopyTo(subItemArray, 0);
@@ -76,7 +76,7 @@ namespace System.Windows.Forms
 
                 // Convert SubItem array to string array
                 string[] subItems = new string[item.SubItems.Count];
-                for(int i=0; i < subItems.Length; ++i)
+                for (int i = 0; i < subItems.Length; ++i)
                 {
                     subItems[i] = item.SubItems[i].Text;
                 }
@@ -233,7 +233,7 @@ namespace System.Windows.Forms
                 // Otherwise, just use the text constructor
                 ctor = typeof(ListViewItem.ListViewSubItem).GetConstructor(new Type[] { typeof(ListViewItem), typeof(string) });
                 Debug.Assert(ctor != null, "Expected the constructor to exist.");
-                return new InstanceDescriptor(ctor, new object[] {null, item.Text}, true);
+                return new InstanceDescriptor(ctor, new object[] { null, item.Text }, true);
             }
 
             return base.ConvertTo(context, culture, value, destinationType);

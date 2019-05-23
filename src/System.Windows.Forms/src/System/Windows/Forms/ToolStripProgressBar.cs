@@ -19,19 +19,23 @@ namespace System.Windows.Forms
 
 
         public ToolStripProgressBar()
-            : base(CreateControlInstance()) {
+            : base(CreateControlInstance())
+        {
             ToolStripProgressBarControl toolStripProgressBarControl = Control as ToolStripProgressBarControl;
-            if (toolStripProgressBarControl != null) {
+            if (toolStripProgressBarControl != null)
+            {
                 toolStripProgressBarControl.Owner = this;
             }
 
-            if (DpiHelper.IsScalingRequirementMet) {
+            if (DpiHelper.IsScalingRequirementMet)
+            {
                 scaledDefaultMargin = DpiHelper.LogicalToDeviceUnits(defaultMargin);
                 scaledDefaultStatusStripMargin = DpiHelper.LogicalToDeviceUnits(defaultStatusStripMargin);
             }
         }
 
-        public ToolStripProgressBar(string name) : this() {
+        public ToolStripProgressBar(string name) : this()
+        {
             this.Name = name;
         }
 
@@ -40,8 +44,10 @@ namespace System.Windows.Forms
         /// </summary>
         /// <value></value>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public ProgressBar ProgressBar {
-            get {
+        public ProgressBar ProgressBar
+        {
+            get
+            {
                 return this.Control as ProgressBar;
             }
         }
@@ -51,11 +57,14 @@ namespace System.Windows.Forms
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         ]
-        public override Image BackgroundImage {
-            get {
+        public override Image BackgroundImage
+        {
+            get
+            {
                 return base.BackgroundImage;
             }
-            set {
+            set
+            {
                 base.BackgroundImage = value;
             }
         }
@@ -65,11 +74,14 @@ namespace System.Windows.Forms
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
-        public override ImageLayout BackgroundImageLayout {
-            get {
+        public override ImageLayout BackgroundImageLayout
+        {
+            get
+            {
                 return base.BackgroundImageLayout;
             }
-            set {
+            set
+            {
                 base.BackgroundImageLayout = value;
             }
         }
@@ -78,9 +90,11 @@ namespace System.Windows.Forms
         /// Specify what size you want the item to start out at
         /// </summary>
         /// <value></value>
-        protected override System.Drawing.Size DefaultSize {
-            get {              
-                return new Size(100,15);
+        protected override System.Drawing.Size DefaultSize
+        {
+            get
+            {
+                return new Size(100, 15);
             }
         }
 
@@ -88,12 +102,16 @@ namespace System.Windows.Forms
         /// Specify how far from the edges you want to be
         /// </summary>
         /// <value></value>
-        protected internal override Padding DefaultMargin {
-            get {
-                if (this.Owner != null && this.Owner is StatusStrip) {
+        protected internal override Padding DefaultMargin
+        {
+            get
+            {
+                if (this.Owner != null && this.Owner is StatusStrip)
+                {
                     return scaledDefaultStatusStripMargin;
                 }
-                else {
+                else
+                {
                     return scaledDefaultMargin;
                 }
             }
@@ -104,7 +122,8 @@ namespace System.Windows.Forms
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.ProgressBarMarqueeAnimationSpeed))
         ]
-        public int MarqueeAnimationSpeed {
+        public int MarqueeAnimationSpeed
+        {
             get { return ProgressBar.MarqueeAnimationSpeed; }
             set { ProgressBar.MarqueeAnimationSpeed = value; }
         }
@@ -116,11 +135,14 @@ namespace System.Windows.Forms
        RefreshProperties(RefreshProperties.Repaint),
        SRDescription(nameof(SR.ProgressBarMaximumDescr))
        ]
-        public int Maximum {
-            get {
+        public int Maximum
+        {
+            get
+            {
                 return ProgressBar.Maximum;
             }
-            set {
+            set
+            {
                 ProgressBar.Maximum = value;
             }
         }
@@ -130,11 +152,14 @@ namespace System.Windows.Forms
         RefreshProperties(RefreshProperties.Repaint),
         SRDescription(nameof(SR.ProgressBarMinimumDescr))
         ]
-        public int Minimum {
-            get {
+        public int Minimum
+        {
+            get
+            {
                 return ProgressBar.Minimum;
             }
-            set {
+            set
+            {
                 ProgressBar.Minimum = value;
             }
         }
@@ -151,13 +176,16 @@ namespace System.Windows.Forms
         DefaultValue(false),
         SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))
         ]
-        public virtual bool RightToLeftLayout {
-            get {
+        public virtual bool RightToLeftLayout
+        {
+            get
+            {
 
                 return ProgressBar.RightToLeftLayout;
             }
 
-            set {
+            set
+            {
                 ProgressBar.RightToLeftLayout = value;
             }
         }
@@ -171,11 +199,14 @@ namespace System.Windows.Forms
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.ProgressBarStepDescr))
         ]
-        public int Step {
-            get {
+        public int Step
+        {
+            get
+            {
                 return ProgressBar.Step;
             }
-            set {
+            set
+            {
                 ProgressBar.Step = value;
             }
         }
@@ -189,11 +220,14 @@ namespace System.Windows.Forms
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.ProgressBarStyleDescr))
         ]
-        public ProgressBarStyle Style {
-            get {
+        public ProgressBarStyle Style
+        {
+            get
+            {
                 return ProgressBar.Style;
             }
-            set {
+            set
+            {
                 ProgressBar.Style = value;
             }
         }
@@ -202,8 +236,8 @@ namespace System.Windows.Forms
         /// Hide the property.
         /// </summary>
         [
-        Browsable(false), 
-        EditorBrowsable(EditorBrowsableState.Never), 
+        Browsable(false),
+        EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public override string Text
@@ -229,11 +263,14 @@ namespace System.Windows.Forms
         Bindable(true),
         SRDescription(nameof(SR.ProgressBarValueDescr))
         ]
-        public int Value {
-            get {
+        public int Value
+        {
+            get
+            {
                 return ProgressBar.Value;
             }
-            set {
+            set
+            {
                 ProgressBar.Value = value;
             }
         }
@@ -245,27 +282,33 @@ namespace System.Windows.Forms
         ///     The new instance of the accessibility object for this ToolStripProgressBar ToolStrip item
         /// </returns>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected override AccessibleObject CreateAccessibilityInstance() {
+        protected override AccessibleObject CreateAccessibilityInstance()
+        {
             return new ToolStripProgressBarAccessibleObject(this);
         }
 
-        private static Control CreateControlInstance() {
+        private static Control CreateControlInstance()
+        {
             ProgressBar progressBar = new ToolStripProgressBarControl();
-            progressBar.Size = new Size(100,15);
+            progressBar.Size = new Size(100, 15);
             return progressBar;
         }
 
-        private void HandleRightToLeftLayoutChanged(object sender, EventArgs e) {
+        private void HandleRightToLeftLayoutChanged(object sender, EventArgs e)
+        {
             OnRightToLeftLayoutChanged(e);
         }
 
-        protected virtual void OnRightToLeftLayoutChanged(EventArgs e) {
+        protected virtual void OnRightToLeftLayoutChanged(EventArgs e)
+        {
             RaiseEvent(EventRightToLeftLayoutChanged, e);
         }
 
-        protected override void OnSubscribeControlEvents(Control control) {
+        protected override void OnSubscribeControlEvents(Control control)
+        {
             ProgressBar bar = control as ProgressBar;
-            if (bar != null) {
+            if (bar != null)
+            {
                 // Please keep this alphabetized and in sync with Unsubscribe
                 // 
                 bar.RightToLeftLayoutChanged += new EventHandler(HandleRightToLeftLayoutChanged);
@@ -274,10 +317,12 @@ namespace System.Windows.Forms
             base.OnSubscribeControlEvents(control);
         }
 
-        protected override void OnUnsubscribeControlEvents(Control control) {
+        protected override void OnUnsubscribeControlEvents(Control control)
+        {
 
             ProgressBar bar = control as ProgressBar;
-            if (bar != null) {
+            if (bar != null)
+            {
                 // Please keep this alphabetized and in sync with Subscribe
                 // 
                 bar.RightToLeftLayoutChanged -= new EventHandler(HandleRightToLeftLayoutChanged);
@@ -351,7 +396,8 @@ namespace System.Windows.Forms
         }
 
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
-        public event EventHandler RightToLeftLayoutChanged {
+        public event EventHandler RightToLeftLayoutChanged
+        {
             add => Events.AddHandler(EventRightToLeftLayoutChanged, value);
             remove => Events.RemoveHandler(EventRightToLeftLayoutChanged, value);
         }
@@ -395,36 +441,45 @@ namespace System.Windows.Forms
             add => base.Validating += value;
             remove => base.Validating -= value;
         }
-        public void Increment(int value) {
+        public void Increment(int value)
+        {
             ProgressBar.Increment(value);
         }
 
-        public void PerformStep() {
+        public void PerformStep()
+        {
             ProgressBar.PerformStep();
         }
 
         [System.Runtime.InteropServices.ComVisible(true)]
-        internal class ToolStripProgressBarAccessibleObject : ToolStripItemAccessibleObject {
+        internal class ToolStripProgressBarAccessibleObject : ToolStripItemAccessibleObject
+        {
             private ToolStripProgressBar ownerItem = null;
 
-            public ToolStripProgressBarAccessibleObject(ToolStripProgressBar ownerItem) : base(ownerItem) {
-              this.ownerItem = ownerItem;
-            }
-         
-            public override AccessibleRole Role {
-               get {
-                   AccessibleRole role = Owner.AccessibleRole;
-                   if (role != AccessibleRole.Default) {
-                       return role;
-                   }
-
-                   return AccessibleRole.ProgressBar;
-               }
+            public ToolStripProgressBarAccessibleObject(ToolStripProgressBar ownerItem) : base(ownerItem)
+            {
+                this.ownerItem = ownerItem;
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
+            public override AccessibleRole Role
+            {
+                get
+                {
+                    AccessibleRole role = Owner.AccessibleRole;
+                    if (role != AccessibleRole.Default)
+                    {
+                        return role;
+                    }
+
+                    return AccessibleRole.ProgressBar;
+                }
+            }
+
+            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            {
                 if (direction == UnsafeNativeMethods.NavigateDirection.FirstChild ||
-                    direction == UnsafeNativeMethods.NavigateDirection.LastChild) {
+                    direction == UnsafeNativeMethods.NavigateDirection.LastChild)
+                {
                     return this.ownerItem.ProgressBar.AccessibilityObject;
                 }
 
@@ -433,30 +488,38 @@ namespace System.Windows.Forms
             }
         }
 
-        internal class ToolStripProgressBarControl : ProgressBar {
+        internal class ToolStripProgressBarControl : ProgressBar
+        {
 
             private ToolStripProgressBar ownerItem;
 
-            public ToolStripProgressBar Owner {
+            public ToolStripProgressBar Owner
+            {
                 get { return ownerItem; }
                 set { ownerItem = value; }
             }
 
             internal override bool SupportsUiaProviders => true;
 
-            protected override AccessibleObject CreateAccessibilityInstance() {
+            protected override AccessibleObject CreateAccessibilityInstance()
+            {
                 return new ToolStripProgressBarControlAccessibleObject(this);
             }
         }
 
-        internal class ToolStripProgressBarControlAccessibleObject : ProgressBar.ProgressBarAccessibleObject {
-            public ToolStripProgressBarControlAccessibleObject(ToolStripProgressBarControl toolStripProgressBarControl) : base(toolStripProgressBarControl) {
+        internal class ToolStripProgressBarControlAccessibleObject : ProgressBar.ProgressBarAccessibleObject
+        {
+            public ToolStripProgressBarControlAccessibleObject(ToolStripProgressBarControl toolStripProgressBarControl) : base(toolStripProgressBarControl)
+            {
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot {
-                get {
+            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+            {
+                get
+                {
                     var toolStripProgressBarControl = this.Owner as ToolStripProgressBarControl;
-                    if (toolStripProgressBarControl != null) {
+                    if (toolStripProgressBarControl != null)
+                    {
                         return toolStripProgressBarControl.Owner.Owner.AccessibilityObject;
                     }
 
@@ -464,13 +527,16 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
-                switch (direction) {
+            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+            {
+                switch (direction)
+                {
                     case UnsafeNativeMethods.NavigateDirection.Parent:
                     case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
                     case UnsafeNativeMethods.NavigateDirection.NextSibling:
                         var toolStripProgressBarControl = Owner as ToolStripProgressBarControl;
-                        if (toolStripProgressBarControl != null) {
+                        if (toolStripProgressBarControl != null)
+                        {
                             return toolStripProgressBarControl.Owner.AccessibilityObject.FragmentNavigate(direction);
                         }
                         break;
@@ -479,7 +545,8 @@ namespace System.Windows.Forms
                 return base.FragmentNavigate(direction);
             }
 
-            internal override object GetPropertyValue(int propertyID) {
+            internal override object GetPropertyValue(int propertyID)
+            {
                 return base.GetPropertyValue(propertyID);
             }
         }

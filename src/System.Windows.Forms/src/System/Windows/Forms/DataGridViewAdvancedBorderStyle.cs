@@ -19,15 +19,15 @@ namespace System.Windows.Forms
         private DataGridViewAdvancedCellBorderStyle bottom = DataGridViewAdvancedCellBorderStyle.None;
 
         public DataGridViewAdvancedBorderStyle() : this(null,
-                                                        DataGridViewAdvancedCellBorderStyle.NotSet, 
-                                                        DataGridViewAdvancedCellBorderStyle.NotSet, 
+                                                        DataGridViewAdvancedCellBorderStyle.NotSet,
+                                                        DataGridViewAdvancedCellBorderStyle.NotSet,
                                                         DataGridViewAdvancedCellBorderStyle.NotSet)
         {
         }
 
-        internal DataGridViewAdvancedBorderStyle(DataGridView owner) : this(owner, 
-                                                                            DataGridViewAdvancedCellBorderStyle.NotSet, 
-                                                                            DataGridViewAdvancedCellBorderStyle.NotSet, 
+        internal DataGridViewAdvancedBorderStyle(DataGridView owner) : this(owner,
+                                                                            DataGridViewAdvancedCellBorderStyle.NotSet,
+                                                                            DataGridViewAdvancedCellBorderStyle.NotSet,
                                                                             DataGridViewAdvancedCellBorderStyle.NotSet)
         {
         }
@@ -36,8 +36,8 @@ namespace System.Windows.Forms
         ///     Creates a new DataGridViewAdvancedBorderStyle. The specified owner will
         ///     be notified when the values are changed.
         /// </summary>
-        internal DataGridViewAdvancedBorderStyle(DataGridView owner, 
-            DataGridViewAdvancedCellBorderStyle banned1, 
+        internal DataGridViewAdvancedBorderStyle(DataGridView owner,
+            DataGridViewAdvancedCellBorderStyle banned1,
             DataGridViewAdvancedCellBorderStyle banned2,
             DataGridViewAdvancedCellBorderStyle banned3)
         {
@@ -49,17 +49,17 @@ namespace System.Windows.Forms
 
         public DataGridViewAdvancedCellBorderStyle All
         {
-            get 
+            get
             {
                 return this.all ? this.top : DataGridViewAdvancedCellBorderStyle.NotSet;
             }
-            set 
+            set
             {
 
                 // Sequential enum.  Valid values are 0x0 to 0x7
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewAdvancedCellBorderStyle.NotSet, (int)DataGridViewAdvancedCellBorderStyle.OutsetPartial))
                 {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAdvancedCellBorderStyle)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAdvancedCellBorderStyle));
                 }
                 if (value == DataGridViewAdvancedCellBorderStyle.NotSet ||
                     value == this.banned1 ||
@@ -82,20 +82,20 @@ namespace System.Windows.Forms
 
         public DataGridViewAdvancedCellBorderStyle Bottom
         {
-            get 
+            get
             {
-                if (this.all) 
+                if (this.all)
                 {
                     return this.top;
                 }
                 return this.bottom;
             }
-            set 
+            set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x7
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewAdvancedCellBorderStyle.NotSet, (int)DataGridViewAdvancedCellBorderStyle.OutsetPartial))
                 {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAdvancedCellBorderStyle)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAdvancedCellBorderStyle));
                 }
                 if (value == DataGridViewAdvancedCellBorderStyle.NotSet)
                 {
@@ -132,20 +132,20 @@ namespace System.Windows.Forms
 
         public DataGridViewAdvancedCellBorderStyle Left
         {
-            get 
+            get
             {
-                if (this.all) 
+                if (this.all)
                 {
                     return this.top;
                 }
                 return this.left;
             }
-            set 
+            set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x7
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewAdvancedCellBorderStyle.NotSet, (int)DataGridViewAdvancedCellBorderStyle.OutsetPartial))
                 {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAdvancedCellBorderStyle)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAdvancedCellBorderStyle));
                 }
                 if (value == DataGridViewAdvancedCellBorderStyle.NotSet)
                 {
@@ -191,21 +191,21 @@ namespace System.Windows.Forms
 
         public DataGridViewAdvancedCellBorderStyle Right
         {
-            get 
+            get
             {
-                if (this.all) 
+                if (this.all)
                 {
                     return this.top;
                 }
                 return this.right;
             }
-            set 
+            set
             {
 
                 // Sequential enum.  Valid values are 0x0 to 0x7
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewAdvancedCellBorderStyle.NotSet, (int)DataGridViewAdvancedCellBorderStyle.OutsetPartial))
                 {
-                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAdvancedCellBorderStyle)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAdvancedCellBorderStyle));
                 }
                 if (value == DataGridViewAdvancedCellBorderStyle.NotSet)
                 {
@@ -247,16 +247,16 @@ namespace System.Windows.Forms
 
         public DataGridViewAdvancedCellBorderStyle Top
         {
-            get 
+            get
             {
                 return this.top;
             }
-            set 
+            set
             {
-                 // Sequential enum.  Valid values are 0x0 to 0x7
+                // Sequential enum.  Valid values are 0x0 to 0x7
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewAdvancedCellBorderStyle.NotSet, (int)DataGridViewAdvancedCellBorderStyle.OutsetPartial))
                 {
-                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAdvancedCellBorderStyle)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAdvancedCellBorderStyle));
                 }
                 if (value == DataGridViewAdvancedCellBorderStyle.NotSet)
                 {
@@ -295,7 +295,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public override bool Equals(object other) 
+        public override bool Equals(object other)
         {
             DataGridViewAdvancedBorderStyle dgvabsOther = other as DataGridViewAdvancedBorderStyle;
 
@@ -304,21 +304,21 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            return dgvabsOther.all == this.all && 
-                dgvabsOther.top == this.top && 
-                dgvabsOther.left == this.left && 
-                dgvabsOther.bottom == this.bottom && 
+            return dgvabsOther.all == this.all &&
+                dgvabsOther.top == this.top &&
+                dgvabsOther.left == this.left &&
+                dgvabsOther.bottom == this.bottom &&
                 dgvabsOther.right == this.right;
         }
 
         public override int GetHashCode() => HashCode.Combine(top, left, bottom, right);
 
-        public override string ToString() 
+        public override string ToString()
         {
             return "DataGridViewAdvancedBorderStyle { All=" + this.All.ToString() + ", Left=" + this.Left.ToString() + ", Right=" + this.Right.ToString() + ", Top=" + this.Top.ToString() + ", Bottom=" + this.Bottom.ToString() + " }";
         }
 
-        object ICloneable.Clone() 
+        object ICloneable.Clone()
         {
             DataGridViewAdvancedBorderStyle dgvabs = new DataGridViewAdvancedBorderStyle(this.owner, this.banned1, this.banned2, this.banned3);
             dgvabs.all = this.all;

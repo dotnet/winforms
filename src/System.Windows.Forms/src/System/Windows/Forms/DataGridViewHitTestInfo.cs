@@ -8,7 +8,7 @@ namespace System.Windows.Forms
 {
     public partial class DataGridView
     {
-        public sealed class HitTestInfo 
+        public sealed class HitTestInfo
         {
             internal DataGridViewHitTestType type = DataGridViewHitTestType.None;
             //internal DataGridViewHitTestTypeCloseEdge edge = DataGridViewHitTestTypeCloseEdge.None;
@@ -42,7 +42,7 @@ namespace System.Windows.Forms
             /// </summary>
             public int ColumnIndex
             {
-                get 
+                get
                 {
                     return this.col;
                 }
@@ -54,7 +54,7 @@ namespace System.Windows.Forms
             /// </summary>
             public int RowIndex
             {
-                get 
+                get
                 {
                     return this.row;
                 }
@@ -65,7 +65,7 @@ namespace System.Windows.Forms
             /// </summary>
             public int ColumnX
             {
-                get 
+                get
                 {
                     return this.colStart;
                 }
@@ -76,7 +76,7 @@ namespace System.Windows.Forms
             /// </summary>
             public int RowY
             {
-                get 
+                get
                 {
                     return this.rowStart;
                 }
@@ -88,7 +88,7 @@ namespace System.Windows.Forms
             /// </summary>
             public DataGridViewHitTestType Type
             {
-                get 
+                get
                 {
                     return this.type;
                 }
@@ -97,14 +97,14 @@ namespace System.Windows.Forms
             /// <summary>
             ///    <para>Indicates whether two objects are identical.</para>
             /// </summary>
-            public override bool Equals(object value) 
+            public override bool Equals(object value)
             {
                 HitTestInfo hti = value as HitTestInfo;
-                if (hti != null) 
+                if (hti != null)
                 {
                     return (this.type == hti.type &&
-                            this.row  == hti.row &&
-                            this.col  == hti.col);
+                            this.row == hti.row &&
+                            this.col == hti.col);
                 }
                 return false;
             }
@@ -117,7 +117,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///    <para>Gets the type, column number and row number.</para>
             /// </summary>
-            public override string ToString() 
+            public override string ToString()
             {
                 return "{ Type:" + type.ToString() + ", Column:" + col.ToString(CultureInfo.CurrentCulture) + ", Row:" + row.ToString(CultureInfo.CurrentCulture) + " }";
             }

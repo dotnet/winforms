@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Resources {
+namespace System.Resources
+{
     using System.Diagnostics;
 
     using System;
@@ -22,7 +23,8 @@ namespace System.Resources {
     ///     with null.
     /// </summary>
     [Serializable]
-    internal sealed class ResXNullRef {
+    internal sealed class ResXNullRef
+    {
     }
 }
 

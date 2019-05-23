@@ -6,25 +6,25 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 
-namespace System.Windows.Forms 
+namespace System.Windows.Forms
 {
     /// <summary>
     /// This class contains the information a user needs to paint ListView
     /// column header (Details view only).
     /// </summary>
-    public class DrawListViewColumnHeaderEventArgs : EventArgs 
+    public class DrawListViewColumnHeaderEventArgs : EventArgs
     {
         /// <summary>
         /// Creates a new DrawListViewColumnHeaderEventArgs with the given parameters.
         /// </summary>
-        public DrawListViewColumnHeaderEventArgs(Graphics graphics, Rectangle bounds, int columnIndex, 
+        public DrawListViewColumnHeaderEventArgs(Graphics graphics, Rectangle bounds, int columnIndex,
                                                  ColumnHeader header, ListViewItemStates state,
                                                  Color foreColor, Color backColor, Font font)
         {
             Graphics = graphics;
             Bounds = bounds;
             ColumnIndex = columnIndex;
-            Header = header; 
+            Header = header;
             State = state;
             ForeColor = foreColor;
             BackColor = backColor;
@@ -70,7 +70,7 @@ namespace System.Windows.Forms
         /// Font used to render the header's text.
         /// </summary>
         public Font Font { get; }
-        
+
         /// <summary>
         /// Causes the item do be drawn by the system instead of owner drawn.
         /// </summary>
@@ -92,23 +92,23 @@ namespace System.Windows.Forms
                 {
                     Graphics.FillRectangle(backBrush, Bounds);
                 }
-                
+
                 // Draw the 3d header
                 Rectangle r = Bounds;
-                
+
                 r.Width -= 1;
                 r.Height -= 1;
-    
+
                 // Draw the dark border around the whole thing
                 Graphics.DrawRectangle(SystemPens.ControlDarkDark, r);
-                
+
                 r.Width -= 1;
                 r.Height -= 1;
-                
+
                 // Draw the light 3D border
                 Graphics.DrawLine(SystemPens.ControlLightLight, r.X, r.Y, r.Right, r.Y);
                 Graphics.DrawLine(SystemPens.ControlLightLight, r.X, r.Y, r.X, r.Bottom);
-    
+
                 // Draw the dark 3D Border
                 Graphics.DrawLine(SystemPens.ControlDark, r.X + 1, r.Bottom, r.Right, r.Bottom);
                 Graphics.DrawLine(SystemPens.ControlDark, r.Right, r.Y + 1, r.Right, r.Bottom);
@@ -121,8 +121,8 @@ namespace System.Windows.Forms
         public void DrawText()
         {
             HorizontalAlignment hAlign = Header.TextAlign;
-            TextFormatFlags flags = (hAlign == HorizontalAlignment.Left) ? TextFormatFlags.Left : 
-                                    ((hAlign == HorizontalAlignment.Center) ? TextFormatFlags.HorizontalCenter : 
+            TextFormatFlags flags = (hAlign == HorizontalAlignment.Left) ? TextFormatFlags.Left :
+                                    ((hAlign == HorizontalAlignment.Center) ? TextFormatFlags.HorizontalCenter :
                                      TextFormatFlags.Right);
             flags |= TextFormatFlags.WordEllipsis;
 
@@ -135,7 +135,7 @@ namespace System.Windows.Forms
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")] // We want to measure the size of blank space so we don't have to localize it.
         public void DrawText(TextFormatFlags flags)
         {
-            string text  = Header.Text;
+            string text = Header.Text;
             int padding = TextRenderer.MeasureText(" ", Font).Width;
             Rectangle newBounds = Rectangle.Inflate(Bounds, -padding, 0);
 

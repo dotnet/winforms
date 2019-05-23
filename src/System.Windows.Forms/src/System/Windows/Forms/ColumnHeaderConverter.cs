@@ -3,7 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System.Runtime.Serialization.Formatters;
     using System.Runtime.InteropServices;
 
@@ -18,19 +19,22 @@ namespace System.Windows.Forms {
 
     /// <summary>
     /// </summary>
-    public class ColumnHeaderConverter : ExpandableObjectConverter {
-    
+    public class ColumnHeaderConverter : ExpandableObjectConverter
+    {
+
         /// <summary>
         ///    <para>Gets a value indicating whether this converter can
         ///       convert an object to the given destination type using the context.</para>
         /// </summary>
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType) {
-            if (destinationType == typeof(InstanceDescriptor)) {
+        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        {
+            if (destinationType == typeof(InstanceDescriptor))
+            {
                 return true;
             }
             return base.CanConvertTo(context, destinationType);
         }
-        
+
         /// <summary>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call
@@ -38,47 +42,57 @@ namespace System.Windows.Forms {
         ///      type is string.  If this cannot convert to the desitnation type, this will
         ///      throw a NotSupportedException.
         /// </summary>
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
-            if (destinationType == null) {
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        {
+            if (destinationType == null)
+            {
                 throw new ArgumentNullException(nameof(destinationType));
             }
 
-            if (destinationType == typeof(InstanceDescriptor) && value is ColumnHeader) {
-                ColumnHeader col = (ColumnHeader) value;
+            if (destinationType == typeof(InstanceDescriptor) && value is ColumnHeader)
+            {
+                ColumnHeader col = (ColumnHeader)value;
                 ConstructorInfo ctor;
 
                 Type t = TypeDescriptor.GetReflectionType(value);
                 InstanceDescriptor id = null;
-                
-                if (col.ImageIndex != -1) {
-                    ctor = t.GetConstructor(new Type[]{typeof(int)});
-                    if (ctor != null) {
-                        id = new InstanceDescriptor(ctor, new object[]{col.ImageIndex}, false);
-                    }
-                    
-                } 
 
-                if (id == null && !string.IsNullOrEmpty(col.ImageKey)) {
-                    ctor = t.GetConstructor(new Type[]{typeof(string)});
-                    if (ctor != null) {
-                        id = new InstanceDescriptor(ctor, new object[]{col.ImageKey}, false);
+                if (col.ImageIndex != -1)
+                {
+                    ctor = t.GetConstructor(new Type[] { typeof(int) });
+                    if (ctor != null)
+                    {
+                        id = new InstanceDescriptor(ctor, new object[] { col.ImageIndex }, false);
                     }
-                } 
 
-                if (id == null) {
+                }
+
+                if (id == null && !string.IsNullOrEmpty(col.ImageKey))
+                {
+                    ctor = t.GetConstructor(new Type[] { typeof(string) });
+                    if (ctor != null)
+                    {
+                        id = new InstanceDescriptor(ctor, new object[] { col.ImageKey }, false);
+                    }
+                }
+
+                if (id == null)
+                {
                     ctor = t.GetConstructor(new Type[0]);
-                    if (ctor != null) {
+                    if (ctor != null)
+                    {
                         return new InstanceDescriptor(ctor, new object[0], false);
                     }
-                    else {
+                    else
+                    {
                         throw new ArgumentException(string.Format(SR.NoDefaultConstructor, t.FullName));
                     }
                 }
-                return id;                
+                return id;
             }
-            
+
             return base.ConvertTo(context, culture, value, destinationType);
         }
-    }    
+    }
 }
 

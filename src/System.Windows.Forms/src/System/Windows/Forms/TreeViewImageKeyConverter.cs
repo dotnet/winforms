@@ -3,7 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
 
     using Microsoft.Win32;
     using System.Collections;
@@ -18,7 +19,8 @@ namespace System.Windows.Forms {
     /// ImageIndexConverter is a class that can be used to convert
     /// image index values one data type to another.
     /// </summary>
-    public class TreeViewImageKeyConverter : ImageKeyConverter {
+    public class TreeViewImageKeyConverter : ImageKeyConverter
+    {
 
         /// <summary>
         /// Converts the given object to another type.  The most common types to convert
@@ -27,22 +29,27 @@ namespace System.Windows.Forms {
         /// type is string.  If this cannot convert to the desitnation type, this will
         /// throw a NotSupportedException.
         /// </summary>
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
-            if (destinationType == null) {
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        {
+            if (destinationType == null)
+            {
                 throw new ArgumentNullException(nameof(destinationType));
             }
-                
-            if (destinationType == typeof(string) && (value == null)) {
+
+            if (destinationType == typeof(string) && (value == null))
+            {
                 return SR.toStringDefault;
             }
-            else {
+            else
+            {
                 string strValue = value as string;
-                if (strValue != null && (strValue.Length == 0)) {
+                if (strValue != null && (strValue.Length == 0))
+                {
                     return SR.toStringDefault;
                 }
             }
 
-	    return base.ConvertTo(context, culture, value, destinationType);
+            return base.ConvertTo(context, culture, value, destinationType);
         }
 
     }

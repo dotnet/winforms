@@ -3,7 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System.Runtime.Serialization.Formatters;
     using System.Runtime.InteropServices;
 
@@ -17,7 +18,7 @@ namespace System.Windows.Forms {
     using System.ComponentModel.Design;
     using System.Windows.Forms.Layout;
     using System.Globalization;
-    
+
     /// <summary>
     ///     The TrackBar is a scrollable control similar to the ScrollBar, but
     ///     has a different UI.  You can configure ranges through which it should
@@ -34,11 +35,12 @@ namespace System.Windows.Forms {
     Designer("System.Windows.Forms.Design.TrackBarDesigner, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionTrackBar))
     ]
-    public class TrackBar : Control, ISupportInitialize {
+    public class TrackBar : Control, ISupportInitialize
+    {
 
         private static readonly object EVENT_SCROLL = new object();
         private static readonly object EVENT_VALUECHANGED = new object();
-        private static readonly object EVENT_RIGHTTOLEFTLAYOUTCHANGED = new object();        
+        private static readonly object EVENT_RIGHTTOLEFTLAYOUTCHANGED = new object();
 
         private bool autoSize = true;
         private int largeChange = 5;
@@ -58,19 +60,20 @@ namespace System.Windows.Forms {
         // Disable value range checking while initializing the control
         private bool initializing = false;
 
-        private bool rightToLeftLayout = false;        
+        private bool rightToLeftLayout = false;
 
         /// <summary>
         ///     Creates a new TrackBar control with a default range of 0..10 and
         ///     ticks shown every value.
         /// </summary>
         public TrackBar()
-        : base() {
+        : base()
+        {
             SetStyle(ControlStyles.UserPaint, false);
             SetStyle(ControlStyles.UseTextForAccessibility, false);
             requestedDim = PreferredDimension;
         }
-        
+
         /// <summary>
         ///     Indicates if the control is being auto-sized.  If true, the
         ///     TrackBar will adjust either its height or width [depending on
@@ -85,23 +88,29 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)
         ]
-        public override bool AutoSize {
-            get {
+        public override bool AutoSize
+        {
+            get
+            {
                 return autoSize;
             }
 
-            set {
+            set
+            {
                 // Note that we intentionally do not call base.  Labels size themselves by
                 // overriding SetBoundsCore (old RTM code).  We let CommonProperties.GetAutoSize
                 // continue to return false to keep our LayoutEngines from messing with TextBoxes.
                 // This is done for backwards compatibility since the new AutoSize behavior differs.                
-                if (autoSize != value) {
+                if (autoSize != value)
+                {
                     autoSize = value;
-                    if (orientation == Orientation.Horizontal) {
+                    if (orientation == Orientation.Horizontal)
+                    {
                         SetStyle(ControlStyles.FixedHeight, autoSize);
                         SetStyle(ControlStyles.FixedWidth, false);
                     }
-                    else {
+                    else
+                    {
                         SetStyle(ControlStyles.FixedWidth, autoSize);
                         SetStyle(ControlStyles.FixedHeight, false);
                     }
@@ -121,33 +130,41 @@ namespace System.Windows.Forms {
 
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override Image BackgroundImage {
-            get {
+        public override Image BackgroundImage
+        {
+            get
+            {
                 return base.BackgroundImage;
             }
-            set {
+            set
+            {
                 base.BackgroundImage = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged {
+        new public event EventHandler BackgroundImageChanged
+        {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override ImageLayout BackgroundImageLayout {
-            get {
+        public override ImageLayout BackgroundImageLayout
+        {
+            get
+            {
                 return base.BackgroundImageLayout;
             }
-            set {
+            set
+            {
                 base.BackgroundImageLayout = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged {
+        new public event EventHandler BackgroundImageLayoutChanged
+        {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
         }
@@ -158,12 +175,15 @@ namespace System.Windows.Forms {
         ///     base.getCreateParams() to make sure the control continues to work
         ///     correctly.
         /// </summary>
-        protected override CreateParams CreateParams {
-            get {
+        protected override CreateParams CreateParams
+        {
+            get
+            {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = NativeMethods.WC_TRACKBAR;
 
-                switch (tickStyle) {
+                switch (tickStyle)
+                {
                     case TickStyle.None:
                         cp.Style |= NativeMethods.TBS_NOTICKS;
                         break;
@@ -178,11 +198,13 @@ namespace System.Windows.Forms {
                         break;
                 }
 
-                if (orientation == Orientation.Vertical) {
+                if (orientation == Orientation.Vertical)
+                {
                     cp.Style |= NativeMethods.TBS_VERT; // HORIZ == 0
                 }
 
-                if (RightToLeft == RightToLeft.Yes && RightToLeftLayout == true) {
+                if (RightToLeft == RightToLeft.Yes && RightToLeftLayout == true)
+                {
                     //We want to turn on mirroring for Trackbar explicitly.
                     cp.ExStyle |= NativeMethods.WS_EX_LAYOUTRTL | NativeMethods.WS_EX_NOINHERITLAYOUT;
                     //Don't need these styles when mirroring is turned on.
@@ -191,9 +213,11 @@ namespace System.Windows.Forms {
                 return cp;
             }
         }
-        
-        protected override ImeMode DefaultImeMode {
-            get {
+
+        protected override ImeMode DefaultImeMode
+        {
+            get
+            {
                 return ImeMode.Disable;
             }
         }
@@ -202,8 +226,10 @@ namespace System.Windows.Forms {
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
         /// </summary>
-        protected override Size DefaultSize {
-            get {
+        protected override Size DefaultSize
+        {
+            get
+            {
                 return new Size(104, PreferredDimension);
             }
         }
@@ -213,27 +239,34 @@ namespace System.Windows.Forms {
         ///     on controls that are based on Win32 Native Controls.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        protected override bool DoubleBuffered {
-            get {
+        protected override bool DoubleBuffered
+        {
+            get
+            {
                 return base.DoubleBuffered;
             }
-            set {
+            set
+            {
                 base.DoubleBuffered = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override Font Font {
-            get {
+        public override Font Font
+        {
+            get
+            {
                 return base.Font;
             }
-            set {
+            set
+            {
                 base.Font = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler FontChanged {
+        new public event EventHandler FontChanged
+        {
             add => base.FontChanged += value;
             remove => base.FontChanged -= value;
         }
@@ -243,32 +276,40 @@ namespace System.Windows.Forms {
         ///     are unable to change this.  It is always Color.WINDOWTEXT
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override Color ForeColor {
-            get {
+        public override Color ForeColor
+        {
+            get
+            {
                 return SystemColors.WindowText;
             }
-            set {
+            set
+            {
             }
         }
-        
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler ForeColorChanged {
+        new public event EventHandler ForeColorChanged
+        {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public ImeMode ImeMode {
-            get {
+        new public ImeMode ImeMode
+        {
+            get
+            {
                 return base.ImeMode;
             }
-            set {
+            set
+            {
                 base.ImeMode = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler ImeModeChanged {
+        public new event EventHandler ImeModeChanged
+        {
             add => base.ImeModeChanged += value;
             remove => base.ImeModeChanged -= value;
         }
@@ -284,16 +325,21 @@ namespace System.Windows.Forms {
         DefaultValue(5),
         SRDescription(nameof(SR.TrackBarLargeChangeDescr))
         ]
-        public int LargeChange {
-            get {
+        public int LargeChange
+        {
+            get
+            {
                 return largeChange;
             }
-            set {
-                if (value < 0) {
+            set
+            {
+                if (value < 0)
+                {
                     throw new ArgumentOutOfRangeException(nameof(LargeChange), string.Format(SR.TrackBarLargeChangeError, value));
                 }
 
-                if (largeChange != value) {
+                if (largeChange != value)
+                {
                     largeChange = value;
                     if (IsHandleCreated)
                     {
@@ -312,13 +358,18 @@ namespace System.Windows.Forms {
         RefreshProperties(RefreshProperties.All),
         SRDescription(nameof(SR.TrackBarMaximumDescr))
         ]
-        public int Maximum {
-            get {
+        public int Maximum
+        {
+            get
+            {
                 return maximum;
             }
-            set {
-                if (maximum != value) {
-                    if (value < minimum) {
+            set
+            {
+                if (maximum != value)
+                {
+                    if (value < minimum)
+                    {
                         minimum = value;
                     }
                     SetRange(minimum, value);
@@ -335,13 +386,18 @@ namespace System.Windows.Forms {
         RefreshProperties(RefreshProperties.All),
         SRDescription(nameof(SR.TrackBarMinimumDescr))
         ]
-        public int Minimum {
-            get {
+        public int Minimum
+        {
+            get
+            {
                 return minimum;
             }
-            set {
-                if (minimum != value) {
-                    if (value > maximum) {
+            set
+            {
+                if (minimum != value)
+                {
+                    if (value > maximum)
+                    {
                         maximum = value;
                     }
                     SetRange(value, maximum);
@@ -360,32 +416,39 @@ namespace System.Windows.Forms {
         Localizable(true),
         SRDescription(nameof(SR.TrackBarOrientationDescr))
         ]
-        public Orientation Orientation {
-            get {
+        public Orientation Orientation
+        {
+            get
+            {
                 return orientation;
             }
-            set {
+            set
+            {
                 //valid values are 0x0 to 0x1
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)Orientation.Horizontal, (int)Orientation.Vertical))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Orientation));
                 }
 
-                if (orientation != value) {
+                if (orientation != value)
+                {
                     orientation = value;
 
-                    if (orientation == Orientation.Horizontal) {
+                    if (orientation == Orientation.Horizontal)
+                    {
                         SetStyle(ControlStyles.FixedHeight, autoSize);
                         SetStyle(ControlStyles.FixedWidth, false);
                         Width = requestedDim;
                     }
-                    else {
+                    else
+                    {
                         SetStyle(ControlStyles.FixedHeight, false);
                         SetStyle(ControlStyles.FixedWidth, autoSize);
                         Height = requestedDim;
                     }
 
-                    if (IsHandleCreated) {
+                    if (IsHandleCreated)
+                    {
                         Rectangle r = Bounds;
                         RecreateHandle();
                         SetBounds(r.X, r.Y, r.Height, r.Width, BoundsSpecified.All);
@@ -400,29 +463,34 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
-        public new Padding Padding {
+        public new Padding Padding
+        {
             get { return base.Padding; }
-            set { base.Padding = value;}
+            set { base.Padding = value; }
         }
 
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
         ]
-        public new event EventHandler PaddingChanged {
-            add => base.PaddingChanged += value; 
-            remove => base.PaddingChanged -= value; }
+        public new event EventHandler PaddingChanged
+        {
+            add => base.PaddingChanged += value;
+            remove => base.PaddingChanged -= value;
+        }
 
         /// <summary>
         ///     Little private routine that helps with auto-sizing.
         /// </summary>
-        private int PreferredDimension {
-            get {
+        private int PreferredDimension
+        {
+            get
+            {
                 int cyhscroll = UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYHSCROLL);
 
                 // this is our preferred size
                 //
-                return((cyhscroll * 8) / 3);
+                return ((cyhscroll * 8) / 3);
             }
         }
 
@@ -451,16 +519,21 @@ namespace System.Windows.Forms {
         DefaultValue(false),
         SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))
         ]
-        public virtual bool RightToLeftLayout {
-            get {
+        public virtual bool RightToLeftLayout
+        {
+            get
+            {
 
                 return rightToLeftLayout;
             }
 
-            set {
-                if (value != rightToLeftLayout) {
+            set
+            {
+                if (value != rightToLeftLayout)
+                {
                     rightToLeftLayout = value;
-                    using(new LayoutTransaction(this, this, PropertyNames.RightToLeftLayout)) {
+                    using (new LayoutTransaction(this, this, PropertyNames.RightToLeftLayout))
+                    {
                         OnRightToLeftLayoutChanged(EventArgs.Empty);
                     }
                 }
@@ -477,15 +550,20 @@ namespace System.Windows.Forms {
         DefaultValue(1),
         SRDescription(nameof(SR.TrackBarSmallChangeDescr))
         ]
-        public int SmallChange {
-            get {
+        public int SmallChange
+        {
+            get
+            {
                 return smallChange;
             }
-            set {
-                if (value < 0) {
+            set
+            {
+                if (value < 0)
+                {
                     throw new ArgumentOutOfRangeException(nameof(SmallChange), string.Format(SR.TrackBarSmallChangeError, value));
                 }
-                if (smallChange != value) {
+                if (smallChange != value)
+                {
                     smallChange = value;
                     if (IsHandleCreated)
                     {
@@ -494,23 +572,27 @@ namespace System.Windows.Forms {
                 }
             }
         }
-        
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]        
-        public override string Text {
-            get {
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
+        public override string Text
+        {
+            get
+            {
                 return base.Text;
             }
-            set {
+            set
+            {
                 base.Text = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TextChanged {
+        new public event EventHandler TextChanged
+        {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
         }
-        
+
         /// <summary>
         ///     Indicates how the TrackBar control will draw itself.  This affects
         ///     both where the ticks will be drawn in relation to the moveable thumb,
@@ -522,11 +604,14 @@ namespace System.Windows.Forms {
         DefaultValue(TickStyle.BottomRight),
         SRDescription(nameof(SR.TrackBarTickStyleDescr))
         ]
-        public TickStyle TickStyle {
-            get {
+        public TickStyle TickStyle
+        {
+            get
+            {
                 return tickStyle;
             }
-            set {
+            set
+            {
                 // Confirm that value is a valid enum
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)TickStyle.None, (int)TickStyle.Both))
@@ -534,7 +619,8 @@ namespace System.Windows.Forms {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TickStyle));
                 }
 
-                if (tickStyle != value) {
+                if (tickStyle != value)
+                {
                     tickStyle = value;
                     RecreateHandle();
                 }
@@ -553,14 +639,19 @@ namespace System.Windows.Forms {
         DefaultValue(1),
         SRDescription(nameof(SR.TrackBarTickFrequencyDescr))
         ]
-        public int TickFrequency {
-            get {
+        public int TickFrequency
+        {
+            get
+            {
                 return tickFrequency;
             }
-            set {
-                if (tickFrequency != value) {
+            set
+            {
+                if (tickFrequency != value)
+                {
                     tickFrequency = value;
-                    if (IsHandleCreated) {
+                    if (IsHandleCreated)
+                    {
                         SendMessage(NativeMethods.TBM_SETTICFREQ, value, 0);
                         Invalidate();
                     }
@@ -578,13 +669,17 @@ namespace System.Windows.Forms {
         Bindable(true),
         SRDescription(nameof(SR.TrackBarValueDescr))
         ]
-        public int Value {
-            get {
+        public int Value
+        {
+            get
+            {
                 GetTrackBarValue();
                 return value;
             }
-            set {
-                if (this.value != value) {
+            set
+            {
+                if (this.value != value)
+                {
                     if (!initializing && ((value < minimum) || (value > maximum)))
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(Value), value, $"'{nameof(Minimum)}'", $"'${nameof(Maximum)}'"));
@@ -595,44 +690,50 @@ namespace System.Windows.Forms {
                     OnValueChanged(EventArgs.Empty);
                 }
             }
-        }    
+        }
 
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler Click {
+        public new event EventHandler Click
+        {
             add => base.Click += value;
             remove => base.Click -= value;
         }
 
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler DoubleClick {
+        public new event EventHandler DoubleClick
+        {
             add => base.DoubleClick += value;
             remove => base.DoubleClick -= value;
         }
 
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event MouseEventHandler MouseClick {
+        public new event MouseEventHandler MouseClick
+        {
             add => base.MouseClick += value;
             remove => base.MouseClick -= value;
         }
 
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event MouseEventHandler MouseDoubleClick {
+        public new event MouseEventHandler MouseDoubleClick
+        {
             add => base.MouseDoubleClick += value;
             remove => base.MouseDoubleClick -= value;
         }
 
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
-        public event EventHandler RightToLeftLayoutChanged {
+        public event EventHandler RightToLeftLayoutChanged
+        {
             add => Events.AddHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
             remove => Events.RemoveHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
         }
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TrackBarOnScrollDescr))]
-        public event EventHandler Scroll {
+        public event EventHandler Scroll
+        {
             add => Events.AddHandler(EVENT_SCROLL, value);
             remove => Events.RemoveHandler(EVENT_SCROLL, value);
         }
@@ -642,13 +743,15 @@ namespace System.Windows.Forms {
         /// </summary>
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event PaintEventHandler Paint {
+        public new event PaintEventHandler Paint
+        {
             add => base.Paint += value;
             remove => base.Paint -= value;
         }
 
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.valueChangedEventDescr))]
-        public event EventHandler ValueChanged {
+        public event EventHandler ValueChanged
+        {
             add => Events.AddHandler(EVENT_VALUECHANGED, value);
             remove => Events.RemoveHandler(EVENT_VALUECHANGED, value);
         }
@@ -656,16 +759,20 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Enforces autoSizing
         /// </summary>
-        private void AdjustSize() {
-            if (IsHandleCreated) {
+        private void AdjustSize()
+        {
+            if (IsHandleCreated)
+            {
                 int saveDim = requestedDim;
-                try {
+                try
+                {
                     if (orientation == Orientation.Horizontal)
                         Height = autoSize ? PreferredDimension : saveDim;
                     else
                         Width = autoSize ? PreferredDimension : saveDim;
                 }
-                finally {
+                finally
+                {
                     requestedDim = saveDim;
                 }
             }
@@ -674,83 +781,101 @@ namespace System.Windows.Forms {
         /// <summary>
         ///      Handles tasks required when the control is being initialized.
         /// </summary>
-        public void BeginInit() {
+        public void BeginInit()
+        {
             initializing = true;
         }
 
         // Constrain the current value of the control to be within
         // the minimum and maximum.
         //
-        private void ConstrainValue() {
+        private void ConstrainValue()
+        {
 
             // Don't constrain the value while we're initializing the control
-            if (initializing) {
+            if (initializing)
+            {
                 return;
             }
 
             Debug.Assert(minimum <= maximum, "Minimum should be <= Maximum");
 
             // Keep the current value within the minimum and maximum
-            if (Value < minimum) {
+            if (Value < minimum)
+            {
                 Value = minimum;
             }
-            if (Value > maximum) {
+            if (Value > maximum)
+            {
                 Value = maximum;
             }
         }
 
         /// <summary>
         /// </summary>
-        protected override void CreateHandle() {
-            if (!RecreatingHandle) {
+        protected override void CreateHandle()
+        {
+            if (!RecreatingHandle)
+            {
                 IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
-                try {
+                try
+                {
                     NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX();
                     icc.dwICC = NativeMethods.ICC_BAR_CLASSES;
                     SafeNativeMethods.InitCommonControlsEx(icc);
-                } finally {
+                }
+                finally
+                {
                     UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
                 }
             }
             base.CreateHandle();
         }
-        
+
         /// <summary>
         ///      Called when initialization of the control is complete.
         /// </summary>
-        public void EndInit() {
+        public void EndInit()
+        {
             initializing = false;
 
             // Make sure the value is constrained by the minimum and maximum
             ConstrainValue();
         }
 
-        private void GetTrackBarValue() {
-            if (IsHandleCreated) {
-                value = unchecked( (int) (long)SendMessage(NativeMethods.TBM_GETPOS, 0, 0));
-                
+        private void GetTrackBarValue()
+        {
+            if (IsHandleCreated)
+            {
+                value = unchecked((int)(long)SendMessage(NativeMethods.TBM_GETPOS, 0, 0));
+
                 // See SetTrackBarValue() for a description of why we sometimes reflect the trackbar value
                 //                   
-                   
-                if (orientation == Orientation.Vertical) {
+
+                if (orientation == Orientation.Vertical)
+                {
                     // Reflect value
                     value = Minimum + Maximum - value;
                 }
-                
+
                 // Reflect for a RightToLeft horizontal trackbar
                 //
-                if (orientation == Orientation.Horizontal && RightToLeft == RightToLeft.Yes && !IsMirrored) {
+                if (orientation == Orientation.Horizontal && RightToLeft == RightToLeft.Yes && !IsMirrored)
+                {
                     value = Minimum + Maximum - value;
                 }
             }
-        }                                               
+        }
 
         /// <summary>
         ///      Handling special input keys, such as pgup, pgdown, home, end, etc...
         /// </summary>
-        protected override bool IsInputKey(Keys keyData) {
-            if ((keyData & Keys.Alt) == Keys.Alt) return false;
-            switch (keyData & Keys.KeyCode) {
+        protected override bool IsInputKey(Keys keyData)
+        {
+            if ((keyData & Keys.Alt) == Keys.Alt)
+                return false;
+            switch (keyData & Keys.KeyCode)
+            {
                 case Keys.PageUp:
                 case Keys.PageDown:
                 case Keys.Home:
@@ -759,10 +884,11 @@ namespace System.Windows.Forms {
             }
             return base.IsInputKey(keyData);
         }
-        
+
         /// <summary>
         /// </summary>
-        protected override void OnHandleCreated(EventArgs e) {
+        protected override void OnHandleCreated(EventArgs e)
+        {
             base.OnHandleCreated(e);
             SendMessage(NativeMethods.TBM_SETRANGEMIN, 0, minimum);
             SendMessage(NativeMethods.TBM_SETRANGEMAX, 0, maximum);
@@ -774,18 +900,22 @@ namespace System.Windows.Forms {
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected virtual void OnRightToLeftLayoutChanged(EventArgs e) {
-            if (GetAnyDisposingInHierarchy()) {
+        protected virtual void OnRightToLeftLayoutChanged(EventArgs e)
+        {
+            if (GetAnyDisposingInHierarchy())
+            {
                 return;
             }
 
-            if (RightToLeft == RightToLeft.Yes) {
+            if (RightToLeft == RightToLeft.Yes)
+            {
                 RecreateHandle();
             }
 
             EventHandler eh = Events[EVENT_RIGHTTOLEFTLAYOUTCHANGED] as EventHandler;
-            if (eh != null) {
-                 eh(this, e);
+            if (eh != null)
+            {
+                eh(this, e);
             }
         }
 
@@ -795,32 +925,39 @@ namespace System.Windows.Forms {
         ///     event.  Inheriting classes should not forget to call
         ///     base.onScroll(e)
         /// </summary>
-        protected virtual void OnScroll(EventArgs e) {
+        protected virtual void OnScroll(EventArgs e)
+        {
             EventHandler handler = (EventHandler)Events[EVENT_SCROLL];
-            if (handler != null) handler(this,e);
+            if (handler != null)
+                handler(this, e);
         }
 
         /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.Control.MouseWheel'/> event.</para>
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected override void OnMouseWheel(MouseEventArgs e) {
-            base.OnMouseWheel( e );
+        protected override void OnMouseWheel(MouseEventArgs e)
+        {
+            base.OnMouseWheel(e);
 
             HandledMouseEventArgs hme = e as HandledMouseEventArgs;
-            if (hme != null) {
-               if (hme.Handled) {
-                   return;
-               }
-               hme.Handled = true;
+            if (hme != null)
+            {
+                if (hme.Handled)
+                {
+                    return;
+                }
+                hme.Handled = true;
             }
 
-            if ((ModifierKeys & (Keys.Shift | Keys.Alt)) != 0 || MouseButtons != MouseButtons.None) {
+            if ((ModifierKeys & (Keys.Shift | Keys.Alt)) != 0 || MouseButtons != MouseButtons.None)
+            {
                 return; // Do not scroll when Shift or Alt key is down, or when a mouse button is down.
             }
 
             int wheelScrollLines = SystemInformation.MouseWheelScrollLines;
-            if (wheelScrollLines == 0) {
+            if (wheelScrollLines == 0)
+            {
                 return; // Do not scroll when the user system setting is 0 lines per notch
             }
 
@@ -831,28 +968,33 @@ namespace System.Windows.Forms {
             float partialNotches;
             partialNotches = (float)this.cumulativeWheelData / (float)NativeMethods.WHEEL_DELTA;
 
-            if (wheelScrollLines == -1) {
+            if (wheelScrollLines == -1)
+            {
                 wheelScrollLines = TickFrequency;
             }
 
             // Evaluate number of bands to scroll
             int scrollBands = (int)((float)wheelScrollLines * partialNotches);
 
-            if (scrollBands != 0) {
-               int absScrollBands;
-               if (scrollBands > 0) {
-                  absScrollBands = scrollBands;
-                  Value = Math.Min(absScrollBands+Value, Maximum);
-                  this.cumulativeWheelData -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
-               }
-               else {
-                  absScrollBands = -scrollBands;
-                  Value = Math.Max(Value-absScrollBands, Minimum);
-                  this.cumulativeWheelData -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
-               }
+            if (scrollBands != 0)
+            {
+                int absScrollBands;
+                if (scrollBands > 0)
+                {
+                    absScrollBands = scrollBands;
+                    Value = Math.Min(absScrollBands + Value, Maximum);
+                    this.cumulativeWheelData -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
+                }
+                else
+                {
+                    absScrollBands = -scrollBands;
+                    Value = Math.Max(Value - absScrollBands, Minimum);
+                    this.cumulativeWheelData -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
+                }
             }
 
-            if (e.Delta != Value) {
+            if (e.Delta != Value)
+            {
                 OnScroll(EventArgs.Empty);
                 OnValueChanged(EventArgs.Empty);
             }
@@ -861,9 +1003,11 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Actually fires the "valueChanged" event.
         /// </summary>
-        protected virtual void OnValueChanged(EventArgs e) {
+        protected virtual void OnValueChanged(EventArgs e)
+        {
             EventHandler handler = (EventHandler)Events[EVENT_VALUECHANGED];
-            if (handler != null) handler(this,e);
+            if (handler != null)
+                handler(this, e);
         }
 
         /// <summary>
@@ -871,20 +1015,23 @@ namespace System.Windows.Forms {
         ///     controls can overide this method to get property change notification on
         ///     basic properties. Inherting controls must call base.propertyChanged.
         /// </summary>
-        protected override void OnBackColorChanged(EventArgs e) {
+        protected override void OnBackColorChanged(EventArgs e)
+        {
             base.OnBackColorChanged(e);
             RedrawControl();
         }
 
-        protected override void OnSystemColorsChanged (EventArgs e) {
-            base.OnSystemColorsChanged (e);
+        protected override void OnSystemColorsChanged(EventArgs e)
+        {
+            base.OnSystemColorsChanged(e);
             RedrawControl();
         }
 
         /// <summary>
         ///     Overrides Control.setBoundsCore to enforce autoSize.
         /// </summary>
-        protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
+        protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
+        {
             //SetBoundsCore .. sets the height for a control in designer .. we should obey the requested 
             //height is Autosize is false..
             //if (IsHandleCreated) {
@@ -892,12 +1039,15 @@ namespace System.Windows.Forms {
                             ? height
                             : width;
 
-            if (autoSize) {
-                if (orientation == Orientation.Horizontal) {
+            if (autoSize)
+            {
+                if (orientation == Orientation.Horizontal)
+                {
                     if ((specified & BoundsSpecified.Height) != BoundsSpecified.None)
                         height = PreferredDimension;
                 }
-                else {
+                else
+                {
                     if ((specified & BoundsSpecified.Width) != BoundsSpecified.None)
                         width = PreferredDimension;
                 }
@@ -911,14 +1061,17 @@ namespace System.Windows.Forms {
         ///     The values passed are both the lower and upper limits to the range
         ///     with which the control will work.
         /// </summary>
-        public void SetRange(int minValue, int maxValue) {
-            if (minimum != minValue || maximum != maxValue) {
-            
+        public void SetRange(int minValue, int maxValue)
+        {
+            if (minimum != minValue || maximum != maxValue)
+            {
+
                 // The Minimum and Maximum properties contain the logic for
                 // ensuring that minValue <= maxValue. It is possible, however,
                 // that this function will be called somewhere other than from
                 // these two properties, so we'll check that here anyway.
-                if (minValue > maxValue) {
+                if (minValue > maxValue)
+                {
                     // We'll just adjust maxValue to match minValue
                     maxValue = minValue;
                 }
@@ -926,7 +1079,8 @@ namespace System.Windows.Forms {
                 minimum = minValue;
                 maximum = maxValue;
 
-                if (IsHandleCreated) {
+                if (IsHandleCreated)
+                {
                     SendMessage(NativeMethods.TBM_SETRANGEMIN, 0, minimum);
 
                     // We must repaint the trackbar after changing
@@ -937,24 +1091,28 @@ namespace System.Windows.Forms {
 
                     Invalidate();
                 }
-                
+
                 // When we change the range, the comctl32 trackbar's internal position can change 
                 // (because of the reflection that occurs with vertical trackbars)
                 // so we make sure to explicitly set the trackbar position.
                 //
-                if (value < minimum) {
+                if (value < minimum)
+                {
                     value = minimum;
                 }
-                if (value > maximum) {
+                if (value > maximum)
+                {
                     value = maximum;
                 }
                 SetTrackBarPosition();
             }
         }
-        
-        private void SetTrackBarPosition() {
-            if (IsHandleCreated) {
-            
+
+        private void SetTrackBarPosition()
+        {
+            if (IsHandleCreated)
+            {
+
                 // There are two situations where we want to reflect the track bar position:
                 //
                 // 1. For a vertical trackbar, it seems to make more sense for the trackbar to increase in value
@@ -963,19 +1121,21 @@ namespace System.Windows.Forms {
                 // 2. For a RightToLeft horizontal trackbar, we want to reflect the position.
                 //
                 int reflectedValue = value;
-                
+
                 // 1. Reflect for a vertical trackbar
                 //
-                if (orientation == Orientation.Vertical) {
+                if (orientation == Orientation.Vertical)
+                {
                     reflectedValue = Minimum + Maximum - value;
                 }
-                
+
                 // 2. Reflect for a RightToLeft horizontal trackbar
                 //
-                if (orientation == Orientation.Horizontal && RightToLeft == RightToLeft.Yes && !IsMirrored) {
+                if (orientation == Orientation.Horizontal && RightToLeft == RightToLeft.Yes && !IsMirrored)
+                {
                     reflectedValue = Minimum + Maximum - value;
                 }
-                
+
                 SendMessage(NativeMethods.TBM_SETPOS, 1, reflectedValue);
             }
         }
@@ -983,7 +1143,8 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Returns a string representation for this control.
         /// </summary>
-        public override string ToString() {
+        public override string ToString()
+        {
 
             string s = base.ToString();
             return s + ", Minimum: " + Minimum.ToString(CultureInfo.CurrentCulture) + ", Maximum: " + Maximum.ToString(CultureInfo.CurrentCulture) + ", Value: " + value;
@@ -994,21 +1155,25 @@ namespace System.Windows.Forms {
         ///     to add extra functionality, but should not forget to call
         ///     base.wndProc(m); to ensure the button continues to function properly.
         /// </summary>
-        protected override void WndProc(ref Message m) {
-            switch (m.Msg) {
-                case Interop.WindowMessages.WM_REFLECT+Interop.WindowMessages.WM_HSCROLL:
-                case Interop.WindowMessages.WM_REFLECT+Interop.WindowMessages.WM_VSCROLL:
-                    switch (NativeMethods.Util.LOWORD(m.WParam)) {
+        protected override void WndProc(ref Message m)
+        {
+            switch (m.Msg)
+            {
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_HSCROLL:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_VSCROLL:
+                    switch (NativeMethods.Util.LOWORD(m.WParam))
+                    {
                         case NativeMethods.TB_LINEUP:
                         case NativeMethods.TB_LINEDOWN:
                         case NativeMethods.TB_PAGEUP:
                         case NativeMethods.TB_PAGEDOWN:
-                            //case NativeMethods.TB_THUMBPOSITION:
+                        //case NativeMethods.TB_THUMBPOSITION:
                         case NativeMethods.TB_THUMBTRACK:
                         case NativeMethods.TB_TOP:
                         case NativeMethods.TB_BOTTOM:
                         case NativeMethods.TB_ENDTRACK:
-                            if (value != Value) {
+                            if (value != Value)
+                            {
                                 OnScroll(EventArgs.Empty);
                                 OnValueChanged(EventArgs.Empty);
                             }

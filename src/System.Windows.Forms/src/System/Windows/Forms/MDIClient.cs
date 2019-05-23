@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
 
     using Microsoft.Win32;
     using System;
@@ -16,7 +17,7 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Threading;
     using System.Windows.Forms;
-    
+
     /// <summary>
     ///    <para> 
     ///       Summary to
@@ -28,7 +29,8 @@ namespace System.Windows.Forms {
     ToolboxItem(false),
     DesignTimeVisible(false)
     ]
-    public sealed class MdiClient : Control {
+    public sealed class MdiClient : Control
+    {
 
         // kept in add order, not ZOrder. Need to return the correct
         // array of items...
@@ -39,7 +41,8 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Creates a new MdiClient.
         /// </summary>
-        public MdiClient() : base() {
+        public MdiClient() : base()
+        {
             SetStyle(ControlStyles.Selectable, false);
             BackColor = SystemColors.AppWorkspace;
             Dock = DockStyle.Fill;
@@ -51,22 +54,27 @@ namespace System.Windows.Forms {
         [
         Localizable(true)
         ]
-        public override Image BackgroundImage {
-            get {
+        public override Image BackgroundImage
+        {
+            get
+            {
                 Image result = base.BackgroundImage;
                 if (result == null && ParentInternal != null)
                     result = ParentInternal.BackgroundImage;
                 return result;
             }
-            
-            set {
+
+            set
+            {
                 base.BackgroundImage = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override ImageLayout BackgroundImageLayout {
-            get {
+        public override ImageLayout BackgroundImageLayout
+        {
+            get
+            {
                 Image backgroundImage = BackgroundImage;
                 if (backgroundImage != null && ParentInternal != null)
                 {
@@ -79,15 +87,18 @@ namespace System.Windows.Forms {
                 }
                 return base.BackgroundImageLayout;
             }
-            set {
+            set
+            {
                 base.BackgroundImageLayout = value;
             }
         }
 
         /// <summary>
         /// </summary>
-        protected override CreateParams CreateParams {
-            get {
+        protected override CreateParams CreateParams
+        {
+            get
+            {
                 CreateParams cp = base.CreateParams;
 
                 cp.ClassName = "MDICLIENT";
@@ -103,12 +114,14 @@ namespace System.Windows.Forms {
                 cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
                 cp.Param = new NativeMethods.CLIENTCREATESTRUCT(IntPtr.Zero, 1);
                 ISite site = (ParentInternal == null) ? null : ParentInternal.Site;
-                if (site != null && site.DesignMode) {
-                      cp.Style |= NativeMethods.WS_DISABLED;
-                      SetState(STATE_ENABLED, false);
+                if (site != null && site.DesignMode)
+                {
+                    cp.Style |= NativeMethods.WS_DISABLED;
+                    SetState(STATE_ENABLED, false);
                 }
-                
-                if (this.RightToLeft == RightToLeft.Yes && this.ParentInternal != null && this.ParentInternal.IsMirrored) {
+
+                if (this.RightToLeft == RightToLeft.Yes && this.ParentInternal != null && this.ParentInternal.IsMirrored)
+                {
                     //We want to turn on mirroring for MdiClient explicitly.
                     cp.ExStyle |= NativeMethods.WS_EX_LAYOUTRTL | NativeMethods.WS_EX_NOINHERITLAYOUT;
                     //Don't need these styles when mirroring is turned on.
@@ -124,15 +137,18 @@ namespace System.Windows.Forms {
         ///     will be sorted by the order in which the children were
         ///     added to the form, not the current ZOrder.
         /// </summary>
-        public Form[] MdiChildren {
-            get {
+        public Form[] MdiChildren
+        {
+            get
+            {
                 Form[] temp = new Form[children.Count];
                 children.CopyTo(temp, 0);
                 return temp;
             }
         }
 
-        protected override Control.ControlCollection CreateControlsInstance() {
+        protected override Control.ControlCollection CreateControlsInstance()
+        {
             return new ControlCollection(this);
         }
 
@@ -140,11 +156,13 @@ namespace System.Windows.Forms {
         ///     Arranges the MDI child forms according to value, which should be a
         ///     member of the MdiLayout enum.
         /// </summary>
-        public void LayoutMdi(MdiLayout value) {
+        public void LayoutMdi(MdiLayout value)
+        {
             if (Handle == IntPtr.Zero)
                 return;
 
-            switch (value) {
+            switch (value)
+            {
                 case MdiLayout.Cascade:
                     SendMessage(Interop.WindowMessages.WM_MDICASCADE, 0, 0);
                     break;
@@ -160,29 +178,33 @@ namespace System.Windows.Forms {
             }
         }
 
-        
+
         /// <summary>
         /// </summary>
-        protected override void OnResize(EventArgs e) {
+        protected override void OnResize(EventArgs e)
+        {
             ISite site = (ParentInternal == null) ? null : ParentInternal.Site;
-            if (site != null && site.DesignMode && Handle != IntPtr.Zero) {
+            if (site != null && site.DesignMode && Handle != IntPtr.Zero)
+            {
                 SetWindowRgn();
             }
             base.OnResize(e);
         }
 
-        
+
         /// <summary>
         ///     Performs the work of scaling the entire control and any child controls.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        protected override void ScaleCore(float dx, float dy) {
+        protected override void ScaleCore(float dx, float dy)
+        {
 
             // Don't scale child forms...
             //
 
             SuspendLayout();
-            try {
+            try
+            {
                 Rectangle bounds = Bounds;
                 int sx = (int)Math.Round(bounds.X * dx);
                 int sy = (int)Math.Round(bounds.Y * dy);
@@ -190,7 +212,8 @@ namespace System.Windows.Forms {
                 int sh = (int)Math.Round((bounds.Y + bounds.Height) * dy - sy);
                 SetBounds(sx, sy, sw, sh, BoundsSpecified.All);
             }
-            finally {
+            finally
+            {
                 ResumeLayout();
             }
         }
@@ -198,21 +221,25 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Scale this form.  Form overrides this to enforce a maximum / minimum size.
         /// </summary>
-        protected override void ScaleControl(SizeF factor, BoundsSpecified specified) {
+        protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
+        {
             // never scale X and Y of an MDI client form
             specified &= ~BoundsSpecified.Location;
             base.ScaleControl(factor, specified);
         }
 
-        protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
+        protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
+        {
             ISite site = (ParentInternal == null) ? null : ParentInternal.Site;
-            if (IsHandleCreated && (site == null || !site.DesignMode)) {
+            if (IsHandleCreated && (site == null || !site.DesignMode))
+            {
                 Rectangle oldBounds = Bounds;
                 base.SetBoundsCore(x, y, width, height, specified);
                 Rectangle newBounds = Bounds;
 
                 int yDelta = oldBounds.Height - newBounds.Height;
-                if (yDelta != 0) {
+                if (yDelta != 0)
+                {
                     // NOTE: This logic is to keep minimized MDI children anchored to
                     // the bottom left of the client area, normally they are anchored
                     // to the top right which just looks wierd!
@@ -220,20 +247,26 @@ namespace System.Windows.Forms {
                     NativeMethods.WINDOWPLACEMENT wp = new NativeMethods.WINDOWPLACEMENT();
                     wp.length = Marshal.SizeOf<NativeMethods.WINDOWPLACEMENT>();
 
-                    for (int i=0; i < Controls.Count; i++) {
+                    for (int i = 0; i < Controls.Count; i++)
+                    {
                         Control ctl = Controls[i];
-                        if (ctl != null && ctl is Form) {
+                        if (ctl != null && ctl is Form)
+                        {
                             Form child = (Form)ctl;
                             // Only adjust the window position for visible MDI Child windows to prevent
                             // them from being re-displayed.
-                            if (child.CanRecreateHandle() && child.WindowState == FormWindowState.Minimized) {
+                            if (child.CanRecreateHandle() && child.WindowState == FormWindowState.Minimized)
+                            {
                                 UnsafeNativeMethods.GetWindowPlacement(new HandleRef(child, child.Handle), ref wp);
                                 wp.ptMinPosition_y -= yDelta;
-                                if (wp.ptMinPosition_y == -1) {
-                                    if (yDelta < 0) {
+                                if (wp.ptMinPosition_y == -1)
+                                {
+                                    if (yDelta < 0)
+                                    {
                                         wp.ptMinPosition_y = 0;
                                     }
-                                    else {
+                                    else
+                                    {
                                         wp.ptMinPosition_y = -2;
                                     }
                                 }
@@ -245,7 +278,8 @@ namespace System.Windows.Forms {
                     }
                 }
             }
-            else {
+            else
+            {
                 base.SetBoundsCore(x, y, width, height, specified);
             }
         }
@@ -255,7 +289,8 @@ namespace System.Windows.Forms {
         /// There is case when the form contains a MainMenu and also has IsMdiContainer property set, in which, the MdiClient fails to 
         /// resize and hence draw the correct backcolor.
         /// </summary>
-        private void SetWindowRgn() {
+        private void SetWindowRgn()
+        {
             IntPtr rgn1 = IntPtr.Zero;
             IntPtr rgn2 = IntPtr.Zero;
             NativeMethods.RECT rect = new NativeMethods.RECT();
@@ -265,58 +300,72 @@ namespace System.Windows.Forms {
 
             Rectangle bounds = Bounds;
             rgn1 = SafeNativeMethods.CreateRectRgn(0, 0, bounds.Width, bounds.Height);
-            try {
+            try
+            {
                 rgn2 = SafeNativeMethods.CreateRectRgn(-rect.left, -rect.top,
                                              bounds.Width - rect.right, bounds.Height - rect.bottom);
-                try {
+                try
+                {
                     if (rgn1 == IntPtr.Zero || rgn2 == IntPtr.Zero)
                         throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
 
                     if (SafeNativeMethods.CombineRgn(new HandleRef(null, rgn1), new HandleRef(null, rgn1), new HandleRef(null, rgn2), NativeMethods.RGN_DIFF) == 0)
                         throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
 
-                    if (UnsafeNativeMethods.SetWindowRgn(new HandleRef(this, Handle), new HandleRef(null, rgn1), true) == 0) {
+                    if (UnsafeNativeMethods.SetWindowRgn(new HandleRef(this, Handle), new HandleRef(null, rgn1), true) == 0)
+                    {
                         throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
                     }
-                    else {
+                    else
+                    {
                         // The hwnd now owns the region.
                         rgn1 = IntPtr.Zero;
                     }
                 }
-                finally {
-                    if (rgn2 != IntPtr.Zero) {
+                finally
+                {
+                    if (rgn2 != IntPtr.Zero)
+                    {
                         SafeNativeMethods.DeleteObject(new HandleRef(null, rgn2));
                     }
                 }
             }
-            finally {
-                if (rgn1 != IntPtr.Zero) {
-                    SafeNativeMethods.DeleteObject(new HandleRef(null, rgn1)); 
+            finally
+            {
+                if (rgn1 != IntPtr.Zero)
+                {
+                    SafeNativeMethods.DeleteObject(new HandleRef(null, rgn1));
                 }
             }
         }
 
 
-        internal override bool ShouldSerializeBackColor() {
+        internal override bool ShouldSerializeBackColor()
+        {
             return BackColor != SystemColors.AppWorkspace;
         }
 
-        private bool ShouldSerializeLocation() {
+        private bool ShouldSerializeLocation()
+        {
             return false;
         }
 
-        internal override bool ShouldSerializeSize() {
+        internal override bool ShouldSerializeSize()
+        {
             return false;
         }
-        
+
 
         /// <summary>
         /// </summary>
-        protected override void WndProc(ref Message m) {
-            switch (m.Msg) {
-                
+        protected override void WndProc(ref Message m)
+        {
+            switch (m.Msg)
+            {
+
                 case Interop.WindowMessages.WM_CREATE:
-                    if (ParentInternal != null && ParentInternal.Site != null && ParentInternal.Site.DesignMode && Handle != IntPtr.Zero) {
+                    if (ParentInternal != null && ParentInternal.Site != null && ParentInternal.Site.DesignMode && Handle != IntPtr.Zero)
+                    {
                         SetWindowRgn();
                     }
                     break;
@@ -324,13 +373,16 @@ namespace System.Windows.Forms {
                 case Interop.WindowMessages.WM_SETFOCUS:
                     InvokeGotFocus(ParentInternal, EventArgs.Empty);
                     Form childForm = null;
-                    if (ParentInternal is Form) {
+                    if (ParentInternal is Form)
+                    {
                         childForm = ((Form)ParentInternal).ActiveMdiChildInternal;
                     }
-                    if (childForm == null && MdiChildren.Length > 0 && MdiChildren[0].IsMdiChildFocusable) {
+                    if (childForm == null && MdiChildren.Length > 0 && MdiChildren[0].IsMdiChildFocusable)
+                    {
                         childForm = MdiChildren[0];
                     }
-                    if (childForm != null && childForm.Visible) {
+                    if (childForm != null && childForm.Visible)
+                    {
                         childForm.Active = true;
                     }
 
@@ -347,11 +399,13 @@ namespace System.Windows.Forms {
             base.WndProc(ref m);
         }
 
-        internal override void OnInvokedSetScrollPosition(object sender, EventArgs e) {
+        internal override void OnInvokedSetScrollPosition(object sender, EventArgs e)
+        {
             Application.Idle += new EventHandler(this.OnIdle); //do this on idle (it must be mega-delayed).
         }
 
-        private void OnIdle(object sender, EventArgs e) {
+        private void OnIdle(object sender, EventArgs e)
+        {
             Application.Idle -= new EventHandler(this.OnIdle);
             base.OnInvokedSetScrollPosition(sender, e);
         }
@@ -360,13 +414,15 @@ namespace System.Windows.Forms {
         ///     Collection of controls...
         /// </summary>
         [ComVisible(false)]
-        new public class ControlCollection : Control.ControlCollection {
+        new public class ControlCollection : Control.ControlCollection
+        {
             private MdiClient owner;
 
             /*C#r: protected*/
 
             public ControlCollection(MdiClient owner)
-            : base(owner) {
+            : base(owner)
+            {
                 this.owner = owner;
             }
 
@@ -384,14 +440,18 @@ namespace System.Windows.Forms {
             ///     child.setMdiParent(this);
             /// </code>
             /// </summary>
-            public override void Add(Control value) {
-                if (value == null) {
+            public override void Add(Control value)
+            {
+                if (value == null)
+                {
                     return;
                 }
-                if (!(value is Form) || !((Form)value).IsMdiChild) {
+                if (!(value is Form) || !((Form)value).IsMdiChild)
+                {
                     throw new ArgumentException(SR.MDIChildAddToNonMDIParent, "value");
                 }
-                if (owner.CreateThreadId != value.CreateThreadId) {
+                if (owner.CreateThreadId != value.CreateThreadId)
+                {
                     throw new ArgumentException(SR.AddDifferentThreads, "value");
                 }
                 owner.children.Add((Form)value);
@@ -401,7 +461,8 @@ namespace System.Windows.Forms {
             /// <summary>
             ///     Removes a child control.
             /// </summary>
-            public override void Remove(Control value) {
+            public override void Remove(Control value)
+            {
                 owner.children.Remove(value);
                 base.Remove(value);
             }

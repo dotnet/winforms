@@ -19,21 +19,21 @@ namespace System.Experimental.Gdi
     internal
 #endif
     enum GdiObjectType
-    {   
-        Pen                 = 1,
-        Brush               = 2,
-        DisplayDC           = 3,
-        MetafileDC          = 4,
-        Palette             = 5,
-        Font                = 6,
-        Bitmap              = 7,
-        Region              = 8,
-        Metafile            = 9,
-        MemoryDC            = 10,
-        ExtendedPen         = 11,
-        EnhancedMetafileDC  = 12,
-        EnhMetafile         = 13,
-        ColorSpace          = 14
+    {
+        Pen = 1,
+        Brush = 2,
+        DisplayDC = 3,
+        MetafileDC = 4,
+        Palette = 5,
+        Font = 6,
+        Bitmap = 7,
+        Region = 8,
+        Metafile = 9,
+        MemoryDC = 10,
+        ExtendedPen = 11,
+        EnhancedMetafileDC = 12,
+        EnhMetafile = 13,
+        ColorSpace = 14
 
         /*
         OBJ_PEN       = 1,

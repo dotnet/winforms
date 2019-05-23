@@ -16,7 +16,7 @@ namespace System.Windows.Forms
         {
             Node = node;
         }
-        
+
         public TreeNode Node { get; }
     }
 }

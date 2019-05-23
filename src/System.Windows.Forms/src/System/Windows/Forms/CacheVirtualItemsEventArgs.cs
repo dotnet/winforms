@@ -11,9 +11,9 @@ namespace System.Windows.Forms
             StartIndex = startIndex;
             EndIndex = endIndex;
         }
-        
+
         public int StartIndex { get; }
-        
+
         public int EndIndex { get; }
     }
 }

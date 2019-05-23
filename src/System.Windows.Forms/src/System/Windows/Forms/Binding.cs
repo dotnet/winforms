@@ -525,7 +525,7 @@ namespace System.Windows.Forms
             {
                 return DataSourceNullValue;
             }
-             
+
             return _propInfo.GetValue(_control) ?? DataSourceNullValue;
         }
 
@@ -750,7 +750,7 @@ namespace System.Windows.Forms
         /// method, which in turn calls PullData. PullData is also called by the binding manager when pulling data
         /// from all bounds properties in one go.
         /// </summary>
-        internal bool PullData() =>  PullData(reformat: true, force: false);
+        internal bool PullData() => PullData(reformat: true, force: false);
 
         internal bool PullData(bool reformat) => PullData(reformat, force: false);
 
@@ -1235,7 +1235,7 @@ namespace System.Windows.Forms
                         }
                         return type;
                     }
-                    
+
                     return _fieldInfo?.PropertyType;
                 }
             }

@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System.Diagnostics;
     using System;
     using System.ComponentModel;
@@ -11,7 +12,7 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Diagnostics.CodeAnalysis;
     using System.ComponentModel.Design;
-    
+
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -21,101 +22,117 @@ namespace System.Windows.Forms {
     InitializationEvent(nameof(Load)),
     ToolboxItem(false)
     ]
-    public class ToolStripContentPanel : Panel {
-        private ToolStripRendererSwitcher      rendererSwitcher         = null;
-        private BitVector32                    state                    = new BitVector32();
-        private static readonly int stateLastDoubleBuffer             = BitVector32.CreateMask();
+    public class ToolStripContentPanel : Panel
+    {
+        private ToolStripRendererSwitcher rendererSwitcher = null;
+        private BitVector32 state = new BitVector32();
+        private static readonly int stateLastDoubleBuffer = BitVector32.CreateMask();
 
-        private static readonly object EventRendererChanged          = new object();
-        private static readonly object EventLoad                     = new object();
-        
-        public ToolStripContentPanel() {
+        private static readonly object EventRendererChanged = new object();
+        private static readonly object EventLoad = new object();
+
+        public ToolStripContentPanel()
+        {
 
             // Consider: OptimizedDoubleBuffer
             SetStyle(ControlStyles.ResizeRedraw | ControlStyles.SupportsTransparentBackColor, true);
         }
 
-         /// <summary>
-         ///     Allows the control to optionally shrink when AutoSize is true.
-         /// </summary>
-         [
-         EditorBrowsable(EditorBrowsableState.Never),
-         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-         Browsable(false),
-         Localizable(false)
-         ]
-         public override AutoSizeMode AutoSizeMode {
-            get {
+        /// <summary>
+        ///     Allows the control to optionally shrink when AutoSize is true.
+        /// </summary>
+        [
+        EditorBrowsable(EditorBrowsableState.Never),
+        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+        Browsable(false),
+        Localizable(false)
+        ]
+        public override AutoSizeMode AutoSizeMode
+        {
+            get
+            {
                 return AutoSizeMode.GrowOnly;
             }
-            set {
+            set
+            {
             }
-         }
+        }
 
-         [
-         Browsable(false), 
-         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-         ]
-         public override AnchorStyles Anchor {
-             get {
-                 return base.Anchor;
-             }
-             set {
-                 base.Anchor = value;
-             }
-         }
-
-         [
-        Browsable(false), 
-        EditorBrowsable(EditorBrowsableState.Never)
+        [
+        Browsable(false),
+        EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
-        public override bool AutoScroll {
+        public override AnchorStyles Anchor
+        {
+            get
+            {
+                return base.Anchor;
+            }
+            set
+            {
+                base.Anchor = value;
+            }
+        }
+
+        [
+       Browsable(false),
+       EditorBrowsable(EditorBrowsableState.Never)
+       ]
+        public override bool AutoScroll
+        {
             get { return base.AutoScroll; }
             set { base.AutoScroll = value; }
         }
 
         [
-        Browsable(false), 
+        Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
-        public new Size AutoScrollMargin {
+        public new Size AutoScrollMargin
+        {
             get { return base.AutoScrollMargin; }
             set { base.AutoScrollMargin = value; }
         }
 
         [
-        Browsable(false), 
+        Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
-        public new Size AutoScrollMinSize {
+        public new Size AutoScrollMinSize
+        {
             get { return base.AutoScrollMinSize; }
             set { base.AutoScrollMinSize = value; }
         }
 
         [
-        Browsable(false), 
+        Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
-        public override bool AutoSize {
+        public override bool AutoSize
+        {
             get { return base.AutoSize; }
-            set { base.AutoSize = value; } 
+            set { base.AutoSize = value; }
         }
 
 
-        public override Color BackColor {
-            get { 
-                return base.BackColor; 
+        public override Color BackColor
+        {
+            get
+            {
+                return base.BackColor;
             }
 
-            set { 
+            set
+            {
 
                 // To support transparency on ToolStripContainer, we need this check
                 // to ensure that background color of the container reflects the 
                 // ContentPanel
-                if (this.ParentInternal is ToolStripContainer && value == Color.Transparent) {
-                   this.ParentInternal.BackColor = Color.Transparent;
+                if (this.ParentInternal is ToolStripContainer && value == Color.Transparent)
+                {
+                    this.ParentInternal.BackColor = Color.Transparent;
                 }
-                base.BackColor = value; 
+                base.BackColor = value;
             }
         }
 
@@ -124,7 +141,8 @@ namespace System.Windows.Forms {
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
-        public new event EventHandler AutoSizeChanged{
+        public new event EventHandler AutoSizeChanged
+        {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
         }
@@ -133,13 +151,15 @@ namespace System.Windows.Forms {
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
-        public new bool CausesValidation {
+        public new bool CausesValidation
+        {
             get { return base.CausesValidation; }
             set { base.CausesValidation = value; }
         }
-  
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler CausesValidationChanged {
+        public new event EventHandler CausesValidationChanged
+        {
             add => base.CausesValidationChanged += value;
             remove => base.CausesValidationChanged -= value;
         }
@@ -148,62 +168,71 @@ namespace System.Windows.Forms {
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
-        public override DockStyle Dock {
-            get {
+        public override DockStyle Dock
+        {
+            get
+            {
                 return base.Dock;
             }
-            set {
-                base.Dock=value;
+            set
+            {
+                base.Dock = value;
             }
         }
         [
-        Browsable(false), 
+        Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
-        public new event EventHandler DockChanged {
-           add => base.DockChanged += value;
+        public new event EventHandler DockChanged
+        {
+            add => base.DockChanged += value;
             remove => base.DockChanged -= value;
         }
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolStripContentPanelOnLoadDescr))]
-        public event EventHandler Load {
+        public event EventHandler Load
+        {
             add => Events.AddHandler(EventLoad, value);
             remove => Events.RemoveHandler(EventLoad, value);
         }
 
         [
-        Browsable(false), 
+        Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
-        public new Point Location {
+        public new Point Location
+        {
             get { return base.Location; }
             set { base.Location = value; }
         }
 
         [
-        Browsable(false), 
+        Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
-        public new event EventHandler LocationChanged {
-           add => base.LocationChanged += value;
+        public new event EventHandler LocationChanged
+        {
+            add => base.LocationChanged += value;
             remove => base.LocationChanged -= value;
         }
 
         [
-        Browsable(false), 
+        Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
-        public override Size MinimumSize {
+        public override Size MinimumSize
+        {
             get { return base.MinimumSize; }
             set { base.MinimumSize = value; }
         }
 
 
         [
-        Browsable(false), 
+        Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
-        public override Size MaximumSize {
+        public override Size MaximumSize
+        {
             get { return base.MaximumSize; }
             set { base.MaximumSize = value; }
         }
@@ -211,34 +240,41 @@ namespace System.Windows.Forms {
         [
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)    
+        Browsable(false)
         ]
-        public new string Name {
-            get {
+        public new string Name
+        {
+            get
+            {
                 return base.Name;
             }
-            set {
+            set
+            {
                 base.Name = value;
             }
         }
 
-       
+
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
-        public new int TabIndex {
-            get {
+        public new int TabIndex
+        {
+            get
+            {
                 return base.TabIndex;
             }
-            set {
+            set
+            {
                 base.TabIndex = value;
             }
         }
-        
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler TabIndexChanged {
+        public new event EventHandler TabIndexChanged
+        {
             add => base.TabIndexChanged += value;
             remove => base.TabIndexChanged -= value;
         }
@@ -248,24 +284,31 @@ namespace System.Windows.Forms {
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
         ]
-        public new bool TabStop {
-            get {
+        public new bool TabStop
+        {
+            get
+            {
                 return base.TabStop;
             }
-            set {
+            set
+            {
                 base.TabStop = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler TabStopChanged {
+        public new event EventHandler TabStopChanged
+        {
             add => base.TabStopChanged += value;
             remove => base.TabStopChanged -= value;
         }
 
-        private ToolStripRendererSwitcher RendererSwitcher {
-            get {
-                if (rendererSwitcher == null) {
+        private ToolStripRendererSwitcher RendererSwitcher
+        {
+            get
+            {
+                if (rendererSwitcher == null)
+                {
                     rendererSwitcher = new ToolStripRendererSwitcher(this, ToolStripRenderMode.System);
                     HandleRendererChanged(this, EventArgs.Empty);
                     rendererSwitcher.RendererChanged += new EventHandler(HandleRendererChanged);
@@ -274,100 +317,120 @@ namespace System.Windows.Forms {
             }
         }
 
-      
+
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
-        public ToolStripRenderer Renderer {
-            get {
+        public ToolStripRenderer Renderer
+        {
+            get
+            {
                 return RendererSwitcher.Renderer;
             }
-            set {
+            set
+            {
                 RendererSwitcher.Renderer = value;
             }
         }
 
-        
+
         [
         SRDescription(nameof(SR.ToolStripRenderModeDescr)),
         SRCategory(nameof(SR.CatAppearance)),
         ]
-        public ToolStripRenderMode RenderMode {
-            get {
-                return RendererSwitcher.RenderMode;      
+        public ToolStripRenderMode RenderMode
+        {
+            get
+            {
+                return RendererSwitcher.RenderMode;
             }
-            set {
+            set
+            {
                 RendererSwitcher.RenderMode = value;
             }
         }
 
         [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripRendererChanged))]
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
-        public event EventHandler RendererChanged {
+        public event EventHandler RendererChanged
+        {
             add => Events.AddHandler(EventRendererChanged, value);
             remove => Events.RemoveHandler(EventRendererChanged, value);
         }
 
-        private void HandleRendererChanged(object sender, EventArgs e) {
-           OnRendererChanged(e);
+        private void HandleRendererChanged(object sender, EventArgs e)
+        {
+            OnRendererChanged(e);
         }
 
-        protected override void OnHandleCreated(EventArgs e) {
+        protected override void OnHandleCreated(EventArgs e)
+        {
             base.OnHandleCreated(e);
-            if (!RecreatingHandle) {
+            if (!RecreatingHandle)
+            {
                 OnLoad(EventArgs.Empty);
             }
         }
-      
+
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected virtual void OnLoad(EventArgs e) {
+        protected virtual void OnLoad(EventArgs e)
+        {
             // There is no good way to explain this event except to say
             // that it's just another name for OnControlCreated.
             EventHandler handler = (EventHandler)Events[EventLoad];
-            if (handler != null) handler(this,e);
+            if (handler != null)
+                handler(this, e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected override void OnPaintBackground(PaintEventArgs e) {
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
             ToolStripContentPanelRenderEventArgs rea = new ToolStripContentPanelRenderEventArgs(e.Graphics, this);
-            
+
             Renderer.DrawToolStripContentPanelBackground(rea);
 
-            if (!rea.Handled) {
+            if (!rea.Handled)
+            {
                 base.OnPaintBackground(e);
             }
 
         }
 
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
-        protected virtual void OnRendererChanged(EventArgs e) {
+        protected virtual void OnRendererChanged(EventArgs e)
+        {
 
-           // we dont want to be greedy.... if we're using TSProfessionalRenderer go DBuf, else dont.
-           if (Renderer is ToolStripProfessionalRenderer) {
+            // we dont want to be greedy.... if we're using TSProfessionalRenderer go DBuf, else dont.
+            if (Renderer is ToolStripProfessionalRenderer)
+            {
                 state[stateLastDoubleBuffer] = this.DoubleBuffered;
                 //this.DoubleBuffered = true;
                 SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-           }
-           else {
+            }
+            else
+            {
                 // restore DBuf
                 this.DoubleBuffered = state[stateLastDoubleBuffer];
-           }
-           
-           Renderer.InitializeContentPanel(this);
+            }
 
-           this.Invalidate();
-           
-           EventHandler handler = (EventHandler)Events[EventRendererChanged];
-           if (handler != null)  handler(this,e);
-           
+            Renderer.InitializeContentPanel(this);
+
+            this.Invalidate();
+
+            EventHandler handler = (EventHandler)Events[EventRendererChanged];
+            if (handler != null)
+                handler(this, e);
+
         }
 
-        private void ResetRenderMode() {
-           this.RendererSwitcher.ResetRenderMode();
+        private void ResetRenderMode()
+        {
+            this.RendererSwitcher.ResetRenderMode();
         }
 
-        private bool ShouldSerializeRenderMode() {
-           return this.RendererSwitcher.ShouldSerializeRenderMode();
+        private bool ShouldSerializeRenderMode()
+        {
+            return this.RendererSwitcher.ShouldSerializeRenderMode();
         }
     }
 }

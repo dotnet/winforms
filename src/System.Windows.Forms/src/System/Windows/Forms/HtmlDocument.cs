@@ -717,7 +717,7 @@ namespace System.Windows.Forms
                                                                           new HTMLDocumentEvents2(htmlDocument),
                                                                           typeof(UnsafeNativeMethods.DHTMLDocumentEvents2),
                                                                           /*throwException*/ false);
-                    if (!cookie.Connected) 
+                    if (!cookie.Connected)
                     {
                         cookie = null;
                     }
@@ -855,91 +855,91 @@ namespace System.Windows.Forms
             }
 
             public void onkeydown(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void onkeyup(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public bool onkeypress(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public void onreadystatechange(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public bool onbeforeupdate(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public void onafterupdate(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public bool onrowexit(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public void onrowenter(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public bool ondragstart(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public bool onselectstart(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public bool onerrorupdate(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public void onrowsdelete(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void onrowsinserted(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void oncellchange(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void onpropertychange(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void ondatasetchanged(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void ondataavailable(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void ondatasetcomplete(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void onbeforeeditfocus(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void onselectionchange(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public bool oncontrolselect(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public bool onmousewheel(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public void onactivate(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void ondeactivate(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public bool onbeforeactivate(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
-            
+
             public bool onbeforedeactivate(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
@@ -947,7 +947,7 @@ namespace System.Windows.Forms
             }
         }
 
-            #region operators
+        #region operators
 
         [SuppressMessage("Microsoft.Design", "CA1046:DoNotOverrideOperatorEqualsOnReferenceTypes")]
         public static bool operator ==(HtmlDocument left, HtmlDocument right)
@@ -1000,7 +1000,7 @@ namespace System.Windows.Forms
         {
             return (this == (HtmlDocument)obj);
         }
-            #endregion
+        #endregion
 
     }
 }

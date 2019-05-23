@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
 
     using Microsoft.Win32;
     using System;
@@ -20,8 +21,9 @@ namespace System.Windows.Forms {
     [SRDescription(nameof(SR.DescriptionPrintDialog))]
     [Designer("System.Windows.Forms.Design.PrintDialogDesigner, " + AssemblyRef.SystemDesign)]
     // The only event this dialog has is HelpRequested, which isn't very useful
-    public sealed class PrintDialog : CommonDialog {
-        private const int printRangeMask = (int) (PrintRange.AllPages | PrintRange.SomePages 
+    public sealed class PrintDialog : CommonDialog
+    {
+        private const int printRangeMask = (int)(PrintRange.AllPages | PrintRange.SomePages
                                                   | PrintRange.Selection | PrintRange.CurrentPage);
 
         // If PrintDocument != null, settings == printDocument.PrinterSettings
@@ -41,11 +43,12 @@ namespace System.Windows.Forms {
         /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.PrintDialog'/> class.</para>
         /// </summary>
-        public PrintDialog() {
+        public PrintDialog()
+        {
             Reset();
         }
 
-        
+
         /// <summary>
         ///    <para>
         ///       Gets or sets a value indicating whether the Current Page option button is enabled.
@@ -55,11 +58,12 @@ namespace System.Windows.Forms {
         DefaultValue(false),
         SRDescription(nameof(SR.PDallowCurrentPageDescr))
         ]
-        public bool AllowCurrentPage {
-            get { return allowCurrentPage;}
-            set { allowCurrentPage = value;}
+        public bool AllowCurrentPage
+        {
+            get { return allowCurrentPage; }
+            set { allowCurrentPage = value; }
         }
-        
+
 
         /// <summary>
         ///    <para>
@@ -67,26 +71,28 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         SRDescription(nameof(SR.PDallowPagesDescr))
         ]
-        public bool AllowSomePages {
-            get { return allowPages;}
-            set { allowPages = value;}
+        public bool AllowSomePages
+        {
+            get { return allowPages; }
+            set { allowPages = value; }
         }
 
         /// <summary>
         ///    <para>Gets or sets a value indicating whether the Print to file check box is enabled.</para>
         /// </summary>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         SRDescription(nameof(SR.PDallowPrintToFileDescr))
         ]
-        public bool AllowPrintToFile {
-            get { return allowPrintToFile;}
-            set { allowPrintToFile = value;}
+        public bool AllowPrintToFile
+        {
+            get { return allowPrintToFile; }
+            set { allowPrintToFile = value; }
         }
 
         /// <summary>
@@ -95,13 +101,14 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         SRDescription(nameof(SR.PDallowSelectionDescr))
         ]
-        public bool AllowSelection {
-            get { return allowSelection;}
-            set { allowSelection = value;}
+        public bool AllowSelection
+        {
+            get { return allowSelection; }
+            set { allowSelection = value; }
         }
 
         /// <summary>
@@ -110,13 +117,15 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         [
-        SRCategory(nameof(SR.CatData)), 
+        SRCategory(nameof(SR.CatData)),
         DefaultValue(null),
         SRDescription(nameof(SR.PDdocumentDescr))
         ]
-        public PrintDocument Document {
-            get { return printDocument;}
-            set { 
+        public PrintDocument Document
+        {
+            get { return printDocument; }
+            set
+            {
                 printDocument = value;
                 if (printDocument == null)
                     settings = new PrinterSettings();
@@ -125,8 +134,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        private PageSettings PageSettings {
-            get {
+        private PageSettings PageSettings
+        {
+            get
+            {
                 if (Document == null)
                     return PrinterSettings.DefaultPageSettings;
                 else
@@ -141,22 +152,25 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         [
-        SRCategory(nameof(SR.CatData)), 
+        SRCategory(nameof(SR.CatData)),
         DefaultValue(null),
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.PDprinterSettingsDescr))
         ]
-        public PrinterSettings PrinterSettings {
-            get {
-                
+        public PrinterSettings PrinterSettings
+        {
+            get
+            {
+
                 if (settings == null)
                 {
                     settings = new PrinterSettings();
                 }
                 return settings;
             }
-            set {
+            set
+            {
                 if (value != PrinterSettings)
                 {
                     settings = value;
@@ -169,13 +183,14 @@ namespace System.Windows.Forms {
         ///    <para>Gets or sets a value indicating whether the Print to file check box is checked.</para>
         /// </summary>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         SRDescription(nameof(SR.PDprintToFileDescr))
         ]
-        public bool PrintToFile {
-            get { return printToFile;}
-            set { printToFile = value;}
+        public bool PrintToFile
+        {
+            get { return printToFile; }
+            set { printToFile = value; }
         }
 
         /// <summary>
@@ -184,13 +199,14 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
         SRDescription(nameof(SR.PDshowHelpDescr))
         ]
-        public bool ShowHelp {
-            get { return showHelp;}
-            set { showHelp = value;}
+        public bool ShowHelp
+        {
+            get { return showHelp; }
+            set { showHelp = value; }
         }
 
         /// <summary>
@@ -199,13 +215,14 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
+        SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
         SRDescription(nameof(SR.PDshowNetworkDescr))
         ]
-        public bool ShowNetwork {
-            get { return showNetwork;}
-            set { showNetwork = value;}
+        public bool ShowNetwork
+        {
+            get { return showNetwork; }
+            set { showNetwork = value; }
         }
 
 
@@ -275,7 +292,8 @@ namespace System.Windows.Forms {
         ///       settings to their default values.
         ///    </para>
         /// </summary>
-        public override void Reset() {
+        public override void Reset()
+        {
             allowCurrentPage = false;
             allowPages = false;
             allowPrintToFile = true;
@@ -288,12 +306,15 @@ namespace System.Windows.Forms {
         }
 
         // Create a PRINTDLG with a few useful defaults.
-        internal static NativeMethods.PRINTDLG CreatePRINTDLG() {
+        internal static NativeMethods.PRINTDLG CreatePRINTDLG()
+        {
             NativeMethods.PRINTDLG data = null;
-            if (IntPtr.Size == 4) {
+            if (IntPtr.Size == 4)
+            {
                 data = new NativeMethods.PRINTDLG_32();
             }
-            else {
+            else
+            {
                 data = new NativeMethods.PRINTDLG_64();
             }
             data.lStructSize = Marshal.SizeOf(data);
@@ -318,7 +339,8 @@ namespace System.Windows.Forms {
             return data;
         }
 
-        internal static NativeMethods.PRINTDLGEX CreatePRINTDLGEX() {
+        internal static NativeMethods.PRINTDLGEX CreatePRINTDLGEX()
+        {
             NativeMethods.PRINTDLGEX data = new NativeMethods.PRINTDLGEX();
             data.lStructSize = Marshal.SizeOf(data);
             data.hwndOwner = IntPtr.Zero;
@@ -360,14 +382,16 @@ namespace System.Windows.Forms {
             }
         }
 
-        private bool ShowPrintDialog(IntPtr hwndOwner, NativeMethods.WndProc hookProcPtr, NativeMethods.PRINTDLG data) {
+        private bool ShowPrintDialog(IntPtr hwndOwner, NativeMethods.WndProc hookProcPtr, NativeMethods.PRINTDLG data)
+        {
 
             data.Flags = GetFlags();
-            data.nCopies = (short) PrinterSettings.Copies;
+            data.nCopies = (short)PrinterSettings.Copies;
             data.hwndOwner = hwndOwner;
             data.lpfnPrintHook = hookProcPtr;
 
-            try {
+            try
+            {
                 if (PageSettings == null)
                     data.hDevMode = PrinterSettings.GetHdevmode();
                 else
@@ -375,15 +399,18 @@ namespace System.Windows.Forms {
 
                 data.hDevNames = PrinterSettings.GetHdevnames();
             }
-            catch (InvalidPrinterException) {
+            catch (InvalidPrinterException)
+            {
                 data.hDevMode = IntPtr.Zero;
                 data.hDevNames = IntPtr.Zero;
                 // Leave those fields null; Windows will fill them in
             }
 
-            try {
+            try
+            {
                 // Windows doesn't like it if page numbers are invalid
-                if (AllowSomePages) {
+                if (AllowSomePages)
+                {
                     if (PrinterSettings.FromPage < PrinterSettings.MinimumPage
                         || PrinterSettings.FromPage > PrinterSettings.MaximumPage)
                         throw new ArgumentException(string.Format(SR.PDpageOutOfRange, "FromPage"));
@@ -393,10 +420,10 @@ namespace System.Windows.Forms {
                     if (PrinterSettings.ToPage < PrinterSettings.FromPage)
                         throw new ArgumentException(string.Format(SR.PDpageOutOfRange, "FromPage"));
 
-                    data.nFromPage = (short) PrinterSettings.FromPage;
-                    data.nToPage = (short) PrinterSettings.ToPage;
-                    data.nMinPage = (short) PrinterSettings.MinimumPage;
-                    data.nMaxPage = (short) PrinterSettings.MaximumPage;
+                    data.nFromPage = (short)PrinterSettings.FromPage;
+                    data.nToPage = (short)PrinterSettings.ToPage;
+                    data.nMinPage = (short)PrinterSettings.MinimumPage;
+                    data.nMaxPage = (short)PrinterSettings.MaximumPage;
                 }
 
                 if (!UnsafeNativeMethods.PrintDlg(data))
@@ -407,7 +434,8 @@ namespace System.Windows.Forms {
                 PrintToFile = ((data.Flags & NativeMethods.PD_PRINTTOFILE) != 0);
                 PrinterSettings.PrintToFile = PrintToFile;
 
-                if (AllowSomePages) {
+                if (AllowSomePages)
+                {
                     PrinterSettings.FromPage = data.nFromPage;
                     PrinterSettings.ToPage = data.nToPage;
                 }
@@ -424,7 +452,8 @@ namespace System.Windows.Forms {
 
                 return true;
             }
-            finally {
+            finally
+            {
                 UnsafeNativeMethods.GlobalFree(new HandleRef(data, data.hDevMode));
                 UnsafeNativeMethods.GlobalFree(new HandleRef(data, data.hDevNames));
             }
@@ -432,13 +461,15 @@ namespace System.Windows.Forms {
 
         // Due to the nature of PRINTDLGEX vs PRINTDLG, separate but similar methods
         // are required for showing the print dialog on Win2k and newer OS'.
-        private bool ShowPrintDialog(IntPtr hwndOwner, NativeMethods.PRINTDLGEX data) {
+        private bool ShowPrintDialog(IntPtr hwndOwner, NativeMethods.PRINTDLGEX data)
+        {
 
             data.Flags = GetFlags();
             data.nCopies = PrinterSettings.Copies;
             data.hwndOwner = hwndOwner;
 
-            try {
+            try
+            {
                 if (PageSettings == null)
                     data.hDevMode = PrinterSettings.GetHdevmode();
                 else
@@ -446,15 +477,18 @@ namespace System.Windows.Forms {
 
                 data.hDevNames = PrinterSettings.GetHdevnames();
             }
-            catch (InvalidPrinterException) {
+            catch (InvalidPrinterException)
+            {
                 data.hDevMode = IntPtr.Zero;
                 data.hDevNames = IntPtr.Zero;
                 // Leave those fields null; Windows will fill them in
             }
 
-            try {
+            try
+            {
                 // Windows doesn't like it if page numbers are invalid
-                if (AllowSomePages) {
+                if (AllowSomePages)
+                {
                     if (PrinterSettings.FromPage < PrinterSettings.MinimumPage
                         || PrinterSettings.FromPage > PrinterSettings.MaximumPage)
                         throw new ArgumentException(string.Format(SR.PDpageOutOfRange, "FromPage"));
@@ -464,7 +498,8 @@ namespace System.Windows.Forms {
                     if (PrinterSettings.ToPage < PrinterSettings.FromPage)
                         throw new ArgumentException(string.Format(SR.PDpageOutOfRange, "FromPage"));
 
-                    unsafe {
+                    unsafe
+                    {
                         int* pageRangeField = (int*)data.pageRanges;
                         *pageRangeField = PrinterSettings.FromPage;
                         pageRangeField += 1;
@@ -480,9 +515,10 @@ namespace System.Windows.Forms {
                 // The flags NativeMethods.PD_SHOWHELP and NativeMethods.PD_NONETWORKBUTTON don't work with
                 // PrintDlgEx. So we have to strip them out.
                 data.Flags &= ~(NativeMethods.PD_SHOWHELP | NativeMethods.PD_NONETWORKBUTTON);
- 
+
                 int hr = UnsafeNativeMethods.PrintDlgEx(data);
-                if (NativeMethods.Failed(hr) || data.dwResultAction == NativeMethods.PD_RESULT_CANCEL) {
+                if (NativeMethods.Failed(hr) || data.dwResultAction == NativeMethods.PD_RESULT_CANCEL)
+                {
                     return false;
                 }
 
@@ -490,8 +526,10 @@ namespace System.Windows.Forms {
 
                 PrintToFile = ((data.Flags & NativeMethods.PD_PRINTTOFILE) != 0);
                 PrinterSettings.PrintToFile = PrintToFile;
-                if (AllowSomePages) {
-                    unsafe {
+                if (AllowSomePages)
+                {
+                    unsafe
+                    {
                         int* pageRangeField = (int*)data.pageRanges;
                         PrinterSettings.FromPage = *pageRangeField;
                         pageRangeField += 1;
@@ -512,7 +550,8 @@ namespace System.Windows.Forms {
                 // We should return true only if the user pressed the "Print" button while dismissing the dialog.
                 return (data.dwResultAction == NativeMethods.PD_RESULT_PRINT);
             }
-            finally {
+            finally
+            {
                 if (data.hDevMode != IntPtr.Zero)
                     UnsafeNativeMethods.GlobalFree(new HandleRef(data, data.hDevMode));
                 if (data.hDevNames != IntPtr.Zero)
@@ -525,19 +564,20 @@ namespace System.Windows.Forms {
         // Due to the nature of PRINTDLGEX vs PRINTDLG, separate but similar methods
         // are required for updating the settings from the structure utilized by the dialog.
         // Take information from print dialog and put in PrinterSettings
-        private static void UpdatePrinterSettings(IntPtr hDevMode, IntPtr hDevNames, short copies, int flags, PrinterSettings settings, PageSettings pageSettings) {
+        private static void UpdatePrinterSettings(IntPtr hDevMode, IntPtr hDevNames, short copies, int flags, PrinterSettings settings, PageSettings pageSettings)
+        {
             // Mode
             settings.SetHdevmode(hDevMode);
             settings.SetHdevnames(hDevNames);
 
-            if (pageSettings!= null)
+            if (pageSettings != null)
                 pageSettings.SetHdevmode(hDevMode);
 
             //Check for Copies == 1 since we might get the Right number of Copies from hdevMode.dmCopies...
             if (settings.Copies == 1)
                 settings.Copies = copies;
 
-            settings.PrintRange = (PrintRange) (flags & printRangeMask);
+            settings.PrintRange = (PrintRange)(flags & printRangeMask);
         }
 
     }

@@ -3,7 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System.Runtime.Serialization.Formatters;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
@@ -30,7 +31,8 @@ namespace System.Windows.Forms {
     DefaultBindingProperty(nameof(Value)),
     SRDescription(nameof(SR.DescriptionProgressBar))
     ]
-    public class ProgressBar : Control {
+    public class ProgressBar : Control
+    {
 
 
         //# VS7 205: simcooke
@@ -63,7 +65,8 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         public ProgressBar()
-        : base() {
+        : base()
+        {
             SetStyle(ControlStyles.UserPaint |
                      ControlStyles.UseTextForAccessibility |
                      ControlStyles.Selectable, false);
@@ -78,18 +81,23 @@ namespace System.Windows.Forms {
         ///       correctly.
         ///    </para>
         /// </summary>
-        protected override CreateParams CreateParams {
-            get {
+        protected override CreateParams CreateParams
+        {
+            get
+            {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = NativeMethods.WC_PROGRESS;
-                if (this.Style == ProgressBarStyle.Continuous) {
+                if (this.Style == ProgressBarStyle.Continuous)
+                {
                     cp.Style |= NativeMethods.PBS_SMOOTH;
                 }
-                else if (this.Style == ProgressBarStyle.Marquee && !DesignMode) {
+                else if (this.Style == ProgressBarStyle.Marquee && !DesignMode)
+                {
                     cp.Style |= NativeMethods.PBS_MARQUEE;
                 }
 
-                if (RightToLeft == RightToLeft.Yes && RightToLeftLayout == true) {
+                if (RightToLeft == RightToLeft.Yes && RightToLeftLayout == true)
+                {
                     //We want to turn on mirroring for Form explicitly.
                     cp.ExStyle |= NativeMethods.WS_EX_LAYOUTRTL;
                     //Don't need these styles when mirroring is turned on.
@@ -102,11 +110,14 @@ namespace System.Windows.Forms {
         /// <summary>
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool AllowDrop {
-            get {
+        public override bool AllowDrop
+        {
+            get
+            {
                 return base.AllowDrop;
             }
-            set {
+            set
+            {
                 base.AllowDrop = value;
             }
         }
@@ -114,11 +125,14 @@ namespace System.Windows.Forms {
         /// <summary>
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override Image BackgroundImage {
-            get {
+        public override Image BackgroundImage
+        {
+            get
+            {
                 return base.BackgroundImage;
             }
-            set {
+            set
+            {
                 base.BackgroundImage = value;
             }
         }
@@ -136,14 +150,19 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.ProgressBarStyleDescr))
         ]
-        public ProgressBarStyle Style {
-            get {
+        public ProgressBarStyle Style
+        {
+            get
+            {
                 return style;
             }
-            set {
-                if (style != value) {
+            set
+            {
+                if (style != value)
+                {
                     //valid values are 0x0 to 0x2
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)ProgressBarStyle.Blocks, (int)ProgressBarStyle.Marquee)){
+                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)ProgressBarStyle.Blocks, (int)ProgressBarStyle.Marquee))
+                    {
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ProgressBarStyle));
                     }
                     style = value;
@@ -158,7 +177,8 @@ namespace System.Windows.Forms {
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged {
+        new public event EventHandler BackgroundImageChanged
+        {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
         }
@@ -167,17 +187,21 @@ namespace System.Windows.Forms {
         /// <summary>
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override ImageLayout BackgroundImageLayout {
-            get {
+        public override ImageLayout BackgroundImageLayout
+        {
+            get
+            {
                 return base.BackgroundImageLayout;
             }
-            set {
+            set
+            {
                 base.BackgroundImageLayout = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged {
+        new public event EventHandler BackgroundImageLayoutChanged
+        {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
         }
@@ -185,23 +209,29 @@ namespace System.Windows.Forms {
 
         /// <devdoc/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new bool CausesValidation {
-            get {
+        public new bool CausesValidation
+        {
+            get
+            {
                 return base.CausesValidation;
             }
-            set {
+            set
+            {
                 base.CausesValidation = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler CausesValidationChanged {
+        new public event EventHandler CausesValidationChanged
+        {
             add => base.CausesValidationChanged += value;
             remove => base.CausesValidationChanged -= value;
         }
 
-        protected override ImeMode DefaultImeMode {
-            get {
+        protected override ImeMode DefaultImeMode
+        {
+            get
+            {
                 return ImeMode.Disable;
             }
         }
@@ -210,8 +240,10 @@ namespace System.Windows.Forms {
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
         /// </summary>
-        protected override Size DefaultSize {
-            get {
+        protected override Size DefaultSize
+        {
+            get
+            {
                 return new Size(100, 23);
             }
         }
@@ -221,11 +253,14 @@ namespace System.Windows.Forms {
         ///     on controls that are based on Win32 Native Controls.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        protected override bool DoubleBuffered {
-            get {
+        protected override bool DoubleBuffered
+        {
+            get
+            {
                 return base.DoubleBuffered;
             }
-            set {
+            set
+            {
                 base.DoubleBuffered = value;
             }
         }
@@ -236,33 +271,41 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override Font Font {
-            get {
+        public override Font Font
+        {
+            get
+            {
                 return base.Font;
             }
-            set {
+            set
+            {
                 base.Font = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler FontChanged {
+        new public event EventHandler FontChanged
+        {
             add => base.FontChanged += value;
             remove => base.FontChanged -= value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public ImeMode ImeMode {
-            get {
+        new public ImeMode ImeMode
+        {
+            get
+            {
                 return base.ImeMode;
             }
-            set {
+            set
+            {
                 base.ImeMode = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler ImeModeChanged {
+        public new event EventHandler ImeModeChanged
+        {
             add => base.ImeModeChanged += value;
             remove => base.ImeModeChanged -= value;
         }
@@ -275,20 +318,25 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         [
-        DefaultValue(100), 
-        SRCategory(nameof(SR.CatBehavior)), 
+        DefaultValue(100),
+        SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.ProgressBarMarqueeAnimationSpeed))]
-        public int MarqueeAnimationSpeed {
-            get {
+        public int MarqueeAnimationSpeed
+        {
+            get
+            {
                 return marqueeSpeed;
-            }            
+            }
             [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
-            set {
-                if (value < 0) {
+            set
+            {
+                if (value < 0)
+                {
                     throw new ArgumentOutOfRangeException("MarqueeAnimationSpeed must be non-negative");
                 }
                 marqueeSpeed = value;
-                if (!DesignMode) {
+                if (!DesignMode)
+                {
                     StartMarquee();
                 }
             }
@@ -326,27 +374,34 @@ namespace System.Windows.Forms {
         RefreshProperties(RefreshProperties.Repaint),
         SRDescription(nameof(SR.ProgressBarMaximumDescr))
         ]
-        public int Maximum {
-            get {
+        public int Maximum
+        {
+            get
+            {
                 return maximum;
             }
-            set {
-                if (maximum != value) {
+            set
+            {
+                if (maximum != value)
+                {
                     // Ensure that value is in the Win32 control's acceptable range
                     // Message: '%1' is not a valid value for '%0'. '%0' must be greater than %2.
                     // Should this set a boundary for the top end too?
                     if (value < 0)
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Maximum), value, 0));
 
-                    if (minimum > value) minimum = value;
+                    if (minimum > value)
+                        minimum = value;
 
                     maximum = value;
 
-                    if (this.value > maximum) this.value = maximum;
+                    if (this.value > maximum)
+                        this.value = maximum;
 
-                    if (IsHandleCreated) {
+                    if (IsHandleCreated)
+                    {
                         SendMessage(NativeMethods.PBM_SETRANGE32, minimum, maximum);
-                        UpdatePos() ;
+                        UpdatePos();
                     }
                 }
             }
@@ -363,26 +418,33 @@ namespace System.Windows.Forms {
         RefreshProperties(RefreshProperties.Repaint),
         SRDescription(nameof(SR.ProgressBarMinimumDescr))
         ]
-        public int Minimum {
-            get {
+        public int Minimum
+        {
+            get
+            {
                 return minimum;
             }
-            set {
-                if (minimum != value) {
+            set
+            {
+                if (minimum != value)
+                {
                     // Ensure that value is in the Win32 control's acceptable range
                     // Message: '%1' is not a valid value for '%0'. '%0' must be greater than %2.
                     // Should this set a boundary for the top end too?
                     if (value < 0)
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Minimum), value, 0));
-                    if (maximum < value) maximum = value;
+                    if (maximum < value)
+                        maximum = value;
 
                     minimum = value;
 
-                    if (this.value < minimum) this.value = minimum;
+                    if (this.value < minimum)
+                        this.value = minimum;
 
-                    if (IsHandleCreated) {
+                    if (IsHandleCreated)
+                    {
                         SendMessage(NativeMethods.PBM_SETRANGE32, minimum, maximum);
-                        UpdatePos() ;
+                        UpdatePos();
                     }
                 }
             }
@@ -411,17 +473,19 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
-        public new Padding Padding {
+        public new Padding Padding
+        {
             get { return base.Padding; }
-            set { base.Padding = value;}
+            set { base.Padding = value; }
         }
 
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
         ]
-        public new event EventHandler PaddingChanged {
-            add => base.PaddingChanged += value; 
+        public new event EventHandler PaddingChanged
+        {
+            add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value;
         }
 
@@ -437,16 +501,21 @@ namespace System.Windows.Forms {
         DefaultValue(false),
         SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))
         ]
-        public virtual bool RightToLeftLayout {
-            get {
+        public virtual bool RightToLeftLayout
+        {
+            get
+            {
 
                 return rightToLeftLayout;
             }
 
-            set {
-                if (value != rightToLeftLayout) {
+            set
+            {
+                if (value != rightToLeftLayout)
+                {
                     rightToLeftLayout = value;
-                    using(new LayoutTransaction(this, this, PropertyNames.RightToLeftLayout)) {
+                    using (new LayoutTransaction(this, this, PropertyNames.RightToLeftLayout))
+                    {
                         OnRightToLeftLayoutChanged(EventArgs.Empty);
                     }
                 }
@@ -455,7 +524,8 @@ namespace System.Windows.Forms {
 
 
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
-        public event EventHandler RightToLeftLayoutChanged {
+        public event EventHandler RightToLeftLayoutChanged
+        {
             add => onRightToLeftLayoutChanged += value;
             remove => onRightToLeftLayoutChanged -= value;
         }
@@ -471,30 +541,38 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.ProgressBarStepDescr))
         ]
-        public int Step {
-            get {
+        public int Step
+        {
+            get
+            {
                 return step;
             }
-            set {
+            set
+            {
                 step = value;
-                if (IsHandleCreated) SendMessage(NativeMethods.PBM_SETSTEP, step, 0);
+                if (IsHandleCreated)
+                    SendMessage(NativeMethods.PBM_SETSTEP, step, 0);
             }
         }
 
         /// <summary>
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public bool TabStop {
-            get {
+        new public bool TabStop
+        {
+            get
+            {
                 return base.TabStop;
             }
-            set {
+            set
+            {
                 base.TabStop = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TabStopChanged {
+        new public event EventHandler TabStopChanged
+        {
             add => base.TabStopChanged += value;
             remove => base.TabStopChanged -= value;
         }
@@ -502,17 +580,21 @@ namespace System.Windows.Forms {
         /// <summary>
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
-        public override string Text {
-            get {
+        public override string Text
+        {
+            get
+            {
                 return base.Text;
             }
-            set {
+            set
+            {
                 base.Text = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TextChanged {
+        new public event EventHandler TextChanged
+        {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
         }
@@ -528,63 +610,74 @@ namespace System.Windows.Forms {
         Bindable(true),
         SRDescription(nameof(SR.ProgressBarValueDescr))
         ]
-        public int Value {
-            get {
+        public int Value
+        {
+            get
+            {
                 return value;
             }
-            set {
-                if (this.value != value) {
+            set
+            {
+                if (this.value != value)
+                {
                     if ((value < minimum) || (value > maximum))
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(Value), value, "'minimum'", "'maximum'"));
                     this.value = value;
-                    UpdatePos() ;
+                    UpdatePos();
                 }
             }
         }
 
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler DoubleClick {
+        public new event EventHandler DoubleClick
+        {
             add => base.DoubleClick += value;
             remove => base.DoubleClick -= value;
         }
 
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event MouseEventHandler MouseDoubleClick {
+        public new event MouseEventHandler MouseDoubleClick
+        {
             add => base.MouseDoubleClick += value;
             remove => base.MouseDoubleClick -= value;
         }
 
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event KeyEventHandler KeyUp {
+        public new event KeyEventHandler KeyUp
+        {
             add => base.KeyUp += value;
             remove => base.KeyUp -= value;
         }
 
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event KeyEventHandler KeyDown {
+        public new event KeyEventHandler KeyDown
+        {
             add => base.KeyDown += value;
             remove => base.KeyDown -= value;
         }
 
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event KeyPressEventHandler KeyPress {
+        public new event KeyPressEventHandler KeyPress
+        {
             add => base.KeyPress += value;
             remove => base.KeyPress -= value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler Enter {
+        public new event EventHandler Enter
+        {
             add => base.Enter += value;
             remove => base.Enter -= value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler Leave {
+        public new event EventHandler Leave
+        {
             add => base.Leave += value;
             remove => base.Leave -= value;
         }
@@ -594,7 +687,8 @@ namespace System.Windows.Forms {
         /// </summary>
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event PaintEventHandler Paint {
+        public new event PaintEventHandler Paint
+        {
             add => base.Paint += value;
             remove => base.Paint -= value;
         }
@@ -602,15 +696,19 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// </summary>
-        protected override void CreateHandle() {
-            if (!RecreatingHandle) {
-                IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();   
-                try {
+        protected override void CreateHandle()
+        {
+            if (!RecreatingHandle)
+            {
+                IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
+                try
+                {
                     NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX();
                     icc.dwICC = NativeMethods.ICC_PROGRESS_CLASS;
                     SafeNativeMethods.InitCommonControlsEx(icc);
                 }
-                finally {
+                finally
+                {
                     UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
                 }
             }
@@ -623,17 +721,21 @@ namespace System.Windows.Forms {
         ///       specified increment and redraws the control to reflect the new position.
         ///    </para>
         /// </summary>
-        public void Increment(int value) {
-            if (this.Style == ProgressBarStyle.Marquee) {
+        public void Increment(int value)
+        {
+            if (this.Style == ProgressBarStyle.Marquee)
+            {
                 throw new InvalidOperationException(SR.ProgressBarIncrementMarqueeException);
             }
             this.value += value;
 
             // Enforce that value is within the range (minimum, maximum)
-            if (this.value < minimum) {
+            if (this.value < minimum)
+            {
                 this.value = minimum;
             }
-            if (this.value > maximum) {
+            if (this.value > maximum)
+            {
                 this.value = maximum;
             }
 
@@ -643,7 +745,8 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    Overridden to set up our properties.
         /// </summary>
-        protected override void OnHandleCreated(EventArgs e) {
+        protected override void OnHandleCreated(EventArgs e)
+        {
             base.OnHandleCreated(e);
             SendMessage(NativeMethods.PBM_SETRANGE32, minimum, maximum);
             SendMessage(NativeMethods.PBM_SETSTEP, step, 0);
@@ -664,17 +767,21 @@ namespace System.Windows.Forms {
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected virtual void OnRightToLeftLayoutChanged(EventArgs e) {
-            if (GetAnyDisposingInHierarchy()) {
+        protected virtual void OnRightToLeftLayoutChanged(EventArgs e)
+        {
+            if (GetAnyDisposingInHierarchy())
+            {
                 return;
             }
 
-            if (RightToLeft == RightToLeft.Yes) {
+            if (RightToLeft == RightToLeft.Yes)
+            {
                 RecreateHandle();
             }
 
-            if (onRightToLeftLayoutChanged != null) {
-                 onRightToLeftLayoutChanged(this, e);
+            if (onRightToLeftLayoutChanged != null)
+            {
+                onRightToLeftLayoutChanged(this, e);
             }
         }
 
@@ -687,8 +794,10 @@ namespace System.Windows.Forms {
         ///       property, and redraws the control to reflect the new position.
         ///    </para>
         /// </summary>
-        public void PerformStep() {
-            if (this.Style == ProgressBarStyle.Marquee) {
+        public void PerformStep()
+        {
+            if (this.Style == ProgressBarStyle.Marquee)
+            {
                 throw new InvalidOperationException(SR.ProgressBarPerformStepMarqueeException);
             }
             Increment(step);
@@ -698,7 +807,8 @@ namespace System.Windows.Forms {
         ///     Resets the fore color to be based on the parent's fore color.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override void ResetForeColor() {
+        public override void ResetForeColor()
+        {
             ForeColor = defaultForeColor;
         }
 
@@ -707,7 +817,8 @@ namespace System.Windows.Forms {
         ///     Returns true if the ForeColor should be persisted in code gen.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal override bool ShouldSerializeForeColor() {
+        internal override bool ShouldSerializeForeColor()
+        {
             return ForeColor != defaultForeColor;
         }
 
@@ -716,7 +827,8 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    Returns a string representation for this control.
         /// </summary>
-        public override string ToString() {
+        public override string ToString()
+        {
 
             string s = base.ToString();
             return s + ", Minimum: " + Minimum.ToString(CultureInfo.CurrentCulture) + ", Maximum: " + Maximum.ToString(CultureInfo.CurrentCulture) + ", Value: " + value;
@@ -726,8 +838,10 @@ namespace System.Windows.Forms {
         ///     Sends the underlying window a PBM_SETPOS message to update
         ///     the current value of the progressbar.
         /// </summary>
-        private void UpdatePos() {
-            if (IsHandleCreated) SendMessage(NativeMethods.PBM_SETPOS, value, 0);
+        private void UpdatePos()
+        {
+            if (IsHandleCreated)
+                SendMessage(NativeMethods.PBM_SETPOS, value, 0);
         }
 
         //Note: ProgressBar doesn't work like other controls as far as setting ForeColor/
@@ -750,14 +864,17 @@ namespace System.Windows.Forms {
         /// <returns>
         /// AccessibleObject for this ProgressBar instance.
         /// </returns>
-        protected override AccessibleObject CreateAccessibilityInstance() {
+        protected override AccessibleObject CreateAccessibilityInstance()
+        {
             return new ProgressBarAccessibleObject(this);
         }
 
         [ComVisible(true)]
-        internal class ProgressBarAccessibleObject : ControlAccessibleObject {
+        internal class ProgressBarAccessibleObject : ControlAccessibleObject
+        {
 
-            internal ProgressBarAccessibleObject(ProgressBar owner) : base(owner) {
+            internal ProgressBarAccessibleObject(ProgressBar owner) : base(owner)
+            {
             }
 
             private ProgressBar OwningProgressBar
@@ -770,17 +887,21 @@ namespace System.Windows.Forms {
 
             internal override bool IsIAccessibleExSupported() => true;
 
-            internal override bool IsPatternSupported(int patternId) {
+            internal override bool IsPatternSupported(int patternId)
+            {
                 if (patternId == NativeMethods.UIA_ValuePatternId ||
-                    patternId == NativeMethods.UIA_RangeValuePatternId) {
+                    patternId == NativeMethods.UIA_RangeValuePatternId)
+                {
                     return true;
                 }
 
                 return base.IsPatternSupported(patternId);
             }
 
-            internal override object GetPropertyValue(int propertyID) {
-                switch (propertyID) {
+            internal override object GetPropertyValue(int propertyID)
+            {
+                switch (propertyID)
+                {
                     case NativeMethods.UIA_NamePropertyId:
                         return this.Name;
                     case NativeMethods.UIA_ControlTypePropertyId:
@@ -801,42 +922,55 @@ namespace System.Windows.Forms {
                 return base.GetPropertyValue(propertyID);
             }
 
-            internal override void SetValue(double newValue) {
+            internal override void SetValue(double newValue)
+            {
                 throw new InvalidOperationException("Progress Bar is read-only.");
             }
 
-            internal override double LargeChange {
-                get {
+            internal override double LargeChange
+            {
+                get
+                {
                     return double.NaN;
                 }
             }
 
-            internal override double Maximum {
-                get {
+            internal override double Maximum
+            {
+                get
+                {
                     return this.OwningProgressBar?.Maximum ?? double.NaN;
                 }
             }
 
-            internal override double Minimum {
-                get {
+            internal override double Minimum
+            {
+                get
+                {
                     return this.OwningProgressBar?.Minimum ?? double.NaN;
                 }
             }
 
-            internal override double SmallChange {
-                get {
+            internal override double SmallChange
+            {
+                get
+                {
                     return double.NaN;
                 }
             }
 
-            internal override double RangeValue {
-                get {
+            internal override double RangeValue
+            {
+                get
+                {
                     return this.OwningProgressBar?.Value ?? double.NaN;
                 }
             }
 
-            internal override bool IsReadOnly {
-                get {
+            internal override bool IsReadOnly
+            {
+                get
+                {
                     return true;
                 }
             }

@@ -2,8 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-    
+namespace System.Windows.Forms
+{
+
     using System.Threading;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -88,41 +89,49 @@ namespace System.Windows.Forms {
         ///     Constructs a StringSorter. Instances are created by the sort() routines,
         ///     but never by the user.
         /// </summary>
-        private StringSorter(CultureInfo culture, string[] keys, object[] items, int options) {
-            if (keys == null) {
-                if (items is string[]) {
+        private StringSorter(CultureInfo culture, string[] keys, object[] items, int options)
+        {
+            if (keys == null)
+            {
+                if (items is string[])
+                {
                     keys = (string[])items;
                     items = null;
                 }
-                else {
+                else
+                {
                     keys = new string[items.Length];
-                    for (int i = 0; i < items.Length; i++) {
+                    for (int i = 0; i < items.Length; i++)
+                    {
                         object item = items[i];
-                        if (item != null) keys[i] = item.ToString();
+                        if (item != null)
+                            keys[i] = item.ToString();
                     }
                 }
             }
             this.keys = keys;
             this.items = items;
-            this.lcid = culture == null? SafeNativeMethods.GetThreadLocale(): culture.LCID;
+            this.lcid = culture == null ? SafeNativeMethods.GetThreadLocale() : culture.LCID;
             this.options = options & CompareOptions;
             this.descending = (options & Descending) != 0;
         }
 
         /// <summary>
         /// </summary>
-        internal static int ArrayLength(object[] array) {
+        internal static int ArrayLength(object[] array)
+        {
             if (array == null)
                 return 0;
             else
                 return array.Length;
         }
-        
+
         /// <summary>
         ///     Compares two strings using the default locale and no additional string
         ///     comparison flags.
         /// </summary>
-        public static int Compare(string s1, string s2) {
+        public static int Compare(string s1, string s2)
+        {
             return Compare(SafeNativeMethods.GetThreadLocale(), s1, s2, 0);
         }
 
@@ -130,7 +139,8 @@ namespace System.Windows.Forms {
         ///     Compares two strings using the default locale with the given set of
         ///     string comparison flags.
         /// </summary>
-        public static int Compare(string s1, string s2, int options) {
+        public static int Compare(string s1, string s2, int options)
+        {
             return Compare(SafeNativeMethods.GetThreadLocale(), s1, s2, options);
         }
 
@@ -148,23 +158,28 @@ namespace System.Windows.Forms {
         /// <code>IGNORENONSPACE</code>, <code>IGNORESYMBOLS</code>,
         /// <code>IGNOREWIDTH</code>, and <code>STRINGSORT</code>.
         /// </summary>
-        public static int Compare(CultureInfo culture, string s1, string s2, int options) {
+        public static int Compare(CultureInfo culture, string s1, string s2, int options)
+        {
             return Compare(culture.LCID, s1, s2, options);
         }
 
         /// <summary>
         /// </summary>
-        private static int Compare(int lcid, string s1, string s2, int options) {
-            if (s1 == null) return s2 == null? 0: -1;
-            if (s2 == null) return 1;
+        private static int Compare(int lcid, string s1, string s2, int options)
+        {
+            if (s1 == null)
+                return s2 == null ? 0 : -1;
+            if (s2 == null)
+                return 1;
             return string.Compare(s1, s2, false, CultureInfo.CurrentCulture);
         }
 
         /// <summary>
         /// </summary>
-        private int CompareKeys(string s1, string s2) {
+        private int CompareKeys(string s1, string s2)
+        {
             int result = Compare(lcid, s1, s2, options);
-            return descending? -result: result;
+            return descending ? -result : result;
         }
 
         /// <summary>
@@ -173,20 +188,28 @@ namespace System.Windows.Forms {
         ///     side. This bounds the recursive depth by log2(n) in the worst case.
         ///     Otherwise, worst case recursive depth would be n.
         /// </summary>
-        private void QuickSort(int left, int right) {
-            do {
+        private void QuickSort(int left, int right)
+        {
+            do
+            {
                 int i = left;
                 int j = right;
                 string s = keys[(i + j) >> 1];
-                do {
-                    while (CompareKeys(keys[i], s) < 0) i++;
-                    while (CompareKeys(s, keys[j]) < 0) j--;
-                    if (i > j) break;
-                    if (i < j) {
+                do
+                {
+                    while (CompareKeys(keys[i], s) < 0)
+                        i++;
+                    while (CompareKeys(s, keys[j]) < 0)
+                        j--;
+                    if (i > j)
+                        break;
+                    if (i < j)
+                    {
                         string key = keys[i];
                         keys[i] = keys[j];
                         keys[j] = key;
-                        if (items != null) {
+                        if (items != null)
+                        {
                             object item = items[i];
                             items[i] = items[j];
                             items[j] = item;
@@ -195,12 +218,16 @@ namespace System.Windows.Forms {
                     i++;
                     j--;
                 } while (i <= j);
-                if (j - left <= right - i) {
-                    if (left < j) QuickSort(left, j);
+                if (j - left <= right - i)
+                {
+                    if (left < j)
+                        QuickSort(left, j);
                     left = i;
                 }
-                else {
-                    if (i < right) QuickSort(i, right);
+                else
+                {
+                    if (i < right)
+                        QuickSort(i, right);
                     right = j;
                 }
             } while (left < right);
@@ -213,7 +240,8 @@ namespace System.Windows.Forms {
         ///     produce the string representation. The objects are then sorted by their
         ///     string representations using the default locale.
         /// </summary>
-        public static void Sort(object[] items) {
+        public static void Sort(object[] items)
+        {
             Sort(null, null, items, 0, ArrayLength(items), 0);
         }
 
@@ -224,7 +252,8 @@ namespace System.Windows.Forms {
         ///     produce the string representation. The objects are then sorted by their
         ///     string representations using the default locale.
         /// </summary>
-        public static void Sort(object[] items, int index, int count) {
+        public static void Sort(object[] items, int index, int count)
+        {
             Sort(null, null, items, index, count, 0);
         }
 
@@ -232,7 +261,8 @@ namespace System.Windows.Forms {
         ///     Sorts a string array and an object array based on the elements of the
         ///     string array. The arrays are sorted using the default locale.
         /// </summary>
-        public static void Sort(string[] keys, object[] items) {
+        public static void Sort(string[] keys, object[] items)
+        {
             Sort(null, keys, items, 0, ArrayLength(items), 0);
         }
 
@@ -241,7 +271,8 @@ namespace System.Windows.Forms {
         ///     the elements of the string array. The arrays are sorted using the
         ///     default locale.
         /// </summary>
-        public static void Sort(string[] keys, object[] items, int index, int count) {
+        public static void Sort(string[] keys, object[] items, int index, int count)
+        {
             Sort(null, keys, items, index, count, 0);
         }
 
@@ -253,7 +284,8 @@ namespace System.Windows.Forms {
         ///     string representations using the default locale and the given sorting
         ///     options.
         /// </summary>
-        public static void Sort(object[] items, int options) {
+        public static void Sort(object[] items, int options)
+        {
             Sort(null, null, items, 0, ArrayLength(items), options);
         }
 
@@ -265,7 +297,8 @@ namespace System.Windows.Forms {
         ///     string representations using the default locale and the given sorting
         ///     options.
         /// </summary>
-        public static void Sort(object[] items, int index, int count, int options) {
+        public static void Sort(object[] items, int index, int count, int options)
+        {
             Sort(null, null, items, index, count, options);
         }
 
@@ -274,7 +307,8 @@ namespace System.Windows.Forms {
         ///     string array. The arrays are sorted using the default locale and the
         ///     given sorting options.
         /// </summary>
-        public static void Sort(string[] keys, object[] items, int options) {
+        public static void Sort(string[] keys, object[] items, int options)
+        {
             Sort(null, keys, items, 0, ArrayLength(items), options);
         }
 
@@ -283,7 +317,8 @@ namespace System.Windows.Forms {
         ///     the elements of the string array. The arrays are sorted using the
         ///     default locale and the given sorting options.
         /// </summary>
-        public static void Sort(string[] keys, object[] items, int index, int count, int options) {
+        public static void Sort(string[] keys, object[] items, int index, int count, int options)
+        {
             Sort(null, keys, items, index, count, options);
         }
 
@@ -295,7 +330,8 @@ namespace System.Windows.Forms {
         ///     string representations using the given locale and the given sorting
         ///     options.
         /// </summary>
-        public static void Sort(CultureInfo culture, object[] items, int options) {
+        public static void Sort(CultureInfo culture, object[] items, int options)
+        {
             Sort(culture, null, items, 0, ArrayLength(items), options);
         }
 
@@ -307,7 +343,8 @@ namespace System.Windows.Forms {
         ///     string representations using the given locale and the given sorting
         ///     options.
         /// </summary>
-        public static void Sort(CultureInfo culture, object[] items, int index, int count, int options) {
+        public static void Sort(CultureInfo culture, object[] items, int index, int count, int options)
+        {
             Sort(culture, null, items, index, count, options);
         }
 
@@ -316,7 +353,8 @@ namespace System.Windows.Forms {
         ///     string array. The arrays are sorted using the given locale and the
         ///     given sorting options.
         /// </summary>
-        public static void Sort(CultureInfo culture, string[] keys, object[] items, int options) {
+        public static void Sort(CultureInfo culture, string[] keys, object[] items, int options)
+        {
             Sort(culture, keys, items, 0, ArrayLength(items), options);
         }
 
@@ -337,7 +375,8 @@ namespace System.Windows.Forms {
         /// <code>IGNOREWIDTH</code>, <code>STRINGSORT</code>, and
         /// <code>DESCENDING</code>.
         /// </summary>
-        public static void Sort(CultureInfo culture, string[] keys, object[] items, int index, int count, int options) {
+        public static void Sort(CultureInfo culture, string[] keys, object[] items, int index, int count, int options)
+        {
             // keys and items have to be the same length
             //
             if ((items == null)
@@ -345,7 +384,8 @@ namespace System.Windows.Forms {
                 throw new ArgumentException(string.Format(SR.ArraysNotSameSize,
                                                                    "keys",
                                                                    "items"));
-            if (count > 1) {
+            if (count > 1)
+            {
                 StringSorter sorter = new StringSorter(culture, keys, items, options);
                 sorter.QuickSort(index, index + count - 1);
             }

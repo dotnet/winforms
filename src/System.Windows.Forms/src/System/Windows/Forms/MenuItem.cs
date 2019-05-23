@@ -1138,7 +1138,7 @@ namespace System.Windows.Forms
                                     windowItem.Checked = true;
                                     activeFormAdded = true;
                                 }
-        
+
                                 windowItem.Text = string.Format(CultureInfo.CurrentUICulture, "&{0} {1}", accel, forms[i].Text);
                                 accel++;
                                 formsAddedToMenu++;
@@ -1348,7 +1348,8 @@ namespace System.Windows.Forms
         public override string ToString()
         {
             string s = base.ToString();
-            string menuItemText = _data?._caption ?? string.Empty;;
+            string menuItemText = _data?._caption ?? string.Empty;
+            ;
             return s + ", Text: " + menuItemText;
         }
 

@@ -48,10 +48,10 @@ namespace System.Windows.Forms
             [SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible")]
             get
             {
-                Keys keyGenerated =  KeyData & Keys.KeyCode;
+                Keys keyGenerated = KeyData & Keys.KeyCode;
 
                 // since Keys can be discontiguous, keeping Enum.IsDefined.
-                if (!Enum.IsDefined(typeof(Keys),(int)keyGenerated))
+                if (!Enum.IsDefined(typeof(Keys), (int)keyGenerated))
                 {
                     return Keys.None;
                 }
@@ -64,7 +64,7 @@ namespace System.Windows.Forms
         /// <see cref='System.Windows.Forms.Control.KeyUp'/> event.
         /// </summary>
         public int KeyValue => (int)(KeyData & Keys.KeyCode);
-       
+
         /// <summary>
         /// Gets the key data for a <see cref='System.Windows.Forms.Control.KeyDown'/> or
         /// <see cref='System.Windows.Forms.Control.KeyUp'/> event.

@@ -13,11 +13,11 @@ namespace System.Windows.Forms
         private DataGridView _dataGridView;
 
         public DataGridViewCellPaintingEventArgs(DataGridView dataGridView,
-                                                 Graphics graphics, 
+                                                 Graphics graphics,
                                                  Rectangle clipBounds,
-                                                 Rectangle cellBounds, 
-                                                 int rowIndex, 
-                                                 int columnIndex, 
+                                                 Rectangle cellBounds,
+                                                 int rowIndex,
+                                                 int columnIndex,
                                                  DataGridViewElementStates cellState,
                                                  object value,
                                                  object formattedValue,
@@ -167,9 +167,9 @@ namespace System.Windows.Forms
 
         internal void SetProperties(Graphics graphics,
                                     Rectangle clipBounds,
-                                    Rectangle cellBounds, 
-                                    int rowIndex, 
-                                    int columnIndex, 
+                                    Rectangle cellBounds,
+                                    int rowIndex,
+                                    int columnIndex,
                                     DataGridViewElementStates cellState,
                                     object value,
                                     object formattedValue,

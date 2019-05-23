@@ -23,12 +23,12 @@ namespace System.Windows.Forms
         /// The event was caused by a mouse click.
         /// </summary>
         ByMouse = 2,
-        
+
         /// <summary>
         /// The tree node is collapsing.
         /// </summary>
         Collapse = 3,
-        
+
         /// <summary>
         /// The tree node is expanding.
         /// </summary>

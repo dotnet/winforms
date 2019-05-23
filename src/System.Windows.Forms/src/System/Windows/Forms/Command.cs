@@ -3,7 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
 
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
@@ -12,10 +13,11 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Windows.Forms;
     using System.Drawing;
-    
+
     using Microsoft.Win32;
 
-    internal class Command : WeakReference {
+    internal class Command : WeakReference
+    {
 
         private static Command[] cmds;
         private static int icmdTry;
@@ -26,26 +28,33 @@ namespace System.Windows.Forms {
         internal int id;
 
         public Command(ICommandExecutor target)
-            : base(target, false) {
+            : base(target, false)
+        {
             AssignID(this);
         }
 
-        public virtual int ID {
-            get {
+        public virtual int ID
+        {
+            get
+            {
                 return id;
             }
         }
 
         [SuppressMessage("Microsoft.Reliability", "CA2001:AvoidCallingProblematicMethods")]
-        protected static void AssignID(Command cmd) {
-            lock(internalSyncObject) {
+        protected static void AssignID(Command cmd)
+        {
+            lock (internalSyncObject)
+            {
                 int icmd;
 
-                if (null == cmds) {
+                if (null == cmds)
+                {
                     cmds = new Command[20];
                     icmd = 0;
                 }
-                else {
+                else
+                {
                     Debug.Assert(cmds.Length > 0, "why is cmds.Length zero?");
                     Debug.Assert(icmdTry >= 0, "why is icmdTry negative?");
 
@@ -56,36 +65,42 @@ namespace System.Windows.Forms {
 
                     // First look for an empty slot (starting at icmdTry).
                     for (icmd = icmdTry; icmd < icmdLim; icmd++)
-                        if (null == cmds[icmd]) goto FindSlotComplete;
+                        if (null == cmds[icmd])
+                            goto FindSlotComplete;
                     for (icmd = 0; icmd < icmdTry; icmd++)
-                        if (null == cmds[icmd]) goto FindSlotComplete;
+                        if (null == cmds[icmd])
+                            goto FindSlotComplete;
 
                     // All slots have Command objects in them. Look for a command
                     // with a null referent.
                     for (icmd = 0; icmd < icmdLim; icmd++)
-                        if (null == cmds[icmd].Target) goto FindSlotComplete;
+                        if (null == cmds[icmd].Target)
+                            goto FindSlotComplete;
 
                     // Grow the array.
                     icmd = cmds.Length;
                     icmdLim = Math.Min(idLim - idMin, 2 * icmd);
 
-                    if (icmdLim <= icmd) {
+                    if (icmdLim <= icmd)
+                    {
                         // Already at maximal size. Do a garbage collect and look again.
                         GC.Collect();
-                        for (icmd = 0; icmd < icmdLim; icmd++) {
+                        for (icmd = 0; icmd < icmdLim; icmd++)
+                        {
                             if (null == cmds[icmd] || null == cmds[icmd].Target)
                                 goto FindSlotComplete;
                         }
                         throw new ArgumentException(SR.CommandIdNotAllocated);
                     }
-                    else {
+                    else
+                    {
                         Command[] newCmds = new Command[icmdLim];
                         Array.Copy(cmds, 0, newCmds, 0, icmd);
                         cmds = newCmds;
                     }
                 }
 
-FindSlotComplete:
+            FindSlotComplete:
 
                 cmd.id = icmd + idMin;
                 Debug.Assert(cmd.id >= idMin && cmd.id < idLim, "generated command id out of range");
@@ -95,17 +110,20 @@ FindSlotComplete:
             }
         }
 
-        public static bool DispatchID(int id) {
+        public static bool DispatchID(int id)
+        {
             Command cmd = GetCommandFromID(id);
             if (null == cmd)
                 return false;
             return cmd.Invoke();
         }
 
-        protected static void Dispose(Command cmd) {
+        protected static void Dispose(Command cmd)
+        {
             lock (internalSyncObject)
             {
-                if (cmd.id >= idMin) {
+                if (cmd.id >= idMin)
+                {
                     cmd.Target = null;
                     if (cmds[cmd.id - idMin] == cmd)
                         cmds[cmd.id - idMin] = null;
@@ -114,12 +132,14 @@ FindSlotComplete:
             }
         }
 
-        public virtual void Dispose() {
+        public virtual void Dispose()
+        {
             if (id >= idMin)
                 Dispose(this);
         }
 
-        public static Command GetCommandFromID(int id) {
+        public static Command GetCommandFromID(int id)
+        {
             lock (internalSyncObject)
             {
                 if (null == cmds)
@@ -131,7 +151,8 @@ FindSlotComplete:
             }
         }
 
-        public virtual bool Invoke() {
+        public virtual bool Invoke()
+        {
             object target = Target;
             if (!(target is ICommandExecutor))
                 return false;

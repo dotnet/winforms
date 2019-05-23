@@ -111,12 +111,12 @@ namespace System.Windows.Forms
                 return this.items;
             }
         }
-        
+
         public DataGridViewCell this[int index]
         {
             get
             {
-                return (DataGridViewCell) this.items[index];
+                return (DataGridViewCell)this.items[index];
             }
         }
 
@@ -128,7 +128,7 @@ namespace System.Windows.Forms
             Debug.Assert(!Contains(dataGridViewCell));
             return this.items.Add(dataGridViewCell);
         }
-        
+
         /* Not used for now
         internal void AddRange(DataGridViewCell[] dataGridViewCells)
         {

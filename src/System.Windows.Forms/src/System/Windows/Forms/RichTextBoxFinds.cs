@@ -29,7 +29,7 @@ namespace System.Windows.Forms
         /// If the text is found, do not highlight it.
         /// </summary>
         NoHighlight = 0x00000008,
-        
+
         /// <summary>
         /// Search from the end of the current selection to the beginning of the
         /// document.

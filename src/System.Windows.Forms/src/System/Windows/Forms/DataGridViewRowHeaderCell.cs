@@ -1189,7 +1189,7 @@ namespace System.Windows.Forms
                     {
                         cellRect.X = rowRect.Right - cellRect.Width;
                     }
-                    
+
                     return cellRect;
                 }
             }

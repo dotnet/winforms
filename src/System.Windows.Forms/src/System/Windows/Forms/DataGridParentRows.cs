@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System.Text;
     using System;
     using System.Collections;
@@ -15,7 +16,8 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Runtime.Versioning;
 
-    internal class DataGridParentRows {
+    internal class DataGridParentRows
+    {
         // siting
         //
         private DataGrid dataGrid;
@@ -35,7 +37,7 @@ namespace System.Windows.Forms {
         private static Bitmap rightArrow = null;
         private static Bitmap leftArrow = null;
 
-        private ColorMap[] colorMap = new ColorMap[] {new ColorMap()};
+        private ColorMap[] colorMap = new ColorMap[] { new ColorMap() };
 
         // private bool gridLineDots = false;
         // private Color gridLineColor = SystemColors.Control;
@@ -71,7 +73,8 @@ namespace System.Windows.Forms {
         private ArrayList rowHeights = new ArrayList();
         AccessibleObject accessibleObject;
 
-        internal DataGridParentRows(DataGrid dataGrid) {
+        internal DataGridParentRows(DataGrid dataGrid)
+        {
             this.colorMap[0].OldColor = Color.Black;
             this.dataGrid = dataGrid;
             // UpdateGridLinePen();
@@ -81,35 +84,46 @@ namespace System.Windows.Forms {
         // =        Properties
         // =------------------------------------------------------------------
 
-        public AccessibleObject AccessibleObject {
-            get {
-                if (accessibleObject == null) {
+        public AccessibleObject AccessibleObject
+        {
+            get
+            {
+                if (accessibleObject == null)
+                {
                     accessibleObject = new DataGridParentRowsAccessibleObject(this);
                 }
                 return accessibleObject;
             }
         }
 
-        internal Color BackColor {
-            get {
+        internal Color BackColor
+        {
+            get
+            {
                 return backBrush.Color;
             }
-            set {
+            set
+            {
                 if (value.IsEmpty)
                     throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "Parent Rows BackColor"));
-                if (value != backBrush.Color) {
+                if (value != backBrush.Color)
+                {
                     backBrush = new SolidBrush(value);
                     Invalidate();
                 }
             }
         }
 
-        internal SolidBrush BackBrush {
-            get {
+        internal SolidBrush BackBrush
+        {
+            get
+            {
                 return backBrush;
             }
-            set {
-                if (value != backBrush) {
+            set
+            {
+                if (value != backBrush)
+                {
                     CheckNull(value, "BackBrush");
                     backBrush = value;
                     Invalidate();
@@ -117,12 +131,16 @@ namespace System.Windows.Forms {
             }
         }
 
-        internal SolidBrush ForeBrush {
-            get {
+        internal SolidBrush ForeBrush
+        {
+            get
+            {
                 return foreBrush;
             }
-            set {
-                if (value != foreBrush) {
+            set
+            {
+                if (value != foreBrush)
+                {
                     CheckNull(value, "BackBrush");
                     foreBrush = value;
                     Invalidate();
@@ -132,12 +150,15 @@ namespace System.Windows.Forms {
 
         // since the layout of the parentRows is computed on every paint message,
         // we can actually return true ClientRectangle coordinates
-        internal Rectangle GetBoundsForDataGridStateAccesibility(DataGridState dgs) {
+        internal Rectangle GetBoundsForDataGridStateAccesibility(DataGridState dgs)
+        {
             Rectangle ret = Rectangle.Empty;
             int rectY = 0;
-            for (int i = 0; i < parentsCount; i++) {
-                int height = (int) rowHeights[i];
-                if (parents[i] == dgs) {
+            for (int i = 0; i < parentsCount; i++)
+            {
+                int height = (int)rowHeights[i];
+                if (parents[i] == dgs)
+                {
                     ret.X = layout.leftArrow.IsEmpty ? layout.data.X : layout.leftArrow.Right;
                     ret.Height = height;
                     ret.Y = rectY;
@@ -163,12 +184,16 @@ namespace System.Windows.Forms {
         }
         */
 
-        internal Brush BorderBrush {
-            get {
+        internal Brush BorderBrush
+        {
+            get
+            {
                 return borderBrush;
             }
-            set {
-                if (value != borderBrush) {
+            set
+            {
+                if (value != borderBrush)
+                {
                     borderBrush = value;
                     Invalidate();
                 }
@@ -203,31 +228,40 @@ namespace System.Windows.Forms {
         }
         */
 
-        internal int Height {
-            get {
+        internal int Height
+        {
+            get
+            {
                 return totalHeight;
             }
         }
 
-        internal Color ForeColor {
-            get {
+        internal Color ForeColor
+        {
+            get
+            {
                 return foreBrush.Color;
             }
-            set {
+            set
+            {
                 if (value.IsEmpty)
                     throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "Parent Rows ForeColor"));
-                if (value != foreBrush.Color) {
+                if (value != foreBrush.Color)
+                {
                     foreBrush = new SolidBrush(value);
                     Invalidate();
                 }
             }
         }
 
-        internal bool Visible {
-            get {
+        internal bool Visible
+        {
+            get
+            {
                 return dataGrid.ParentRowsVisible;
             }
-            set {
+            set
+            {
                 dataGrid.ParentRowsVisible = value;
             }
         }
@@ -239,15 +273,18 @@ namespace System.Windows.Forms {
         /// <summary>
         ///      Adds a DataGridState object to the top of the list of parents.
         /// </summary>
-        internal void AddParent(DataGridState dgs) {
-            CurrencyManager childDataSource = (CurrencyManager) dataGrid.BindingContext[dgs.DataSource, dgs.DataMember];
+        internal void AddParent(DataGridState dgs)
+        {
+            CurrencyManager childDataSource = (CurrencyManager)dataGrid.BindingContext[dgs.DataSource, dgs.DataMember];
             parents.Add(dgs);
             SetParentCount(parentsCount + 1);
             Debug.Assert(GetTopParent() != null, "we should have a parent at least");
         }
 
-        internal void Clear() {
-            for (int i = 0; i < parents.Count; i++) {
+        internal void Clear()
+        {
+            for (int i = 0; i < parents.Count; i++)
+            {
                 DataGridState dgs = parents[i] as DataGridState;
                 dgs.RemoveChangeNotification();
             }
@@ -257,53 +294,62 @@ namespace System.Windows.Forms {
             SetParentCount(0);
         }
 
-        internal void SetParentCount(int count) {
+        internal void SetParentCount(int count)
+        {
             parentsCount = count;
             dataGrid.Caption.BackButtonVisible = (parentsCount > 0) && (dataGrid.AllowNavigation);
         }
 
-        internal void CheckNull(object value, string propName) {
+        internal void CheckNull(object value, string propName)
+        {
             if (value == null)
                 throw new ArgumentNullException(nameof(propName));
         }
 
-        internal void Dispose() {
+        internal void Dispose()
+        {
             gridLinePen.Dispose();
         }
 
         /// <summary>
         ///      Retrieves the top most parent in the list of parents.
         /// </summary>
-        internal DataGridState GetTopParent() {
-            if (parentsCount < 1) {
+        internal DataGridState GetTopParent()
+        {
+            if (parentsCount < 1)
+            {
                 return null;
             }
-            return(DataGridState)(((ICloneable)(parents[parentsCount-1])).Clone());
+            return (DataGridState)(((ICloneable)(parents[parentsCount - 1])).Clone());
         }
 
         /// <summary>
         ///      Determines if there are any parent rows contained in this object.
         /// </summary>
-        internal bool IsEmpty() {
+        internal bool IsEmpty()
+        {
             return parentsCount == 0;
         }
 
         /// <summary>
         ///      Similar to GetTopParent() but also removes it.
         /// </summary>
-        internal DataGridState PopTop() {
-            if (parentsCount < 1) {
+        internal DataGridState PopTop()
+        {
+            if (parentsCount < 1)
+            {
                 return null;
             }
 
             SetParentCount(parentsCount - 1);
-            DataGridState ret = (DataGridState)parents[parentsCount];            
+            DataGridState ret = (DataGridState)parents[parentsCount];
             ret.RemoveChangeNotification();
-            parents.RemoveAt(parentsCount);           
+            parents.RemoveAt(parentsCount);
             return ret;
         }
 
-        internal void Invalidate() {
+        internal void Invalidate()
+        {
             if (dataGrid != null)
                 dataGrid.InvalidateParentRows();
         }
@@ -318,12 +364,14 @@ namespace System.Windows.Forms {
         }
 
         // called from DataGrid::OnLayout
-        internal void OnLayout() {
+        internal void OnLayout()
+        {
             if (parentsCount == rowHeights.Count)
                 return;
 
             int height = 0;
-            if (totalHeight == 0) {
+            if (totalHeight == 0)
+            {
                 totalHeight += 2 * borderWidth;
             }
 
@@ -339,43 +387,50 @@ namespace System.Windows.Forms {
             // ( ie, when the form does not process PerformLayout )
             // the grid will receive an OnLayout message when there is more
             // than one parent in the grid
-            if (parentsCount > rowHeights.Count) {
+            if (parentsCount > rowHeights.Count)
+            {
                 Debug.Assert(parentsCount == rowHeights.Count + 1 || rowHeights.Count == 0, "see comment above for more info");
                 int rowHeightsCount = this.rowHeights.Count;
-                for (int i = rowHeightsCount; i < parentsCount; i++) {
-                    DataGridState dgs = (DataGridState) parents[i];
+                for (int i = rowHeightsCount; i < parentsCount; i++)
+                {
+                    DataGridState dgs = (DataGridState)parents[i];
                     GridColumnStylesCollection cols = dgs.GridColumnStyles;
 
                     int colsHeight = 0;
 
-                    for (int j=0; j<cols.Count; j++) {
+                    for (int j = 0; j < cols.Count; j++)
+                    {
                         colsHeight = Math.Max(colsHeight, cols[j].GetMinimumHeight());
                     }
                     height = Math.Max(colsHeight, textRegionHeight);
 
                     // the height of the bottom border
-                    height ++;
+                    height++;
                     rowHeights.Add(height);
 
                     totalHeight += height;
                 }
-            } else {
+            }
+            else
+            {
                 Debug.Assert(parentsCount == rowHeights.Count - 1, "we do layout only for push/popTop");
                 if (parentsCount == 0)
                     totalHeight = 0;
                 else
-                    totalHeight -= (int) rowHeights[rowHeights.Count-1];
+                    totalHeight -= (int)rowHeights[rowHeights.Count - 1];
                 rowHeights.RemoveAt(rowHeights.Count - 1);
             }
         }
 
-        private int CellCount() {
+        private int CellCount()
+        {
             int cellCount = 0;
             cellCount = ColsCount();
 
             if (dataGrid.ParentRowsLabelStyle == DataGridParentRowsLabelStyle.TableName ||
-                dataGrid.ParentRowsLabelStyle == DataGridParentRowsLabelStyle.Both) {
-                cellCount ++;
+                dataGrid.ParentRowsLabelStyle == DataGridParentRowsLabelStyle.Both)
+            {
+                cellCount++;
             }
 
             return cellCount;
@@ -389,8 +444,10 @@ namespace System.Windows.Forms {
             downRightArrow = false;
         }
 
-        private void LeftArrowClick(int cellCount) {
-            if (horizOffset > 0) {
+        private void LeftArrowClick(int cellCount)
+        {
+            if (horizOffset > 0)
+            {
                 ResetMouseInfo();
                 horizOffset -= 1;
                 Invalidate();
@@ -402,8 +459,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        private void RightArrowClick(int cellCount) {
-            if (horizOffset < cellCount - 1) {
+        private void RightArrowClick(int cellCount)
+        {
+            if (horizOffset < cellCount - 1)
+            {
                 ResetMouseInfo();
                 horizOffset += 1;
                 Invalidate();
@@ -418,15 +477,18 @@ namespace System.Windows.Forms {
         // the only mouse clicks that are handled are
         // the mouse clicks on the LeftArrow and RightArrow
         //
-        internal void OnMouseDown(int x, int y, bool alignToRight) {
-            if (layout.rightArrow.IsEmpty) {
+        internal void OnMouseDown(int x, int y, bool alignToRight)
+        {
+            if (layout.rightArrow.IsEmpty)
+            {
                 Debug.Assert(layout.leftArrow.IsEmpty, "we can't have the leftArrow w/o the rightArrow");
                 return;
             }
 
             int cellCount = CellCount();
 
-            if (layout.rightArrow.Contains(x,y)) {
+            if (layout.rightArrow.Contains(x, y))
+            {
                 // draw a nice sunken border around the right arrow area
                 // we want to keep a cell on the screen
 
@@ -437,7 +499,8 @@ namespace System.Windows.Forms {
                 else
                     RightArrowClick(cellCount);
             }
-            else if (layout.leftArrow.Contains(x,y)) {
+            else if (layout.leftArrow.Contains(x, y))
+            {
                 downLeftArrow = true;
 
                 if (alignToRight)
@@ -445,7 +508,7 @@ namespace System.Windows.Forms {
                 else
                     LeftArrowClick(cellCount);
             }
-            else 
+            else
             {
                 if (downLeftArrow)
                 {
@@ -460,7 +523,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        internal void OnMouseLeave() {
+        internal void OnMouseLeave()
+        {
             if (downLeftArrow)
             {
                 downLeftArrow = false;
@@ -473,7 +537,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        internal void OnMouseMove(int x, int y) {
+        internal void OnMouseMove(int x, int y)
+        {
             /*
             if (!layout.leftArrow.IsEmpty && layout.leftArrow.Contains(x,y))
             {
@@ -503,31 +568,35 @@ namespace System.Windows.Forms {
             }
         }
 
-        internal void OnMouseUp(int x, int y) {
+        internal void OnMouseUp(int x, int y)
+        {
             ResetMouseInfo();
-            if (!layout.rightArrow.IsEmpty && layout.rightArrow.Contains(x,y))
+            if (!layout.rightArrow.IsEmpty && layout.rightArrow.Contains(x, y))
             {
                 InvalidateRect(layout.rightArrow);
                 return;
             }
-            if (!layout.leftArrow.IsEmpty && layout.leftArrow.Contains(x,y))
+            if (!layout.leftArrow.IsEmpty && layout.leftArrow.Contains(x, y))
             {
                 InvalidateRect(layout.leftArrow);
                 return;
             }
         }
 
-        internal void OnResize(Rectangle oldBounds) {
+        internal void OnResize(Rectangle oldBounds)
+        {
             Invalidate();
         }
 
         /// <summary>
         ///      Paints the parent rows
         /// </summary>
-        internal void Paint(Graphics g, Rectangle visualbounds, bool alignRight) {
+        internal void Paint(Graphics g, Rectangle visualbounds, bool alignRight)
+        {
             Rectangle bounds = visualbounds;
             // Paint the border around our bounds
-            if (borderWidth > 0) {
+            if (borderWidth > 0)
+            {
                 PaintBorder(g, bounds);
                 bounds.Inflate(-borderWidth, -borderWidth);
             }
@@ -535,7 +604,8 @@ namespace System.Windows.Forms {
             PaintParentRows(g, bounds, alignRight);
         }
 
-        private void PaintBorder(Graphics g, Rectangle bounds) {
+        private void PaintBorder(Graphics g, Rectangle bounds)
+        {
             Rectangle border = bounds;
 
             // top
@@ -548,7 +618,7 @@ namespace System.Windows.Forms {
 
             // left
             border = new Rectangle(bounds.X, bounds.Y + borderWidth,
-                                   borderWidth, bounds.Height - 2*borderWidth);
+                                   borderWidth, bounds.Height - 2 * borderWidth);
             g.FillRectangle(borderBrush, border);
 
             // right
@@ -558,21 +628,25 @@ namespace System.Windows.Forms {
 
         // will return the width of the text box that will fit all the 
         // tables names
-        private int GetTableBoxWidth(Graphics g, Font font) {
+        private int GetTableBoxWidth(Graphics g, Font font)
+        {
             // try to make the font BOLD
             Font textFont = font;
-            try {
+            try
+            {
                 textFont = new Font(font, FontStyle.Bold);
             }
-            catch {
+            catch
+            {
             }
             int width = 0;
-            for (int row = 0; row < parentsCount; row ++) {
-                DataGridState dgs = (DataGridState) parents[row];
+            for (int row = 0; row < parentsCount; row++)
+            {
+                DataGridState dgs = (DataGridState)parents[row];
                 // Graphics.MeasureString(...) returns different results for ": " than for " :"
                 //
                 string displayTableName = dgs.ListManager.GetListName() + " :";
-                int size = (int) g.MeasureString(displayTableName, textFont).Width;
+                int size = (int)g.MeasureString(displayTableName, textFont).Width;
                 width = Math.Max(size, width);
             }
 
@@ -581,17 +655,20 @@ namespace System.Windows.Forms {
 
         // will return the width of the text box that will
         // fit all the column names
-        private int GetColBoxWidth(Graphics g, Font font, int colNum) {
+        private int GetColBoxWidth(Graphics g, Font font, int colNum)
+        {
             int width = 0;
 
-            for (int  row = 0; row < parentsCount; row ++) {
-                DataGridState dgs = (DataGridState) parents[row];
+            for (int row = 0; row < parentsCount; row++)
+            {
+                DataGridState dgs = (DataGridState)parents[row];
                 GridColumnStylesCollection columns = dgs.GridColumnStyles;
-                if (colNum < columns.Count) {
+                if (colNum < columns.Count)
+                {
                     // Graphics.MeasureString(...) returns different results for ": " than for " :"
                     //
                     string colName = columns[colNum].HeaderText + " :";
-                    int size = (int) g.MeasureString(colName, font).Width;
+                    int size = (int)g.MeasureString(colName, font).Width;
                     width = Math.Max(size, width);
                 }
             }
@@ -601,13 +678,16 @@ namespace System.Windows.Forms {
 
         // will return the width of the best fit for the column
         //
-        private int GetColDataBoxWidth(Graphics g, int colNum) {
+        private int GetColDataBoxWidth(Graphics g, int colNum)
+        {
             int width = 0;
-            for (int row = 0; row < parentsCount; row ++) {
-                DataGridState dgs = (DataGridState) parents[row];
+            for (int row = 0; row < parentsCount; row++)
+            {
+                DataGridState dgs = (DataGridState)parents[row];
                 GridColumnStylesCollection columns = dgs.GridColumnStyles;
-                if (colNum < columns.Count) {
-                    object value = columns[colNum].GetColumnValueAtRow((CurrencyManager) dataGrid.BindingContext[dgs.DataSource, dgs.DataMember],
+                if (colNum < columns.Count)
+                {
+                    object value = columns[colNum].GetColumnValueAtRow((CurrencyManager)dataGrid.BindingContext[dgs.DataSource, dgs.DataMember],
                                                                         dgs.LinkingRow.RowNumber);
                     int size = columns[colNum].GetPreferredSize(g, value).Width;
                     width = Math.Max(size, width);
@@ -617,21 +697,25 @@ namespace System.Windows.Forms {
         }
 
         // will return the count of the table with the largest number of columns
-        private int ColsCount() {
+        private int ColsCount()
+        {
             int colNum = 0;
-            for (int row = 0; row < parentsCount; row ++) {
-                DataGridState dgs = (DataGridState) parents[row];
+            for (int row = 0; row < parentsCount; row++)
+            {
+                DataGridState dgs = (DataGridState)parents[row];
                 colNum = Math.Max(colNum, dgs.GridColumnStyles.Count);
             }
             return colNum;
         }
 
         // will return the total width required to paint the parentRows
-        private int TotalWidth(int tableNameBoxWidth, int[] colsNameWidths, int[] colsDataWidths) {
+        private int TotalWidth(int tableNameBoxWidth, int[] colsNameWidths, int[] colsDataWidths)
+        {
             int totalWidth = 0;
             totalWidth += tableNameBoxWidth;
             Debug.Assert(colsNameWidths.Length == colsDataWidths.Length, "both arrays are as long as the largest column count in dgs");
-            for (int i = 0; i < colsNameWidths.Length; i ++) {
+            for (int i = 0; i < colsNameWidths.Length; i++)
+            {
                 totalWidth += colsNameWidths[i];
                 totalWidth += colsDataWidths[i];
             }
@@ -644,21 +728,25 @@ namespace System.Windows.Forms {
 
         // computes the layout for the parent rows
         //
-        private void ComputeLayout(Rectangle bounds, int tableNameBoxWidth, int[] colsNameWidths, int[] colsDataWidths) {
+        private void ComputeLayout(Rectangle bounds, int tableNameBoxWidth, int[] colsNameWidths, int[] colsDataWidths)
+        {
             int totalWidth = TotalWidth(tableNameBoxWidth, colsNameWidths, colsDataWidths);
-            if (totalWidth > bounds.Width) {
+            if (totalWidth > bounds.Width)
+            {
                 layout.leftArrow = new Rectangle(bounds.X, bounds.Y, 15, bounds.Height);
                 layout.data = new Rectangle(layout.leftArrow.Right, bounds.Y, bounds.Width - 30, bounds.Height);
                 layout.rightArrow = new Rectangle(layout.data.Right, bounds.Y, 15, bounds.Height);
             }
-            else {
+            else
+            {
                 layout.data = bounds;
                 layout.leftArrow = Rectangle.Empty;
                 layout.rightArrow = Rectangle.Empty;
             }
         }
 
-        private void PaintParentRows(Graphics g, Rectangle bounds, bool alignToRight) {
+        private void PaintParentRows(Graphics g, Rectangle bounds, bool alignToRight)
+        {
             // variables needed for aligning the table and column names
             int tableNameBoxWidth = 0;
             int numCols = ColsCount();
@@ -668,18 +756,22 @@ namespace System.Windows.Forms {
             // compute the size of the box that will contain the tableName
             //
             if (dataGrid.ParentRowsLabelStyle == DataGridParentRowsLabelStyle.TableName ||
-                dataGrid.ParentRowsLabelStyle == DataGridParentRowsLabelStyle.Both) {
+                dataGrid.ParentRowsLabelStyle == DataGridParentRowsLabelStyle.Both)
+            {
                 tableNameBoxWidth = GetTableBoxWidth(g, dataGrid.Font);
             }
 
             // initialiaze the arrays that contain the column names and the column size
             //
-            for (int i = 0; i < numCols; i++) {
+            for (int i = 0; i < numCols; i++)
+            {
                 if (dataGrid.ParentRowsLabelStyle == DataGridParentRowsLabelStyle.ColumnName ||
-                    dataGrid.ParentRowsLabelStyle == DataGridParentRowsLabelStyle.Both) {
+                    dataGrid.ParentRowsLabelStyle == DataGridParentRowsLabelStyle.Both)
+                {
                     colsNameWidths[i] = GetColBoxWidth(g, dataGrid.Font, i);
                 }
-                else {
+                else
+                {
                     colsNameWidths[i] = 0;
                 }
                 colsDataWidths[i] = GetColDataBoxWidth(g, i);
@@ -700,12 +792,13 @@ namespace System.Windows.Forms {
             // paint the parent rows:
             //
             Rectangle rowBounds = layout.data;
-            for (int row = 0; row < parentsCount; ++row) {
-                rowBounds.Height = (int) rowHeights[row];
+            for (int row = 0; row < parentsCount; ++row)
+            {
+                rowBounds.Height = (int)rowHeights[row];
                 if (rowBounds.Y > bounds.Bottom)
                     break;
                 int paintedWidth = PaintRow(g, rowBounds, row, dataGrid.Font, alignToRight, tableNameBoxWidth, colsNameWidths, colsDataWidths);
-                if (row == parentsCount-1)
+                if (row == parentsCount - 1)
                     break;
 
                 // draw the grid line below
@@ -722,11 +815,14 @@ namespace System.Windows.Forms {
             }
         }
 
-        private Bitmap GetBitmap(string bitmapName) {
-            try {
+        private Bitmap GetBitmap(string bitmapName)
+        {
+            try
+            {
                 return DpiHelper.GetBitmapFromIcon(typeof(DataGridParentRows), bitmapName);
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Debug.Fail("Failed to load bitmap: " + bitmapName, e.ToString());
                 return null;
             }
@@ -759,7 +855,7 @@ namespace System.Windows.Forms {
             ImageAttributes attr = new ImageAttributes();
             this.colorMap[0].NewColor = this.ForeColor;
             attr.SetRemapTable(colorMap, ColorAdjustType.Bitmap);
-            g.DrawImage(b, bmpRect, 0, 0, bmpRect.Width, bmpRect.Height,GraphicsUnit.Pixel, attr);
+            g.DrawImage(b, bmpRect, 0, 0, bmpRect.Width, bmpRect.Height, GraphicsUnit.Pixel, attr);
             attr.Dispose();
         }
 
@@ -793,14 +889,17 @@ namespace System.Windows.Forms {
             if (downLeftArrow)
             {
                 PaintDownButton(g, bounds);
-                layout.leftArrow.Inflate(-1,-1);
-                lock (bmp) {
+                layout.leftArrow.Inflate(-1, -1);
+                lock (bmp)
+                {
                     PaintBitmap(g, bmp, bounds);
                 }
-                layout.leftArrow.Inflate(1,1);
+                layout.leftArrow.Inflate(1, 1);
             }
-            else {
-                lock (bmp) {
+            else
+            {
+                lock (bmp)
+                {
                     PaintBitmap(g, bmp, bounds);
                 }
             }
@@ -822,39 +921,46 @@ namespace System.Windows.Forms {
             if (downRightArrow)
             {
                 PaintDownButton(g, bounds);
-                layout.rightArrow.Inflate(-1,-1);
-                lock (bmp) {
+                layout.rightArrow.Inflate(-1, -1);
+                lock (bmp)
+                {
                     PaintBitmap(g, bmp, bounds);
                 }
-                layout.rightArrow.Inflate(1,1);
+                layout.rightArrow.Inflate(1, 1);
             }
-            else {
-                lock (bmp) {
+            else
+            {
+                lock (bmp)
+                {
                     PaintBitmap(g, bmp, bounds);
                 }
             }
         }
 
         private int PaintRow(Graphics g, Rectangle bounds, int row, Font font, bool alignToRight,
-                             int tableNameBoxWidth, int[] colsNameWidths, int[] colsDataWidths) {
-            DataGridState dgs = (DataGridState) parents[row];
+                             int tableNameBoxWidth, int[] colsNameWidths, int[] colsDataWidths)
+        {
+            DataGridState dgs = (DataGridState)parents[row];
             Rectangle paintBounds = bounds;
             Rectangle rowBounds = bounds;
-            paintBounds.Height = (int) rowHeights[row];
-            rowBounds.Height = (int) rowHeights[row];
+            paintBounds.Height = (int)rowHeights[row];
+            rowBounds.Height = (int)rowHeights[row];
 
             int paintedWidth = 0;
             // used for scrolling: when paiting, we will skip horizOffset cells in the dataGrid ParentRows
             int skippedCells = 0;
 
             // paint the table name
-            if ( dataGrid.ParentRowsLabelStyle == DataGridParentRowsLabelStyle.TableName ||
-                 dataGrid.ParentRowsLabelStyle == DataGridParentRowsLabelStyle.Both) {
-                if (skippedCells < horizOffset) {
+            if (dataGrid.ParentRowsLabelStyle == DataGridParentRowsLabelStyle.TableName ||
+                 dataGrid.ParentRowsLabelStyle == DataGridParentRowsLabelStyle.Both)
+            {
+                if (skippedCells < horizOffset)
+                {
                     // skip this
-                    skippedCells ++;
+                    skippedCells++;
                 }
-                else {
+                else
+                {
                     paintBounds.Width = Math.Min(paintBounds.Width, tableNameBoxWidth);
                     paintBounds.X = MirrorRect(bounds, paintBounds, alignToRight);
                     string displayTableName = dgs.ListManager.GetListName() + ": ";
@@ -871,7 +977,8 @@ namespace System.Windows.Forms {
             paintedWidth += PaintColumns(g, rowBounds, dgs, font, alignToRight, colsNameWidths, colsDataWidths, skippedCells);
 
             // paint the possible space left after columns
-            if (paintedWidth < bounds.Width) {
+            if (paintedWidth < bounds.Width)
+            {
                 paintBounds.X = bounds.X + paintedWidth;
                 paintBounds.Width = bounds.Width - paintedWidth;
                 paintBounds.X = MirrorRect(bounds, paintBounds, alignToRight);
@@ -881,23 +988,28 @@ namespace System.Windows.Forms {
         }
 
         private int PaintColumns(Graphics g, Rectangle bounds, DataGridState dgs, Font font, bool alignToRight,
-                                 int[] colsNameWidths, int[] colsDataWidths, int skippedCells) {
+                                 int[] colsNameWidths, int[] colsDataWidths, int skippedCells)
+        {
             Rectangle paintBounds = bounds;
             Rectangle rowBounds = bounds;
             GridColumnStylesCollection cols = dgs.GridColumnStyles;
             int cx = 0;
 
-            for (int i = 0; i < cols.Count; i ++) {
+            for (int i = 0; i < cols.Count; i++)
+            {
                 if (cx >= bounds.Width)
                     break;
 
                 // paint the column name, if we have to
                 if (dataGrid.ParentRowsLabelStyle == DataGridParentRowsLabelStyle.ColumnName ||
-                    dataGrid.ParentRowsLabelStyle == DataGridParentRowsLabelStyle.Both) {
-                    if (skippedCells < horizOffset) {
+                    dataGrid.ParentRowsLabelStyle == DataGridParentRowsLabelStyle.Both)
+                {
+                    if (skippedCells < horizOffset)
+                    {
                         // skip this column
                     }
-                    else {
+                    else
+                    {
                         paintBounds.X = bounds.X + cx;
                         paintBounds.Width = Math.Min(bounds.Width - cx, colsNameWidths[i]);
                         paintBounds.X = MirrorRect(bounds, paintBounds, alignToRight);
@@ -912,10 +1024,13 @@ namespace System.Windows.Forms {
                 if (cx >= bounds.Width)
                     break;
 
-                if (skippedCells < horizOffset) {
+                if (skippedCells < horizOffset)
+                {
                     // skip this cell
-                    skippedCells ++;
-                } else {
+                    skippedCells++;
+                }
+                else
+                {
                     // paint the cell contents
                     paintBounds.X = bounds.X + cx;
                     paintBounds.Width = Math.Min(bounds.Width - cx, colsDataWidths[i]);
@@ -923,7 +1038,7 @@ namespace System.Windows.Forms {
 
                     // when we paint the data grid parent rows, we want to paint the data at the position 
                     // stored in the currency manager.
-                    cols[i].Paint(g, paintBounds, (CurrencyManager) dataGrid.BindingContext[dgs.DataSource, dgs.DataMember],
+                    cols[i].Paint(g, paintBounds, (CurrencyManager)dataGrid.BindingContext[dgs.DataSource, dgs.DataMember],
                                     dataGrid.BindingContext[dgs.DataSource, dgs.DataMember].Position, BackBrush, ForeBrush, alignToRight);
 
                     cx += paintBounds.Width;
@@ -942,7 +1057,7 @@ namespace System.Windows.Forms {
                     // put 3 pixels in between columns
                     // see DonnaWa
                     //
-                    if ( i < cols.Count - 1)
+                    if (i < cols.Count - 1)
                     {
                         paintBounds.X = bounds.X + cx;
                         paintBounds.Width = Math.Min(bounds.Width - cx, 3);
@@ -961,19 +1076,23 @@ namespace System.Windows.Forms {
         ///      Draws on the screen the text. It is used only to paint the Table Name and the column Names
         ///      Returns the width of bounding rectangle that was passed in
         /// </summary>
-        private int PaintText(Graphics g, Rectangle textBounds, string text, Font font, bool bold, bool alignToRight) {
+        private int PaintText(Graphics g, Rectangle textBounds, string text, Font font, bool bold, bool alignToRight)
+        {
             Font textFont = font;
             if (bold)
-                try {
+                try
+                {
                     textFont = new Font(font, FontStyle.Bold);
-                } catch {}
+                }
+                catch { }
             else
                 textFont = font;
 
             // right now, we paint the entire box, cause it will be used anyway
             g.FillRectangle(BackBrush, textBounds);
             StringFormat format = new StringFormat();
-            if (alignToRight) {
+            if (alignToRight)
+            {
                 format.FormatFlags |= StringFormatFlags.DirectionRightToLeft;
                 format.Alignment = StringAlignment.Far;
             }
@@ -991,7 +1110,8 @@ namespace System.Windows.Forms {
 
         // will return the X coordinate of the containedRect mirrored within the surroundingRect
         // according to the value of alignToRight
-        private int MirrorRect(Rectangle surroundingRect, Rectangle containedRect, bool alignToRight) {
+        private int MirrorRect(Rectangle surroundingRect, Rectangle containedRect, bool alignToRight)
+        {
             Debug.Assert(containedRect.X >= surroundingRect.X && containedRect.Right <= surroundingRect.Right, "containedRect is not contained in surroundingRect");
             if (alignToRight)
                 return surroundingRect.Right - containedRect.Right + surroundingRect.X;
@@ -999,18 +1119,21 @@ namespace System.Windows.Forms {
                 return containedRect.X;
         }
 
-        private class Layout {
+        private class Layout
+        {
             public Rectangle data;
             public Rectangle leftArrow;
             public Rectangle rightArrow;
 
-            public Layout() {
+            public Layout()
+            {
                 data = Rectangle.Empty;
                 leftArrow = Rectangle.Empty;
                 rightArrow = Rectangle.Empty;
             }
 
-            public override string ToString() {
+            public override string ToString()
+            {
                 StringBuilder sb = new StringBuilder(200);
                 sb.Append("ParentRows Layout: \n");
                 sb.Append("data = ");
@@ -1026,61 +1149,80 @@ namespace System.Windows.Forms {
         }
 
         [ComVisible(true)]
-        protected internal class DataGridParentRowsAccessibleObject : AccessibleObject {
+        protected internal class DataGridParentRowsAccessibleObject : AccessibleObject
+        {
             DataGridParentRows owner = null;
 
-            public DataGridParentRowsAccessibleObject(DataGridParentRows owner) : base() {
+            public DataGridParentRowsAccessibleObject(DataGridParentRows owner) : base()
+            {
                 Debug.Assert(owner != null, "DataGridParentRowsAccessibleObject must have a valid owner");
                 this.owner = owner;
             }
 
-            internal DataGridParentRows Owner {
-                get {
+            internal DataGridParentRows Owner
+            {
+                get
+                {
                     return owner;
                 }
             }
 
-            public override Rectangle Bounds {
-                get {
+            public override Rectangle Bounds
+            {
+                get
+                {
                     return owner.dataGrid.RectangleToScreen(owner.dataGrid.ParentRowsBounds);
                 }
             }
 
-            public override string DefaultAction {
-                get {
+            public override string DefaultAction
+            {
+                get
+                {
                     return SR.AccDGNavigateBack;
                 }
             }
 
-            public override string Name {
-                get {
+            public override string Name
+            {
+                get
+                {
                     return SR.AccDGParentRows;
                 }
             }
 
-            public override AccessibleObject Parent {
-                get {
+            public override AccessibleObject Parent
+            {
+                get
+                {
                     return owner.dataGrid.AccessibilityObject;
                 }
             }
 
-            public override AccessibleRole Role {
-                get {
+            public override AccessibleRole Role
+            {
+                get
+                {
                     return AccessibleRole.List;
                 }
             }
 
-            public override AccessibleStates State {
-                get {
+            public override AccessibleStates State
+            {
+                get
+                {
                     AccessibleStates state = AccessibleStates.ReadOnly;
 
-                    if (owner.parentsCount == 0) {
+                    if (owner.parentsCount == 0)
+                    {
                         state |= AccessibleStates.Invisible;
                     }
-                    if (owner.dataGrid.ParentRowsVisible) {
+                    if (owner.dataGrid.ParentRowsVisible)
+                    {
                         state |= AccessibleStates.Expanded;
                     }
-                    else {
+                    else
+                    {
                         state |= AccessibleStates.Collapsed;
                     }
 
@@ -1088,21 +1230,26 @@ namespace System.Windows.Forms {
                 }
             }
 
-            public override string Value {
-                get {
+            public override string Value
+            {
+                get
+                {
                     return null;
                 }
             }
-            
-            public override void DoDefaultAction() {
+
+            public override void DoDefaultAction()
+            {
                 owner.dataGrid.NavigateBack();
             }
 
-            public override AccessibleObject GetChild(int index) {
+            public override AccessibleObject GetChild(int index)
+            {
                 return ((DataGridState)owner.parents[index]).ParentRowAccessibleObject;
             }
 
-            public override int GetChildCount() {
+            public override int GetChildCount()
+            {
                 return owner.parentsCount;
             }
 
@@ -1110,19 +1257,24 @@ namespace System.Windows.Forms {
             ///      Returns the currently focused child, if any.
             ///      Returns this if the object itself is focused.
             /// </summary>
-            public override AccessibleObject GetFocused() {
+            public override AccessibleObject GetFocused()
+            {
                 return null;
             }
 
-            internal AccessibleObject GetNext(AccessibleObject child) {
+            internal AccessibleObject GetNext(AccessibleObject child)
+            {
                 int children = GetChildCount();
                 bool hit = false;
 
-                for (int i=0; i<children; i++) {
-                    if (hit) {
+                for (int i = 0; i < children; i++)
+                {
+                    if (hit)
+                    {
                         return GetChild(i);
                     }
-                    if (GetChild(i) == child) {
+                    if (GetChild(i) == child)
+                    {
                         hit = true;
                     }
                 }
@@ -1130,15 +1282,19 @@ namespace System.Windows.Forms {
                 return null;
             }
 
-            internal AccessibleObject GetPrev(AccessibleObject child) {
+            internal AccessibleObject GetPrev(AccessibleObject child)
+            {
                 int children = GetChildCount();
                 bool hit = false;
 
-                for (int i=children-1; i>=0; i--) {
-                    if (hit) {
+                for (int i = children - 1; i >= 0; i--)
+                {
+                    if (hit)
+                    {
                         return GetChild(i);
                     }
-                    if (GetChild(i) == child) {
+                    if (GetChild(i) == child)
+                    {
                         hit = true;
                     }
                 }
@@ -1149,8 +1305,10 @@ namespace System.Windows.Forms {
             /// <summary>
             ///      Navigate to the next or previous grid entry.
             /// </summary>
-            public override AccessibleObject Navigate(AccessibleNavigation navdir) {
-                switch (navdir) {
+            public override AccessibleObject Navigate(AccessibleNavigation navdir)
+            {
+                switch (navdir)
+                {
                     case AccessibleNavigation.Right:
                     case AccessibleNavigation.Next:
                     case AccessibleNavigation.Down:
@@ -1160,12 +1318,14 @@ namespace System.Windows.Forms {
                     case AccessibleNavigation.Previous:
                         return Parent.GetChild(GetChildCount() - 1);
                     case AccessibleNavigation.FirstChild:
-                        if (GetChildCount() > 0) {
+                        if (GetChildCount() > 0)
+                        {
                             return GetChild(0);
                         }
                         break;
                     case AccessibleNavigation.LastChild:
-                        if (GetChildCount() > 0) {
+                        if (GetChildCount() > 0)
+                        {
                             return GetChild(GetChildCount() - 1);
                         }
                         break;
@@ -1176,7 +1336,8 @@ namespace System.Windows.Forms {
 
             }
 
-            public override void Select(AccessibleSelection flags) {
+            public override void Select(AccessibleSelection flags)
+            {
             }
         }
     }

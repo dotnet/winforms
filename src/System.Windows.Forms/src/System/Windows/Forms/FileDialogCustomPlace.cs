@@ -23,7 +23,7 @@ namespace System.Windows.Forms
 
         public FileDialogCustomPlace(Guid knownFolderGuid)
         {
-            KnownFolderGuid = knownFolderGuid; 
+            KnownFolderGuid = knownFolderGuid;
         }
 
         public string Path

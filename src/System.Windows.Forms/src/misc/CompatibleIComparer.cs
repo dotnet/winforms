@@ -2,29 +2,36 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Collections.Specialized {
+namespace System.Collections.Specialized
+{
 
     using Microsoft.Win32;
     using System.Collections;
     using System.Runtime.Serialization;
     using System.Globalization;
 
-    internal class BackCompatibleStringComparer : IEqualityComparer {
+    internal class BackCompatibleStringComparer : IEqualityComparer
+    {
 
         static internal IEqualityComparer Default = new BackCompatibleStringComparer();
 
-        internal BackCompatibleStringComparer() {
+        internal BackCompatibleStringComparer()
+        {
         }
 
         //For backcompat
-        public static int GetHashCode(string obj) {
-            unsafe {
-                fixed (char* src = obj) {
+        public static int GetHashCode(string obj)
+        {
+            unsafe
+            {
+                fixed (char* src = obj)
+                {
                     int hash = 5381;
                     int c;
                     char* szStr = src;
 
-                    while ((c = *szStr) != 0) {
+                    while ((c = *szStr) != 0)
+                    {
                         hash = ((hash << 5) + hash) ^ c;
                         ++szStr;
                     }
@@ -33,13 +40,16 @@ namespace System.Collections.Specialized {
             }
         }
 
-        bool IEqualityComparer.Equals(object a, object b) {
+        bool IEqualityComparer.Equals(object a, object b)
+        {
             return Object.Equals(a, b);
         }
 
-        public virtual int GetHashCode(object o) {
+        public virtual int GetHashCode(object o)
+        {
             string obj = o as string;
-            if (obj == null) {
+            if (obj == null)
+            {
                 return o.GetHashCode();
             }
 

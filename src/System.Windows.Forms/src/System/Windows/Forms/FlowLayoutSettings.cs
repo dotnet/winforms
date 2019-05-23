@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -10,49 +11,58 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
 
     [DefaultProperty(nameof(FlowDirection))]
-    public class FlowLayoutSettings : LayoutSettings {
+    public class FlowLayoutSettings : LayoutSettings
+    {
 
-        internal FlowLayoutSettings(IArrangedElement owner) : base(owner) {}
-        
-        public override LayoutEngine LayoutEngine {
+        internal FlowLayoutSettings(IArrangedElement owner) : base(owner) { }
+
+        public override LayoutEngine LayoutEngine
+        {
             get { return FlowLayout.Instance; }
         }
 
         [SRDescription(nameof(SR.FlowPanelFlowDirectionDescr))]
         [DefaultValue(FlowDirection.LeftToRight)]
         [SRCategory(nameof(SR.CatLayout))]
-        public FlowDirection FlowDirection {
+        public FlowDirection FlowDirection
+        {
             get { return FlowLayout.GetFlowDirection(Owner); }
-            set { 
+            set
+            {
                 FlowLayout.SetFlowDirection(Owner, value);
                 Debug.Assert(FlowDirection == value, "FlowDirection should be the same as we set it");
             }
         }
-        
+
         [SRDescription(nameof(SR.FlowPanelWrapContentsDescr))]
         [DefaultValue(true)]
         [SRCategory(nameof(SR.CatLayout))]
-        public bool WrapContents {
+        public bool WrapContents
+        {
             get { return FlowLayout.GetWrapContents(Owner); }
-            set { 
+            set
+            {
                 FlowLayout.SetWrapContents(Owner, value);
                 Debug.Assert(WrapContents == value, "WrapContents should be the same as we set it");
             }
         }
 
-        public void SetFlowBreak(object child, bool value) {
+        public void SetFlowBreak(object child, bool value)
+        {
             IArrangedElement element = FlowLayout.Instance.CastToArrangedElement(child);
-            if (GetFlowBreak(child) != value) {
+            if (GetFlowBreak(child) != value)
+            {
                 CommonProperties.SetFlowBreak(element, value);
             }
         }
 
-        public bool GetFlowBreak(object child) {
+        public bool GetFlowBreak(object child)
+        {
             IArrangedElement element = FlowLayout.Instance.CastToArrangedElement(child);
             return CommonProperties.GetFlowBreak(element);
         }
 
-        
+
     }
 }
 

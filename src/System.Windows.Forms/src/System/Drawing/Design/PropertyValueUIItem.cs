@@ -22,10 +22,10 @@ namespace System.Drawing.Design
 
         /// <summary>Gets the 8 x 8 pixel image that will be drawn on the properties window.</summary>
         public virtual Image Image { get; }
-        
+
         /// <summary>Gets the handler that will be raised when this item is double clicked.</summary>
         public virtual PropertyValueUIItemInvokeHandler InvokeHandler { get; }
-        
+
         /// <summary>Gets the ToolTip to display for this item.</summary>
         public virtual string ToolTip { get; }
 

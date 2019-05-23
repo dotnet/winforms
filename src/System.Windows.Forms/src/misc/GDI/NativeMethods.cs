@@ -24,79 +24,80 @@ namespace System.Experimental.Gdi
 #else
     internal
 #endif
-    partial class IntNativeMethods     {
+    partial class IntNativeMethods
+    {
         public const int
-        DT_TOP                      = 0x00000000,
-        DT_LEFT                     = 0x00000000,
-        DT_CENTER                   = 0x00000001,
-        DT_RIGHT                    = 0x00000002,
-        DT_VCENTER                  = 0x00000004,
-        DT_BOTTOM                   = 0x00000008,
-        DT_WORDBREAK                = 0x00000010,
-        DT_SINGLELINE               = 0x00000020,
-        DT_EXPANDTABS               = 0x00000040,
-        DT_TABSTOP                  = 0x00000080,
-        DT_NOCLIP                   = 0x00000100,
-        DT_EXTERNALLEADING          = 0x00000200,
-        DT_CALCRECT                 = 0x00000400,
-        DT_NOPREFIX                 = 0x00000800,
-        DT_INTERNAL                 = 0x00001000,
-        DT_EDITCONTROL              = 0x00002000,
-        DT_PATH_ELLIPSIS            = 0x00004000,
-        DT_END_ELLIPSIS             = 0x00008000,
-        DT_MODIFYSTRING             = 0x00010000,
-        DT_RTLREADING               = 0x00020000,
-        DT_WORD_ELLIPSIS            = 0x00040000,
-        DT_NOFULLWIDTHCHARBREAK     = 0x00080000,
-        DT_HIDEPREFIX               = 0x00100000,
-        DT_PREFIXONLY               = 0x00200000,
+        DT_TOP = 0x00000000,
+        DT_LEFT = 0x00000000,
+        DT_CENTER = 0x00000001,
+        DT_RIGHT = 0x00000002,
+        DT_VCENTER = 0x00000004,
+        DT_BOTTOM = 0x00000008,
+        DT_WORDBREAK = 0x00000010,
+        DT_SINGLELINE = 0x00000020,
+        DT_EXPANDTABS = 0x00000040,
+        DT_TABSTOP = 0x00000080,
+        DT_NOCLIP = 0x00000100,
+        DT_EXTERNALLEADING = 0x00000200,
+        DT_CALCRECT = 0x00000400,
+        DT_NOPREFIX = 0x00000800,
+        DT_INTERNAL = 0x00001000,
+        DT_EDITCONTROL = 0x00002000,
+        DT_PATH_ELLIPSIS = 0x00004000,
+        DT_END_ELLIPSIS = 0x00008000,
+        DT_MODIFYSTRING = 0x00010000,
+        DT_RTLREADING = 0x00020000,
+        DT_WORD_ELLIPSIS = 0x00040000,
+        DT_NOFULLWIDTHCHARBREAK = 0x00080000,
+        DT_HIDEPREFIX = 0x00100000,
+        DT_PREFIXONLY = 0x00200000,
 
-        DIB_RGB_COLORS          = 0,
-        BI_BITFIELDS            = 3,
-        BI_RGB                  = 0,
+        DIB_RGB_COLORS = 0,
+        BI_BITFIELDS = 3,
+        BI_RGB = 0,
         BITMAPINFO_MAX_COLORSIZE = 256,
         SPI_GETICONTITLELOGFONT = 0x001F,
         SPI_GETNONCLIENTMETRICS = 41,
-        DEFAULT_GUI_FONT        = 17,
-        HOLLOW_BRUSH            = 5,
+        DEFAULT_GUI_FONT = 17,
+        HOLLOW_BRUSH = 5,
 
-        BITSPIXEL               = 12,
-        ALTERNATE               = 1,
-        WINDING                 = 2,
+        BITSPIXEL = 12,
+        ALTERNATE = 1,
+        WINDING = 2,
 
-        SRCCOPY                 = 0x00CC0020,
-        SRCPAINT                = 0x00EE0086, /* dest = source OR dest           */
-        SRCAND                  = 0x008800C6, /* dest = source AND dest          */
-        SRCINVERT               = 0x00660046, /* dest = source XOR dest          */
-        SRCERASE                = 0x00440328, /* dest = source AND (NOT dest )   */
-        NOTSRCCOPY              = 0x00330008, /* dest = (NOT source)             */
-        NOTSRCERASE             = 0x001100A6, /* dest = (NOT src) AND (NOT dest) */
-        MERGECOPY               = 0x00C000CA, /* dest = (source AND pattern)     */
-        MERGEPAINT              = 0x00BB0226, /* dest = (NOT source) OR dest     */
-        PATCOPY                 = 0x00F00021, /* dest = pattern                  */
-        PATPAINT                = 0x00FB0A09, /* dest = DPSnoo                   */
-        PATINVERT               = 0x005A0049, /* dest = pattern XOR dest         */
-        DSTINVERT               = 0x00550009, /* dest = (NOT dest)               */
-        BLACKNESS               = 0x00000042, /* dest = BLACK                    */
-        WHITENESS               = 0x00FF0062, /* dest = WHITE                    */
-        CAPTUREBLT              = 0x40000000, /* Include layered windows */
-        
-    
+        SRCCOPY = 0x00CC0020,
+        SRCPAINT = 0x00EE0086, /* dest = source OR dest           */
+        SRCAND = 0x008800C6, /* dest = source AND dest          */
+        SRCINVERT = 0x00660046, /* dest = source XOR dest          */
+        SRCERASE = 0x00440328, /* dest = source AND (NOT dest )   */
+        NOTSRCCOPY = 0x00330008, /* dest = (NOT source)             */
+        NOTSRCERASE = 0x001100A6, /* dest = (NOT src) AND (NOT dest) */
+        MERGECOPY = 0x00C000CA, /* dest = (source AND pattern)     */
+        MERGEPAINT = 0x00BB0226, /* dest = (NOT source) OR dest     */
+        PATCOPY = 0x00F00021, /* dest = pattern                  */
+        PATPAINT = 0x00FB0A09, /* dest = DPSnoo                   */
+        PATINVERT = 0x005A0049, /* dest = pattern XOR dest         */
+        DSTINVERT = 0x00550009, /* dest = (NOT dest)               */
+        BLACKNESS = 0x00000042, /* dest = BLACK                    */
+        WHITENESS = 0x00FF0062, /* dest = WHITE                    */
+        CAPTUREBLT = 0x40000000, /* Include layered windows */
+
+
         /* FONT WEIGHT (BOLD) VALUES */
-        FW_DONTCARE         = 0,
-        FW_NORMAL           = 400,
-        FW_BOLD             = 700,
+        FW_DONTCARE = 0,
+        FW_NORMAL = 400,
+        FW_BOLD = 700,
         // some others...
 
         /* FONT CHARACTER SET */
-        ANSI_CHARSET        = 0,
-        DEFAULT_CHARSET     = 1,
+        ANSI_CHARSET = 0,
+        DEFAULT_CHARSET = 1,
         // plus others ....
 
         /* Font OutPrecision */
-        OUT_DEFAULT_PRECIS  = 0,
-        OUT_TT_PRECIS       = 4,
-        OUT_TT_ONLY_PRECIS  = 7,
+        OUT_DEFAULT_PRECIS = 0,
+        OUT_TT_PRECIS = 4,
+        OUT_TT_ONLY_PRECIS = 7,
         // some others...
 
         /* Font clip precision */
@@ -113,23 +114,23 @@ namespace System.Experimental.Gdi
         CLEARTYPE_NATURAL_QUALITY = 6,
 
         /* Object Definitions for GetCurrentObject() and others. */
-        OBJ_PEN       = 1,
-        OBJ_BRUSH     = 2,
-        OBJ_DC        = 3,
-        OBJ_METADC    = 4,
-//      OBJ_PAL       = 5,
-        OBJ_FONT      = 6,
-        OBJ_BITMAP    = 7,
-//      OBJ_REGION    = 8,
-//      OBJ_METAFILE  = 9,
-        OBJ_MEMDC     = 10,
-        OBJ_EXTPEN    = 11,
+        OBJ_PEN = 1,
+        OBJ_BRUSH = 2,
+        OBJ_DC = 3,
+        OBJ_METADC = 4,
+        //      OBJ_PAL       = 5,
+        OBJ_FONT = 6,
+        OBJ_BITMAP = 7,
+        //      OBJ_REGION    = 8,
+        //      OBJ_METAFILE  = 9,
+        OBJ_MEMDC = 10,
+        OBJ_EXTPEN = 11,
         OBJ_ENHMETADC = 12,
-//      OBJ_ENHMETAFILE = 13,
-//      OBJ_COLORSPACE = 14
+        //      OBJ_ENHMETAFILE = 13,
+        //      OBJ_COLORSPACE = 14
 
         // Brush styles
-        BS_SOLID   = 0,
+        BS_SOLID = 0,
         BS_HATCHED = 2,
         // BS_PATTERN = 3,
         // some others...
@@ -139,28 +140,28 @@ namespace System.Experimental.Gdi
 
 
         FORMAT_MESSAGE_ALLOCATE_BUFFER = 0x00000100,
-        FORMAT_MESSAGE_IGNORE_INSERTS  = 0x00000200,
-        FORMAT_MESSAGE_FROM_SYSTEM     = 0x00001000,
-        FORMAT_MESSAGE_DEFAULT         = FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_FROM_SYSTEM;
+        FORMAT_MESSAGE_IGNORE_INSERTS = 0x00000200,
+        FORMAT_MESSAGE_FROM_SYSTEM = 0x00001000,
+        FORMAT_MESSAGE_DEFAULT = FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_FROM_SYSTEM;
         // some others...
 
-        public enum RegionFlags 
+        public enum RegionFlags
         {
-            ERROR           = 0,
-            NULLREGION      = 1,
-            SIMPLEREGION    = 2,
-            COMPLEXREGION   = 3,
+            ERROR = 0,
+            NULLREGION = 1,
+            SIMPLEREGION = 2,
+            COMPLEXREGION = 3,
         }
-              
+
         [StructLayout(LayoutKind.Sequential)]
-        public struct RECT 
+        public struct RECT
         {
             public int left;
             public int top;
             public int right;
             public int bottom;
 
-            public RECT(int left, int top, int right, int bottom) 
+            public RECT(int left, int top, int right, int bottom)
             {
                 this.left = left;
                 this.top = top;
@@ -176,7 +177,7 @@ namespace System.Experimental.Gdi
                 this.bottom = r.Bottom;
             }
 
-            public static RECT FromXYWH(int x, int y, int width, int height) 
+            public static RECT FromXYWH(int x, int y, int width, int height)
             {
                 return new RECT(
                     x,
@@ -185,9 +186,9 @@ namespace System.Experimental.Gdi
                     y + height);
             }
 
-            public Size Size 
+            public Size Size
             {
-                get 
+                get
                 {
                     return new Size(this.right - this.left, this.bottom - this.top);
                 }
@@ -211,16 +212,16 @@ namespace System.Experimental.Gdi
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public class POINT 
+        public class POINT
         {
             public int x;
             public int y;
 
-            public POINT() 
+            public POINT()
             {
             }
 
-            public POINT(int x, int y) 
+            public POINT(int x, int y)
             {
                 this.x = x;
                 this.y = y;
@@ -237,10 +238,10 @@ namespace System.Experimental.Gdi
             }
 #endif
         }
-    
+
         [StructLayout(LayoutKind.Sequential)]
-        public class DRAWTEXTPARAMS 
-        { 
+        public class DRAWTEXTPARAMS
+        {
             private int cbSize = Marshal.SizeOf<DRAWTEXTPARAMS>();
             public int iTabLength;
             public int iLeftMargin;
@@ -263,7 +264,7 @@ namespace System.Experimental.Gdi
                 this.iTabLength = original.iTabLength;
             }
 
-            public DRAWTEXTPARAMS(int leftMargin, int rightMargin )
+            public DRAWTEXTPARAMS(int leftMargin, int rightMargin)
             {
                 this.iLeftMargin = leftMargin;
                 this.iRightMargin = rightMargin;
@@ -278,15 +279,15 @@ namespace System.Experimental.Gdi
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public class LOGBRUSH 
+        public class LOGBRUSH
         {
             public int lbStyle;
             public int lbColor;
             public int lbHatch;
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
-        public class LOGFONT 
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+        public class LOGFONT
         {
             public int lfHeight;
             public int lfWidth;
@@ -301,31 +302,31 @@ namespace System.Experimental.Gdi
             public byte lfClipPrecision;
             public byte lfQuality;
             public byte lfPitchAndFamily;
-            [MarshalAs(System.Runtime.InteropServices.UnmanagedType.ByValTStr, SizeConst=32)]
-            public string   lfFaceName;
+            [MarshalAs(System.Runtime.InteropServices.UnmanagedType.ByValTStr, SizeConst = 32)]
+            public string lfFaceName;
 
             public LOGFONT()
             {
             }
 
-            public LOGFONT( LOGFONT lf )
+            public LOGFONT(LOGFONT lf)
             {
-                Debug.Assert( lf != null, "lf is null" );
-                
-                this.lfHeight           = lf.lfHeight;
-                this.lfWidth            = lf.lfWidth;
-                this.lfEscapement       = lf.lfEscapement;
-                this.lfOrientation      = lf.lfOrientation;
-                this.lfWeight           = lf.lfWeight;
-                this.lfItalic           = lf.lfItalic;
-                this.lfUnderline        = lf.lfUnderline;
-                this.lfStrikeOut        = lf.lfStrikeOut;
-                this.lfCharSet          = lf.lfCharSet;
-                this.lfOutPrecision     = lf.lfOutPrecision;
-                this.lfClipPrecision    = lf.lfClipPrecision;
-                this.lfQuality          = lf.lfQuality;
-                this.lfPitchAndFamily   = lf.lfPitchAndFamily;
-                this.lfFaceName         = lf.lfFaceName;
+                Debug.Assert(lf != null, "lf is null");
+
+                this.lfHeight = lf.lfHeight;
+                this.lfWidth = lf.lfWidth;
+                this.lfEscapement = lf.lfEscapement;
+                this.lfOrientation = lf.lfOrientation;
+                this.lfWeight = lf.lfWeight;
+                this.lfItalic = lf.lfItalic;
+                this.lfUnderline = lf.lfUnderline;
+                this.lfStrikeOut = lf.lfStrikeOut;
+                this.lfCharSet = lf.lfCharSet;
+                this.lfOutPrecision = lf.lfOutPrecision;
+                this.lfClipPrecision = lf.lfClipPrecision;
+                this.lfQuality = lf.lfQuality;
+                this.lfPitchAndFamily = lf.lfPitchAndFamily;
+                this.lfFaceName = lf.lfFaceName;
             }
 
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
@@ -363,56 +364,56 @@ namespace System.Experimental.Gdi
 #endif
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Unicode)]
-        public struct TEXTMETRIC 
-        { 
-            public int  tmHeight; 
-            public int  tmAscent; 
-            public int  tmDescent; 
-            public int  tmInternalLeading; 
-            public int  tmExternalLeading; 
-            public int  tmAveCharWidth; 
-            public int  tmMaxCharWidth; 
-            public int  tmWeight; 
-            public int  tmOverhang; 
-            public int  tmDigitizedAspectX; 
-            public int  tmDigitizedAspectY; 
-            public char tmFirstChar; 
-            public char tmLastChar; 
-            public char tmDefaultChar; 
-            public char tmBreakChar; 
-            public byte tmItalic; 
-            public byte tmUnderlined; 
-            public byte tmStruckOut; 
-            public byte tmPitchAndFamily; 
-            public byte tmCharSet; 
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public struct TEXTMETRIC
+        {
+            public int tmHeight;
+            public int tmAscent;
+            public int tmDescent;
+            public int tmInternalLeading;
+            public int tmExternalLeading;
+            public int tmAveCharWidth;
+            public int tmMaxCharWidth;
+            public int tmWeight;
+            public int tmOverhang;
+            public int tmDigitizedAspectX;
+            public int tmDigitizedAspectY;
+            public char tmFirstChar;
+            public char tmLastChar;
+            public char tmDefaultChar;
+            public char tmBreakChar;
+            public byte tmItalic;
+            public byte tmUnderlined;
+            public byte tmStruckOut;
+            public byte tmPitchAndFamily;
+            public byte tmCharSet;
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
-        public struct TEXTMETRICA 
-        { 
-            public int  tmHeight; 
-            public int  tmAscent; 
-            public int  tmDescent; 
-            public int  tmInternalLeading; 
-            public int  tmExternalLeading; 
-            public int  tmAveCharWidth; 
-            public int  tmMaxCharWidth; 
-            public int  tmWeight; 
-            public int  tmOverhang; 
-            public int  tmDigitizedAspectX; 
-            public int  tmDigitizedAspectY; 
-            public byte tmFirstChar; 
-            public byte tmLastChar; 
-            public byte tmDefaultChar; 
-            public byte tmBreakChar; 
-            public byte tmItalic; 
-            public byte tmUnderlined; 
-            public byte tmStruckOut; 
-            public byte tmPitchAndFamily; 
-            public byte tmCharSet; 
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        public struct TEXTMETRICA
+        {
+            public int tmHeight;
+            public int tmAscent;
+            public int tmDescent;
+            public int tmInternalLeading;
+            public int tmExternalLeading;
+            public int tmAveCharWidth;
+            public int tmMaxCharWidth;
+            public int tmWeight;
+            public int tmOverhang;
+            public int tmDigitizedAspectX;
+            public int tmDigitizedAspectY;
+            public byte tmFirstChar;
+            public byte tmLastChar;
+            public byte tmDefaultChar;
+            public byte tmBreakChar;
+            public byte tmItalic;
+            public byte tmUnderlined;
+            public byte tmStruckOut;
+            public byte tmPitchAndFamily;
+            public byte tmCharSet;
         }
-       
+
         [StructLayout(LayoutKind.Sequential)]
         public class SIZE
         {

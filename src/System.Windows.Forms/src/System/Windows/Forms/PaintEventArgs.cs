@@ -36,7 +36,7 @@ namespace System.Windows.Forms
 
 #if DEBUG
         private static readonly TraceSwitch s_paintEventFinalizationSwitch = new TraceSwitch("PaintEventFinalization", "Tracks the creation and finalization of PaintEvent objects");
-        
+
         internal static string GetAllocationStack()
         {
             if (s_paintEventFinalizationSwitch.TraceVerbose)
@@ -101,7 +101,7 @@ namespace System.Windows.Forms
                     _graphics.PageUnit = GraphicsUnit.Pixel;
                     _savedGraphicsState = _graphics.Save(); // See ResetGraphics() below
                 }
-    
+
                 return _graphics;
             }
         }
@@ -118,8 +118,8 @@ namespace System.Windows.Forms
 
         protected virtual void Dispose(bool disposing)
         {
-           if (disposing)
-           {
+            if (disposing)
+            {
                 // Only dispose the graphics object if we created it via the dc.
                 if (_graphics != null && _dc != IntPtr.Zero)
                 {

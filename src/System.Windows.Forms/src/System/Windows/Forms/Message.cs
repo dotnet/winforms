@@ -52,7 +52,7 @@ namespace System.Windows.Forms
             m.Result = IntPtr.Zero;
 
 #if DEBUG
-            if(s_allWinMessages.TraceVerbose)
+            if (s_allWinMessages.TraceVerbose)
             {
                 Debug.WriteLine(m.ToString());
             }

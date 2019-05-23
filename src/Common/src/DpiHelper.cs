@@ -346,7 +346,7 @@ namespace System.Windows.Forms
         /// Set, when the first (Parking)Window has been created. From that moment on, 
         /// we will not be able nor allow to change the Process' DpiMode.
         /// </summary>
-        internal static bool FirstParkingWindowCreated {get; set;}
+        internal static bool FirstParkingWindowCreated { get; set; }
 
         /// <summary>
         /// Gets the DPI awareness.

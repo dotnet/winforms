@@ -206,7 +206,8 @@ namespace System.Windows.Forms
         public virtual string Name
         {
             // Does nothing by default
-            get {
+            get
+            {
                 if (systemIAccessible != null)
                 {
                     try
@@ -385,7 +386,7 @@ namespace System.Windows.Forms
             if (GetChildCount() >= 0)
             {
                 int count = GetChildCount();
-                for(int index=0; index < count; ++index)
+                for (int index = 0; index < count; ++index)
                 {
                     AccessibleObject child = GetChild(index);
                     Debug.Assert(child != null, "GetChild(" + index.ToString(CultureInfo.InvariantCulture) + ") returned null!");
@@ -446,7 +447,7 @@ namespace System.Windows.Forms
             if (GetChildCount() >= 0)
             {
                 int count = GetChildCount();
-                for(int index=0; index < count; ++index)
+                for (int index = 0; index < count; ++index)
                 {
                     AccessibleObject child = GetChild(index);
                     Debug.Assert(child != null, "GetChild(" + index.ToString(CultureInfo.InvariantCulture) + ") returned null!");
@@ -487,7 +488,7 @@ namespace System.Windows.Forms
             if (GetChildCount() >= 0)
             {
                 int count = GetChildCount();
-                for(int index=0; index < count; ++index)
+                for (int index = 0; index < count; ++index)
                 {
                     AccessibleObject child = GetChild(index);
                     Debug.Assert(child != null, "GetChild(" + index.ToString(CultureInfo.InvariantCulture) + ") returned null!");
@@ -835,7 +836,7 @@ namespace System.Windows.Forms
 
         UnsafeNativeMethods.ProviderOptions UnsafeNativeMethods.IRawElementProviderSimple.ProviderOptions
         {
-            get => (UnsafeNativeMethods.ProviderOptions) ProviderOptions;
+            get => (UnsafeNativeMethods.ProviderOptions)ProviderOptions;
         }
 
         UnsafeNativeMethods.IRawElementProviderSimple UnsafeNativeMethods.IRawElementProviderSimple.HostRawElementProvider
@@ -1953,7 +1954,7 @@ namespace System.Windows.Forms
             // Some default behavior for objects with AccessibleObject children
             if (GetChildCount() >= 0)
             {
-                switch(navdir)
+                switch (navdir)
                 {
                     case AccessibleNavigation.FirstChild:
                         return GetChild(0);
@@ -2122,7 +2123,7 @@ namespace System.Windows.Forms
 
             // Perform any supported navigation operation (fall back on system for unsupported navigation ops)
             AccessibleObject newObject;
-            if (!GetSysChild((AccessibleNavigation) navDir, out newObject))
+            if (!GetSysChild((AccessibleNavigation)navDir, out newObject))
             {
                 return false;
             }
@@ -2602,7 +2603,7 @@ namespace System.Windows.Forms
                 for (i = 0; i < n && currentChild < childCount; ++i)
                 {
                     ++currentChild;
-                    Marshal.GetNativeVariantForObject(((object) currentChild), GetAddressOfVariantAtIndex(rgvar, i));
+                    Marshal.GetNativeVariantForObject(((object)currentChild), GetAddressOfVariantAtIndex(rgvar, i));
                     Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.IEV.Next: adding own child " + currentChild + " of " + childCount);
                 }
 
@@ -2641,7 +2642,7 @@ namespace System.Windows.Forms
             private static IntPtr GetAddressOfVariantAtIndex(IntPtr variantArrayPtr, int index)
             {
                 int variantSize = 8 + (IntPtr.Size * 2);
-                return (IntPtr) ((ulong) variantArrayPtr + ((ulong) index) * ((ulong) variantSize));
+                return (IntPtr)((ulong)variantArrayPtr + ((ulong)index) * ((ulong)variantSize));
             }
 
         }
@@ -2673,7 +2674,8 @@ namespace System.Windows.Forms
                                     UnsafeNativeMethods.ILegacyIAccessibleProvider,
                                     UnsafeNativeMethods.ISelectionProvider,
                                     UnsafeNativeMethods.ISelectionItemProvider,
-                                    UnsafeNativeMethods.IRawElementProviderHwndOverride {
+                                    UnsafeNativeMethods.IRawElementProviderHwndOverride
+    {
 
         private IAccessible publicIAccessible;                       // AccessibleObject as IAccessible
         private UnsafeNativeMethods.IEnumVariant publicIEnumVariant; // AccessibleObject as IEnumVariant
@@ -2707,19 +2709,19 @@ namespace System.Windows.Forms
         internal InternalAccessibleObject(AccessibleObject accessibleImplemention)
         {
             // Get all the casts done here to catch any issues early
-            publicIAccessible = (IAccessible) accessibleImplemention;
-            publicIEnumVariant = (UnsafeNativeMethods.IEnumVariant) accessibleImplemention;
-            publicIOleWindow = (UnsafeNativeMethods.IOleWindow) accessibleImplemention;
-            publicIReflect = (IReflect) accessibleImplemention;
-            publicIServiceProvider = (UnsafeNativeMethods.IServiceProvider) accessibleImplemention;
-            publicIAccessibleEx = (UnsafeNativeMethods.IAccessibleEx) accessibleImplemention;
-            publicIRawElementProviderSimple = (UnsafeNativeMethods.IRawElementProviderSimple) accessibleImplemention;
+            publicIAccessible = (IAccessible)accessibleImplemention;
+            publicIEnumVariant = (UnsafeNativeMethods.IEnumVariant)accessibleImplemention;
+            publicIOleWindow = (UnsafeNativeMethods.IOleWindow)accessibleImplemention;
+            publicIReflect = (IReflect)accessibleImplemention;
+            publicIServiceProvider = (UnsafeNativeMethods.IServiceProvider)accessibleImplemention;
+            publicIAccessibleEx = (UnsafeNativeMethods.IAccessibleEx)accessibleImplemention;
+            publicIRawElementProviderSimple = (UnsafeNativeMethods.IRawElementProviderSimple)accessibleImplemention;
             publicIRawElementProviderFragment = (UnsafeNativeMethods.IRawElementProviderFragment)accessibleImplemention;
             publicIRawElementProviderFragmentRoot = (UnsafeNativeMethods.IRawElementProviderFragmentRoot)accessibleImplemention;
             publicIInvokeProvider = (UnsafeNativeMethods.IInvokeProvider)accessibleImplemention;
-            publicIValueProvider = (UnsafeNativeMethods.IValueProvider) accessibleImplemention;
+            publicIValueProvider = (UnsafeNativeMethods.IValueProvider)accessibleImplemention;
             publicIRangeValueProvider = (UnsafeNativeMethods.IRangeValueProvider)accessibleImplemention;
-            publicIExpandCollapseProvider = (UnsafeNativeMethods.IExpandCollapseProvider) accessibleImplemention;
+            publicIExpandCollapseProvider = (UnsafeNativeMethods.IExpandCollapseProvider)accessibleImplemention;
             publicIToggleProvider = (UnsafeNativeMethods.IToggleProvider)accessibleImplemention;
             publicITableProvider = (UnsafeNativeMethods.ITableProvider)accessibleImplemention;
             publicITableItemProvider = (UnsafeNativeMethods.ITableItemProvider)accessibleImplemention;
@@ -2840,8 +2842,8 @@ namespace System.Windows.Forms
 
         object UnsafeNativeMethods.IAccessibleInternal.get_accRole(object childID)
         {
-		    return publicIAccessible.get_accRole(childID);
-	    }
+            return publicIAccessible.get_accRole(childID);
+        }
 
         object UnsafeNativeMethods.IAccessibleInternal.get_accSelection()
         {

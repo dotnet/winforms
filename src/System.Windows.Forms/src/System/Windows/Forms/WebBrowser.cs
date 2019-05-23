@@ -29,13 +29,14 @@ namespace System.Windows.Forms
     Docking(DockingBehavior.AutoDock),
     SRDescription(nameof(SR.DescriptionWebBrowser)),
     Designer("System.Windows.Forms.Design.WebBrowserDesigner, " + AssemblyRef.SystemDesign)]
-    public class WebBrowser : WebBrowserBase {
+    public class WebBrowser : WebBrowserBase
+    {
         private static bool createdInIE;
 
         // Reference to the native ActiveX control's IWebBrowser2
         // Do not reference this directly. Use the AxIWebBrowser2
         // property instead.
-        private UnsafeNativeMethods.IWebBrowser2 axIWebBrowser2;  
+        private UnsafeNativeMethods.IWebBrowser2 axIWebBrowser2;
 
         private AxHost.ConnectionPointCookie cookie;   // To hook up events from the native WebBrowser
         private Stream documentStreamToSetOnLoad;
@@ -45,13 +46,13 @@ namespace System.Windows.Forms
         internal string statusText = string.Empty;
 
 
-        private const int   WEBBROWSERSTATE_webBrowserShortcutsEnabled      = 0x00000001;
-        private const int   WEBBROWSERSTATE_documentStreamJustSet           = 0x00000002;
-        private const int   WEBBROWSERSTATE_isWebBrowserContextMenuEnabled  = 0x00000004;
-        private const int   WEBBROWSERSTATE_canGoBack                       = 0x00000008;
-        private const int   WEBBROWSERSTATE_canGoForward                    = 0x00000010;
-        private const int   WEBBROWSERSTATE_scrollbarsEnabled               = 0x00000020;
-        private const int   WEBBROWSERSTATE_allowNavigation                 = 0x00000040;
+        private const int WEBBROWSERSTATE_webBrowserShortcutsEnabled = 0x00000001;
+        private const int WEBBROWSERSTATE_documentStreamJustSet = 0x00000002;
+        private const int WEBBROWSERSTATE_isWebBrowserContextMenuEnabled = 0x00000004;
+        private const int WEBBROWSERSTATE_canGoBack = 0x00000008;
+        private const int WEBBROWSERSTATE_canGoForward = 0x00000010;
+        private const int WEBBROWSERSTATE_scrollbarsEnabled = 0x00000020;
+        private const int WEBBROWSERSTATE_allowNavigation = 0x00000040;
 
         // PERF: take all the bools and put them into a state variable
         private System.Collections.Specialized.BitVector32 webBrowserState;          // see TREEVIEWSTATE_ consts above
@@ -65,9 +66,10 @@ namespace System.Windows.Forms
         /// Creates an instance of the <see cref='System.Windows.Forms.WebBrowser'/> control.
         ///     </para>
         /// </summary>
-        public WebBrowser() : base("8856f961-340a-11d0-a96b-00c04fd705a2") {
-                CheckIfCreatedInIE();
-    
+        public WebBrowser() : base("8856f961-340a-11d0-a96b-00c04fd705a2")
+        {
+            CheckIfCreatedInIE();
+
             webBrowserState = new System.Collections.Specialized.BitVector32(WEBBROWSERSTATE_isWebBrowserContextMenuEnabled |
                     WEBBROWSERSTATE_webBrowserShortcutsEnabled | WEBBROWSERSTATE_scrollbarsEnabled);
             AllowNavigation = true;
@@ -115,20 +117,24 @@ namespace System.Windows.Forms
         /// </summary>
         [SRDescription(nameof(SR.WebBrowserAllowWebBrowserDropDescr)),
         SRCategory(nameof(SR.CatBehavior)), DefaultValue(true)]
-        public bool AllowWebBrowserDrop {
-            get {
+        public bool AllowWebBrowserDrop
+        {
+            get
+            {
                 return this.AxIWebBrowser2.RegisterAsDropTarget;
             }
-            set {
+            set
+            {
                 //Note: you lose this value when you load a new document: the value needs to be refreshed in
                 //OnDocumentCompleted.
-                if (value != AllowWebBrowserDrop) {
+                if (value != AllowWebBrowserDrop)
+                {
                     this.AxIWebBrowser2.RegisterAsDropTarget = value;
                     this.Refresh();
                 }
             }
         }
-        
+
         /// <summary>
         ///     <para>
         /// Specifies whether the browser control shows script errors in dialogs or not.
@@ -137,12 +143,16 @@ namespace System.Windows.Forms
         /// </summary>
         [SRDescription(nameof(SR.WebBrowserScriptErrorsSuppressedDescr)),
         SRCategory(nameof(SR.CatBehavior)), DefaultValue(false)]
-        public bool ScriptErrorsSuppressed {
-            get {
+        public bool ScriptErrorsSuppressed
+        {
+            get
+            {
                 return this.AxIWebBrowser2.Silent;
             }
-            set {
-                if (value != ScriptErrorsSuppressed) {
+            set
+            {
+                if (value != ScriptErrorsSuppressed)
+                {
                     this.AxIWebBrowser2.Silent = value;
                 }
             }
@@ -156,11 +166,14 @@ namespace System.Windows.Forms
         /// </summary>
         [SRDescription(nameof(SR.WebBrowserWebBrowserShortcutsEnabledDescr)),
         SRCategory(nameof(SR.CatBehavior)), DefaultValue(true)]
-        public bool WebBrowserShortcutsEnabled {
-            get {
+        public bool WebBrowserShortcutsEnabled
+        {
+            get
+            {
                 return webBrowserState[WEBBROWSERSTATE_webBrowserShortcutsEnabled];
             }
-            set {
+            set
+            {
                 webBrowserState[WEBBROWSERSTATE_webBrowserShortcutsEnabled] = value;
             }
         }
@@ -173,8 +186,10 @@ namespace System.Windows.Forms
         ///     </para>
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool CanGoBack {
-            get {
+        public bool CanGoBack
+        {
+            get
+            {
                 return CanGoBackInternal;
             }
         }
@@ -183,18 +198,22 @@ namespace System.Windows.Forms
         /// Returns the current WEBBROWSERSTATE_canGoBack value so that this value can be accessed
         /// from child classes.
         /// </summary>
-        internal bool CanGoBackInternal {
-            get {
+        internal bool CanGoBackInternal
+        {
+            get
+            {
                 return webBrowserState[WEBBROWSERSTATE_canGoBack];
             }
-            set {
-                if (value != CanGoBackInternal) {
+            set
+            {
+                if (value != CanGoBackInternal)
+                {
                     webBrowserState[WEBBROWSERSTATE_canGoBack] = value;
                     OnCanGoBackChanged(EventArgs.Empty);
                 }
             }
         }
-        
+
         /// <summary>
         ///     <para>
         /// If true, there is navigation history such that calling GoForward() will succeed.
@@ -203,22 +222,28 @@ namespace System.Windows.Forms
         ///     </para>
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool CanGoForward {
-            get {
+        public bool CanGoForward
+        {
+            get
+            {
                 return CanGoForwardInternal;
             }
         }
-        
+
         /// <summary>
         /// Returns the current WEBBROWSERSTATE_canGoForward value so that this value can
         /// be accessed from child classes.
         /// </summary>
-        internal bool CanGoForwardInternal {
-            get {
+        internal bool CanGoForwardInternal
+        {
+            get
+            {
                 return webBrowserState[WEBBROWSERSTATE_canGoForward];
             }
-            set {
-                if (value != CanGoForwardInternal) {
+            set
+            {
+                if (value != CanGoForwardInternal)
+                {
                     webBrowserState[WEBBROWSERSTATE_canGoForward] = value;
                     OnCanGoForwardChanged(EventArgs.Empty);
                 }
@@ -232,25 +257,32 @@ namespace System.Windows.Forms
         ///     </para>
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public HtmlDocument Document {
-            get {
+        public HtmlDocument Document
+        {
+            get
+            {
                 object objDoc = this.AxIWebBrowser2.Document;
-                if (objDoc != null) {
+                if (objDoc != null)
+                {
                     // Document is not necessarily an IHTMLDocument, it might be an office document as well.
                     UnsafeNativeMethods.IHTMLDocument2 iHTMLDocument2 = null;
-                    try {
+                    try
+                    {
                         iHTMLDocument2 = objDoc as UnsafeNativeMethods.IHTMLDocument2;
-                    } 
-                    catch (InvalidCastException) { 
                     }
-                    if (iHTMLDocument2 != null) {
+                    catch (InvalidCastException)
+                    {
+                    }
+                    if (iHTMLDocument2 != null)
+                    {
                         UnsafeNativeMethods.IHTMLLocation iHTMLLocation = iHTMLDocument2.GetLocation();
-                        if (iHTMLLocation != null) {
+                        if (iHTMLLocation != null)
+                        {
                             string href = iHTMLLocation.GetHref();
                             if (!string.IsNullOrEmpty(href))
                             {
                                 Uri url = new Uri(href);
-                                return new HtmlDocument (ShimManager, iHTMLDocument2 as UnsafeNativeMethods.IHTMLDocument);
+                                return new HtmlDocument(ShimManager, iHTMLDocument2 as UnsafeNativeMethods.IHTMLDocument);
                             }
                         }
                     }
@@ -258,7 +290,7 @@ namespace System.Windows.Forms
                 return null;
             }
         }
-        
+
         /// <summary>
         ///     <para>
         /// Get/sets the stream for the html document.
@@ -266,19 +298,25 @@ namespace System.Windows.Forms
         ///     </para>
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public Stream DocumentStream {
-            get {
-                HtmlDocument htmlDocument = this.Document; 
-                if (htmlDocument == null) {
+        public Stream DocumentStream
+        {
+            get
+            {
+                HtmlDocument htmlDocument = this.Document;
+                if (htmlDocument == null)
+                {
                     return null;
                 }
-                else {
+                else
+                {
                     UnsafeNativeMethods.IPersistStreamInit psi = htmlDocument.DomDocument as UnsafeNativeMethods.IPersistStreamInit;
                     Debug.Assert(psi != null, "Object isn't an IPersistStreamInit!");
-                    if (psi == null) {
+                    if (psi == null)
+                    {
                         return null;
                     }
-                    else {
+                    else
+                    {
                         MemoryStream memoryStream = new MemoryStream();
                         UnsafeNativeMethods.IStream iStream = (UnsafeNativeMethods.IStream)new UnsafeNativeMethods.ComStreamFromDataStream(memoryStream);
                         psi.Save(iStream, false);
@@ -286,27 +324,32 @@ namespace System.Windows.Forms
                     }
                 }
             }
-            set {
+            set
+            {
                 this.documentStreamToSetOnLoad = value;
-                try {
+                try
+                {
                     webBrowserState[WEBBROWSERSTATE_documentStreamJustSet] = true;
                     // Lets navigate to "about:blank" so that we get a "clean" document
                     this.Url = new Uri("about:blank");
                 }
-                finally {
+                finally
+                {
                     webBrowserState[WEBBROWSERSTATE_documentStreamJustSet] = false;
                 }
             }
         }
-        
+
         /// <summary>
         ///     <para>
         /// Sets/sets the text of the contained html page.
         ///     </para>
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public string DocumentText {
-            get {
+        public string DocumentText
+        {
+            get
+            {
                 Stream stream = this.DocumentStream;
                 if (stream == null)
                 {
@@ -316,7 +359,8 @@ namespace System.Windows.Forms
                 stream.Position = 0;
                 return reader.ReadToEnd();
             }
-            set {
+            set
+            {
                 if (value == null)
                 {
                     value = string.Empty;
@@ -324,7 +368,7 @@ namespace System.Windows.Forms
                 //string length is a good initial guess for capacity -- 
                 //if it needs more room, it'll take it.
                 MemoryStream ms = new MemoryStream(value.Length);
-                StreamWriter sw = new StreamWriter(ms, Encoding.UTF8 );
+                StreamWriter sw = new StreamWriter(ms, Encoding.UTF8);
                 sw.Write(value);
                 sw.Flush();
                 ms.Position = 0;
@@ -339,28 +383,34 @@ namespace System.Windows.Forms
         ///     </para>
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public string DocumentTitle {
-            get {
+        public string DocumentTitle
+        {
+            get
+            {
                 string documentTitle;
 
                 HtmlDocument htmlDocument = this.Document;
-                if (htmlDocument == null) {
+                if (htmlDocument == null)
+                {
                     documentTitle = this.AxIWebBrowser2.LocationName;
                 }
-                else {
+                else
+                {
                     UnsafeNativeMethods.IHTMLDocument2 htmlDocument2 = htmlDocument.DomDocument as UnsafeNativeMethods.IHTMLDocument2;
                     Debug.Assert(htmlDocument2 != null, "The HtmlDocument object must implement IHTMLDocument2.");
-                    try {
+                    try
+                    {
                         documentTitle = htmlDocument2.GetTitle();
                     }
-                    catch (COMException) {
+                    catch (COMException)
+                    {
                         documentTitle = string.Empty;
                     }
                 }
                 return documentTitle;
             }
         }
-        
+
         /// <summary>
         ///     <para>
         /// A string containing the MIME type of the document hosted in the browser control.
@@ -368,24 +418,29 @@ namespace System.Windows.Forms
         ///     </para>
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public string DocumentType {
-            get {
+        public string DocumentType
+        {
+            get
+            {
                 string docType = string.Empty;
                 HtmlDocument htmlDocument = this.Document;
-                if (htmlDocument != null) {
+                if (htmlDocument != null)
+                {
                     UnsafeNativeMethods.IHTMLDocument2 htmlDocument2 = htmlDocument.DomDocument as UnsafeNativeMethods.IHTMLDocument2;
                     Debug.Assert(htmlDocument2 != null, "The HtmlDocument object must implement IHTMLDocument2.");
-                    try {
+                    try
+                    {
                         docType = htmlDocument2.GetMimeType();
                     }
-                    catch (COMException) {
+                    catch (COMException)
+                    {
                         docType = string.Empty;
                     }
                 }
                 return docType;
             }
         }
-        
+
         /// <summary>
         ///     <para>
         /// Initially set to WebBrowserEncryptionLevel.Insecure.
@@ -393,44 +448,53 @@ namespace System.Windows.Forms
         ///     </para>
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public WebBrowserEncryptionLevel EncryptionLevel {
-            get {
-                if (this.Document == null) {
+        public WebBrowserEncryptionLevel EncryptionLevel
+        {
+            get
+            {
+                if (this.Document == null)
+                {
                     encryptionLevel = WebBrowserEncryptionLevel.Unknown;
                 }
                 return encryptionLevel;
             }
         }
-        
+
         /// <summary>
         ///     <para>
         /// True if the browser is engaged in navigation or download.  Maps to IWebBrowser2:Busy.
         ///     </para>
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool IsBusy {
-            get {
-                if (this.Document == null) {
+        public bool IsBusy
+        {
+            get
+            {
+                if (this.Document == null)
+                {
                     return false;
                 }
-                else {
+                else
+                {
                     return this.AxIWebBrowser2.Busy;
                 }
             }
         }
-        
+
         /// <summary>
         ///     <para>
         /// Gets the offline state of the browser control. Maps to IWebBrowser2:Offline.
         ///     </para>
         /// </summary>
         [SRDescription(nameof(SR.WebBrowserIsOfflineDescr)), Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool IsOffline {
-            get {
+        public bool IsOffline
+        {
+            get
+            {
                 return this.AxIWebBrowser2.Offline;
             }
         }
-        
+
         /// <summary>
         ///     <para>
         /// Indicates whether to use the WebBrowser context menu.
@@ -442,11 +506,14 @@ namespace System.Windows.Forms
         /// </summary>
         [SRDescription(nameof(SR.WebBrowserIsWebBrowserContextMenuEnabledDescr)),
         SRCategory(nameof(SR.CatBehavior)), DefaultValue(true)]
-        public bool IsWebBrowserContextMenuEnabled {
-            get {
+        public bool IsWebBrowserContextMenuEnabled
+        {
+            get
+            {
                 return webBrowserState[WEBBROWSERSTATE_isWebBrowserContextMenuEnabled];
             }
-            set {
+            set
+            {
                 webBrowserState[WEBBROWSERSTATE_isWebBrowserContextMenuEnabled] = value;
             }
         }
@@ -460,13 +527,13 @@ namespace System.Windows.Forms
         ///     </para>
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public object ObjectForScripting 
+        public object ObjectForScripting
         {
-            get 
+            get
             {
                 return objectForScripting;
             }
-            set 
+            set
             {
                 if (value != null)
                 {
@@ -487,9 +554,10 @@ namespace System.Windows.Forms
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
-        public new Padding Padding {
+        public new Padding Padding
+        {
             get { return base.Padding; }
-            set { base.Padding = value;}
+            set { base.Padding = value; }
         }
 
         [
@@ -511,12 +579,16 @@ namespace System.Windows.Forms
         ///     </para>
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public WebBrowserReadyState ReadyState {
-            get {
-                if (this.Document == null) {
+        public WebBrowserReadyState ReadyState
+        {
+            get
+            {
+                if (this.Document == null)
+                {
                     return WebBrowserReadyState.Uninitialized;
                 }
-                else {
+                else
+                {
                     return (WebBrowserReadyState)this.AxIWebBrowser2.ReadyState;
                 }
             }
@@ -531,9 +603,12 @@ namespace System.Windows.Forms
         ///     </para>
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public virtual string StatusText {
-            get {
-                if (this.Document == null) {
+        public virtual string StatusText
+        {
+            get
+            {
+                if (this.Document == null)
+                {
                     statusText = string.Empty;
                 }
                 return statusText;
@@ -555,8 +630,10 @@ namespace System.Windows.Forms
             TypeConverter(typeof(System.Windows.Forms.WebBrowserUriTypeConverter)),
             DefaultValue(null)
         ]
-        public Uri Url {
-            get {
+        public Uri Url
+        {
+            get
+            {
                 string urlString = this.AxIWebBrowser2.LocationURL;
 
                 if (string.IsNullOrEmpty(urlString))
@@ -572,7 +649,8 @@ namespace System.Windows.Forms
                     return null;
                 }
             }
-            set {
+            set
+            {
                 if (value != null && value.ToString() == "")
                 {
                     value = null;
@@ -588,14 +666,16 @@ namespace System.Windows.Forms
         ///     </para>
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public Version Version {
-            get {
+        public Version Version
+        {
+            get
+            {
                 string mshtmlPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "mshtml.dll");
                 FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(mshtmlPath);
                 return new Version(fvi.FileMajorPart, fvi.FileMinorPart, fvi.FileBuildPart, fvi.FilePrivatePart);
             }
         }
-        
+
 
 
         //
@@ -610,7 +690,8 @@ namespace System.Windows.Forms
         /// false if there is no page in the navigation history to go back to.
         ///     </para>
         /// </summary>
-        public bool GoBack() {
+        public bool GoBack()
+        {
             bool retVal = true;
             try
             {
@@ -626,7 +707,7 @@ namespace System.Windows.Forms
             }
             return retVal;
         }
-        
+
         /// <summary>
         ///     <para>
         /// Navigates the browser to the next page in the navigation history list.
@@ -635,7 +716,8 @@ namespace System.Windows.Forms
         /// false if there is no page in the navigation history to go forward to.
         ///     </para>
         /// </summary>
-        public bool GoForward() {
+        public bool GoForward()
+        {
             bool retVal = true;
             try
             {
@@ -651,22 +733,24 @@ namespace System.Windows.Forms
             }
             return retVal;
         }
-        
+
         /// <summary>
         ///     <para>
         /// Navigates the browser to user's homepage.  Maps to IWebBrowser2:GoHome.
         ///     </para>
         /// </summary>
-        public void GoHome() {
+        public void GoHome()
+        {
             this.AxIWebBrowser2.GoHome();
         }
-        
+
         /// <summary>
         ///     <para>
         /// Navigates the browser to user's default search page.  Maps to IWebBrowser2:GoSearch.
         ///     </para>
         /// </summary>
-        public void GoSearch() {
+        public void GoSearch()
+        {
             this.AxIWebBrowser2.GoSearch();
         }
 
@@ -729,7 +813,8 @@ namespace System.Windows.Forms
         /// Opens a new window if newWindow is true, navigating it to the specified URL. Maps to IWebBrowser2:Navigate.
         ///     </para>
         /// </summary>
-        public void Navigate(Uri url, bool newWindow) {
+        public void Navigate(Uri url, bool newWindow)
+        {
             PerformNavigateHelper(ReadyNavigateToUrl(url), newWindow, null, null, null);
         }
 
@@ -781,7 +866,8 @@ namespace System.Windows.Forms
         /// Maps to IWebBrowser2:ExecWB w/ IDM_PRINT flag & LECMDEXECOPT_DONTPROMPTUSER.
         ///     </para>
         /// </summary>
-        public void Print() {
+        public void Print()
+        {
             object nullObjectArray = null;
             try
             {
@@ -795,13 +881,14 @@ namespace System.Windows.Forms
                 }
             }
         }
-        
+
         /// <summary>
         ///     <para>
         /// Refreshes the current page.  Maps to IWebBrowser2:Refresh.
         ///     </para>
         /// </summary>
-        public override void Refresh() {
+        public override void Refresh()
+        {
             try
             {
                 if (ShouldSerializeDocumentText())
@@ -823,7 +910,7 @@ namespace System.Windows.Forms
                 }
             }
         }
-        
+
         /// <summary>
         ///     <para>
         /// Refreshes the current page w/ the specified refresh option. The refresh option
@@ -831,9 +918,11 @@ namespace System.Windows.Forms
         /// Maps to IWebBrowser2:Refresh2
         ///     </para>
         /// </summary>
-        public void Refresh(WebBrowserRefreshOption opt) {
-            object level = (object) opt;
-            try {
+        public void Refresh(WebBrowserRefreshOption opt)
+        {
+            object level = (object)opt;
+            try
+            {
                 if (ShouldSerializeDocumentText())
                 {
                     string text = this.DocumentText;
@@ -845,13 +934,15 @@ namespace System.Windows.Forms
                     this.AxIWebBrowser2.Refresh2(ref level);
                 }
             }
-            catch (Exception ex) {
-                if (ClientUtils.IsSecurityOrCriticalException(ex)) {
+            catch (Exception ex)
+            {
+                if (ClientUtils.IsSecurityOrCriticalException(ex))
+                {
                     throw;
                 }
             }
         }
-        
+
         /// <summary>
         ///     <para>
         /// Enables/disables the webbrowser's scrollbars.
@@ -859,122 +950,150 @@ namespace System.Windows.Forms
         /// </summary>
         [SRDescription(nameof(SR.WebBrowserScrollBarsEnabledDescr)),
         SRCategory(nameof(SR.CatBehavior)), DefaultValue(true)]
-        public bool ScrollBarsEnabled {
-            get {
+        public bool ScrollBarsEnabled
+        {
+            get
+            {
                 return webBrowserState[WEBBROWSERSTATE_scrollbarsEnabled];
             }
-            set {
-                if (value != webBrowserState[WEBBROWSERSTATE_scrollbarsEnabled]) {
+            set
+            {
+                if (value != webBrowserState[WEBBROWSERSTATE_scrollbarsEnabled])
+                {
                     webBrowserState[WEBBROWSERSTATE_scrollbarsEnabled] = value;
                     this.Refresh();
                 }
             }
         }
-        
+
         /// <summary>
         ///     <para>
         /// Opens the IE page setup dialog for the current page.
         /// Maps to IWebBrowser2:ExecWebBrowser w/ IDM_PAGESETUP flag & LECMDEXECOPT_PROMPTUSER.
         ///     </para>
         /// </summary>
-        public void ShowPageSetupDialog() {
+        public void ShowPageSetupDialog()
+        {
             object nullObjectArray = null;
-            try {
+            try
+            {
                 this.AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PAGESETUP, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, ref nullObjectArray, IntPtr.Zero);
             }
-            catch (Exception ex) {
-                if (ClientUtils.IsSecurityOrCriticalException(ex)) {
+            catch (Exception ex)
+            {
+                if (ClientUtils.IsSecurityOrCriticalException(ex))
+                {
                     throw;
                 }
             }
         }
-        
+
         /// <summary>
         ///     <para>
         /// Opens the IE print dialog.
         /// Maps to IWebBrowser2:ExecWebBrowser w/ IDM_PRINT flag & OLECMDEXECOPT_PROMPTUSER.
         ///     </para>
         /// </summary>
-        public void ShowPrintDialog() {
+        public void ShowPrintDialog()
+        {
             object nullObjectArray = null;
-            
-            try {
+
+            try
+            {
                 this.AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PRINT, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, ref nullObjectArray, IntPtr.Zero);
             }
-            catch (Exception ex) {
-                if (ClientUtils.IsSecurityOrCriticalException(ex)) {
+            catch (Exception ex)
+            {
+                if (ClientUtils.IsSecurityOrCriticalException(ex))
+                {
                     throw;
                 }
             }
         }
-        
+
         /// <summary>
         ///     <para>
         /// Opens the IE print preview dialog.  Maps to IWebBrowser2:ExecWebBrowser w/ IDM_PRINTPREVIEW flag.
         ///     </para>
         /// </summary>
-        public void ShowPrintPreviewDialog() {
+        public void ShowPrintPreviewDialog()
+        {
             object nullObjectArray = null;
-            
-            try {
+
+            try
+            {
                 this.AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PRINTPREVIEW, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, ref nullObjectArray, IntPtr.Zero);
             }
-            catch (Exception ex) {
-                if (ClientUtils.IsSecurityOrCriticalException(ex)) {
+            catch (Exception ex)
+            {
+                if (ClientUtils.IsSecurityOrCriticalException(ex))
+                {
                     throw;
                 }
             }
         }
-        
+
         /// <summary>
         ///     <para>
         /// Opens the properties dialog for the current html page.
         /// Maps to IWebBrowser2:ExecWebBrowser w/ IDM_PROPERTIES flag & LECMDEXECOPT_PROMPTUSER.
         ///     </para>
         /// </summary>
-        public void ShowPropertiesDialog() {
+        public void ShowPropertiesDialog()
+        {
             object nullObjectArray = null;
-            
-            try {
+
+            try
+            {
                 this.AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_PROPERTIES, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, ref nullObjectArray, IntPtr.Zero);
             }
-            catch (Exception ex) {
-                if (ClientUtils.IsSecurityOrCriticalException(ex)) {
+            catch (Exception ex)
+            {
+                if (ClientUtils.IsSecurityOrCriticalException(ex))
+                {
                     throw;
                 }
             }
         }
-        
+
         /// <summary>
         ///     <para>
         /// Opens the IE File-Save dialog.
         /// Maps to IWebBrowser2:ExecWebBrowser w/ IDM_SAVEAS flag & LECMDEXECOPT_PROMPTUSER.
         ///     </para>
         /// </summary>
-        public void ShowSaveAsDialog() {
+        public void ShowSaveAsDialog()
+        {
             object nullObjectArray = null;
-            
-            try {
+
+            try
+            {
                 this.AxIWebBrowser2.ExecWB(NativeMethods.OLECMDID.OLECMDID_SAVEAS, NativeMethods.OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, ref nullObjectArray, IntPtr.Zero);
             }
-            catch (Exception ex) {
-                if (ClientUtils.IsSecurityOrCriticalException(ex)) {
+            catch (Exception ex)
+            {
+                if (ClientUtils.IsSecurityOrCriticalException(ex))
+                {
                     throw;
                 }
             }
         }
-        
+
         /// <summary>
         ///     <para>
         /// Stops the current navigation.  Maps to IWebBrowser2:Stop.
         ///     </para>
         /// </summary>
-        public void Stop() {
-            try {
+        public void Stop()
+        {
+            try
+            {
                 this.AxIWebBrowser2.Stop();
             }
-            catch (Exception ex) {
-                if (ClientUtils.IsSecurityOrCriticalException(ex)) {
+            catch (Exception ex)
+            {
+                if (ClientUtils.IsSecurityOrCriticalException(ex))
+                {
                     throw;
                 }
             }
@@ -1090,9 +1209,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///     Returns true if this control (or any of its child windows) has focus.
         /// </summary>
-        public override bool Focused {
-            get {
-                if (base.Focused) {
+        public override bool Focused
+        {
+            get
+            {
+                if (base.Focused)
+                {
                     return true;
                 }
                 IntPtr hwndFocus = UnsafeNativeMethods.GetFocus();
@@ -1107,8 +1229,10 @@ namespace System.Windows.Forms
         //
         //
         //
-        protected override void Dispose(bool disposing) {
-            if (disposing) {
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
                 if (htmlShimManager != null)
                 {
                     htmlShimManager.Dispose();
@@ -1124,8 +1248,10 @@ namespace System.Windows.Forms
         /// Overrides the default size property of Control to specify a bigger default size of 250 x 250.
         ///     </para>
         /// </summary>
-        protected override Size DefaultSize {
-            get {
+        protected override Size DefaultSize
+        {
+            get
+            {
                 return new Size(250, 250);
             }
         }
@@ -1135,7 +1261,8 @@ namespace System.Windows.Forms
         /// Retrieves IWebBrowser2 from the native object. Overriding classes should first call base.AttachInterfaces.
         ///     </para>
         /// </summary>
-        protected override void AttachInterfaces(object nativeActiveXObject) {
+        protected override void AttachInterfaces(object nativeActiveXObject)
+        {
             this.axIWebBrowser2 = (UnsafeNativeMethods.IWebBrowser2)nativeActiveXObject;
         }
 
@@ -1144,16 +1271,18 @@ namespace System.Windows.Forms
         /// Discards the IWebBrowser2 reference. Overriding classes should call base.DetachInterfaces.
         ///     </para>
         /// </summary>
-        protected override void DetachInterfaces() {
+        protected override void DetachInterfaces()
+        {
             this.axIWebBrowser2 = null;
         }
-        
+
         /// <summary>
         ///     <para>
         /// Returns a WebBrowserSite object.
         ///     </para>
         /// </summary>
-        protected override WebBrowserSiteBase CreateWebBrowserSiteBase() {
+        protected override WebBrowserSiteBase CreateWebBrowserSiteBase()
+        {
             return new WebBrowserSite(this);
         }
 
@@ -1162,35 +1291,42 @@ namespace System.Windows.Forms
         /// Attaches to the DWebBrowserEvents2 connection point.
         ///     </para>
         /// </summary>
-        protected override void CreateSink() {
+        protected override void CreateSink()
+        {
             object ax = this.activeXInstance;
-            if (ax != null) {
+            if (ax != null)
+            {
                 webBrowserEvent = new WebBrowserEvent(this);
                 webBrowserEvent.AllowNavigation = AllowNavigation;
                 this.cookie = new AxHost.ConnectionPointCookie(ax, webBrowserEvent,
                         typeof(UnsafeNativeMethods.DWebBrowserEvents2));
             }
         }
-        
+
         /// <summary>
         ///     <para>
         /// Releases the DWebBrowserEvents2 connection point.
         ///     </para>
         /// </summary>
-        protected override void DetachSink() {
+        protected override void DetachSink()
+        {
             //If we have a cookie get rid of it
-            if (this.cookie != null) {
+            if (this.cookie != null)
+            {
                 this.cookie.Disconnect();
                 this.cookie = null;
             }
         }
 
-        internal override void OnTopMostActiveXParentChanged(EventArgs e) {
-            if (TopMostParent.IsIEParent) {
+        internal override void OnTopMostActiveXParentChanged(EventArgs e)
+        {
+            if (TopMostParent.IsIEParent)
+            {
                 WebBrowser.createdInIE = true;
                 CheckIfCreatedInIE();
             }
-            else {
+            else
+            {
                 WebBrowser.createdInIE = false;
                 base.OnTopMostActiveXParentChanged(e);
             }
@@ -1369,46 +1505,56 @@ namespace System.Windows.Forms
         }
 
 
-#region ShimSupport
-       private HtmlShimManager htmlShimManager;
-       internal HtmlShimManager ShimManager {
-            get {
-                if (htmlShimManager == null) {
+        #region ShimSupport
+        private HtmlShimManager htmlShimManager;
+        internal HtmlShimManager ShimManager
+        {
+            get
+            {
+                if (htmlShimManager == null)
+                {
                     htmlShimManager = new HtmlShimManager();
                 }
                 return htmlShimManager;
             }
         }
-#endregion
+        #endregion
 
 
         //
         // Private methods:
         //
-        private void CheckIfCreatedInIE() {
-            if (WebBrowser.createdInIE) {
-                if (this.ParentInternal != null) {
+        private void CheckIfCreatedInIE()
+        {
+            if (WebBrowser.createdInIE)
+            {
+                if (this.ParentInternal != null)
+                {
                     this.ParentInternal.Controls.Remove(this);
                     this.Dispose();
                 }
-                else {
+                else
+                {
                     this.Dispose();
                     throw new NotSupportedException(SR.WebBrowserInIENotSupported);
                 }
             }
         }
 
-        private string ReadyNavigateToUrl(string urlString) {
-            if (string.IsNullOrEmpty(urlString)) {
+        private string ReadyNavigateToUrl(string urlString)
+        {
+            if (string.IsNullOrEmpty(urlString))
+            {
                 urlString = "about:blank";
-            } 
+            }
 
             //
             // Nullify any calls to set_DocumentStream which may still be pending
-            if (!webBrowserState[WEBBROWSERSTATE_documentStreamJustSet]) {
+            if (!webBrowserState[WEBBROWSERSTATE_documentStreamJustSet])
+            {
                 this.documentStreamToSetOnLoad = null;
             }
-            
+
             return urlString;
         }
 
@@ -1439,20 +1585,23 @@ namespace System.Windows.Forms
         private void PerformNavigateHelper(string urlString, bool newWindow, string targetFrameName, byte[] postData, string headers)
         {
             object objUrlString = (object)urlString;
-            object objFlags = (object) (newWindow ? 1 : 0);
+            object objFlags = (object)(newWindow ? 1 : 0);
             object objTargetFrameName = (object)targetFrameName;
             object objPostData = (object)postData;
             object objHeaders = (object)headers;
             PerformNavigate2(ref objUrlString, ref objFlags, ref objTargetFrameName, ref objPostData, ref objHeaders);
         }
 
-        private void PerformNavigate2(ref object URL, ref object flags, ref object targetFrameName, ref object postData, ref object headers) 
+        private void PerformNavigate2(ref object URL, ref object flags, ref object targetFrameName, ref object postData, ref object headers)
         {
-            try {
+            try
+            {
                 this.AxIWebBrowser2.Navigate2(ref URL, ref flags, ref targetFrameName, ref postData, ref headers);
             }
-            catch (COMException ce) {
-                if ((uint)unchecked(ce.ErrorCode) != (uint)unchecked(0x800704c7)) {
+            catch (COMException ce)
+            {
+                if ((uint)unchecked(ce.ErrorCode) != (uint)unchecked(0x800704c7))
+                {
                     // "the operation was canceled by the user" - navigation failed
                     // ignore this error, IE has already alerted the user. 
                     throw;
@@ -1460,7 +1609,8 @@ namespace System.Windows.Forms
             }
         }
 
-        private bool ShouldSerializeDocumentText() {
+        private bool ShouldSerializeDocumentText()
+        {
             return IsValidUrl;
         }
 
@@ -1471,8 +1621,9 @@ namespace System.Windows.Forms
                 return Url == null || Url.AbsoluteUri == "about:blank";
             }
         }
-        
-        private bool ShouldSerializeUrl() {
+
+        private bool ShouldSerializeUrl()
+        {
             return !ShouldSerializeDocumentText();
         }
 
@@ -1480,45 +1631,61 @@ namespace System.Windows.Forms
         ///     Returns TRUE if there is a context menu to show
         ///     Returns FALSE otherwise
         /// </summary>
-        private bool ShowContextMenu(int x, int y) {
+        private bool ShowContextMenu(int x, int y)
+        {
             ContextMenuStrip contextMenuStrip = ContextMenuStrip;
             ContextMenu contextMenu = contextMenuStrip != null ? null : ContextMenu;
 
-            if (contextMenuStrip != null || contextMenu != null) {
+            if (contextMenuStrip != null || contextMenu != null)
+            {
                 Point client;
                 bool keyboardActivated = false;
                 // X will be exactly -1 when the user invokes the context menu from the keyboard
                 //
-                if (x == -1) {
+                if (x == -1)
+                {
                     keyboardActivated = true;
                     client = new Point(Width / 2, Height / 2);
-                } else {
+                }
+                else
+                {
                     client = PointToClient(new Point(x, y));
                 }
 
-                if (ClientRectangle.Contains(client)) {
-                    if (contextMenuStrip != null) {
+                if (ClientRectangle.Contains(client))
+                {
+                    if (contextMenuStrip != null)
+                    {
                         contextMenuStrip.ShowInternal(this, client, keyboardActivated);
-                    } else if (contextMenu != null) {
+                    }
+                    else if (contextMenu != null)
+                    {
                         contextMenu.Show(this, client);
                     }
 
                     return true;
-                } else {
+                }
+                else
+                {
                     return false;
                 }
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
 
-        protected override void WndProc(ref Message m) {
-            switch (m.Msg) {
+        protected override void WndProc(ref Message m)
+        {
+            switch (m.Msg)
+            {
                 case Interop.WindowMessages.WM_CONTEXTMENU:
                     int x = NativeMethods.Util.SignedLOWORD(m.LParam);
                     int y = NativeMethods.Util.SignedHIWORD(m.LParam);
 
-                    if (!ShowContextMenu(x, y)) {
+                    if (!ShowContextMenu(x, y))
+                    {
                         DefWndProc(ref m);
                     }
                     break;
@@ -1527,21 +1694,27 @@ namespace System.Windows.Forms
                     break;
             }
         }
-        
-        private UnsafeNativeMethods.IWebBrowser2 AxIWebBrowser2 {
-            get {
-                if (this.axIWebBrowser2 == null) {
-                    if (!this.IsDisposed) {
+
+        private UnsafeNativeMethods.IWebBrowser2 AxIWebBrowser2
+        {
+            get
+            {
+                if (this.axIWebBrowser2 == null)
+                {
+                    if (!this.IsDisposed)
+                    {
                         // This should call AttachInterfaces
                         TransitionUpTo(WebBrowserHelper.AXState.InPlaceActive);
                     }
-                    else {
+                    else
+                    {
                         throw new System.ObjectDisposedException(GetType().Name);
                     }
                 }
                 // We still don't have this.axIWebBrowser2. Throw an exception.
-                if (this.axIWebBrowser2 == null) {
-                    throw new InvalidOperationException(SR.WebBrowserNoCastToIWebBrowser2); 
+                if (this.axIWebBrowser2 == null)
+                {
+                    throw new InvalidOperationException(SR.WebBrowserNoCastToIWebBrowser2);
                 }
                 return this.axIWebBrowser2;
             }
@@ -1566,21 +1739,27 @@ namespace System.Windows.Forms
             /// Creates an instance of the <see cref='System.Windows.Forms.WebBrowser.WebBrowserSite'/> class.
             ///     </para>
             /// </summary>
-            public WebBrowserSite(WebBrowser host) : base(host) {
+            public WebBrowserSite(WebBrowser host) : base(host)
+            {
             }
 
 
             //
             // IDocHostUIHandler Implementation
             //
-            int UnsafeNativeMethods.IDocHostUIHandler.ShowContextMenu(int dwID, NativeMethods.POINT pt, object pcmdtReserved, object pdispReserved) {
+            int UnsafeNativeMethods.IDocHostUIHandler.ShowContextMenu(int dwID, NativeMethods.POINT pt, object pcmdtReserved, object pdispReserved)
+            {
                 WebBrowser wb = (WebBrowser)this.Host;
 
-                if (wb.IsWebBrowserContextMenuEnabled) {
+                if (wb.IsWebBrowserContextMenuEnabled)
+                {
                     // let MSHTML display its UI
                     return NativeMethods.S_FALSE;
-                } else {
-                    if (pt.x == 0 && pt.y == 0) {
+                }
+                else
+                {
+                    if (pt.x == 0 && pt.y == 0)
+                    {
                         // IDocHostUIHandler::ShowContextMenu sends (0,0) when the context menu is invoked via the keyboard
                         // make it (-1, -1) for the WebBrowser::ShowContextMenu method
                         pt.x = -1;
@@ -1593,65 +1772,79 @@ namespace System.Windows.Forms
             }
 
 
-            int UnsafeNativeMethods.IDocHostUIHandler.GetHostInfo(NativeMethods.DOCHOSTUIINFO info) {
+            int UnsafeNativeMethods.IDocHostUIHandler.GetHostInfo(NativeMethods.DOCHOSTUIINFO info)
+            {
                 WebBrowser wb = (WebBrowser)this.Host;
 
                 info.dwDoubleClick = (int)NativeMethods.DOCHOSTUIDBLCLICK.DEFAULT;
                 info.dwFlags = (int)NativeMethods.DOCHOSTUIFLAG.NO3DOUTERBORDER |
                                 (int)NativeMethods.DOCHOSTUIFLAG.DISABLE_SCRIPT_INACTIVE;
 
-                if (wb.ScrollBarsEnabled) {
+                if (wb.ScrollBarsEnabled)
+                {
                     info.dwFlags |= (int)NativeMethods.DOCHOSTUIFLAG.FLAT_SCROLLBAR;
                 }
-                else {
+                else
+                {
                     info.dwFlags |= (int)NativeMethods.DOCHOSTUIFLAG.SCROLL_NO;
                 }
 
-                if (Application.RenderWithVisualStyles) {
+                if (Application.RenderWithVisualStyles)
+                {
                     info.dwFlags |= (int)NativeMethods.DOCHOSTUIFLAG.THEME;
                 }
-                else {
+                else
+                {
                     info.dwFlags |= (int)NativeMethods.DOCHOSTUIFLAG.NOTHEME;
                 }
-                
+
                 return NativeMethods.S_OK;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.EnableModeless(bool fEnable) {
+            int UnsafeNativeMethods.IDocHostUIHandler.EnableModeless(bool fEnable)
+            {
                 return NativeMethods.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.ShowUI(int dwID, UnsafeNativeMethods.IOleInPlaceActiveObject activeObject, 
-                    NativeMethods.IOleCommandTarget commandTarget, UnsafeNativeMethods.IOleInPlaceFrame frame, 
-                    UnsafeNativeMethods.IOleInPlaceUIWindow doc) {
+            int UnsafeNativeMethods.IDocHostUIHandler.ShowUI(int dwID, UnsafeNativeMethods.IOleInPlaceActiveObject activeObject,
+                    NativeMethods.IOleCommandTarget commandTarget, UnsafeNativeMethods.IOleInPlaceFrame frame,
+                    UnsafeNativeMethods.IOleInPlaceUIWindow doc)
+            {
                 return NativeMethods.S_FALSE;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.HideUI() {
+            int UnsafeNativeMethods.IDocHostUIHandler.HideUI()
+            {
                 return NativeMethods.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.UpdateUI() {
+            int UnsafeNativeMethods.IDocHostUIHandler.UpdateUI()
+            {
                 return NativeMethods.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.OnDocWindowActivate(bool fActivate) {
+            int UnsafeNativeMethods.IDocHostUIHandler.OnDocWindowActivate(bool fActivate)
+            {
                 return NativeMethods.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.OnFrameWindowActivate(bool fActivate) {
+            int UnsafeNativeMethods.IDocHostUIHandler.OnFrameWindowActivate(bool fActivate)
+            {
                 return NativeMethods.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.ResizeBorder(NativeMethods.COMRECT rect, UnsafeNativeMethods.IOleInPlaceUIWindow doc, bool fFrameWindow) {
+            int UnsafeNativeMethods.IDocHostUIHandler.ResizeBorder(NativeMethods.COMRECT rect, UnsafeNativeMethods.IOleInPlaceUIWindow doc, bool fFrameWindow)
+            {
                 return NativeMethods.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.GetOptionKeyPath(string[] pbstrKey, int dw) {
+            int UnsafeNativeMethods.IDocHostUIHandler.GetOptionKeyPath(string[] pbstrKey, int dw)
+            {
                 return NativeMethods.E_NOTIMPL;
             }
-            
-            int UnsafeNativeMethods.IDocHostUIHandler.GetDropTarget(UnsafeNativeMethods.IOleDropTarget pDropTarget, out UnsafeNativeMethods.IOleDropTarget ppDropTarget) {
+
+            int UnsafeNativeMethods.IDocHostUIHandler.GetDropTarget(UnsafeNativeMethods.IOleDropTarget pDropTarget, out UnsafeNativeMethods.IOleDropTarget ppDropTarget)
+            {
                 //
                 // Set to null no matter what we return, to prevent the marshaller
                 // from having issues if the pointer points to random stuff.
@@ -1659,26 +1852,29 @@ namespace System.Windows.Forms
                 return NativeMethods.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.GetExternal(out object ppDispatch) {
+            int UnsafeNativeMethods.IDocHostUIHandler.GetExternal(out object ppDispatch)
+            {
                 WebBrowser wb = (WebBrowser)this.Host;
                 ppDispatch = wb.ObjectForScripting;
                 return NativeMethods.S_OK;
             }
 
-            [SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible")]                     
-            int UnsafeNativeMethods.IDocHostUIHandler.TranslateAccelerator(ref NativeMethods.MSG msg, ref Guid group, int nCmdID) {
+            [SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible")]
+            int UnsafeNativeMethods.IDocHostUIHandler.TranslateAccelerator(ref NativeMethods.MSG msg, ref Guid group, int nCmdID)
+            {
                 //
                 // Returning S_FALSE will allow the native control to do default processing,
                 // i.e., execute the shortcut key. Returning S_OK will cancel the shortcut key.
 
                 WebBrowser wb = (WebBrowser)this.Host;
-                
+
                 if (!wb.WebBrowserShortcutsEnabled)
                 {
                     int keyCode = (int)msg.wParam | (int)Control.ModifierKeys;
 
                     if (msg.message != Interop.WindowMessages.WM_CHAR
-                            && Enum.IsDefined(typeof(Shortcut), (Shortcut)keyCode)) {
+                            && Enum.IsDefined(typeof(Shortcut), (Shortcut)keyCode))
+                    {
                         return NativeMethods.S_OK;
                     }
                     return NativeMethods.S_FALSE;
@@ -1686,7 +1882,8 @@ namespace System.Windows.Forms
                 return NativeMethods.S_FALSE;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.TranslateUrl(int dwTranslate, string strUrlIn, out string pstrUrlOut) {
+            int UnsafeNativeMethods.IDocHostUIHandler.TranslateUrl(int dwTranslate, string strUrlIn, out string pstrUrlOut)
+            {
                 //
                 // Set to null no matter what we return, to prevent the marshaller
                 // from having issues if the pointer points to random stuff.
@@ -1694,7 +1891,7 @@ namespace System.Windows.Forms
                 return NativeMethods.S_FALSE;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.FilterDataObject(IComDataObject pDO, out IComDataObject ppDORet) 
+            int UnsafeNativeMethods.IDocHostUIHandler.FilterDataObject(IComDataObject pDO, out IComDataObject ppDORet)
             {
                 //
                 // Set to null no matter what we return, to prevent the marshaller
@@ -1706,25 +1903,29 @@ namespace System.Windows.Forms
             //
             // Internal methods
             //
-            internal override void OnPropertyChanged(int dispid) {
-                if (dispid != NativeMethods.ActiveX.DISPID_READYSTATE) {
+            internal override void OnPropertyChanged(int dispid)
+            {
+                if (dispid != NativeMethods.ActiveX.DISPID_READYSTATE)
+                {
                     base.OnPropertyChanged(dispid);
                 }
             }
         }
-        
-        
+
+
         //
         // Private classes:
         //
         [ClassInterface(ClassInterfaceType.None)]
-        private class WebBrowserEvent : StandardOleMarshalObject, UnsafeNativeMethods.DWebBrowserEvents2{
-            
+        private class WebBrowserEvent : StandardOleMarshalObject, UnsafeNativeMethods.DWebBrowserEvents2
+        {
+
             private WebBrowser parent;
             private bool allowNavigation;
             private bool haveNavigated = false;
 
-            public WebBrowserEvent(WebBrowser parent) {
+            public WebBrowserEvent(WebBrowser parent)
+            {
                 this.parent = parent;
             }
 
@@ -1740,16 +1941,20 @@ namespace System.Windows.Forms
                 }
             }
 
-            public void CommandStateChange(long command, bool enable) {
-                if (command == NativeMethods.CSC_NAVIGATEBACK) {
+            public void CommandStateChange(long command, bool enable)
+            {
+                if (command == NativeMethods.CSC_NAVIGATEBACK)
+                {
                     this.parent.CanGoBackInternal = enable;
                 }
-                else if (command == NativeMethods.CSC_NAVIGATEFORWARD) {
+                else if (command == NativeMethods.CSC_NAVIGATEFORWARD)
+                {
                     this.parent.CanGoForwardInternal = enable;
                 }
             }
-            
-            public void BeforeNavigate2(object pDisp, ref object urlObject, ref object flags, ref object targetFrameName, ref object postData, ref object headers, ref bool cancel) {
+
+            public void BeforeNavigate2(object pDisp, ref object urlObject, ref object flags, ref object targetFrameName, ref object postData, ref object headers, ref bool cancel)
+            {
                 Debug.Assert(parent != null, "Parent should have been set");
                 //Note: we want to allow navigation if we haven't already navigated.
                 if (AllowNavigation || !haveNavigated)
@@ -1761,10 +1966,12 @@ namespace System.Windows.Forms
                     // If during running interop code, the variant.bstr value gets set
                     // to -1 on return back to native code, if the original value was null, we
                     // have to set targetFrameName and headers to "".
-                    if (targetFrameName == null) {
+                    if (targetFrameName == null)
+                    {
                         targetFrameName = string.Empty;
                     }
-                    if (headers == null) {
+                    if (headers == null)
+                    {
                         headers = string.Empty;
                     }
 
@@ -1774,18 +1981,21 @@ namespace System.Windows.Forms
                     this.parent.OnNavigating(e);
                     cancel = e.Cancel;
                 }
-                else 
+                else
                 {
                     cancel = true;
                 }
             }
 
-            public void DocumentComplete(object pDisp, ref object urlObject) {
+            public void DocumentComplete(object pDisp, ref object urlObject)
+            {
                 Debug.Assert(urlObject == null || urlObject is string, "invalid url");
                 haveNavigated = true;
-                if (this.parent.documentStreamToSetOnLoad != null && (string)urlObject == "about:blank") {
+                if (this.parent.documentStreamToSetOnLoad != null && (string)urlObject == "about:blank")
+                {
                     HtmlDocument htmlDocument = this.parent.Document;
-                    if (htmlDocument != null) {
+                    if (htmlDocument != null)
+                    {
                         UnsafeNativeMethods.IPersistStreamInit psi = htmlDocument.DomDocument as UnsafeNativeMethods.IPersistStreamInit;
                         Debug.Assert(psi != null, "The Document does not implement IPersistStreamInit");
                         UnsafeNativeMethods.IStream iStream = (UnsafeNativeMethods.IStream)new UnsafeNativeMethods.ComStreamFromDataStream(
@@ -1795,51 +2005,59 @@ namespace System.Windows.Forms
                     }
                     this.parent.documentStreamToSetOnLoad = null;
                 }
-                else {
+                else
+                {
                     string urlString = urlObject == null ? "" : urlObject.ToString();
                     WebBrowserDocumentCompletedEventArgs e = new WebBrowserDocumentCompletedEventArgs(
                             new Uri(urlString));
                     this.parent.OnDocumentCompleted(e);
                 }
             }
-            
-            public void TitleChange(string text) {
+
+            public void TitleChange(string text)
+            {
                 this.parent.OnDocumentTitleChanged(EventArgs.Empty);
             }
-            
-            public void SetSecureLockIcon(int secureLockIcon) {
+
+            public void SetSecureLockIcon(int secureLockIcon)
+            {
                 this.parent.encryptionLevel = (WebBrowserEncryptionLevel)secureLockIcon;
                 this.parent.OnEncryptionLevelChanged(EventArgs.Empty);
             }
-            
-            public void NavigateComplete2(object pDisp, ref object urlObject) {
+
+            public void NavigateComplete2(object pDisp, ref object urlObject)
+            {
                 Debug.Assert(urlObject == null || urlObject is string, "invalid url type");
                 string urlString = urlObject == null ? "" : (string)urlObject;
                 WebBrowserNavigatedEventArgs e = new WebBrowserNavigatedEventArgs(
                         new Uri(urlString));
                 this.parent.OnNavigated(e);
             }
-            
-            public void NewWindow2(ref object ppDisp, ref bool cancel) {
+
+            public void NewWindow2(ref object ppDisp, ref bool cancel)
+            {
                 CancelEventArgs e = new CancelEventArgs();
                 this.parent.OnNewWindow(e);
                 cancel = e.Cancel;
             }
-            
-            public void ProgressChange(int progress, int progressMax) {
+
+            public void ProgressChange(int progress, int progressMax)
+            {
                 WebBrowserProgressChangedEventArgs e = new WebBrowserProgressChangedEventArgs(progress, progressMax);
                 this.parent.OnProgressChanged(e);
             }
-            
-            public void StatusTextChange(string text) {
+
+            public void StatusTextChange(string text)
+            {
                 this.parent.statusText = (text == null) ? "" : text;
                 this.parent.OnStatusTextChanged(EventArgs.Empty);
             }
-            
-            public void DownloadBegin() {
+
+            public void DownloadBegin()
+            {
                 this.parent.OnFileDownload(EventArgs.Empty);
             }
-            
+
             public void FileDownload(ref bool cancel) { }
             public void PrivacyImpactedStateChange(bool bImpacted) { }
             public void UpdatePageStatus(object pDisp, ref object nPage, ref object fDone) { }

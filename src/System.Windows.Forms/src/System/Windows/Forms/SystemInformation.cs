@@ -1421,7 +1421,7 @@ namespace System.Windows.Forms
                     int error = Marshal.GetLastWin32Error();
                     return error == NativeMethods.ERROR_ACCESS_DENIED;
                 }
-                
+
                 SafeNativeMethods.CloseDesktop(hDsk);
             }
 

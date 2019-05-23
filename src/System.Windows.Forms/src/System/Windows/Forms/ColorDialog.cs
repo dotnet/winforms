@@ -3,7 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System.Runtime.InteropServices;
     using System.Runtime.Versioning;
     using System.Diagnostics;
@@ -26,7 +27,8 @@ namespace System.Windows.Forms {
     [DefaultProperty(nameof(Color))]
     [SRDescription(nameof(SR.DescriptionColorDialog))]
     // The only event this dialog has is HelpRequest, which isn't very useful
-    public class ColorDialog : CommonDialog {
+    public class ColorDialog : CommonDialog
+    {
 
         private int options;
         private int[] customColors;
@@ -45,7 +47,8 @@ namespace System.Windows.Forms {
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not call Reset
                                                                                                     // it would be a breaking change.
         ]
-        public ColorDialog() {
+        public ColorDialog()
+        {
             customColors = new int[16];
             Reset();
         }
@@ -57,16 +60,19 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         [
-            SRCategory(nameof(SR.CatBehavior)), 
+            SRCategory(nameof(SR.CatBehavior)),
             DefaultValue(true),
             SRDescription(nameof(SR.CDallowFullOpenDescr))
         ]
-        public virtual bool AllowFullOpen {
-            get {
+        public virtual bool AllowFullOpen
+        {
+            get
+            {
                 return !GetOption(NativeMethods.CC_PREVENTFULLOPEN);
             }
 
-            set {
+            set
+            {
                 SetOption(NativeMethods.CC_PREVENTFULLOPEN, !value);
             }
         }
@@ -78,16 +84,19 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         [
-            SRCategory(nameof(SR.CatBehavior)), 
+            SRCategory(nameof(SR.CatBehavior)),
             DefaultValue(false),
             SRDescription(nameof(SR.CDanyColorDescr))
         ]
-        public virtual bool AnyColor {
-            get {
+        public virtual bool AnyColor
+        {
+            get
+            {
                 return GetOption(NativeMethods.CC_ANYCOLOR);
             }
 
-            set {
+            set
+            {
                 SetOption(NativeMethods.CC_ANYCOLOR, value);
             }
         }
@@ -98,18 +107,23 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         [
-            SRCategory(nameof(SR.CatData)), 
+            SRCategory(nameof(SR.CatData)),
             SRDescription(nameof(SR.CDcolorDescr))
         ]
-        public Color Color {
-            get {
+        public Color Color
+        {
+            get
+            {
                 return color;
             }
-            set {
-                if (!value.IsEmpty) {
+            set
+            {
+                if (!value.IsEmpty)
+                {
                     color = value;
                 }
-                else {
+                else
+                {
                     color = Color.Black;
                 }
             }
@@ -126,12 +140,16 @@ namespace System.Windows.Forms {
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
             SRDescription(nameof(SR.CDcustomColorsDescr))
         ]
-        public int[] CustomColors {
-            get { return(int[]) customColors.Clone();}
-            set {
-                int length = value == null? 0: Math.Min(value.Length, 16);
-                if (length > 0) Array.Copy(value, 0, customColors, 0, length);
-                for (int i = length; i < 16; i++) customColors[i] = 0x00FFFFFF;
+        public int[] CustomColors
+        {
+            get { return (int[])customColors.Clone(); }
+            set
+            {
+                int length = value == null ? 0 : Math.Min(value.Length, 16);
+                if (length > 0)
+                    Array.Copy(value, 0, customColors, 0, length);
+                for (int i = length; i < 16; i++)
+                    customColors[i] = 0x00FFFFFF;
             }
         }
 
@@ -142,16 +160,19 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         [
-            SRCategory(nameof(SR.CatAppearance)), 
+            SRCategory(nameof(SR.CatAppearance)),
             DefaultValue(false),
             SRDescription(nameof(SR.CDfullOpenDescr))
         ]
-        public virtual bool FullOpen {
-            get {
+        public virtual bool FullOpen
+        {
+            get
+            {
                 return GetOption(NativeMethods.CC_FULLOPEN);
             }
 
-            set {
+            set
+            {
                 SetOption(NativeMethods.CC_FULLOPEN, value);
             }
         }
@@ -161,15 +182,18 @@ namespace System.Windows.Forms {
         ///       Our HINSTANCE from Windows.
         ///    </para>
         /// </summary>
-        protected virtual IntPtr Instance {
-            get { return UnsafeNativeMethods.GetModuleHandle(null);}
+        protected virtual IntPtr Instance
+        {
+            get { return UnsafeNativeMethods.GetModuleHandle(null); }
         }
 
         /// <summary>
         ///    Returns our CHOOSECOLOR options.
         /// </summary>
-        protected virtual int Options {
-            get {
+        protected virtual int Options
+        {
+            get
+            {
                 return options;
             }
         }
@@ -181,15 +205,18 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         [
-            SRCategory(nameof(SR.CatBehavior)), 
+            SRCategory(nameof(SR.CatBehavior)),
             DefaultValue(false),
             SRDescription(nameof(SR.CDshowHelpDescr))
         ]
-        public virtual bool ShowHelp {
-            get {
+        public virtual bool ShowHelp
+        {
+            get
+            {
                 return GetOption(NativeMethods.CC_SHOWHELP);
             }
-            set {
+            set
+            {
                 SetOption(NativeMethods.CC_SHOWHELP, value);
             }
         }
@@ -203,15 +230,18 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         [
-            SRCategory(nameof(SR.CatBehavior)), 
+            SRCategory(nameof(SR.CatBehavior)),
             DefaultValue(false),
             SRDescription(nameof(SR.CDsolidColorOnlyDescr))
         ]
-        public virtual bool SolidColorOnly {
-            get {
+        public virtual bool SolidColorOnly
+        {
+            get
+            {
                 return GetOption(NativeMethods.CC_SOLIDCOLOR);
             }
-            set {
+            set
+            {
                 SetOption(NativeMethods.CC_SOLIDCOLOR, value);
             }
         }
@@ -219,8 +249,9 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Lets us control the CHOOSECOLOR options.
         /// </summary>
-        private bool GetOption(int option) {
-            return(options & option) != 0;
+        private bool GetOption(int option)
+        {
+            return (options & option) != 0;
         }
 
         /// <summary>
@@ -231,24 +262,28 @@ namespace System.Windows.Forms {
         ///       colors to their default values.
         ///    </para>
         /// </summary>
-        public override void Reset() {
+        public override void Reset()
+        {
             options = 0;
             color = Color.Black;
             CustomColors = null;
         }
 
-	private void ResetColor() {
-		Color = Color.Black;
-	}
+        private void ResetColor()
+        {
+            Color = Color.Black;
+        }
 
         /// <summary>
         /// </summary>
-        protected override bool RunDialog(IntPtr hwndOwner) {
+        protected override bool RunDialog(IntPtr hwndOwner)
+        {
 
             NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(this.HookProc);
             NativeMethods.CHOOSECOLOR cc = new NativeMethods.CHOOSECOLOR();
             IntPtr custColorPtr = Marshal.AllocCoTaskMem(64);
-            try {
+            try
+            {
                 Marshal.Copy(customColors, 0, custColorPtr, 16);
                 cc.hwndOwner = hwndOwner;
                 cc.hInstance = Instance;
@@ -262,12 +297,15 @@ namespace System.Windows.Forms {
                 cc.Flags = flags;
 
                 cc.lpfnHook = hookProcPtr;
-                if (!SafeNativeMethods.ChooseColor(cc)) return false;
-                if (cc.rgbResult != ColorTranslator.ToWin32(color)) color = ColorTranslator.FromOle(cc.rgbResult);
+                if (!SafeNativeMethods.ChooseColor(cc))
+                    return false;
+                if (cc.rgbResult != ColorTranslator.ToWin32(color))
+                    color = ColorTranslator.FromOle(cc.rgbResult);
                 Marshal.Copy(custColorPtr, customColors, 0, 16);
                 return true;
             }
-            finally {
+            finally
+            {
                 Marshal.FreeCoTaskMem(custColorPtr);
             }
         }
@@ -275,11 +313,14 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Allows us to manipulate the CHOOSECOLOR options
         /// </summary>
-        private void SetOption(int option, bool value) {
-            if (value) {
+        private void SetOption(int option, bool value)
+        {
+            if (value)
+            {
                 options |= option;
             }
-            else {
+            else
+            {
                 options &= ~option;
             }
         }
@@ -290,7 +331,8 @@ namespace System.Windows.Forms {
         ///       persisted.
         ///    </para>
         /// </summary>
-        private bool ShouldSerializeColor() {
+        private bool ShouldSerializeColor()
+        {
             return !Color.Equals(Color.Black);
         }
 
@@ -299,7 +341,8 @@ namespace System.Windows.Forms {
         ///       Provides a string version of this object.
         ///    </para>
         /// </summary>
-        public override string ToString() {
+        public override string ToString()
+        {
             string s = base.ToString();
             return s + ",  Color: " + Color.ToString();
         }

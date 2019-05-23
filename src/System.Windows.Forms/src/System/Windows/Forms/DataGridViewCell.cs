@@ -4964,12 +4964,12 @@ namespace System.Windows.Forms
                 {
                     cellRight = rowRect.Right - rightToLeftRowHeadersWidth;
                 }
-                
+
                 if ((cellRight - cellLeft) >= 0)
                     cellRect.Width = cellRight - cellLeft;
                 else
                     cellRect.Width = 0;
-                
+
                 return cellRect;
             }
 
@@ -5325,33 +5325,33 @@ namespace System.Windows.Forms
 
             internal override object GetPropertyValue(int propertyID)
             {
-                    switch (propertyID)
-                    {
-                        case NativeMethods.UIA_NamePropertyId:
-                            return this.Name;
-                        case NativeMethods.UIA_HasKeyboardFocusPropertyId:
-                            return (State & AccessibleStates.Focused) == AccessibleStates.Focused; // Announce the cell when focusing.
-                        case NativeMethods.UIA_IsEnabledPropertyId:
-                            return owner.DataGridView.Enabled;
-                        case NativeMethods.UIA_AutomationIdPropertyId:
-                            return AutomationId;
-                        case NativeMethods.UIA_HelpTextPropertyId:
-                            return Help ?? string.Empty;
-                        case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
-                            return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
-                        case NativeMethods.UIA_IsPasswordPropertyId:
-                            return false;
-                        case NativeMethods.UIA_IsOffscreenPropertyId:
-                            return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
-                        case NativeMethods.UIA_AccessKeyPropertyId:
-                            return string.Empty;
-                        case NativeMethods.UIA_GridItemContainingGridPropertyId:
-                            return Owner.DataGridView.AccessibilityObject;
-                        case NativeMethods.UIA_IsTableItemPatternAvailablePropertyId:
-                            return IsPatternSupported(NativeMethods.UIA_TableItemPatternId);
-                        case NativeMethods.UIA_IsGridItemPatternAvailablePropertyId:
-                            return IsPatternSupported(NativeMethods.UIA_GridItemPatternId);
-                    }
+                switch (propertyID)
+                {
+                    case NativeMethods.UIA_NamePropertyId:
+                        return this.Name;
+                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                        return (State & AccessibleStates.Focused) == AccessibleStates.Focused; // Announce the cell when focusing.
+                    case NativeMethods.UIA_IsEnabledPropertyId:
+                        return owner.DataGridView.Enabled;
+                    case NativeMethods.UIA_AutomationIdPropertyId:
+                        return AutomationId;
+                    case NativeMethods.UIA_HelpTextPropertyId:
+                        return Help ?? string.Empty;
+                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                        return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
+                    case NativeMethods.UIA_IsPasswordPropertyId:
+                        return false;
+                    case NativeMethods.UIA_IsOffscreenPropertyId:
+                        return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
+                    case NativeMethods.UIA_AccessKeyPropertyId:
+                        return string.Empty;
+                    case NativeMethods.UIA_GridItemContainingGridPropertyId:
+                        return Owner.DataGridView.AccessibilityObject;
+                    case NativeMethods.UIA_IsTableItemPatternAvailablePropertyId:
+                        return IsPatternSupported(NativeMethods.UIA_TableItemPatternId);
+                    case NativeMethods.UIA_IsGridItemPatternAvailablePropertyId:
+                        return IsPatternSupported(NativeMethods.UIA_GridItemPatternId);
+                }
 
                 return base.GetPropertyValue(propertyID);
             }

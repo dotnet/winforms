@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.ComponentModel {
+namespace System.ComponentModel
+{
 
     using System;
     using System.Collections;
@@ -16,8 +17,8 @@ namespace System.ComponentModel {
     {
         private static IEqualityComparer _comparer = new WeakKeyComparer();
 
-        private long     _lastGlobalMem;
-        private int      _lastHashCount;
+        private long _lastGlobalMem;
+        private int _lastHashCount;
 
         internal WeakHashtable() : base(_comparer)
         {
@@ -93,7 +94,7 @@ namespace System.ComponentModel {
                 // for dead references.
                 //
                 ArrayList cleanupList = null;
-                foreach(object o in Keys)
+                foreach (object o in Keys)
                 {
                     WeakReference wr = o as WeakReference;
                     if (wr != null && !wr.IsAlive)
@@ -109,13 +110,13 @@ namespace System.ComponentModel {
 
                 if (cleanupList != null)
                 {
-                    foreach(object o in cleanupList)
+                    foreach (object o in cleanupList)
                     {
                         Remove(o);
                     }
                 }
             }
-        
+
             _lastGlobalMem = globalMem;
             _lastHashCount = hashCount;
         }
@@ -157,7 +158,7 @@ namespace System.ComponentModel {
                 return false;
             }
 
-            int IEqualityComparer.GetHashCode (object obj)
+            int IEqualityComparer.GetHashCode(object obj)
             {
                 return obj.GetHashCode();
             }

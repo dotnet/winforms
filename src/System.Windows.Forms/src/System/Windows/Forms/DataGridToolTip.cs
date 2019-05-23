@@ -2,10 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System.Runtime.InteropServices;
     using System.Drawing;
-    
+
     using System.Windows.Forms;
     using Microsoft.Win32;
     using System.Diagnostics;
@@ -13,7 +14,8 @@ namespace System.Windows.Forms {
 
     // this class is basically a NativeWindow that does toolTipping
     // should be one for the entire grid
-    internal class DataGridToolTip : MarshalByRefObject {
+    internal class DataGridToolTip : MarshalByRefObject
+    {
         // the toolTip control
         private NativeWindow tipWindow = null;
 
@@ -23,7 +25,7 @@ namespace System.Windows.Forms {
         // CONSTRUCTOR
         public DataGridToolTip(DataGrid dataGrid)
         {
-            Debug.Assert(dataGrid!= null, "can't attach a tool tip to a null grid");
+            Debug.Assert(dataGrid != null, "can't attach a tool tip to a null grid");
             this.dataGrid = dataGrid;
         }
 

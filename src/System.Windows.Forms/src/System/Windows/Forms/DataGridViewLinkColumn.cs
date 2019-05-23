@@ -69,7 +69,7 @@ namespace System.Windows.Forms
 
             return !this.ActiveLinkColor.Equals(LinkUtilities.IEActiveLinkColor);
         }
-        
+
         [
             Browsable(false),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)

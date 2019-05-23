@@ -172,7 +172,7 @@ namespace System.Windows.Forms
                         // When the dialog is dismissed OK, the Readonly bit can't
                         // be left on if ShowReadOnly was false
                         // Downlevel this happens automatically, on Vista mode, we need to watch out for it.
-                        _options &= ~ NativeMethods.OFN_READONLY;
+                        _options &= ~NativeMethods.OFN_READONLY;
                     }
                 }
             }

@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
 
     using Microsoft.Win32;
     using System.Collections;
@@ -16,13 +17,16 @@ namespace System.Windows.Forms {
     ///      ListViewItemStateImageIndexConverter is a class that can be used to convert
     ///      image index values one data type to another.
     /// </summary>
-    public class ListViewItemStateImageIndexConverter : ImageIndexConverter {
+    public class ListViewItemStateImageIndexConverter : ImageIndexConverter
+    {
 
-        protected override bool IncludeNoneAsStandardValue {
-            get {
+        protected override bool IncludeNoneAsStandardValue
+        {
+            get
+            {
                 return false;
             }
-        }                                
+        }
 
 
         /// <summary>
@@ -31,63 +35,74 @@ namespace System.Windows.Forms {
         ///      will return null if the data type does not support a
         ///      standard set of values.
         /// </summary>
-        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context) {
-            if (context != null && context.Instance != null) {
+        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+        {
+            if (context != null && context.Instance != null)
+            {
                 object instance = context.Instance;
 
                 ImageList imageList = null;
 
-                PropertyDescriptorCollection listViewItemProps = TypeDescriptor.GetProperties(instance);  
+                PropertyDescriptorCollection listViewItemProps = TypeDescriptor.GetProperties(instance);
                 PropertyDescriptor listViewProp = listViewItemProps["ListView"];
 
-                 if (listViewProp != null) {
-                        // Grab the ListView property off of the TreeNode.
-                        object listViewInstance = listViewProp.GetValue(instance);
-                        
-                        if (listViewInstance != null) {
-                            // Get the ImageList property from the ListView and set it to be the currentImageList.
-                            PropertyDescriptorCollection listViewProps = TypeDescriptor.GetProperties(listViewInstance);
-                            PropertyDescriptor listViewImageListProperty = listViewProps["StateImageList"];
-                            if (listViewImageListProperty != null) {
-                                imageList = (ImageList)listViewImageListProperty.GetValue(listViewInstance);
-                            }
+                if (listViewProp != null)
+                {
+                    // Grab the ListView property off of the TreeNode.
+                    object listViewInstance = listViewProp.GetValue(instance);
+
+                    if (listViewInstance != null)
+                    {
+                        // Get the ImageList property from the ListView and set it to be the currentImageList.
+                        PropertyDescriptorCollection listViewProps = TypeDescriptor.GetProperties(listViewInstance);
+                        PropertyDescriptor listViewImageListProperty = listViewProps["StateImageList"];
+                        if (listViewImageListProperty != null)
+                        {
+                            imageList = (ImageList)listViewImageListProperty.GetValue(listViewInstance);
                         }
-                 }    
-                
-                if (imageList != null) {
-                    
+                    }
+                }
+
+                if (imageList != null)
+                {
+
                     // Create array to contain standard values
                     //
                     object[] values;
                     int nImages = imageList.Images.Count;
-                    if (IncludeNoneAsStandardValue) {
+                    if (IncludeNoneAsStandardValue)
+                    {
                         values = new object[nImages + 1];
                         values[nImages] = -1;
                     }
-                    else {
+                    else
+                    {
                         values = new object[nImages];
                     }
-                    
-                    
+
+
                     // Fill in the array
                     //
-                    for (int i = 0; i < nImages; i++) {
+                    for (int i = 0; i < nImages; i++)
+                    {
                         values[i] = i;
                     }
-                    
+
                     return new StandardValuesCollection(values);
                 }
-        
+
             }
-            if (IncludeNoneAsStandardValue) {
-                return new StandardValuesCollection(new object[] {-1});
+            if (IncludeNoneAsStandardValue)
+            {
+                return new StandardValuesCollection(new object[] { -1 });
             }
-            else {
+            else
+            {
                 return new StandardValuesCollection(new object[0]);
             }
-            
+
         }
 
-        
+
     }
 }

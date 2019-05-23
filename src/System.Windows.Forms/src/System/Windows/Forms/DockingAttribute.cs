@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
 
     /// <summary>
     ///    <para>
@@ -10,7 +11,8 @@ namespace System.Windows.Forms {
     ///    </para>
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    public sealed class DockingAttribute : Attribute {
+    public sealed class DockingAttribute : Attribute
+    {
         private DockingBehavior dockingBehavior;
 
         /// <summary>
@@ -18,16 +20,18 @@ namespace System.Windows.Forms {
         ///       Default constructor.
         ///    </para>
         /// </summary>
-        public DockingAttribute() {
+        public DockingAttribute()
+        {
             this.dockingBehavior = DockingBehavior.Never;
         }
-        
+
         /// <summary>
         ///    <para>
         ///       Constructor.
         ///    </para>
         /// </summary>
-        public DockingAttribute(DockingBehavior dockingBehavior) {
+        public DockingAttribute(DockingBehavior dockingBehavior)
+        {
             this.dockingBehavior = dockingBehavior;
         }
 
@@ -44,16 +48,20 @@ namespace System.Windows.Forms {
         ///       DockingBehavior property.
         ///    </para>
         /// </summary>
-        public DockingBehavior DockingBehavior {
-            get {
+        public DockingBehavior DockingBehavior
+        {
+            get
+            {
                 return dockingBehavior;
             }
         }
 
         /// <summary>
         /// </summary>
-        public override bool Equals(object obj) {
-            if (obj == this) {
+        public override bool Equals(object obj)
+        {
+            if (obj == this)
+            {
                 return true;
             }
 
@@ -62,13 +70,15 @@ namespace System.Windows.Forms {
             return (other != null) && other.DockingBehavior == this.dockingBehavior;
         }
 
-        public override int GetHashCode() {
+        public override int GetHashCode()
+        {
             return dockingBehavior.GetHashCode();
         }
 
         /// <summary>
         /// </summary>
-        public override bool IsDefaultAttribute() {
+        public override bool IsDefaultAttribute()
+        {
             return (this.Equals(Default));
         }
     }

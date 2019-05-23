@@ -118,9 +118,9 @@ namespace System.Windows.Forms
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")] // We want to measure the size of blank spaces o we don't have to localize it.
         public void DrawText(TextFormatFlags flags)
         {
-            string text  = (ItemIndex == -1) ? Item.Text      : SubItem.Text;
-            Font   font  = (ItemIndex == -1) ? Item.Font      : SubItem.Font;
-            Color  color = (ItemIndex == -1) ? Item.ForeColor : SubItem.ForeColor;
+            string text = (ItemIndex == -1) ? Item.Text : SubItem.Text;
+            Font font = (ItemIndex == -1) ? Item.Font : SubItem.Font;
+            Color color = (ItemIndex == -1) ? Item.ForeColor : SubItem.ForeColor;
             int padding = TextRenderer.MeasureText(" ", font).Width;
             Rectangle newBounds = Rectangle.Inflate(Bounds, -padding, 0);
 

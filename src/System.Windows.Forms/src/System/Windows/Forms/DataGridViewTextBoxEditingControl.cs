@@ -54,7 +54,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                this.Text = (string) value;
+                this.Text = (string)value;
             }
         }
 
@@ -248,7 +248,7 @@ namespace System.Windows.Forms
 
         protected override bool ProcessKeyEventArgs(ref Message m)
         {
-            switch ((Keys)(int) m.WParam)
+            switch ((Keys)(int)m.WParam)
             {
                 case Keys.Enter:
                     if (m.Msg == Interop.WindowMessages.WM_CHAR &&
@@ -282,7 +282,7 @@ namespace System.Windows.Forms
             return base.ProcessKeyEventArgs(ref m);
         }
 
-        private static HorizontalAlignment TranslateAlignment(DataGridViewContentAlignment align) 
+        private static HorizontalAlignment TranslateAlignment(DataGridViewContentAlignment align)
         {
             if ((align & anyRight) != 0)
             {

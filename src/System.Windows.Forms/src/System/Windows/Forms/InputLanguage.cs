@@ -165,7 +165,7 @@ namespace System.Windows.Forms
                     // directly through the registry value
                     if (layoutName == null)
                     {
-                        layoutName = (string) key.GetValue("Layout Text");
+                        layoutName = (string)key.GetValue("Layout Text");
                     }
 
                     key.Close();
@@ -217,7 +217,7 @@ namespace System.Windows.Forms
                                 // directly through the registry value
                                 if (layoutName == null)
                                 {
-                                    layoutName = (string) key.GetValue("Layout Text");
+                                    layoutName = (string)key.GetValue("Layout Text");
                                 }
 
                                 key.Close();
@@ -232,7 +232,7 @@ namespace System.Windows.Forms
                         foreach (string encoding in encodings)
                         {
                             Debug.Assert(encoding.Length == 8, "unexpected key in registry: hklm\\SYSTEM\\CurrentControlSet\\Control\\Keyboard Layouts\\" + encoding);
-                            if (language == (0xffff & Convert.ToInt32(encoding.Substring(4,4), 16)))
+                            if (language == (0xffff & Convert.ToInt32(encoding.Substring(4, 4), 16)))
                             {
                                 RegistryKey key = layouts.OpenSubKey(encoding);
                                 string codeValue = (string)key.GetValue("Layout Id");
@@ -332,7 +332,7 @@ namespace System.Windows.Forms
             // is the CU-preferred keyboard language for custom cultures.
             int lcid = culture.KeyboardLayoutId;
 
-            foreach(InputLanguage lang in InstalledInputLanguages)
+            foreach (InputLanguage lang in InstalledInputLanguages)
             {
                 if ((unchecked((int)(long)lang.handle) & 0xFFFF) == lcid)
                 {

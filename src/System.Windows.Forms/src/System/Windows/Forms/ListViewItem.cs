@@ -1117,7 +1117,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void UnHost(bool checkSelection) =>  UnHost(Index, checkSelection);
+        internal void UnHost(bool checkSelection) => UnHost(Index, checkSelection);
 
         internal void UnHost(int displayIndex, bool checkSelection)
         {

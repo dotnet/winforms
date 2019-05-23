@@ -28,7 +28,7 @@ namespace System.Windows.Forms
 
         int IList.Add(object value)
         {
-            return this.Add((DataGridViewCell) value);            
+            return this.Add((DataGridViewCell)value);
         }
 
         void IList.Clear()
@@ -48,12 +48,12 @@ namespace System.Windows.Forms
 
         void IList.Insert(int index, object value)
         {
-            this.Insert(index, (DataGridViewCell) value);
+            this.Insert(index, (DataGridViewCell)value);
         }
 
         void IList.Remove(object value)
         {
-            this.Remove((DataGridViewCell) value);
+            this.Remove((DataGridViewCell)value);
         }
 
         void IList.RemoveAt(int index)
@@ -63,18 +63,18 @@ namespace System.Windows.Forms
 
         bool IList.IsFixedSize
         {
-            get {return false;}
+            get { return false; }
         }
 
         bool IList.IsReadOnly
         {
-            get {return false;}
+            get { return false; }
         }
 
         object IList.this[int index]
         {
             get { return this[index]; }
-            set { this[index] = (DataGridViewCell) value; }
+            set { this[index] = (DataGridViewCell)value; }
         }
 
         void ICollection.CopyTo(Array array, int index)
@@ -84,17 +84,17 @@ namespace System.Windows.Forms
 
         int ICollection.Count
         {
-            get {return this.items.Count;}
+            get { return this.items.Count; }
         }
 
         bool ICollection.IsSynchronized
         {
-            get {return false;}
+            get { return false; }
         }
 
         object ICollection.SyncRoot
         {
-            get {return this;}
+            get { return this; }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -123,7 +123,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (DataGridViewCell) this.items[index];
+                return (DataGridViewCell)this.items[index];
             }
             set
             {
@@ -145,7 +145,7 @@ namespace System.Windows.Forms
                     this.owner.DataGridView.OnReplacingCell(this.owner, index);
                 }
 
-                DataGridViewCell oldDataGridViewCell = (DataGridViewCell) this.items[index];
+                DataGridViewCell oldDataGridViewCell = (DataGridViewCell)this.items[index];
                 this.items[index] = dataGridViewCell;
                 dataGridViewCell.OwningRowInternal = this.owner;
                 dataGridViewCell.StateInternal = oldDataGridViewCell.State;
@@ -186,7 +186,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(string.Format(SR.DataGridViewColumnCollection_ColumnNotFound, columnName), "columnName");
                 }
-                return (DataGridViewCell) this.items[dataGridViewColumn.Index];
+                return (DataGridViewCell)this.items[dataGridViewColumn.Index];
             }
             set
             {
@@ -239,7 +239,7 @@ namespace System.Windows.Forms
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, dataGridViewCell));
             return index;
         }
-        
+
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual void AddRange(params DataGridViewCell[] dataGridViewCells)
         {
@@ -285,7 +285,7 @@ namespace System.Windows.Forms
             }
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));
         }
-        
+
         public virtual void Clear()
         {
             if (this.owner.DataGridView != null)
@@ -367,7 +367,7 @@ namespace System.Windows.Forms
             int itemsCount = this.items.Count;
             for (int i = 0; i < itemsCount; ++i)
             {
-                if (this.items[i] == cell) 
+                if (this.items[i] == cell)
                 {
                     cellIndex = i;
                     break;
@@ -394,7 +394,7 @@ namespace System.Windows.Forms
 
         internal void RemoveAtInternal(int index)
         {
-            DataGridViewCell dataGridViewCell = (DataGridViewCell) this.items[index];
+            DataGridViewCell dataGridViewCell = (DataGridViewCell)this.items[index];
             this.items.RemoveAt(index);
             dataGridViewCell.DataGridViewInternal = null;
             dataGridViewCell.OwningRowInternal = null;

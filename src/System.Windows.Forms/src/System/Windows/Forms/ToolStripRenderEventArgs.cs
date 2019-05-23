@@ -9,7 +9,7 @@ namespace System.Windows.Forms
     public class ToolStripRenderEventArgs : EventArgs
     {
         private Color _backColor = Color.Empty;
-        
+
         /// <summary>
         /// This class represents all the information to render the toolStrip
         /// </summary>        
@@ -57,7 +57,8 @@ namespace System.Windows.Forms
                 {
                     // get the user specified color
                     _backColor = ToolStrip.RawBackColor;
-                    if (_backColor == Color.Empty) {
+                    if (_backColor == Color.Empty)
+                    {
                         if (ToolStrip is ToolStripDropDown)
                         {
                             _backColor = SystemColors.Menu;
@@ -97,31 +98,31 @@ namespace System.Windows.Forms
                         Rectangle bounds = ToolStrip.Bounds;
 
                         Rectangle overlap = ToolStrip.ClientRectangle;
-                        overlap.Inflate(1,1);
+                        overlap.Inflate(1, 1);
                         if (overlap.IntersectsWith(itemBounds))
                         {
                             switch (ownerItem.DropDownDirection)
                             {
                                 case ToolStripDropDownDirection.AboveLeft:
-                                case ToolStripDropDownDirection.AboveRight:                        
+                                case ToolStripDropDownDirection.AboveRight:
                                     return Rectangle.Empty;
                                 case ToolStripDropDownDirection.BelowRight:
                                 case ToolStripDropDownDirection.BelowLeft:
                                     overlap.Intersect(itemBounds);
                                     if (overlap.Height == 2)
                                     {
-                                        return new Rectangle(itemBounds.X+1, 0, itemBounds.Width -2, 2);                                   
+                                        return new Rectangle(itemBounds.X + 1, 0, itemBounds.Width - 2, 2);
                                     }
- 
+
                                     // If its overlapping more than one pixel, this means we've pushed it to obscure 
                                     // the menu item. In this case pretend it's not connected.
                                     return Rectangle.Empty;
                                 case ToolStripDropDownDirection.Right:
                                 case ToolStripDropDownDirection.Left:
                                     return Rectangle.Empty;
-                               }
-                           }
-                     }
+                            }
+                        }
+                    }
                 }
 
                 return Rectangle.Empty;

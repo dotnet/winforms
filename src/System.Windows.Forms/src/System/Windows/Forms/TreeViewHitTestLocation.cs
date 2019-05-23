@@ -36,7 +36,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// AboveClientArea.
         /// </summary>
-        AboveClientArea =  NativeMethods.TVHT_ABOVE,
+        AboveClientArea = NativeMethods.TVHT_ABOVE,
 
         /// <summary>
         /// BelowClientArea.
@@ -56,7 +56,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// RightOfNode.
         /// </summary>
-        RightOfLabel =   NativeMethods.TVHT_ONITEMRIGHT,
+        RightOfLabel = NativeMethods.TVHT_ONITEMRIGHT,
 
         /// <summary>
         /// StateImage.

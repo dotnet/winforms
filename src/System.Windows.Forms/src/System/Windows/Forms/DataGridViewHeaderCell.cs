@@ -41,7 +41,7 @@ namespace System.Windows.Forms
                 int buttonState = this.Properties.GetInteger(PropButtonState, out found);
                 if (found)
                 {
-                    return (ButtonState) buttonState;
+                    return (ButtonState)buttonState;
                 }
                 return ButtonState.Normal;
             }
@@ -57,17 +57,19 @@ namespace System.Windows.Forms
                 Debug.Assert(Enum.IsDefined(typeof(ButtonState), value));
                 if (this.ButtonState != value)
                 {
-                    this.Properties.SetInteger(PropButtonState, (int) value);
+                    this.Properties.SetInteger(PropButtonState, (int)value);
                 }
             }
         }
 
-        protected override void Dispose(bool disposing) {
-             if (FlipXPThemesBitmap != null && disposing) {
-                  FlipXPThemesBitmap.Dispose();
-             }
-             base.Dispose(disposing);
-                             
+        protected override void Dispose(bool disposing)
+        {
+            if (FlipXPThemesBitmap != null && disposing)
+            {
+                FlipXPThemesBitmap.Dispose();
+            }
+            base.Dispose(disposing);
+
         }
 
         [
@@ -223,7 +225,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Type valueType = (Type) this.Properties.GetObject(PropValueType);
+                Type valueType = (Type)this.Properties.GetObject(PropValueType);
                 if (valueType != null)
                 {
                     return valueType;
@@ -256,7 +258,7 @@ namespace System.Windows.Forms
                 if (this.OwningColumn != null)
                 {
                     // column header cell
-                    return this.OwningColumn.Visible && 
+                    return this.OwningColumn.Visible &&
                             (this.DataGridView == null || this.DataGridView.ColumnHeadersVisible);
                 }
 
@@ -314,7 +316,7 @@ namespace System.Windows.Forms
             if (this.OwningRow != null)
             {
                 // row header cell
-                if ((this.DataGridView == null && rowIndex != -1) || 
+                if ((this.DataGridView == null && rowIndex != -1) ||
                     (this.DataGridView != null && (rowIndex < 0 || rowIndex >= this.DataGridView.Rows.Count)))
                 {
                     throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex));
@@ -536,7 +538,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
-            if (e.Button == MouseButtons.Left && 
+            if (e.Button == MouseButtons.Left &&
                 this.DataGridView.ApplyVisualStylesToHeaderCells &&
                 !this.DataGridView.ResizingOperationAboutToStart)
             {
@@ -595,11 +597,11 @@ namespace System.Windows.Forms
             }
         }
 
-        protected override void Paint(Graphics graphics, 
+        protected override void Paint(Graphics graphics,
                                       Rectangle clipBounds,
-                                      Rectangle cellBounds, 
-                                      int rowIndex, 
-                                      DataGridViewElementStates dataGridViewElementState, 
+                                      Rectangle cellBounds,
+                                      int rowIndex,
+                                      DataGridViewElementStates dataGridViewElementState,
                                       object value,
                                       object formattedValue,
                                       string errorText,

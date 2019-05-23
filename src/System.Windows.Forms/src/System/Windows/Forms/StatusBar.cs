@@ -3,7 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System.Runtime.Serialization.Formatters;
     using System.Runtime.InteropServices;
     using System.ComponentModel;
@@ -28,7 +29,8 @@ namespace System.Windows.Forms {
     DefaultProperty(nameof(Text)),
     Designer("System.Windows.Forms.Design.StatusBarDesigner, " + AssemblyRef.SystemDesign),
     ]
-    public class StatusBar : Control {
+    public class StatusBar : Control
+    {
 
         private int sizeGripWidth = 0;
         private const int SIMPLE_INDEX = 0xFF;
@@ -36,15 +38,15 @@ namespace System.Windows.Forms {
         private static readonly object EVENT_PANELCLICK = new object();
         private static readonly object EVENT_SBDRAWITEM = new object();
 
-        private bool                         showPanels;
-        private bool                         layoutDirty;
-        private int                          panelsRealized;
-        private bool                         sizeGrip = true;
-        private string                       simpleText;
-        private Point                        lastClick = new Point(0, 0);
-        private IList                        panels = new ArrayList();
-        private StatusBarPanelCollection     panelsCollection;
-        private ControlToolTip               tooltips;
+        private bool showPanels;
+        private bool layoutDirty;
+        private int panelsRealized;
+        private bool sizeGrip = true;
+        private string simpleText;
+        private Point lastClick = new Point(0, 0);
+        private IList panels = new ArrayList();
+        private StatusBarPanelCollection panelsCollection;
+        private ControlToolTip tooltips;
 
         private ToolTip mainToolTip = null;
         private bool toolTipSet = false;
@@ -55,7 +57,8 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         public StatusBar()
-        : base() {
+        : base()
+        {
             base.SetStyle(ControlStyles.UserPaint | ControlStyles.Selectable, false);
 
             Dock = DockStyle.Bottom;
@@ -67,14 +70,19 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     A VisualStyleRenderer we can use to get information about the current UI theme
         /// </summary>
-        private static VisualStyleRenderer VisualStyleRenderer {
-            get {
-                if (VisualStyleRenderer.IsSupported) {
-                    if (renderer == null) {
+        private static VisualStyleRenderer VisualStyleRenderer
+        {
+            get
+            {
+                if (VisualStyleRenderer.IsSupported)
+                {
+                    if (renderer == null)
+                    {
                         renderer = new VisualStyleRenderer(VisualStyleElement.ToolBar.Button.Normal);
                     }
                 }
-                else {
+                else
+                {
                     renderer = null;
                 }
                 return renderer;
@@ -82,10 +90,14 @@ namespace System.Windows.Forms {
 
         }
 
-        private int SizeGripWidth {
-            get {
-                if (sizeGripWidth == 0) {
-                    if (Application.RenderWithVisualStyles && VisualStyleRenderer != null){
+        private int SizeGripWidth
+        {
+            get
+            {
+                if (sizeGripWidth == 0)
+                {
+                    if (Application.RenderWithVisualStyles && VisualStyleRenderer != null)
+                    {
                         // Need to build up accurate gripper width to avoid cutting off other panes.
                         VisualStyleRenderer vsRenderer = VisualStyleRenderer;
                         VisualStyleElement thisElement;
@@ -106,7 +118,8 @@ namespace System.Windows.Forms {
                         // Either GetPartSize could have returned a width of zero, so make sure we have a reasonable number:
                         sizeGripWidth = Math.Max(sizeGripWidth, 16);
                     }
-                    else {
+                    else
+                    {
                         sizeGripWidth = 16;
                     }
                 }
@@ -121,19 +134,23 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override Color BackColor {
-            get {
+        public override Color BackColor
+        {
+            get
+            {
                 // not supported, always return CONTROL
                 return SystemColors.Control;
             }
 
-            set {
+            set
+            {
                 // no op, not supported.
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackColorChanged {
+        new public event EventHandler BackColorChanged
+        {
             add => base.BackColorChanged += value;
             remove => base.BackColorChanged -= value;
         }
@@ -146,33 +163,41 @@ namespace System.Windows.Forms {
         /// </para>
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override Image BackgroundImage {
-            get {
+        public override Image BackgroundImage
+        {
+            get
+            {
                 return base.BackgroundImage;
             }
-            set {
+            set
+            {
                 base.BackgroundImage = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged {
+        new public event EventHandler BackgroundImageChanged
+        {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override ImageLayout BackgroundImageLayout {
-            get {
+        public override ImageLayout BackgroundImageLayout
+        {
+            get
+            {
                 return base.BackgroundImageLayout;
             }
-            set {
+            set
+            {
                 base.BackgroundImageLayout = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged {
+        new public event EventHandler BackgroundImageLayoutChanged
+        {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
         }
@@ -183,15 +208,19 @@ namespace System.Windows.Forms {
         ///       Inheriting classes should call base.getCreateParams in the manor below:
         ///    </para>
         /// </summary>
-        protected override CreateParams CreateParams {
-            get {
+        protected override CreateParams CreateParams
+        {
+            get
+            {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = NativeMethods.WC_STATUSBAR;
 
-                if (this.sizeGrip) {
+                if (this.sizeGrip)
+                {
                     cp.Style |= NativeMethods.SBARS_SIZEGRIP;
                 }
-                else {
+                else
+                {
                     cp.Style &= (~NativeMethods.SBARS_SIZEGRIP);
                 }
                 cp.Style |= NativeMethods.CCS_NOPARENTALIGN | NativeMethods.CCS_NORESIZE;
@@ -200,8 +229,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        protected override ImeMode DefaultImeMode {
-            get {
+        protected override ImeMode DefaultImeMode
+        {
+            get
+            {
                 return ImeMode.Disable;
             }
         }
@@ -210,8 +241,10 @@ namespace System.Windows.Forms {
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
         /// </summary>
-        protected override Size DefaultSize {
-            get {
+        protected override Size DefaultSize
+        {
+            get
+            {
                 return new Size(100, 22);
             }
         }
@@ -221,11 +254,14 @@ namespace System.Windows.Forms {
         ///     on controls that are based on Win32 Native Controls.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        protected override bool DoubleBuffered {
-            get {
+        protected override bool DoubleBuffered
+        {
+            get
+            {
                 return base.DoubleBuffered;
             }
-            set {
+            set
+            {
                 base.DoubleBuffered = value;
             }
         }
@@ -239,11 +275,14 @@ namespace System.Windows.Forms {
         Localizable(true),
         DefaultValue(DockStyle.Bottom)
         ]
-        public override DockStyle Dock {
-            get {
+        public override DockStyle Dock
+        {
+            get
+            {
                 return base.Dock;
             }
-            set {
+            set
+            {
                 base.Dock = value;
             }
         }
@@ -258,9 +297,11 @@ namespace System.Windows.Forms {
         [
         Localizable(true)
         ]
-        public override Font Font {
-            get { return base.Font;}
-            set {
+        public override Font Font
+        {
+            get { return base.Font; }
+            set
+            {
                 base.Font = value;
                 SetPanelContentsWidths(false);
             }
@@ -273,33 +314,41 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override Color ForeColor {
-            get {
+        public override Color ForeColor
+        {
+            get
+            {
                 return base.ForeColor;
             }
-            set {
+            set
+            {
                 base.ForeColor = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler ForeColorChanged {
+        new public event EventHandler ForeColorChanged
+        {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public ImeMode ImeMode {
-            get {
+        new public ImeMode ImeMode
+        {
+            get
+            {
                 return base.ImeMode;
             }
-            set {
+            set
+            {
                 base.ImeMode = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler ImeModeChanged {
+        public new event EventHandler ImeModeChanged
+        {
             add => base.ImeModeChanged += value;
             remove => base.ImeModeChanged -= value;
         }
@@ -318,9 +367,12 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatAppearance)),
         MergableProperty(false)
         ]
-        public StatusBarPanelCollection Panels {
-            get {
-                if (panelsCollection == null) {
+        public StatusBarPanelCollection Panels
+        {
+            get
+            {
+                if (panelsCollection == null)
+                {
                     panelsCollection = new StatusBarPanelCollection(this);
                 }
 
@@ -336,18 +388,24 @@ namespace System.Windows.Forms {
         [
         Localizable(true)
         ]
-        public override string Text {
-            get {
-                if (simpleText == null) {
+        public override string Text
+        {
+            get
+            {
+                if (simpleText == null)
+                {
                     return "";
                 }
-                else {
+                else
+                {
                     return simpleText;
                 }
             }
-            set {
+            set
+            {
                 SetSimpleText(value);
-                if (simpleText != value) {
+                if (simpleText != value)
+                {
                     simpleText = value;
                     OnTextChanged(EventArgs.Empty);
                 }
@@ -374,26 +432,34 @@ namespace System.Windows.Forms {
         DefaultValue(false),
         SRDescription(nameof(SR.StatusBarShowPanelsDescr))
         ]
-        public bool ShowPanels {
-            get {
+        public bool ShowPanels
+        {
+            get
+            {
                 return showPanels;
             }
-            set {
-                if (showPanels != value) {
+            set
+            {
+                if (showPanels != value)
+                {
                     showPanels = value;
 
                     layoutDirty = true;
-                    if (IsHandleCreated) {
+                    if (IsHandleCreated)
+                    {
                         int bShowPanels = (!showPanels) ? 1 : 0;
 
                         SendMessage(NativeMethods.SB_SIMPLE, bShowPanels, 0);
 
-                        if (showPanels) {
+                        if (showPanels)
+                        {
                             PerformLayout();
                             RealizePanels();
                         }
-                        else if (tooltips != null) {
-                            for (int i=0; i<panels.Count; i++) {
+                        else if (tooltips != null)
+                        {
+                            for (int i = 0; i < panels.Count; i++)
+                            {
                                 tooltips.SetTool(panels[i], null);
                             }
                         }
@@ -416,12 +482,16 @@ namespace System.Windows.Forms {
         DefaultValue(true),
         SRDescription(nameof(SR.StatusBarSizingGripDescr))
         ]
-        public bool SizingGrip {
-            get {
+        public bool SizingGrip
+        {
+            get
+            {
                 return sizeGrip;
             }
-            set {
-                if (value != sizeGrip) {
+            set
+            {
+                if (value != sizeGrip)
+                {
                     sizeGrip = value;
                     RecreateHandle();
                 }
@@ -435,23 +505,30 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         [DefaultValue(false)]
-        new public bool TabStop {
-            get {
+        new public bool TabStop
+        {
+            get
+            {
                 return base.TabStop;
             }
-            set {
+            set
+            {
                 base.TabStop = value;
             }
         }
 
-        internal bool ToolTipSet {
-            get {
+        internal bool ToolTipSet
+        {
+            get
+            {
                 return toolTipSet;
             }
         }
 
-        internal ToolTip MainToolTip {
-            get {
+        internal ToolTip MainToolTip
+        {
+            get
+            {
                 return mainToolTip;
             }
         }
@@ -462,7 +539,8 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.StatusBarDrawItem))]
-        public event StatusBarDrawItemEventHandler DrawItem {
+        public event StatusBarDrawItemEventHandler DrawItem
+        {
             add => Events.AddHandler(EVENT_SBDRAWITEM, value);
             remove => Events.RemoveHandler(EVENT_SBDRAWITEM, value);
         }
@@ -473,7 +551,8 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.StatusBarOnPanelClickDescr))]
-        public event StatusBarPanelClickEventHandler PanelClick {
+        public event StatusBarPanelClickEventHandler PanelClick
+        {
             add => Events.AddHandler(EVENT_PANELCLICK, value);
             remove => Events.RemoveHandler(EVENT_PANELCLICK, value);
         }
@@ -483,7 +562,8 @@ namespace System.Windows.Forms {
         /// </summary>
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event PaintEventHandler Paint {
+        public new event PaintEventHandler Paint
+        {
             add => base.Paint += value;
             remove => base.Paint -= value;
         }
@@ -491,34 +571,39 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Tells whether the panels have been realized.
         /// </summary>
-        internal bool ArePanelsRealized() {
+        internal bool ArePanelsRealized()
+        {
             return this.showPanels && IsHandleCreated;
         }
 
         /// <summary>
         /// </summary>
-        internal void DirtyLayout() {
+        internal void DirtyLayout()
+        {
             layoutDirty = true;
         }
 
         /// <summary>
         ///     Makes the panel according to the sizes in the panel list.
         /// </summary>
-        private void ApplyPanelWidths() {
+        private void ApplyPanelWidths()
+        {
             // This forces handle creation every time any time the StatusBar
             // has to be re-laidout.
             //
             if (!IsHandleCreated)
                 return;
 
-            StatusBarPanel  panel = null;
+            StatusBarPanel panel = null;
             int length = this.panels.Count;
 
-            if (length == 0) {
+            if (length == 0)
+            {
                 Size sz = Size;
                 int[] offsets = new int[1];
                 offsets[0] = sz.Width;
-                if (sizeGrip) {
+                if (sizeGrip)
+                {
                     offsets[0] -= SizeGripWidth;
                 }
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.SB_SETPARTS, 1, offsets);
@@ -529,8 +614,9 @@ namespace System.Windows.Forms {
 
             int[] offsets2 = new int[length];
             int currentOffset = 0;
-            for (int i = 0; i < length; i++) {
-                panel = (StatusBarPanel) this.panels[i];
+            for (int i = 0; i < length; i++)
+            {
+                panel = (StatusBarPanel)this.panels[i];
                 currentOffset += panel.Width;
                 offsets2[i] = currentOffset;
                 panel.Right = offsets2[i];
@@ -539,8 +625,9 @@ namespace System.Windows.Forms {
 
             // Tooltip setup...
             //
-            for (int i=0; i<length; i++) {
-                panel = (StatusBarPanel) this.panels[i];
+            for (int i = 0; i < length; i++)
+            {
+                panel = (StatusBarPanel)this.panels[i];
                 UpdateTooltip(panel);
             }
 
@@ -549,34 +636,42 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// </summary>
-        protected override void CreateHandle() {
-            if (!RecreatingHandle) {
+        protected override void CreateHandle()
+        {
+            if (!RecreatingHandle)
+            {
                 IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
-            
-                try {
+
+                try
+                {
                     NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX();
                     icc.dwICC = NativeMethods.ICC_BAR_CLASSES;
                     SafeNativeMethods.InitCommonControlsEx(icc);
                 }
-                finally {
+                finally
+                {
                     UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
                 }
             }
-            
+
             base.CreateHandle();
         }
 
         /// <summary>
         ///     Disposes this control
         /// </summary>
-        protected override void Dispose(bool disposing) {
-            if (disposing) {
-                if (panelsCollection != null) {
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (panelsCollection != null)
+                {
                     StatusBarPanel[] panelCopy = new StatusBarPanel[panelsCollection.Count];
                     ((ICollection)panelsCollection).CopyTo(panelCopy, 0);
                     panelsCollection.Clear();
 
-                    foreach(StatusBarPanel p in panelCopy) {
+                    foreach (StatusBarPanel p in panelCopy)
+                    {
                         p.Dispose();
                     }
                 }
@@ -587,8 +682,10 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Forces the panels to be updated, location, repainting, etc.
         /// </summary>
-        private void ForcePanelUpdate() {
-            if (ArePanelsRealized()) {
+        private void ForcePanelUpdate()
+        {
+            if (ArePanelsRealized())
+            {
                 layoutDirty = true;
                 SetPanelContentsWidths(true);
                 PerformLayout();
@@ -602,17 +699,21 @@ namespace System.Windows.Forms {
         ///       event.
         ///    </para>
         /// </summary>
-        protected override void OnHandleCreated(EventArgs e) {
+        protected override void OnHandleCreated(EventArgs e)
+        {
             base.OnHandleCreated(e);
-            if (!DesignMode) {
+            if (!DesignMode)
+            {
                 tooltips = new ControlToolTip(this);
             }
 
-            if (!this.showPanels) {
+            if (!this.showPanels)
+            {
                 SendMessage(NativeMethods.SB_SIMPLE, 1, 0);
                 SetSimpleText(simpleText);
             }
-            else {
+            else
+            {
                 ForcePanelUpdate();
             }
         }
@@ -622,9 +723,11 @@ namespace System.Windows.Forms {
         ///       Raises the <see cref='System.Windows.Forms.StatusBar.OnHandleDestroyed'/> event.
         ///    </para>
         /// </summary>
-        protected override void OnHandleDestroyed(EventArgs e) {
+        protected override void OnHandleDestroyed(EventArgs e)
+        {
             base.OnHandleDestroyed(e);
-            if (tooltips != null) {
+            if (tooltips != null)
+            {
                 tooltips.Dispose();
                 tooltips = null;
             }
@@ -660,7 +763,8 @@ namespace System.Windows.Forms {
         ///       Raises the <see cref='System.Windows.Forms.StatusBar.OnMouseDown'/> event.
         ///    </para>
         /// </summary>
-        protected override void OnMouseDown(MouseEventArgs e) {
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
             lastClick.X = e.X;
             lastClick.Y = e.Y;
             base.OnMouseDown(e);
@@ -671,9 +775,11 @@ namespace System.Windows.Forms {
         ///       Raises the <see cref='System.Windows.Forms.StatusBar.OnPanelClick'/> event.
         ///    </para>
         /// </summary>
-        protected virtual void OnPanelClick(StatusBarPanelClickEventArgs e) {
+        protected virtual void OnPanelClick(StatusBarPanelClickEventArgs e)
+        {
             StatusBarPanelClickEventHandler handler = (StatusBarPanelClickEventHandler)Events[EVENT_PANELCLICK];
-            if (handler != null) handler(this,e);
+            if (handler != null)
+                handler(this, e);
         }
 
         /// <summary>
@@ -681,10 +787,13 @@ namespace System.Windows.Forms {
         ///       Raises the Layout event.
         ///    </para>
         /// </summary>
-        protected override void OnLayout(LayoutEventArgs levent) {
-            if (this.showPanels) {
+        protected override void OnLayout(LayoutEventArgs levent)
+        {
+            if (this.showPanels)
+            {
                 LayoutPanels();
-                if (IsHandleCreated && panelsRealized != panels.Count) {
+                if (IsHandleCreated && panelsRealized != panels.Count)
+                {
                     RealizePanels();
                 }
             }
@@ -695,28 +804,34 @@ namespace System.Windows.Forms {
         ///     This function sets up all the panel on the status bar according to
         ///     the internal this.panels List.
         /// </summary>
-        internal void RealizePanels() {
-            StatusBarPanel  panel = null;
-            int             length = this.panels.Count;
-            int             old = panelsRealized;
+        internal void RealizePanels()
+        {
+            StatusBarPanel panel = null;
+            int length = this.panels.Count;
+            int old = panelsRealized;
 
             panelsRealized = 0;
 
-            if (length == 0) {
+            if (length == 0)
+            {
                 SendMessage(NativeMethods.SB_SETTEXT, 0, "");
             }
 
             int i;
-            for (i = 0; i < length; i++) {
-                panel = (StatusBarPanel) this.panels[i];
-                try {
+            for (i = 0; i < length; i++)
+            {
+                panel = (StatusBarPanel)this.panels[i];
+                try
+                {
                     panel.Realize();
                     panelsRealized++;
                 }
-                catch {
+                catch
+                {
                 }
             }
-            for (; i<old; i++) {
+            for (; i < old; i++)
+            {
                 SendMessage(NativeMethods.SB_SETTEXT, 0, null);
             }
         }
@@ -724,16 +839,19 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Remove the internal list of panels without updating the control.
         /// </summary>
-        internal void RemoveAllPanelsWithoutUpdate() {
+        internal void RemoveAllPanelsWithoutUpdate()
+        {
             int size = this.panels.Count;
             // remove the parent reference
-            for (int i = 0; i < size; i++) {
-                StatusBarPanel sbp = (StatusBarPanel) this.panels[i];
+            for (int i = 0; i < size; i++)
+            {
+                StatusBarPanel sbp = (StatusBarPanel)this.panels[i];
                 sbp.ParentInternal = null;
             }
 
             this.panels.Clear();
-            if (this.showPanels == true) {
+            if (this.showPanels == true)
+            {
                 ApplyPanelWidths();
                 ForcePanelUpdate();
             }
@@ -744,30 +862,38 @@ namespace System.Windows.Forms {
         ///     Sets the widths of any panels that have the
         ///     StatusBarPanelAutoSize.CONTENTS property set.
         /// </summary>
-        internal void SetPanelContentsWidths(bool newPanels) {
+        internal void SetPanelContentsWidths(bool newPanels)
+        {
             int size = panels.Count;
             bool changed = false;
-            for (int i = 0; i < size; i++) {
-                StatusBarPanel sbp = (StatusBarPanel) panels[i];
-                if (sbp.AutoSize == StatusBarPanelAutoSize.Contents) {
+            for (int i = 0; i < size; i++)
+            {
+                StatusBarPanel sbp = (StatusBarPanel)panels[i];
+                if (sbp.AutoSize == StatusBarPanelAutoSize.Contents)
+                {
                     int newWidth = sbp.GetContentsWidth(newPanels);
-                    if (sbp.Width != newWidth) {
+                    if (sbp.Width != newWidth)
+                    {
                         sbp.Width = newWidth;
                         changed = true;
                     }
                 }
             }
-            if (changed) {
+            if (changed)
+            {
                 DirtyLayout();
                 PerformLayout();
             }
         }
 
-        private void SetSimpleText(string simpleText) {
-            if (!showPanels && IsHandleCreated) {
+        private void SetSimpleText(string simpleText)
+        {
+            if (!showPanels && IsHandleCreated)
+            {
 
                 int wparam = SIMPLE_INDEX + NativeMethods.SBT_NOBORDERS;
-                if (RightToLeft == RightToLeft.Yes) {
+                if (RightToLeft == RightToLeft.Yes)
+                {
                     wparam |= NativeMethods.SBT_RTLREADING;
                 }
 
@@ -779,16 +905,19 @@ namespace System.Windows.Forms {
         ///     Sizes the the panels appropriately.  It looks at the SPRING AutoSize
         ///     property.
         /// </summary>
-        private void LayoutPanels() {
-            StatusBarPanel      panel = null;
-            int                 barPanelWidth = 0;
-            int                 springNum = 0;
-            StatusBarPanel[]    pArray = new StatusBarPanel[this.panels.Count];
-            bool             changed = false;
+        private void LayoutPanels()
+        {
+            StatusBarPanel panel = null;
+            int barPanelWidth = 0;
+            int springNum = 0;
+            StatusBarPanel[] pArray = new StatusBarPanel[this.panels.Count];
+            bool changed = false;
 
-            for (int i = 0; i < pArray.Length; i++) {
-                panel = (StatusBarPanel) this.panels[i];
-                if (panel.AutoSize == StatusBarPanelAutoSize.Spring) {
+            for (int i = 0; i < pArray.Length; i++)
+            {
+                panel = (StatusBarPanel)this.panels[i];
+                if (panel.AutoSize == StatusBarPanelAutoSize.Spring)
+                {
                     pArray[springNum] = panel;
                     springNum++;
                 }
@@ -797,37 +926,45 @@ namespace System.Windows.Forms {
             }
 
 
-            if (springNum > 0) {
+            if (springNum > 0)
+            {
                 Rectangle rect = Bounds;
                 int springPanelsLeft = springNum;
                 int leftoverWidth = rect.Width - barPanelWidth;
-                if (sizeGrip) {
+                if (sizeGrip)
+                {
                     leftoverWidth -= SizeGripWidth;
                 }
                 int copyOfLeftoverWidth = unchecked((int)0x80000000);
-                while (springPanelsLeft > 0) {
+                while (springPanelsLeft > 0)
+                {
 
                     int widthOfSpringPanel = (leftoverWidth) / springPanelsLeft;
                     if (leftoverWidth == copyOfLeftoverWidth)
                         break;
                     copyOfLeftoverWidth = leftoverWidth;
 
-                    for (int i = 0; i < springNum; i++) {
+                    for (int i = 0; i < springNum; i++)
+                    {
                         panel = pArray[i];
                         if (panel == null)
                             continue;
 
-                        if (widthOfSpringPanel < panel.MinWidth) {
-                            if (panel.Width != panel.MinWidth) {
+                        if (widthOfSpringPanel < panel.MinWidth)
+                        {
+                            if (panel.Width != panel.MinWidth)
+                            {
                                 changed = true;
                             }
                             panel.Width = panel.MinWidth;
                             pArray[i] = null;
-                            springPanelsLeft --;
+                            springPanelsLeft--;
                             leftoverWidth -= panel.MinWidth;
                         }
-                        else {
-                            if (panel.Width != widthOfSpringPanel) {
+                        else
+                        {
+                            if (panel.Width != widthOfSpringPanel)
+                            {
                                 changed = true;
                             }
                             panel.Width = widthOfSpringPanel;
@@ -836,7 +973,8 @@ namespace System.Windows.Forms {
                 }
             }
 
-            if (changed || layoutDirty) {
+            if (changed || layoutDirty)
+            {
                 ApplyPanelWidths();
             }
         }
@@ -847,9 +985,11 @@ namespace System.Windows.Forms {
         ///       event.
         ///    </para>
         /// </summary>
-        protected virtual void OnDrawItem(StatusBarDrawItemEventArgs sbdievent) {
+        protected virtual void OnDrawItem(StatusBarDrawItemEventArgs sbdievent)
+        {
             StatusBarDrawItemEventHandler handler = (StatusBarDrawItemEventHandler)Events[EVENT_SBDRAWITEM];
-            if (handler != null) handler(this,sbdievent);
+            if (handler != null)
+                handler(this, sbdievent);
         }
 
         /// <summary>
@@ -858,7 +998,8 @@ namespace System.Windows.Forms {
         ///       event.
         ///    </para>
         /// </summary>
-        protected override void OnResize(EventArgs e) {
+        protected override void OnResize(EventArgs e)
+        {
             Invalidate();
             base.OnResize(e);
         }
@@ -868,10 +1009,12 @@ namespace System.Windows.Forms {
         ///       Returns a string representation for this control.
         ///    </para>
         /// </summary>
-        public override string ToString() {
+        public override string ToString()
+        {
 
             string s = base.ToString();
-            if (Panels != null) {
+            if (Panels != null)
+            {
                 s += ", Panels.Count: " + Panels.Count.ToString(CultureInfo.CurrentCulture);
                 if (Panels.Count > 0)
                     s += ", Panels[0]: " + Panels[0].ToString();
@@ -880,42 +1023,52 @@ namespace System.Windows.Forms {
         }
 
         //call this when System.Windows.forms.toolTip is Associated with Statusbar....
-        internal void SetToolTip(ToolTip t) {
+        internal void SetToolTip(ToolTip t)
+        {
             this.mainToolTip = t;
             toolTipSet = true;
 
         }
 
-        internal void UpdateTooltip(StatusBarPanel panel) {
-            if (tooltips == null) {
-                if (IsHandleCreated && !DesignMode) {
+        internal void UpdateTooltip(StatusBarPanel panel)
+        {
+            if (tooltips == null)
+            {
+                if (IsHandleCreated && !DesignMode)
+                {
                     //This shouldn't happen: tooltips should've already been set.  The best we can 
                     //do here is reset it.
                     tooltips = new ControlToolTip(this);
                 }
-                else {
+                else
+                {
                     return;
                 }
             }
 
-            if (panel.Parent == this && panel.ToolTipText.Length > 0) {
+            if (panel.Parent == this && panel.ToolTipText.Length > 0)
+            {
                 int border = SystemInformation.Border3DSize.Width;
                 ControlToolTip.Tool t = tooltips.GetTool(panel);
-                if (t == null) {
+                if (t == null)
+                {
                     t = new ControlToolTip.Tool();
                 }
                 t.text = panel.ToolTipText;
-                t.rect = new Rectangle(panel.Right-panel.Width + border, 0, panel.Width - border, Height);
+                t.rect = new Rectangle(panel.Right - panel.Width + border, 0, panel.Width - border, Height);
                 tooltips.SetTool(panel, t);
             }
-            else {
+            else
+            {
                 tooltips.SetTool(panel, null);
             }
         }
 
-        private void UpdatePanelIndex() {
+        private void UpdatePanelIndex()
+        {
             int length = panels.Count;
-            for (int i=0; i<length; i++) {
+            for (int i = 0; i < length; i++)
+            {
                 ((StatusBarPanel)panels[i]).Index = i;
             }
         }
@@ -923,7 +1076,8 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Processes messages for ownerdraw panels.
         /// </summary>
-        private void WmDrawItem(ref Message m) {
+        private void WmDrawItem(ref Message m)
+        {
             NativeMethods.DRAWITEMSTRUCT dis = (NativeMethods.DRAWITEMSTRUCT)m.GetLParam(typeof(NativeMethods.DRAWITEMSTRUCT));
 
             int length = this.panels.Count;
@@ -943,28 +1097,34 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// </summary>
-        private void WmNotifyNMClick(NativeMethods.NMHDR note) {
+        private void WmNotifyNMClick(NativeMethods.NMHDR note)
+        {
 
-            if (!showPanels) {
+            if (!showPanels)
+            {
                 return;
             }
 
             int size = panels.Count;
             int currentOffset = 0;
             int index = -1;
-            for (int i = 0; i < size; i++) {
-                StatusBarPanel panel = (StatusBarPanel) panels[i];
+            for (int i = 0; i < size; i++)
+            {
+                StatusBarPanel panel = (StatusBarPanel)panels[i];
                 currentOffset += panel.Width;
-                if (lastClick.X < currentOffset) {
+                if (lastClick.X < currentOffset)
+                {
                     // this is where the mouse was clicked.
                     index = i;
                     break;
                 }
             }
-            if (index != -1) {
+            if (index != -1)
+            {
                 MouseButtons button = MouseButtons.Left;
                 int clicks = 0;
-                switch (note.code) {
+                switch (note.code)
+                {
                     case NativeMethods.NM_CLICK:
                         button = MouseButtons.Left;
                         clicks = 1;
@@ -984,7 +1144,7 @@ namespace System.Windows.Forms {
                 }
 
                 Point pt = lastClick;
-                StatusBarPanel panel = (StatusBarPanel) panels[index];
+                StatusBarPanel panel = (StatusBarPanel)panels[index];
 
                 StatusBarPanelClickEventArgs sbpce = new StatusBarPanelClickEventArgs(panel,
                                                                                       button, clicks, pt.X, pt.Y);
@@ -992,7 +1152,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        private void WmNCHitTest(ref Message m) {
+        private void WmNCHitTest(ref Message m)
+        {
             int x = NativeMethods.Util.LOWORD(m.LParam);
             Rectangle bounds = Bounds;
             bool callSuper = true;
@@ -1003,29 +1164,37 @@ namespace System.Windows.Forms {
             //       : to prevent that we provide a little bit a sanity to only
             //       : allow resizing, when it would resize the form.
             //
-            if (x > bounds.X + bounds.Width - SizeGripWidth) {
+            if (x > bounds.X + bounds.Width - SizeGripWidth)
+            {
                 Control parent = ParentInternal;
-                if (parent != null && parent is Form) {
+                if (parent != null && parent is Form)
+                {
                     FormBorderStyle bs = ((Form)parent).FormBorderStyle;
 
                     if (bs != FormBorderStyle.Sizable
-                        && bs != FormBorderStyle.SizableToolWindow) {
+                        && bs != FormBorderStyle.SizableToolWindow)
+                    {
                         callSuper = false;
                     }
 
                     if (!((Form)parent).TopLevel
-                        || Dock != DockStyle.Bottom) {
+                        || Dock != DockStyle.Bottom)
+                    {
 
                         callSuper = false;
                     }
 
-                    if (callSuper) {
+                    if (callSuper)
+                    {
                         Control.ControlCollection children = parent.Controls;
                         int c = children.Count;
-                        for (int i=0; i<c; i++) {
+                        for (int i = 0; i < c; i++)
+                        {
                             Control ctl = children[i];
-                            if (ctl != this && ctl.Dock == DockStyle.Bottom) {
-                                if (ctl.Top > Top) {
+                            if (ctl != this && ctl.Dock == DockStyle.Bottom)
+                            {
+                                if (ctl.Top > Top)
+                                {
                                     callSuper = false;
                                     break;
                                 }
@@ -1033,15 +1202,18 @@ namespace System.Windows.Forms {
                         }
                     }
                 }
-                else {
+                else
+                {
                     callSuper = false;
                 }
             }
 
-            if (callSuper) {
+            if (callSuper)
+            {
                 base.WndProc(ref m);
             }
-            else {
+            else
+            {
                 m.Result = (IntPtr)NativeMethods.HTCLIENT;
             }
         }
@@ -1053,8 +1225,10 @@ namespace System.Windows.Forms {
         ///       for any messages that they don't handle.
         ///    </para>
         /// </summary>
-        protected override void WndProc(ref Message m) {
-            switch (m.Msg) {
+        protected override void WndProc(ref Message m)
+        {
+            switch (m.Msg)
+            {
                 case Interop.WindowMessages.WM_NCHITTEST:
                     WmNCHitTest(ref m);
                     break;
@@ -1064,7 +1238,8 @@ namespace System.Windows.Forms {
                 case Interop.WindowMessages.WM_NOTIFY:
                 case Interop.WindowMessages.WM_NOTIFY + Interop.WindowMessages.WM_REFLECT:
                     NativeMethods.NMHDR note = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
-                    switch (note.code) {
+                    switch (note.code)
+                    {
                         case NativeMethods.NM_CLICK:
                         case NativeMethods.NM_RCLICK:
                         case NativeMethods.NM_DBLCLK:
@@ -1092,7 +1267,8 @@ namespace System.Windows.Forms {
         [
         ListBindable(false)
         ]
-        public class StatusBarPanelCollection : IList {
+        public class StatusBarPanelCollection : IList
+        {
             private StatusBar owner;
             /// A caching mechanism for key accessor
             /// We use an index here rather than control so that we don't have lifetime
@@ -1105,58 +1281,70 @@ namespace System.Windows.Forms {
             ///       Constructor for the StatusBarPanelCollection class
             ///    </para>
             /// </summary>
-            public StatusBarPanelCollection(StatusBar owner) {
+            public StatusBarPanelCollection(StatusBar owner)
+            {
                 this.owner = owner;
             }
 
             /// <summary>
             ///       This method will return an individual StatusBarPanel with the appropriate index.
             /// </summary>
-            public virtual StatusBarPanel this[int index] {
-                get {
-                    return(StatusBarPanel)owner.panels[index];
+            public virtual StatusBarPanel this[int index]
+            {
+                get
+                {
+                    return (StatusBarPanel)owner.panels[index];
                 }
-                set {
+                set
+                {
 
                     if (value == null)
                         throw new ArgumentNullException(nameof(StatusBarPanel));
 
                     owner.layoutDirty = true;
 
-                    if (value.Parent != null) {
+                    if (value.Parent != null)
+                    {
                         throw new ArgumentException(SR.ObjectHasParent, "value");
                     }
 
                     int length = owner.panels.Count;
 
-                    if (index < 0|| index >= length)
+                    if (index < 0 || index >= length)
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
 
-                    StatusBarPanel oldPanel = (StatusBarPanel) owner.panels[index];
+                    StatusBarPanel oldPanel = (StatusBarPanel)owner.panels[index];
                     oldPanel.ParentInternal = null;
                     value.ParentInternal = owner;
-                    if (value.AutoSize == StatusBarPanelAutoSize.Contents) {
+                    if (value.AutoSize == StatusBarPanelAutoSize.Contents)
+                    {
                         value.Width = value.GetContentsWidth(true);
                     }
                     owner.panels[index] = value;
                     value.Index = index;
 
-                    if (owner.ArePanelsRealized()) {
+                    if (owner.ArePanelsRealized())
+                    {
                         owner.PerformLayout();
                         value.Realize();
                     }
                 }
             }
 
-            object IList.this[int index] {
-                get {
+            object IList.this[int index]
+            {
+                get
+                {
                     return this[index];
                 }
-                set {
-                    if (value is StatusBarPanel) {
+                set
+                {
+                    if (value is StatusBarPanel)
+                    {
                         this[index] = (StatusBarPanel)value;
                     }
-                    else {
+                    else
+                    {
                         throw new ArgumentException(SR.StatusBarBadStatusBarPanel, "value");
                     }
                 }
@@ -1164,19 +1352,24 @@ namespace System.Windows.Forms {
             /// <summary>
             ///     <para>Retrieves the child control with the specified key.</para>
             /// </summary>
-            public virtual StatusBarPanel this[string key] {
-                get {
+            public virtual StatusBarPanel this[string key]
+            {
+                get
+                {
                     // We do not support null and empty string as valid keys.
-                    if (string.IsNullOrEmpty(key)){
+                    if (string.IsNullOrEmpty(key))
+                    {
                         return null;
                     }
 
                     // Search for the key in our collection
                     int index = IndexOfKey(key);
-                    if (IsValidIndex(index)) {
+                    if (IsValidIndex(index))
+                    {
                         return this[index];
                     }
-                    else {
+                    else
+                    {
                         return null;
                     }
 
@@ -1190,32 +1383,42 @@ namespace System.Windows.Forms {
             ///    </para>
             /// </summary>
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-            public int Count {
-                get {
+            public int Count
+            {
+                get
+                {
                     return owner.panels.Count;
                 }
             }
 
-            object ICollection.SyncRoot {
-                get {
+            object ICollection.SyncRoot
+            {
+                get
+                {
                     return this;
                 }
             }
 
-            bool ICollection.IsSynchronized {
-                get {
+            bool ICollection.IsSynchronized
+            {
+                get
+                {
                     return false;
                 }
             }
 
-            bool IList.IsFixedSize {
-                get {
+            bool IList.IsFixedSize
+            {
+                get
+                {
                     return false;
                 }
             }
 
-            public bool IsReadOnly {
-                get {
+            public bool IsReadOnly
+            {
+                get
+                {
                     return false;
                 }
             }
@@ -1225,7 +1428,8 @@ namespace System.Windows.Forms {
             ///       Adds a StatusBarPanel to the collection.
             ///    </para>
             /// </summary>
-            public virtual StatusBarPanel Add(string text) {
+            public virtual StatusBarPanel Add(string text)
+            {
                 StatusBarPanel panel = new StatusBarPanel();
                 panel.Text = text;
                 Add(panel);
@@ -1237,39 +1441,50 @@ namespace System.Windows.Forms {
             ///       Adds a StatusBarPanel to the collection.
             ///    </para>
             /// </summary>
-            public virtual int Add(StatusBarPanel value) {
+            public virtual int Add(StatusBarPanel value)
+            {
                 int index = owner.panels.Count;
                 Insert(index, value);
                 return index;
             }
 
-            int IList.Add(object value) {
-                if (value is StatusBarPanel) {
+            int IList.Add(object value)
+            {
+                if (value is StatusBarPanel)
+                {
                     return Add((StatusBarPanel)value);
                 }
-                else {
+                else
+                {
                     throw new ArgumentException(SR.StatusBarBadStatusBarPanel, "value");
                 }
             }
 
-            public virtual void AddRange(StatusBarPanel[] panels) {
-                if (panels == null) {
+            public virtual void AddRange(StatusBarPanel[] panels)
+            {
+                if (panels == null)
+                {
                     throw new ArgumentNullException(nameof(panels));
                 }
-                foreach(StatusBarPanel panel in panels) {
+                foreach (StatusBarPanel panel in panels)
+                {
                     Add(panel);
                 }
             }
 
-            public bool Contains(StatusBarPanel panel) {
+            public bool Contains(StatusBarPanel panel)
+            {
                 return IndexOf(panel) != -1;
             }
 
-            bool IList.Contains(object panel) {
-                if (panel is StatusBarPanel) {
+            bool IList.Contains(object panel)
+            {
+                if (panel is StatusBarPanel)
+                {
                     return Contains((StatusBarPanel)panel);
                 }
-                else {
+                else
+                {
                     return false;
                 }
             }
@@ -1277,49 +1492,61 @@ namespace System.Windows.Forms {
             /// <summary>
             ///     <para>Returns true if the collection contains an item with the specified key, false otherwise.</para>
             /// </summary>
-            public virtual bool ContainsKey(string key) {
-                 return IsValidIndex(IndexOfKey(key));
+            public virtual bool ContainsKey(string key)
+            {
+                return IsValidIndex(IndexOfKey(key));
             }
 
 
-            public int IndexOf(StatusBarPanel panel) {
-                for(int index=0; index < Count; ++index) {
-                    if (this[index] == panel) {
+            public int IndexOf(StatusBarPanel panel)
+            {
+                for (int index = 0; index < Count; ++index)
+                {
+                    if (this[index] == panel)
+                    {
                         return index;
                     }
                 }
                 return -1;
             }
 
-            int IList.IndexOf(object panel) {
-                if (panel is StatusBarPanel) {
+            int IList.IndexOf(object panel)
+            {
+                if (panel is StatusBarPanel)
+                {
                     return IndexOf((StatusBarPanel)panel);
                 }
-                else {
+                else
+                {
                     return -1;
                 }
             }
 
-           /// <summary>
-           ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
-           /// </summary>
-           public virtual int  IndexOfKey(string key) {
-                  // Step 0 - Arg validation
-                  if (string.IsNullOrEmpty(key)){
-                        return -1; // we dont support empty or null keys.
-                  }
+            /// <summary>
+            ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
+            /// </summary>
+            public virtual int IndexOfKey(string key)
+            {
+                // Step 0 - Arg validation
+                if (string.IsNullOrEmpty(key))
+                {
+                    return -1; // we dont support empty or null keys.
+                }
 
                 // step 1 - check the last cached item
                 if (IsValidIndex(lastAccessedIndex))
                 {
-                    if (WindowsFormsUtils.SafeCompareStrings(this[lastAccessedIndex].Name, key, /* ignoreCase = */ true)) {
+                    if (WindowsFormsUtils.SafeCompareStrings(this[lastAccessedIndex].Name, key, /* ignoreCase = */ true))
+                    {
                         return lastAccessedIndex;
                     }
                 }
 
                 // step 2 - search for the item
-                for (int i = 0; i < this.Count; i ++) {
-                    if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, /* ignoreCase = */ true)) {
+                for (int i = 0; i < this.Count; i++)
+                {
+                    if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, /* ignoreCase = */ true))
+                    {
                         lastAccessedIndex = i;
                         return i;
                     }
@@ -1328,7 +1555,7 @@ namespace System.Windows.Forms {
                 // step 3 - we didn't find it.  Invalidate the last accessed index and return -1.
                 lastAccessedIndex = -1;
                 return -1;
-           }
+            }
 
 
             /// <summary>
@@ -1336,7 +1563,8 @@ namespace System.Windows.Forms {
             ///       Inserts a StatusBarPanel in the collection.
             ///    </para>
             /// </summary>
-            public virtual void Insert(int index, StatusBarPanel value) {
+            public virtual void Insert(int index, StatusBarPanel value)
+            {
 
                 //check for the value not to be null
                 if (value == null)
@@ -1354,7 +1582,8 @@ namespace System.Windows.Forms {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 value.ParentInternal = owner;
 
-                switch (value.AutoSize) {
+                switch (value.AutoSize)
+                {
                     case StatusBarPanelAutoSize.None:
                     case StatusBarPanelAutoSize.Spring:
                         break;
@@ -1369,20 +1598,24 @@ namespace System.Windows.Forms {
                 owner.ForcePanelUpdate();
             }
 
-            void IList.Insert(int index, object value) {
-                if (value is StatusBarPanel) {
+            void IList.Insert(int index, object value)
+            {
+                if (value is StatusBarPanel)
+                {
                     Insert(index, (StatusBarPanel)value);
                 }
-                else {
+                else
+                {
                     throw new ArgumentException(SR.StatusBarBadStatusBarPanel, "value");
                 }
             }
 
-           /// <summary>
-           ///     <para>Determines if the index is valid for the collection.</para>
-           /// </summary>
-           private bool IsValidIndex(int index) {
-               return ((index >= 0) && (index < this.Count));
+            /// <summary>
+            ///     <para>Determines if the index is valid for the collection.</para>
+            /// </summary>
+            private bool IsValidIndex(int index)
+            {
+                return ((index >= 0) && (index < this.Count));
             }
 
             /// <summary>
@@ -1390,7 +1623,8 @@ namespace System.Windows.Forms {
             ///       Removes all the StatusBarPanels in the collection.
             ///    </para>
             /// </summary>
-            public virtual void Clear() {
+            public virtual void Clear()
+            {
                 owner.RemoveAllPanelsWithoutUpdate();
                 owner.PerformLayout();
 
@@ -1401,21 +1635,25 @@ namespace System.Windows.Forms {
             ///       Removes an individual StatusBarPanel in the collection.
             ///    </para>
             /// </summary>
-            public virtual void Remove(StatusBarPanel value) {
+            public virtual void Remove(StatusBarPanel value)
+            {
 
                 //check for the value not to be null
                 if (value == null)
                     throw new ArgumentNullException(nameof(StatusBarPanel));
                 //end check
 
-                if (value.Parent != owner) {
+                if (value.Parent != owner)
+                {
                     return;
                 }
                 RemoveAt(value.Index);
             }
 
-            void IList.Remove(object value) {
-                if (value is StatusBarPanel) {
+            void IList.Remove(object value)
+            {
+                if (value is StatusBarPanel)
+                {
                     Remove((StatusBarPanel)value);
                 }
             }
@@ -1426,7 +1664,8 @@ namespace System.Windows.Forms {
             ///       Removes an individual StatusBarPanel in the collection at the given index.
             ///    </para>
             /// </summary>
-            public virtual void RemoveAt(int index) {
+            public virtual void RemoveAt(int index)
+            {
                 int length = Count;
                 if (index < 0 || index >= length)
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
@@ -1450,14 +1689,17 @@ namespace System.Windows.Forms {
             /// <summary>
             ///     <para>Removes the child control with the specified key.</para>
             /// </summary>
-            public virtual void RemoveByKey(string key) {
+            public virtual void RemoveByKey(string key)
+            {
                 int index = IndexOfKey(key);
-                if (IsValidIndex(index)) {
+                if (IsValidIndex(index))
+                {
                     RemoveAt(index);
-                 }
-             }
+                }
+            }
 
-            void ICollection.CopyTo(Array dest, int index) {
+            void ICollection.CopyTo(Array dest, int index)
+            {
                 owner.panels.CopyTo(dest, index);
             }
 
@@ -1466,11 +1708,14 @@ namespace System.Windows.Forms {
             ///       Returns the Enumerator for this collection.
             ///    </para>
             /// </summary>
-            public IEnumerator GetEnumerator() {
-                if (owner.panels != null) {
+            public IEnumerator GetEnumerator()
+            {
+                if (owner.panels != null)
+                {
                     return owner.panels.GetEnumerator();
                 }
-                else {
+                else
+                {
                     return new StatusBarPanel[0].GetEnumerator();
                 }
             }
@@ -1484,23 +1729,26 @@ namespace System.Windows.Forms {
         ///     this control binds to rectangular regions, instead of
         ///     full controls.
         /// </summary>
-        private class ControlToolTip {
+        private class ControlToolTip
+        {
 
-            public class Tool {
+            public class Tool
+            {
                 public Rectangle rect = Rectangle.Empty;
                 public string text;
                 internal IntPtr id = new IntPtr(-1);
             }
 
-            private Hashtable           tools = new Hashtable();
+            private Hashtable tools = new Hashtable();
             private ToolTipNativeWindow window = null;
-            private Control             parent = null;
-            private int                 nextId = 0;
+            private Control parent = null;
+            private int nextId = 0;
 
             /// <summary>
             ///    Creates a new ControlToolTip.
             /// </summary>
-            public ControlToolTip(Control parent) {
+            public ControlToolTip(Control parent)
+            {
                 window = new ToolTipNativeWindow(this);
                 this.parent = parent;
             }
@@ -1508,8 +1756,10 @@ namespace System.Windows.Forms {
             /// <summary>
             ///    Returns the createParams to create the window.
             /// </summary>
-            protected CreateParams CreateParams {
-                get {
+            protected CreateParams CreateParams
+            {
+                get
+                {
                     NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX();
                     icc.dwICC = NativeMethods.ICC_TAB_CLASSES;
                     SafeNativeMethods.InitCommonControlsEx(icc);
@@ -1525,20 +1775,25 @@ namespace System.Windows.Forms {
 
             /// <summary>
             /// </summary>
-            public IntPtr Handle {
-                get {
-                    if (window.Handle == IntPtr.Zero) {
+            public IntPtr Handle
+            {
+                get
+                {
+                    if (window.Handle == IntPtr.Zero)
+                    {
                         CreateHandle();
                     }
                     return window.Handle;
                 }
             }
 
-            private bool IsHandleCreated {
-                get { return window.Handle != IntPtr.Zero;}
+            private bool IsHandleCreated
+            {
+                get { return window.Handle != IntPtr.Zero; }
             }
 
-            private void AssignId(Tool tool) {
+            private void AssignId(Tool tool)
+            {
                 tool.id = (IntPtr)nextId;
                 nextId++;
             }
@@ -1554,43 +1809,54 @@ namespace System.Windows.Forms {
             ///    tool parameter will result in the tool
             ///    region being removed.
             /// </summary>
-            public void SetTool(object key, Tool tool) {
+            public void SetTool(object key, Tool tool)
+            {
                 bool remove = false;
                 bool add = false;
                 bool update = false;
 
                 Tool toRemove = null;
-                if (tools.ContainsKey(key)) {
+                if (tools.ContainsKey(key))
+                {
                     toRemove = (Tool)tools[key];
                 }
 
-                if (toRemove != null) {
+                if (toRemove != null)
+                {
                     remove = true;
                 }
-                if (tool != null) {
+                if (tool != null)
+                {
                     add = true;
                 }
                 if (tool != null && toRemove != null
-                    && tool.id == toRemove.id) {
+                    && tool.id == toRemove.id)
+                {
                     update = true;
                 }
 
-                if (update) {
+                if (update)
+                {
                     UpdateTool(tool);
                 }
-                else {
-                    if (remove) {
+                else
+                {
+                    if (remove)
+                    {
                         RemoveTool(toRemove);
                     }
-                    if (add) {
+                    if (add)
+                    {
                         AddTool(tool);
                     }
                 }
 
-                if (tool != null) {
+                if (tool != null)
+                {
                     tools[key] = tool;
                 }
-                else {
+                else
+                {
                     tools.Remove(key);
                 }
 
@@ -1600,34 +1866,44 @@ namespace System.Windows.Forms {
             ///    Returns the tool associated with the specified key,
             ///    or null if there is no area.
             /// </summary>
-            public Tool GetTool(object key) {
-                return(Tool)tools[key];
+            public Tool GetTool(object key)
+            {
+                return (Tool)tools[key];
             }
 
 
-            private void AddTool(Tool tool) {
-                if (tool != null && tool.text != null && tool.text.Length > 0) {
+            private void AddTool(Tool tool)
+            {
+                if (tool != null && tool.text != null && tool.text.Length > 0)
+                {
                     int ret;
                     StatusBar p = (StatusBar)parent;
 
-                    if (p.ToolTipSet) {
+                    if (p.ToolTipSet)
+                    {
                         ret = (int)UnsafeNativeMethods.SendMessage(new HandleRef(p.MainToolTip, p.MainToolTip.Handle), NativeMethods.TTM_ADDTOOL, 0, GetTOOLINFO(tool));
                     }
-                    else {
+                    else
+                    {
                         ret = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_ADDTOOL, 0, GetTOOLINFO(tool));
                     }
-                    if (ret == 0) {
+                    if (ret == 0)
+                    {
                         throw new InvalidOperationException(SR.StatusBarAddFailed);
                     }
                 }
             }
-            private void RemoveTool(Tool tool) {
-                if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0) {
+            private void RemoveTool(Tool tool)
+            {
+                if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0)
+                {
                     UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_DELTOOL, 0, GetMinTOOLINFO(tool));
                 }
             }
-            private void UpdateTool(Tool tool) {
-                if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0) {
+            private void UpdateTool(Tool tool)
+            {
+                if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0)
+                {
                     UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_SETTOOLINFO, 0, GetTOOLINFO(tool));
                 }
             }
@@ -1636,8 +1912,10 @@ namespace System.Windows.Forms {
             /// <summary>
             ///    Creates the handle for the control.
             /// </summary>
-            protected void CreateHandle() {
-                if (IsHandleCreated) {
+            protected void CreateHandle()
+            {
+                if (IsHandleCreated)
+                {
                     return;
                 }
 
@@ -1656,8 +1934,10 @@ namespace System.Windows.Forms {
             /// <summary>
             ///    Destroys the handle for this control.
             /// </summary>
-            protected void DestroyHandle() {
-                if (IsHandleCreated) {
+            protected void DestroyHandle()
+            {
+                if (IsHandleCreated)
+                {
                     window.DestroyHandle();
                     tools.Clear();
                 }
@@ -1668,7 +1948,8 @@ namespace System.Windows.Forms {
             ///    This method removes the component from its container (if the component has a site)
             ///    and triggers the dispose event.
             /// </summary>
-            public void Dispose() {
+            public void Dispose()
+            {
                 DestroyHandle();
             }
 
@@ -1677,18 +1958,22 @@ namespace System.Windows.Forms {
             ///     required data to uniquely identify a region. This is used primarily
             ///     for delete operations. NOTE: This cannot force the creation of a handle.
             /// </summary>
-            private NativeMethods.TOOLINFO_T GetMinTOOLINFO(Tool tool) {
+            private NativeMethods.TOOLINFO_T GetMinTOOLINFO(Tool tool)
+            {
                 NativeMethods.TOOLINFO_T ti = new NativeMethods.TOOLINFO_T();
                 ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_T>();
                 ti.hwnd = parent.Handle;
-                if ((int)tool.id < 0) {
+                if ((int)tool.id < 0)
+                {
                     AssignId(tool);
                 }
                 StatusBar p = (StatusBar)parent;
-                if (p != null && p.ToolTipSet) {
-                   ti.uId = parent.Handle; 
+                if (p != null && p.ToolTipSet)
+                {
+                    ti.uId = parent.Handle;
                 }
-                else {
+                else
+                {
                     ti.uId = tool.id;
                 }
                 return ti;
@@ -1698,7 +1983,8 @@ namespace System.Windows.Forms {
             ///     Returns a detailed TOOLINFO_T structure that represents the specified
             ///     region. NOTE: This may force the creation of a handle.
             /// </summary>
-            private NativeMethods.TOOLINFO_T GetTOOLINFO(Tool tool) {
+            private NativeMethods.TOOLINFO_T GetTOOLINFO(Tool tool)
+            {
                 NativeMethods.TOOLINFO_T ti = GetMinTOOLINFO(tool);
                 ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_T>();
                 ti.uFlags |= NativeMethods.TTF_TRANSPARENT | NativeMethods.TTF_SUBCLASS;
@@ -1706,7 +1992,8 @@ namespace System.Windows.Forms {
                 // RightToLeft reading order
                 //
                 Control richParent = parent;
-                if (richParent != null && richParent.RightToLeft == RightToLeft.Yes) {
+                if (richParent != null && richParent.RightToLeft == RightToLeft.Yes)
+                {
                     ti.uFlags |= NativeMethods.TTF_RTLREADING;
                 }
 
@@ -1718,7 +2005,8 @@ namespace System.Windows.Forms {
 
             /// <summary>
             /// </summary>
-            ~ControlToolTip() {
+            ~ControlToolTip()
+            {
                 DestroyHandle();
             }
 
@@ -1726,8 +2014,10 @@ namespace System.Windows.Forms {
             ///    WNDPROC
             /// </summary>
 
-            protected void WndProc(ref Message msg) {
-                switch (msg.Msg) {
+            protected void WndProc(ref Message msg)
+            {
+                switch (msg.Msg)
+                {
                     case Interop.WindowMessages.WM_SETFOCUS:
                         // 
 
@@ -1742,15 +2032,19 @@ namespace System.Windows.Forms {
 
             /// <summary>
             /// </summary>
-            private class ToolTipNativeWindow : NativeWindow {
+            private class ToolTipNativeWindow : NativeWindow
+            {
                 ControlToolTip control;
 
-                internal ToolTipNativeWindow(ControlToolTip control) {
+                internal ToolTipNativeWindow(ControlToolTip control)
+                {
                     this.control = control;
                 }
 
-                protected override void WndProc(ref Message m) {
-                    if (control != null) {
+                protected override void WndProc(ref Message m)
+                {
+                    if (control != null)
+                    {
                         control.WndProc(ref m);
                     }
                 }

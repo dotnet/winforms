@@ -83,7 +83,7 @@ namespace System.Windows.Forms
 
                 if (_list == null)
                 {
-                     // nothing to do
+                    // nothing to do
                     return;
                 }
 
@@ -153,7 +153,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(SR.ListViewGroupCollectionBadListViewGroup, nameof(value));
             }
-                
+
             return Add(group);
         }
 
@@ -210,7 +210,7 @@ namespace System.Windows.Forms
             {
                 this[i].ListView = null;
             }
-            
+
             List.Clear();
 
             // we have to tell the listView that there are no more groups

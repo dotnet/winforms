@@ -4,7 +4,8 @@
 
 
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
 
     using System.Diagnostics;
 
@@ -19,21 +20,26 @@ namespace System.Windows.Forms {
     ///       Provides data for the <see cref='System.Windows.Forms.TreeView.OnAfterCheck'/>, <see cref='System.Windows.Forms.TreeView.AfterCollapse'/>, <see cref='System.Windows.Forms.TreeView.AfterExpand'/>, or <see cref='System.Windows.Forms.TreeView.AfterSelect'/> event.
     ///    </para>
     /// </summary>
-    public class TreeViewEventArgs : EventArgs {
+    public class TreeViewEventArgs : EventArgs
+    {
         TreeNode node;
         TreeViewAction action = TreeViewAction.Unknown;
-        
-        public TreeViewEventArgs(TreeNode node) {
+
+        public TreeViewEventArgs(TreeNode node)
+        {
             this.node = node;
         }
-        
-        public TreeViewEventArgs(TreeNode node, TreeViewAction action) {
-            this.node = node;                                           
+
+        public TreeViewEventArgs(TreeNode node, TreeViewAction action)
+        {
+            this.node = node;
             this.action = action;
         }
-        
-        public TreeNode Node {
-            get {
+
+        public TreeNode Node
+        {
+            get
+            {
                 return node;
             }
         }
@@ -41,8 +47,10 @@ namespace System.Windows.Forms {
         /// <summary>
         ///      An event specific action-flag.
         /// </summary>
-        public TreeViewAction Action {
-            get {
+        public TreeViewAction Action
+        {
+            get
+            {
                 return action;
             }
         }

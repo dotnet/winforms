@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
 
     using Microsoft.Win32;
     using System;
@@ -19,26 +20,29 @@ namespace System.Windows.Forms {
     [
     DefaultEvent(nameof(Popup)),
     ]
-    public class ContextMenu : Menu {
+    public class ContextMenu : Menu
+    {
 
         private EventHandler onPopup;
         private EventHandler onCollapse;
         internal Control sourceControl;
-        
+
         private RightToLeft rightToLeft = System.Windows.Forms.RightToLeft.Inherit;
-    
+
         /// <summary>
         ///     Creates a new ContextMenu object with no items in it by default.
         /// </summary>
         public ContextMenu()
-            : base(null) {
+            : base(null)
+        {
         }
 
         /// <summary>
         ///     Creates a ContextMenu object with the given MenuItems.
         /// </summary>
         public ContextMenu(MenuItem[] menuItems)
-            : base(menuItems) {
+            : base(menuItems)
+        {
         }
 
         /// <summary>
@@ -50,27 +54,31 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.ContextMenuSourceControlDescr))
         ]
-        public Control SourceControl {
-            get {
+        public Control SourceControl
+        {
+            get
+            {
                 return sourceControl;
             }
         }
 
         [SRDescription(nameof(SR.MenuItemOnInitDescr))]
-        public event EventHandler Popup {
+        public event EventHandler Popup
+        {
             add => onPopup += value;
             remove => onPopup -= value;
         }
-        
+
         /// <summary>
         ///    Fires when the context menu collapses.
         /// </summary>
         [SRDescription(nameof(SR.ContextMenuCollapseDescr))]
-        public event EventHandler Collapse {
+        public event EventHandler Collapse
+        {
             add => onCollapse += value;
             remove => onCollapse -= value;
         }
-        
+
         /// <summary>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
@@ -83,44 +91,57 @@ namespace System.Windows.Forms {
         DefaultValue(RightToLeft.No),
         SRDescription(nameof(SR.MenuRightToLeftDescr))
         ]
-        public virtual RightToLeft RightToLeft {
-            get {
-                if (System.Windows.Forms.RightToLeft.Inherit == rightToLeft) {
-                    if (sourceControl != null) {
+        public virtual RightToLeft RightToLeft
+        {
+            get
+            {
+                if (System.Windows.Forms.RightToLeft.Inherit == rightToLeft)
+                {
+                    if (sourceControl != null)
+                    {
                         return ((Control)sourceControl).RightToLeft;
                     }
-                    else {
+                    else
+                    {
                         return RightToLeft.No;
                     }
                 }
-                else {
+                else
+                {
                     return rightToLeft;
                 }
             }
-            set {
-            
+            set
+            {
+
                 //valid values are 0x0 to 0x2.
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)RightToLeft.No, (int)RightToLeft.Inherit)){
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)RightToLeft.No, (int)RightToLeft.Inherit))
+                {
                     throw new InvalidEnumArgumentException(nameof(RightToLeft), (int)value, typeof(RightToLeft));
                 }
-                if (RightToLeft != value) {
+                if (RightToLeft != value)
+                {
                     rightToLeft = value;
                     UpdateRtl((value == System.Windows.Forms.RightToLeft.Yes));
                 }
 
             }
-        } 
+        }
 
-        internal override bool RenderIsRightToLeft {
-            get {
+        internal override bool RenderIsRightToLeft
+        {
+            get
+            {
                 return (rightToLeft == System.Windows.Forms.RightToLeft.Yes);
             }
         }
         /// <summary>
         ///     Fires the popup event
         /// </summary>
-        protected internal virtual void OnPopup(EventArgs e) {
-            if (onPopup != null) {
+        protected internal virtual void OnPopup(EventArgs e)
+        {
+            if (onPopup != null)
+            {
                 onPopup(this, e);
             }
         }
@@ -128,28 +149,34 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Fires the collapse event
         /// </summary>
-        protected internal virtual void OnCollapse(EventArgs e) {
-            if (onCollapse != null) {
+        protected internal virtual void OnCollapse(EventArgs e)
+        {
+            if (onCollapse != null)
+            {
                 onCollapse(this, e);
             }
         }
 
         /// <summary>
         /// </summary>
-        protected internal virtual bool ProcessCmdKey(ref Message msg, Keys keyData, Control control) {
+        protected internal virtual bool ProcessCmdKey(ref Message msg, Keys keyData, Control control)
+        {
             sourceControl = control;
             return ProcessCmdKey(ref msg, keyData);
         }
 
-        private void ResetRightToLeft() {
-        	RightToLeft = RightToLeft.No;	
+        private void ResetRightToLeft()
+        {
+            RightToLeft = RightToLeft.No;
         }
-        
+
         /// <summary>
         ///     Returns true if the RightToLeft should be persisted in code gen.
         /// </summary>
-        internal virtual bool ShouldSerializeRightToLeft() {
-            if (System.Windows.Forms.RightToLeft.Inherit == rightToLeft) {
+        internal virtual bool ShouldSerializeRightToLeft()
+        {
+            if (System.Windows.Forms.RightToLeft.Inherit == rightToLeft)
+            {
                 return false;
             }
             return true;
@@ -159,7 +186,8 @@ namespace System.Windows.Forms {
         ///     Displays the context menu at the specified position.  This method
         ///     doesn't return until the menu is dismissed.
         /// </summary>
-        public void Show(Control control, Point pos) {
+        public void Show(Control control, Point pos)
+        {
             Show(control, pos, NativeMethods.TPM_VERTICAL | NativeMethods.TPM_RIGHTBUTTON);
         }
 
@@ -167,21 +195,25 @@ namespace System.Windows.Forms {
         ///     Displays the context menu at the specified position.  This method
         ///     doesn't return until the menu is dismissed.
         /// </summary>
-        public void Show(Control control, Point pos, LeftRightAlignment alignment)  {
+        public void Show(Control control, Point pos, LeftRightAlignment alignment)
+        {
 
             // This code below looks wrong but it's correct. 
             // WinForms Left alignment means we want the menu to show up left of the point it is invoked from.
             // We specify TPM_RIGHTALIGN which tells win32 to align the right side of this 
             // menu with the point (which aligns it Left visually)
-            if (alignment == LeftRightAlignment.Left) {
+            if (alignment == LeftRightAlignment.Left)
+            {
                 Show(control, pos, NativeMethods.TPM_VERTICAL | NativeMethods.TPM_RIGHTBUTTON | NativeMethods.TPM_RIGHTALIGN);
             }
-            else {
+            else
+            {
                 Show(control, pos, NativeMethods.TPM_VERTICAL | NativeMethods.TPM_RIGHTBUTTON | NativeMethods.TPM_LEFTALIGN);
             }
         }
 
-        private void Show(Control control, Point pos, int flags) {
+        private void Show(Control control, Point pos, int flags)
+        {
             if (control == null)
                 throw new ArgumentNullException(nameof(control));
 
@@ -199,6 +231,6 @@ namespace System.Windows.Forms {
                 new HandleRef(control, control.Handle),
                 null);
         }
-            
+
     }
 }

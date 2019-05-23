@@ -137,7 +137,7 @@ namespace System.Windows.Forms
             {
                 return false;
             }
-             
+
             return this == otherPadding;
         }
 

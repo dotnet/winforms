@@ -251,7 +251,7 @@ internal static partial class Interop
                 {
                     return handle;
                 }
-    
+
                 int currentCount = 0;
                 lock (this)
                 {

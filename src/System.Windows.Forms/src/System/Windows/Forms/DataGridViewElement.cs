@@ -10,7 +10,7 @@ namespace System.Windows.Forms
     /// <summary>
     /// Identifies an element in the dataGridView (base class for TCell, TBand, TRow, TColumn.
     /// </summary>
-    public class DataGridViewElement 
+    public class DataGridViewElement
     {
         private DataGridViewElementStates _state; // enabled frozen readOnly resizable selected visible
         private DataGridView _dataGridView;

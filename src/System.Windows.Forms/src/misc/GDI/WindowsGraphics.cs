@@ -19,7 +19,7 @@ namespace System.Experimental.Gdi
     using System.Runtime.InteropServices;
     using System.ComponentModel;
     using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;    
+    using System.Diagnostics.CodeAnalysis;
     using System.Drawing;
     using System.Drawing.Drawing2D;
     using System.Runtime.Versioning;
@@ -55,9 +55,9 @@ namespace System.Experimental.Gdi
 
         // Construction/destruction API
 
-        public WindowsGraphics( DeviceContext dc )
+        public WindowsGraphics(DeviceContext dc)
         {
-            Debug.Assert( dc != null, "null dc!");         
+            Debug.Assert(dc != null, "null dc!");
             this.dc = dc;
             this.dc.SaveHdc();
             //this.disposeDc = false; // the dc is not owned by this object.
@@ -68,14 +68,14 @@ namespace System.Experimental.Gdi
         ///     This object is suitable for performing text measuring but not for drawing into it because it does 
         ///     not have a backup bitmap.
         /// </summary>
-        
-        
+
+
         public static WindowsGraphics CreateMeasurementWindowsGraphics()
         {
             DeviceContext dc = DeviceContext.FromCompatibleDC(IntPtr.Zero);
             WindowsGraphics wg = new WindowsGraphics(dc);
             wg.disposeDc = true; // we create it, we dispose it.
-            
+
             return wg;
         }
 
@@ -84,34 +84,34 @@ namespace System.Experimental.Gdi
         ///     This object is suitable for performing text measuring but not for drawing into it because it does 
         ///     not have a backup bitmap.
         /// </summary>
-        
-        
+
+
         public static WindowsGraphics CreateMeasurementWindowsGraphics(IntPtr screenDC)
         {
             DeviceContext dc = DeviceContext.FromCompatibleDC(screenDC);
             WindowsGraphics wg = new WindowsGraphics(dc);
             wg.disposeDc = true; // we create it, we dispose it.
-            
+
             return wg;
         }
 
         public static WindowsGraphics FromHwnd(IntPtr hWnd)
-        { 
-            DeviceContext dc = DeviceContext.FromHwnd( hWnd );
-            WindowsGraphics wg = new WindowsGraphics( dc );
+        {
+            DeviceContext dc = DeviceContext.FromHwnd(hWnd);
+            WindowsGraphics wg = new WindowsGraphics(dc);
             wg.disposeDc = true; // we create it, we dispose it.
-             
-            return wg;    
+
+            return wg;
         }
 
-        
-        
+
+
         public static WindowsGraphics FromHdc(IntPtr hDc)
         {
-            Debug.Assert( hDc != IntPtr.Zero, "null hDc" );
-            
+            Debug.Assert(hDc != IntPtr.Zero, "null hDc");
+
             DeviceContext dc = DeviceContext.FromHdc(hDc);
-            WindowsGraphics wg = new WindowsGraphics( dc ); 
+            WindowsGraphics wg = new WindowsGraphics(dc);
             wg.disposeDc = true; // we create it, we dispose it.
 
             return wg;
@@ -140,19 +140,19 @@ namespace System.Experimental.Gdi
         ///     Please note that this only applies the HDC created graphics, for Bitmap derived graphics, GetHdc creates a new DIBSection and 
         ///     things get a lot more complicated.
         /// </summary>
-        
-        
+
+
         public static WindowsGraphics FromGraphics(Graphics g)
         {
             ApplyGraphicsProperties properties = ApplyGraphicsProperties.All;
             return WindowsGraphics.FromGraphics(g, properties);
         }
 
-        
-        
+
+
         public static WindowsGraphics FromGraphics(Graphics g, ApplyGraphicsProperties properties)
         {
-            Debug.Assert( g != null, "null Graphics object." );
+            Debug.Assert(g != null, "null Graphics object.");
             //Debug.Assert( properties != ApplyGraphicsProperties.None, "Consider using other WindowsGraphics constructor if not preserving Graphics properties." );
 
             WindowsRegion wr = null;
@@ -165,22 +165,22 @@ namespace System.Experimental.Gdi
             {
                 object[] data = g.GetContextInfo() as object[];
 
-                if( data != null && data.Length == 2 )
+                if (data != null && data.Length == 2)
                 {
                     clipRgn = data[0] as Region;
                     worldTransf = data[1] as Matrix;
                 }
 
-                if( worldTransf != null )
+                if (worldTransf != null)
                 {
-                    if ((properties & ApplyGraphicsProperties.TranslateTransform) != 0) 
+                    if ((properties & ApplyGraphicsProperties.TranslateTransform) != 0)
                     {
                         elements = worldTransf.Elements;
                     }
                     worldTransf.Dispose();
                 }
 
-                if( clipRgn != null )
+                if (clipRgn != null)
                 {
                     if ((properties & ApplyGraphicsProperties.Clipping) != 0)
                     {
@@ -188,7 +188,7 @@ namespace System.Experimental.Gdi
                         // in case of an unlikely exception before releasing the WindowsRegion, the finalizer will do it for us.
                         // (no try-finally block since this method is used frequently - perf).                        
                         // If the Graphics.Clip has not been set (Region.IsInfinite) we don't need to apply it to the DC.
-                        if (!clipRgn.IsInfinite(g)) 
+                        if (!clipRgn.IsInfinite(g))
                         {
                             wr = WindowsRegion.FromRegion(clipRgn, g); // WindowsRegion will take ownership of the hRegion.
                         }
@@ -197,7 +197,7 @@ namespace System.Experimental.Gdi
                 }
             }
 
-            WindowsGraphics wg = WindowsGraphics.FromHdc( g.GetHdc() ); // This locks the Graphics object.
+            WindowsGraphics wg = WindowsGraphics.FromHdc(g.GetHdc()); // This locks the Graphics object.
             wg.graphics = g;
 
             // Apply transform and clip
@@ -223,13 +223,13 @@ namespace System.Experimental.Gdi
         }
 
         ~WindowsGraphics()
-        { 
+        {
             Dispose(false);
         }
 
-        public DeviceContext DeviceContext 
+        public DeviceContext DeviceContext
         {
-            get 
+            get
             {
                 return this.dc;
             }
@@ -248,11 +248,11 @@ namespace System.Experimental.Gdi
         }
 
         [SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
-        
-        
+
+
         internal void Dispose(bool disposing)
         {
-            if (this.dc != null )
+            if (this.dc != null)
             {
                 DbgUtil.AssertFinalization(this, disposing);
 
@@ -261,34 +261,35 @@ namespace System.Experimental.Gdi
                     // Restore original dc.
                     this.dc.RestoreHdc();
 
-                    if( this.disposeDc)
+                    if (this.disposeDc)
                     {
                         this.dc.Dispose(disposing);
                     }
 
-                    if( this.graphics != null )    // if created from a Graphics object...
+                    if (this.graphics != null)    // if created from a Graphics object...
                     {
                         this.graphics.ReleaseHdcInternal(this.dc.Hdc);
                         this.graphics = null;
                     }
-                                
+
                 }
-                catch(Exception ex )
+                catch (Exception ex)
                 {
-                    if( ClientUtils.IsSecurityOrCriticalException( ex ) )
+                    if (ClientUtils.IsSecurityOrCriticalException(ex))
                     {
                         throw; // rethrow the original exception.
                     }
                     Debug.Fail("Exception thrown during disposing: \r\n" + ex.ToString());
                 }
-                finally {
+                finally
+                {
                     this.dc = null;
                 }
             }
         }
 
-        
-        
+
+
         public IntPtr GetHdc()
         {
             return this.dc.Hdc;

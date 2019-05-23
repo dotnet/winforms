@@ -88,14 +88,14 @@ namespace System.Windows.Forms
                 int alignment = this.Properties.GetInteger(PropAlignment, out found);
                 if (found)
                 {
-                    return (DataGridViewContentAlignment) alignment;
+                    return (DataGridViewContentAlignment)alignment;
                 }
                 return DataGridViewContentAlignment.NotSet;
             }
             set
             {
-               switch (value) 
-               { 
+                switch (value)
+                {
                     case DataGridViewContentAlignment.NotSet:
                     case DataGridViewContentAlignment.TopLeft:
                     case DataGridViewContentAlignment.TopCenter:
@@ -107,8 +107,8 @@ namespace System.Windows.Forms
                     case DataGridViewContentAlignment.BottomCenter:
                     case DataGridViewContentAlignment.BottomRight:
                         break;
-                    default: 
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewContentAlignment)); 
+                    default:
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewContentAlignment));
                 }
                 this.AlignmentInternal = value;
             }
@@ -124,7 +124,7 @@ namespace System.Windows.Forms
                 Debug.Assert(Enum.IsDefined(typeof(DataGridViewContentAlignment), value));
                 if (this.Alignment != value)
                 {
-                    this.Properties.SetInteger(PropAlignment, (int) value);
+                    this.Properties.SetInteger(PropAlignment, (int)value);
                     OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
                 }
             }
@@ -137,7 +137,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.Properties.GetColor(PropBackColor);              
+                return this.Properties.GetColor(PropBackColor);
             }
             set
             {
@@ -154,7 +154,7 @@ namespace System.Windows.Forms
         }
 
         [
-            Browsable(false), 
+            Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced),
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
@@ -178,7 +178,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (value == System.DBNull.Value && 
+                if (value == System.DBNull.Value &&
                     this.Properties.ContainsObject(PropDataSourceNullValue))
                 {
                     this.Properties.RemoveObject(PropDataSourceNullValue);
@@ -203,7 +203,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (Font) this.Properties.GetObject(PropFont);
+                return (Font)this.Properties.GetObject(PropFont);
             }
             set
             {
@@ -220,7 +220,7 @@ namespace System.Windows.Forms
                 }
             }
         }
-        
+
         [
             SRCategory(nameof(SR.CatAppearance))
         ]
@@ -237,7 +237,7 @@ namespace System.Windows.Forms
                 {
                     this.Properties.SetColor(PropForeColor, value);
                 }
-                if (!c.Equals(this.ForeColor)) 
+                if (!c.Equals(this.ForeColor))
                 {
                     OnPropertyChanged(DataGridViewCellStylePropertyInternal.ForeColor);
                 }
@@ -261,7 +261,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return (string) format;
+                    return (string)format;
                 }
             }
             set
@@ -293,7 +293,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return (IFormatProvider) formatProvider;
+                    return (IFormatProvider)formatProvider;
                 }
             }
             set
@@ -463,7 +463,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.Properties.GetColor(PropSelectionBackColor);              
+                return this.Properties.GetColor(PropSelectionBackColor);
             }
             set
             {
@@ -478,7 +478,7 @@ namespace System.Windows.Forms
                 }
             }
         }
-        
+
         [
             SRCategory(nameof(SR.CatAppearance))
         ]
@@ -486,7 +486,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this.Properties.GetColor(PropSelectionForeColor);        
+                return this.Properties.GetColor(PropSelectionForeColor);
             }
             set
             {
@@ -495,7 +495,7 @@ namespace System.Windows.Forms
                 {
                     this.Properties.SetColor(PropSelectionForeColor, value);
                 }
-                if (!c.Equals(this.SelectionForeColor)) 
+                if (!c.Equals(this.SelectionForeColor))
                 {
                     OnPropertyChanged(DataGridViewCellStylePropertyInternal.Color);
                 }
@@ -534,15 +534,16 @@ namespace System.Windows.Forms
                 int wrap = this.Properties.GetInteger(PropWrapMode, out found);
                 if (found)
                 {
-                    return (DataGridViewTriState) wrap;
+                    return (DataGridViewTriState)wrap;
                 }
                 return DataGridViewTriState.NotSet;
             }
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewTriState.NotSet, (int)DataGridViewTriState.False)){
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewTriState)); 
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewTriState.NotSet, (int)DataGridViewTriState.False))
+                {
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewTriState));
                 }
                 this.WrapModeInternal = value;
             }
@@ -555,7 +556,7 @@ namespace System.Windows.Forms
                 Debug.Assert(value >= DataGridViewTriState.NotSet && value <= DataGridViewTriState.False);
                 if (this.WrapMode != value)
                 {
-                    this.Properties.SetInteger(PropWrapMode, (int) value);
+                    this.Properties.SetInteger(PropWrapMode, (int)value);
                     OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
                 }
             }
@@ -627,11 +628,12 @@ namespace System.Windows.Forms
             }
         }
 
-        public virtual DataGridViewCellStyle Clone() {
+        public virtual DataGridViewCellStyle Clone()
+        {
             return new DataGridViewCellStyle(this);
         }
 
-        public override bool Equals(object o) 
+        public override bool Equals(object o)
         {
             DataGridViewCellStyle dgvcs = o as DataGridViewCellStyle;
             if (dgvcs != null)
@@ -657,13 +659,13 @@ namespace System.Windows.Forms
                     dgvcs.NullValue != this.NullValue ||
                     dgvcs.Padding != this.Padding ||
                     dgvcs.Tag != this.Tag ||
-                    dgvcs.WrapMode != this.WrapMode );
+                    dgvcs.WrapMode != this.WrapMode);
 
             bool preferredSizeNonAffectingPropDifferent = (
                     dgvcs.BackColor != this.BackColor ||
                     dgvcs.ForeColor != this.ForeColor ||
                     dgvcs.SelectionBackColor != this.SelectionBackColor ||
-                    dgvcs.SelectionForeColor != this.SelectionForeColor );
+                    dgvcs.SelectionForeColor != this.SelectionForeColor);
 
             if (preferredSizeAffectingPropDifferent)
             {
@@ -745,42 +747,49 @@ namespace System.Windows.Forms
             }
         }
 
-        private bool ShouldSerializeBackColor() {
+        private bool ShouldSerializeBackColor()
+        {
             bool found;
             this.Properties.GetColor(PropBackColor, out found);
             return found;
         }
 
-        private bool ShouldSerializeFont() {
+        private bool ShouldSerializeFont()
+        {
             return this.Properties.GetObject(PropFont) != null;
         }
 
-        private bool ShouldSerializeForeColor() {
+        private bool ShouldSerializeForeColor()
+        {
             bool found;
             this.Properties.GetColor(PropForeColor, out found);
             return found;
         }
 
-        private bool ShouldSerializeFormatProvider() {
+        private bool ShouldSerializeFormatProvider()
+        {
             return this.Properties.GetObject(PropFormatProvider) != null;
         }
 
-        private bool ShouldSerializePadding() {
+        private bool ShouldSerializePadding()
+        {
             return this.Padding != Padding.Empty;
         }
 
-        private bool ShouldSerializeSelectionBackColor() {
+        private bool ShouldSerializeSelectionBackColor()
+        {
             bool found;
             this.Properties.GetObject(PropSelectionBackColor, out found);
             return found;
         }
 
-        private bool ShouldSerializeSelectionForeColor() {
+        private bool ShouldSerializeSelectionForeColor()
+        {
             bool found;
             this.Properties.GetColor(PropSelectionForeColor, out found);
             return found;
         }
-        
+
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder(128);
@@ -894,7 +903,8 @@ namespace System.Windows.Forms
             return sb.ToString();
         }
 
-        object ICloneable.Clone() {
+        object ICloneable.Clone()
+        {
             return Clone();
         }
 

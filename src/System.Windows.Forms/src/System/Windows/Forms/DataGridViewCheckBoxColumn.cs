@@ -11,7 +11,7 @@ namespace System.Windows.Forms
     using System.Drawing;
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
-    
+
     [ToolboxBitmapAttribute(typeof(DataGridViewCheckBoxColumn), "DataGridViewCheckBoxColumn")]
     public class DataGridViewCheckBoxColumn : DataGridViewColumn
     {
@@ -62,7 +62,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (DataGridViewCheckBoxCell) this.CellTemplate;
+                return (DataGridViewCheckBoxCell)this.CellTemplate;
             }
         }
 
@@ -89,7 +89,7 @@ namespace System.Windows.Forms
             SRDescription(nameof(SR.DataGridView_CheckBoxColumnFalseValueDescr)),
             TypeConverter(typeof(StringConverter))
         ]
-        public object FalseValue 
+        public object FalseValue
         {
             get
             {
@@ -128,7 +128,7 @@ namespace System.Windows.Forms
             SRCategory(nameof(SR.CatAppearance)),
             SRDescription(nameof(SR.DataGridView_CheckBoxColumnFlatStyleDescr))
         ]
-        public FlatStyle FlatStyle 
+        public FlatStyle FlatStyle
         {
             get
             {
@@ -168,7 +168,7 @@ namespace System.Windows.Forms
             SRDescription(nameof(SR.DataGridView_CheckBoxColumnIndeterminateValueDescr)),
             TypeConverter(typeof(StringConverter))
         ]
-        public object IndeterminateValue 
+        public object IndeterminateValue
         {
             get
             {
@@ -240,16 +240,16 @@ namespace System.Windows.Forms
                         }
                         this.DataGridView.InvalidateColumn(this.Index);
                     }
-                    
-                    if (value && 
-                        this.DefaultCellStyle.NullValue is bool && 
-                        (bool) this.DefaultCellStyle.NullValue == false)
+
+                    if (value &&
+                        this.DefaultCellStyle.NullValue is bool &&
+                        (bool)this.DefaultCellStyle.NullValue == false)
                     {
                         this.DefaultCellStyle.NullValue = CheckState.Indeterminate;
                     }
-                    else if (!value && 
-                             this.DefaultCellStyle.NullValue is CheckState && 
-                             (CheckState) this.DefaultCellStyle.NullValue == CheckState.Indeterminate)
+                    else if (!value &&
+                             this.DefaultCellStyle.NullValue is CheckState &&
+                             (CheckState)this.DefaultCellStyle.NullValue == CheckState.Indeterminate)
                     {
                         this.DefaultCellStyle.NullValue = false;
                     }
@@ -323,9 +323,9 @@ namespace System.Windows.Forms
 
             DataGridViewCellStyle defaultCellStyle = this.DefaultCellStyle;
 
-            return (!defaultCellStyle.BackColor.IsEmpty || 
+            return (!defaultCellStyle.BackColor.IsEmpty ||
                     !defaultCellStyle.ForeColor.IsEmpty ||
-                    !defaultCellStyle.SelectionBackColor.IsEmpty || 
+                    !defaultCellStyle.SelectionBackColor.IsEmpty ||
                     !defaultCellStyle.SelectionForeColor.IsEmpty ||
                     defaultCellStyle.Font != null ||
                     !defaultCellStyle.NullValue.Equals(defaultNullValue) ||
@@ -334,7 +334,7 @@ namespace System.Windows.Forms
                     !defaultCellStyle.FormatProvider.Equals(System.Globalization.CultureInfo.CurrentCulture) ||
                     defaultCellStyle.Alignment != DataGridViewContentAlignment.MiddleCenter ||
                     defaultCellStyle.WrapMode != DataGridViewTriState.NotSet ||
-                    defaultCellStyle.Tag !=  null ||
+                    defaultCellStyle.Tag != null ||
                     !defaultCellStyle.Padding.Equals(Padding.Empty));
         }
 

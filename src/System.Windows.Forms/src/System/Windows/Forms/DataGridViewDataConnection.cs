@@ -686,9 +686,9 @@ namespace System.Windows.Forms
                             }
                             else
                             {
-                                #if DEBUG
+#if DEBUG
                                 Debug.Fail("fail in debug builds so we can catch this situation in the check in suites");
-                                #endif // DEBUG
+#endif // DEBUG
                                 throw new InvalidOperationException();
                             }
                             break;
@@ -805,7 +805,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                   
+
 
                 this.dataConnectionState[DATACONNECTIONSTATE_positionChangingInCurrencyManager] = true;
                 try
@@ -1077,7 +1077,7 @@ namespace System.Windows.Forms
                     // Go thru the IBindingListView which offers the entire list of sorted columns 
                     // and pick the first one as the SortedColumn.
                     ListSortDescriptionCollection sorts = iblv.SortDescriptions;
-                    if (sorts != null && 
+                    if (sorts != null &&
                         sorts.Count > 0 &&
                         sorts[0].PropertyDescriptor != null)
                     {
@@ -1208,7 +1208,7 @@ namespace System.Windows.Forms
             public string GetError(int rowIndex)
             {
                 IDataErrorInfo errInfo = null;
-                try 
+                try
                 {
                     errInfo = this.currencyManager[rowIndex] as IDataErrorInfo;
                 }
@@ -1218,7 +1218,7 @@ namespace System.Windows.Forms
                     {
                         throw;
                     }
-                    DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(exception,  -1 /*columnIndex*/, rowIndex,
+                    DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(exception, -1 /*columnIndex*/, rowIndex,
                                                                                                DataGridViewDataErrorContexts.Display);
                     this.owner.OnDataErrorInternal(dgvdee);
                     if (dgvdee.ThrowException)
@@ -1304,7 +1304,7 @@ namespace System.Windows.Forms
                     // all the properties in the currency manager should be either Browsable(false) or point to sub lists
                     if (this.props != null)
                     {
-                        for (int i = 0; i < this.props.Count; i ++)
+                        for (int i = 0; i < this.props.Count; i++)
                         {
                             Debug.Assert(!props[i].IsBrowsable || typeof(IList).IsAssignableFrom(props[i].PropertyType), "if the DGV does not have any columns then the properties in the currency manager should be Browsable(false) or point to sub lists");
                         }
@@ -1365,7 +1365,7 @@ namespace System.Windows.Forms
 
                     // Scroll target cell into view first.
                     if ((scrollIntoView && !this.owner.ScrollIntoView(columnIndex, rowIndex, true)) ||
-                        (columnIndex < this.owner.Columns.Count && rowIndex < this.owner.Rows.Count && 
+                        (columnIndex < this.owner.Columns.Count && rowIndex < this.owner.Rows.Count &&
                          !this.owner.SetAndSelectCurrentCellAddress(columnIndex, rowIndex,
                                                                    true,  /*setAnchorCellAddress*/
                                                                    false, /*validateCurrentCell*/
@@ -1385,7 +1385,7 @@ namespace System.Windows.Forms
                 try
                 {
                     object currentItem = null;
-                    if (this.currencyManager.Position >= 0 && this.currencyManager.Position < this.currencyManager.List.Count )
+                    if (this.currencyManager.Position >= 0 && this.currencyManager.Position < this.currencyManager.List.Count)
                     {
                         currentItem = this.currencyManager.Current;
                     }
@@ -1397,7 +1397,7 @@ namespace System.Windows.Forms
                     // So, if the current item inside the currency manager did not change, we have to start a new transaction.
                     // (If the current item inside the currency manager changed, then the currency manager would have already started a new transaction).
                     IEditableObject editableObject = null;
-                    if (this.currencyManager.Position >= 0 && this.currencyManager.Position < this.currencyManager.List.Count )
+                    if (this.currencyManager.Position >= 0 && this.currencyManager.Position < this.currencyManager.List.Count)
                     {
                         editableObject = this.currencyManager.Current as IEditableObject;
                     }

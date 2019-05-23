@@ -3,7 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System.Runtime.Serialization.Formatters;
     using System.Runtime.InteropServices;
     using System.ComponentModel;
@@ -27,29 +28,30 @@ namespace System.Windows.Forms {
     DesignTimeVisible(false),
     DefaultProperty(nameof(Text))
     ]
-    public class StatusBarPanel : Component, ISupportInitialize {
+    public class StatusBarPanel : Component, ISupportInitialize
+    {
 
         private const int DEFAULTWIDTH = 100;
         private const int DEFAULTMINWIDTH = 10;
         private const int PANELTEXTINSET = 3;
         private const int PANELGAP = 2;
 
-        private string          text          = string.Empty;
-        private string          name          = string.Empty;
-        private string          toolTipText   = string.Empty;
-        private Icon            icon          = null;
+        private string text = string.Empty;
+        private string name = string.Empty;
+        private string toolTipText = string.Empty;
+        private Icon icon = null;
 
-        private HorizontalAlignment        alignment     = HorizontalAlignment.Left;
-        private System.Windows.Forms.StatusBarPanelBorderStyle  borderStyle   = System.Windows.Forms.StatusBarPanelBorderStyle.Sunken;
-        private StatusBarPanelStyle        style         = StatusBarPanelStyle.Text;
+        private HorizontalAlignment alignment = HorizontalAlignment.Left;
+        private System.Windows.Forms.StatusBarPanelBorderStyle borderStyle = System.Windows.Forms.StatusBarPanelBorderStyle.Sunken;
+        private StatusBarPanelStyle style = StatusBarPanelStyle.Text;
 
         // these are package scope so the parent can get at them.
         //
-        private StatusBar       parent          = null;
-        private int             width           = DEFAULTWIDTH;
-        private int             right           = 0;
-        private int             minWidth        = DEFAULTMINWIDTH;
-        private int             index           = 0;
+        private StatusBar parent = null;
+        private int width = DEFAULTWIDTH;
+        private int right = 0;
+        private int minWidth = DEFAULTMINWIDTH;
+        private int index = 0;
         private StatusBarPanelAutoSize autoSize = StatusBarPanelAutoSize.None;
 
         private bool initializing = false;
@@ -61,7 +63,8 @@ namespace System.Windows.Forms {
         ///       Initializes a new default instance of the <see cref='System.Windows.Forms.StatusBarPanel'/> class.
         ///    </para>
         /// </summary>
-        public StatusBarPanel() {
+        public StatusBarPanel()
+        {
         }
 
         /// <summary>
@@ -77,17 +80,22 @@ namespace System.Windows.Forms {
         Localizable(true),
         SRDescription(nameof(SR.StatusBarPanelAlignmentDescr))
         ]
-        public HorizontalAlignment Alignment {
-            get {
+        public HorizontalAlignment Alignment
+        {
+            get
+            {
                 return alignment;
             }
 
-            set {
+            set
+            {
                 //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center)){
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
+                {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
                 }
-                if (alignment != value) {
+                if (alignment != value)
+                {
                     alignment = value;
                     Realize();
                 }
@@ -107,17 +115,22 @@ namespace System.Windows.Forms {
         RefreshProperties(RefreshProperties.All),
         SRDescription(nameof(SR.StatusBarPanelAutoSizeDescr))
         ]
-        public StatusBarPanelAutoSize AutoSize {
-            get {
+        public StatusBarPanelAutoSize AutoSize
+        {
+            get
+            {
                 return this.autoSize;
             }
 
-            set {
+            set
+            {
                 //valid values are 0x1 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)StatusBarPanelAutoSize.None, (int)StatusBarPanelAutoSize.Contents)){
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)StatusBarPanelAutoSize.None, (int)StatusBarPanelAutoSize.Contents))
+                {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(StatusBarPanelAutoSize));
                 }
-                if (this.autoSize != value) {
+                if (this.autoSize != value)
+                {
                     this.autoSize = value;
                     UpdateSize();
                 }
@@ -139,17 +152,22 @@ namespace System.Windows.Forms {
         DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
         SRDescription(nameof(SR.StatusBarPanelBorderStyleDescr))
         ]
-        public StatusBarPanelBorderStyle BorderStyle {
-            get {
+        public StatusBarPanelBorderStyle BorderStyle
+        {
+            get
+            {
                 return borderStyle;
             }
 
-            set {
+            set
+            {
                 //valid values are 0x1 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)StatusBarPanelBorderStyle.None, (int)StatusBarPanelBorderStyle.Sunken)){
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)StatusBarPanelBorderStyle.None, (int)StatusBarPanelBorderStyle.Sunken))
+                {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(StatusBarPanelBorderStyle));
                 }
-                if (this.borderStyle != value) {
+                if (this.borderStyle != value)
+                {
                     this.borderStyle = value;
                     Realize();
                     if (Created)
@@ -160,8 +178,10 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// </summary>
-        internal bool Created {
-            get {
+        internal bool Created
+        {
+            get
+            {
                 return this.parent != null && this.parent.ArePanelsRealized();
             }
         }
@@ -179,30 +199,37 @@ namespace System.Windows.Forms {
         Localizable(true),
         SRDescription(nameof(SR.StatusBarPanelIconDescr))
         ]
-        public Icon Icon {
-            
-            get {
+        public Icon Icon
+        {
+
+            get
+            {
                 // unfortunately we have no way of getting the icon from the control.
                 return this.icon;
             }
-            
-            
-            set {
 
-                if (value != null && (((Icon)value).Height > SystemInformation.SmallIconSize.Height || ((Icon)value).Width > SystemInformation.SmallIconSize.Width)) {
-                    this.icon  = new Icon(value, SystemInformation.SmallIconSize);
+
+            set
+            {
+
+                if (value != null && (((Icon)value).Height > SystemInformation.SmallIconSize.Height || ((Icon)value).Width > SystemInformation.SmallIconSize.Width))
+                {
+                    this.icon = new Icon(value, SystemInformation.SmallIconSize);
                 }
-                else {
+                else
+                {
                     this.icon = value;
                 }
 
-                if (Created) {
+                if (Created)
+                {
                     IntPtr handle = (this.icon == null) ? IntPtr.Zero : this.icon.Handle;
                     this.parent.SendMessage(NativeMethods.SB_SETICON, (IntPtr)GetIndex(), handle);
 
                 }
                 UpdateSize();
-                if (Created) {
+                if (Created)
+                {
                     this.parent.Invalidate();
                 }
             }
@@ -238,20 +265,26 @@ namespace System.Windows.Forms {
         RefreshProperties(RefreshProperties.All),
         SRDescription(nameof(SR.StatusBarPanelMinWidthDescr))
         ]
-        public int MinWidth {
-            get {
+        public int MinWidth
+        {
+            get
+            {
                 return this.minWidth;
             }
-            set {
-                if (value < 0) {
+            set
+            {
+                if (value < 0)
+                {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(MinWidth), value, 0));
                 }
 
-                if (value != this.minWidth) {
+                if (value != this.minWidth)
+                {
                     this.minWidth = value;
 
                     UpdateSize();
-                    if (this.minWidth > this.Width) {
+                    if (this.minWidth > this.Width)
+                    {
                         Width = value;
                     }
                 }
@@ -263,18 +296,22 @@ namespace System.Windows.Forms {
         ///       Gets or sets the name of the panel.
         ///    </para>
         /// </summary>
-	[
-        SRCategory(nameof(SR.CatAppearance)),
-        Localizable(true),
-        SRDescription(nameof(SR.StatusBarPanelNameDescr))
-        ]
-        public string Name {
-            get {
+        [
+            SRCategory(nameof(SR.CatAppearance)),
+            Localizable(true),
+            SRDescription(nameof(SR.StatusBarPanelNameDescr))
+            ]
+        public string Name
+        {
+            get
+            {
                 return WindowsFormsUtils.GetComponentName(this, name);
             }
-            set {
+            set
+            {
                 name = value;
-                if(Site!= null) {
+                if (Site != null)
+                {
                     Site.Name = name;
                 }
             }
@@ -289,8 +326,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </summary>
         [Browsable(false)]
-        public StatusBar Parent {
-            get {
+        public StatusBar Parent
+        {
+            get
+            {
                 return parent;
             }
         }
@@ -336,17 +375,22 @@ namespace System.Windows.Forms {
         DefaultValue(StatusBarPanelStyle.Text),
         SRDescription(nameof(SR.StatusBarPanelStyleDescr))
         ]
-        public StatusBarPanelStyle Style {
-            get { return style;}
-            set {
+        public StatusBarPanelStyle Style
+        {
+            get { return style; }
+            set
+            {
                 //valid values are 0x1 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)StatusBarPanelStyle.Text, (int)StatusBarPanelStyle.OwnerDraw)){
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)StatusBarPanelStyle.Text, (int)StatusBarPanelStyle.OwnerDraw))
+                {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(StatusBarPanelStyle));
                 }
-                if (this.style != value) {
+                if (this.style != value)
+                {
                     this.style = value;
                     Realize();
-                    if (Created) {
+                    if (Created)
+                    {
                         this.parent.Invalidate();
                     }
                 }
@@ -361,11 +405,14 @@ namespace System.Windows.Forms {
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]
-        public object Tag {
-            get {
+        public object Tag
+        {
+            get
+            {
                 return userData;
             }
-            set {
+            set
+            {
                 userData = value;
             }
         }
@@ -381,26 +428,35 @@ namespace System.Windows.Forms {
         DefaultValue(""),
         SRDescription(nameof(SR.StatusBarPanelTextDescr))
         ]
-        public string Text {
-            get {
-                if (text == null) {
+        public string Text
+        {
+            get
+            {
+                if (text == null)
+                {
                     return "";
                 }
-                else {
+                else
+                {
                     return text;
                 }
             }
-            set {
-                if (value == null) {
+            set
+            {
+                if (value == null)
+                {
                     value = string.Empty;
                 }
 
-                if (!Text.Equals(value)) {
+                if (!Text.Equals(value))
+                {
 
-                    if (value.Length == 0) {
+                    if (value.Length == 0)
+                    {
                         this.text = null;
                     }
-                    else {
+                    else
+                    {
                         this.text = value;
                     }
                     Realize();
@@ -421,30 +477,40 @@ namespace System.Windows.Forms {
         DefaultValue(""),
         SRDescription(nameof(SR.StatusBarPanelToolTipTextDescr))
         ]
-        public string ToolTipText {
-            get {
-                if (this.toolTipText == null) {
+        public string ToolTipText
+        {
+            get
+            {
+                if (this.toolTipText == null)
+                {
                     return "";
                 }
-                else {
+                else
+                {
                     return this.toolTipText;
                 }
             }
-            set {
-                if (value == null) {
+            set
+            {
+                if (value == null)
+                {
                     value = string.Empty;
                 }
 
-                if (!ToolTipText.Equals(value)) {
+                if (!ToolTipText.Equals(value))
+                {
 
-                    if (value.Length == 0) {
+                    if (value.Length == 0)
+                    {
                         this.toolTipText = null;
                     }
-                    else {
+                    else
+                    {
                         this.toolTipText = value;
                     }
 
-                    if (Created) {
+                    if (Created)
+                    {
                         parent.UpdateTooltip(this);
                     }
                 }
@@ -464,11 +530,14 @@ namespace System.Windows.Forms {
         DefaultValue(DEFAULTWIDTH),
         SRDescription(nameof(SR.StatusBarPanelWidthDescr))
         ]
-        public int Width {
-            get {
+        public int Width
+        {
+            get
+            {
                 return this.width;
             }
-            set {
+            set
+            {
                 if (!initializing && value < this.minWidth)
                     throw new ArgumentOutOfRangeException(nameof(Width), SR.WidthGreaterThanMinWidth);
 
@@ -480,17 +549,22 @@ namespace System.Windows.Forms {
         /// <summary>
         ///      Handles tasks required when the control is being initialized.
         /// </summary>
-        public void BeginInit() {
+        public void BeginInit()
+        {
             initializing = true;
         }
 
         /// <summary>
         /// </summary>
-        protected override void Dispose(bool disposing) {
-            if (disposing) {
-                if (parent != null) {
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (parent != null)
+                {
                     int index = GetIndex();
-                    if (index != -1) {
+                    if (index != -1)
+                    {
                         parent.Panels.RemoveAt(index);
                     }
                 }
@@ -501,10 +575,12 @@ namespace System.Windows.Forms {
         /// <summary>
         ///      Called when initialization of the control is complete.
         /// </summary>
-        public void EndInit() {
+        public void EndInit()
+        {
             initializing = false;
 
-            if (Width < MinWidth) {
+            if (Width < MinWidth)
+            {
                 Width = MinWidth;
             }
         }
@@ -512,9 +588,11 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Gets the width of the contents of the panel
         /// </summary>
-        internal int GetContentsWidth(bool newPanel) {
+        internal int GetContentsWidth(bool newPanel)
+        {
             string text;
-            if (newPanel) {
+            if (newPanel)
+            {
                 if (this.text == null)
                     text = string.Empty;
                 else
@@ -525,12 +603,13 @@ namespace System.Windows.Forms {
 
             Graphics g = this.parent.CreateGraphicsInternal();
             Size sz = Size.Ceiling(g.MeasureString(text, parent.Font));
-            if (this.icon != null) {
+            if (this.icon != null)
+            {
                 sz.Width += this.icon.Size.Width + 5;
             }
             g.Dispose();
 
-            int width = sz.Width + SystemInformation.BorderSize.Width*2 + PANELTEXTINSET*2 + PANELGAP;
+            int width = sz.Width + SystemInformation.BorderSize.Width * 2 + PANELTEXTINSET * 2 + PANELGAP;
             return Math.Max(width, minWidth);
         }
 
@@ -538,31 +617,38 @@ namespace System.Windows.Forms {
         ///     Returns the index of the panel by making the parent control search
         ///     for it within its list.
         /// </summary>
-        private int GetIndex() {
+        private int GetIndex()
+        {
             return index;
         }
 
         /// <summary>
         ///     Sets all the properties for this panel.
         /// </summary>
-        internal void Realize() {
-            if (Created) {
+        internal void Realize()
+        {
+            if (Created)
+            {
                 string text;
-                string  sendText;
-                int     border = 0;
+                string sendText;
+                int border = 0;
 
-                if (this.text == null) {
+                if (this.text == null)
+                {
                     text = string.Empty;
                 }
-                else {
+                else
+                {
                     text = this.text;
                 }
 
                 HorizontalAlignment align = alignment;
                 // Translate the alignment for Rtl apps
                 //
-                if (parent.RightToLeft == RightToLeft.Yes) {
-                    switch (align) {
+                if (parent.RightToLeft == RightToLeft.Yes)
+                {
+                    switch (align)
+                    {
                         case HorizontalAlignment.Left:
                             align = HorizontalAlignment.Right;
                             break;
@@ -572,7 +658,8 @@ namespace System.Windows.Forms {
                     }
                 }
 
-                switch (align) {
+                switch (align)
+                {
                     case HorizontalAlignment.Center:
                         sendText = "\t" + text;
                         break;
@@ -583,7 +670,8 @@ namespace System.Windows.Forms {
                         sendText = text;
                         break;
                 }
-                switch (borderStyle) {
+                switch (borderStyle)
+                {
                     case StatusBarPanelBorderStyle.None:
                         border |= NativeMethods.SBT_NOBORDERS;
                         break;
@@ -593,7 +681,8 @@ namespace System.Windows.Forms {
                         border |= NativeMethods.SBT_POPOUT;
                         break;
                 }
-                switch (style) {
+                switch (style)
+                {
                     case StatusBarPanelStyle.Text:
                         break;
                     case StatusBarPanelStyle.OwnerDraw:
@@ -603,52 +692,65 @@ namespace System.Windows.Forms {
 
 
                 int wparam = GetIndex() | border;
-                if (parent.RightToLeft == RightToLeft.Yes) {
+                if (parent.RightToLeft == RightToLeft.Yes)
+                {
                     wparam |= NativeMethods.SBT_RTLREADING;
                 }
 
-                int result = (int) UnsafeNativeMethods.SendMessage(new HandleRef(parent, parent.Handle), NativeMethods.SB_SETTEXT, (IntPtr)wparam, sendText);
+                int result = (int)UnsafeNativeMethods.SendMessage(new HandleRef(parent, parent.Handle), NativeMethods.SB_SETTEXT, (IntPtr)wparam, sendText);
 
                 if (result == 0)
                     throw new InvalidOperationException(SR.UnableToSetPanelText);
 
-                if (this.icon != null && style != StatusBarPanelStyle.OwnerDraw) {
+                if (this.icon != null && style != StatusBarPanelStyle.OwnerDraw)
+                {
                     this.parent.SendMessage(NativeMethods.SB_SETICON, (IntPtr)GetIndex(), this.icon.Handle);
                 }
-                else {
+                else
+                {
                     this.parent.SendMessage(NativeMethods.SB_SETICON, (IntPtr)GetIndex(), IntPtr.Zero);
                 }
 
-                if (style == StatusBarPanelStyle.OwnerDraw) {
+                if (style == StatusBarPanelStyle.OwnerDraw)
+                {
                     NativeMethods.RECT rect = new NativeMethods.RECT();
-                    result = (int) UnsafeNativeMethods.SendMessage(new HandleRef(parent, parent.Handle), NativeMethods.SB_GETRECT, (IntPtr)GetIndex(), ref rect);
+                    result = (int)UnsafeNativeMethods.SendMessage(new HandleRef(parent, parent.Handle), NativeMethods.SB_GETRECT, (IntPtr)GetIndex(), ref rect);
 
-                    if (result != 0) {
+                    if (result != 0)
+                    {
                         this.parent.Invalidate(Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom));
                     }
                 }
             }
         }
 
-        private void UpdateSize() {
-            if (this.autoSize == StatusBarPanelAutoSize.Contents) {
+        private void UpdateSize()
+        {
+            if (this.autoSize == StatusBarPanelAutoSize.Contents)
+            {
                 ApplyContentSizing();
             }
-            else {
-                if (Created) {
+            else
+            {
+                if (Created)
+                {
                     parent.DirtyLayout();
                     parent.PerformLayout();
                 }
             }
         }
 
-        private void ApplyContentSizing() {
+        private void ApplyContentSizing()
+        {
             if (this.autoSize == StatusBarPanelAutoSize.Contents &&
-                parent != null) {
+                parent != null)
+            {
                 int newWidth = GetContentsWidth(false);
-                if (newWidth != this.Width) {
+                if (newWidth != this.Width)
+                {
                     this.Width = newWidth;
-                    if (Created) {
+                    if (Created)
+                    {
                         parent.DirtyLayout();
                         parent.PerformLayout();
                     }
@@ -662,7 +764,8 @@ namespace System.Windows.Forms {
         ///       panel.
         ///    </para>
         /// </summary>
-        public override string ToString() {
+        public override string ToString()
+        {
             return "StatusBarPanel: {" + Text + "}";
         }
     }

@@ -121,7 +121,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(string.Format(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet));
                 }
-                
+
                 if (index < 0)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index));
@@ -135,7 +135,7 @@ namespace System.Windows.Forms
                 if (this.owner.RowHeadersVisible)
                 {
                     // decrement the index because the first child is the top left header cell
-                    index --;
+                    index--;
                 }
 
                 Debug.Assert(index >= 0);
@@ -161,7 +161,7 @@ namespace System.Windows.Forms
                 if (this.owner.RowHeadersVisible)
                 {
                     // + 1 is the top left header cell accessibility object
-                    result ++;
+                    result++;
                 }
 
                 return result;

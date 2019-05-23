@@ -151,7 +151,7 @@ namespace System.Windows.Forms
             this.dataGridView.NotifyCurrentCellDirty(true);
         }
 
-        protected override void OnSelectedIndexChanged(EventArgs e) 
+        protected override void OnSelectedIndexChanged(EventArgs e)
         {
             base.OnSelectedIndexChanged(e);
             if (this.SelectedIndex != -1)

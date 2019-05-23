@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System.ComponentModel;
     using System.Diagnostics;
     using System;
@@ -13,7 +14,8 @@ namespace System.Windows.Forms {
 
     /// <summary>
     /// </summary>
-    internal sealed class MdiWindowDialog : Form {
+    internal sealed class MdiWindowDialog : Form
+    {
         private System.Windows.Forms.ListBox itemList;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button cancelButton;
@@ -21,13 +23,16 @@ namespace System.Windows.Forms {
         Form active;
 
         public MdiWindowDialog()
-            : base() {
+            : base()
+        {
 
             InitializeComponent();
         }
 
-        public Form ActiveChildForm {
-            get {
+        public Form ActiveChildForm
+        {
+            get
+            {
 #if DEBUG
                 ListItem item = (ListItem)itemList.SelectedItem;
                 Debug.Assert(item != null, "No item selected!");
@@ -39,25 +44,32 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// </summary>
-        private class ListItem {
+        private class ListItem
+        {
             public Form form;
 
-            public ListItem(Form f) {
+            public ListItem(Form f)
+            {
                 form = f;
             }
 
-            public override string ToString() {
+            public override string ToString()
+            {
                 return form.Text;
             }
         }
 
-        public void SetItems(Form active, Form[] all) {
+        public void SetItems(Form active, Form[] all)
+        {
             int selIndex = 0;
-            for (int i=0; i<all.Length; i++) {
+            for (int i = 0; i < all.Length; i++)
+            {
                 // Don't list non-visible windows
-                if(all[i].Visible) {
+                if (all[i].Visible)
+                {
                     int n = itemList.Items.Add(new ListItem(all[i]));
-                    if (all[i].Equals(active)) {
+                    if (all[i].Equals(active))
+                    {
                         selIndex = n;
                     }
                 }
@@ -66,13 +78,16 @@ namespace System.Windows.Forms {
             itemList.SelectedIndex = selIndex;
         }
 
-        private void ItemList_doubleClick(object source, EventArgs e) {
+        private void ItemList_doubleClick(object source, EventArgs e)
+        {
             okButton.PerformClick();
         }
 
-        private void ItemList_selectedIndexChanged(object source, EventArgs e) {
+        private void ItemList_selectedIndexChanged(object source, EventArgs e)
+        {
             ListItem item = (ListItem)itemList.SelectedItem;
-            if (item != null) {
+            if (item != null)
+            {
                 active = item.form;
             }
         }
@@ -83,7 +98,8 @@ namespace System.Windows.Forms {
         ///     modify it using the code editor.
         /// </summary>
 
-        private void InitializeComponent() {
+        private void InitializeComponent()
+        {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MdiWindowDialog));
             this.itemList = new System.Windows.Forms.ListBox();
             this.okButton = new System.Windows.Forms.Button();
@@ -93,29 +109,29 @@ namespace System.Windows.Forms {
             this.itemList.DoubleClick += new System.EventHandler(this.ItemList_doubleClick);
             this.itemList.SelectedIndexChanged += new EventHandler(this.ItemList_selectedIndexChanged);
             this.SuspendLayout();
-// 
-// itemList
-// 
+            // 
+            // itemList
+            // 
             resources.ApplyResources(this.itemList, "itemList");
             this.itemList.FormattingEnabled = true;
             this.itemList.Name = "itemList";
-// 
-// okButton
-// 
+            // 
+            // okButton
+            // 
             resources.ApplyResources(this.okButton, "okButton");
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.okButton.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.okButton.Name = "okButton";
-// 
-// cancelButton
-// 
+            // 
+            // cancelButton
+            // 
             resources.ApplyResources(this.cancelButton, "cancelButton");
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancelButton.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.cancelButton.Name = "cancelButton";
-// 
-// okCancelTableLayoutPanel
-// 
+            // 
+            // okCancelTableLayoutPanel
+            // 
             resources.ApplyResources(this.okCancelTableLayoutPanel, "okCancelTableLayoutPanel");
             this.okCancelTableLayoutPanel.ColumnCount = 2;
             this.okCancelTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -125,9 +141,9 @@ namespace System.Windows.Forms {
             this.okCancelTableLayoutPanel.Name = "okCancelTableLayoutPanel";
             this.okCancelTableLayoutPanel.RowCount = 1;
             this.okCancelTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-// 
-// MdiWindowDialog
-// 
+            // 
+            // MdiWindowDialog
+            // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.okCancelTableLayoutPanel);

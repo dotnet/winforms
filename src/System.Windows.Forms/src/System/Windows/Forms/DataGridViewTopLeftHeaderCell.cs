@@ -182,14 +182,14 @@ namespace System.Windows.Forms
             {
                 val = null;
             }
-            return DataGridViewUtilities.GetPreferredRowHeaderSize(graphics, 
-                                                                   (string) val, 
-                                                                   cellStyle, 
-                                                                   borderAndPaddingWidths, 
+            return DataGridViewUtilities.GetPreferredRowHeaderSize(graphics,
+                                                                   (string)val,
+                                                                   cellStyle,
+                                                                   borderAndPaddingWidths,
                                                                    borderAndPaddingHeights,
                                                                    this.DataGridView.ShowCellErrors,
                                                                    false /*showGlyph*/,
-                                                                   constraintSize, 
+                                                                   constraintSize,
                                                                    flags);
         }
 
@@ -326,9 +326,9 @@ namespace System.Windows.Forms
             valBounds.Offset(DATAGRIDVIEWTOPLEFTHEADERCELL_horizontalTextMarginLeft, DATAGRIDVIEWTOPLEFTHEADERCELL_verticalTextMargin);
             valBounds.Width -= DATAGRIDVIEWTOPLEFTHEADERCELL_horizontalTextMarginLeft + DATAGRIDVIEWTOPLEFTHEADERCELL_horizontalTextMarginRight;
             valBounds.Height -= 2 * DATAGRIDVIEWTOPLEFTHEADERCELL_verticalTextMargin;
-            if (valBounds.Width > 0 && 
-                valBounds.Height > 0 && 
-                !string.IsNullOrEmpty(formattedValueStr) && 
+            if (valBounds.Width > 0 &&
+                valBounds.Height > 0 &&
+                !string.IsNullOrEmpty(formattedValueStr) &&
                 (paint || computeContentBounds))
             {
                 Color textColor;
@@ -419,7 +419,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///    <para></para>
         /// </summary>
-        public override string ToString() 
+        public override string ToString()
         {
             return "DataGridViewTopLeftHeaderCell";
         }
@@ -454,7 +454,7 @@ namespace System.Windows.Forms
 
         protected class DataGridViewTopLeftHeaderCellAccessibleObject : DataGridViewColumnHeaderCellAccessibleObject
         {
-            public DataGridViewTopLeftHeaderCellAccessibleObject(DataGridViewTopLeftHeaderCell owner) : base (owner)
+            public DataGridViewTopLeftHeaderCellAccessibleObject(DataGridViewTopLeftHeaderCell owner) : base(owner)
             {
             }
 

@@ -139,7 +139,7 @@ namespace System.Windows.Forms
         /// This will set value to zero and return false if the
         /// list does not contain the given key.
         /// </summary>
-        public int GetInteger(int key) =>  GetInteger(key, out _);
+        public int GetInteger(int key) => GetInteger(key, out _);
 
         /// <summary>
         /// Retrieves an integer value from our property list.
@@ -448,7 +448,7 @@ namespace System.Windows.Forms
                     {
                         index++;
                     }
-    
+
                     return false;
                 }
             }

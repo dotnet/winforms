@@ -42,7 +42,8 @@ namespace System.Windows.Forms
         }
 
 
-        public ScrollEventArgs(ScrollEventType type, int oldValue,  int newValue, ScrollOrientation scroll) {
+        public ScrollEventArgs(ScrollEventType type, int oldValue, int newValue, ScrollOrientation scroll)
+        {
             Type = type;
             NewValue = newValue;
             OldValue = oldValue;
@@ -59,10 +60,10 @@ namespace System.Windows.Forms
         /// </summary>
         public int NewValue { get; set; }
 
-       /// <summary>
-       /// Specifies the last position  within the scroll bar.
-       /// </summary>
-       public int OldValue { get; }
+        /// <summary>
+        /// Specifies the last position  within the scroll bar.
+        /// </summary>
+        public int OldValue { get; }
 
         /// <summary>
         /// Specifies the type of scroll event that occurred.

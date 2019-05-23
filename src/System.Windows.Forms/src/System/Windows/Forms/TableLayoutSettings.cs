@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -11,19 +12,20 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Drawing;
-    using System.Drawing.Design;    
+    using System.Drawing.Design;
     using System.Globalization;
     using System.Windows.Forms.Layout;
     using System.Reflection;
     using System.Runtime.Serialization;
-    
+
     /// <summary>this is a wrapper class to expose interesting properties of TableLayout</summary>
     [
      TypeConverter(typeof(TableLayoutSettingsTypeConverter)),
      Serializable
     ]
-    public sealed class TableLayoutSettings : LayoutSettings, ISerializable {
-        
+    public sealed class TableLayoutSettings : LayoutSettings, ISerializable
+    {
+
 
         static private int[] borderStyleToOffset = {
             /*None = */ 0,
@@ -36,46 +38,55 @@ namespace System.Windows.Forms {
         };
         private TableLayoutPanelCellBorderStyle _borderStyle;
         private TableLayoutSettingsStub _stub;
-        
+
         // used by TableLayoutSettingsTypeConverter
-        internal TableLayoutSettings() : base(null){
+        internal TableLayoutSettings() : base(null)
+        {
             _stub = new TableLayoutSettingsStub();
         }
 
-        internal TableLayoutSettings(IArrangedElement owner) : base(owner) {}
+        internal TableLayoutSettings(IArrangedElement owner) : base(owner) { }
 
         [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]
-        internal TableLayoutSettings(SerializationInfo serializationInfo, StreamingContext context) : this() {
+        internal TableLayoutSettings(SerializationInfo serializationInfo, StreamingContext context) : this()
+        {
             TypeConverter converter = TypeDescriptor.GetConverter(this);
             string stringVal = serializationInfo.GetString("SerializedString");
 
-            if (!string.IsNullOrEmpty(stringVal)) {
+            if (!string.IsNullOrEmpty(stringVal))
+            {
                 TableLayoutSettings tls = converter.ConvertFromInvariantString(stringVal) as TableLayoutSettings;
-                if (tls != null) {
+                if (tls != null)
+                {
                     this.ApplySettings(tls);
                 }
             }
         }
-        
-        public override LayoutEngine LayoutEngine {
+
+        public override LayoutEngine LayoutEngine
+        {
             get { return TableLayout.Instance; }
         }
 
-        private TableLayout TableLayout {
-            get { return (TableLayout) this.LayoutEngine; }
+        private TableLayout TableLayout
+        {
+            get { return (TableLayout)this.LayoutEngine; }
         }
-        
+
 
         /// <summary> internal as this is a TableLayoutPanel feature only </summary>
         [DefaultValue(TableLayoutPanelCellBorderStyle.None), SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.TableLayoutPanelCellBorderStyleDescr))]
-        internal TableLayoutPanelCellBorderStyle CellBorderStyle {
+        internal TableLayoutPanelCellBorderStyle CellBorderStyle
+        {
             get { return _borderStyle; }
-            set { 
+            set
+            {
                 //valid values are 0x0 to 0x6
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)TableLayoutPanelCellBorderStyle.None, (int)TableLayoutPanelCellBorderStyle.OutsetPartial)){
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)TableLayoutPanelCellBorderStyle.None, (int)TableLayoutPanelCellBorderStyle.OutsetPartial))
+                {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(CellBorderStyle), value));
                 }
-                _borderStyle = value;   
+                _borderStyle = value;
                 //set the CellBorderWidth according to the current CellBorderStyle.
                 TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
                 containerInfo.CellBorderWidth = borderStyleToOffset[(int)value];
@@ -85,10 +96,11 @@ namespace System.Windows.Forms {
         }
 
         [DefaultValue(0)]
-        internal int CellBorderWidth {
+        internal int CellBorderWidth
+        {
             get { return TableLayout.GetContainerInfo(Owner).CellBorderWidth; }
         }
-        
+
         /// <summary>
         /// This sets the maximum number of columns allowed on this table instead of allocating
         /// actual spaces for these columns. So it is OK to set ColumnCount to Int32.MaxValue without
@@ -97,22 +109,25 @@ namespace System.Windows.Forms {
         [SRDescription(nameof(SR.GridPanelColumnsDescr))]
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(0)]
-        public int ColumnCount {
-            get { 
+        public int ColumnCount
+        {
+            get
+            {
                 TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
                 return containerInfo.MaxColumns;
             }
-            set { 
+            set
+            {
                 if (value < 0)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ColumnCount), value, 0));
                 }
 
-                TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);         
+                TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
                 containerInfo.MaxColumns = value;
                 LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.Columns);
                 Debug.Assert(ColumnCount == value, "the max columns should equal to the value we set it to");
-                
+
             }
         }
 
@@ -124,12 +139,15 @@ namespace System.Windows.Forms {
         [SRDescription(nameof(SR.GridPanelRowsDescr))]
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(0)]
-        public int RowCount {
-            get { 
+        public int RowCount
+        {
+            get
+            {
                 TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
                 return containerInfo.MaxRows;
             }
-            set { 
+            set
+            {
                 if (value < 0)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(RowCount), value, 0));
@@ -139,19 +157,23 @@ namespace System.Windows.Forms {
                 containerInfo.MaxRows = value;
                 LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.Rows);
                 Debug.Assert(RowCount == value, "the max rows should equal to the value we set it to");
-                
+
             }
         }
 
         [SRDescription(nameof(SR.GridPanelRowStylesDescr))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [SRCategory(nameof(SR.CatLayout))]
-        public TableLayoutRowStyleCollection RowStyles {
-            get { 
-                if (IsStub) {
+        public TableLayoutRowStyleCollection RowStyles
+        {
+            get
+            {
+                if (IsStub)
+                {
                     return _stub.RowStyles;
                 }
-                else {
+                else
+                {
                     TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
                     return containerInfo.RowStyles;
                 }
@@ -161,12 +183,16 @@ namespace System.Windows.Forms {
         [SRDescription(nameof(SR.GridPanelColumnStylesDescr))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [SRCategory(nameof(SR.CatLayout))]
-        public TableLayoutColumnStyleCollection ColumnStyles {
-            get { 
-                if (IsStub) {
+        public TableLayoutColumnStyleCollection ColumnStyles
+        {
+            get
+            {
+                if (IsStub)
+                {
                     return _stub.ColumnStyles;
                 }
-                else {
+                else
+                {
                     TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
                     return containerInfo.ColumnStyles;
                 }
@@ -181,46 +207,58 @@ namespace System.Windows.Forms {
         [SRDescription(nameof(SR.TableLayoutPanelGrowStyleDescr))]
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(TableLayoutPanelGrowStyle.AddRows)]
-        public TableLayoutPanelGrowStyle GrowStyle {
-            get {
+        public TableLayoutPanelGrowStyle GrowStyle
+        {
+            get
+            {
                 return TableLayout.GetContainerInfo(Owner).GrowStyle;
-            }   
-            
-            set { 
+            }
+
+            set
+            {
                 //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)TableLayoutPanelGrowStyle.FixedSize, (int)TableLayoutPanelGrowStyle.AddColumns)){
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)TableLayoutPanelGrowStyle.FixedSize, (int)TableLayoutPanelGrowStyle.AddColumns))
+                {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(GrowStyle), value));
-                }            
-               
+                }
+
                 TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
-                if (containerInfo.GrowStyle != value) {
+                if (containerInfo.GrowStyle != value)
+                {
                     containerInfo.GrowStyle = value;
                     LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.GrowStyle);
                 }
             }
         }
 
-        internal bool IsStub {
-            get {
-                if ( _stub != null) {
+        internal bool IsStub
+        {
+            get
+            {
+                if (_stub != null)
+                {
                     return true;
                 }
                 return false;
             }
         }
 
-        internal void ApplySettings(TableLayoutSettings settings) {
-            if (settings.IsStub) {
-                if (!IsStub) {
-                   // we're the real-live thing here, gotta walk through and touch controls
-                   settings._stub.ApplySettings(this);
+        internal void ApplySettings(TableLayoutSettings settings)
+        {
+            if (settings.IsStub)
+            {
+                if (!IsStub)
+                {
+                    // we're the real-live thing here, gotta walk through and touch controls
+                    settings._stub.ApplySettings(this);
                 }
-                else {
-                   // we're just copying another stub into us, just replace the member
-                   _stub = settings._stub;
+                else
+                {
+                    // we're just copying another stub into us, just replace the member
+                    _stub = settings._stub;
                 }
             }
-           
+
         }
 
         #region Extended Properties   
@@ -260,7 +298,7 @@ namespace System.Windows.Forms {
             }
             else
             {
-                IArrangedElement element = LayoutEngine.CastToArrangedElement(control);	
+                IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
                 if (element.Container != null)
                 {
                     TableLayout.ClearCachedAssignments(TableLayout.GetContainerInfo(element.Container));
@@ -269,7 +307,7 @@ namespace System.Windows.Forms {
                 LayoutTransaction.DoLayout(element.Container, element, PropertyNames.ColumnSpan);
                 Debug.Assert(GetColumnSpan(element) == value, "column span should equal to the value we set");
             }
-            
+
         }
 
         public int GetRowSpan(object control)
@@ -289,7 +327,7 @@ namespace System.Windows.Forms {
                 return TableLayout.GetLayoutInfo(element).RowSpan;
             }
         }
-        
+
         public void SetRowSpan(object control, int value)
         {
             if (control == null)
@@ -339,7 +377,7 @@ namespace System.Windows.Forms {
             {
                 IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
                 TableLayout.LayoutInfo layoutInfo = TableLayout.GetLayoutInfo(element);
-                return layoutInfo.RowPosition; 
+                return layoutInfo.RowPosition;
             }
         }
 
@@ -415,10 +453,10 @@ namespace System.Windows.Forms {
             {
                 IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
                 TableLayout.LayoutInfo layoutInfo = TableLayout.GetLayoutInfo(element);
-                return layoutInfo.ColumnPosition; 
-           }
+                return layoutInfo.ColumnPosition;
+            }
         }
-        
+
         /// <summary>
         /// Set the column position of the element
         /// If we set the column position to -1, it will automatically switch the control from 
@@ -445,7 +483,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        private void SetCellPosition(object control, int row, int column,  bool rowSpecified, bool colSpecified)
+        private void SetCellPosition(object control, int row, int column, bool rowSpecified, bool colSpecified)
         {
             if (IsStub)
             {
@@ -479,47 +517,55 @@ namespace System.Windows.Forms {
                 Debug.Assert(!rowSpecified || GetRow(element) == row, "row position shoule equal to what we set");
             }
         }
-        
+
         ///<summary>
         /// Get the element which covers the specified row and column. return null if we can't find one
         ///</summary>
-        internal IArrangedElement GetControlFromPosition (int column, int row)
+        internal IArrangedElement GetControlFromPosition(int column, int row)
         {
             return TableLayout.GetControlFromPosition(Owner, column, row);
         }
 
-        internal TableLayoutPanelCellPosition GetPositionFromControl (IArrangedElement element)
+        internal TableLayoutPanelCellPosition GetPositionFromControl(IArrangedElement element)
         {
             return TableLayout.GetPositionFromControl(Owner, element);
         }
-        
+
         #endregion
-        
-        void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) {
+
+        void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
+        {
             TypeConverter converter = TypeDescriptor.GetConverter(this);
             string stringVal = converter.ConvertToInvariantString(this);
-            
-            if (!string.IsNullOrEmpty(stringVal)) {
+
+            if (!string.IsNullOrEmpty(stringVal))
+            {
                 si.AddValue("SerializedString", stringVal);
             }
         }
 
-        internal List<ControlInformation> GetControlsInformation() {
-           if (IsStub) {
-               return _stub.GetControlsInformation();
-           }
-           else {
+        internal List<ControlInformation> GetControlsInformation()
+        {
+            if (IsStub)
+            {
+                return _stub.GetControlsInformation();
+            }
+            else
+            {
                 List<ControlInformation> controlsInfo = new List<ControlInformation>(Owner.Children.Count);
 
-                foreach (IArrangedElement element in Owner.Children) {
+                foreach (IArrangedElement element in Owner.Children)
+                {
                     Control c = element as Control;
-                    if (c != null) {
+                    if (c != null)
+                    {
                         ControlInformation controlInfo = new ControlInformation();
-                        
+
                         // We need to go through the PropertyDescriptor for the Name property
                         // since it is shadowed.
                         PropertyDescriptor prop = TypeDescriptor.GetProperties(c)["Name"];
-                        if (prop != null && prop.PropertyType == typeof(string)) {
+                        if (prop != null && prop.PropertyType == typeof(string))
+                        {
                             controlInfo.Name = prop.GetValue(c);
                         }
 
@@ -527,23 +573,25 @@ namespace System.Windows.Forms {
                         controlInfo.RowSpan = GetRowSpan(c);
                         controlInfo.Column = GetColumn(c);
                         controlInfo.ColumnSpan = GetColumnSpan(c);
-                        controlsInfo.Add(controlInfo);               
+                        controlsInfo.Add(controlInfo);
                     }
-    
+
                 }
                 return controlsInfo;
-           }
+            }
 
         }
 
-        internal struct ControlInformation {
+        internal struct ControlInformation
+        {
             internal object Name;
             internal int Row;
             internal int Column;
             internal int RowSpan;
             internal int ColumnSpan;
-            
-            internal ControlInformation(object name, int row, int column, int rowSpan, int columnSpan)  {
+
+            internal ControlInformation(object name, int row, int column, int rowSpan, int columnSpan)
+            {
                 Name = name;
                 Row = row;
                 Column = column;
@@ -551,19 +599,21 @@ namespace System.Windows.Forms {
                 ColumnSpan = columnSpan;
             }
         }
-    
+
         /// <summary> TableLayoutSettingsStub 
         ///               contains information about 
         /// </summary>
-        private class TableLayoutSettingsStub {
-       
-            private static ControlInformation DefaultControlInfo = new ControlInformation(null, -1, -1, 1, 1); 
+        private class TableLayoutSettingsStub
+        {
+
+            private static ControlInformation DefaultControlInfo = new ControlInformation(null, -1, -1, 1, 1);
             private TableLayoutColumnStyleCollection columnStyles;
             private TableLayoutRowStyleCollection rowStyles;
             private Dictionary<object, ControlInformation> controlsInfo;
             private bool isValid = true;
 
-            public TableLayoutSettingsStub() {
+            public TableLayoutSettingsStub()
+            {
             }
 
             /// <summary> ApplySettings - applies settings from the stub into a full-fledged
@@ -573,31 +623,38 @@ namespace System.Windows.Forms {
             ///          as a result of calling this function. we hand as much over to the other guy
             ///          so we dont have to reallocate anything
             /// </summary>
-            internal void ApplySettings(TableLayoutSettings settings) {
+            internal void ApplySettings(TableLayoutSettings settings)
+            {
                 //
                 // apply row,column,rowspan,colspan
                 //
                 TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(settings.Owner);
                 Control appliedControl = containerInfo.Container as Control;
-                if (appliedControl != null && controlsInfo != null) {
+                if (appliedControl != null && controlsInfo != null)
+                {
 
                     // we store the control names, look up the controls 
                     // in the appliedControl's control collection and apply the row,column settings.
-                    foreach (object controlName in controlsInfo.Keys){
+                    foreach (object controlName in controlsInfo.Keys)
+                    {
                         ControlInformation controlInfo = controlsInfo[controlName];
 
                         // Look for the control in our table, we have to go through
                         // PropertyDescriptor rather than just going using appliedControl.Controls[controlName]
                         // because the Name property is shadowed at design time
-                        foreach (Control tableControl in appliedControl.Controls) {
-                            if (tableControl != null) {
+                        foreach (Control tableControl in appliedControl.Controls)
+                        {
+                            if (tableControl != null)
+                            {
                                 string name = null;
                                 PropertyDescriptor prop = TypeDescriptor.GetProperties(tableControl)["Name"];
-                                if (prop != null && prop.PropertyType == typeof(string)) {
+                                if (prop != null && prop.PropertyType == typeof(string))
+                                {
                                     name = prop.GetValue(tableControl) as string;
                                 }
 
-                                if (WindowsFormsUtils.SafeCompareStrings(name, controlName as string, /* ignoreCase = */ false)) {
+                                if (WindowsFormsUtils.SafeCompareStrings(name, controlName as string, /* ignoreCase = */ false))
+                                {
                                     settings.SetRow(tableControl, controlInfo.Row);
                                     settings.SetColumn(tableControl, controlInfo.Column);
                                     settings.SetRowSpan(tableControl, controlInfo.RowSpan);
@@ -621,41 +678,51 @@ namespace System.Windows.Forms {
 
                 // set a flag for assertion detection.
                 isValid = false;
-                
-            }
-         
-            
 
-            public TableLayoutColumnStyleCollection ColumnStyles {
-                get {
-                    if (columnStyles == null) {
+            }
+
+
+
+            public TableLayoutColumnStyleCollection ColumnStyles
+            {
+                get
+                {
+                    if (columnStyles == null)
+                    {
                         columnStyles = new TableLayoutColumnStyleCollection();
                     }
                     return columnStyles;
                 }
             }
 
-            public bool IsValid {
+            public bool IsValid
+            {
                 get { return isValid; }
             }
-      
-            public TableLayoutRowStyleCollection RowStyles {
-                get {
-                    if (rowStyles == null) {
+
+            public TableLayoutRowStyleCollection RowStyles
+            {
+                get
+                {
+                    if (rowStyles == null)
+                    {
                         rowStyles = new TableLayoutRowStyleCollection();
                     }
                     return rowStyles;
                 }
             }
 
-            internal List<ControlInformation> GetControlsInformation() {
-                
-                if (controlsInfo == null) {
+            internal List<ControlInformation> GetControlsInformation()
+            {
+
+                if (controlsInfo == null)
+                {
                     return new List<ControlInformation>();
                 }
 
                 List<ControlInformation> listOfControlInfo = new List<ControlInformation>(controlsInfo.Count);
-                foreach (object name in controlsInfo.Keys ) {
+                foreach (object name in controlsInfo.Keys)
+                {
                     ControlInformation ci = controlsInfo[name];
                     ci.Name = name;
                     listOfControlInfo.Add(ci);
@@ -663,149 +730,181 @@ namespace System.Windows.Forms {
                 return listOfControlInfo;
             }
 
-            private ControlInformation GetControlInformation(object controlName) {
+            private ControlInformation GetControlInformation(object controlName)
+            {
 
-                if (controlsInfo == null) {
+                if (controlsInfo == null)
+                {
                     return DefaultControlInfo;
                 }
-                if (!controlsInfo.ContainsKey(controlName)) {
+                if (!controlsInfo.ContainsKey(controlName))
+                {
                     return DefaultControlInfo;
                 }
                 return controlsInfo[controlName];
-            
+
             }
 
-            public int GetColumn(object controlName) {
+            public int GetColumn(object controlName)
+            {
                 return GetControlInformation(controlName).Column;
             }
-            public int GetColumnSpan(object controlName) {
+            public int GetColumnSpan(object controlName)
+            {
                 return GetControlInformation(controlName).ColumnSpan;
             }
-            public int GetRow(object controlName) {
-               return GetControlInformation(controlName).Row;
+            public int GetRow(object controlName)
+            {
+                return GetControlInformation(controlName).Row;
             }
-            public int GetRowSpan(object controlName) {
-               return GetControlInformation(controlName).RowSpan;
+            public int GetRowSpan(object controlName)
+            {
+                return GetControlInformation(controlName).RowSpan;
             }
 
-            private void SetControlInformation(object controlName, ControlInformation info) {
-                if (controlsInfo == null) {
+            private void SetControlInformation(object controlName, ControlInformation info)
+            {
+                if (controlsInfo == null)
+                {
                     controlsInfo = new Dictionary<object, ControlInformation>();
                 }
                 controlsInfo[controlName] = info;
             }
 
-            public void SetColumn(object controlName, int column) {
-               if (GetColumn(controlName) != column) {
+            public void SetColumn(object controlName, int column)
+            {
+                if (GetColumn(controlName) != column)
+                {
                     ControlInformation info = GetControlInformation(controlName);
                     info.Column = column;
                     SetControlInformation(controlName, info);
-               }
-               
+                }
+
             }
-            public void SetColumnSpan(object controlName, int value) {
-                if (GetColumnSpan(controlName) != value) {
+            public void SetColumnSpan(object controlName, int value)
+            {
+                if (GetColumnSpan(controlName) != value)
+                {
                     ControlInformation info = GetControlInformation(controlName);
                     info.ColumnSpan = value;
                     SetControlInformation(controlName, info);
-               }
+                }
             }
-            public void SetRow(object controlName, int row) {
-               if (GetRow(controlName) != row) {
+            public void SetRow(object controlName, int row)
+            {
+                if (GetRow(controlName) != row)
+                {
                     ControlInformation info = GetControlInformation(controlName);
                     info.Row = row;
                     SetControlInformation(controlName, info);
-               }     
+                }
             }
-            public void SetRowSpan(object controlName, int value) {
-                if (GetRowSpan(controlName) != value) {
-                     ControlInformation info = GetControlInformation(controlName);
-                     info.RowSpan = value;
-                     SetControlInformation(controlName, info);
-                }     
+            public void SetRowSpan(object controlName, int value)
+            {
+                if (GetRowSpan(controlName) != value)
+                {
+                    ControlInformation info = GetControlInformation(controlName);
+                    info.RowSpan = value;
+                    SetControlInformation(controlName, info);
+                }
             }
 
-        
+
         } // end of System.Windows.Forms.TableLayoutSettings
 
-        internal class StyleConverter : TypeConverter {    
-            public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType) {
-                if (destinationType == typeof(InstanceDescriptor)) {
+        internal class StyleConverter : TypeConverter
+        {
+            public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+            {
+                if (destinationType == typeof(InstanceDescriptor))
+                {
                     return true;
                 }
                 return base.CanConvertTo(context, destinationType);
             }
-            
-            public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
-                if (destinationType == null) {
+
+            public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+            {
+                if (destinationType == null)
+                {
                     throw new ArgumentNullException(nameof(destinationType));
                 }
-        
-                if (destinationType == typeof(InstanceDescriptor) && value is TableLayoutStyle) {
-                    TableLayoutStyle style = (TableLayoutStyle) value;
-        
-                    switch(style.SizeType) {
+
+                if (destinationType == typeof(InstanceDescriptor) && value is TableLayoutStyle)
+                {
+                    TableLayoutStyle style = (TableLayoutStyle)value;
+
+                    switch (style.SizeType)
+                    {
                         case SizeType.AutoSize:
                             return new InstanceDescriptor(
-                                style.GetType().GetConstructor(new Type[] {}),
-                                new object[] {});
+                                style.GetType().GetConstructor(new Type[] { }),
+                                new object[] { });
                         case SizeType.Absolute:
                         case SizeType.Percent:
                             return new InstanceDescriptor(
-                                style.GetType().GetConstructor(new Type[] {typeof(SizeType), typeof(int)}),
-                                new object[] {style.SizeType, style.Size});
+                                style.GetType().GetConstructor(new Type[] { typeof(SizeType), typeof(int) }),
+                                new object[] { style.SizeType, style.Size });
                         default:
                             break;
                     }
                 }
                 return base.ConvertTo(context, culture, value, destinationType);
             }
-        }    
+        }
     }
 
-    public class ColumnStyle : TableLayoutStyle {
+    public class ColumnStyle : TableLayoutStyle
+    {
 
 
-        public ColumnStyle() {}
+        public ColumnStyle() { }
 
 
-        public ColumnStyle(SizeType sizeType) {
+        public ColumnStyle(SizeType sizeType)
+        {
             this.SizeType = sizeType;
         }
 
 
-        public ColumnStyle(SizeType sizeType, float width) {
+        public ColumnStyle(SizeType sizeType, float width)
+        {
             this.SizeType = sizeType;
             this.Width = width;
         }
-        
 
-        public float Width {
+
+        public float Width
+        {
             get { return base.Size; }
             set { base.Size = value; }
         }
     }
 
 
-    public class RowStyle : TableLayoutStyle {
+    public class RowStyle : TableLayoutStyle
+    {
 
 
-        public RowStyle() {}
-        
-        public RowStyle(SizeType sizeType) {
+        public RowStyle() { }
+
+        public RowStyle(SizeType sizeType)
+        {
             this.SizeType = sizeType;
         }
-        
-    
-        public RowStyle(SizeType sizeType, float height) {
+
+
+        public RowStyle(SizeType sizeType, float height)
+        {
             this.SizeType = sizeType;
             this.Height = height;
         }
 
- 
-        public float Height {
+
+        public float Height
+        {
             get { return base.Size; }
             set { base.Size = value; }
         }
-    } 
+    }
 }

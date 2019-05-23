@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.ComponentModel.Com2Interop {
+namespace System.Windows.Forms.ComponentModel.Com2Interop
+{
     using System;
     using System.Collections;
     using System.ComponentModel;
@@ -10,29 +11,38 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.Globalization;
     using Microsoft.Win32;
 
-    internal class Com2ICategorizePropertiesHandler : Com2ExtendedBrowsingHandler {
+    internal class Com2ICategorizePropertiesHandler : Com2ExtendedBrowsingHandler
+    {
 
-        public override Type Interface {
-            get {
+        public override Type Interface
+        {
+            get
+            {
                 return typeof(NativeMethods.ICategorizeProperties);
             }
         }
 
-        private string GetCategoryFromObject(object obj, int dispid) {
-            if (obj == null) {
+        private string GetCategoryFromObject(object obj, int dispid)
+        {
+            if (obj == null)
+            {
                 return null;
             }
 
-            if (obj is NativeMethods.ICategorizeProperties) {
+            if (obj is NativeMethods.ICategorizeProperties)
+            {
                 NativeMethods.ICategorizeProperties catObj = (NativeMethods.ICategorizeProperties)obj;
 
-                try {
+                try
+                {
                     int categoryID = 0;
 
-                    if (NativeMethods.S_OK == catObj.MapPropertyToCategory(dispid, ref categoryID)) {
+                    if (NativeMethods.S_OK == catObj.MapPropertyToCategory(dispid, ref categoryID))
+                    {
                         string categoryName = null;
-                        
-                        switch (categoryID) {
+
+                        switch (categoryID)
+                        {
                             case NativeMethods.ActiveX.PROPCAT_Nil:
                                 return "";
                             case NativeMethods.ActiveX.PROPCAT_Misc:
@@ -56,32 +66,39 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                             case NativeMethods.ActiveX.PROPCAT_DDE:
                                 return SR.PropertyCategoryDDE;
                         }
-                        
-                        if (NativeMethods.S_OK == catObj.GetCategoryName(categoryID, CultureInfo.CurrentCulture.LCID, out categoryName)) {
+
+                        if (NativeMethods.S_OK == catObj.GetCategoryName(categoryID, CultureInfo.CurrentCulture.LCID, out categoryName))
+                        {
                             return categoryName;
                         }
                     }
                 }
-                catch {
+                catch
+                {
                 }
             }
             return null;
         }
 
-        public override void SetupPropertyHandlers(Com2PropertyDescriptor[] propDesc) {
-            if (propDesc == null) {
+        public override void SetupPropertyHandlers(Com2PropertyDescriptor[] propDesc)
+        {
+            if (propDesc == null)
+            {
                 return;
             }
-            for (int i = 0; i < propDesc.Length; i++) {
+            for (int i = 0; i < propDesc.Length; i++)
+            {
                 propDesc[i].QueryGetBaseAttributes += new GetAttributesEventHandler(this.OnGetAttributes);
             }
         }
 
-        private void OnGetAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent) {
+        private void OnGetAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
+        {
 
             string cat = GetCategoryFromObject(sender.TargetObject, sender.DISPID);
 
-            if (cat != null && cat.Length > 0) {
+            if (cat != null && cat.Length > 0)
+            {
                 attrEvent.Add(new CategoryAttribute(cat));
             }
         }

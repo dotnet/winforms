@@ -2,16 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
 
     using System;
-    
+
     using System.Windows.Forms;
     using System.ComponentModel;
     using System.ComponentModel.Design;
     using System.Windows.Forms.ComponentModel;
     using System.Drawing;
-    
+
     using Microsoft.Win32;
     using System.Diagnostics;
     using System.Globalization;
@@ -20,11 +21,12 @@ namespace System.Windows.Forms {
     /// <summary>
     /// <para>Hosts a System.Windows.Forms.TextBox control in a cell of a System.Windows.Forms.DataGridColumnStyle for editing strings.</para>
     /// </summary>
-    public class DataGridTextBoxColumn : DataGridColumnStyle {
+    public class DataGridTextBoxColumn : DataGridColumnStyle
+    {
 
         // ui State
-        private int   xMargin =           2;
-        private int   yMargin =           1;
+        private int xMargin = 2;
+        private int yMargin = 1;
         // private int   fontHandle =        0;
         private string format = null;
         private TypeConverter typeConverter;
@@ -46,7 +48,8 @@ namespace System.Windows.Forms {
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set format
                                                                                                     // it would be a breaking change.
         ]
-        public DataGridTextBoxColumn() : this(null, null) {
+        public DataGridTextBoxColumn() : this(null, null)
+        {
         }
 
         /// <summary>
@@ -58,7 +61,8 @@ namespace System.Windows.Forms {
                                                                                                     // it would be a breaking change.
         ]
         public DataGridTextBoxColumn(PropertyDescriptor prop)
-        : this(prop, null, false) {
+        : this(prop, null, false)
+        {
         }
 
         /// <summary>
@@ -69,13 +73,14 @@ namespace System.Windows.Forms {
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set format
                                                                                                     // it would be a breaking change.
         ]
-        public DataGridTextBoxColumn(PropertyDescriptor prop, string format) : this(prop, format, false){}
+        public DataGridTextBoxColumn(PropertyDescriptor prop, string format) : this(prop, format, false) { }
 
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set format
                                                                                                     // it would be a breaking change.
         ]
-        public DataGridTextBoxColumn(PropertyDescriptor prop, string format, bool isDefault) : base(prop, isDefault) {
+        public DataGridTextBoxColumn(PropertyDescriptor prop, string format, bool isDefault) : base(prop, isDefault)
+        {
             edit = new DataGridTextBox();
             edit.BorderStyle = BorderStyle.None;
             edit.Multiline = true;
@@ -88,7 +93,7 @@ namespace System.Windows.Forms {
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set format
                                                                                                     // it would be a breaking change.
         ]
-        public DataGridTextBoxColumn(PropertyDescriptor prop, bool isDefault) : this(prop, null, isDefault) {}
+        public DataGridTextBoxColumn(PropertyDescriptor prop, bool isDefault) : this(prop, null, isDefault) { }
 
 
         // =------------------------------------------------------------------
@@ -99,13 +104,16 @@ namespace System.Windows.Forms {
         /// <para>Gets the hosted System.Windows.Forms.TextBox control.</para>
         /// </summary>
         [Browsable(false)]
-        public virtual TextBox TextBox {
-            get {
+        public virtual TextBox TextBox
+        {
+            get
+            {
                 return edit;
             }
         }
 
-        internal override bool KeyPress(int rowNum, Keys keyData) {
+        internal override bool KeyPress(int rowNum, Keys keyData)
+        {
             if (edit.IsInEditOrNavigateMode)
                 return base.KeyPress(rowNum, keyData);
 
@@ -121,12 +129,15 @@ namespace System.Windows.Forms {
         ///       .
         ///    </para>
         /// </summary>
-        protected override void SetDataGridInColumn(DataGrid value) {
+        protected override void SetDataGridInColumn(DataGrid value)
+        {
             base.SetDataGridInColumn(value);
-            if (edit.ParentInternal != null) {
+            if (edit.ParentInternal != null)
+            {
                 edit.ParentInternal.Controls.Remove(edit);
             }
-            if (value != null) {
+            if (value != null)
+            {
                 value.Controls.Add(edit);
             }
 
@@ -155,13 +166,17 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FormatControlFormatDescr)),
         DefaultValue(null)
         ]
-        public override PropertyDescriptor PropertyDescriptor {
-            set {
+        public override PropertyDescriptor PropertyDescriptor
+        {
+            set
+            {
                 base.PropertyDescriptor = value;
-                if (this.PropertyDescriptor != null) {
-                    if (this.PropertyDescriptor.PropertyType != typeof(object)) {
+                if (this.PropertyDescriptor != null)
+                {
+                    if (this.PropertyDescriptor.PropertyType != typeof(object))
+                    {
                         this.typeConverter = TypeDescriptor.GetConverter(this.PropertyDescriptor.PropertyType);
-                        this.parseMethod = this.PropertyDescriptor.PropertyType.GetMethod("Parse", new Type[]{typeof(string), typeof(IFormatProvider)});
+                        this.parseMethod = this.PropertyDescriptor.PropertyType.GetMethod("Parse", new Type[] { typeof(string), typeof(IFormatProvider) });
                     }
                 }
             }
@@ -170,20 +185,25 @@ namespace System.Windows.Forms {
         // add the corresponding value Editor: rip one from the valueEditor for the DisplayMember in the 
         // format object
         [DefaultValue(null), Editor("System.Windows.Forms.Design.DataGridColumnStyleFormatEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor))]
-        public string Format {
-            get {
+        public string Format
+        {
+            get
+            {
                 return format;
             }
-            set {
+            set
+            {
                 if (value == null)
                     value = string.Empty;
-                if (format == null || !format.Equals(value)) {
+                if (format == null || !format.Equals(value))
+                {
                     this.format = value;
 
                     // if the associated typeConverter cannot convert from string,
                     // then we can't modify the column value. hence, make it readOnly
                     //
-                    if (format.Length == 0) {
+                    if (format.Length == 0)
+                    {
                         if (this.typeConverter != null && !typeConverter.CanConvertFrom(typeof(string)))
                             this.ReadOnly = true;
                     }
@@ -194,24 +214,31 @@ namespace System.Windows.Forms {
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
-        public IFormatProvider FormatInfo {
-            get {
+        public IFormatProvider FormatInfo
+        {
+            get
+            {
                 return this.formatInfo;
             }
-            set {
+            set
+            {
                 if (this.formatInfo == null || !this.formatInfo.Equals(value))
                     this.formatInfo = value;
             }
         }
 
-        public override bool ReadOnly {
-            get {
+        public override bool ReadOnly
+        {
+            get
+            {
                 return base.ReadOnly;
             }
-            set {
+            set
+            {
                 // if the gridColumn is can't convert the string to 
                 // the backGround propertyDescriptor, then make the column ReadOnly
-                if (!value && (format == null || format.Length == 0)) {
+                if (!value && (format == null || format.Length == 0))
+                {
                     if (this.typeConverter != null && !this.typeConverter.CanConvertFrom(typeof(string)))
                         return;
                 }
@@ -223,7 +250,8 @@ namespace System.Windows.Forms {
         // =        Methods
         // =------------------------------------------------------------------
 
-        private void DebugOut(string s) {
+        private void DebugOut(string s)
+        {
             Debug.WriteLineIf(CompModSwitches.DGEditColumnEditing.TraceVerbose, "DGEditColumnEditing: " + s);
         }
 
@@ -231,7 +259,8 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para>Informs the column the focus is being conceded.</para>
         /// </summary>
-        protected internal override void ConcedeFocus() {
+        protected internal override void ConcedeFocus()
+        {
             edit.Bounds = Rectangle.Empty;
             // edit.Visible = false;
             // HideEditBox();
@@ -244,7 +273,8 @@ namespace System.Windows.Forms {
         ///       control.
         ///    </para>
         /// </summary>
-        protected void HideEditBox() {
+        protected void HideEditBox()
+        {
             bool wasFocused = edit.Focused;
             edit.Visible = false;
 
@@ -262,7 +292,8 @@ namespace System.Windows.Forms {
             // before deleting the column will go to the backEnd)
             // however, in that situation, we are left w/ the editColumn which is not parented.
             // the grid will call Edit to reset the EditColumn
-            if (wasFocused && this.DataGridTableStyle != null && this.DataGridTableStyle.DataGrid != null && this.DataGridTableStyle.DataGrid.CanFocus) {
+            if (wasFocused && this.DataGridTableStyle != null && this.DataGridTableStyle.DataGrid != null && this.DataGridTableStyle.DataGrid.CanFocus)
+            {
                 this.DataGridTableStyle.DataGrid.Focus();
                 Debug.Assert(!edit.Focused, "the edit control just conceeded focus to the dataGrid");
             }
@@ -280,7 +311,8 @@ namespace System.Windows.Forms {
         /// <para>Ends an edit operation on the System.Windows.Forms.DataGridColumnStyle
         /// .</para>
         /// </summary>
-        protected void EndEdit() {
+        protected void EndEdit()
+        {
             edit.IsInEditOrNavigateMode = true;
             DebugOut("Ending Edit");
             Invalidate();
@@ -291,9 +323,10 @@ namespace System.Windows.Forms {
         ///       height of the cell in a specified row relative
         ///       to the specified value.</para>
         /// </summary>
-        protected internal override Size GetPreferredSize(Graphics g, object value) {
+        protected internal override Size GetPreferredSize(Graphics g, object value)
+        {
             Size extents = Size.Ceiling(g.MeasureString(GetText(value), DataGridTableStyle.DataGrid.Font));
-            extents.Width += xMargin*2 + this.DataGridTableStyle.GridLineWidth;
+            extents.Width += xMargin * 2 + this.DataGridTableStyle.GridLineWidth;
             extents.Height += yMargin;
             return extents;
         }
@@ -304,7 +337,8 @@ namespace System.Windows.Forms {
         ///       .
         ///    </para>
         /// </summary>
-        protected internal override int GetMinimumHeight() {
+        protected internal override int GetMinimumHeight()
+        {
             // why + 3? cause we have to give some way to the edit box.
             return FontHeight + yMargin + 3;
         }
@@ -312,14 +346,15 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    <para>Gets the height to be used in for automatically resizing columns.</para>
         /// </summary>
-        protected internal override int GetPreferredHeight(Graphics g, object value) {
+        protected internal override int GetPreferredHeight(Graphics g, object value)
+        {
             int newLineIndex = 0;
             int newLines = 0;
             string valueString = GetText(value);
             while (newLineIndex != -1 && newLineIndex < valueString.Length)
             {
                 newLineIndex = valueString.IndexOf("\r\n", newLineIndex + 1);
-                newLines ++;
+                newLines++;
             }
 
             return FontHeight * newLines + yMargin;
@@ -330,7 +365,8 @@ namespace System.Windows.Forms {
         ///       Initiates a request to interrupt an edit procedure.
         ///    </para>
         /// </summary>
-        protected internal override void Abort(int rowNum) {
+        protected internal override void Abort(int rowNum)
+        {
             RollBack();
             HideEditBox();
             EndEdit();
@@ -342,7 +378,8 @@ namespace System.Windows.Forms {
         ///       Enters a <see langword='null '/>in the column.
         ///    </para>
         /// </summary>
-        protected internal override void EnterNullValue() {
+        protected internal override void EnterNullValue()
+        {
             if (this.ReadOnly)
                 return;
 
@@ -369,7 +406,8 @@ namespace System.Windows.Forms {
         ///       Inititates a request to complete an editing procedure.
         ///    </para>
         /// </summary>
-        protected internal override bool Commit(CurrencyManager dataSource, int rowNum) {
+        protected internal override bool Commit(CurrencyManager dataSource, int rowNum)
+        {
             // always hide the edit box
             // HideEditBox();
             edit.Bounds = Rectangle.Empty;
@@ -377,33 +415,42 @@ namespace System.Windows.Forms {
             if (edit.IsInEditOrNavigateMode)
                 return true;
 
-            try {
+            try
+            {
                 object value = edit.Text;
-                if (NullText.Equals(value)) {
+                if (NullText.Equals(value))
+                {
                     value = Convert.DBNull;
                     edit.Text = NullText;
-                } else if (format != null && format.Length != 0 && this.parseMethod != null && this.FormatInfo != null) {
+                }
+                else if (format != null && format.Length != 0 && this.parseMethod != null && this.FormatInfo != null)
+                {
                     // use reflection to get the Parse method on the
                     // type of the propertyDescriptor.
-                    value = (object) parseMethod.Invoke(null, new object[] {edit.Text, this.FormatInfo});
-                    if (value is IFormattable) {
+                    value = (object)parseMethod.Invoke(null, new object[] { edit.Text, this.FormatInfo });
+                    if (value is IFormattable)
+                    {
                         edit.Text = ((IFormattable)value).ToString(format, formatInfo);
-                    }else 
+                    }
+                    else
                         edit.Text = value.ToString();
-                } else if (typeConverter != null && typeConverter.CanConvertFrom(typeof(string))) {
+                }
+                else if (typeConverter != null && typeConverter.CanConvertFrom(typeof(string)))
+                {
                     value = typeConverter.ConvertFromString(edit.Text);
                     edit.Text = typeConverter.ConvertToString(value);
                 }
 
                 SetColumnValueAtRow(dataSource, rowNum, value);
             }
-            catch {
-             // MessageBox.Show("There was an error caught setting field \""
-             //                 + this.PropertyDescriptor.Name + "\" to the value \"" + edit.Text + "\"\n"
-             //                 + "The value is being rolled back to the original.\n"
-             //                 + "The error was a '" + e.Message + "' "  + e.StackTrace
-             //                 , "Error commiting changes...", MessageBox.IconError);
-             // Debug.WriteLine(e.GetType().Name);
+            catch
+            {
+                // MessageBox.Show("There was an error caught setting field \""
+                //                 + this.PropertyDescriptor.Name + "\" to the value \"" + edit.Text + "\"\n"
+                //                 + "The value is being rolled back to the original.\n"
+                //                 + "The error was a '" + e.Message + "' "  + e.StackTrace
+                //                 , "Error commiting changes...", MessageBox.IconError);
+                // Debug.WriteLine(e.GetType().Name);
                 RollBack();
                 return false;
             }
@@ -420,7 +467,8 @@ namespace System.Windows.Forms {
                                     Rectangle bounds,
                                     bool readOnly,
                                     string displayText,
-                                    bool cellIsVisible) {
+                                    bool cellIsVisible)
+        {
             DebugOut("Begining Edit, rowNum :" + rowNum.ToString(CultureInfo.InvariantCulture));
 
             Rectangle originalBounds = bounds;
@@ -428,7 +476,8 @@ namespace System.Windows.Forms {
             edit.ReadOnly = readOnly || ReadOnly || this.DataGridTableStyle.ReadOnly;
 
             edit.Text = GetText(GetColumnValueAtRow(source, rowNum));
-            if (!edit.ReadOnly && displayText != null) {
+            if (!edit.ReadOnly && displayText != null)
+            {
                 // tell the grid that we are changing stuff
                 this.DataGridTableStyle.DataGrid.ColumnStartedEditing(bounds);
                 // tell the edit control that the user changed it
@@ -436,9 +485,10 @@ namespace System.Windows.Forms {
                 edit.Text = displayText;
             }
 
-            if (cellIsVisible) {
+            if (cellIsVisible)
+            {
                 bounds.Offset(xMargin, 2 * yMargin);
-                bounds.Width  -= xMargin;
+                bounds.Width -= xMargin;
                 bounds.Height -= 2 * yMargin;
                 DebugOut("edit bounds: " + bounds.ToString());
                 edit.Bounds = bounds;
@@ -447,7 +497,8 @@ namespace System.Windows.Forms {
 
                 edit.TextAlign = this.Alignment;
             }
-            else {
+            else
+            {
                 edit.Bounds = Rectangle.Empty;
                 // edit.Bounds = originalBounds;
                 // edit.Visible = false;
@@ -459,7 +510,8 @@ namespace System.Windows.Forms {
 
             editRow = rowNum;
 
-            if (!edit.ReadOnly) {
+            if (!edit.ReadOnly)
+            {
                 oldValue = edit.Text;
             }
 
@@ -468,7 +520,8 @@ namespace System.Windows.Forms {
             // uses the SelectedText property 
             if (displayText == null)
                 edit.SelectAll();
-            else {
+            else
+            {
                 int end = edit.Text.Length;
                 edit.Select(end, 0);
             }
@@ -477,33 +530,41 @@ namespace System.Windows.Forms {
                 DataGridTableStyle.DataGrid.Invalidate(originalBounds);
         }
 
-        internal override string GetDisplayText(object value) {
+        internal override string GetDisplayText(object value)
+        {
             return GetText(value);
         }
 
-        private string GetText(object value) {
+        private string GetText(object value)
+        {
             if (value is System.DBNull)
                 return NullText;
-            else if (format != null && format.Length != 0 && (value is IFormattable)) {
-                try {
+            else if (format != null && format.Length != 0 && (value is IFormattable))
+            {
+                try
+                {
                     return ((IFormattable)value).ToString(format, this.formatInfo);
                 }
-                catch {
+                catch
+                {
                     // 
                 }
-            } else {
+            }
+            else
+            {
                 // use the typeConverter:
                 if (this.typeConverter != null && this.typeConverter.CanConvertTo(typeof(string)))
                     return (string)this.typeConverter.ConvertTo(value, typeof(string));
             }
-            return(value != null ? value.ToString() : "");
+            return (value != null ? value.ToString() : "");
         }
 
         /// <summary>
         /// <para>Paints the a System.Windows.Forms.DataGridColumnStyle with the specified System.Drawing.Graphics,
         /// System.Drawing.Rectangle, DataView.Rectangle, and row number. </para>
         /// </summary>
-        protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum) {
+        protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum)
+        {
             Paint(g, bounds, source, rowNum, false);
         }
 
@@ -512,7 +573,8 @@ namespace System.Windows.Forms {
         ///       Paints a System.Windows.Forms.DataGridColumnStyle with the specified System.Drawing.Graphics, System.Drawing.Rectangle, DataView, row number, and alignment.
         ///    </para>
         /// </summary>
-        protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum, bool alignToRight) {
+        protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum, bool alignToRight)
+        {
             string text = GetText(GetColumnValueAtRow(source, rowNum));
             PaintText(g, bounds, text, alignToRight);
         }
@@ -523,7 +585,8 @@ namespace System.Windows.Forms {
         ///    and foreground color..</para>
         /// </summary>
         protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum,
-                                     Brush backBrush, Brush foreBrush, bool alignToRight) {
+                                     Brush backBrush, Brush foreBrush, bool alignToRight)
+        {
             string text = GetText(GetColumnValueAtRow(source, rowNum));
             PaintText(g, bounds, text, backBrush, foreBrush, alignToRight);
         }
@@ -532,7 +595,8 @@ namespace System.Windows.Forms {
         ///    <para>Draws the text and
         ///       rectangle at the given location with the specified alignment.</para>
         /// </summary>
-        protected void PaintText(Graphics g, Rectangle bounds, string text, bool alignToRight) {
+        protected void PaintText(Graphics g, Rectangle bounds, string text, bool alignToRight)
+        {
             PaintText(g, bounds, text, this.DataGridTableStyle.BackBrush, this.DataGridTableStyle.ForeBrush, alignToRight);
         }
 
@@ -540,7 +604,8 @@ namespace System.Windows.Forms {
         ///    <para>Draws the text and rectangle at the specified location with the
         ///       specified colors and alignment.</para>
         /// </summary>
-        protected void PaintText(Graphics g, Rectangle textBounds, string text, Brush backBrush, Brush foreBrush, bool alignToRight) {
+        protected void PaintText(Graphics g, Rectangle textBounds, string text, Brush backBrush, Brush foreBrush, bool alignToRight)
+        {
             /*
             if (edit.Visible)
                 g.BackColor = BackColor;
@@ -549,7 +614,8 @@ namespace System.Windows.Forms {
             Rectangle rect = textBounds;
 
             StringFormat format = new StringFormat();
-            if (alignToRight) {
+            if (alignToRight)
+            {
                 format.FormatFlags |= StringFormatFlags.DirectionRightToLeft;
             }
 
@@ -562,19 +628,22 @@ namespace System.Windows.Forms {
             g.FillRectangle(backBrush, rect);
             // by design, painting  leaves a little padding around the rectangle.
             // so do not deflate the rectangle.
-            rect.Offset(0,2 * yMargin);
+            rect.Offset(0, 2 * yMargin);
             rect.Height -= 2 * yMargin;
             g.DrawString(text, this.DataGridTableStyle.DataGrid.Font, foreBrush, rect, format);
             format.Dispose();
         }
 
-        private void RollBack() {
+        private void RollBack()
+        {
             Debug.Assert(!edit.IsInEditOrNavigateMode, "Must be editing to rollback changes...");
             edit.Text = oldValue;
         }
 
-        protected internal override void ReleaseHostedControl() {
-            if (edit.ParentInternal != null) {
+        protected internal override void ReleaseHostedControl()
+        {
+            if (edit.ParentInternal != null)
+            {
                 edit.ParentInternal.Controls.Remove(edit);
             }
         }

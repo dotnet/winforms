@@ -80,7 +80,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_CellTemplateRequired));
                 }
-                return ((DataGridViewButtonCell) this.CellTemplate).FlatStyle;
+                return ((DataGridViewButtonCell)this.CellTemplate).FlatStyle;
             }
             set
             {
@@ -199,7 +199,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                dataGridViewColumn = (DataGridViewButtonColumn) System.Activator.CreateInstance(thisType);
+                dataGridViewColumn = (DataGridViewButtonColumn)System.Activator.CreateInstance(thisType);
             }
             if (dataGridViewColumn != null)
             {
@@ -218,9 +218,9 @@ namespace System.Windows.Forms
 
             DataGridViewCellStyle defaultCellStyle = this.DefaultCellStyle;
 
-            return (!defaultCellStyle.BackColor.IsEmpty || 
+            return (!defaultCellStyle.BackColor.IsEmpty ||
                     !defaultCellStyle.ForeColor.IsEmpty ||
-                    !defaultCellStyle.SelectionBackColor.IsEmpty || 
+                    !defaultCellStyle.SelectionBackColor.IsEmpty ||
                     !defaultCellStyle.SelectionForeColor.IsEmpty ||
                     defaultCellStyle.Font != null ||
                     !defaultCellStyle.IsNullValueDefault ||
@@ -229,11 +229,11 @@ namespace System.Windows.Forms
                     !defaultCellStyle.FormatProvider.Equals(System.Globalization.CultureInfo.CurrentCulture) ||
                     defaultCellStyle.Alignment != DataGridViewContentAlignment.MiddleCenter ||
                     defaultCellStyle.WrapMode != DataGridViewTriState.NotSet ||
-                    defaultCellStyle.Tag !=  null ||
+                    defaultCellStyle.Tag != null ||
                     !defaultCellStyle.Padding.Equals(Padding.Empty));
         }
 
-        public override string ToString() 
+        public override string ToString()
         {
             StringBuilder sb = new StringBuilder(64);
             sb.Append("DataGridViewButtonColumn { Name=");

@@ -10,7 +10,7 @@ namespace System.Windows.Forms
     using System.Diagnostics;
     using System.Drawing;
     using System.Globalization;
-    
+
     [ToolboxBitmapAttribute(typeof(DataGridViewTextBoxColumn), "DataGridViewTextBoxColumn")]
     public class DataGridViewTextBoxColumn : DataGridViewColumn
     {
@@ -98,11 +98,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (DataGridViewTextBoxCell) this.CellTemplate;
+                return (DataGridViewTextBoxCell)this.CellTemplate;
             }
         }
 
-        public override string ToString() 
+        public override string ToString()
         {
             StringBuilder sb = new StringBuilder(64);
             sb.Append("DataGridViewTextBoxColumn { Name=");

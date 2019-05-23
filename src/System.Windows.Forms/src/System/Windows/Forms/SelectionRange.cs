@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System.Runtime.Serialization.Formatters;
 
     using System.Diagnostics;
@@ -21,7 +22,8 @@ namespace System.Windows.Forms {
     [
     TypeConverterAttribute(typeof(SelectionRangeConverter))
     ]
-    public sealed class SelectionRange {
+    public sealed class SelectionRange
+    {
         /// <summary>
         ///     The lower limit of the selection range.
         /// </summary>
@@ -35,33 +37,38 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Create a new SelectionRange object with the range [null, null].
         /// </summary>
-        public SelectionRange() {
+        public SelectionRange()
+        {
         }
 
         /// <summary>
         ///     Create a new SelectionRange object with the given range.
         /// </summary>
-        public SelectionRange(DateTime lower, DateTime upper) {
+        public SelectionRange(DateTime lower, DateTime upper)
+        {
             //NOTE: simcooke: we explicitly DO NOT want to throw an exception here - just silently
             //                swap them around. This is because the win32 control can return non-
             //                normalized ranges.
-            
+
             // We use lower.Date and upper.Date to remove any time component
             //
-            if (lower < upper) {
+            if (lower < upper)
+            {
                 start = lower.Date;
                 end = upper.Date;
             }
-            else {
+            else
+            {
                 start = upper.Date;
                 end = lower.Date;
-            }                        
+            }
         }
 
         /// <summary>
         ///     Create a new SelectionRange object given an existing SelectionRange object.
         /// </summary>
-        public SelectionRange(SelectionRange range) {
+        public SelectionRange(SelectionRange range)
+        {
             this.start = range.start;
             this.end = range.end;
         }
@@ -69,11 +76,14 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Returns the ending time of this range.
         /// </summary>
-        public DateTime End {
-            get { 
+        public DateTime End
+        {
+            get
+            {
                 return end;
             }
-            set { 
+            set
+            {
                 end = value.Date;
             }
         }
@@ -81,11 +91,14 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Starting time of this range
         /// </summary>
-        public DateTime Start {
-            get {
+        public DateTime Start
+        {
+            get
+            {
                 return start;
             }
-            set { 
+            set
+            {
                 start = value.Date;
             }
         }
@@ -93,7 +106,8 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Returns a string representation for this control.
         /// </summary>
-        public override string ToString() {
+        public override string ToString()
+        {
             return "SelectionRange: Start: " + start.ToString() + ", End: " + end.ToString();
         }
     }

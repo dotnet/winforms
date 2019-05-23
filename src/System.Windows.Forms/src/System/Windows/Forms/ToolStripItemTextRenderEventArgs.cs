@@ -58,7 +58,7 @@ namespace System.Windows.Forms
             set
             {
                 _textColor = value;
-                _textColorChanged=true;
+                _textColorChanged = true;
             }
         }
 

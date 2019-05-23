@@ -3,7 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System;
@@ -21,7 +22,8 @@ namespace System.Windows.Forms {
     [
         ComVisible(true),
         ClassInterface(ClassInterfaceType.AutoDispatch)]
-    public class ThreadExceptionDialog : Form {
+    public class ThreadExceptionDialog : Form
+    {
 
         private const string DownBitmapName = "down";
         private const string UpBitmapName = "up";
@@ -80,9 +82,11 @@ namespace System.Windows.Forms {
         /// <summary>
         ///    Initializes a new instance of the <see cref='System.Windows.Forms.ThreadExceptionDialog'/> class.      
         /// </summary>
-        public ThreadExceptionDialog(Exception t) {
+        public ThreadExceptionDialog(Exception t)
+        {
 
-            if (DpiHelper.IsScalingRequirementMet) {
+            if (DpiHelper.IsScalingRequirementMet)
+            {
                 scaledMaxWidth = LogicalToDeviceUnits(MAXWIDTH);
                 scaledMaxHeight = LogicalToDeviceUnits(MAXHEIGHT);
                 scaledPaddingWidth = LogicalToDeviceUnits(PADDINGWIDTH);
@@ -110,48 +114,61 @@ namespace System.Windows.Forms {
             bool detailAnchor = false;
 
             WarningException w = t as WarningException;
-            if (w != null) {
+            if (w != null)
+            {
                 messageFormat = SR.ExDlgWarningText;
                 messageText = w.Message;
-                if (w.HelpUrl == null) {
-                    buttons = new Button[] {continueButton};
+                if (w.HelpUrl == null)
+                {
+                    buttons = new Button[] { continueButton };
                 }
-                else {
-                    buttons = new Button[] {continueButton, helpButton};
+                else
+                {
+                    buttons = new Button[] { continueButton, helpButton };
                 }
             }
-            else {
+            else
+            {
                 messageText = t.Message;
 
                 detailAnchor = true;
-                
-                if (Application.AllowQuit) {
-                    if (t is System.Security.SecurityException) {
+
+                if (Application.AllowQuit)
+                {
+                    if (t is System.Security.SecurityException)
+                    {
                         messageFormat = SR.ExDlgSecurityErrorText;
                     }
-                    else {
+                    else
+                    {
                         messageFormat = SR.ExDlgErrorText;
                     }
-                    buttons = new Button[] {detailsButton, continueButton, quitButton};
+                    buttons = new Button[] { detailsButton, continueButton, quitButton };
                 }
-                else {
-                    if (t is System.Security.SecurityException) {
+                else
+                {
+                    if (t is System.Security.SecurityException)
+                    {
                         messageFormat = SR.ExDlgSecurityContinueErrorText;
                     }
-                    else {
+                    else
+                    {
                         messageFormat = SR.ExDlgContinueErrorText;
                     }
-                    buttons = new Button[] {detailsButton, continueButton};
+                    buttons = new Button[] { detailsButton, continueButton };
                 }
             }
 
-            if (messageText.Length == 0) {
+            if (messageText.Length == 0)
+            {
                 messageText = t.GetType().Name;
             }
-            if (t is System.Security.SecurityException) {
+            if (t is System.Security.SecurityException)
+            {
                 messageText = string.Format(messageFormat, t.GetType().Name, Trim(messageText));
             }
-            else {
+            else
+            {
                 messageText = string.Format(messageFormat, Trim(messageText));
             }
 
@@ -159,10 +176,12 @@ namespace System.Windows.Forms {
             string newline = "\r\n";
             string separator = SR.ExDlgMsgSeperator;
             string sectionseparator = SR.ExDlgMsgSectionSeperator;
-            if (Application.CustomThreadExceptionHandlerAttached) {
+            if (Application.CustomThreadExceptionHandlerAttached)
+            {
                 detailsTextBuilder.Append(SR.ExDlgMsgHeaderNonSwitchable);
             }
-            else {
+            else
+            {
                 detailsTextBuilder.Append(SR.ExDlgMsgHeaderSwitchable);
             }
             detailsTextBuilder.Append(string.Format(CultureInfo.CurrentCulture, sectionseparator, SR.ExDlgMsgExceptionSection));
@@ -171,29 +190,36 @@ namespace System.Windows.Forms {
             detailsTextBuilder.Append(newline);
             detailsTextBuilder.Append(string.Format(CultureInfo.CurrentCulture, sectionseparator, SR.ExDlgMsgLoadedAssembliesSection));
 
-            foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies()) {
+            foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
+            {
                 AssemblyName name = asm.GetName();
                 string fileVer = SR.NotAvailable;
 
-                try {
-                    if (name.EscapedCodeBase != null && name.EscapedCodeBase.Length > 0) {
+                try
+                {
+                    if (name.EscapedCodeBase != null && name.EscapedCodeBase.Length > 0)
+                    {
                         Uri codeBase = new Uri(name.EscapedCodeBase);
-                        if (codeBase.Scheme == "file") {
+                        if (codeBase.Scheme == "file")
+                        {
                             fileVer = FileVersionInfo.GetVersionInfo(NativeMethods.GetLocalPath(name.EscapedCodeBase)).FileVersion;
                         }
                     }
                 }
-                catch(System.IO.FileNotFoundException){
+                catch (System.IO.FileNotFoundException)
+                {
                 }
                 detailsTextBuilder.Append(string.Format(SR.ExDlgMsgLoadedAssembliesEntry, name.Name, name.Version, fileVer, name.EscapedCodeBase));
                 detailsTextBuilder.Append(separator);
             }
-            
+
             detailsTextBuilder.Append(string.Format(CultureInfo.CurrentCulture, sectionseparator, SR.ExDlgMsgJITDebuggingSection));
-            if (Application.CustomThreadExceptionHandlerAttached) {
+            if (Application.CustomThreadExceptionHandlerAttached)
+            {
                 detailsTextBuilder.Append(SR.ExDlgMsgFooterNonSwitchable);
             }
-            else {
+            else
+            {
                 detailsTextBuilder.Append(SR.ExDlgMsgFooterSwitchable);
             }
 
@@ -206,11 +232,13 @@ namespace System.Windows.Forms {
 
             Size textSize = new Size(scaledMaxWidth - scaledPaddingWidth, int.MaxValue);
 
-            if (DpiHelper.IsScalingRequirementMet && Label.UseCompatibleTextRenderingDefault == false) {
+            if (DpiHelper.IsScalingRequirementMet && Label.UseCompatibleTextRenderingDefault == false)
+            {
                 // we need to measure string using API that matches the rendering engine - TextRenderer.MeasureText for GDI
                 textSize = Size.Ceiling(TextRenderer.MeasureText(messageText, Font, textSize, TextFormatFlags.WordBreak));
             }
-            else {
+            else
+            {
                 // if HighDpi improvements are not enabled, or rendering mode is GDI+, use Graphics.MeasureString
                 textSize = Size.Ceiling(g.MeasureString(messageText, Font, textSize.Width));
             }
@@ -218,17 +246,21 @@ namespace System.Windows.Forms {
             textSize.Height += scaledExceptionMessageVerticalPadding;
             g.Dispose();
 
-            if (textSize.Width < scaledMaxTextWidth) textSize.Width = scaledMaxTextWidth;
-            if (textSize.Height > scaledMaxHeight) textSize.Height = scaledMaxHeight;
+            if (textSize.Width < scaledMaxTextWidth)
+                textSize.Width = scaledMaxTextWidth;
+            if (textSize.Height > scaledMaxHeight)
+                textSize.Height = scaledMaxHeight;
 
             int width = textSize.Width + scaledPaddingWidth;
             int buttonTop = Math.Max(textSize.Height, scaledMaxTextHeight) + scaledPaddingHeight;
 
             Form activeForm = Form.ActiveForm;
-            if (activeForm == null || activeForm.Text.Length == 0) {
+            if (activeForm == null || activeForm.Text.Length == 0)
+            {
                 Text = SR.ExDlgCaption;
             }
-            else {
+            else
+            {
                 Text = string.Format(SR.ExDlgCaption2, activeForm.Text);
             }
 
@@ -242,13 +274,15 @@ namespace System.Windows.Forms {
             ClientSize = new Size(width, buttonTop + scaledButtonTopPadding);
             TopMost = true;
 
-            pictureBox.Location = new Point(scaledPictureWidth/8, scaledPictureHeight/8);
-            pictureBox.Size = new Size(scaledPictureWidth*3/4, scaledPictureHeight*3/4);
+            pictureBox.Location = new Point(scaledPictureWidth / 8, scaledPictureHeight / 8);
+            pictureBox.Size = new Size(scaledPictureWidth * 3 / 4, scaledPictureHeight * 3 / 4);
             pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-            if (t is System.Security.SecurityException) {
+            if (t is System.Security.SecurityException)
+            {
                 pictureBox.Image = SystemIcons.Information.ToBitmap();
             }
-            else {
+            else
+            {
                 pictureBox.Image = SystemIcons.Error.ToBitmap();
             }
             Controls.Add(pictureBox);
@@ -276,8 +310,9 @@ namespace System.Windows.Forms {
 
             Button b = null;
             int startIndex = 0;
-            
-            if (detailAnchor) {
+
+            if (detailAnchor)
+            {
                 b = detailsButton;
 
                 expandImage = DpiHelper.GetBitmapFromIcon(GetType(), DownBitmapName);
@@ -295,10 +330,11 @@ namespace System.Windows.Forms {
                 Controls.Add(b);
                 startIndex = 1;
             }
-            
+
             int buttonLeft = (width - scaledButtonDetailsLeftPadding - ((buttons.Length - startIndex) * scaledButtonAlignmentWidth - scaledButtonAlignmentPadding));
-            
-            for (int i = startIndex; i < buttons.Length; i++) {
+
+            for (int i = startIndex; i < buttons.Length; i++)
+            {
                 b = buttons[i];
                 b.SetBounds(buttonLeft, buttonTop, scaledButtonWidth, scaledButtonHeight);
                 Controls.Add(b);
@@ -312,22 +348,26 @@ namespace System.Windows.Forms {
             details.WordWrap = false;
             details.TabStop = false;
             details.AcceptsReturn = false;
-            
+
             details.SetBounds(scaledButtonDetailsLeftPadding, buttonTop + scaledButtonTopPadding, width - scaledDetailsWidthPadding, scaledDetailsHeight);
             details.Visible = detailsVisible;
             Controls.Add(details);
-            if (DpiHelper.IsScalingRequirementMet) {
+            if (DpiHelper.IsScalingRequirementMet)
+            {
                 DpiChanged += ThreadExceptionDialog_DpiChanged;
             }
         }
 
-        private void ThreadExceptionDialog_DpiChanged(object sender, DpiChangedEventArgs e) {
-            if (expandImage != null) {
+        private void ThreadExceptionDialog_DpiChanged(object sender, DpiChangedEventArgs e)
+        {
+            if (expandImage != null)
+            {
                 expandImage.Dispose();
             }
             expandImage = DpiHelper.GetBitmapFromIcon(GetType(), DownBitmapName);
 
-            if (collapseImage != null) {
+            if (collapseImage != null)
+            {
                 collapseImage.Dispose();
             }
             collapseImage = DpiHelper.GetBitmapFromIcon(GetType(), UpBitmapName);
@@ -355,24 +395,29 @@ namespace System.Windows.Forms {
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
-        }                
+        }
 
         /// <summary>
         ///     Called when the details button is clicked.
         /// </summary>
-        private void DetailsClick(object sender, EventArgs eventargs) {
+        private void DetailsClick(object sender, EventArgs eventargs)
+        {
             int delta = details.Height + scaledHeightPadding;
-            if (detailsVisible) delta = -delta;
+            if (detailsVisible)
+                delta = -delta;
             Height = Height + delta;
             detailsVisible = !detailsVisible;
             details.Visible = detailsVisible;
             detailsButton.Image = detailsVisible ? collapseImage : expandImage;
         }
 
-        private static string Trim(string s) {
-            if (s == null) return s;
+        private static string Trim(string s)
+        {
+            if (s == null)
+                return s;
             int i = s.Length;
-            while (i > 0 && s[i - 1] == '.') i--;
+            while (i > 0 && s[i - 1] == '.')
+                i--;
             return s.Substring(0, i);
         }
     }

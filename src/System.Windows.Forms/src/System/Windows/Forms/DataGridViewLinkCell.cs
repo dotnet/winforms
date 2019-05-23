@@ -137,14 +137,14 @@ namespace System.Windows.Forms
                 {
                     return (LinkBehavior)linkBehavior;
                 }
-                return LinkBehavior.SystemDefault; 
+                return LinkBehavior.SystemDefault;
             }
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)LinkBehavior.SystemDefault, (int)LinkBehavior.NeverUnderline))
                 {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(LinkBehavior)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(LinkBehavior));
                 }
                 if (value != this.LinkBehavior)
                 {
@@ -246,7 +246,7 @@ namespace System.Windows.Forms
                 int linkState = this.Properties.GetInteger(PropLinkCellLinkState, out found);
                 if (found)
                 {
-                    return (LinkState) linkState;
+                    return (LinkState)linkState;
                 }
                 return LinkState.Normal;
             }
@@ -254,7 +254,7 @@ namespace System.Windows.Forms
             {
                 if (this.LinkState != value)
                 {
-                    this.Properties.SetInteger(PropLinkCellLinkState, (int) value);
+                    this.Properties.SetInteger(PropLinkCellLinkState, (int)value);
                 }
             }
         }
@@ -465,7 +465,7 @@ namespace System.Windows.Forms
         public override object Clone()
         {
             DataGridViewLinkCell dataGridViewCell;
-            Type thisType = this.GetType ();
+            Type thisType = this.GetType();
 
             if (thisType == cellType) //performance improvement
             {
@@ -655,39 +655,39 @@ namespace System.Windows.Forms
                 switch (freeDimension)
                 {
                     case DataGridViewFreeDimension.Width:
-                    {
-                        int maxHeight = constraintSize.Height - borderAndPaddingHeights - DATAGRIDVIEWLINKCELL_verticalTextMarginTop - DATAGRIDVIEWLINKCELL_verticalTextMarginBottom;
-                        if ((cellStyle.Alignment & anyBottom) != 0)
                         {
-                            maxHeight--;
+                            int maxHeight = constraintSize.Height - borderAndPaddingHeights - DATAGRIDVIEWLINKCELL_verticalTextMarginTop - DATAGRIDVIEWLINKCELL_verticalTextMarginBottom;
+                            if ((cellStyle.Alignment & anyBottom) != 0)
+                            {
+                                maxHeight--;
+                            }
+                            preferredSize = new Size(DataGridViewCell.MeasureTextWidth(graphics,
+                                                                                       formattedString,
+                                                                                       cellStyle.Font,
+                                                                                       Math.Max(1, maxHeight),
+                                                                                       flags),
+                                                     0);
+                            break;
                         }
-                        preferredSize = new Size(DataGridViewCell.MeasureTextWidth(graphics,
-                                                                                   formattedString,
-                                                                                   cellStyle.Font,
-                                                                                   Math.Max(1, maxHeight),
-                                                                                   flags),
-                                                 0);
-                        break;
-                    }
                     case DataGridViewFreeDimension.Height:
-                    {
-                        preferredSize = new Size(0,
-                                                 DataGridViewCell.MeasureTextHeight(graphics, 
-                                                                                    formattedString,
-                                                                                    cellStyle.Font,
-                                                                                    Math.Max(1, constraintSize.Width - borderAndPaddingWidths - DATAGRIDVIEWLINKCELL_horizontalTextMarginLeft - DATAGRIDVIEWLINKCELL_horizontalTextMarginRight),
-                                                                                    flags));
-                        break;
-                    }
+                        {
+                            preferredSize = new Size(0,
+                                                     DataGridViewCell.MeasureTextHeight(graphics,
+                                                                                        formattedString,
+                                                                                        cellStyle.Font,
+                                                                                        Math.Max(1, constraintSize.Width - borderAndPaddingWidths - DATAGRIDVIEWLINKCELL_horizontalTextMarginLeft - DATAGRIDVIEWLINKCELL_horizontalTextMarginRight),
+                                                                                        flags));
+                            break;
+                        }
                     default:
-                    {
-                        preferredSize = DataGridViewCell.MeasureTextPreferredSize(graphics, 
-                                                                                  formattedString, 
-                                                                                  cellStyle.Font, 
-                                                                                  5.0F, 
-                                                                                  flags);
-                        break;
-                    }
+                        {
+                            preferredSize = DataGridViewCell.MeasureTextPreferredSize(graphics,
+                                                                                      formattedString,
+                                                                                      cellStyle.Font,
+                                                                                      5.0F,
+                                                                                      flags);
+                            break;
+                        }
                 }
             }
             else
@@ -695,22 +695,22 @@ namespace System.Windows.Forms
                 switch (freeDimension)
                 {
                     case DataGridViewFreeDimension.Width:
-                    {
-                        preferredSize = new Size(DataGridViewCell.MeasureTextSize(graphics, formattedString, cellStyle.Font, flags).Width, 
-                                                 0);
-                        break;
-                    }
+                        {
+                            preferredSize = new Size(DataGridViewCell.MeasureTextSize(graphics, formattedString, cellStyle.Font, flags).Width,
+                                                     0);
+                            break;
+                        }
                     case DataGridViewFreeDimension.Height:
-                    {
-                        preferredSize = new Size(0,
-                                                 DataGridViewCell.MeasureTextSize(graphics, formattedString, cellStyle.Font, flags).Height);
-                        break;
-                    }
+                        {
+                            preferredSize = new Size(0,
+                                                     DataGridViewCell.MeasureTextSize(graphics, formattedString, cellStyle.Font, flags).Height);
+                            break;
+                        }
                     default:
-                    {
-                        preferredSize = DataGridViewCell.MeasureTextSize(graphics, formattedString, cellStyle.Font, flags);
-                        break;
-                    }
+                        {
+                            preferredSize = DataGridViewCell.MeasureTextSize(graphics, formattedString, cellStyle.Font, flags);
+                            break;
+                        }
                 }
             }
 
@@ -742,12 +742,12 @@ namespace System.Windows.Forms
         protected override object GetValue(int rowIndex)
         {
             if (this.UseColumnTextForLinkValue &&
-                this.DataGridView != null && 
-                this.DataGridView.NewRowIndex != rowIndex && 
-                this.OwningColumn != null && 
+                this.DataGridView != null &&
+                this.DataGridView.NewRowIndex != rowIndex &&
+                this.OwningColumn != null &&
                 this.OwningColumn is DataGridViewLinkColumn)
             {
-                return ((DataGridViewLinkColumn) this.OwningColumn).Text;
+                return ((DataGridViewLinkColumn)this.OwningColumn).Text;
             }
             return base.GetValue(rowIndex);
         }
@@ -905,10 +905,10 @@ namespace System.Windows.Forms
             }
         }
 
-        protected override void Paint(Graphics graphics, 
+        protected override void Paint(Graphics graphics,
             Rectangle clipBounds,
-            Rectangle cellBounds, 
-            int rowIndex, 
+            Rectangle cellBounds,
+            int rowIndex,
             DataGridViewElementStates cellState,
             object value,
             object formattedValue,
@@ -922,14 +922,14 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(cellStyle));
             }
 
-            PaintPrivate(graphics, 
+            PaintPrivate(graphics,
                 clipBounds,
-                cellBounds, 
+                cellBounds,
                 rowIndex,
                 cellState,
                 formattedValue,
-                errorText, 
-                cellStyle, 
+                errorText,
+                cellStyle,
                 advancedBorderStyle,
                 paintParts,
                 false /*computeContentBounds*/,
@@ -948,7 +948,7 @@ namespace System.Windows.Forms
         // else it returns Rectangle.Empty;
         private Rectangle PaintPrivate(Graphics g,
             Rectangle clipBounds,
-            Rectangle cellBounds, 
+            Rectangle cellBounds,
             int rowIndex,
             DataGridViewElementStates cellState,
             object formattedValue,
@@ -1104,11 +1104,11 @@ namespace System.Windows.Forms
             else if (paint || computeContentBounds)
             {
                 if (cellCurrent &&
-                    this.DataGridView.ShowFocusCues && 
-                    this.DataGridView.Focused && 
-                    DataGridViewCell.PaintFocus(paintParts) && 
-                    paint && 
-                    valBounds.Width > 0 && 
+                    this.DataGridView.ShowFocusCues &&
+                    this.DataGridView.Focused &&
+                    DataGridViewCell.PaintFocus(paintParts) &&
+                    paint &&
+                    valBounds.Width > 0 &&
                     valBounds.Height > 0)
                 {
                     // Draw focus rectangle
@@ -1139,7 +1139,7 @@ namespace System.Windows.Forms
         protected class DataGridViewLinkCellAccessibleObject : DataGridViewCellAccessibleObject
         {
 
-            public DataGridViewLinkCellAccessibleObject(DataGridViewCell owner) : base (owner)
+            public DataGridViewLinkCellAccessibleObject(DataGridViewCell owner) : base(owner)
             {
             }
 

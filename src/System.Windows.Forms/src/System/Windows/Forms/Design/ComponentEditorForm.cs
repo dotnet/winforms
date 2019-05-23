@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Design {
+namespace System.Windows.Forms.Design
+{
     using System.Runtime.InteropServices;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -24,7 +25,8 @@ namespace System.Windows.Forms.Design {
      ClassInterface(ClassInterfaceType.AutoDispatch)
     ]
     [ToolboxItem(false)]
-    public class ComponentEditorForm : Form {
+    public class ComponentEditorForm : Form
+    {
         private IComponent component;
         private Type[] pageTypes;
         private ComponentEditorPageSite[] pageSites;
@@ -56,10 +58,12 @@ namespace System.Windows.Forms.Design {
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.Design.ComponentEditorForm'/> class.
         ///    </para>
         /// </summary>
-        public ComponentEditorForm(object component, Type[] pageTypes) : base() {
-        
-            if (!(component is IComponent)) {
-               throw new ArgumentException(SR.ComponentEditorFormBadComponent,"component");
+        public ComponentEditorForm(object component, Type[] pageTypes) : base()
+        {
+
+            if (!(component is IComponent))
+            {
+                throw new ArgumentException(SR.ComponentEditorFormBadComponent, "component");
             }
             this.component = (IComponent)component;
             this.pageTypes = pageTypes;
@@ -82,18 +86,25 @@ namespace System.Windows.Forms.Design {
         /// <summary>
         ///     Applies any changes in the set of ComponentPageControl to the actual component.
         /// </summary>
-        internal virtual void ApplyChanges(bool lastApply) {
-            if (dirty) {
+        internal virtual void ApplyChanges(bool lastApply)
+        {
+            if (dirty)
+            {
                 IComponentChangeService changeService = null;
 
-                if (component.Site != null) {
+                if (component.Site != null)
+                {
                     changeService = (IComponentChangeService)component.Site.GetService(typeof(IComponentChangeService));
-                    if (changeService != null) {
-                        try {
+                    if (changeService != null)
+                    {
+                        try
+                        {
                             changeService.OnComponentChanging(component, null);
                         }
-                        catch (CheckoutException e) {
-                            if (e == CheckoutException.Canceled) {
+                        catch (CheckoutException e)
+                        {
+                            if (e == CheckoutException.Canceled)
+                            {
                                 return;
                             }
                             throw e;
@@ -101,14 +112,17 @@ namespace System.Windows.Forms.Design {
                     }
                 }
 
-                for (int n = 0; n < pageSites.Length; n++) {
-                    if (pageSites[n].Dirty) {
+                for (int n = 0; n < pageSites.Length; n++)
+                {
+                    if (pageSites[n].Dirty)
+                    {
                         pageSites[n].GetPageControl().ApplyChanges();
                         pageSites[n].Dirty = false;
                     }
                 }
 
-                if (changeService != null) {
+                if (changeService != null)
+                {
                     changeService.OnComponentChanged(component, null, null, null);
                 }
 
@@ -116,8 +130,10 @@ namespace System.Windows.Forms.Design {
                 cancelButton.Text = SR.CloseCaption;
                 dirty = false;
 
-                if (lastApply == false) {
-                    for (int n = 0; n < pageSites.Length; n++) {
+                if (lastApply == false)
+                {
+                    for (int n = 0; n < pageSites.Length; n++)
+                    {
                         pageSites[n].GetPageControl().OnApplyComplete();
                     }
                 }
@@ -154,7 +170,7 @@ namespace System.Windows.Forms.Design {
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
-        }                
+        }
 
 
         /*
@@ -167,18 +183,23 @@ namespace System.Windows.Forms.Design {
         /// <summary>
         ///     Handles ok/cancel/apply/help button click events
         /// </summary>
-        private void OnButtonClick(object sender, EventArgs e) {
-            if (sender == okButton) {
+        private void OnButtonClick(object sender, EventArgs e)
+        {
+            if (sender == okButton)
+            {
                 ApplyChanges(true);
                 DialogResult = DialogResult.OK;
             }
-            else if (sender == cancelButton) {
+            else if (sender == cancelButton)
+            {
                 DialogResult = DialogResult.Cancel;
             }
-            else if (sender == applyButton) {
+            else if (sender == applyButton)
+            {
                 ApplyChanges(false);
             }
-            else if (sender == helpButton) {
+            else if (sender == helpButton)
+            {
                 ShowPageHelp();
             }
         }
@@ -186,11 +207,14 @@ namespace System.Windows.Forms.Design {
         /// <summary>
         ///     Lays out the UI of the form.
         /// </summary>
-        private void OnConfigureUI() {
+        private void OnConfigureUI()
+        {
             Font uiFont = Control.DefaultFont;
-            if (component.Site != null) {
+            if (component.Site != null)
+            {
                 IUIService uiService = (IUIService)component.Site.GetService(typeof(IUIService));
-                if (uiService != null) {
+                if (uiService != null)
+                {
                     uiFont = (Font)uiService.Styles["DialogFont"];
                 }
             }
@@ -214,14 +238,16 @@ namespace System.Windows.Forms.Design {
 
             int selectorWidth = MIN_SELECTOR_WIDTH;
 
-            if (pageSites != null) {
+            if (pageSites != null)
+            {
                 // Add the nodes corresponding to the pages
-                for (int n = 0; n < pageSites.Length; n++) {
+                for (int n = 0; n < pageSites.Length; n++)
+                {
                     ComponentEditorPage page = pageSites[n].GetPageControl();
 
                     string title = page.Title;
                     Graphics graphics = CreateGraphicsInternal();
-                    int titleWidth = (int) graphics.MeasureString(title, Font).Width;
+                    int titleWidth = (int)graphics.MeasureString(title, Font).Width;
                     graphics.Dispose();
                     selectorImageList.Images.Add(page.Icon.ToBitmap());
 
@@ -234,10 +260,12 @@ namespace System.Windows.Forms.Design {
 
             string caption = string.Empty;
             ISite site = component.Site;
-            if (site != null) {
+            if (site != null)
+            {
                 caption = string.Format(SR.ComponentEditorFormProperties, site.Name);
             }
-            else {
+            else
+            {
                 caption = SR.ComponentEditorFormPropertiesNoName;
             }
             this.Text = caption;
@@ -249,9 +277,11 @@ namespace System.Windows.Forms.Design {
             grayStrip.Bounds = new Rectangle(pageHostBounds.X, BUTTON_PAD,
                                              pageHostBounds.Width, STRIP_HEIGHT);
 
-            if (pageSites != null) {
+            if (pageSites != null)
+            {
                 Rectangle pageBounds = new Rectangle(0, 0, pageHostBounds.Width, pageHostBounds.Height);
-                for (int n = 0; n < pageSites.Length; n++) {
+                for (int n = 0; n < pageSites.Length; n++)
+                {
                     ComponentEditorPage page = pageSites[n].GetPageControl();
                     page.GetControl().Bounds = pageBounds;
                 }
@@ -299,7 +329,7 @@ namespace System.Windows.Forms.Design {
             okButton.FlatStyle = FlatStyle.System;
             this.AcceptButton = okButton;
 
-            this.Controls.Clear();                     
+            this.Controls.Clear();
             this.Controls.AddRange(new Control[] {
                 selector,
                 grayStrip,
@@ -310,12 +340,12 @@ namespace System.Windows.Forms.Design {
                 helpButton
             });
 
-            #pragma warning disable 618            
+#pragma warning disable 618
             // continuing with the old autoscale base size stuff, it works, 
             // and is currently set to a non-standard height
             AutoScaleBaseSize = new Size(5, 14);
             ApplyAutoScaling();
-            #pragma warning restore 618
+#pragma warning restore 618
 
 
         }
@@ -324,12 +354,14 @@ namespace System.Windows.Forms.Design {
         /// </summary>
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
-        protected override void OnActivated(EventArgs e) {
+        protected override void OnActivated(EventArgs e)
+        {
             base.OnActivated(e);
 
-            if (firstActivate) {
+            if (firstActivate)
+            {
                 firstActivate = false;
-                
+
                 selector.SelectedNode = selector.Nodes[initialActivePage];
                 pageSites[initialActivePage].Active = true;
                 activePage = initialActivePage;
@@ -342,7 +374,8 @@ namespace System.Windows.Forms.Design {
         /// </summary>
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         // 
-        protected override void OnHelpRequested(HelpEventArgs e) {
+        protected override void OnHelpRequested(HelpEventArgs e)
+        {
             base.OnHelpRequested(e);
             ShowPageHelp();
         }
@@ -350,7 +383,8 @@ namespace System.Windows.Forms.Design {
         /// <summary>
         ///     Called to initialize this form with the new component.
         /// </summary>
-        private void OnNewObjects() {
+        private void OnNewObjects()
+        {
             pageSites = null;
             maxSize = new Size(3 * (BUTTON_WIDTH + BUTTON_PAD), 24 * pageTypes.Length);
 
@@ -358,7 +392,8 @@ namespace System.Windows.Forms.Design {
 
             // create sites for them
             //
-            for (int n = 0; n < pageTypes.Length; n++) {
+            for (int n = 0; n < pageTypes.Length; n++)
+            {
                 pageSites[n] = new ComponentEditorPageSite(pageHost, pageTypes[n], component, this);
                 ComponentEditorPage page = pageSites[n].GetPageControl();
 
@@ -371,7 +406,8 @@ namespace System.Windows.Forms.Design {
 
             // and set them all to an ideal size
             //
-            for (int n = 0; n < pageSites.Length; n++) {
+            for (int n = 0; n < pageSites.Length; n++)
+            {
                 pageSites[n].GetPageControl().Size = maxSize;
             }
         }
@@ -379,13 +415,15 @@ namespace System.Windows.Forms.Design {
         /// <summary>
         ///     Handles switching between pages.
         /// </summary>
-        protected virtual void OnSelChangeSelector(object source, TreeViewEventArgs e) {
-            if (firstActivate == true) {
+        protected virtual void OnSelChangeSelector(object source, TreeViewEventArgs e)
+        {
+            if (firstActivate == true)
+            {
                 // treeview seems to fire a change event when it is first setup before
                 // the form is activated
                 return;
             }
-                
+
             int newPage = selector.SelectedNode.Index;
             Debug.Assert((newPage >= 0) && (newPage < pageSites.Length),
                          "Invalid page selected");
@@ -393,7 +431,8 @@ namespace System.Windows.Forms.Design {
             if (newPage == activePage)
                 return;
 
-            if (activePage != -1) {
+            if (activePage != -1)
+            {
                 if (pageSites[activePage].AutoCommit)
                     ApplyChanges(false);
                 pageSites[activePage].Active = false;
@@ -408,7 +447,8 @@ namespace System.Windows.Forms.Design {
         ///    <para>Provides a method to override in order to pre-process input messages before 
         ///       they are dispatched.</para>
         /// </summary>        
-        public override bool PreProcessMessage(ref Message msg) {
+        public override bool PreProcessMessage(ref Message msg)
+        {
             if (null != pageSites && pageSites[activePage].GetPageControl().IsPageMessage(ref msg))
                 return true;
 
@@ -419,7 +459,8 @@ namespace System.Windows.Forms.Design {
         ///     Sets the controls of the form to dirty.  This enables the "apply"
         ///     button.
         /// </summary>
-        internal virtual void SetDirty() {
+        internal virtual void SetDirty()
+        {
             dirty = true;
             applyButton.Enabled = true;
             cancelButton.Text = SR.CancelCaption;
@@ -428,35 +469,41 @@ namespace System.Windows.Forms.Design {
         /// <summary>
         ///    <para>Shows the form. The form will have no owner window.</para>
         /// </summary>
-        public virtual DialogResult ShowForm() {
+        public virtual DialogResult ShowForm()
+        {
             return ShowForm(null, 0);
         }
 
         /// <summary>
         ///    <para> Shows the form and the specified page. The form will have no owner window.</para>
         /// </summary>
-        public virtual DialogResult ShowForm(int page) {
+        public virtual DialogResult ShowForm(int page)
+        {
             return ShowForm(null, page);
         }
 
         /// <summary>
         ///    <para>Shows the form with the specified owner.</para>
         /// </summary>
-        public virtual DialogResult ShowForm(IWin32Window owner) {
+        public virtual DialogResult ShowForm(IWin32Window owner)
+        {
             return ShowForm(owner, 0);
         }
 
         /// <summary>
         ///    <para>Shows the form and the specified page with the specified owner.</para>
         /// </summary>
-        public virtual DialogResult ShowForm(IWin32Window owner, int page) {
+        public virtual DialogResult ShowForm(IWin32Window owner, int page)
+        {
             initialActivePage = page;
 
             // CreateNewTransaction();
-            try {                                                   
+            try
+            {
                 ShowDialog(owner);
             }
-            finally {
+            finally
+            {
                 /*
                 if (DialogResult == DialogResult.OK) {
                     transaction.Commit();
@@ -474,10 +521,12 @@ namespace System.Windows.Forms.Design {
         /// <summary>
         ///     Shows help for the active page.
         /// </summary>
-        private void ShowPageHelp() {
+        private void ShowPageHelp()
+        {
             Debug.Assert(activePage != -1);
 
-            if (pageSites[activePage].GetPageControl().SupportsHelp()) {
+            if (pageSites[activePage].GetPageControl().SupportsHelp())
+            {
                 pageSites[activePage].GetPageControl().ShowHelp();
             }
         }
@@ -486,7 +535,8 @@ namespace System.Windows.Forms.Design {
         ///     Implements a standard version of ComponentEditorPageSite for use within a
         ///     ComponentEditorForm.
         /// </summary>
-        private sealed class ComponentEditorPageSite : IComponentEditorPageSite {
+        private sealed class ComponentEditorPageSite : IComponentEditorPageSite
+        {
             internal IComponent component;
             internal ComponentEditorPage pageControl;
             internal Control parent;
@@ -497,7 +547,8 @@ namespace System.Windows.Forms.Design {
             /// <summary>
             ///     Creates the page site.
             /// </summary>
-            internal ComponentEditorPageSite(Control parent, Type pageClass, IComponent component, ComponentEditorForm form) {
+            internal ComponentEditorPageSite(Control parent, Type pageClass, IComponent component, ComponentEditorForm form)
+            {
                 this.component = component;
                 this.parent = parent;
                 this.isActive = false;
@@ -508,10 +559,12 @@ namespace System.Windows.Forms.Design {
 
                 this.form = form;
 
-                try {
+                try
+                {
                     pageControl = (ComponentEditorPage)Activator.CreateInstance(pageClass);
                 }
-                catch (TargetInvocationException e) {
+                catch (TargetInvocationException e)
+                {
                     Debug.Fail(e.ToString());
                     throw new TargetInvocationException(string.Format(SR.ExceptionCreatingCompEditorControl, e.ToString()), e.InnerException);
                 }
@@ -523,33 +576,42 @@ namespace System.Windows.Forms.Design {
             /// <summary>
             ///     Called by the ComponentEditorForm to activate / deactivate the page.
             /// </summary>
-            internal bool Active {
-                set {
-                    if (value) {
+            internal bool Active
+            {
+                set
+                {
+                    if (value)
+                    {
                         // make sure the page has been created
                         pageControl.CreateControl();
 
                         // activate it and give it focus
                         pageControl.Activate();
                     }
-                    else {
+                    else
+                    {
                         pageControl.Deactivate();
                     }
                     isActive = value;
                 }
             }
 
-            internal bool AutoCommit {
-                get {
+            internal bool AutoCommit
+            {
+                get
+                {
                     return pageControl.CommitOnDeactivate;
                 }
             }
 
-            internal bool Dirty {
-                get {
+            internal bool Dirty
+            {
+                get
+                {
                     return isDirty;
                 }
-                set {
+                set
+                {
                     isDirty = value;
                 }
             }
@@ -557,24 +619,27 @@ namespace System.Windows.Forms.Design {
             /// <summary>
             ///     Called by a page to return a parenting control for itself.
             /// </summary>
-            public Control GetControl() {
+            public Control GetControl()
+            {
                 return parent;
             }
 
             /// <summary>
             ///     Called by the ComponentEditorForm to get the actual page.
             /// </summary>
-            internal ComponentEditorPage GetPageControl() {
+            internal ComponentEditorPage GetPageControl()
+            {
                 return pageControl;
             }
 
             /// <summary>
             ///     Called by a page to mark it's contents as dirty.
             /// </summary>
-            public void SetDirty() {
+            public void SetDirty()
+            {
                 if (isActive)
                     Dirty = true;
-                    form.SetDirty();
+                form.SetDirty();
             }
         }
 
@@ -582,7 +647,8 @@ namespace System.Windows.Forms.Design {
         /// </summary>
         //  This should be moved into a shared location
         //  Its a duplication of what exists in the StyleBuilder.
-        internal sealed class PageSelector : TreeView {
+        internal sealed class PageSelector : TreeView
+        {
             private const int PADDING_VERT = 3;
             private const int PADDING_HORZ = 4;
 
@@ -596,7 +662,8 @@ namespace System.Windows.Forms.Design {
             private IntPtr hbrushDither;
 
 
-            public PageSelector() {
+            public PageSelector()
+            {
                 this.HotTracking = true;
                 this.HideSelection = false;
                 this.BackColor = SystemColors.Control;
@@ -613,8 +680,10 @@ namespace System.Windows.Forms.Design {
 
 
 
-            protected override CreateParams CreateParams {
-                get {
+            protected override CreateParams CreateParams
+            {
+                get
+                {
                     CreateParams cp = base.CreateParams;
 
                     cp.ExStyle |= NativeMethods.WS_EX_STATICEDGE;
@@ -622,7 +691,8 @@ namespace System.Windows.Forms.Design {
                 }
             }
 
-            private void CreateDitherBrush() {
+            private void CreateDitherBrush()
+            {
                 Debug.Assert(hbrushDither == IntPtr.Zero, "Brush should not be recreated.");
 
                 short[] patternBits = new short[] {
@@ -634,7 +704,8 @@ namespace System.Windows.Forms.Design {
                 Debug.Assert(hbitmapTemp != IntPtr.Zero,
                              "could not create dither bitmap. Page selector UI will not be correct");
 
-                if (hbitmapTemp != IntPtr.Zero) {
+                if (hbitmapTemp != IntPtr.Zero)
+                {
                     hbrushDither = SafeNativeMethods.CreatePatternBrush(new HandleRef(null, hbitmapTemp));
 
                     Debug.Assert(hbrushDither != IntPtr.Zero,
@@ -645,7 +716,8 @@ namespace System.Windows.Forms.Design {
             }
 
             private void DrawTreeItem(string itemText, int imageIndex, IntPtr dc, NativeMethods.RECT rcIn,
-                                        int state, int backColor, int textColor) {
+                                        int state, int backColor, int textColor)
+            {
                 IntNativeMethods.SIZE size = new IntNativeMethods.SIZE();
                 IntNativeMethods.RECT rc2 = new IntNativeMethods.RECT();
                 IntNativeMethods.RECT rc = new IntNativeMethods.RECT(rcIn.left, rcIn.top, rcIn.right, rcIn.bottom);
@@ -658,11 +730,13 @@ namespace System.Windows.Forms.Design {
                     hfontOld = SafeNativeMethods.SelectObject(new HandleRef(null, dc), new HandleRef(Parent, ((Control)Parent).FontHandle));
 
                 // Fill the background
-                if (((state & STATE_SELECTED) != 0) && (hbrushDither != IntPtr.Zero)) {
+                if (((state & STATE_SELECTED) != 0) && (hbrushDither != IntPtr.Zero))
+                {
                     FillRectDither(dc, rcIn);
                     SafeNativeMethods.SetBkMode(new HandleRef(null, dc), NativeMethods.TRANSPARENT);
                 }
-                else {
+                else
+                {
                     SafeNativeMethods.SetBkColor(new HandleRef(null, dc), backColor);
                     IntUnsafeNativeMethods.ExtTextOut(new HandleRef(null, dc), 0, 0, NativeMethods.ETO_CLIPPED | NativeMethods.ETO_OPAQUE, ref rc, null, 0, null);
                 }
@@ -684,7 +758,8 @@ namespace System.Windows.Forms.Design {
                                        NativeMethods.ILD_TRANSPARENT);
 
                 // Draw the hot-tracking border if needed
-                if ((state & STATE_HOT) != 0) {
+                if ((state & STATE_HOT) != 0)
+                {
                     int savedColor;
 
                     // top left
@@ -716,7 +791,8 @@ namespace System.Windows.Forms.Design {
                     SafeNativeMethods.SelectObject(new HandleRef(null, dc), new HandleRef(null, hfontOld));
             }
 
-            protected override void OnHandleCreated(EventArgs e) {
+            protected override void OnHandleCreated(EventArgs e)
+            {
                 base.OnHandleCreated(e);
 
                 int itemHeight;
@@ -725,37 +801,41 @@ namespace System.Windows.Forms.Design {
                 itemHeight += 2 * PADDING_VERT;
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_SETITEMHEIGHT, itemHeight, 0);
 
-                if (hbrushDither == IntPtr.Zero) {
+                if (hbrushDither == IntPtr.Zero)
+                {
                     CreateDitherBrush();
                 }
             }
 
-            private void OnCustomDraw(ref Message m) {
+            private void OnCustomDraw(ref Message m)
+            {
                 NativeMethods.NMTVCUSTOMDRAW nmtvcd = (NativeMethods.NMTVCUSTOMDRAW)m.GetLParam(typeof(NativeMethods.NMTVCUSTOMDRAW));
 
-                switch (nmtvcd.nmcd.dwDrawStage) {
+                switch (nmtvcd.nmcd.dwDrawStage)
+                {
                     case NativeMethods.CDDS_PREPAINT:
                         m.Result = (IntPtr)(NativeMethods.CDRF_NOTIFYITEMDRAW | NativeMethods.CDRF_NOTIFYPOSTPAINT);
                         break;
                     case NativeMethods.CDDS_ITEMPREPAINT:
                         {
                             TreeNode itemNode = TreeNode.FromHandle(this, (IntPtr)nmtvcd.nmcd.dwItemSpec);
-                            if (itemNode != null) {
+                            if (itemNode != null)
+                            {
                                 int state = STATE_NORMAL;
                                 int itemState = nmtvcd.nmcd.uItemState;
 
                                 if (((itemState & NativeMethods.CDIS_HOT) != 0) ||
                                    ((itemState & NativeMethods.CDIS_FOCUS) != 0))
-                                   state |= STATE_HOT;
+                                    state |= STATE_HOT;
                                 if ((itemState & NativeMethods.CDIS_SELECTED) != 0)
-                                   state |= STATE_SELECTED;
+                                    state |= STATE_SELECTED;
 
                                 DrawTreeItem(itemNode.Text, itemNode.ImageIndex,
                                          nmtvcd.nmcd.hdc, nmtvcd.nmcd.rc,
                                          state, ColorTranslator.ToWin32(SystemColors.Control), ColorTranslator.ToWin32(SystemColors.ControlText));
-                            }     
+                            }
                             m.Result = (IntPtr)NativeMethods.CDRF_SKIPDEFAULT;
-                        
+
                         }
                         break;
                     case NativeMethods.CDDS_POSTPAINT:
@@ -767,19 +847,23 @@ namespace System.Windows.Forms.Design {
                 }
             }
 
-            protected override void OnHandleDestroyed(EventArgs e) {
+            protected override void OnHandleDestroyed(EventArgs e)
+            {
                 base.OnHandleDestroyed(e);
 
-                if (!RecreatingHandle && (hbrushDither != IntPtr.Zero)) {
+                if (!RecreatingHandle && (hbrushDither != IntPtr.Zero))
+                {
                     SafeNativeMethods.DeleteObject(new HandleRef(this, hbrushDither));
                     hbrushDither = IntPtr.Zero;
                 }
             }
 
-            private void FillRectDither(IntPtr dc, NativeMethods.RECT rc) {
+            private void FillRectDither(IntPtr dc, NativeMethods.RECT rc)
+            {
                 IntPtr hbrushOld = SafeNativeMethods.SelectObject(new HandleRef(null, dc), new HandleRef(this, hbrushDither));
 
-                if (hbrushOld != IntPtr.Zero) {
+                if (hbrushOld != IntPtr.Zero)
+                {
                     int oldTextColor, oldBackColor;
 
                     oldTextColor = SafeNativeMethods.SetTextColor(new HandleRef(null, dc), ColorTranslator.ToWin32(SystemColors.ControlLightLight));
@@ -791,10 +875,13 @@ namespace System.Windows.Forms.Design {
                 }
             }
 
-            protected override void WndProc(ref Message m) {
-                if (m.Msg == Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY) {
+            protected override void WndProc(ref Message m)
+            {
+                if (m.Msg == Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY)
+                {
                     NativeMethods.NMHDR nmh = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
-                    if (nmh.code == NativeMethods.NM_CUSTOMDRAW) {
+                    if (nmh.code == NativeMethods.NM_CUSTOMDRAW)
+                    {
                         OnCustomDraw(ref m);
                         return;
                     }

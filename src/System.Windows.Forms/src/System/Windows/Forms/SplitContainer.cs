@@ -3,7 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
 
     using Microsoft.Win32;
     using System;
@@ -81,7 +82,7 @@ namespace System.Windows.Forms {
         //
         //Properties used using DRAWING a MOVING SPLITTER
         //
-        private int lastDrawSplit =1;
+        private int lastDrawSplit = 1;
         private int initialSplitterDistance;
         private Rectangle initialSplitterRectangle;
         private Point anchor = Point.Empty;
@@ -127,8 +128,8 @@ namespace System.Windows.Forms {
         // private IMessageFilter implementation
         SplitContainerMessageFilter splitContainerMessageFilter = null;
 
-		//This would avoid re-entrant code into SelectNextControl.
-		private bool selectNextControl = false;
+        //This would avoid re-entrant code into SelectNextControl.
+        private bool selectNextControl = false;
 
         // Initialization flag for ISupportInitialize
         private bool initializing = false;
@@ -145,7 +146,7 @@ namespace System.Windows.Forms {
             // either the left or bottom panel - RTL
             panel2 = new SplitterPanel(this);
             splitterRect = new Rectangle();
-            
+
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 
@@ -176,13 +177,16 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FormAutoScrollDescr)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never)
         ]
-        public override bool AutoScroll {
-            get {
+        public override bool AutoScroll
+        {
+            get
+            {
                 //Always return false ... as Splitcontainer doesnt support AutoScroll
                 return false;
             }
 
-            set {
+            set
+            {
                 base.AutoScroll = value;
             }
         }
@@ -192,11 +196,14 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never),
         DefaultValue(typeof(Point), "0, 0")
         ]
-        public override Point AutoScrollOffset {
-            get {
-               return base.AutoScrollOffset;
+        public override Point AutoScrollOffset
+        {
+            get
+            {
+                return base.AutoScrollOffset;
             }
-            set {
+            set
+            {
                 base.AutoScrollOffset = value;
             }
         }
@@ -209,11 +216,14 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         Browsable(false)
         ]
-        public new Size AutoScrollMinSize {
-            get {
+        public new Size AutoScrollMinSize
+        {
+            get
+            {
                 return base.AutoScrollMinSize;
             }
-            set {
+            set
+            {
                 base.AutoScrollMinSize = value;
             }
         }
@@ -227,11 +237,14 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         Browsable(false)
         ]
-        public new Size AutoScrollMargin {
-            get {
+        public new Size AutoScrollMargin
+        {
+            get
+            {
                 return base.AutoScrollMargin;
             }
-            set {
+            set
+            {
                 base.AutoScrollMargin = value;
             }
         }
@@ -241,14 +254,17 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatLayout)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.FormAutoScrollPositionDescr))        
+        SRDescription(nameof(SR.FormAutoScrollPositionDescr))
         ]
-        public new Point AutoScrollPosition {
-            get {
+        public new Point AutoScrollPosition
+        {
+            get
+            {
                 return base.AutoScrollPosition;
             }
 
-            set {
+            set
+            {
                 base.AutoScrollPosition = value;
             }
         }
@@ -271,28 +287,35 @@ namespace System.Windows.Forms {
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler AutoSizeChanged {
+        new public event EventHandler AutoSizeChanged
+        {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
         }
 
 
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
-        public override Image BackgroundImage {
-            get {
+        public override Image BackgroundImage
+        {
+            get
+            {
                 return base.BackgroundImage;
             }
-            set {
+            set
+            {
                 base.BackgroundImage = value;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override ImageLayout BackgroundImageLayout {
-            get {
+        public override ImageLayout BackgroundImageLayout
+        {
+            get
+            {
                 return base.BackgroundImageLayout;
             }
-            set {
+            set
+            {
                 base.BackgroundImageLayout = value;
             }
         }
@@ -308,11 +331,14 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ContainerControlBindingContextDescr)),
         SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")
         ]
-        public override BindingContext BindingContext {
-            get {
+        public override BindingContext BindingContext
+        {
+            get
+            {
                 return BindingContextInternal;
             }
-            set {
+            set
+            {
                 BindingContextInternal = value;
             }
         }
@@ -327,23 +353,30 @@ namespace System.Windows.Forms {
         System.Runtime.InteropServices.DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
         SRDescription(nameof(SR.SplitterBorderStyleDescr))
         ]
-        public BorderStyle BorderStyle {
-            get {
+        public BorderStyle BorderStyle
+        {
+            get
+            {
                 return borderStyle;
             }
 
-            set {
+            set
+            {
                 //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D)){
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
+                {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                 }
 
-                if (borderStyle != value) {
+                if (borderStyle != value)
+                {
                     borderStyle = value;
                     Invalidate();
                     SetInnerMostBorder(this);
-                    if (this.ParentInternal != null) {
-                        if (this.ParentInternal is SplitterPanel) {
+                    if (this.ParentInternal != null)
+                    {
+                        if (this.ParentInternal is SplitterPanel)
+                        {
                             SplitContainer sc = (SplitContainer)((SplitterPanel)this.ParentInternal).Owner;
                             sc.SetInnerMostBorder(sc);
                         }
@@ -352,7 +385,7 @@ namespace System.Windows.Forms {
 
                 switch (BorderStyle)
                 {
-                    case BorderStyle.None: 
+                    case BorderStyle.None:
                         BORDERSIZE = 0;
                         break;
                     case BorderStyle.FixedSingle:
@@ -371,21 +404,25 @@ namespace System.Windows.Forms {
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new Control.ControlCollection Controls {
-            get {
+        public new Control.ControlCollection Controls
+        {
+            get
+            {
                 return base.Controls;
             }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event ControlEventHandler ControlAdded {
+        public new event ControlEventHandler ControlAdded
+        {
             add => base.ControlAdded += value;
             remove => base.ControlAdded -= value;
         }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event ControlEventHandler ControlRemoved {
-             add => base.ControlRemoved += value;
-             remove => base.ControlRemoved -= value;
+        public new event ControlEventHandler ControlRemoved
+        {
+            add => base.ControlRemoved += value;
+            remove => base.ControlRemoved -= value;
         }
         /// <summary>
         ///     The dock property. The dock property controls to which edge
@@ -393,14 +430,19 @@ namespace System.Windows.Forms {
         ///     the top of the container, the control will be displayed flush at the
         ///     top of the container, extending the length of the container.
         /// </summary>
-        public new DockStyle Dock {
-            get {
+        public new DockStyle Dock
+        {
+            get
+            {
                 return base.Dock;
             }
-            set {
+            set
+            {
                 base.Dock = value;
-                if (this.ParentInternal != null) {
-                    if (this.ParentInternal is SplitterPanel) {
+                if (this.ParentInternal != null)
+                {
+                    if (this.ParentInternal is SplitterPanel)
+                    {
                         SplitContainer sc = (SplitContainer)((SplitterPanel)this.ParentInternal).Owner;
                         sc.SetInnerMostBorder(sc);
                     }
@@ -413,8 +455,10 @@ namespace System.Windows.Forms {
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
         /// </summary>
-        protected override Size DefaultSize {
-            get {
+        protected override Size DefaultSize
+        {
+            get
+            {
                 return new Size(150, 100);
             }
         }
@@ -428,31 +472,39 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatLayout)),
         SRDescription(nameof(SR.SplitContainerFixedPanelDescr))
         ]
-        public FixedPanel FixedPanel {
-            get {
+        public FixedPanel FixedPanel
+        {
+            get
+            {
                 return fixedPanel;
             }
 
-            set {
+            set
+            {
                 //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)FixedPanel.None, (int)FixedPanel.Panel2)){
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)FixedPanel.None, (int)FixedPanel.Panel2))
+                {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FixedPanel));
                 }
 
-                if (fixedPanel != value) {
+                if (fixedPanel != value)
+                {
                     fixedPanel = value;
                     // UpdatePanelSize !!
-                    switch (fixedPanel) {
+                    switch (fixedPanel)
+                    {
                         case FixedPanel.Panel2:
-                            if (Orientation == Orientation.Vertical) {
-                                panelSize  = Width - SplitterDistanceInternal - SplitterWidthInternal;
+                            if (Orientation == Orientation.Vertical)
+                            {
+                                panelSize = Width - SplitterDistanceInternal - SplitterWidthInternal;
                             }
-                            else {
-                                panelSize  = Height - SplitterDistanceInternal - SplitterWidthInternal;
+                            else
+                            {
+                                panelSize = Height - SplitterDistanceInternal - SplitterWidthInternal;
                             }
                             break;
                         default:
-                            panelSize  =   SplitterDistanceInternal;
+                            panelSize = SplitterDistanceInternal;
                             break;
                     }
                 }
@@ -469,24 +521,31 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.SplitContainerIsSplitterFixedDescr))
         ]
 
-        public bool IsSplitterFixed {
-            get {
+        public bool IsSplitterFixed
+        {
+            get
+            {
                 return splitterFixed;
             }
-            set {
+            set
+            {
                 splitterFixed = value;
             }
         }
 
         //Private property used to check whether the splitter can be moved by the user.
-        private bool IsSplitterMovable {
-            get {
-                 if (Orientation == Orientation.Vertical) {
-                     return (Width >= Panel1MinSize + SplitterWidthInternal + Panel2MinSize);
-                 }
-                 else {
-                     return (Height >= Panel1MinSize + SplitterWidthInternal + Panel2MinSize);
-                 }
+        private bool IsSplitterMovable
+        {
+            get
+            {
+                if (Orientation == Orientation.Vertical)
+                {
+                    return (Width >= Panel1MinSize + SplitterWidthInternal + Panel2MinSize);
+                }
+                else
+                {
+                    return (Height >= Panel1MinSize + SplitterWidthInternal + Panel2MinSize);
+                }
 
             }
         }
@@ -509,32 +568,41 @@ namespace System.Windows.Forms {
         Localizable(true),
         SRDescription(nameof(SR.SplitContainerOrientationDescr))
         ]
-        public Orientation Orientation {
-            get { return  orientation; }
-            set {
+        public Orientation Orientation
+        {
+            get { return orientation; }
+            set
+            {
                 //valid values are 0x0 to 0x1
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)Orientation.Horizontal, (int)Orientation.Vertical)){
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)Orientation.Horizontal, (int)Orientation.Vertical))
+                {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Orientation));
                 }
-                if (orientation != value) {
+                if (orientation != value)
+                {
                     orientation = value;
-					//update the splitterDistance to validate it w.r.t the new Orientation.
-					splitDistance = 0;
-					SplitterDistance = SplitterDistanceInternal;
+                    //update the splitterDistance to validate it w.r.t the new Orientation.
+                    splitDistance = 0;
+                    SplitterDistance = SplitterDistanceInternal;
                     UpdateSplitter();
                 }
             }
         }
 
-        private Cursor OverrideCursor {
-            get {
+        private Cursor OverrideCursor
+        {
+            get
+            {
                 return overrideCursor;
             }
-            set {
-                if (overrideCursor != value) {
+            set
+            {
+                if (overrideCursor != value)
+                {
                     overrideCursor = value;
 
-                    if (IsHandleCreated) {
+                    if (IsHandleCreated)
+                    {
                         // We want to instantly change the cursor if the mouse is within our bounds.
                         NativeMethods.POINT p = new NativeMethods.POINT();
                         NativeMethods.RECT r = new NativeMethods.RECT();
@@ -550,8 +618,10 @@ namespace System.Windows.Forms {
         ///<summary>
         /// Indicates if either panel is collapsed
         ///</summary>
-        private bool CollapsedMode {
-            get {
+        private bool CollapsedMode
+        {
+            get
+            {
                 return Panel1Collapsed || Panel2Collapsed;
             }
         }
@@ -565,8 +635,10 @@ namespace System.Windows.Forms {
         Localizable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content)
         ]
-        public SplitterPanel Panel1 {
-            get {
+        public SplitterPanel Panel1
+        {
+            get
+            {
                 return this.panel1;
             }
         }
@@ -574,13 +646,16 @@ namespace System.Windows.Forms {
         ///<summary>
         ///     Collapses or restores the given panel
         ///</summary>
-        private void CollapsePanel(SplitterPanel p, bool collapsing) {
+        private void CollapsePanel(SplitterPanel p, bool collapsing)
+        {
             p.Collapsed = collapsing;
-            if (collapsing) {
+            if (collapsing)
+            {
                 p.Visible = false;
 
             }
-            else {
+            else
+            {
                 // restore panel
                 p.Visible = true;
             }
@@ -592,18 +667,21 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
-        public new Padding Padding {
+        public new Padding Padding
+        {
             get { return base.Padding; }
-            set { base.Padding = value;}
+            set { base.Padding = value; }
         }
 
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
         ]
-        public new event EventHandler PaddingChanged {
-            add => base.PaddingChanged += value; 
-            remove => base.PaddingChanged -= value; }
+        public new event EventHandler PaddingChanged
+        {
+            add => base.PaddingChanged += value;
+            remove => base.PaddingChanged -= value;
+        }
 
         /// <summary>
         /// Collapses or restores panel1
@@ -613,13 +691,18 @@ namespace System.Windows.Forms {
         DefaultValue(false),
         SRDescription(nameof(SR.SplitContainerPanel1CollapsedDescr))
         ]
-        public bool Panel1Collapsed {
-            get {
+        public bool Panel1Collapsed
+        {
+            get
+            {
                 return panel1.Collapsed;
             }
-            set {
-                if (value != panel1.Collapsed) {
-                    if (value && panel2.Collapsed) {
+            set
+            {
+                if (value != panel1.Collapsed)
+                {
+                    if (value && panel2.Collapsed)
+                    {
                         CollapsePanel(panel2, false);
                     }
                     CollapsePanel(panel1, value);
@@ -636,13 +719,18 @@ namespace System.Windows.Forms {
         DefaultValue(false),
         SRDescription(nameof(SR.SplitContainerPanel2CollapsedDescr))
         ]
-        public bool Panel2Collapsed {
-            get {
+        public bool Panel2Collapsed
+        {
+            get
+            {
                 return panel2.Collapsed;
             }
-            set {
-                if (value != panel2.Collapsed) {
-                    if (value && panel1.Collapsed) {
+            set
+            {
+                if (value != panel2.Collapsed)
+                {
+                    if (value && panel1.Collapsed)
+                    {
                         CollapsePanel(panel1, false);
                     }
                     CollapsePanel(panel2, value);
@@ -658,15 +746,19 @@ namespace System.Windows.Forms {
         DefaultValue(25),
         Localizable(true),
         SRDescription(nameof(SR.SplitContainerPanel1MinSizeDescr)),
-        RefreshProperties(RefreshProperties.All)       
+        RefreshProperties(RefreshProperties.All)
         ]
-        public int Panel1MinSize {
-            get {
+        public int Panel1MinSize
+        {
+            get
+            {
                 return panel1MinSize;
             }
-            set {
+            set
+            {
                 newPanel1MinSize = value;
-                if (value != Panel1MinSize && !initializing) {
+                if (value != Panel1MinSize && !initializing)
+                {
                     ApplyPanel1MinSize(value);
                 }
             }
@@ -681,8 +773,10 @@ namespace System.Windows.Forms {
         Localizable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content)
         ]
-        public SplitterPanel Panel2 {
-            get {
+        public SplitterPanel Panel2
+        {
+            get
+            {
                 return this.panel2;
             }
         }
@@ -697,13 +791,17 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.SplitContainerPanel2MinSizeDescr)),
         RefreshProperties(RefreshProperties.All)
         ]
-        public int Panel2MinSize {
-            get {
+        public int Panel2MinSize
+        {
+            get
+            {
                 return panel2MinSize;
             }
-            set {
+            set
+            {
                 newPanel2MinSize = value;
-                if (value != Panel2MinSize && !initializing) {
+                if (value != Panel2MinSize && !initializing)
+                {
                     ApplyPanel2MinSize(value);
                 }
             }
@@ -719,7 +817,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.SplitContainerSplitterDistanceDescr)),
         DefaultValue(50)
         ]
-        public int SplitterDistance 
+        public int SplitterDistance
         {
             get
             {
@@ -729,18 +827,20 @@ namespace System.Windows.Forms {
             {
                 if (value != SplitterDistance)
                 {
-                    if (value < 0) {
+                    if (value < 0)
+                    {
                         throw new ArgumentOutOfRangeException(nameof(SplitterDistance), string.Format(SR.InvalidLowBoundArgument, "SplitterDistance", value, 0));
                     }
-                    
+
 
                     try
                     {
                         setSplitterDistance = true;
-                    
-                        if (Orientation == Orientation.Vertical) {
 
-                            if (value  < Panel1MinSize)
+                        if (Orientation == Orientation.Vertical)
+                        {
+
+                            if (value < Panel1MinSize)
                             {
                                 value = Panel1MinSize;
                             }
@@ -748,7 +848,8 @@ namespace System.Windows.Forms {
                             {
                                 value = this.Width - Panel2MinSize - SplitterWidthInternal;
                             }
-                            if (value < 0 ) {
+                            if (value < 0)
+                            {
                                 throw new InvalidOperationException(SR.SplitterDistanceNotAllowed);
                             }
                             splitDistance = value;
@@ -756,7 +857,8 @@ namespace System.Windows.Forms {
                             panel1.WidthInternal = SplitterDistance;
 
                         }
-                        else {
+                        else
+                        {
 
                             if (value < Panel1MinSize)
                             {
@@ -767,7 +869,8 @@ namespace System.Windows.Forms {
                             {
                                 value = this.Height - Panel2MinSize - SplitterWidthInternal;
                             }
-                            if (value < 0 ) {
+                            if (value < 0)
+                            {
                                 throw new InvalidOperationException(SR.SplitterDistanceNotAllowed);
                             }
                             splitDistance = value;
@@ -775,16 +878,19 @@ namespace System.Windows.Forms {
                             panel1.HeightInternal = SplitterDistance;
                         }
 
-                        switch (fixedPanel) {
+                        switch (fixedPanel)
+                        {
                             case FixedPanel.Panel1:
-                                panelSize  =   SplitterDistance;
+                                panelSize = SplitterDistance;
                                 break;
                             case FixedPanel.Panel2:
-                                if (Orientation == Orientation.Vertical) {
-                                    panelSize  = Width - SplitterDistance - SplitterWidthInternal;
+                                if (Orientation == Orientation.Vertical)
+                                {
+                                    panelSize = Width - SplitterDistance - SplitterWidthInternal;
                                 }
-                                else {
-                                    panelSize  = Height - SplitterDistance - SplitterWidthInternal;
+                                else
+                                {
+                                    panelSize = Height - SplitterDistance - SplitterWidthInternal;
                                 }
                                 break;
                         }
@@ -794,17 +900,20 @@ namespace System.Windows.Forms {
                     {
                         setSplitterDistance = false;
                     }
-                    OnSplitterMoved(new SplitterEventArgs(SplitterRectangle.X + SplitterRectangle.Width/2, SplitterRectangle.Y + SplitterRectangle.Height/2, SplitterRectangle.X, SplitterRectangle.Y));
+                    OnSplitterMoved(new SplitterEventArgs(SplitterRectangle.X + SplitterRectangle.Width / 2, SplitterRectangle.Y + SplitterRectangle.Height / 2, SplitterRectangle.X, SplitterRectangle.Y));
                 }
             }
         }
 
-        private int SplitterDistanceInternal {
+        private int SplitterDistanceInternal
+        {
 
-            get {
+            get
+            {
                 return splitterDistance;
             }
-            set {
+            set
+            {
                 SplitterDistance = value;
             }
         }
@@ -818,13 +927,17 @@ namespace System.Windows.Forms {
         Localizable(true),
         SRDescription(nameof(SR.SplitContainerSplitterIncrementDescr))
         ]
-        public int SplitterIncrement {
-            get {
+        public int SplitterIncrement
+        {
+            get
+            {
                 return splitterInc;
             }
-            set {
+            set
+            {
 
-                if (value < 1 ) {
+                if (value < 1)
+                {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SplitterIncrement), value, 1));
                 }
 
@@ -841,8 +954,10 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.SplitContainerSplitterRectangleDescr)),
         Browsable(false)
         ]
-        public Rectangle SplitterRectangle {
-            get {
+        public Rectangle SplitterRectangle
+        {
+            get
+            {
                 Rectangle r = splitterRect;
                 r.X = splitterRect.X - Left;
                 r.Y = splitterRect.Y - Top;
@@ -859,13 +974,17 @@ namespace System.Windows.Forms {
         Localizable(true),
         DefaultValue(4)
         ]
-        public int SplitterWidth {
-            get {
+        public int SplitterWidth
+        {
+            get
+            {
                 return splitterWidth;
             }
-            set {
+            set
+            {
                 newSplitterWidth = value;
-                if (value != SplitterWidth && !initializing) {
+                if (value != SplitterWidth && !initializing)
+                {
                     ApplySplitterWidth(value);
                 }
             }
@@ -875,8 +994,10 @@ namespace System.Windows.Forms {
         ///    We need to have a internal Property for the SplitterWidth which returns zero if we are in collapased mode.
         ///    This property is used to Layout SplitContainer.
         /// </summary>
-        private int SplitterWidthInternal {
-            get {
+        private int SplitterWidthInternal
+        {
+            get
+            {
                 // if CollapsedMode then splitterwidth == 0;
                 return (CollapsedMode) ? 0 : splitterWidth;
             }
@@ -892,12 +1013,16 @@ namespace System.Windows.Forms {
         DispId(NativeMethods.ActiveX.DISPID_TABSTOP),
         SRDescription(nameof(SR.ControlTabStopDescr))
         ]
-        public new bool TabStop {
-            get {
+        public new bool TabStop
+        {
+            get
+            {
                 return tabStop;
             }
-            set {
-                if (TabStop != value) {
+            set
+            {
+                if (TabStop != value)
+                {
                     tabStop = value;
                     OnTabStopChanged(EventArgs.Empty);
                 }
@@ -907,11 +1032,14 @@ namespace System.Windows.Forms {
         /// <summary>
         /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
-        public override string Text {
-            get {
+        public override string Text
+        {
+            get
+            {
                 return base.Text;
             }
-            set {
+            set
+            {
                 base.Text = value;
             }
         }
@@ -933,7 +1061,8 @@ namespace System.Windows.Forms {
         ///     ISupportInitialize support. Disables splitter panel min size and splitter width
         ///     validation during initialization.
         /// </summary>
-        public void BeginInit() {
+        public void BeginInit()
+        {
             initializing = true;
         }
 
@@ -941,17 +1070,21 @@ namespace System.Windows.Forms {
         ///     ISupportInitialize support. Enables splitter panel min size and splitter width
         ///     validation after initialization.
         /// </summary>
-        public void EndInit() {
+        public void EndInit()
+        {
             initializing = false;
 
             // validate and apply new value
-            if (newPanel1MinSize != panel1MinSize) {
+            if (newPanel1MinSize != panel1MinSize)
+            {
                 ApplyPanel1MinSize(newPanel1MinSize);
             }
-            if (newPanel2MinSize != panel2MinSize) {
+            if (newPanel2MinSize != panel2MinSize)
+            {
                 ApplyPanel2MinSize(newPanel2MinSize);
             }
-            if (newSplitterWidth != splitterWidth) {
+            if (newSplitterWidth != splitterWidth)
+            {
                 ApplySplitterWidth(newSplitterWidth);
             }
         }
@@ -970,31 +1103,36 @@ namespace System.Windows.Forms {
         /////////////////////////////////////////////////////////////////////////////////////////////
 
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
-        new public event EventHandler BackgroundImageChanged {
+        new public event EventHandler BackgroundImageChanged
+        {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged {
+        new public event EventHandler BackgroundImageLayoutChanged
+        {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
         }
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.SplitterSplitterMovingDescr))]
-        public event SplitterCancelEventHandler SplitterMoving {
+        public event SplitterCancelEventHandler SplitterMoving
+        {
             add => Events.AddHandler(EVENT_MOVING, value);
             remove => Events.RemoveHandler(EVENT_MOVING, value);
         }
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.SplitterSplitterMovedDescr))]
-        public event SplitterEventHandler SplitterMoved {
+        public event SplitterEventHandler SplitterMoved
+        {
             add => Events.AddHandler(EVENT_MOVED, value);
             remove => Events.RemoveHandler(EVENT_MOVED, value);
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TextChanged {
+        new public event EventHandler TextChanged
+        {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
         }
@@ -1016,7 +1154,8 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Overides the Control.OnGotFocus to Invalidate...
         /// </summary>
-        protected override void OnGotFocus(EventArgs e) {
+        protected override void OnGotFocus(EventArgs e)
+        {
             base.OnGotFocus(e);
             Invalidate();
 
@@ -1025,12 +1164,15 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Overrides the Control.OnKeydown for implementing splitter movements.
         /// </summary>
-        protected override void OnKeyDown(KeyEventArgs e) {
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
             Debug.Assert(Enabled, "SplitContainer.OnKeyDown should not be called if the button is disabled");
             base.OnKeyDown(e);
             //If the Panel1MinSize + Panel2MinSize < SplitContainer.Size then carry on the splitter move...
-            if (IsSplitterMovable && !IsSplitterFixed) {
-                if (e.KeyData == Keys.Escape && splitBegin) {
+            if (IsSplitterMovable && !IsSplitterFixed)
+            {
+                if (e.KeyData == Keys.Escape && splitBegin)
+                {
                     splitBegin = false;
                     splitBreak = true;
                     return;
@@ -1038,46 +1180,56 @@ namespace System.Windows.Forms {
                 //valid Keys that move the splitter...
                 if (e.KeyData == Keys.Right || e.KeyData == Keys.Down ||
                     e.KeyData == Keys.Left || e.KeyData == Keys.Up
-                    && splitterFocused) {
-                    if (splitBegin) {
+                    && splitterFocused)
+                {
+                    if (splitBegin)
+                    {
                         splitMove = true;
                     }
 
                     //left OR up
-                    if (e.KeyData == Keys.Left || e.KeyData == Keys.Up && splitterFocused) {
+                    if (e.KeyData == Keys.Left || e.KeyData == Keys.Up && splitterFocused)
+                    {
                         splitterDistance -= SplitterIncrement;
                         splitterDistance = (splitterDistance < Panel1MinSize) ? splitterDistance + SplitterIncrement : Math.Max(splitterDistance, BORDERSIZE);
                     }
                     //right OR down
-                    if (e.KeyData == Keys.Right || e.KeyData == Keys.Down && splitterFocused) {
+                    if (e.KeyData == Keys.Right || e.KeyData == Keys.Down && splitterFocused)
+                    {
                         splitterDistance += SplitterIncrement;
-                        if (Orientation == Orientation.Vertical) {
-                            splitterDistance = (splitterDistance + SplitterWidth > Width - Panel2MinSize -BORDERSIZE) ? splitterDistance - SplitterIncrement : splitterDistance;
+                        if (Orientation == Orientation.Vertical)
+                        {
+                            splitterDistance = (splitterDistance + SplitterWidth > Width - Panel2MinSize - BORDERSIZE) ? splitterDistance - SplitterIncrement : splitterDistance;
                         }
-                        else {
+                        else
+                        {
                             splitterDistance = (splitterDistance + SplitterWidth > Height - Panel2MinSize - BORDERSIZE) ? splitterDistance - SplitterIncrement : splitterDistance;
                         }
 
                     }
 
-                    if (!splitBegin) {
+                    if (!splitBegin)
+                    {
                         splitBegin = true;
                     }
                     //draw Helper start
-                    if (splitBegin && !splitMove) {
+                    if (splitBegin && !splitMove)
+                    {
                         initialSplitterDistance = SplitterDistanceInternal;
                         DrawSplitBar(DRAW_START);
                     }
-                    else { //draw helper move
+                    else
+                    { //draw helper move
                         DrawSplitBar(DRAW_MOVE);
                         //Moving by mouse .....gives the origin of the splitter..
                         //
                         Rectangle r = CalcSplitLine(splitterDistance, 0);
                         int xSplit = r.X;
                         int ySplit = r.Y;
-                        SplitterCancelEventArgs se = new SplitterCancelEventArgs(this.Left + SplitterRectangle.X + SplitterRectangle.Width/2, this.Top + SplitterRectangle.Y + SplitterRectangle.Height/2, xSplit, ySplit);
+                        SplitterCancelEventArgs se = new SplitterCancelEventArgs(this.Left + SplitterRectangle.X + SplitterRectangle.Width / 2, this.Top + SplitterRectangle.Y + SplitterRectangle.Height / 2, xSplit, ySplit);
                         OnSplitterMoving(se);
-                        if (se.Cancel) {
+                        if (se.Cancel)
+                        {
                             SplitEnd(false);
                         }
                     }
@@ -1088,42 +1240,51 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Overrides the Control.OnKeydown for implementing splitter movements.
         /// </summary>
-        protected override void OnKeyUp(KeyEventArgs e) {
+        protected override void OnKeyUp(KeyEventArgs e)
+        {
             base.OnKeyUp(e);
-            if (splitBegin && IsSplitterMovable) {
+            if (splitBegin && IsSplitterMovable)
+            {
                 if (e.KeyData == Keys.Right || e.KeyData == Keys.Down ||
                     e.KeyData == Keys.Left || e.KeyData == Keys.Up
-                    && splitterFocused) {
+                    && splitterFocused)
+                {
                     DrawSplitBar(DRAW_END);
                     ApplySplitterDistance();
                     splitBegin = false;
                     splitMove = false;
                 }
             }
-            if (splitBreak) {
+            if (splitBreak)
+            {
                 splitBreak = false;
                 SplitEnd(false);
             }
             //problem with the Focus rect after Keyup ....
             //Focus rect and reverible lines leave a trace behind on the splitter...
-            using (Graphics g = CreateGraphicsInternal()) {
-                if (BackgroundImage == null) {
-                    using (SolidBrush brush = new SolidBrush(this.BackColor)) {
+            using (Graphics g = CreateGraphicsInternal())
+            {
+                if (BackgroundImage == null)
+                {
+                    using (SolidBrush brush = new SolidBrush(this.BackColor))
+                    {
                         g.FillRectangle(brush, SplitterRectangle);
                     }
                 }
                 DrawFocus(g, SplitterRectangle);
             }
-            
+
         }
 
         /// <summary>
         ///     Overrides the Control.OnLayout.
         /// </summary>
-        protected override void OnLayout(LayoutEventArgs e) {
+        protected override void OnLayout(LayoutEventArgs e)
+        {
             SetInnerMostBorder(this);
-            
-            if (IsSplitterMovable && !setSplitterDistance) {
+
+            if (IsSplitterMovable && !setSplitterDistance)
+            {
                 ResizeSplitContainer();
             }
             base.OnLayout(e);
@@ -1132,7 +1293,8 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Overrides the Control.OnLostFocus to Invalidate.
         /// </summary>
-        protected override void OnLostFocus(EventArgs e) {
+        protected override void OnLostFocus(EventArgs e)
+        {
             base.OnLostFocus(e);
             Invalidate();
         }
@@ -1141,34 +1303,43 @@ namespace System.Windows.Forms {
         /// <para>Raises the <see cref='System.Windows.Forms.SplitContainer.MouseMove'/> event.</para>
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected override void OnMouseMove(MouseEventArgs e) {
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
             base.OnMouseMove(e);
-            if (!IsSplitterFixed && IsSplitterMovable) {
+            if (!IsSplitterFixed && IsSplitterMovable)
+            {
 
                 //change cursor if default and user hasnt changed the cursor.
                 if (Cursor == DefaultCursor && SplitterRectangle.Contains(e.Location))
                 {
-                    if (Orientation == Orientation.Vertical) {
+                    if (Orientation == Orientation.Vertical)
+                    {
                         OverrideCursor = Cursors.VSplit;
                     }
-                    else {
+                    else
+                    {
                         OverrideCursor = Cursors.HSplit;
                     }
                 }
-                else {
-                    OverrideCursor = null;;
+                else
+                {
+                    OverrideCursor = null;
+                    ;
                 }
 
-                if (splitterClick) {
-                    int x = e.X ;
-                    int y = e.Y ;
+                if (splitterClick)
+                {
+                    int x = e.X;
+                    int y = e.Y;
                     splitterDrag = true;
                     SplitMove(x, y);
-                    if (Orientation == Orientation.Vertical) {
+                    if (Orientation == Orientation.Vertical)
+                    {
                         x = Math.Max(Math.Min(x, Width - Panel2MinSize), Panel1MinSize);
                         y = Math.Max(y, 0);
                     }
-                    else {
+                    else
+                    {
                         y = Math.Max(Math.Min(y, Height - Panel2MinSize), Panel1MinSize);
                         x = Math.Max(x, 0);
                     }
@@ -1177,7 +1348,8 @@ namespace System.Windows.Forms {
                     int ySplit = r.Y;
                     SplitterCancelEventArgs se = new SplitterCancelEventArgs(x, y, xSplit, ySplit);
                     OnSplitterMoving(se);
-                    if (se.Cancel) {
+                    if (se.Cancel)
+                    {
                         SplitEnd(false);
 
                     }
@@ -1188,9 +1360,11 @@ namespace System.Windows.Forms {
         /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.SplitContainer.OnMouseLeave'/> event.</para>
         /// </summary>
-        protected override void OnMouseLeave(EventArgs e) {
+        protected override void OnMouseLeave(EventArgs e)
+        {
             base.OnMouseLeave(e);
-            if (!Enabled) {
+            if (!Enabled)
+            {
                 return;
             }
             OverrideCursor = null;
@@ -1199,23 +1373,30 @@ namespace System.Windows.Forms {
         /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.SplitContainer.OnMouseDown'/> event.</para>
         /// </summary>
-        protected override void OnMouseDown(MouseEventArgs e) {
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
             base.OnMouseDown(e);
             //If the Panel1MinSize + Panel2MinSize < SplitContainer.Size then carry on the splitter move...
-            if (IsSplitterMovable && SplitterRectangle.Contains(e.Location)) {
-                if (!Enabled) {
+            if (IsSplitterMovable && SplitterRectangle.Contains(e.Location))
+            {
+                if (!Enabled)
+                {
                     return;
                 }
-                if (e.Button == MouseButtons.Left && e.Clicks == 1 && !IsSplitterFixed) {
+                if (e.Button == MouseButtons.Left && e.Clicks == 1 && !IsSplitterFixed)
+                {
                     // Focus the current splitter OnMouseDown.
                     splitterFocused = true;
                     IContainerControl c = this.ParentInternal.GetContainerControl();
-                    if (c != null) {
+                    if (c != null)
+                    {
                         ContainerControl cc = c as ContainerControl;
-                        if (cc == null) {
+                        if (cc == null)
+                        {
                             c.ActiveControl = this;
                         }
-                        else {
+                        else
+                        {
                             cc.SetActiveControl(this);
                         }
                     }
@@ -1223,7 +1404,7 @@ namespace System.Windows.Forms {
                     nextActiveControl = panel2;
 
                     SplitBegin(e.X, e.Y);
-                    splitterClick  = true;
+                    splitterClick = true;
                 }
             }
         }
@@ -1231,45 +1412,52 @@ namespace System.Windows.Forms {
         /// <summary>
         /// <para>Raises the <see cref='System.Windows.Forms.SplitContainer.OnMouseUp'/> event.</para>
         /// </summary>
-        protected override void OnMouseUp(MouseEventArgs e) {
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
             base.OnMouseUp(e);
-            if (!Enabled) {
+            if (!Enabled)
+            {
                 return;
             }
-            if (!IsSplitterFixed && IsSplitterMovable && splitterClick) {
+            if (!IsSplitterFixed && IsSplitterMovable && splitterClick)
+            {
                 CaptureInternal = false;
-                
-                if (splitterDrag) {
+
+                if (splitterDrag)
+                {
                     CalcSplitLine(GetSplitterDistance(e.X, e.Y), 0);
                     SplitEnd(true);
                 }
-                else {
+                else
+                {
                     SplitEnd(false);
 
                 }
-                splitterClick  = false;
+                splitterClick = false;
                 splitterDrag = false;
             }
         }
 
-	/// <summary>
-	///     Overrides the Control.OnMove() to synchronize the 
-	///     splitterRect with the position of the SplitContainer.
-	/// </summary>
-	protected override void OnMove(EventArgs e)
-	{
-	    base.OnMove(e);
-	    SetSplitterRect(this.Orientation == Orientation.Vertical);
-	}
-		
+        /// <summary>
+        ///     Overrides the Control.OnMove() to synchronize the 
+        ///     splitterRect with the position of the SplitContainer.
+        /// </summary>
+        protected override void OnMove(EventArgs e)
+        {
+            base.OnMove(e);
+            SetSplitterRect(this.Orientation == Orientation.Vertical);
+        }
+
 
         /// <summary>
         ///     Overrides the Control.OnPaint() to focus the Splitter.
         /// </summary>
-        protected override void OnPaint(PaintEventArgs e) {
+        protected override void OnPaint(PaintEventArgs e)
+        {
             base.OnPaint(e);
-            if (Focused) {
-                DrawFocus(e.Graphics,SplitterRectangle);
+            if (Focused)
+            {
+                DrawFocus(e.Graphics, SplitterRectangle);
             }
         }
 
@@ -1278,9 +1466,11 @@ namespace System.Windows.Forms {
         ///     splitterMoving event. This event occurs while the splitter is
         ///     being moved by the user.
         /// </summary>
-        public void OnSplitterMoving(SplitterCancelEventArgs e) {
+        public void OnSplitterMoving(SplitterCancelEventArgs e)
+        {
             SplitterCancelEventHandler handler = (SplitterCancelEventHandler)Events[EVENT_MOVING];
-            if (handler != null) handler(this, e);
+            if (handler != null)
+                handler(this, e);
 
         }
 
@@ -1289,9 +1479,11 @@ namespace System.Windows.Forms {
         ///     splitterMoved event. This event occurs when the user finishes
         ///     moving the splitter.
         /// </summary>
-        public void OnSplitterMoved(SplitterEventArgs e) {
+        public void OnSplitterMoved(SplitterEventArgs e)
+        {
             SplitterEventHandler handler = (SplitterEventHandler)Events[EVENT_MOVED];
-            if (handler != null) handler(this, e);
+            if (handler != null)
+                handler(this, e);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1301,7 +1493,8 @@ namespace System.Windows.Forms {
         ////////////////////////////////////////////////////////////////////////////////////////////////
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected override void OnRightToLeftChanged(EventArgs e) {
+        protected override void OnRightToLeftChanged(EventArgs e)
+        {
             base.OnRightToLeftChanged(e);
             // pass the RightToLeft value to the Parent.
             this.panel1.RightToLeft = this.RightToLeft;
@@ -1320,24 +1513,31 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Validate and set the minimum size for Panel1.
         /// </summary>
-        private void ApplyPanel1MinSize(int value) {
-            if (value < 0) {
+        private void ApplyPanel1MinSize(int value)
+        {
+            if (value < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgument, nameof(Panel1MinSize), value));
             }
 
-            if (Orientation== Orientation.Vertical) {
-                if (DesignMode && Width != DefaultSize.Width && value + Panel2MinSize + SplitterWidth > Width) {
+            if (Orientation == Orientation.Vertical)
+            {
+                if (DesignMode && Width != DefaultSize.Width && value + Panel2MinSize + SplitterWidth > Width)
+                {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(Panel1MinSize), value));
                 }
             }
-            else if (Orientation == Orientation.Horizontal) {
-                if (DesignMode && Height != DefaultSize.Height && value + Panel2MinSize + SplitterWidth > Height) {
+            else if (Orientation == Orientation.Horizontal)
+            {
+                if (DesignMode && Height != DefaultSize.Height && value + Panel2MinSize + SplitterWidth > Height)
+                {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(Panel1MinSize), value));
                 }
             }
 
             panel1MinSize = value;
-            if (value > SplitterDistanceInternal) {
+            if (value > SplitterDistanceInternal)
+            {
                 SplitterDistanceInternal = value;  //Set the Splitter Distance to the end of Panel1
             }
         }
@@ -1345,23 +1545,30 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Validate and set the minimum size for Panel2.
         /// </summary>
-        private void ApplyPanel2MinSize(int value) {
-            if (value < 0) {
+        private void ApplyPanel2MinSize(int value)
+        {
+            if (value < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgument, nameof(Panel2MinSize), value, 0));
             }
-            if (Orientation == Orientation.Vertical) {
-                if (DesignMode && Width != DefaultSize.Width && value + Panel1MinSize + SplitterWidth > Width) {
+            if (Orientation == Orientation.Vertical)
+            {
+                if (DesignMode && Width != DefaultSize.Width && value + Panel1MinSize + SplitterWidth > Width)
+                {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(Panel2MinSize), value.ToString()));
                 }
 
             }
-            else if (Orientation == Orientation.Horizontal) {
-                if (DesignMode && Height != DefaultSize.Height && value + Panel1MinSize + SplitterWidth > Height) {
+            else if (Orientation == Orientation.Horizontal)
+            {
+                if (DesignMode && Height != DefaultSize.Height && value + Panel1MinSize + SplitterWidth > Height)
+                {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(Panel2MinSize), value));
                 }
             }
             panel2MinSize = value;
-            if (value > Panel2.Width) {
+            if (value > Panel2.Width)
+            {
                 SplitterDistanceInternal = Panel2.Width + SplitterWidthInternal;  //Set the Splitter Distance to the start of Panel2
             }
         }
@@ -1369,18 +1576,24 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Validate and set the splitter width.
         /// </summary>
-        private void ApplySplitterWidth(int value) {
-            if (value < 1) {
+        private void ApplySplitterWidth(int value)
+        {
+            if (value < 1)
+            {
                 throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SplitterWidth), value, 1));
             }
-            if (Orientation == Orientation.Vertical) {
-                if (DesignMode && value + Panel1MinSize + Panel2MinSize > Width) {
+            if (Orientation == Orientation.Vertical)
+            {
+                if (DesignMode && value + Panel1MinSize + Panel2MinSize > Width)
+                {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SplitterWidth), value));
                 }
 
             }
-            else if (Orientation == Orientation.Horizontal) {
-                if (DesignMode && value + Panel1MinSize + Panel2MinSize > Height) {
+            else if (Orientation == Orientation.Horizontal)
+            {
+                if (DesignMode && value + Panel1MinSize + Panel2MinSize > Height)
+                {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SplitterWidth), value));
                 }
             }
@@ -1392,28 +1605,35 @@ namespace System.Windows.Forms {
         ///     Sets the split position to be the current split size. This is called
         ///     by splitEdit
         /// </summary>
-        private void ApplySplitterDistance() {
+        private void ApplySplitterDistance()
+        {
 
-            using (new System.Windows.Forms.Layout.LayoutTransaction(this, this, "SplitterDistance", false)) {
+            using (new System.Windows.Forms.Layout.LayoutTransaction(this, this, "SplitterDistance", false))
+            {
                 SplitterDistanceInternal = splitterDistance;
             }
 
             // We need to invalidate when we have transparent backgournd.
-            if (this.BackColor == Color.Transparent) {
+            if (this.BackColor == Color.Transparent)
+            {
                 // the panel1 retains the focus rect... so Invalidate the rect ...
                 Invalidate();
             }
 
-            if (Orientation == Orientation.Vertical) {
-                
-                if (RightToLeft == RightToLeft.No) {
+            if (Orientation == Orientation.Vertical)
+            {
+
+                if (RightToLeft == RightToLeft.No)
+                {
                     splitterRect.X = this.Location.X + SplitterDistanceInternal;
                 }
-                else {
+                else
+                {
                     splitterRect.X = this.Right - SplitterDistanceInternal - SplitterWidthInternal;
                 }
             }
-            else {
+            else
+            {
                 splitterRect.Y = this.Location.Y + SplitterDistanceInternal;
             }
         }
@@ -1422,31 +1642,37 @@ namespace System.Windows.Forms {
         ///     Calculates the bounding rect of the split line. minWeight refers
         ///     to the minimum height or width of the splitline.
         /// </summary>
-        private Rectangle CalcSplitLine(int splitSize, int minWeight) {
+        private Rectangle CalcSplitLine(int splitSize, int minWeight)
+        {
 
-           Rectangle r = new Rectangle();
-            switch (Orientation) {
+            Rectangle r = new Rectangle();
+            switch (Orientation)
+            {
                 case Orientation.Vertical:
-                    r.Width =  SplitterWidthInternal ;
+                    r.Width = SplitterWidthInternal;
                     r.Height = Height;
-                    if (r.Width < minWeight) {
+                    if (r.Width < minWeight)
+                    {
                         r.Width = minWeight;
                     }
-                    
-                    if (RightToLeft == RightToLeft.No) {
+
+                    if (RightToLeft == RightToLeft.No)
+                    {
                         r.X = panel1.Location.X + splitSize;
                     }
-                    else {
+                    else
+                    {
                         r.X = Width - splitSize - SplitterWidthInternal;
                     }
-                    
+
                     break;
 
 
                 case Orientation.Horizontal:
                     r.Width = Width;
                     r.Height = SplitterWidthInternal;
-                    if (r.Width < minWeight) {
+                    if (r.Width < minWeight)
+                    {
                         r.Width = minWeight;
                     }
                     r.Y = panel1.Location.Y + splitSize;
@@ -1459,30 +1685,38 @@ namespace System.Windows.Forms {
         ///     Draws the splitter bar at the current location. Will automatically
         ///     cleanup anyplace the splitter was drawn previously.
         /// </summary>
-        private void DrawSplitBar(int mode) {
-            if (mode != DRAW_START && lastDrawSplit != -1) {
+        private void DrawSplitBar(int mode)
+        {
+            if (mode != DRAW_START && lastDrawSplit != -1)
+            {
                 DrawSplitHelper(lastDrawSplit);
                 lastDrawSplit = -1;
             }
             // Bail if drawing with no old point...
             //
-            else if (mode != DRAW_START && lastDrawSplit == -1) {
+            else if (mode != DRAW_START && lastDrawSplit == -1)
+            {
                 return;
             }
 
-            if (mode != DRAW_END) {
-                if (splitMove || splitBegin) { // Splitter is moved by keys and not by mouse
-                        DrawSplitHelper(splitterDistance);
-                        lastDrawSplit = splitterDistance;
+            if (mode != DRAW_END)
+            {
+                if (splitMove || splitBegin)
+                { // Splitter is moved by keys and not by mouse
+                    DrawSplitHelper(splitterDistance);
+                    lastDrawSplit = splitterDistance;
                 }
-                else {
+                else
+                {
                     DrawSplitHelper(splitterDistance);
                     lastDrawSplit = splitterDistance;
                 }
 
             }
-            else {
-                if (lastDrawSplit != -1) {
+            else
+            {
+                if (lastDrawSplit != -1)
+                {
                     DrawSplitHelper(lastDrawSplit);
                 }
                 lastDrawSplit = -1;
@@ -1495,8 +1729,9 @@ namespace System.Windows.Forms {
         ///
         ///    </para>
         /// </summary>
-        private void DrawFocus(Graphics g, Rectangle r) {
-            r.Inflate (-1, -1);
+        private void DrawFocus(Graphics g, Rectangle r)
+        {
+            r.Inflate(-1, -1);
             ControlPaint.DrawFocusRectangle(g, r, this.ForeColor, this.BackColor);
         }
 
@@ -1504,7 +1739,8 @@ namespace System.Windows.Forms {
         ///     Draws the splitter line at the requested location. Should only be called
         ///     by drawSpltBar.
         /// </summary>
-        private void DrawSplitHelper(int splitSize) {
+        private void DrawSplitHelper(int splitSize)
+        {
 
             Rectangle r = CalcSplitLine(splitSize, 3);
             IntPtr parentHandle = this.Handle;
@@ -1520,25 +1756,31 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Calculates the split size based on the mouse position (x, y).
         /// </summary>
-        private int GetSplitterDistance(int x, int y) {
+        private int GetSplitterDistance(int x, int y)
+        {
             int delta;
-            if (Orientation == Orientation.Vertical) {
+            if (Orientation == Orientation.Vertical)
+            {
                 delta = x - anchor.X;
             }
-            else {
+            else
+            {
                 delta = y - anchor.Y;
             }
 
             // Negative delta - moving to the left
             // Positive delta - moving to the right
-            
+
             int size = 0;
-            switch (Orientation) {
+            switch (Orientation)
+            {
                 case Orientation.Vertical:
-                    if (RightToLeft == RightToLeft.No) {
+                    if (RightToLeft == RightToLeft.No)
+                    {
                         size = Math.Max(panel1.Width + delta, BORDERSIZE);
                     }
-                    else {
+                    else
+                    {
                         // In RTL negative delta actually means increasing the size....
                         size = Math.Max(panel1.Width - delta, BORDERSIZE);
                     }
@@ -1547,10 +1789,12 @@ namespace System.Windows.Forms {
                     size = Math.Max(panel1.Height + delta, BORDERSIZE);
                     break;
             }
-            if (Orientation == Orientation.Vertical) {
+            if (Orientation == Orientation.Vertical)
+            {
                 return Math.Max(Math.Min(size, Width - Panel2MinSize), Panel1MinSize);
             }
-            else {
+            else
+            {
                 return Math.Max(Math.Min(size, Height - Panel2MinSize), Panel1MinSize);
             }
         }
@@ -1559,9 +1803,11 @@ namespace System.Windows.Forms {
         ///     Process an arrowKey press by selecting the next control in the group
         ///     that the activeControl belongs to.
         /// </summary>
-        private bool ProcessArrowKey(bool forward) {
+        private bool ProcessArrowKey(bool forward)
+        {
             Control group = this;
-            if (ActiveControl != null) {
+            if (ActiveControl != null)
+            {
                 group = ActiveControl.ParentInternal;
             }
             return group.SelectNextControl(ActiveControl, forward, false, false, true);
@@ -1572,16 +1818,21 @@ namespace System.Windows.Forms {
         /// </summary>
         private void RepaintSplitterRect()
         {
-            if (IsHandleCreated) {
+            if (IsHandleCreated)
+            {
                 Graphics g = this.CreateGraphicsInternal();
-                if (BackgroundImage != null) {
+                if (BackgroundImage != null)
+                {
 
-                    using (TextureBrush textureBrush = new TextureBrush(BackgroundImage,WrapMode.Tile)) {
+                    using (TextureBrush textureBrush = new TextureBrush(BackgroundImage, WrapMode.Tile))
+                    {
                         g.FillRectangle(textureBrush, ClientRectangle);
                     }
                 }
-                else{
-                    using (SolidBrush solidBrush = new SolidBrush(this.BackColor)) {
+                else
+                {
+                    using (SolidBrush solidBrush = new SolidBrush(this.BackColor))
+                    {
                         g.FillRectangle(solidBrush, splitterRect);
                     }
                 }
@@ -1590,7 +1841,8 @@ namespace System.Windows.Forms {
         }
 
 
-        private void SetSplitterRect(bool vertical) {
+        private void SetSplitterRect(bool vertical)
+        {
             if (vertical)
             {
                 splitterRect.X = ((RightToLeft == RightToLeft.Yes) ? this.Width - splitterDistance - SplitterWidthInternal : this.Location.X + splitterDistance);
@@ -1606,7 +1858,7 @@ namespace System.Windows.Forms {
                 splitterRect.Height = SplitterWidthInternal;
             }
         }
-        
+
         /// <summary>
         ///     Reize SplitContainer
         /// </summary>
@@ -1619,44 +1871,52 @@ namespace System.Windows.Forms {
 
             panel1.SuspendLayout();
             panel2.SuspendLayout();
-                        
-            if (this.Width == 0) {         // Set the correct Width iif the WIDTH has changed to ZERO.
+
+            if (this.Width == 0)
+            {         // Set the correct Width iif the WIDTH has changed to ZERO.
                 panel1.Size = new Size(0, panel1.Height);
                 panel2.Size = new Size(0, panel2.Height);
             }
-            else if (this.Height == 0) {   // Set the correct Height iif the HEIGHT has changed to ZERO.
+            else if (this.Height == 0)
+            {   // Set the correct Height iif the HEIGHT has changed to ZERO.
                 panel1.Size = new Size(panel1.Width, 0);
                 panel2.Size = new Size(panel2.Width, 0);
             }
-            else 
+            else
             {
-                if (Orientation == Orientation.Vertical) 
+                if (Orientation == Orientation.Vertical)
                 {
                     // If no panel is collapsed then do the default ...
-                    if (!CollapsedMode) 
+                    if (!CollapsedMode)
                     {
-                        if (this.FixedPanel == FixedPanel.Panel1) {
+                        if (this.FixedPanel == FixedPanel.Panel1)
+                        {
                             panel1.Size = new Size(panelSize, Height);
                             panel2.Size = new Size(Math.Max(Width - panelSize - SplitterWidthInternal, Panel2MinSize), Height);
                         }
-                        if (this.FixedPanel == FixedPanel.Panel2) {
+                        if (this.FixedPanel == FixedPanel.Panel2)
+                        {
                             panel2.Size = new Size(panelSize, Height);
                             splitterDistance = Math.Max(Width - panelSize - SplitterWidthInternal, Panel1MinSize);
                             panel1.WidthInternal = splitterDistance;
                             panel1.HeightInternal = Height;
                         }
-                        if (this.FixedPanel == FixedPanel.None) {
-                            if (ratioWidth != 0.0) {
+                        if (this.FixedPanel == FixedPanel.None)
+                        {
+                            if (ratioWidth != 0.0)
+                            {
                                 splitterDistance = Math.Max((int)(Math.Floor(this.Width / ratioWidth)), Panel1MinSize);
                             }
                             panel1.WidthInternal = splitterDistance; //Default splitter distance from left or top.
                             panel1.HeightInternal = Height;
                             panel2.Size = new Size(Math.Max(Width - splitterDistance - SplitterWidthInternal, Panel2MinSize), Height);
                         }
-                        if (RightToLeft == RightToLeft.No) {
+                        if (RightToLeft == RightToLeft.No)
+                        {
                             panel2.Location = new Point(panel1.WidthInternal + SplitterWidthInternal, 0);
                         }
-                        else {
+                        else
+                        {
                             panel1.Location = new Point(Width - panel1.WidthInternal, 0);
                         }
                         RepaintSplitterRect();
@@ -1664,30 +1924,35 @@ namespace System.Windows.Forms {
                     }
                     else
                     {
-                        if (Panel1Collapsed) {
+                        if (Panel1Collapsed)
+                        {
                             panel2.Size = this.Size;
-                            panel2.Location = new Point(0,0);
+                            panel2.Location = new Point(0, 0);
                         }
-                        else if (Panel2Collapsed) {
+                        else if (Panel2Collapsed)
+                        {
                             panel1.Size = this.Size;
-                            panel1.Location = new Point(0,0);
+                            panel1.Location = new Point(0, 0);
                         }
                     }
 
                 }
-                else if (Orientation == Orientation.Horizontal) {
+                else if (Orientation == Orientation.Horizontal)
+                {
                     // If no panel is collapsed then do the default ...
-                    if (!CollapsedMode) 
+                    if (!CollapsedMode)
                     {
-                        if (this.FixedPanel == FixedPanel.Panel1) {
+                        if (this.FixedPanel == FixedPanel.Panel1)
+                        {
 
                             //Default splitter distance from left or top.
                             panel1.Size = new Size(Width, panelSize);
                             int panel2Start = panelSize + SplitterWidthInternal;
                             panel2.Size = new Size(Width, Math.Max(Height - panel2Start, Panel2MinSize));
-                            panel2.Location = new Point(0,panel2Start);
+                            panel2.Location = new Point(0, panel2Start);
                         }
-                        if (this.FixedPanel == FixedPanel.Panel2) {
+                        if (this.FixedPanel == FixedPanel.Panel2)
+                        {
 
                             panel2.Size = new Size(Width, panelSize);
                             splitterDistance = Math.Max(Height - Panel2.Height - SplitterWidthInternal, Panel1MinSize);
@@ -1696,18 +1961,19 @@ namespace System.Windows.Forms {
                             int panel2Start = splitterDistance + SplitterWidthInternal;
                             panel2.Location = new Point(0, panel2Start);
                         }
-                        if (this.FixedPanel == FixedPanel.None) {
+                        if (this.FixedPanel == FixedPanel.None)
+                        {
                             //NO PANEL FIXED !!
                             if (ratioHeight != 0.0)
                             {
-                                splitterDistance = Math.Max((int)(Math.Floor(this.Height / ratioHeight )), Panel1MinSize);
+                                splitterDistance = Math.Max((int)(Math.Floor(this.Height / ratioHeight)), Panel1MinSize);
                             }
                             panel1.HeightInternal = splitterDistance; //Default splitter distance from left or top.
                             panel1.WidthInternal = Width;
                             int panel2Start = splitterDistance + SplitterWidthInternal;
-                            panel2.Size = new Size(Width,Math.Max(Height - panel2Start, Panel2MinSize));
-                            panel2.Location = new Point(0,panel2Start);
-                            
+                            panel2.Size = new Size(Width, Math.Max(Height - panel2Start, Panel2MinSize));
+                            panel2.Location = new Point(0, panel2Start);
+
 
                         }
                         RepaintSplitterRect();
@@ -1715,21 +1981,25 @@ namespace System.Windows.Forms {
                     }
                     else
                     {
-                        if (Panel1Collapsed) {
+                        if (Panel1Collapsed)
+                        {
                             panel2.Size = this.Size;
-                            panel2.Location = new Point(0,0);
+                            panel2.Location = new Point(0, 0);
                         }
-                        else if (Panel2Collapsed) {
+                        else if (Panel2Collapsed)
+                        {
                             panel1.Size = this.Size;
-                            panel1.Location = new Point(0,0);
+                            panel1.Location = new Point(0, 0);
                         }
                     }
                 }
-                try {
+                try
+                {
                     resizeCalled = true;
                     ApplySplitterDistance();
                 }
-                finally {
+                finally
+                {
                     resizeCalled = false;
                 }
             }
@@ -1748,17 +2018,20 @@ namespace System.Windows.Forms {
         ///     BoundsSpecified.None.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected override void ScaleControl(SizeF factor, BoundsSpecified specified) {
+        protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
+        {
             try
             {
                 splitContainerScaling = true;
                 base.ScaleControl(factor, specified);
 
                 float scale;
-                if (orientation == Orientation.Vertical) {
+                if (orientation == Orientation.Vertical)
+                {
                     scale = factor.Width;
                 }
-                else {
+                else
+                {
                     scale = factor.Height;
                 }
                 SplitterWidth = (int)Math.Round((float)SplitterWidth * scale);
@@ -1769,7 +2042,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        protected override void Select(bool directed, bool forward) {
+        protected override void Select(bool directed, bool forward)
+        {
             // avoid re-entrant code.
             // SelectNextControl can call back on us.. and we might end up infinitely recursing.
             if (selectNextControl)
@@ -1777,21 +2051,27 @@ namespace System.Windows.Forms {
                 return;
             }
             // continue selection iff panels have controls or tabstop is true.
-            if ((this.Panel1.Controls.Count > 0 || this.Panel2.Controls.Count > 0) || TabStop) {
+            if ((this.Panel1.Controls.Count > 0 || this.Panel2.Controls.Count > 0) || TabStop)
+            {
                 SelectNextControlInContainer(this, forward, true, true, false);
             }
-            else { //If this SplitContainer cannot be selected let the parent select the next in line
-                try {
+            else
+            { //If this SplitContainer cannot be selected let the parent select the next in line
+                try
+                {
                     Control parent = this.ParentInternal;
                     selectNextControl = true;
-                    while (parent != null) {
-                        if (parent.SelectNextControl(this, forward, true, true, parent.ParentInternal == null)) {
+                    while (parent != null)
+                    {
+                        if (parent.SelectNextControl(this, forward, true, true, parent.ParentInternal == null))
+                        {
                             break;
                         }
                         parent = parent.ParentInternal;
                     }
                 }
-                finally {
+                finally
+                {
                     selectNextControl = false;
                 }
             }
@@ -1801,31 +2081,40 @@ namespace System.Windows.Forms {
         ///     Selects the next control following ctl.
         /// </summary>
         private bool SelectNextControlInContainer(Control ctl, bool forward, bool tabStopOnly,
-                                      bool nested, bool wrap) {
-            if (!Contains(ctl) || !nested && ctl.ParentInternal != this) ctl = null;
+                                      bool nested, bool wrap)
+        {
+            if (!Contains(ctl) || !nested && ctl.ParentInternal != this)
+                ctl = null;
             Control start = ctl;
             SplitterPanel firstPanel = null;
-            do {
+            do
+            {
                 ctl = GetNextControl(ctl, forward);
 
                 SplitterPanel panel = ctl as SplitterPanel;
-                if (panel != null && panel.Visible) {
+                if (panel != null && panel.Visible)
+                {
                     //We have crossed over to the second Panel...
-                    if (firstPanel != null) {
+                    if (firstPanel != null)
+                    {
                         break;
                     }
                     firstPanel = panel;
                 }
-                if (!forward && firstPanel != null && ctl.ParentInternal != firstPanel) {
+                if (!forward && firstPanel != null && ctl.ParentInternal != firstPanel)
+                {
                     //goback to start correct re-ordering ....
                     ctl = firstPanel;
                     break;
                 }
-                if (ctl == null) {
+                if (ctl == null)
+                {
                     break;
                 }
-                else {
-                    if (ctl.CanSelect && ctl.TabStop) {
+                else
+                {
+                    if (ctl.CanSelect && ctl.TabStop)
+                    {
                         if (ctl is SplitContainer)
                         {
                             ((SplitContainer)ctl).Select(forward, forward);
@@ -1838,16 +2127,20 @@ namespace System.Windows.Forms {
                     }
                 }
             } while (ctl != null);
-            if (ctl != null && this.TabStop) {
+            if (ctl != null && this.TabStop)
+            {
                 //we are on Splitter.....Focus it
                 splitterFocused = true;
                 IContainerControl c = this.ParentInternal.GetContainerControl();
-                if (c != null) {
+                if (c != null)
+                {
                     ContainerControl cc = c as ContainerControl;
-                    if (cc == null) {
+                    if (cc == null)
+                    {
                         c.ActiveControl = this;
                     }
-                    else {
+                    else
+                    {
                         cc.SetActiveControl(this);
                     }
                 }
@@ -1856,7 +2149,7 @@ namespace System.Windows.Forms {
                 return true;
             }
             else
-            { 
+            {
                 // If the splitter cannot be selected select the next control in the splitter
                 bool selected = SelectNextControlInPanel(ctl, forward, tabStopOnly, nested, wrap);
                 if (!selected)
@@ -1884,17 +2177,23 @@ namespace System.Windows.Forms {
         /// </summary>
         [SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
         private bool SelectNextControlInPanel(Control ctl, bool forward, bool tabStopOnly,
-                                      bool nested, bool wrap) {
+                                      bool nested, bool wrap)
+        {
 
-            if (!Contains(ctl) || !nested && ctl.ParentInternal != this) ctl = null;
+            if (!Contains(ctl) || !nested && ctl.ParentInternal != this)
+                ctl = null;
             Control start = ctl;
-            do {
+            do
+            {
                 ctl = GetNextControl(ctl, forward);
-                if (ctl == null || (ctl is SplitterPanel && ctl.Visible)) {
+                if (ctl == null || (ctl is SplitterPanel && ctl.Visible))
+                {
                     break;
                 }
-                else {
-                    if (ctl.CanSelect && (!tabStopOnly || ctl.TabStop)) {
+                else
+                {
+                    if (ctl.CanSelect && (!tabStopOnly || ctl.TabStop))
+                    {
                         if (ctl is SplitContainer)
                         {
                             ((SplitContainer)ctl).Select(forward, forward);
@@ -1909,7 +2208,8 @@ namespace System.Windows.Forms {
             } while (ctl != null);
 
             //If CTL == null .. we r out of the Current SplitContainer...
-            if (ctl == null || (ctl is SplitterPanel && !ctl.Visible)) {
+            if (ctl == null || (ctl is SplitterPanel && !ctl.Visible))
+            {
                 callBaseVersion = true;
 
             }
@@ -1918,11 +2218,14 @@ namespace System.Windows.Forms {
             else
             {
                 ctl = GetNextControl(ctl, forward);
-                if (forward) {
+                if (forward)
+                {
                     nextActiveControl = panel2;
                 }
-                else {
-                    if (ctl == null || !(ctl.ParentInternal.Visible)) {
+                else
+                {
+                    if (ctl == null || !(ctl.ParentInternal.Visible))
+                    {
                         callBaseVersion = true;
                     }
                     else
@@ -1962,24 +2265,31 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Selects the innermost PANEL.
         /// </summary>
-        private void SetInnerMostBorder(SplitContainer sc) {
-            foreach(Control ctl in sc.Controls) {
+        private void SetInnerMostBorder(SplitContainer sc)
+        {
+            foreach (Control ctl in sc.Controls)
+            {
                 bool foundChildSplitContainer = false;
-                if (ctl is SplitterPanel) {
-                    foreach (Control c in ctl.Controls) {
+                if (ctl is SplitterPanel)
+                {
+                    foreach (Control c in ctl.Controls)
+                    {
                         SplitContainer c1 = c as SplitContainer;
-                        if (c1 != null && c1.Dock == DockStyle.Fill) {
-                           // We need to Overlay borders
-                           // if the Children have matching BorderStyles ...
-                           if (c1.BorderStyle != BorderStyle) {
-                               break;
-                           }
+                        if (c1 != null && c1.Dock == DockStyle.Fill)
+                        {
+                            // We need to Overlay borders
+                            // if the Children have matching BorderStyles ...
+                            if (c1.BorderStyle != BorderStyle)
+                            {
+                                break;
+                            }
                            ((SplitterPanel)ctl).BorderStyle = BorderStyle.None;
-                           SetInnerMostBorder(c1);
-                           foundChildSplitContainer = true;
+                            SetInnerMostBorder(c1);
+                            foundChildSplitContainer = true;
                         }
                     }
-                    if (!foundChildSplitContainer) {
+                    if (!foundChildSplitContainer)
+                    {
                         ((SplitterPanel)ctl).BorderStyle = BorderStyle;
                     }
                 }
@@ -1993,10 +2303,12 @@ namespace System.Windows.Forms {
         ///     Say, the Panel1MinSize == 150 , Panel2MinSize == 50 and SplitterWidth == 4 and the user tries
         ///     to set SplitContainer.Width = 50 ... then this function would try to correct the value to 204.. instead of throwing.
         /// </summary>
-        protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
+        protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
+        {
 
             // If we are changing Height, check if its greater than minimun else ... make it equal to the minimum
-            if ((specified & BoundsSpecified.Height) != BoundsSpecified.None && Orientation == Orientation.Horizontal) {
+            if ((specified & BoundsSpecified.Height) != BoundsSpecified.None && Orientation == Orientation.Horizontal)
+            {
                 if (height < Panel1MinSize + SplitterWidthInternal + Panel2MinSize)
                 {
                     height = Panel1MinSize + SplitterWidthInternal + Panel2MinSize;
@@ -2004,13 +2316,14 @@ namespace System.Windows.Forms {
             }
 
             // If we are changing Width, check if its greater than minimun else ... make it equal to the minimum
-            if ((specified & BoundsSpecified.Width) != BoundsSpecified.None && Orientation == Orientation.Vertical) {
+            if ((specified & BoundsSpecified.Width) != BoundsSpecified.None && Orientation == Orientation.Vertical)
+            {
                 if (width < Panel1MinSize + SplitterWidthInternal + Panel2MinSize)
                 {
                     width = Panel1MinSize + SplitterWidthInternal + Panel2MinSize;
                 }
             }
-            
+
             base.SetBoundsCore(x, y, width, height, specified);
 
             SetSplitterRect(this.Orientation == Orientation.Vertical);
@@ -2019,7 +2332,8 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Begins the splitter moving.
         /// </summary>
-        private void SplitBegin(int x, int y) {
+        private void SplitBegin(int x, int y)
+        {
             anchor = new Point(x, y);
             splitterDistance = GetSplitterDistance(x, y);
             initialSplitterDistance = splitterDistance;
@@ -2038,24 +2352,26 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     The split movement.
         /// </summary>
-        private void SplitMove(int x, int y) {
+        private void SplitMove(int x, int y)
+        {
             int size = GetSplitterDistance(x, y);
             int delta = size - initialSplitterDistance;
             int mod = delta % SplitterIncrement;
-            if (splitterDistance != size) {
+            if (splitterDistance != size)
+            {
                 if (Orientation == Orientation.Vertical)
                 {
-                	if (size + SplitterWidthInternal <= this.Width - Panel2MinSize - BORDERSIZE)
-                	{
-                		splitterDistance = size - mod;
-                	}
+                    if (size + SplitterWidthInternal <= this.Width - Panel2MinSize - BORDERSIZE)
+                    {
+                        splitterDistance = size - mod;
+                    }
                 }
                 else
                 {
-                	if (size + SplitterWidthInternal <= this.Height - Panel2MinSize - BORDERSIZE)
-                	{
-                		splitterDistance = size - mod;
-                	}
+                    if (size + SplitterWidthInternal <= this.Height - Panel2MinSize - BORDERSIZE)
+                    {
+                        splitterDistance = size - mod;
+                    }
                 }
             }
             DrawSplitBar(DRAW_MOVE);
@@ -2064,19 +2380,22 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Finishes the split movement.
         /// </summary>
-        private void SplitEnd(bool accept) {
+        private void SplitEnd(bool accept)
+        {
             DrawSplitBar(DRAW_END);
             if (splitContainerMessageFilter != null)
             {
-                Application.RemoveMessageFilter(splitContainerMessageFilter);    
+                Application.RemoveMessageFilter(splitContainerMessageFilter);
                 splitContainerMessageFilter = null;
             }
 
-            if (accept) {
+            if (accept)
+            {
                 ApplySplitterDistance();
-                
+
             }
-            else if (splitterDistance != initialSplitterDistance) {
+            else if (splitterDistance != initialSplitterDistance)
+            {
                 splitterClick = false;
                 splitterDistance = SplitterDistanceInternal = initialSplitterDistance;
             }
@@ -2087,112 +2406,132 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Update Splitter
         /// </summary>
-        private void UpdateSplitter() {
+        private void UpdateSplitter()
+        {
             if (splitContainerScaling)
             {
                 return;
             }
             panel1.SuspendLayout();
             panel2.SuspendLayout();
-            if (Orientation == Orientation.Vertical) {
+            if (Orientation == Orientation.Vertical)
+            {
                 bool isRTL = RightToLeft == RightToLeft.Yes;
 
                 //NO PANEL FIXED !!
-                if (!CollapsedMode) {
+                if (!CollapsedMode)
+                {
 
                     panel1.HeightInternal = Height;
                     panel1.WidthInternal = splitterDistance; //Default splitter distance from left or top.
                     panel2.Size = new Size(Width - splitterDistance - SplitterWidthInternal, Height);
-                    
-                    if (!isRTL) {
-                        panel1.Location = new Point(0,0);
+
+                    if (!isRTL)
+                    {
+                        panel1.Location = new Point(0, 0);
                         panel2.Location = new Point(splitterDistance + SplitterWidthInternal, 0);
                     }
-                    else {
+                    else
+                    {
                         panel1.Location = new Point(Width - splitterDistance, 0);
                         panel2.Location = new Point(0, 0);
                     }
 
                     RepaintSplitterRect();
                     SetSplitterRect(true /*Vertical*/);
-                    if (!resizeCalled) {
-                        ratioWidth =  ((double)(this.Width) / (double)(panel1.Width) > 0) ? (double)(this.Width) / (double)(panel1.Width) : ratioWidth;
+                    if (!resizeCalled)
+                    {
+                        ratioWidth = ((double)(this.Width) / (double)(panel1.Width) > 0) ? (double)(this.Width) / (double)(panel1.Width) : ratioWidth;
                     }
-                    
-                        
+
+
                 }
-                else {
-                    if (Panel1Collapsed) {
+                else
+                {
+                    if (Panel1Collapsed)
+                    {
                         panel2.Size = this.Size;
-                        panel2.Location = new Point(0,0);
+                        panel2.Location = new Point(0, 0);
                     }
-                    else if (Panel2Collapsed) {
+                    else if (Panel2Collapsed)
+                    {
                         panel1.Size = this.Size;
-                        panel1.Location = new Point(0,0);
+                        panel1.Location = new Point(0, 0);
                     }
                     // Update Ratio when the splitContainer is in CollapsedMode.
                     if (!resizeCalled)
                     {
-                    	ratioWidth = ((double)(this.Width) / (double)(splitterDistance) > 0) ? (double)(this.Width) / (double)(splitterDistance) : ratioWidth;
+                        ratioWidth = ((double)(this.Width) / (double)(splitterDistance) > 0) ? (double)(this.Width) / (double)(splitterDistance) : ratioWidth;
                     }
                 }
             }
-            else {
+            else
+            {
                 //NO PANEL FIXED !!
-                if (!CollapsedMode) {
-                    panel1.Location = new Point(0,0);
+                if (!CollapsedMode)
+                {
+                    panel1.Location = new Point(0, 0);
                     panel1.WidthInternal = Width;
 
                     panel1.HeightInternal = SplitterDistanceInternal; //Default splitter distance from left or top.
                     int panel2Start = splitterDistance + SplitterWidthInternal;
                     panel2.Size = new Size(Width, Height - panel2Start);
-                    panel2.Location = new Point(0,panel2Start);
+                    panel2.Location = new Point(0, panel2Start);
 
                     RepaintSplitterRect();
                     SetSplitterRect(false/*Horizontal*/);
-                    
-                    if (!resizeCalled) {
-                        ratioHeight =  ((double)(this.Height) / (double)(panel1.Height) > 0) ? (double)(this.Height) / (double)(panel1.Height) : ratioHeight;
+
+                    if (!resizeCalled)
+                    {
+                        ratioHeight = ((double)(this.Height) / (double)(panel1.Height) > 0) ? (double)(this.Height) / (double)(panel1.Height) : ratioHeight;
                     }
                 }
-                else {
-                    if (Panel1Collapsed) {
+                else
+                {
+                    if (Panel1Collapsed)
+                    {
                         panel2.Size = this.Size;
-                        panel2.Location = new Point(0,0);
+                        panel2.Location = new Point(0, 0);
                     }
-                    else if (Panel2Collapsed) {
+                    else if (Panel2Collapsed)
+                    {
                         panel1.Size = this.Size;
-                        panel1.Location = new Point(0,0);
+                        panel1.Location = new Point(0, 0);
                     }
 
                     // Update Ratio when the splitContainer is in CollapsedMode.
                     if (!resizeCalled)
                     {
-                    	ratioHeight = ((double)(this.Height) / (double)(splitterDistance) > 0) ? (double)(this.Height) / (double)(splitterDistance) : ratioHeight;
+                        ratioHeight = ((double)(this.Height) / (double)(splitterDistance) > 0) ? (double)(this.Height) / (double)(splitterDistance) : ratioHeight;
                     }
                 }
             }
             panel1.ResumeLayout();
-            panel2.ResumeLayout(); 
-         }
+            panel2.ResumeLayout();
+        }
 
         /// <summary>
         ///     Handles the WM_SETCURSOR message
         /// </summary>
-        private void WmSetCursor(ref Message m) {
+        private void WmSetCursor(ref Message m)
+        {
 
             // Accessing through the Handle property has side effects that break this
             // logic. You must use InternalHandle.
             //
-            if (m.WParam == InternalHandle && ((int)m.LParam & 0x0000FFFF) == NativeMethods.HTCLIENT) {
-                if (OverrideCursor != null) {
+            if (m.WParam == InternalHandle && ((int)m.LParam & 0x0000FFFF) == NativeMethods.HTCLIENT)
+            {
+                if (OverrideCursor != null)
+                {
                     Cursor.CurrentInternal = OverrideCursor;
                 }
-                else {
+                else
+                {
                     Cursor.CurrentInternal = Cursor;
                 }
             }
-            else {
+            else
+            {
                 DefWndProc(ref m);
             }
 
@@ -2213,20 +2552,22 @@ namespace System.Windows.Forms {
         //                                                                                               //
         ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-        internal override Rectangle GetToolNativeScreenRectangle() {
+        internal override Rectangle GetToolNativeScreenRectangle()
+        {
             // Return splitter rectangle instead of the whole container rectangle to be consistent with the mouse ToolTip
             Rectangle containerRectangle = base.GetToolNativeScreenRectangle();
             Rectangle splitterRectangle = this.SplitterRectangle;
             return new Rectangle(containerRectangle.X + splitterRectangle.X, containerRectangle.Y + splitterRectangle.Y, splitterRectangle.Width, splitterRectangle.Height);
         }
 
-        internal override void AfterControlRemoved(Control control, Control oldParent) {
+        internal override void AfterControlRemoved(Control control, Control oldParent)
+        {
             base.AfterControlRemoved(control, oldParent);
             if (control is SplitContainer && control.Dock == DockStyle.Fill)
             {
-               SetInnerMostBorder(this); 
+                SetInnerMostBorder(this);
             }
-            
+
         }
 
         /// <summary>
@@ -2238,23 +2579,29 @@ namespace System.Windows.Forms {
         ///    on the form. For the arrow keys,
         ///    !!!
         /// </summary>
-        protected override bool ProcessDialogKey(Keys keyData) {
+        protected override bool ProcessDialogKey(Keys keyData)
+        {
 #if DEBUG
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "ContainerControl.ProcessDialogKey [" + keyData.ToString() + "]");
 #endif
-            if ((keyData & (Keys.Alt | Keys.Control)) == Keys.None) {
+            if ((keyData & (Keys.Alt | Keys.Control)) == Keys.None)
+            {
                 Keys keyCode = (Keys)keyData & Keys.KeyCode;
-                switch (keyCode) {
+                switch (keyCode)
+                {
                     case Keys.Tab:
-                        if (ProcessTabKey((keyData & Keys.Shift) == Keys.None)) return true;
+                        if (ProcessTabKey((keyData & Keys.Shift) == Keys.None))
+                            return true;
                         break;
                     case Keys.Left:
                     case Keys.Right:
                     case Keys.Up:
                     case Keys.Down:
-                        if (!splitterFocused) {
+                        if (!splitterFocused)
+                        {
                             if (ProcessArrowKey(keyCode == Keys.Right ||
-                                            keyCode == Keys.Down)) return true;
+                                            keyCode == Keys.Down))
+                                return true;
                         }
                         else
                             return false;
@@ -2269,37 +2616,47 @@ namespace System.Windows.Forms {
         ///   This will process the TabKey for the SplitContainer. The Focus needs to Shift from controls to the Left of the Splitter
         ///   to the splitter and then to the controls on the right of the splitter. This override implements this Logic.
         /// </summary>
-        protected override bool ProcessTabKey(bool forward) {
+        protected override bool ProcessTabKey(bool forward)
+        {
             //Dont Focus the Splitter if TabStop == False or if the Splitter is Fixed !!
-            if (!TabStop || IsSplitterFixed) {
+            if (!TabStop || IsSplitterFixed)
+            {
                 return base.ProcessTabKey(forward);
             }
 
-            if (nextActiveControl != null) {
+            if (nextActiveControl != null)
+            {
                 SetActiveControl(nextActiveControl);
                 nextActiveControl = null;
             }
 
-            if (SelectNextControlInPanel(ActiveControl, forward, true, true, true)) {
+            if (SelectNextControlInPanel(ActiveControl, forward, true, true, true))
+            {
                 nextActiveControl = null;
                 splitterFocused = false;
                 return true;
             }
-            else {
-                if (callBaseVersion) {
+            else
+            {
+                if (callBaseVersion)
+                {
                     callBaseVersion = false;
                     return base.ProcessTabKey(forward);
                 }
-                else {
+                else
+                {
                     //We are om Splitter ......
                     splitterFocused = true;
                     IContainerControl c = this.ParentInternal.GetContainerControl();
-                    if (c != null) {
+                    if (c != null)
+                    {
                         ContainerControl cc = c as ContainerControl;
-                        if (cc == null) {
+                        if (cc == null)
+                        {
                             c.ActiveControl = this;
                         }
-                        else {
+                        else
+                        {
                             cc.SetActiveControl(this);
                         }
                     }
@@ -2309,7 +2666,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        protected override void OnMouseCaptureChanged(EventArgs e) {
+        protected override void OnMouseCaptureChanged(EventArgs e)
+        {
             base.OnMouseCaptureChanged(e);
             if (splitContainerMessageFilter != null)
             {
@@ -2320,8 +2678,10 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// </summary>
-        protected override void WndProc(ref Message msg) {
-            switch (msg.Msg) {
+        protected override void WndProc(ref Message msg)
+        {
+            switch (msg.Msg)
+            {
                 case Interop.WindowMessages.WM_SETCURSOR:
                     WmSetCursor(ref msg);
                     break;
@@ -2344,7 +2704,8 @@ namespace System.Windows.Forms {
         /// <summary>
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected override Control.ControlCollection CreateControlsInstance() {
+        protected override Control.ControlCollection CreateControlsInstance()
+        {
             return new SplitContainerTypedControlCollection(this, typeof(SplitterPanel), /*isReadOnly*/true);
         }
 
@@ -2356,7 +2717,7 @@ namespace System.Windows.Forms {
         ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        private class SplitContainerMessageFilter : IMessageFilter 
+        private class SplitContainerMessageFilter : IMessageFilter
         {
             private SplitContainer owner = null;
 
@@ -2364,18 +2725,21 @@ namespace System.Windows.Forms {
             {
                 this.owner = splitContainer;
             }
-            
+
             /// <summary>
             /// </summary>
-            bool IMessageFilter.PreFilterMessage(ref Message m) {
-                if (m.Msg >= Interop.WindowMessages.WM_KEYFIRST && m.Msg <= Interop.WindowMessages.WM_KEYLAST) {
+            bool IMessageFilter.PreFilterMessage(ref Message m)
+            {
+                if (m.Msg >= Interop.WindowMessages.WM_KEYFIRST && m.Msg <= Interop.WindowMessages.WM_KEYLAST)
+                {
                     if ((m.Msg == Interop.WindowMessages.WM_KEYDOWN && (int)m.WParam == (int)Keys.Escape)
-                        || (m.Msg == Interop.WindowMessages.WM_SYSKEYDOWN)) {
+                        || (m.Msg == Interop.WindowMessages.WM_SYSKEYDOWN))
+                    {
                         //Notify that splitMOVE was reverted ..
                         //this is used in ONKEYUP!!
                         owner.splitBegin = false;
                         owner.SplitEnd(false);
-                        owner.splitterClick  = false;
+                        owner.splitterClick = false;
                         owner.splitterDrag = false;
                     }
                     return true;
@@ -2384,22 +2748,27 @@ namespace System.Windows.Forms {
             }
         }
 
-         /// <summary>
-         /// This control collection only allows a specific type of control
-         /// into the controls collection.  It optionally supports readonlyness.
-         /// </summary>
-         internal class SplitContainerTypedControlCollection : WindowsFormsUtils.TypedControlCollection {
+        /// <summary>
+        /// This control collection only allows a specific type of control
+        /// into the controls collection.  It optionally supports readonlyness.
+        /// </summary>
+        internal class SplitContainerTypedControlCollection : WindowsFormsUtils.TypedControlCollection
+        {
             SplitContainer owner;
 
-            public SplitContainerTypedControlCollection(Control c, Type type, bool isReadOnly): base(c, type, isReadOnly)
+            public SplitContainerTypedControlCollection(Control c, Type type, bool isReadOnly) : base(c, type, isReadOnly)
             {
-              this.owner = c as SplitContainer;
+                this.owner = c as SplitContainer;
             }
 
-            public override void Remove(Control value) {
-                if (value is SplitterPanel) {
-                    if (!owner.DesignMode) {
-                        if (IsReadOnly) throw new NotSupportedException(SR.ReadonlyControlsCollection);
+            public override void Remove(Control value)
+            {
+                if (value is SplitterPanel)
+                {
+                    if (!owner.DesignMode)
+                    {
+                        if (IsReadOnly)
+                            throw new NotSupportedException(SR.ReadonlyControlsCollection);
                     }
                 }
                 base.Remove(value);
@@ -2407,21 +2776,25 @@ namespace System.Windows.Forms {
 
             internal override void SetChildIndexInternal(Control child, int newIndex)
             {
-               if (child is SplitterPanel) {
-                   if (!owner.DesignMode) {
-                       if (IsReadOnly) {
-                           throw new NotSupportedException(SR.ReadonlyControlsCollection);
-                       }
-                   }
-                   else {
-                       // just no-op it at DT.
-                       return;
-                   }
-               }
-               base.SetChildIndexInternal(child, newIndex);
+                if (child is SplitterPanel)
+                {
+                    if (!owner.DesignMode)
+                    {
+                        if (IsReadOnly)
+                        {
+                            throw new NotSupportedException(SR.ReadonlyControlsCollection);
+                        }
+                    }
+                    else
+                    {
+                        // just no-op it at DT.
+                        return;
+                    }
+                }
+                base.SetChildIndexInternal(child, newIndex);
             }
 
         }
 
     }
- }
+}

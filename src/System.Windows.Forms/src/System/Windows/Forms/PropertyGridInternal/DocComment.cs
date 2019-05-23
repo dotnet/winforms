@@ -3,26 +3,28 @@
 // See the LICENSE file in the project root for more information.
 
 
-namespace System.Windows.Forms.PropertyGridInternal {
+namespace System.Windows.Forms.PropertyGridInternal
+{
 
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
 
     using System;
     using System.Windows.Forms;
-    
+
     using System.ComponentModel;
     using System.ComponentModel.Design;
     using System.Drawing;
     using Microsoft.Win32;
     using System.Windows.Forms.Layout;
 
-    internal class DocComment : PropertyGrid.SnappableControl {
-        
+    internal class DocComment : PropertyGrid.SnappableControl
+    {
+
         private Label m_labelTitle;
         private Label m_labelDesc;
         private string fullDesc;
-        
+
         protected int lineHeight;
         private bool needUpdateUIWithFont = true;
 
@@ -36,7 +38,8 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         internal Rectangle rect = Rectangle.Empty;
 
-        internal DocComment(PropertyGrid owner) : base(owner) {
+        internal DocComment(PropertyGrid owner) : base(owner)
+        {
             SuspendLayout();
             m_labelTitle = new Label();
             m_labelTitle.UseMnemonic = false;
@@ -49,7 +52,8 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
             Controls.Add(m_labelTitle);
             Controls.Add(m_labelDesc);
-            if (DpiHelper.IsScalingRequirementMet) {
+            if (DpiHelper.IsScalingRequirementMet)
+            {
                 cBorder = LogicalToDeviceUnits(CBORDER);
                 cydef = LogicalToDeviceUnits(CYDEF);
             }
@@ -61,32 +65,37 @@ namespace System.Windows.Forms.PropertyGridInternal {
             ResumeLayout(false);
         }
 
-        public virtual int Lines {
-            get {
+        public virtual int Lines
+        {
+            get
+            {
                 UpdateUIWithFont();
-                return Height/lineHeight;
+                return Height / lineHeight;
             }
-            set {
+            set
+            {
                 UpdateUIWithFont();
                 Size = new Size(Width, 1 + value * lineHeight);
             }
         }
 
-        public override int GetOptimalHeight(int width) {
+        public override int GetOptimalHeight(int width)
+        {
             UpdateUIWithFont();
             // compute optimal label height as one line only.
             int height = m_labelTitle.Size.Height;
 
             // do this to avoid getting parented to the Parking window.
             //
-            if (this.ownerGrid.IsHandleCreated && !IsHandleCreated) {
+            if (this.ownerGrid.IsHandleCreated && !IsHandleCreated)
+            {
                 CreateControl();
             }
 
             // compute optimal text height
             var isScalingRequirementMet = DpiHelper.IsScalingRequirementMet;
             Graphics g = m_labelDesc.CreateGraphicsInternal();
-            SizeF sizef = PropertyGrid.MeasureTextHelper.MeasureText( this.ownerGrid, g, m_labelTitle.Text, Font, width);
+            SizeF sizef = PropertyGrid.MeasureTextHelper.MeasureText(this.ownerGrid, g, m_labelTitle.Text, Font, width);
             Size sz = Size.Ceiling(sizef);
             g.Dispose();
             var padding = isScalingRequirementMet ? LogicalToDeviceUnits(2) : 2;
@@ -94,33 +103,40 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return Math.Max(height + 2 * padding, isScalingRequirementMet ? LogicalToDeviceUnits(CYDEF) : CYDEF);
         }
 
-        internal virtual void LayoutWindow() {
+        internal virtual void LayoutWindow()
+        {
         }
 
-        protected override void OnFontChanged(EventArgs e) {
+        protected override void OnFontChanged(EventArgs e)
+        {
             needUpdateUIWithFont = true;
             PerformLayout();
             base.OnFontChanged(e);
         }
 
-        protected override void OnLayout(LayoutEventArgs e) {
+        protected override void OnLayout(LayoutEventArgs e)
+        {
             UpdateUIWithFont();
             SetChildLabelsBounds();
             m_labelDesc.Text = this.fullDesc;
             m_labelDesc.AccessibleName = this.fullDesc; // Don't crop the description for accessibility clients
             base.OnLayout(e);
         }
-        
-        protected override void OnResize(EventArgs e) {
+
+        protected override void OnResize(EventArgs e)
+        {
             Rectangle newRect = ClientRectangle;
-            if (!rect.IsEmpty && newRect.Width > rect.Width) {
+            if (!rect.IsEmpty && newRect.Width > rect.Width)
+            {
                 Rectangle rectInvalidate = new Rectangle(rect.Width - 1, 0, newRect.Width - rect.Width + 1, rect.Height);
                 Invalidate(rectInvalidate);
             }
-            if (DpiHelper.IsScalingRequirementMet) {
+            if (DpiHelper.IsScalingRequirementMet)
+            {
                 var lineHeightOld = lineHeight;
                 lineHeight = (int)Font.Height + LogicalToDeviceUnits(2);
-                if (lineHeightOld != lineHeight) {
+                if (lineHeightOld != lineHeight)
+                {
                     m_labelTitle.Location = new Point(cBorder, cBorder);
                     m_labelDesc.Location = new Point(cBorder, cBorder + lineHeight);
                     // Labels were explicitly set bounds. resize of parent is not rescaling labels.
@@ -128,14 +144,15 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
             }
 
-                rect = newRect;
+            rect = newRect;
             base.OnResize(e);
         }
 
         /// <summary>
         /// Setting child label bounds
         /// </summary>
-        private void SetChildLabelsBounds() {
+        private void SetChildLabelsBounds()
+        {
             Size size = ClientSize;
 
             // if the client size is 0, setting this to a negative number
@@ -156,7 +173,8 @@ namespace System.Windows.Forms.PropertyGridInternal {
                                   BoundsSpecified.Size);
         }
 
-        protected override void OnHandleCreated(EventArgs e) {
+        protected override void OnHandleCreated(EventArgs e)
+        {
             base.OnHandleCreated(e);
             UpdateUIWithFont();
         }
@@ -166,37 +184,44 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// </summary>
         /// <param name="deviceDpiOld"> old dpi</param>
         /// <param name="deviceDpiNew"> new dpi</param>
-        protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) {
+        protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
+        {
             base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
-            if (DpiHelper.IsScalingRequirementMet) {
+            if (DpiHelper.IsScalingRequirementMet)
+            {
                 cBorder = LogicalToDeviceUnits(CBORDER);
                 cydef = LogicalToDeviceUnits(CYDEF);
             }
         }
 
-        public virtual void SetComment(string title, string desc) {
-            if (m_labelDesc.Text != title) {
+        public virtual void SetComment(string title, string desc)
+        {
+            if (m_labelDesc.Text != title)
+            {
                 m_labelTitle.Text = title;
             }
-            
-            if (desc != fullDesc) {
+
+            if (desc != fullDesc)
+            {
                 this.fullDesc = desc;
                 m_labelDesc.Text = fullDesc;
                 m_labelDesc.AccessibleName = this.fullDesc; // Don't crop the description for accessibility clients
             }
         }
 
-        public override int SnapHeightRequest(int cyNew) {
+        public override int SnapHeightRequest(int cyNew)
+        {
             UpdateUIWithFont();
-            int lines = Math.Max(MIN_LINES, cyNew/lineHeight);
-            return 1 + lines*lineHeight;
+            int lines = Math.Max(MIN_LINES, cyNew / lineHeight);
+            return 1 + lines * lineHeight;
         }
 
         /// <summary>
         /// Constructs the new instance of the accessibility object for this control.
         /// </summary>
         /// <returns>The accessibility object for this control.</returns>
-        protected override AccessibleObject CreateAccessibilityInstance() {
+        protected override AccessibleObject CreateAccessibilityInstance()
+        {
             return new DocCommentAccessibleObject(this, ownerGrid);
         }
 
@@ -206,20 +231,25 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// </summary>
         internal override bool SupportsUiaProviders => true;
 
-        internal void UpdateTextRenderingEngine() {
+        internal void UpdateTextRenderingEngine()
+        {
             m_labelTitle.UseCompatibleTextRendering = this.ownerGrid.UseCompatibleTextRendering;
             m_labelDesc.UseCompatibleTextRendering = this.ownerGrid.UseCompatibleTextRendering;
         }
 
-        private void UpdateUIWithFont() {
-            if (IsHandleCreated && needUpdateUIWithFont) {
+        private void UpdateUIWithFont()
+        {
+            if (IsHandleCreated && needUpdateUIWithFont)
+            {
 
                 // Some fonts throw because Bold is not a valid option
                 // for them.  Fail gracefully.
-                try {
+                try
+                {
                     m_labelTitle.Font = new Font(Font, FontStyle.Bold);
                 }
-                catch {
+                catch
+                {
                 }
 
                 lineHeight = (int)Font.Height + 2;
@@ -236,7 +266,8 @@ namespace System.Windows.Forms.PropertyGridInternal {
     /// Represents the DocComment control accessible object.
     /// </summary>
     [System.Runtime.InteropServices.ComVisible(true)]
-    internal class DocCommentAccessibleObject : Control.ControlAccessibleObject {
+    internal class DocCommentAccessibleObject : Control.ControlAccessibleObject
+    {
 
         private PropertyGrid _parentPropertyGrid;
 
@@ -245,7 +276,8 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// </summary>
         /// <param name="owningDocComment">The owning DocComment control.</param>
         /// <param name="parentPropertyGrid">The parent PropertyGrid control.</param>
-        public DocCommentAccessibleObject(DocComment owningDocComment, PropertyGrid parentPropertyGrid) : base(owningDocComment) {
+        public DocCommentAccessibleObject(DocComment owningDocComment, PropertyGrid parentPropertyGrid) : base(owningDocComment)
+        {
             _parentPropertyGrid = parentPropertyGrid;
         }
 
@@ -254,11 +286,14 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// </summary>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
-        internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
+        internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+        {
             var propertyGridAccessibleObject = _parentPropertyGrid.AccessibilityObject as PropertyGridAccessibleObject;
-            if (propertyGridAccessibleObject != null) {
+            if (propertyGridAccessibleObject != null)
+            {
                 var navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
-                if (navigationTarget != null) {
+                if (navigationTarget != null)
+                {
                     return navigationTarget;
                 }
             }
@@ -271,10 +306,14 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// </summary>
         /// <param name="propertyId">Identifier indicating the property to return</param>
         /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
-        internal override object GetPropertyValue(int propertyID) {
-            if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
+        internal override object GetPropertyValue(int propertyID)
+        {
+            if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
+            {
                 return NativeMethods.UIA_PaneControlTypeId;
-            } else if (propertyID == NativeMethods.UIA_NamePropertyId) {
+            }
+            else if (propertyID == NativeMethods.UIA_NamePropertyId)
+            {
                 return Name;
             }
 

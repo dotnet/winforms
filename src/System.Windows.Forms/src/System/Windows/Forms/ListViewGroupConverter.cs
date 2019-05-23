@@ -62,7 +62,7 @@ namespace System.Windows.Forms
                     ListViewItem item = context.Instance as ListViewItem;
                     if (item != null && item.ListView != null)
                     {
-                        foreach(ListViewGroup group in item.ListView.Groups)
+                        foreach (ListViewGroup group in item.ListView.Groups)
                         {
                             if (group.Header == text)
                             {
@@ -101,7 +101,7 @@ namespace System.Windows.Forms
                 ConstructorInfo ctor;
 
                 // Header
-                ctor = typeof(ListViewGroup).GetConstructor(new Type[] {typeof(string), typeof(HorizontalAlignment)});
+                ctor = typeof(ListViewGroup).GetConstructor(new Type[] { typeof(string), typeof(HorizontalAlignment) });
                 Debug.Assert(ctor != null, "Expected the constructor to exist.");
                 return new InstanceDescriptor(ctor, new object[] { group.Header, group.HeaderAlignment }, false);
             }

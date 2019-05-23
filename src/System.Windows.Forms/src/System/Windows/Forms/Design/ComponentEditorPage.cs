@@ -4,7 +4,8 @@
 
 
 
-namespace System.Windows.Forms.Design {
+namespace System.Windows.Forms.Design
+{
     using System.ComponentModel;
 
     using System.Diagnostics;
@@ -25,7 +26,8 @@ namespace System.Windows.Forms.Design {
      ClassInterface(ClassInterfaceType.AutoDispatch),
      System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1012:AbstractTypesShouldNotHaveConstructors") // Shipped in Everett
     ]
-    public abstract class ComponentEditorPage : Panel {
+    public abstract class ComponentEditorPage : Panel
+    {
 
         IComponentEditorPageSite pageSite;
         IComponent component;
@@ -40,7 +42,8 @@ namespace System.Windows.Forms.Design {
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.Design.ComponentEditorPage'/> class.
         ///    </para>
         /// </summary>
-        public ComponentEditorPage() : base() {
+        public ComponentEditorPage() : base()
+        {
             commitOnDeactivate = false;
             firstActivate = true;
             loadRequired = false;
@@ -78,35 +81,40 @@ namespace System.Windows.Forms.Design {
         /// <summary>
         ///    <para>Gets or sets the page site.</para>
         /// </summary>
-        protected IComponentEditorPageSite PageSite {
+        protected IComponentEditorPageSite PageSite
+        {
             get { return pageSite; }
             set { pageSite = value; }
         }
         /// <summary>
         ///    <para>Gets or sets the component to edit.</para>
         /// </summary>
-        protected IComponent Component {
+        protected IComponent Component
+        {
             get { return component; }
             set { component = value; }
         }
         /// <summary>
         ///    <para>Indicates whether the page is being activated for the first time.</para>
         /// </summary>
-        protected bool FirstActivate {
+        protected bool FirstActivate
+        {
             get { return firstActivate; }
             set { firstActivate = value; }
         }
         /// <summary>
         ///    <para>Indicates whether a load is required previous to editing.</para>
         /// </summary>
-        protected bool LoadRequired {
+        protected bool LoadRequired
+        {
             get { return loadRequired; }
             set { loadRequired = value; }
         }
         /// <summary>
         ///    <para>Indicates if loading is taking place.</para>
         /// </summary>
-        protected int Loading {
+        protected int Loading
+        {
             get { return loading; }
             set { loading = value; }
         }
@@ -115,11 +123,14 @@ namespace System.Windows.Forms.Design {
         ///    <para> Indicates whether an editor should apply its
         ///       changes before it is deactivated.</para>
         /// </summary>
-        public bool CommitOnDeactivate {
-            get {
+        public bool CommitOnDeactivate
+        {
+            get
+            {
                 return commitOnDeactivate;
             }
-            set {
+            set
+            {
                 commitOnDeactivate = value;
             }
         }
@@ -127,8 +138,10 @@ namespace System.Windows.Forms.Design {
         /// <summary>
         ///    <para>Gets or sets the creation parameters for this control.</para>
         /// </summary>
-        protected override CreateParams CreateParams {
-            get {
+        protected override CreateParams CreateParams
+        {
+            get
+            {
                 CreateParams cp = base.CreateParams;
                 cp.Style &= ~(NativeMethods.WS_BORDER | NativeMethods.WS_OVERLAPPED | NativeMethods.WS_DLGFRAME);
                 return cp;
@@ -138,16 +151,20 @@ namespace System.Windows.Forms.Design {
         /// <summary>
         ///    <para>Gets or sets the icon for this page.</para>
         /// </summary>
-        public Icon Icon {
-            
-            
-            get {
-                if (icon == null) {
+        public Icon Icon
+        {
+
+
+            get
+            {
+                if (icon == null)
+                {
                     icon = new Icon(typeof(ComponentEditorPage), "ComponentEditorPage");
                 }
                 return icon;
             }
-            set {
+            set
+            {
                 icon = value;
             }
         }
@@ -156,8 +173,10 @@ namespace System.Windows.Forms.Design {
         ///    <para> 
         ///       Gets or sets the title of the page.</para>
         /// </summary>
-        public virtual string Title {
-            get {
+        public virtual string Title
+        {
+            get
+            {
                 return base.Text;
             }
         }
@@ -165,8 +184,10 @@ namespace System.Windows.Forms.Design {
         /// <summary>
         ///     Activates and displays the page.
         /// </summary>
-        public virtual void Activate() {
-            if (loadRequired) {
+        public virtual void Activate()
+        {
+            if (loadRequired)
+            {
                 EnterLoadingMode();
                 LoadComponent();
                 ExitLoadingMode();
@@ -180,14 +201,16 @@ namespace System.Windows.Forms.Design {
         /// <summary>
         ///    <para>Applies changes to all the components being edited.</para>
         /// </summary>
-        public virtual void ApplyChanges() {
+        public virtual void ApplyChanges()
+        {
             SaveComponent();
         }
 
         /// <summary>
         ///    <para>Deactivates and hides the page.</para>
         /// </summary>
-        public virtual void Deactivate() {
+        public virtual void Deactivate()
+        {
             Visible = false;
         }
 
@@ -195,7 +218,8 @@ namespace System.Windows.Forms.Design {
         ///    Increments the loading counter, which determines whether a page
         ///    is in loading mode.
         /// </summary>
-        protected void EnterLoadingMode() {
+        protected void EnterLoadingMode()
+        {
             loading++;
         }
 
@@ -203,7 +227,8 @@ namespace System.Windows.Forms.Design {
         ///    Decrements the loading counter, which determines whether a page
         ///    is in loading mode.
         /// </summary>
-        protected void ExitLoadingMode() {
+        protected void ExitLoadingMode()
+        {
             Debug.Assert(loading > 0, "Unbalanced Enter/ExitLoadingMode calls");
             loading--;
         }
@@ -211,35 +236,40 @@ namespace System.Windows.Forms.Design {
         /// <summary>
         ///    <para>Gets the control that represents the window for this page.</para>
         /// </summary>
-        public virtual Control GetControl() {
+        public virtual Control GetControl()
+        {
             return this;
         }
 
         /// <summary>
         ///    <para>Gets the component that is to be edited.</para>
         /// </summary>
-        protected IComponent GetSelectedComponent() {
+        protected IComponent GetSelectedComponent()
+        {
             return component;
         }
 
         /// <summary>
         ///    <para>Processes messages that could be handled by the page.</para>
         /// </summary>
-        public virtual bool IsPageMessage(ref Message msg) {
+        public virtual bool IsPageMessage(ref Message msg)
+        {
             return PreProcessMessage(ref msg);
         }
 
         /// <summary>
         ///    <para>Gets a value indicating whether the page is being activated for the first time.</para>
         /// </summary>
-        protected bool IsFirstActivate() {
+        protected bool IsFirstActivate()
+        {
             return firstActivate;
         }
 
         /// <summary>
         ///    <para>Gets a value indicating whether the page is being loaded.</para>
         /// </summary>
-        protected bool IsLoading() {
+        protected bool IsLoading()
+        {
             return loading != 0;
         }
 
@@ -253,7 +283,8 @@ namespace System.Windows.Forms.Design {
         ///       Called when the page along with its sibling
         ///       pages have applied their changes.</para>
         /// </summary>
-        public virtual void OnApplyComplete() {
+        public virtual void OnApplyComplete()
+        {
             ReloadComponent();
         }
 
@@ -261,8 +292,10 @@ namespace System.Windows.Forms.Design {
         ///    <para>Called when the current component may have changed elsewhere
         ///       and needs to be reloded into the UI.</para>
         /// </summary>
-        protected virtual void ReloadComponent() {
-            if (Visible == false) {
+        protected virtual void ReloadComponent()
+        {
+            if (Visible == false)
+            {
                 loadRequired = true;
             }
         }
@@ -275,8 +308,10 @@ namespace System.Windows.Forms.Design {
         /// <summary>
         ///    <para>Sets the page to be in dirty state.</para>
         /// </summary>
-        protected virtual void SetDirty() {
-            if (IsLoading() == false) {
+        protected virtual void SetDirty()
+        {
+            if (IsLoading() == false)
+            {
                 pageSite.SetDirty();
             }
         }
@@ -284,7 +319,8 @@ namespace System.Windows.Forms.Design {
         /// <summary>
         ///    <para>Sets the component to be edited.</para>
         /// </summary>
-        public virtual void SetComponent(IComponent component) {
+        public virtual void SetComponent(IComponent component)
+        {
             this.component = component;
             loadRequired = true;
         }
@@ -292,7 +328,8 @@ namespace System.Windows.Forms.Design {
         /// <summary>
         ///     Sets the site for this page.
         /// </summary>
-        public virtual void SetSite(IComponentEditorPageSite site) {
+        public virtual void SetSite(IComponentEditorPageSite site)
+        {
             this.pageSite = site;
 
             pageSite.GetControl().Controls.Add(this);
@@ -302,13 +339,15 @@ namespace System.Windows.Forms.Design {
         ///    <para> 
         ///       Provides help information to the help system.</para>
         /// </summary>
-        public virtual void ShowHelp() {
+        public virtual void ShowHelp()
+        {
         }
 
         /// <summary>
         ///    <para>Gets a value indicating whether the editor supports Help.</para>
         /// </summary>
-        public virtual bool SupportsHelp() {
+        public virtual bool SupportsHelp()
+        {
             return false;
         }
     }

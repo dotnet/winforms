@@ -18,27 +18,27 @@ namespace System.Windows.Forms
         {
             _uicues = uicues;
         }
-        
+
         /// <summary>
         /// Focus rectangles are shown after the change.
         /// </summary>
         public bool ShowFocus => (_uicues & UICues.ShowFocus) != 0;
-           
+
         /// <summary>
         /// Keyboard cues are underlined after the change.
         /// </summary>
         public bool ShowKeyboard => (_uicues & UICues.ShowKeyboard) != 0;
-        
+
         /// <summary>
         /// The state of the focus cues has changed.
         /// </summary>
         public bool ChangeFocus => (_uicues & UICues.ChangeFocus) != 0;
-        
+
         /// <summary>
         /// The state of the keyboard cues has changed.
         /// </summary>
         public bool ChangeKeyboard => (_uicues & UICues.ChangeKeyboard) != 0;
-        
+
         public UICues Changed => (_uicues & UICues.Changed);
     }
 }

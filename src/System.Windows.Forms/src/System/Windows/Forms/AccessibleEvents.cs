@@ -148,10 +148,10 @@ namespace System.Windows.Forms
         //          of the child identified by the VARIANT. In other words, the
         //          child in this case is accessible but not a full object.
         //          Like a button on a titlebar which is 'small' and has no children.
-        Create =  0x8000,  // hwnd + ID + idChild is created item
+        Create = 0x8000,  // hwnd + ID + idChild is created item
         Destroy = 0x8001,  // hwnd + ID + idChild is destroyed item
-        Show =    0x8002,  // hwnd + ID + idChild is shown item
-        Hide =    0x8003,  // hwnd + ID + idChild is hidden item
+        Show = 0x8002,  // hwnd + ID + idChild is shown item
+        Hide = 0x8003,  // hwnd + ID + idChild is hidden item
         Reorder = 0x8004,  // hwnd + ID + idChild is parent of zordering children
 
         /// <summary>
@@ -161,9 +161,9 @@ namespace System.Windows.Forms
         /// but are not truly visible. Hence do not send HIDE notifications for the
         /// children also. One implies all. The same goes for SHOW.
         /// </summary>
-        Focus =           0x8005,  // hwnd + ID + idChild is focused item
-        Selection =       0x8006,  // hwnd + ID + idChild is selected item (if only one), or idChild is OBJID_WINDOW if complex
-        SelectionAdd =    0x8007,  // hwnd + ID + idChild is item added
+        Focus = 0x8005,  // hwnd + ID + idChild is focused item
+        Selection = 0x8006,  // hwnd + ID + idChild is selected item (if only one), or idChild is OBJID_WINDOW if complex
+        SelectionAdd = 0x8007,  // hwnd + ID + idChild is item added
         SelectionRemove = 0x8008,  // hwnd + ID + idChild is item removed
         SelectionWithin = 0x8009,  // hwnd + ID + idChild is parent of changed selected items
 
@@ -201,14 +201,14 @@ namespace System.Windows.Forms
         ///     query the container control what the new bunch of selected items
         ///     are.
         /// </summary>
-        StateChange =         0x800A,  // hwnd + ID + idChild is item w/ state change
-        LocationChange =      0x800B,  // hwnd + ID + idChild is moved/sized item
-        NameChange =          0x800C,  // hwnd + ID + idChild is item w/ name change
-        DescriptionChange =   0x800D,  // hwnd + ID + idChild is item w/ desc change
-        ValueChange =         0x800E,  // hwnd + ID + idChild is item w/ value change
-        ParentChange =        0x800F,  // hwnd + ID + idChild is item w/ new parent
-        HelpChange =          0x8010,  // hwnd + ID + idChild is item w/ help change
+        StateChange = 0x800A,  // hwnd + ID + idChild is item w/ state change
+        LocationChange = 0x800B,  // hwnd + ID + idChild is moved/sized item
+        NameChange = 0x800C,  // hwnd + ID + idChild is item w/ name change
+        DescriptionChange = 0x800D,  // hwnd + ID + idChild is item w/ desc change
+        ValueChange = 0x800E,  // hwnd + ID + idChild is item w/ value change
+        ParentChange = 0x800F,  // hwnd + ID + idChild is item w/ new parent
+        HelpChange = 0x8010,  // hwnd + ID + idChild is item w/ help change
         DefaultActionChange = 0x8011,  // hwnd + ID + idChild is item w/ def action change
-        AcceleratorChange =   0x8012,  // hwnd + ID + idChild is item w/ keybd accel change
+        AcceleratorChange = 0x8012,  // hwnd + ID + idChild is item w/ keybd accel change
     }
 }

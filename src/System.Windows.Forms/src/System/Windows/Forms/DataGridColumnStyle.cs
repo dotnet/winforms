@@ -475,7 +475,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.DataGridColumnNoPropertyDescriptor);
             }
-            
+
             return descriptor.GetValue(source[rowNum]);
         }
 

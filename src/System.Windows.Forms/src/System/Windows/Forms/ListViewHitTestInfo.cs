@@ -2,18 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
 
     using System.Diagnostics;
     using System;
-    
-    
+
+
     /// <summary>
     ///    <para>
     ///       Specifies the return value for HITTEST on ListView.
     ///    </para>
     /// </summary>
-    public class ListViewHitTestInfo {
+    public class ListViewHitTestInfo
+    {
 
         private ListViewHitTestLocations loc;
         private ListViewItem item;
@@ -22,36 +24,43 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Creates a ListViewHitTestInfo instance.
         /// </summary>
-        public ListViewHitTestInfo(ListViewItem hitItem, ListViewItem.ListViewSubItem hitSubItem, ListViewHitTestLocations hitLocation) {
+        public ListViewHitTestInfo(ListViewItem hitItem, ListViewItem.ListViewSubItem hitSubItem, ListViewHitTestLocations hitLocation)
+        {
             this.item = hitItem;
             this.subItem = hitSubItem;
             this.loc = hitLocation;
         }
-        
+
 
         /// <summary>
         ///     This gives the exact location returned by hit test on listview.
         /// </summary>
-        public ListViewHitTestLocations Location {
-            get {
+        public ListViewHitTestLocations Location
+        {
+            get
+            {
                 return loc;
             }
         }
-        
+
         /// <summary>
         ///     This gives the ListViewItem returned by hit test on listview.
         /// </summary>
-        public ListViewItem Item {
-            get {
+        public ListViewItem Item
+        {
+            get
+            {
                 return item;
             }
         }
-        
+
         /// <summary>
         ///     This gives the ListViewSubItem returned by hit test on listview.
         /// </summary>
-        public ListViewItem.ListViewSubItem SubItem {
-            get {
+        public ListViewItem.ListViewSubItem SubItem
+        {
+            get
+            {
                 return subItem;
             }
         }

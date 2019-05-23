@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.PropertyGridInternal {
+namespace System.Windows.Forms.PropertyGridInternal
+{
     using System.Runtime.Serialization.Formatters;
     using System.Threading;
     using System.Runtime.InteropServices;
@@ -11,16 +12,16 @@ namespace System.Windows.Forms.PropertyGridInternal {
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System;
-    using System.Collections;   
+    using System.Collections;
     using System.Windows.Forms;
     using System.Windows.Forms.ComponentModel;
-    using System.Windows.Forms.Design;    
+    using System.Windows.Forms.Design;
     using System.ComponentModel.Design;
     using System.IO;
     using System.Drawing;
     using Microsoft.Win32;
     using Message = System.Windows.Forms.Message;
-    using System.Drawing.Drawing2D;    
+    using System.Drawing.Drawing2D;
 
     /// <summary>
     ///     Implements a dialog that is displayed when an unhandled exception occurs in
@@ -29,7 +30,8 @@ namespace System.Windows.Forms.PropertyGridInternal {
     ///     Use caution and check at all DPI scaling factors if adding a new message
     ///     to be displayed in the top pane.
     /// </summary>
-    internal class GridErrorDlg : Form {
+    internal class GridErrorDlg : Form
+    {
         private TableLayoutPanel overarchingTableLayoutPanel;
         private TableLayoutPanel buttonTableLayoutPanel;
         private PictureBox pictureBox;
@@ -46,22 +48,28 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         private bool detailsButtonExpanded = false;
 
-        public bool DetailsButtonExpanded {
-            get {
+        public bool DetailsButtonExpanded
+        {
+            get
+            {
                 return detailsButtonExpanded;
             }
         }
 
-        public string Details {
-            set {
+        public string Details
+        {
+            set
+            {
                 this.details.Text = value;
             }
         }
-       
 
-        public string Message {
-            set {
-                 this.lblMessage.Text = value;
+
+        public string Message
+        {
+            set
+            {
+                this.lblMessage.Text = value;
             }
         }
 
@@ -69,21 +77,26 @@ namespace System.Windows.Forms.PropertyGridInternal {
             SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // We use " " for the text so we leave a small amount of test.
                                                                                                         // So we don't have to localize it.
         ]
-        public GridErrorDlg(PropertyGrid owner) {
+        public GridErrorDlg(PropertyGrid owner)
+        {
             ownerGrid = owner;
             expandImage = DpiHelper.GetBitmapFromIcon(typeof(ThreadExceptionDialog), "down");
-            if (DpiHelper.IsScalingRequired) {
+            if (DpiHelper.IsScalingRequired)
+            {
                 DpiHelper.ScaleBitmapLogicalToDevice(ref expandImage);
             }
             collapseImage = DpiHelper.GetBitmapFromIcon(typeof(ThreadExceptionDialog), "up");
-            if (DpiHelper.IsScalingRequired) {
+            if (DpiHelper.IsScalingRequired)
+            {
                 DpiHelper.ScaleBitmapLogicalToDevice(ref collapseImage);
             }
 
             InitializeComponent();
 
-            foreach( Control c in this.Controls ){
-                if( c.SupportsUseCompatibleTextRendering ){
+            foreach (Control c in this.Controls)
+            {
+                if (c.SupportsUseCompatibleTextRendering)
+                {
                     c.UseCompatibleTextRenderingInt = ownerGrid.UseCompatibleTextRendering;
                 }
             }
@@ -92,7 +105,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             detailsBtn.Text = " " + SR.ExDlgShowDetails;
 
             details.AccessibleName = SR.ExDlgDetailsText;
-            
+
             okBtn.Text = SR.ExDlgOk;
             cancelBtn.Text = SR.ExDlgCancel;
             detailsBtn.Image = expandImage;
@@ -101,15 +114,18 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// <summary>
         ///     Called when the details button is clicked.
         /// </summary>
-        private void DetailsClick(object sender, EventArgs devent) {
+        private void DetailsClick(object sender, EventArgs devent)
+        {
             int delta = details.Height + 8;
 
-            if (details.Visible) {
+            if (details.Visible)
+            {
                 detailsBtn.Image = expandImage;
                 detailsButtonExpanded = false;
                 Height -= delta;
             }
-            else {
+            else
+            {
                 detailsBtn.Image = collapseImage;
                 detailsButtonExpanded = true;
                 details.Width = overarchingTableLayoutPanel.Width - details.Margin.Horizontal;
@@ -122,7 +138,8 @@ namespace System.Windows.Forms.PropertyGridInternal {
             AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
             details.TabStop = !details.TabStop;
 
-            if (details.Visible) {
+            if (details.Visible)
+            {
                 details.Focus();
             }
         }
@@ -131,14 +148,18 @@ namespace System.Windows.Forms.PropertyGridInternal {
         ///     Tells whether the current resources for this dll have been
         ///     localized for a RTL language.
         /// </summary>
-        private static bool IsRTLResources {
-            get {
+        private static bool IsRTLResources
+        {
+            get
+            {
                 return SR.RTL != "RTL_False";
             }
         }
 
-        private void InitializeComponent() {
-            if (IsRTLResources) {
+        private void InitializeComponent()
+        {
+            if (IsRTLResources)
+            {
                 this.RightToLeft = RightToLeft.Yes;
             }
 
@@ -300,20 +321,24 @@ namespace System.Windows.Forms.PropertyGridInternal {
             this.PerformLayout();
         }
 
-        private void OnButtonClick(object s, EventArgs e) {
+        private void OnButtonClick(object s, EventArgs e)
+        {
             DialogResult = ((Button)s).DialogResult;
             Close();
         }
 
-        protected override void OnVisibleChanged(EventArgs e) {
-            if (this.Visible) {
+        protected override void OnVisibleChanged(EventArgs e)
+        {
+            if (this.Visible)
+            {
                 // make sure the details button is sized properly
                 //
-                using (Graphics g = CreateGraphics()) {
-                    SizeF sizef = PropertyGrid.MeasureTextHelper.MeasureText( this.ownerGrid, g, detailsBtn.Text, detailsBtn.Font);
-                    int detailsWidth = (int) Math.Ceiling(sizef.Width);
+                using (Graphics g = CreateGraphics())
+                {
+                    SizeF sizef = PropertyGrid.MeasureTextHelper.MeasureText(this.ownerGrid, g, detailsBtn.Text, detailsBtn.Font);
+                    int detailsWidth = (int)Math.Ceiling(sizef.Width);
                     detailsWidth += detailsBtn.Image.Width;
-                    detailsBtn.Width = (int) Math.Ceiling(detailsWidth * (ownerGrid.UseCompatibleTextRendering ? 1.15f : 1.4f));
+                    detailsBtn.Width = (int)Math.Ceiling(detailsWidth * (ownerGrid.UseCompatibleTextRendering ? 1.15f : 1.4f));
                     detailsBtn.Height = okBtn.Height;
                 }
 
@@ -324,14 +349,16 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 // Location is relative to its parent,
                 // therefore, we need to take its parent into consideration
                 Control parent = detailsBtn.Parent;
-                while(parent != null && !(parent is Form)) {
+                while (parent != null && !(parent is Form))
+                {
                     y += parent.Location.Y;
                     parent = parent.Parent;
                 }
 
                 details.Location = new System.Drawing.Point(x, y);
 
-                if (details.Visible) {
+                if (details.Visible)
+                {
                     DetailsClick(details, EventArgs.Empty);
                 }
             }
@@ -339,67 +366,87 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
     }
 
-    internal class DetailsButton: Button {
+    internal class DetailsButton : Button
+    {
         private GridErrorDlg parent;
-        public DetailsButton(GridErrorDlg form){
+        public DetailsButton(GridErrorDlg form)
+        {
             parent = form;
         }
 
-        public bool Expanded { 
-            get { 
-                return parent.DetailsButtonExpanded; 
-            } 
+        public bool Expanded
+        {
+            get
+            {
+                return parent.DetailsButtonExpanded;
+            }
         }
-        protected override AccessibleObject CreateAccessibilityInstance() {
+        protected override AccessibleObject CreateAccessibilityInstance()
+        {
             return new DetailsButtonAccessibleObject(this);
         }
     }
 
-    internal class DetailsButtonAccessibleObject: Control.ControlAccessibleObject {
-        
-        private DetailsButton ownerItem = null; 
-        
-        public DetailsButtonAccessibleObject(DetailsButton owner): base(owner) {
+    internal class DetailsButtonAccessibleObject : Control.ControlAccessibleObject
+    {
+
+        private DetailsButton ownerItem = null;
+
+        public DetailsButtonAccessibleObject(DetailsButton owner) : base(owner)
+        {
             ownerItem = owner;
         }
 
-        internal override bool IsIAccessibleExSupported() {
+        internal override bool IsIAccessibleExSupported()
+        {
             Debug.Assert(ownerItem != null, "AccessibleObject owner cannot be null");
             return true;
         }
 
-        internal override object GetPropertyValue(int propertyID) {
-            if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
+        internal override object GetPropertyValue(int propertyID)
+        {
+            if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
+            {
                 return NativeMethods.UIA_ButtonControlTypeId;
             }
-            else {
+            else
+            {
                 return base.GetPropertyValue(propertyID);
             }
         }
 
-        internal override bool IsPatternSupported(int patternId) {
-            if (patternId == NativeMethods.UIA_ExpandCollapsePatternId) {
+        internal override bool IsPatternSupported(int patternId)
+        {
+            if (patternId == NativeMethods.UIA_ExpandCollapsePatternId)
+            {
                 return true;
             }
-            else {
+            else
+            {
                 return base.IsPatternSupported(patternId);
             }
         }
 
-        internal override UnsafeNativeMethods.ExpandCollapseState ExpandCollapseState {
-            get {
+        internal override UnsafeNativeMethods.ExpandCollapseState ExpandCollapseState
+        {
+            get
+            {
                 return ownerItem.Expanded ? UnsafeNativeMethods.ExpandCollapseState.Expanded : UnsafeNativeMethods.ExpandCollapseState.Collapsed;
             }
         }
 
-        internal override void Expand() {
-            if (ownerItem !=null && !ownerItem.Expanded) {
+        internal override void Expand()
+        {
+            if (ownerItem != null && !ownerItem.Expanded)
+            {
                 DoDefaultAction();
             }
         }
 
-        internal override void Collapse() {
-            if (ownerItem != null && ownerItem.Expanded) {
+        internal override void Collapse()
+        {
+            if (ownerItem != null && ownerItem.Expanded)
+            {
                 DoDefaultAction();
             }
         }

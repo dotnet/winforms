@@ -16,8 +16,10 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool GetCachedSwitchValue(string switchName, ref int switchValue)
         {
-            if (switchValue < 0) return false;
-            if (switchValue > 0) return true;
+            if (switchValue < 0)
+                return false;
+            if (switchValue > 0)
+                return true;
 
             return GetCachedSwitchValueInternal(switchName, ref switchValue);
         }

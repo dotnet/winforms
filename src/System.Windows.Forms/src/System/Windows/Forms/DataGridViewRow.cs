@@ -1802,7 +1802,7 @@ namespace System.Windows.Forms
                     }
 
                     Rectangle rowRect = owner.DataGridView.RectangleToScreen(owner.DataGridView.GetRowDisplayRectangle(owner.Index, false /*cutOverflow*/));
-                    
+
                     int horizontalScrollBarHeight = 0;
                     if (this.owner.DataGridView.HorizontalScrollBarVisible)
                     {
@@ -1823,7 +1823,7 @@ namespace System.Windows.Forms
                         rowRectBottom = dataGridViewRect.Bottom - owner.DataGridView.BorderWidth - horizontalScrollBarHeight;
                     }
 
-                    
+
 
                     if ((dataGridViewRect.Top + columnHeadersHeight) > rowRect.Top)
                     {

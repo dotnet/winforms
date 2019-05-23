@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     using System.Diagnostics;
     using System;
     using System.ComponentModel;
@@ -22,20 +23,23 @@ namespace System.Windows.Forms {
         internal Form ownerForm;  // this is the form that created this menu, and is the only form allowed to dispose it.
         private RightToLeft rightToLeft = System.Windows.Forms.RightToLeft.Inherit;
         private EventHandler onCollapse;
-       
+
         /// <summary>
         ///     Creates a new MainMenu control.
         /// </summary>
         public MainMenu()
-            : base(null) {
+            : base(null)
+        {
 
         }
 
         /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.MainMenu'/> class with the specified container.</para>
         /// </summary>
-        public MainMenu(IContainer container) : this() {
-            if (container == null) {
+        public MainMenu(IContainer container) : this()
+        {
+            if (container == null)
+            {
                 throw new ArgumentNullException(nameof(container));
             }
 
@@ -47,17 +51,19 @@ namespace System.Windows.Forms {
         ///     with.
         /// </summary>
         public MainMenu(MenuItem[] items)
-            : base(items) {
+            : base(items)
+        {
 
         }
 
         [SRDescription(nameof(SR.MainMenuCollapseDescr))]
-        public event EventHandler Collapse {
+        public event EventHandler Collapse
+        {
             add => onCollapse += value;
             remove => onCollapse -= value;
         }
 
-        
+
         /// <summary>
         ///     This is used for international applications where the language
         ///     is written from RightToLeft. When this property is true,
@@ -69,36 +75,47 @@ namespace System.Windows.Forms {
         AmbientValue(RightToLeft.Inherit),
         SRDescription(nameof(SR.MenuRightToLeftDescr))
         ]
-        public virtual RightToLeft RightToLeft {
-            get {
-                if (System.Windows.Forms.RightToLeft.Inherit == rightToLeft) {
-                    if (form != null) {
+        public virtual RightToLeft RightToLeft
+        {
+            get
+            {
+                if (System.Windows.Forms.RightToLeft.Inherit == rightToLeft)
+                {
+                    if (form != null)
+                    {
                         return form.RightToLeft;
                     }
-                    else {
+                    else
+                    {
                         return RightToLeft.Inherit;
                     }
                 }
-                else {
+                else
+                {
                     return rightToLeft;
                 }
             }
-            set {
-            
+            set
+            {
+
                 //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)RightToLeft.No, (int)RightToLeft.Inherit)){
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)RightToLeft.No, (int)RightToLeft.Inherit))
+                {
                     throw new InvalidEnumArgumentException(nameof(RightToLeft), (int)value, typeof(RightToLeft));
                 }
-                if (rightToLeft != value) {
+                if (rightToLeft != value)
+                {
                     rightToLeft = value;
                     UpdateRtl((value == System.Windows.Forms.RightToLeft.Yes));
                 }
 
             }
         }
-        
-        internal override bool RenderIsRightToLeft {
-            get {
+
+        internal override bool RenderIsRightToLeft
+        {
+            get
+            {
                 return (RightToLeft == System.Windows.Forms.RightToLeft.Yes && (form == null || !form.IsMirrored));
             }
         }
@@ -106,7 +123,8 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Creates a new MainMenu object which is a dupliate of this one.
         /// </summary>
-        public virtual MainMenu CloneMenu() {
+        public virtual MainMenu CloneMenu()
+        {
             MainMenu newMenu = new MainMenu();
             newMenu.CloneMenu(this);
             return newMenu;
@@ -114,9 +132,10 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// </summary>
-        
-        
-        protected override IntPtr CreateMenuHandle() {
+
+
+        protected override IntPtr CreateMenuHandle()
+        {
             return UnsafeNativeMethods.CreateMenu();
         }
 
@@ -125,9 +144,12 @@ namespace System.Windows.Forms {
         ///     If the menu is parented in a form, it is disconnected from that as
         ///     well.
         /// </summary>
-        protected override void Dispose(bool disposing) {
-            if (disposing) {
-                if (form != null && (ownerForm == null || form == ownerForm)) {
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (form != null && (ownerForm == null || form == ownerForm))
+                {
                     form.Menu = null;
                 }
             }
@@ -137,17 +159,20 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Indicates which form in which we are currently residing [if any]
         /// </summary>
-        public Form GetForm() {
+        public Form GetForm()
+        {
             return form;
         }
 
-        internal Form GetFormUnsafe() {
-             return form;
+        internal Form GetFormUnsafe()
+        {
+            return form;
         }
 
         /// <summary>
         /// </summary>
-        internal override void ItemsChanged(int change) {
+        internal override void ItemsChanged(int change)
+        {
             base.ItemsChanged(change);
             if (form != null)
                 form.MenuChanged(change, this);
@@ -155,7 +180,8 @@ namespace System.Windows.Forms {
 
         /// <summary>
         /// </summary>
-        internal virtual void ItemsChanged(int change, Menu menu) {
+        internal virtual void ItemsChanged(int change, Menu menu)
+        {
             if (form != null)
                 form.MenuChanged(change, menu);
         }
@@ -163,17 +189,21 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Fires the collapse event
         /// </summary>
-        protected internal virtual void OnCollapse(EventArgs e) {
-            if (onCollapse != null) {
+        protected internal virtual void OnCollapse(EventArgs e)
+        {
+            if (onCollapse != null)
+            {
                 onCollapse(this, e);
             }
         }
-        
+
         /// <summary>
         ///     Returns true if the RightToLeft should be persisted in code gen.
         /// </summary>
-        internal virtual bool ShouldSerializeRightToLeft() {
-            if (System.Windows.Forms.RightToLeft.Inherit == RightToLeft) {
+        internal virtual bool ShouldSerializeRightToLeft()
+        {
+            if (System.Windows.Forms.RightToLeft.Inherit == RightToLeft)
+            {
                 return false;
             }
             return true;
@@ -182,7 +212,8 @@ namespace System.Windows.Forms {
         /// <summary>
         ///     Returns a string representation for this control.
         /// </summary>
-        public override string ToString() {
+        public override string ToString()
+        {
             // Removing GetForm information 
             return base.ToString();
         }

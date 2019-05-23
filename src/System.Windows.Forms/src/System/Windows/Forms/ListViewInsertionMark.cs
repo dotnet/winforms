@@ -6,7 +6,8 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
 
     /// <summary>
     ///    <para>
@@ -14,14 +15,15 @@ namespace System.Windows.Forms {
     ///    </para>
     /// </summary>
     public sealed class ListViewInsertionMark
-    {	
+    {
         private ListView listView;
-        
+
         private int index = 0;
         private Color color = Color.Empty;
         private bool appearsAfterItem = false;
 
-        internal ListViewInsertionMark(ListView listView) {
+        internal ListViewInsertionMark(ListView listView)
+        {
             this.listView = listView;
         }
 
@@ -31,28 +33,32 @@ namespace System.Windows.Forms {
     	///     before the item (the default).
         /// </summary>
         ///
-    	public bool AppearsAfterItem { 
+    	public bool AppearsAfterItem
+        {
             get
             {
                 return appearsAfterItem;
             }
             set
             {
-                if (appearsAfterItem != value) {
+                if (appearsAfterItem != value)
+                {
                     appearsAfterItem = value;
 
-                    if (listView.IsHandleCreated) {
+                    if (listView.IsHandleCreated)
+                    {
                         UpdateListView();
                     }
                 }
             }
         }
-    
+
         /// <summary>
         ///     Returns bounds of the insertion-mark.
         /// </summary>
         ///
-    	public Rectangle Bounds {
+        public Rectangle Bounds
+        {
             get
             {
                 NativeMethods.RECT rect = new NativeMethods.RECT();
@@ -60,56 +66,63 @@ namespace System.Windows.Forms {
                 return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
             }
         }
-    
+
         /// <summary>
         ///     The color of the insertion-mark.
         /// </summary>
         ///
-    	public Color Color { 
-            get 
+        public Color Color
+        {
+            get
             {
-                if (color.IsEmpty) {
+                if (color.IsEmpty)
+                {
                     color = SafeNativeMethods.ColorFromCOLORREF((int)listView.SendMessage(NativeMethods.LVM_GETINSERTMARKCOLOR, 0, 0));
                 }
                 return color;
-            }             
+            }
             set
             {
-                if (color != value) {
+                if (color != value)
+                {
                     color = value;
-                    if (listView.IsHandleCreated) {
+                    if (listView.IsHandleCreated)
+                    {
                         listView.SendMessage(NativeMethods.LVM_SETINSERTMARKCOLOR, 0, SafeNativeMethods.ColorToCOLORREF(color));
                     }
                 }
             }
         }
-    
+
         /// <summary>
         ///     Item next to which the insertion-mark appears.
         /// </summary>
         ///
-    	public int Index {
+        public int Index
+        {
             get
             {
                 return index;
             }
             set
             {
-                if (index != value) {
+                if (index != value)
+                {
                     index = value;
-                    if (listView.IsHandleCreated) {
+                    if (listView.IsHandleCreated)
+                    {
                         UpdateListView();
                     }
                 }
             }
-        }        
-  
+        }
+
         /// <summary>
         ///     Performs a hit-test at the specified insertion point
-    	///     and returns the closest item.
+        ///     and returns the closest item.
         /// </summary>
         ///
-    	public int NearestIndex(Point pt)
+        public int NearestIndex(Point pt)
         {
             NativeMethods.POINT point = new NativeMethods.POINT();
             point.x = pt.X;
@@ -119,18 +132,20 @@ namespace System.Windows.Forms {
             UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), NativeMethods.LVM_INSERTMARKHITTEST, point, lvInsertMark);
 
             return lvInsertMark.iItem;
-        }       
+        }
 
-        internal void UpdateListView() {
+        internal void UpdateListView()
+        {
             Debug.Assert(listView.IsHandleCreated, "ApplySavedState Precondition: List-view handle must be created");
-            NativeMethods.LVINSERTMARK lvInsertMark = new NativeMethods.LVINSERTMARK();                 
+            NativeMethods.LVINSERTMARK lvInsertMark = new NativeMethods.LVINSERTMARK();
             lvInsertMark.dwFlags = appearsAfterItem ? NativeMethods.LVIM_AFTER : 0;
             lvInsertMark.iItem = index;
             UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), NativeMethods.LVM_SETINSERTMARK, 0, lvInsertMark);
 
-            if (!color.IsEmpty) {
+            if (!color.IsEmpty)
+            {
                 listView.SendMessage(NativeMethods.LVM_SETINSERTMARKCOLOR, 0, SafeNativeMethods.ColorToCOLORREF(color));
-            }            
+            }
         }
     }
 }

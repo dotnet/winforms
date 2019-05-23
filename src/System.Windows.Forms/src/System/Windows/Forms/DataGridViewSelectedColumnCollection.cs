@@ -108,12 +108,12 @@ namespace System.Windows.Forms
                 return this.items;
             }
         }
-        
+
         public DataGridViewColumn this[int index]
         {
             get
             {
-                return (DataGridViewColumn) this.items[index];
+                return (DataGridViewColumn)this.items[index];
             }
         }
 
@@ -124,7 +124,7 @@ namespace System.Windows.Forms
         {
             return this.items.Add(dataGridViewColumn);
         }
-        
+
         /* Unused at this point
         internal void AddRange(DataGridViewColumn[] dataGridViewColumns)
         {

@@ -3,10 +3,11 @@
 // See the LICENSE file in the project root for more information.
 
 
-namespace System.Windows.Forms {
-    
+namespace System.Windows.Forms
+{
+
     using System;
-    using System.ComponentModel;   
+    using System.ComponentModel;
     using System.Diagnostics;
 
     /// <summary>
@@ -15,14 +16,16 @@ namespace System.Windows.Forms {
     ///    </para>
     /// </summary>
     [AttributeUsage(AttributeTargets.All)]
-    internal sealed class WinCategoryAttribute : CategoryAttribute {
+    internal sealed class WinCategoryAttribute : CategoryAttribute
+    {
 
         /// <summary>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.ComponentModel.CategoryAttribute'/> class.
         ///    </para>
         /// </summary>
-        public WinCategoryAttribute(string category) : base(category) {
+        public WinCategoryAttribute(string category) : base(category)
+        {
         }
 
         /// <summary>
@@ -33,9 +36,11 @@ namespace System.Windows.Forms {
         ///     available for the given value, the method should return it.
         ///     Otherwise, it should return null.
         /// </summary>
-        protected override string GetLocalizedString(string value) {
+        protected override string GetLocalizedString(string value)
+        {
             string localizedValue = base.GetLocalizedString(value);
-            if (localizedValue == null) {
+            if (localizedValue == null)
+            {
                 localizedValue = (string)GetSRObject("WinFormsCategory" + value);
             }
             // This attribute is internal, and we should never have a missing resource string.
@@ -47,7 +52,8 @@ namespace System.Windows.Forms {
         private static object GetSRObject(string name)
         {
             object resourceObject = null;
-            try { resourceObject = SR.ResourceManager.GetObject(name); }
+            try
+            { resourceObject = SR.ResourceManager.GetObject(name); }
             catch (System.Resources.MissingManifestResourceException) { }
             return resourceObject;
         }

@@ -3,7 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 
-namespace System.Windows.Forms.PropertyGridInternal {
+namespace System.Windows.Forms.PropertyGridInternal
+{
 
     using System.Diagnostics;
 
@@ -17,60 +18,75 @@ namespace System.Windows.Forms.PropertyGridInternal {
     using Microsoft.Win32;
     using System.Globalization;
 
-    internal class ArrayElementGridEntry : GridEntry {
+    internal class ArrayElementGridEntry : GridEntry
+    {
 
         protected int index;
 
 
         public ArrayElementGridEntry(PropertyGrid ownerGrid, GridEntry peParent, int index)
-        : base(ownerGrid, peParent) {
+        : base(ownerGrid, peParent)
+        {
             this.index = index;
             this.SetFlag(FLAG_RENDER_READONLY, (peParent.Flags & FLAG_RENDER_READONLY) != 0 || peParent.ForceReadOnly);
         }
 
-        
-        public override GridItemType GridItemType {
-            get {
+
+        public override GridItemType GridItemType
+        {
+            get
+            {
                 return GridItemType.ArrayValue;
             }
         }
 
 
-        public override bool IsValueEditable {
-            get{
+        public override bool IsValueEditable
+        {
+            get
+            {
                 return ParentGridEntry.IsValueEditable;
             }
         }
 
-        public override string PropertyLabel {
-            get {
+        public override string PropertyLabel
+        {
+            get
+            {
                 return "[" + index.ToString(CultureInfo.CurrentCulture) + "]";
             }
         }
 
 
 
-        public override Type PropertyType {
-            get {
+        public override Type PropertyType
+        {
+            get
+            {
                 return parentPE.PropertyType.GetElementType();
             }
         }
 
-        public override object PropertyValue {
-            get {
+        public override object PropertyValue
+        {
+            get
+            {
                 object owner = GetValueOwner();
                 Debug.Assert(owner is Array, "Owner is not array type!");
-                return((Array)owner).GetValue(index);
+                return ((Array)owner).GetValue(index);
             }
-            set {
+            set
+            {
                 object owner = GetValueOwner();
                 Debug.Assert(owner is Array, "Owner is not array type!");
-                ((Array)owner).SetValue(value,index);
+                ((Array)owner).SetValue(value, index);
             }
         }
 
-        public override bool ShouldRenderReadOnly {
-            get {
+        public override bool ShouldRenderReadOnly
+        {
+            get
+            {
                 return ParentGridEntry.ShouldRenderReadOnly;
             }
         }
@@ -100,6 +116,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
         public override bool CanSetReadOnlyPropertyValue() {
            return this.ParentGridEntry.CanSetReadOnlyPropertyValue();
         }*/
-       
+
     }
 }

@@ -188,7 +188,7 @@ namespace System.Windows.Forms
                 else
                 {
                     nameOfControl += "Unknown";
-                    
+
                     // Add some extra debug info for ToolStripDropDowns.
                     if (c is ToolStripDropDown dd && dd.OwnerItem != null)
                     {
@@ -428,7 +428,7 @@ namespace System.Windows.Forms
                     _current++;
                     return true;
                 }
-                
+
                 return false;
             }
 
@@ -531,7 +531,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfType, _typeOfControl.Name)), value.GetType().Name);
                 }
-    
+
                 base.Add(value);
             }
         }

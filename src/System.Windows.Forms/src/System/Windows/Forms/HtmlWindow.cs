@@ -181,7 +181,7 @@ namespace System.Windows.Forms
 
         public Uri Url
         {
-            get 
+            get
             {
                 UnsafeNativeMethods.IHTMLLocation iHtmlLocation = this.NativeHtmlWindow.GetLocation();
                 string stringLocation = (iHtmlLocation == null) ? "" : iHtmlLocation.GetHref();
@@ -447,7 +447,7 @@ namespace System.Windows.Forms
                 FireEvent(HtmlWindow.EventScroll, e);
             }
 
-            public void onresize(UnsafeNativeMethods.IHTMLEventObj evtObj) 
+            public void onresize(UnsafeNativeMethods.IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 FireEvent(HtmlWindow.EventResize, e);
@@ -460,9 +460,9 @@ namespace System.Windows.Forms
             }
 
             public void onbeforeunload(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void onbeforeprint(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
-            
+
             public void onafterprint(UnsafeNativeMethods.IHTMLEventObj evtObj) { }
         }
 
@@ -523,7 +523,7 @@ namespace System.Windows.Forms
                                                                               new HTMLWindowEvents2(htmlWindow),
                                                                               typeof(UnsafeNativeMethods.DHTMLWindowEvents2),
                                                                               /*throwException*/ false);
-                    if (!cookie.Connected) 
+                    if (!cookie.Connected)
                     {
                         cookie = null;
                     }
@@ -576,7 +576,7 @@ namespace System.Windows.Forms
             }
         }
 
-            #region operators
+        #region operators
 
         [SuppressMessage("Microsoft.Design", "CA1046:DoNotOverrideOperatorEqualsOnReferenceTypes")]
         public static bool operator ==(HtmlWindow left, HtmlWindow right)
@@ -629,7 +629,7 @@ namespace System.Windows.Forms
         {
             return (this == (HtmlWindow)obj);
         }
-            #endregion
+        #endregion
 
     }
 }
