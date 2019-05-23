@@ -272,12 +272,12 @@ namespace System.Drawing.Design.Tests
             {
                 Filter = value
             };
-            Assert.Equal(expected , item.Filter);
+            Assert.Equal(expected, item.Filter);
             Assert.Equal(expected, item.Properties["Filter"]);
 
             // Set same.
             item.Filter = value;
-            Assert.Equal(expected , item.Filter);
+            Assert.Equal(expected, item.Filter);
             Assert.Equal(expected, item.Properties["Filter"]);
         }
 
@@ -296,12 +296,12 @@ namespace System.Drawing.Design.Tests
             {
                 IsTransient = value
             };
-            Assert.Equal(value , item.IsTransient);
+            Assert.Equal(value, item.IsTransient);
             Assert.Equal(value, item.Properties["IsTransient"]);
 
             // Set same.
             item.IsTransient = value;
-            Assert.Equal(value , item.IsTransient);
+            Assert.Equal(value, item.IsTransient);
             Assert.Equal(value, item.Properties["IsTransient"]);
         }
 
@@ -1544,7 +1544,7 @@ namespace System.Drawing.Design.Tests
             yield return new object[] { "TypeName", null, string.Empty };
             yield return new object[] { "TypeName", "value", "value" };
 
-            var filter = new ToolboxItemFilterAttribute("filter");    
+            var filter = new ToolboxItemFilterAttribute("filter");
             yield return new object[] { "Filter", null, new ToolboxItemFilterAttribute[0] };
             yield return new object[] { "Filter", new ToolboxItemFilterAttribute[0], new ToolboxItemFilterAttribute[0] };
             yield return new object[] { "Filter", new object[] { null, "value", filter, filter }, new ToolboxItemFilterAttribute[] { filter, filter } };
@@ -1637,7 +1637,7 @@ namespace System.Drawing.Design.Tests
             {
                 return base.CreateComponentsCore(host, defaultValues);
             }
-            
+
             public new object FilterPropertyValue(string propertyName, object value)
             {
                 return base.FilterPropertyValue(propertyName, value);

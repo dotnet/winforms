@@ -217,7 +217,7 @@ namespace System.ComponentModel.Design.Tests
                 callCount++;
             };
             service.DesignerActionListsChanged += handler;
-            
+
             service.Clear();
             Assert.Equal(2, callCount);
 
@@ -694,7 +694,7 @@ namespace System.ComponentModel.Design.Tests
                 callCount++;
             };
             service.DesignerActionListsChanged += handler;
-            
+
             service.Remove(component1);
             Assert.False(service.Contains(component1));
             Assert.Equal(1, callCount);
@@ -776,7 +776,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.True(service.Contains(component2));
             Assert.True(service.Contains(component3));
             Assert.True(service.Contains(component4));
-            
+
             // Remove across multiple components.
             service.Remove(actionList3);
             Assert.Empty(service.GetComponentActions(component1));
@@ -872,7 +872,7 @@ namespace System.ComponentModel.Design.Tests
                 callCount++;
             };
             service.DesignerActionListsChanged += handler;
-            
+
             service.Remove(actionList1);
             Assert.False(service.Contains(component1));
             Assert.Equal(1, callCount);
@@ -939,7 +939,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.True(service.Contains(component2));
             Assert.True(service.Contains(component3));
             Assert.True(service.Contains(component4));
-            
+
             // Remove across multiple components.
             service.Remove(component2, actionList3);
             Assert.Empty(service.GetComponentActions(component1));
@@ -1002,7 +1002,7 @@ namespace System.ComponentModel.Design.Tests
                 callCount++;
             };
             service.DesignerActionListsChanged += handler;
-            
+
             service.Remove(component1, actionList1);
             Assert.False(service.Contains(component1));
             Assert.Equal(1, callCount);
@@ -1053,7 +1053,7 @@ namespace System.ComponentModel.Design.Tests
                 base.GetComponentServiceActions(component, actionLists);
             }
         }
-        
+
         private class CustomDesignerActionList : DesignerActionList
         {
             public CustomDesignerActionList(IComponent component) : base(component)
