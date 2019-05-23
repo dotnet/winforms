@@ -13,11 +13,11 @@ namespace System.Windows.Forms.Func.Tests
 
         public string GetPathToTestFromBin()
         {
-            string buildType = "Release"; 
+            string buildType = "Release";
 
-            #if DEBUG
-                buildType = "Debug";
-            #endif
+#if DEBUG
+            buildType = "Debug";
+#endif
 
             return "WinformsControlsTest\\" + buildType + "\\netcoreapp3.0\\WinformsControlsTest.exe";
         }

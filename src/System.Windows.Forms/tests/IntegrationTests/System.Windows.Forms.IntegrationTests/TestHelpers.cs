@@ -8,9 +8,9 @@ using System.IO;
 using System.Reflection;
 
 namespace System.Windows.Forms.Func.Tests
-{ 
+{
     public class TestHelpers
-    {       
+    {
 
         /// <summary>
         /// Calls StartProcess for the ProcessStartInfo containing the bin path of this directory plus the given byPathFromBinToExe; also ensures that repo\.dotnet\dotnet.exe exists
@@ -24,7 +24,7 @@ namespace System.Windows.Forms.Func.Tests
         /// <returns>The new Process</returns>
         public static Process StartProcess(string byPathFromBinToExe)
         {
-            if(byPathFromBinToExe == null)
+            if (byPathFromBinToExe == null)
             {
                 throw new ArgumentNullException(nameof(byPathFromBinToExe));
             }
@@ -34,10 +34,10 @@ namespace System.Windows.Forms.Func.Tests
                 throw new ArgumentException(nameof(byPathFromBinToExe) + " must end in a .exe");
             }
 
-            var dotnetPath = DotNetPath();	
-            if (!Directory.Exists(dotnetPath))	
-            {	
-                throw new DirectoryNotFoundException(dotnetPath + " directory cannot be found.");	
+            var dotnetPath = DotNetPath();
+            if (!Directory.Exists(dotnetPath))
+            {
+                throw new DirectoryNotFoundException(dotnetPath + " directory cannot be found.");
             }
 
             ProcessStartInfo startInfo = new ProcessStartInfo();
@@ -95,7 +95,7 @@ namespace System.Windows.Forms.Func.Tests
         /// <returns>The path as a string; example: example:\Project\bin\ given "bin" if bin is present in the path</returns>
         public static string RelativePathForwardTo(string stop)
         {
-            if(string.IsNullOrEmpty(stop))
+            if (string.IsNullOrEmpty(stop))
             {
                 throw new ArgumentException(nameof(stop) + " must not be null or empty.");
             }
@@ -147,7 +147,7 @@ namespace System.Windows.Forms.Func.Tests
                 }
                 currentDirectory = Directory.GetParent(currentDirectory).FullName;
             }
-            throw new DirectoryNotFoundException($"No {seek} folder was found among siblings of subfolders of {codeBasePath}.");           
+            throw new DirectoryNotFoundException($"No {seek} folder was found among siblings of subfolders of {codeBasePath}.");
         }
 
         /// <summary>
@@ -274,7 +274,7 @@ namespace System.Windows.Forms.Func.Tests
 
             if (handle.Equals(ExternalTestHelpers.TryGetForegroundWindow()))
             {
-                SendKeys.SendWait(keys);             
+                SendKeys.SendWait(keys);
 
                 Thread.Sleep(200);
 
