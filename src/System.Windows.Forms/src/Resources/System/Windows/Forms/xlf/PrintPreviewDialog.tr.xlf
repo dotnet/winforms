@@ -189,17 +189,17 @@
       </trans-unit>
       <trans-unit id="toolStripMenuItem4.AccessibleDescription">
         <source>100%</source>
-        <target state="translated">100%</target>
+        <target state="translated">%100</target>
         <note />
       </trans-unit>
       <trans-unit id="toolStripMenuItem4.AccessibleName">
         <source>100%</source>
-        <target state="translated">100%</target>
+        <target state="translated">%100</target>
         <note />
       </trans-unit>
       <trans-unit id="toolStripMenuItem4.Text">
         <source>100%</source>
-        <target state="translated">100%</target>
+        <target state="translated">%100</target>
         <note />
       </trans-unit>
       <trans-unit id="toolStripMenuItem5.AccessibleDescription">
