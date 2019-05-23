@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Tests
         public void Application_EnableVisualStyles_GetUseVisualStyles_ReturnsTrue()
         {
             Application.EnableVisualStyles();
-            Assert.True(Application.UseVisualStyles, "New Visual Styles will not be applied on Winforms app. This is a high priority bug and must be looked into");            
+            Assert.True(Application.UseVisualStyles, "New Visual Styles will not be applied on Winforms app. This is a high priority bug and must be looked into");
         }
 
         [Fact]

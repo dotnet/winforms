@@ -703,7 +703,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, menuItem.ShowShortcut);
         }
-        
+
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void MenuItem_ShowShortcut_SetCreated_GetReturnsExpected(bool value)
@@ -736,7 +736,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, menuItem.Shortcut);
         }
-        
+
         [Theory]
         [InlineData(Shortcut.None)]
         [InlineData(Shortcut.Ctrl0)]
@@ -1098,7 +1098,7 @@ namespace System.Windows.Forms.Tests
         public void MenuItem_OnPopup_MdiChildrenWithoutParent_DoesNotAddSeparator()
         {
             var menuItem = new SubMenuItem("text", new MenuItem[] { new MenuItem("child") }) { MdiList = true };
-            
+
             menuItem.OnPopup(null);
             Assert.Equal(new string[] { "child" }, menuItem.MenuItems.Cast<MenuItem>().Select(m => m.Text));
 
@@ -1141,7 +1141,7 @@ namespace System.Windows.Forms.Tests
             formWithManyMdiChildrenClient.Controls.Add(new Form { MdiParent = formWithManyMdiChildren, Visible = true, Text = "Form9" });
             formWithManyMdiChildrenClient.Controls.Add(new Form { MdiParent = formWithManyMdiChildren, Visible = true, Text = "Form10" });
             yield return new object[] { new SubMenuItem("text", new MenuItem[] { new MenuItem("child") }) { MdiList = true }, formWithManyMdiChildren.Menu, new string[] { "child", "-", "&1 Form1", "&2 Form1", "&3 Form2", "&4 Form2", "&5 Form3", "&6 Form3", "&7 Form4", "&8 Form4", "&9 Form10", "&10 Form10", "&More Windows..." } };
-            
+
             var formWithActiveMdiChildren = new SubForm { Menu = new MainMenu(), Visible = true };
             var formWithActiveMdiChildrenClient = new MdiClient();
             formWithActiveMdiChildren.Controls.Add(formWithActiveMdiChildrenClient);

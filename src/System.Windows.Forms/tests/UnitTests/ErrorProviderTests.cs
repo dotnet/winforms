@@ -18,7 +18,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(ep);
             Assert.NotNull(ep.Icon);
         }
-        
+
         [Fact]
         public void ErrorProvider_ConstructorContainerControl()
         {
@@ -29,7 +29,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(ep);
             Assert.NotNull(ep.Icon);
         }
-        
+
         [Fact]
         public void ErrorProvider_ConstructorIContainer()
         {

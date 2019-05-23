@@ -758,7 +758,7 @@ namespace System.Windows.Forms.Tests
             {
                 BindingContext = context
             };
-            
+
             control.DataSource = value;
             Assert.Same(value, control.DataSource);
             Assert.Empty(control.DisplayMember);
@@ -795,7 +795,7 @@ namespace System.Windows.Forms.Tests
                 BindingContext = context,
                 DataSource = new List<int>()
             };
-            
+
             control.DataSource = value;
             Assert.Same(value, control.DataSource);
             Assert.Empty(control.DisplayMember);
@@ -832,7 +832,7 @@ namespace System.Windows.Forms.Tests
                 BindingContext = context,
                 DisplayMember = "Value"
             };
-    
+
             control.DataSource = value;
             Assert.Same(value, control.DataSource);
             Assert.Equal("Value", control.DisplayMember);
@@ -1035,7 +1035,7 @@ namespace System.Windows.Forms.Tests
             {
                 BindingContext = context
             };
-            
+
             control.DisplayMember = value;
             Assert.Same(expected, control.DisplayMember);
             Assert.Null(control.DataSource);
@@ -1059,7 +1059,7 @@ namespace System.Windows.Forms.Tests
                 BindingContext = context,
                 DataSource = dataSource
             };
-            
+
             control.DisplayMember = value;
             Assert.Empty(control.DisplayMember);
             Assert.Same(dataSource, control.DataSource);
@@ -1086,7 +1086,7 @@ namespace System.Windows.Forms.Tests
                 BindingContext = context,
                 DataSource = dataSource
             };
-    
+
             control.DisplayMember = value;
             Assert.Equal(expected, control.DisplayMember);
             Assert.Equal(dataSource, control.DataSource);
@@ -1782,9 +1782,9 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> SelectedValue_NoMatchingValue_TestData()
         {
             yield return new object[] { new List<DataClass>(), "selected" };
-            yield return new object[] { new List<DataClass> { new DataClass { Value = "NoSuchValue" }}, string.Empty };
-            yield return new object[] { new List<DataClass> { new DataClass { Value = "NoSuchValue" }}, "selected" };
-            yield return new object[] { new List<DataClass> { new DataClass { Value = "NoSuchValue" }}, "nosuchvalue" };
+            yield return new object[] { new List<DataClass> { new DataClass { Value = "NoSuchValue" } }, string.Empty };
+            yield return new object[] { new List<DataClass> { new DataClass { Value = "NoSuchValue" } }, "selected" };
+            yield return new object[] { new List<DataClass> { new DataClass { Value = "NoSuchValue" } }, "nosuchvalue" };
         }
 
         [Theory]
@@ -1916,7 +1916,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.SelectedIndex);
             Assert.Throws<IndexOutOfRangeException>(() => control.SelectedValue);
         }
- 
+
         [Theory]
         [InlineData(Keys.Alt, false)]
         [InlineData(Keys.Alt | Keys.PageUp, false)]
@@ -2745,7 +2745,7 @@ namespace System.Windows.Forms.Tests
             public new void OnBindingContextChanged(EventArgs e) => base.OnBindingContextChanged(e);
 
             public new void OnDataSourceChanged(EventArgs e) => base.OnDataSourceChanged(e);
-            
+
             public new void OnDisplayMemberChanged(EventArgs e) => base.OnDisplayMemberChanged(e);
 
             public new void OnFormat(ListControlConvertEventArgs e) => base.OnFormat(e);

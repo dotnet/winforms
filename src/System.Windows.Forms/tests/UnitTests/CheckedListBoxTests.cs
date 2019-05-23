@@ -15,7 +15,7 @@ namespace System.Windows.Forms.Tests
         {
             var box = new CheckedListBox();
 
-            Assert.NotNull(box);   
+            Assert.NotNull(box);
         }
 
         /// <summary>
@@ -224,7 +224,7 @@ namespace System.Windows.Forms.Tests
             var box = new CheckedListBox();
             box.Items.Add(new CheckBox(), false);
 
-            var ex = Assert.Throws<InvalidEnumArgumentException>(() => box.SetItemCheckState(0,expected));
+            var ex = Assert.Throws<InvalidEnumArgumentException>(() => box.SetItemCheckState(0, expected));
             Assert.Equal("value", ex.ParamName);
         }
 

@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(ts.TabStop);
             Assert.False(ts.MenuAutoExpand);
             Assert.NotNull(ToolStripManager.ToolStrips);
-            Assert.True(ToolStripManager.ToolStrips.Contains(ts));            
+            Assert.True(ToolStripManager.ToolStrips.Contains(ts));
             Assert.True(ts.AutoSize);
             Assert.False(ts.CausesValidation);
             Assert.Equal(100, ts.Size.Width);

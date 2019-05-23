@@ -567,7 +567,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> ErrorText_GetNeedsErrorText_TestData()
         {
             yield return new object[] { new DataGridView { ColumnCount = 1, VirtualMode = true } };
-            
+
             var bound = new DataGridView { DataSource = new[] { new { Name = "Name" } } };
             new Form().Controls.Add(bound);
             Assert.NotNull(bound.BindingContext);
@@ -790,7 +790,7 @@ namespace System.Windows.Forms.Tests
         }
 
         public static IEnumerable<object[]> HeaderCell_Get_TestData()
-        {   
+        {
             yield return new object[] { new DataGridViewRow() };
 
             var dataGridView = new DataGridView { ColumnCount = 1 };
@@ -951,7 +951,7 @@ namespace System.Windows.Forms.Tests
                 22, 0, 22
             };
             yield return new object[] { new DataGridView { ColumnCount = 1, VirtualMode = true }, 6, 1, 5 };
-            
+
             var bound = new DataGridView { DataSource = new[] { new { Name = "Name" } } };
             new Form().Controls.Add(bound);
             Assert.NotNull(bound.BindingContext);
@@ -993,7 +993,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new DataGridViewRow(), 1, 3 };
             yield return new object[] { new DataGridViewRow(), 3, 3 };
             yield return new object[] { new DataGridViewRow(), 4, 4 };
-            
+
             var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             yield return new object[] { dataGridView.Rows[0], 65536, 65536 };
@@ -1262,7 +1262,7 @@ namespace System.Windows.Forms.Tests
                 5, 0
             };
             yield return new object[] { new DataGridView { ColumnCount = 1, VirtualMode = true }, 6, 1 };
-            
+
             var bound = new DataGridView { DataSource = new[] { new { Name = "Name" } } };
             new Form().Controls.Add(bound);
             Assert.NotNull(bound.BindingContext);
@@ -1303,7 +1303,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new DataGridViewRow(), 3, 10 };
             yield return new object[] { new DataGridViewRow(), 10, 10 };
             yield return new object[] { new DataGridViewRow(), 11, 11 };
-            
+
             var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             yield return new object[] { dataGridView.Rows[0], 65536, 65536 };
@@ -1401,7 +1401,7 @@ namespace System.Windows.Forms.Tests
         {
             Assert.Equal(expected, row.ReadOnly);
         }
-        
+
         [Theory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_ReadOnly_GetShared_ThrowsInvalidOperationException(DataGridViewRow row)
@@ -1487,7 +1487,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(row.ReadOnly);
             Assert.Equal(2, callCount);
         }
-        
+
         [Theory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_ReadOnly_SetShared_ThrowsInvalidOperationException(DataGridViewRow row)
@@ -1514,7 +1514,7 @@ namespace System.Windows.Forms.Tests
         {
             Assert.Equal(expected, row.Resizable);
         }
-        
+
         [Theory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_Resizable_GetShared_ThrowsInvalidOperationException(DataGridViewRow row)
@@ -1615,7 +1615,7 @@ namespace System.Windows.Forms.Tests
         {
             Assert.Equal(expected, row.Selected);
         }
-        
+
         [Theory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_Selected_GetShared_ThrowsInvalidOperationException(DataGridViewRow row)
@@ -1633,7 +1633,7 @@ namespace System.Windows.Forms.Tests
             row.Selected = false;
             Assert.False(row.Selected);
         }
-        
+
         [Theory]
         [InlineData(DataGridViewSelectionMode.CellSelect, false)]
         [InlineData(DataGridViewSelectionMode.FullRowSelect, true)]
@@ -1734,7 +1734,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(row1.Selected);
             Assert.False(row2.Selected);
         }
-        
+
         [Theory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_Selected_SetShared_ThrowsInvalidOperationException(DataGridViewRow row)
@@ -1758,7 +1758,7 @@ namespace System.Windows.Forms.Tests
         {
             Assert.Equal(expected, row.State);
         }
-        
+
         [Theory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_State_GetShared_ThrowsInvalidOperationException(DataGridViewRow row)
@@ -1833,7 +1833,7 @@ namespace System.Windows.Forms.Tests
         {
             Assert.Equal(expected, row.Visible);
         }
-        
+
         [Theory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_Visible_GetShared_ThrowsInvalidOperationException(DataGridViewRow row)
@@ -1914,11 +1914,11 @@ namespace System.Windows.Forms.Tests
 
             Assert.Throws<InvalidOperationException>(() => row.Visible = false);
             Assert.True(row.Visible);
-            
+
             row.Visible = true;
             Assert.True(row.Visible);
         }
-        
+
         [Theory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_Visible_SetShared_ThrowsInvalidOperationException(DataGridViewRow row)
@@ -2735,7 +2735,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> GetContextMenuStrip_NeedsContextMenuStrip_TestData()
         {
             yield return new object[] { new DataGridView { ColumnCount = 1, VirtualMode = true } };
-            
+
             var bound = new DataGridView { DataSource = new[] { new { Name = "Name" } } };
             new Form().Controls.Add(bound);
             Assert.NotNull(bound.BindingContext);
@@ -2821,7 +2821,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> GetErrorText_NeedsErrorText_TestData()
         {
             yield return new object[] { new DataGridView { ColumnCount = 1, VirtualMode = true } };
-            
+
             var bound = new DataGridView { DataSource = new[] { new { Name = "Name" } } };
             new Form().Controls.Add(bound);
             Assert.NotNull(bound.BindingContext);
@@ -2877,7 +2877,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> GetState_TestData()
         {
             yield return new object[] { new DataGridViewRow(), -1, DataGridViewElementStates.Visible };
-            
+
             var dataGridView = new DataGridView();
             dataGridView.Columns.Add("Column", "Text");
             dataGridView.Rows.Add(new SubDataGridViewRow());
@@ -2925,7 +2925,7 @@ namespace System.Windows.Forms.Tests
             headersInvisibleDataGridView.Rows.Add(new DataGridViewRow());
 
             yield return new object[] { headersInvisibleDataGridView.Rows[1], Rectangle.Empty, new Rectangle(1, 2, 100, 100), -1, DataGridViewElementStates.None, true, true, DataGridViewPaintParts.All };
-        
+
             var frozenDataGridView = new DataGridView { ColumnCount = 1 };
             frozenDataGridView.Rows.Add(new DataGridViewRow());
             frozenDataGridView.Columns[0].Frozen = true;
@@ -2935,7 +2935,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { frozenDataGridView.Rows[1], new Rectangle(1, 2, 100, 100), new Rectangle(1, 2, 100, 100), 0, DataGridViewElementStates.Displayed | DataGridViewElementStates.Displayed, false, true, DataGridViewPaintParts.None };
             yield return new object[] { frozenDataGridView.Rows[1], new Rectangle(1000, 2000, 100, 100), new Rectangle(1, 2, 100, 100), 1, DataGridViewElementStates.Displayed | DataGridViewElementStates.Displayed, true, false, DataGridViewPaintParts.All };
             yield return new object[] { frozenDataGridView.Rows[1], new Rectangle(1, 2, 100, 100), new Rectangle(1, 2, 1000, 1000), 1, DataGridViewElementStates.Displayed | DataGridViewElementStates.Displayed, true, false, DataGridViewPaintParts.All };
-        
+
             var leftToRightDataGridView = new DataGridView { ColumnCount = 1, RightToLeft = RightToLeft.Yes };
             leftToRightDataGridView.Rows.Add(new DataGridViewRow());
             leftToRightDataGridView.Columns[0].Frozen = true;
@@ -2945,7 +2945,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { leftToRightDataGridView.Rows[1], new Rectangle(1, 2, 100, 100), new Rectangle(1, 2, 100, 100), 0, DataGridViewElementStates.Displayed | DataGridViewElementStates.Displayed, false, true, DataGridViewPaintParts.None };
             yield return new object[] { leftToRightDataGridView.Rows[1], new Rectangle(1000, 2000, 100, 100), new Rectangle(1, 2, 100, 100), 1, DataGridViewElementStates.Displayed | DataGridViewElementStates.Displayed, true, false, DataGridViewPaintParts.All };
             yield return new object[] { leftToRightDataGridView.Rows[1], new Rectangle(1, 2, 100, 100), new Rectangle(1, 2, 1000, 1000), 1, DataGridViewElementStates.Displayed | DataGridViewElementStates.Displayed, true, false, DataGridViewPaintParts.All };
-        
+
             var singleVerticalBorderAddedDataGridView = new DataGridView { ColumnCount = 1, RowHeadersVisible = false };
             singleVerticalBorderAddedDataGridView.Rows.Add(new DataGridViewRow());
             singleVerticalBorderAddedDataGridView.Columns[0].Frozen = true;
@@ -2955,7 +2955,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { singleVerticalBorderAddedDataGridView.Rows[1], new Rectangle(1, 2, 100, 100), new Rectangle(1, 2, 100, 100), 0, DataGridViewElementStates.Displayed | DataGridViewElementStates.Displayed, false, true, DataGridViewPaintParts.None };
             yield return new object[] { singleVerticalBorderAddedDataGridView.Rows[1], new Rectangle(1000, 2000, 100, 100), new Rectangle(1, 2, 100, 100), 1, DataGridViewElementStates.Displayed | DataGridViewElementStates.Displayed, true, false, DataGridViewPaintParts.All };
             yield return new object[] { singleVerticalBorderAddedDataGridView.Rows[1], new Rectangle(1, 2, 100, 100), new Rectangle(1, 2, 1000, 1000), 1, DataGridViewElementStates.Displayed | DataGridViewElementStates.Displayed, true, false, DataGridViewPaintParts.All };
-        
+
             var singleHorizontalBorderAddedDataGridView = new DataGridView { ColumnCount = 1, ColumnHeadersVisible = false };
             singleHorizontalBorderAddedDataGridView.Rows.Add(new DataGridViewRow());
             singleHorizontalBorderAddedDataGridView.Columns[0].Frozen = true;

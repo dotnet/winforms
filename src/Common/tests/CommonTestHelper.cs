@@ -287,7 +287,7 @@ namespace WinForms.Common.Tests
         }
 
         public static TheoryData<Point> GetPointTheoryData() => GetPointTheoryData(TestIncludeType.All);
-        
+
         public static TheoryData<Point> GetPointTheoryData(TestIncludeType includeType)
         {
             var data = new TheoryData<Point>();
@@ -313,7 +313,7 @@ namespace WinForms.Common.Tests
             if (!includeType.HasFlag(TestIncludeType.NoPositives))
             {
                 data.Add(new Size());
-                data.Add(new Size(new Point(1,1)));
+                data.Add(new Size(new Point(1, 1)));
                 data.Add(new Size(1, 2));
             }
             if (!includeType.HasFlag(TestIncludeType.NoNegatives))

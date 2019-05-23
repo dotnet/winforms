@@ -19,8 +19,8 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotNull(bn);
         }
-        
-       [Fact]
+
+        [Fact]
         public void BindingNavigator_ConstructorBindingSource()
         {
             var bindingSource = new BindingSource();
@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotNull(bn);
             Assert.Equal(bindingSource, bn.BindingSource);
-            
+
             // need more thorough binding source testing
         }
 
@@ -50,7 +50,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(bn);
             mockContainer.Verify(x => x.Add(bn));
         }
-        
+
         [Fact]
         public void BindingNavigator_ConstructorBool()
         {
@@ -98,7 +98,7 @@ namespace System.Windows.Forms.Tests
                 SR.BindingNavigatorDeleteItemText
             };
 
-            for (var i=0; i<items.Count; i++)
+            for (var i = 0; i < items.Count; i++)
             {
                 var item = items[i];
                 Assert.NotNull(item);

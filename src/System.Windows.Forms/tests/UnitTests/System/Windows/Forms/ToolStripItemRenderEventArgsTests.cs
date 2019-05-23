@@ -17,7 +17,7 @@ namespace System.Windows.Forms.Tests
 
             yield return new object[] { null, null, null };
             yield return new object[] { graphics, new ToolStripButton(), null };
-            
+
             var toolStripItem = new ToolStripButton();
             var toolStrip = new ToolStrip();
             toolStrip.Items.Add(toolStripItem);

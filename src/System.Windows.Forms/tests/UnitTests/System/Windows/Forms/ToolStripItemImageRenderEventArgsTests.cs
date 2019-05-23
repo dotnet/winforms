@@ -26,14 +26,14 @@ namespace System.Windows.Forms.Tests
                     Image = image
                 }, new Rectangle(1, 2, 3, 4)
             };
-                yield return new object[]
-            {
+            yield return new object[]
+        {
                 graphics, new ToolStripButton
                 {
                     RightToLeftAutoMirrorImage = true,
                     Image = image
                 }, new Rectangle(1, 2, 3, 4)
-            };
+        };
             yield return new object[]
             {
                 graphics, new ToolStripButton

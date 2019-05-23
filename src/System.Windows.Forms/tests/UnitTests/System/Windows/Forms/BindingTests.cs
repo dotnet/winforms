@@ -73,7 +73,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> Ctor_String_Object_String_Bool_DataSourceUpdateMode_TestData()
         {
             yield return new object[] { null, null, null, true, DataSourceUpdateMode.OnValidation };
-            yield return new object[] { string.Empty, new object(), string.Empty, true, DataSourceUpdateMode.OnValidation -1 };
+            yield return new object[] { string.Empty, new object(), string.Empty, true, DataSourceUpdateMode.OnValidation - 1 };
             yield return new object[] { "propertyName", new object(), "dataMember", false, DataSourceUpdateMode.Never };
             yield return new object[] { "propertyName", new object(), "dataMember.subDataMember", false, DataSourceUpdateMode.Never + 1 };
         }
@@ -102,7 +102,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> Ctor_String_Object_String_Bool_DataSourceUpdateMode_Object_TestData()
         {
             yield return new object[] { null, null, null, true, DataSourceUpdateMode.OnValidation, null };
-            yield return new object[] { string.Empty, new object(), string.Empty, true, DataSourceUpdateMode.OnValidation -1, DBNull.Value };
+            yield return new object[] { string.Empty, new object(), string.Empty, true, DataSourceUpdateMode.OnValidation - 1, DBNull.Value };
             yield return new object[] { "propertyName", new object(), "dataMember", false, DataSourceUpdateMode.Never, new object() };
             yield return new object[] { "propertyName", new object(), "dataMember.subDataMember", false, DataSourceUpdateMode.Never + 1, new object() };
         }
@@ -131,7 +131,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> Ctor_String_Object_String_Bool_DataSourceUpdateMode_Object_String_TestData()
         {
             yield return new object[] { null, null, null, true, DataSourceUpdateMode.OnValidation, null, null };
-            yield return new object[] { string.Empty, new object(), string.Empty, true, DataSourceUpdateMode.OnValidation -1, DBNull.Value, string.Empty };
+            yield return new object[] { string.Empty, new object(), string.Empty, true, DataSourceUpdateMode.OnValidation - 1, DBNull.Value, string.Empty };
             yield return new object[] { "propertyName", new object(), "dataMember", false, DataSourceUpdateMode.Never, new object(), "formatString" };
             yield return new object[] { "propertyName", new object(), "dataMember.subDataMember", false, DataSourceUpdateMode.Never + 1, new object(), "formatString" };
         }
@@ -160,7 +160,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> Ctor_String_Object_String_Bool_DataSourceUpdateMode_Object_String_IFormatProvider_TestData()
         {
             yield return new object[] { null, null, null, true, DataSourceUpdateMode.OnValidation, null, null, null };
-            yield return new object[] { string.Empty, new object(), string.Empty, true, DataSourceUpdateMode.OnValidation -1, DBNull.Value, string.Empty, CultureInfo.CurrentCulture };
+            yield return new object[] { string.Empty, new object(), string.Empty, true, DataSourceUpdateMode.OnValidation - 1, DBNull.Value, string.Empty, CultureInfo.CurrentCulture };
             yield return new object[] { "propertyName", new object(), "dataMember", false, DataSourceUpdateMode.Never, new object(), "formatString", CultureInfo.InvariantCulture };
             yield return new object[] { "propertyName", new object(), "dataMember.subDataMember", false, DataSourceUpdateMode.Never + 1, new object(), "formatString", CultureInfo.CurrentCulture };
         }

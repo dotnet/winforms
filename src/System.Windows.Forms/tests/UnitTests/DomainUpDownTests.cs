@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Tests
         public void DomainUpDown_Constructor()
         {
             var underTest = GetNewDomainUpDown();
-            
+
             Assert.NotNull(underTest);
             Assert.False(underTest.AllowDrop);
             Assert.False(underTest.Wrap);
@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(indexAfterSet, underTest.SelectedIndex);
             Assert.Equal(value, underTest.SelectedItem);
         }
-        
+
         [Fact]
         public void DomainUpDown_SelectedIndex_ArgumentOutOfRangeException()
         {
@@ -108,7 +108,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, actual);
         }
 
-        private DomainUpDown GetNewDomainUpDown(bool sorted = false) {
+        private DomainUpDown GetNewDomainUpDown(bool sorted = false)
+        {
             var domainUpDown = new DomainUpDown();
             domainUpDown.Sorted = sorted;
             var items = domainUpDown.Items;

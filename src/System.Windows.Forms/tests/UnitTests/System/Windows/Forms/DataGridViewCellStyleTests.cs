@@ -845,7 +845,7 @@ namespace System.Windows.Forms.Tests
             var formatProvider = new NumberFormatInfo();
 
             yield return new object[] { new DataGridViewCellStyle(), new DataGridViewCellStyle(), true };
-            
+
             yield return new object[]
             {
                 new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.BottomCenter },

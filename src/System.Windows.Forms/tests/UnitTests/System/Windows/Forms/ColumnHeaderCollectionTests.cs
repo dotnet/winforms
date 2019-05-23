@@ -112,7 +112,7 @@ namespace System.Windows.Forms.Tests
             header2.Name = "text";
             collection.Add(header1);
             collection.Add(header2);
-            
+
             Assert.Equal(expectedIndex != -1 ? collection[expectedIndex] : null, collection[key]);
         }
 
@@ -520,7 +520,7 @@ namespace System.Windows.Forms.Tests
             var collection = new ListView.ColumnHeaderCollection(listView);
             var header = new ColumnHeader();
             collection.Add(header);
-            
+
             Assert.True(collection.Contains(header));
             Assert.False(collection.Contains(new ColumnHeader()));
             Assert.False(collection.Contains(null));
@@ -531,7 +531,7 @@ namespace System.Windows.Forms.Tests
         {
             var listView = new ListView();
             var collection = new ListView.ColumnHeaderCollection(listView);
-            
+
             Assert.False(collection.Contains(new ColumnHeader()));
             Assert.False(collection.Contains(null));
         }
@@ -553,7 +553,7 @@ namespace System.Windows.Forms.Tests
             header2.Name = "text";
             collection.Add(header1);
             collection.Add(header2);
-            
+
             Assert.Equal(expected, collection.ContainsKey(key));
         }
 
@@ -562,7 +562,7 @@ namespace System.Windows.Forms.Tests
         {
             var listView = new ListView();
             var collection = new ListView.ColumnHeaderCollection(listView);
-            
+
             Assert.False(collection.ContainsKey("text"));
             Assert.False(collection.ContainsKey(null));
         }
@@ -574,7 +574,7 @@ namespace System.Windows.Forms.Tests
             IList collection = new ListView.ColumnHeaderCollection(listView);
             var header = new ColumnHeader();
             collection.Add(header);
-            
+
             Assert.True(collection.Contains(header));
             Assert.False(collection.Contains(new ColumnHeader()));
             Assert.False(collection.Contains(new object()));
@@ -586,7 +586,7 @@ namespace System.Windows.Forms.Tests
         {
             var listView = new ListView();
             IList collection = new ListView.ColumnHeaderCollection(listView);
-            
+
             Assert.False(collection.Contains(new ColumnHeader()));
             Assert.False(collection.Contains(new object()));
             Assert.False(collection.Contains(null));
@@ -599,7 +599,7 @@ namespace System.Windows.Forms.Tests
             var collection = new ListView.ColumnHeaderCollection(listView);
             var header = new ColumnHeader();
             collection.Add(header);
-            
+
             Assert.Equal(0, collection.IndexOf(header));
             Assert.Equal(-1, collection.IndexOf(new ColumnHeader()));
             Assert.Equal(-1, collection.IndexOf(null));
@@ -610,7 +610,7 @@ namespace System.Windows.Forms.Tests
         {
             var listView = new ListView();
             var collection = new ListView.ColumnHeaderCollection(listView);
-            
+
             Assert.Equal(-1, collection.IndexOf(new ColumnHeader()));
             Assert.Equal(-1, collection.IndexOf(null));
         }
@@ -632,7 +632,7 @@ namespace System.Windows.Forms.Tests
             header2.Name = "text";
             collection.Add(header1);
             collection.Add(header2);
-            
+
             Assert.Equal(expected, collection.IndexOfKey(key));
 
             // Call again to validate caching behaviour.
@@ -645,7 +645,7 @@ namespace System.Windows.Forms.Tests
         {
             var listView = new ListView();
             var collection = new ListView.ColumnHeaderCollection(listView);
-            
+
             Assert.Equal(-1, collection.IndexOfKey("text"));
             Assert.Equal(-1, collection.IndexOf(null));
         }
@@ -657,7 +657,7 @@ namespace System.Windows.Forms.Tests
             IList collection = new ListView.ColumnHeaderCollection(listView);
             var header = new ColumnHeader();
             collection.Add(header);
-            
+
             Assert.Equal(0, collection.IndexOf(header));
             Assert.Equal(-1, collection.IndexOf(new ColumnHeader()));
             Assert.Equal(-1, collection.IndexOf(new object()));
@@ -669,7 +669,7 @@ namespace System.Windows.Forms.Tests
         {
             var listView = new ListView();
             IList collection = new ListView.ColumnHeaderCollection(listView);
-            
+
             Assert.Equal(-1, collection.IndexOf(new ColumnHeader()));
             Assert.Equal(-1, collection.IndexOf(new object()));
             Assert.Equal(-1, collection.IndexOf(null));

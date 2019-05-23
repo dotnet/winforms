@@ -16,7 +16,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         public void DataGridViewCellsAccessibleObject_Ctor_Default(RightToLeft rightToLeft)
         {
             DataGridView dataGridView = new DataGridView();
-            
+
             dataGridView.RightToLeft = rightToLeft;
             dataGridView.ColumnCount = 4;
             dataGridView.Width = 85;
@@ -29,7 +29,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             AccessibleObject rr = dataGridView.AccessibilityObject; //it is necessary to be in time to initialize elements
 
             var accCellWidthSum = 0;
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 accCellWidthSum += dataGridView.Rows[0].Cells[i].AccessibilityObject.BoundingRectangle.Width;
             }

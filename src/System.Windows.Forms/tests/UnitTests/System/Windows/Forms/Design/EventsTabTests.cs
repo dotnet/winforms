@@ -130,7 +130,7 @@ namespace System.Windows.Forms.Design.Tests
                 .Returns(service);
             var tab = new EventsTab(mockServiceProvider.Object);
             Assert.Null(tab.GetDefaultProperty(obj));
-            
+
             service.OnActiveDesignerChanged(e);
             Assert.Equal(expected, tab.GetDefaultProperty(obj));
         }

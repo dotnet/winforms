@@ -96,7 +96,7 @@ namespace System.Windows.Forms.Tests
         private TypeConverter GetNewSpecialFolderEnumConverter()
         {
             PropertyDescriptor descriptor = TypeDescriptor.GetProperties(new FolderBrowserDialog()).Find(nameof(FolderBrowserDialog.RootFolder), ignoreCase: false);
-            return (TypeConverter)Activator.CreateInstance(descriptor.Converter.GetType(), new Type[] { typeof(Environment.SpecialFolder )});
+            return (TypeConverter)Activator.CreateInstance(descriptor.Converter.GetType(), new Type[] { typeof(Environment.SpecialFolder) });
         }
 
         private class CustomReflectionType

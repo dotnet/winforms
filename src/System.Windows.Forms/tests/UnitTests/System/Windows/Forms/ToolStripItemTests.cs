@@ -72,7 +72,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Ctor_String_Image_EventHandler_TestData()
         {
-            EventHandler onClick = (sender, e) => {};
+            EventHandler onClick = (sender, e) => { };
 
             yield return new object[] { null, null, null };
             yield return new object[] { string.Empty, new Bitmap(10, 10), onClick };
@@ -138,7 +138,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Ctor_String_Image_EventHandler_String_TestData()
         {
-            EventHandler onClick = (sender, e) => {};
+            EventHandler onClick = (sender, e) => { };
 
             yield return new object[] { null, null, null, null, string.Empty };
             yield return new object[] { string.Empty, new Bitmap(10, 10), onClick, string.Empty, string.Empty };
@@ -1140,7 +1140,7 @@ namespace System.Windows.Forms.Tests
             {
                 Parent = parent
             };
-            
+
             item.ForeColor = value;
             Assert.Equal(expected, item.ForeColor);
 
@@ -1437,10 +1437,10 @@ namespace System.Windows.Forms.Tests
         {
             foreach (Color color in new Color[] { Color.Empty, Color.Red })
             {
-            yield return new object[] { null, color };
-            yield return new object[] { new Bitmap(10, 10), color };
-            yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "nature24bits.gif")), color };
-            yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico")), color };
+                yield return new object[] { null, color };
+                yield return new object[] { new Bitmap(10, 10), color };
+                yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "nature24bits.gif")), color };
+                yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico")), color };
             }
         }
 
@@ -4103,7 +4103,7 @@ namespace System.Windows.Forms.Tests
         {
             yield return new object[] { new SubToolStripItem(), true };
             yield return new object[] { new CannotSelectToolStripItem(), false };
-            
+
             var toolStrip = new ToolStrip();
             var toolStripItem = new SubToolStripItem();
             toolStrip.Items.Add(toolStripItem);
@@ -4126,7 +4126,7 @@ namespace System.Windows.Forms.Tests
                 Parent = toolStripDropDown
             };
             yield return new object[] { toolStripDropDownParentItem, true };
-            
+
             var toolStripDropDownWithOwnerItemOwnerItem = new SubToolStripItem();
             var toolStripDropDownWithOwnerItem = new ToolStripDropDown
             {

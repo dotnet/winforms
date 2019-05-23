@@ -429,7 +429,7 @@ namespace System.Windows.Forms.Tests
         public void BindingContext_Item_GetIListDataSource_AddsToCollection()
         {
             var context = new BindingContext();
-            var dataSource = new List<int> { 1, 2, 3};
+            var dataSource = new List<int> { 1, 2, 3 };
             CurrencyManager manager = Assert.IsType<CurrencyManager>(context[dataSource]);
             Assert.Same(dataSource, manager.List);
             Assert.Equal(1, manager.Current);
@@ -443,7 +443,7 @@ namespace System.Windows.Forms.Tests
         public void BindingContext_Item_GetArrayDataSource_AddsToCollection()
         {
             var context = new BindingContext();
-            var dataSource = new int[] { 1, 2, 3};
+            var dataSource = new int[] { 1, 2, 3 };
             CurrencyManager manager = Assert.IsType<CurrencyManager>(context[dataSource]);
             Assert.Same(dataSource, manager.List);
             Assert.Equal(1, manager.Current);
@@ -457,7 +457,7 @@ namespace System.Windows.Forms.Tests
         public void BindingContext_Item_GetIListSourceDataSource_AddsToCollection()
         {
             var context = new BindingContext();
-            var dataSource = new List<int> { 1, 2, 3};
+            var dataSource = new List<int> { 1, 2, 3 };
             var mockIListSource = new Mock<IListSource>(MockBehavior.Strict);
             mockIListSource
                 .Setup(s => s.GetList())
@@ -584,7 +584,7 @@ namespace System.Windows.Forms.Tests
         public void BindingContext_Item_GetIListWithDataMemberReturningIList_AddsToCollection()
         {
             var context = new BindingContext();
-            var list = new List<int> { 1, 2, 3};
+            var list = new List<int> { 1, 2, 3 };
             var dataSource = new IListDataSource();
             dataSource.Property = list;
 
@@ -601,7 +601,7 @@ namespace System.Windows.Forms.Tests
         public void BindingContext_Item_GetIListWithDataMemberReturningNonIList_AddsToCollection()
         {
             var context = new BindingContext();
-            var list = new List<int> { 1, 2, 3};
+            var list = new List<int> { 1, 2, 3 };
             var dataSource = new ObjectDataSource();
             dataSource.Property = list;
 
@@ -617,7 +617,7 @@ namespace System.Windows.Forms.Tests
         public void BindingContext_Item_GetArrayWithDataMember_AddsToCollection()
         {
             var context = new BindingContext();
-            var list = new int[] { 1, 2, 3};
+            var list = new int[] { 1, 2, 3 };
             var dataSource = new IListDataSource();
             dataSource.Property = list;
 
@@ -634,7 +634,7 @@ namespace System.Windows.Forms.Tests
         public void BindingContext_Item_GetIListSourceDataSourceWithDataMemberReturningIList_AddsToCollection()
         {
             var context = new BindingContext();
-            var list = new List<int> { 1, 2, 3};
+            var list = new List<int> { 1, 2, 3 };
             var dataSource = new IListDataSource();
             var mockIListSource = new Mock<IListSource>(MockBehavior.Strict);
             mockIListSource
@@ -656,7 +656,7 @@ namespace System.Windows.Forms.Tests
         public void BindingContext_Item_GetIListSourceDataSourceWithDataMemberReturningNonIList_AddsToCollection()
         {
             var context = new BindingContext();
-            var list = new List<int> { 1, 2, 3};
+            var list = new List<int> { 1, 2, 3 };
             var dataSource = new IListSourceDataSource();
             var mockIListSource = new Mock<IListSource>(MockBehavior.Strict);
             mockIListSource

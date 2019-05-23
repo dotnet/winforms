@@ -176,11 +176,11 @@ namespace System.Windows.Forms.Tests
         {
             Assert.Equal(expected, cell.Displayed);
         }
-        
+
         public static IEnumerable<object[]> EditedFormattedValue_Get_TestData()
         {
             yield return new object[] { new SubDataGridViewCell(), null };
-    
+
             var row = new DataGridViewRow();
             row.Cells.Add(new SubDataGridViewCell());
             yield return new object[] { row.Cells[0], null };
@@ -260,7 +260,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> ErrorText_Get_TestData()
         {
             yield return new object[] { new SubDataGridViewCell(), string.Empty };
-    
+
             var row = new DataGridViewRow();
             row.Cells.Add(new SubDataGridViewCell());
             yield return new object[] { row.Cells[0], string.Empty };
@@ -285,7 +285,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> ErrorText_GetNeedsErrorText_TestData()
         {
             yield return new object[] { new DataGridView { ColumnCount = 1, VirtualMode = true } };
-            
+
             var bound = new DataGridView { DataSource = new[] { new { Name = "Name" } } };
             new Form().Controls.Add(bound);
             Assert.NotNull(bound.BindingContext);
@@ -325,7 +325,7 @@ namespace System.Windows.Forms.Tests
             foreach (string errorText in new string[] { null, "", "reasonable" })
             {
                 yield return new object[] { new SubDataGridViewCell(), errorText, errorText ?? string.Empty };
-        
+
                 var row = new DataGridViewRow();
                 row.Cells.Add(new SubDataGridViewCell());
                 yield return new object[] { row.Cells[0], errorText, errorText ?? string.Empty };
@@ -408,11 +408,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("errorText", cell.ErrorText);
             Assert.Equal(3, callCount);
         }
-        
+
         public static IEnumerable<object[]> FormattedValue_Get_TestData()
         {
             yield return new object[] { new SubDataGridViewCell(), null };
-    
+
             var row = new DataGridViewRow();
             row.Cells.Add(new SubDataGridViewCell());
             yield return new object[] { row.Cells[0], null };
@@ -484,7 +484,7 @@ namespace System.Windows.Forms.Tests
             var frozenColumnDataGridView = new DataGridView { ColumnCount = 1 };
             frozenColumnDataGridView.Columns[0].Frozen = true;
             yield return new object[] { frozenColumnDataGridView.Rows[0].Cells[0], false };
-            
+
             var frozenDataGridView = new DataGridView { ColumnCount = 1 };
             frozenDataGridView.Columns[0].Frozen = true;
             frozenDataGridView.Rows[0].Frozen = true;
@@ -517,7 +517,7 @@ namespace System.Windows.Forms.Tests
 
             var column = new DataGridViewColumn();
             yield return new object[] { column.HeaderCell, DataGridViewElementStates.ReadOnly | DataGridViewElementStates.ResizableSet | DataGridViewElementStates.Visible };
-        
+
             var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             dataGridView.Rows.Add(new DataGridViewRow());
@@ -531,7 +531,7 @@ namespace System.Windows.Forms.Tests
             customDataGridViewRow.Resizable = DataGridViewTriState.False;
             customDataGridViewRow.Visible = false;
             yield return new object[] { customDataGridViewRow.Cells[0], DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Resizable | DataGridViewElementStates.ResizableSet | DataGridViewElementStates.Selected };
-    
+
             DataGridViewCell dataGridViewCustomCell = dataGridView.Rows[2].Cells[0];
             dataGridViewCustomCell.ReadOnly = true;
             dataGridViewCustomCell.Selected = true;
@@ -610,7 +610,7 @@ namespace System.Windows.Forms.Tests
             readOnlyRow2.Cells.Add(readOnlyCell2);
             readOnlyRow2.ReadOnly = true;
             yield return new object[] { readOnlyCell2, true };
-    
+
             var column = new DataGridViewColumn();
             yield return new object[] { column.HeaderCell, true };
 
@@ -1058,7 +1058,7 @@ namespace System.Windows.Forms.Tests
                 },
                 new Rectangle(0, 0, 0, 1)
             };
-            
+
             var row = new DataGridViewRow { DividerHeight = 10 };
             var cell = new SubDataGridViewCell();
             row.Cells.Add(cell);
@@ -1290,7 +1290,7 @@ namespace System.Windows.Forms.Tests
             foreach (int rowIndex in new int[] { -2, -1, 0 })
             {
                 yield return new object[] { new SubDataGridViewCell(), rowIndex, DataGridViewDataErrorContexts.Formatting, null };
-        
+
                 var row = new DataGridViewRow();
                 var cell = new SubDataGridViewCell();
                 row.Cells.Add(cell);
@@ -1319,7 +1319,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { new SubDataGridViewCell(), rowIndex, string.Empty };
                 yield return new object[] { new SubDataGridViewCell { ErrorText = null }, rowIndex, string.Empty };
                 yield return new object[] { new SubDataGridViewCell { ErrorText = "errorText" }, rowIndex, "errorText" };
-            
+
                 var row = new DataGridViewRow();
                 var cell = new SubDataGridViewCell();
                 row.Cells.Add(cell);
@@ -1340,7 +1340,7 @@ namespace System.Windows.Forms.Tests
             {
                 yield return new object[] { new SubDataGridViewCell(), "value", rowIndex, new DataGridViewCellStyle(), new Int32Converter(), new Int32Converter(), DataGridViewDataErrorContexts.Formatting, null };
                 yield return new object[] { new SubDataGridViewCell(), null, rowIndex, null, null, null, (DataGridViewDataErrorContexts)(DataGridViewDataErrorContexts.Formatting - 1), null };
-            
+
                 var row = new DataGridViewRow();
                 var cell = new SubDataGridViewCell();
                 row.Cells.Add(cell);
@@ -1535,7 +1535,7 @@ namespace System.Windows.Forms.Tests
             {
                 int height = DataGridViewCell.MeasureTextHeight(graphics, text, SystemFonts.DefaultFont, 10, TextFormatFlags.Default);
                 Assert.Equal(0, height);
-                
+
                 height = DataGridViewCell.MeasureTextHeight(graphics, text, SystemFonts.DefaultFont, 10, TextFormatFlags.Default, out bool widthTruncated);
                 Assert.Equal(0, height);
                 Assert.False(widthTruncated);
@@ -1552,7 +1552,7 @@ namespace System.Windows.Forms.Tests
             {
                 int height = DataGridViewCell.MeasureTextHeight(graphics, text, SystemFonts.DefaultFont, 20, TextFormatFlags.Default);
                 Assert.NotEqual(0, height);
-                
+
                 height = DataGridViewCell.MeasureTextHeight(graphics, text, SystemFonts.DefaultFont, 20, TextFormatFlags.Default, out bool widthTruncated);
                 Assert.NotEqual(0, height);
                 Assert.Equal(expectedWidthTruncated, widthTruncated);
@@ -2110,7 +2110,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { typeof(int?), typeof(int), 123, new DataGridViewCellStyle(), null, null, 123 };
             yield return new object[] { typeof(int), typeof(int?), 123, new DataGridViewCellStyle(), null, null, 123 };
             yield return new object[] { typeof(string), typeof(int?), 123, new DataGridViewCellStyle(), null, null, "123" };
-        
+
             // CheckState.
             yield return new object[] { typeof(bool), typeof(CheckState), CheckState.Indeterminate, new DataGridViewCellStyle(), null, null, DBNull.Value };
             yield return new object[] { typeof(bool), typeof(CheckState), CheckState.Checked, new DataGridViewCellStyle(), null, null, true };
@@ -2273,7 +2273,7 @@ namespace System.Windows.Forms.Tests
             public new bool DoubleClickUnsharesRow(DataGridViewCellEventArgs e) => base.DoubleClickUnsharesRow(e);
 
             public new bool EnterUnsharesRow(int rowIndex, bool throughMouseClick) => base.EnterUnsharesRow(rowIndex, throughMouseClick);
-            
+
             public new object GetClipboardContent(int rowIndex, bool firstCell, bool lastCell, bool inFirstRow, bool inLastRow, string format)
             {
                 return base.GetClipboardContent(rowIndex, firstCell, lastCell, inFirstRow, inLastRow, format);
@@ -2298,7 +2298,7 @@ namespace System.Windows.Forms.Tests
             {
                 return base.GetPreferredSize(graphics, cellStyle, rowIndex, constraintSize);
             }
-            
+
             public new Size GetSize(int rowIndex) => base.GetSize(rowIndex);
 
             public new object GetValue(int rowIndex) => base.GetValue(rowIndex);

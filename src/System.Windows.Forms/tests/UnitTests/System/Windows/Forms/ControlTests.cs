@@ -1348,7 +1348,7 @@ namespace System.Windows.Forms.Tests
                 Font = value
             };
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
-            
+
             // Set same.
             control.Font = value;
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
@@ -1383,7 +1383,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value ?? string.Empty, control.WindowText);
 
             // Set same.
-            control.WindowText = value; 
+            control.WindowText = value;
             Assert.Equal(value ?? string.Empty, control.WindowText);
         }
 
@@ -1393,12 +1393,12 @@ namespace System.Windows.Forms.Tests
         {
             var control = new Control();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            
+
             control.WindowText = value;
             Assert.Equal(value ?? string.Empty, control.WindowText);
 
             // Set same.
-            control.WindowText = value; 
+            control.WindowText = value;
             Assert.Equal(value ?? string.Empty, control.WindowText);
         }
 
@@ -1413,7 +1413,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value ?? string.Empty, control.Name);
 
             // Set same.
-            control.Name = value; 
+            control.Name = value;
             Assert.Equal(value ?? string.Empty, control.Name);
         }
 
@@ -1428,7 +1428,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value ?? string.Empty, control.Text);
 
             // Set same.
-            control.Text = value; 
+            control.Text = value;
             Assert.Equal(value ?? string.Empty, control.Text);
         }
 
@@ -1443,7 +1443,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value ?? string.Empty, control.Text);
 
             // Set same.
-            control.Text = value; 
+            control.Text = value;
             Assert.Equal(value ?? string.Empty, control.Text);
         }
 
