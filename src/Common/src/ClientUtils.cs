@@ -25,6 +25,9 @@
     // Miscellaneous utilities
     static internal class ClientUtils {
 
+        private const int SurrogateRangeStart = 0xD800;
+        private const int SurrogateRangeEnd = 0xDFFF;
+
 // ExecutionEngineException is obsolete and shouldn't be used (to catch, throw or reference) anymore.
 // Pragma added to prevent converting the "type is obsolete" warning into build error.
 // File owner should fix this.
@@ -136,7 +139,43 @@
              return false;
         }
 
-#if DEBUG      
+        private enum CharType
+        {
+            None,
+            Word,
+            NonWord
+        }
+
+        // Imitates the backwards word selection logic of the native SHAutoComplete Ctrl+Backspace handler.
+        // The selection will consist of any run of word characters and any run of non-word characters at the end of that word.
+        // If the selection reaches the second character in the input, and the first character is non-word, it is also selected.
+        // Here, word characters are equivalent to the "\w" regex class but with UnicodeCategory.ConnectorPunctuation excluded.
+        public static int GetWordBoundaryStart(char[] text, int endIndex)
+        {
+            bool seenWord = false;
+            CharType lastSeen = CharType.None;
+            int index = endIndex - 1;
+            for (; index >= 0; index--)
+            {
+                char character = text[index];
+                if (character >= SurrogateRangeStart && character <= SurrogateRangeEnd)
+                {
+                    break;
+                }
+                bool isWord = char.IsLetterOrDigit(character) ||
+                    CharUnicodeInfo.GetUnicodeCategory(character) == UnicodeCategory.NonSpacingMark;
+                if ((isWord && lastSeen == CharType.NonWord && seenWord) ||
+                    (!isWord && lastSeen == CharType.Word && index != 0))
+                {
+                    break;
+                }
+                seenWord |= isWord;
+                lastSeen = isWord ? CharType.Word : CharType.NonWord;
+            }
+            return index + 1;
+        }
+
+#if DEBUG
         [ThreadStatic]
         private static Hashtable enumValueInfo;
         public const int MAXCACHE = 300;  // we think we're going to get O(100) of these, put in a tripwire if it gets larger.
@@ -252,7 +291,7 @@
                }
 
            }
-        #endif
+#endif
 
         /// <summary>
         ///   WeakRefCollection - a collection that holds onto weak references

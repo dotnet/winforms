@@ -844,6 +844,61 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentOutOfRangeException>("startIndex", () => control.FindStringExact("s", startIndex, ignoreCase: false));
         }
 
+        private SubComboBox CreateControlForCtrlBackspace(string text = "", int cursorRelativeToEnd = 0)
+        {
+            var tb = new SubComboBox();
+            tb.Text = text;
+            tb.Focus();
+            tb.SelectionStart = tb.Text.Length + cursorRelativeToEnd;
+            tb.SelectionLength = 0;
+            return tb;
+        }
+
+        private void SendCtrlBackspace(SubComboBox tb)
+        {
+            var message = new Message();
+            tb.ProcessCmdKey(ref message, Keys.Control | Keys.Back);
+        }
+
+        [Fact]
+        public void CtrlBackspaceTextRemainsEmpty()
+        {
+            SubComboBox control = CreateControlForCtrlBackspace();
+            SendCtrlBackspace(control);
+            Assert.Equal("", control.Text);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetCtrlBackspaceData))]
+        public void CtrlBackspaceTextChanged(string value, string expected, int cursorRelativeToEnd)
+        {
+            SubComboBox control = CreateControlForCtrlBackspace(value, cursorRelativeToEnd);
+            SendCtrlBackspace(control);
+            Assert.Equal(expected, control.Text);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetCtrlBackspaceRepeatedData))]
+        public void CtrlBackspaceRepeatedTextChanged(string value, string expected, int repeats)
+        {
+            SubComboBox control = CreateControlForCtrlBackspace(value);
+            for (int i = 0; i < repeats; i++)
+            {
+                SendCtrlBackspace(control);
+            }
+            Assert.Equal(expected, control.Text);
+        }
+
+        [Fact]
+        public void CtrlBackspaceDeletesSelection()
+        {
+            SubComboBox control = CreateControlForCtrlBackspace("123-5-7-9");
+            control.SelectionStart = 2;
+            control.SelectionLength = 5;
+            SendCtrlBackspace(control);
+            Assert.Equal("12-9", control.Text);
+        }
+
         private class SubComboBox : ComboBox
         {
             public new bool AllowSelection => base.AllowSelection;
@@ -857,6 +912,8 @@ namespace System.Windows.Forms.Tests
             public new Padding DefaultPadding => base.DefaultPadding;
 
             public new Size DefaultSize => base.DefaultSize;
+
+            public new bool ProcessCmdKey(ref Message msg, Keys keyData) => base.ProcessCmdKey(ref msg, keyData);
         }
 
         private class DataClass

@@ -189,7 +189,7 @@ namespace System.Windows.Forms {
             // the shortcut key we are not supported in TextBox.
             bool returnedValue = base.ProcessCmdKey(ref msg, keyData);
 
-            if (this.ShortcutsEnabled == false) {
+            if (ShortcutsEnabled == false) {
                 foreach (int shortcutValue in shortcutsToDisable) {
                     if ((int)keyData == shortcutValue ||
                         (int)keyData == (shortcutValue | (int)Keys.Shift)) {
@@ -209,6 +209,25 @@ namespace System.Windows.Forms {
                     || k == (int)Shortcut.CtrlJ) {  // align justified
                     return true;
                 }
+            }
+
+            if (!ReadOnly && (keyData == (Keys.Control | Keys.Back) || keyData == (Keys.Control | Keys.Shift | Keys.Back)))
+            {
+                if (SelectionLength != 0)
+                {
+                    SetSelectedTextInternal("", clearUndo: false);
+                }
+                else if (SelectionStart != 0)
+                {
+                    int boundaryStart = ClientUtils.GetWordBoundaryStart(Text.ToCharArray(), SelectionStart);
+                    int length = SelectionStart - boundaryStart;
+                    BeginUpdateInternal();
+                    SelectionStart = boundaryStart;
+                    SelectionLength = length;
+                    EndUpdateInternal();
+                    SetSelectedTextInternal("", clearUndo: false);
+                }
+                return true;
             }
 
             return returnedValue;
