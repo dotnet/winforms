@@ -83,7 +83,7 @@ namespace System.Windows.Forms
 
         private const bool defaultParentRowsVisible = true;
 
-        private DataGridTableStyle defaultTableStyle = new DataGridTableStyle(true);
+        private readonly DataGridTableStyle defaultTableStyle = new DataGridTableStyle(true);
 
         // private bool allowSorting = true;
 
@@ -108,7 +108,7 @@ namespace System.Windows.Forms
         private const int defaultPreferredColumnWidth = 75;
         private int preferredColumnWidth = defaultPreferredColumnWidth;
 
-        private static int defaultFontHeight = Control.DefaultFont.Height;
+        private static readonly int defaultFontHeight = Control.DefaultFont.Height;
         private int prefferedRowHeight = defaultFontHeight + 3;
 
         // private bool rowHeadersVisible = true;
@@ -121,7 +121,7 @@ namespace System.Windows.Forms
 
         // parent rows
         //
-        private DataGridParentRows parentRows = null;
+        private readonly DataGridParentRows parentRows = null;
         // Set_ListManager uses the originalState to determine
         // if the grid should disconnect from all the MetaDataChangedEvents
         // keep "originalState != null" when navigating back and forth in the grid
@@ -183,7 +183,7 @@ namespace System.Windows.Forms
         // private bool listHasErrors = false;
 
         // caption
-        private DataGridCaption caption;
+        private readonly DataGridCaption caption;
 
         // Border
         //
@@ -235,7 +235,7 @@ namespace System.Windows.Forms
 
         // Policy
         // private bool   readOnlyMode = false;
-        private Policy policy = new Policy();
+        private readonly Policy policy = new Policy();
         // private bool allowNavigation = true;
 
         // editing
@@ -247,8 +247,8 @@ namespace System.Windows.Forms
 
         // scrolling
         //
-        private ScrollBar horizScrollBar = new HScrollBar();
-        private ScrollBar vertScrollBar = new VScrollBar();
+        private readonly ScrollBar horizScrollBar = new HScrollBar();
+        private readonly ScrollBar vertScrollBar = new VScrollBar();
 
         // the sum of the widths of the columns preceding the firstVisibleColumn
         //
@@ -294,16 +294,16 @@ namespace System.Windows.Forms
 
         // event handlers
         //
-        private ItemChangedEventHandler itemChangedHandler;
-        private EventHandler positionChangedHandler;
-        private EventHandler currentChangedHandler;
-        private EventHandler metaDataChangedHandler;
+        private readonly ItemChangedEventHandler itemChangedHandler;
+        private readonly EventHandler positionChangedHandler;
+        private readonly EventHandler currentChangedHandler;
+        private readonly EventHandler metaDataChangedHandler;
 
         // we have to know when the collection of dataGridTableStyles changes
-        private CollectionChangeEventHandler dataGridTableStylesCollectionChanged;
+        private readonly CollectionChangeEventHandler dataGridTableStylesCollectionChanged;
 
-        private EventHandler backButtonHandler;
-        private EventHandler downButtonHandler;
+        private readonly EventHandler backButtonHandler;
+        private readonly EventHandler downButtonHandler;
 
         private NavigateEventHandler onNavigate;
 

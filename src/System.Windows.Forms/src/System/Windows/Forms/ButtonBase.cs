@@ -36,7 +36,7 @@ namespace System.Windows.Forms
         private ContentAlignment imageAlign = ContentAlignment.MiddleCenter;
         private ContentAlignment textAlign = ContentAlignment.MiddleCenter;
         private TextImageRelation textImageRelation = TextImageRelation.Overlay;
-        private ImageList.Indexer imageIndex = new ImageList.Indexer();
+        private readonly ImageList.Indexer imageIndex = new ImageList.Indexer();
         private FlatButtonAppearance flatAppearance;
         private ImageList imageList;
         private Image image;

@@ -16,8 +16,8 @@ namespace System.Windows.Forms
     public class TreeViewHitTestInfo
     {
 
-        private TreeViewHitTestLocations loc;
-        private TreeNode node;
+        private readonly TreeViewHitTestLocations loc;
+        private readonly TreeNode node;
 
         /// <summary>
         ///     Creates a TreeViewHitTestInfo instance.

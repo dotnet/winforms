@@ -31,8 +31,8 @@ namespace System.Windows.Forms
         internal static readonly object EventMouseOver = new object();
         internal static readonly object EventMouseUp = new object();
 
-        private UnsafeNativeMethods.IHTMLElement htmlElement;
-        private HtmlShimManager shimManager;
+        private readonly UnsafeNativeMethods.IHTMLElement htmlElement;
+        private readonly HtmlShimManager shimManager;
 
         internal HtmlElement(HtmlShimManager shimManager, UnsafeNativeMethods.IHTMLElement element)
         {
@@ -689,7 +689,7 @@ namespace System.Windows.Forms
                                            UnsafeNativeMethods.DHTMLScriptEvents2
         {
 
-            private HtmlElement parent;
+            private readonly HtmlElement parent;
 
             public HTMLElementEvents2(HtmlElement htmlElement)
             {
@@ -1040,7 +1040,7 @@ namespace System.Windows.Forms
         internal class HtmlElementShim : HtmlShim
         {
 
-            private static Type[] dispInterfaceTypes = {typeof(UnsafeNativeMethods.DHTMLElementEvents2),
+            private static readonly Type[] dispInterfaceTypes = {typeof(UnsafeNativeMethods.DHTMLElementEvents2),
                                                     typeof(UnsafeNativeMethods.DHTMLAnchorEvents2),
                                                     typeof(UnsafeNativeMethods.DHTMLAreaEvents2),
                                                     typeof(UnsafeNativeMethods.DHTMLButtonElementEvents2),
@@ -1064,7 +1064,7 @@ namespace System.Windows.Forms
 
             private AxHost.ConnectionPointCookie cookie;   // To hook up events from the native HtmlElement
             private HtmlElement htmlElement;
-            private UnsafeNativeMethods.IHTMLWindow2 associatedWindow = null;
+            private readonly UnsafeNativeMethods.IHTMLWindow2 associatedWindow = null;
 
             public HtmlElementShim(HtmlElement element)
             {

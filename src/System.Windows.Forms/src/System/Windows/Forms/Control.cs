@@ -152,8 +152,8 @@ namespace System.Windows.Forms
         internal static readonly BooleanSwitch BufferPinkRect;
 #endif
 
-        private static int WM_GETCONTROLNAME;
-        private static int WM_GETCONTROLTYPE;
+        private static readonly int WM_GETCONTROLNAME;
+        private static readonly int WM_GETCONTROLTYPE;
 
         static Control()
         {
@@ -399,7 +399,7 @@ namespace System.Windows.Forms
         // Resist the temptation to make this variable 'internal' rather than
         // private. Handle access should be tightly controlled, and is in this
         // file.  Making it 'internal' makes controlling it quite difficult.
-        private ControlNativeWindow window;
+        private readonly ControlNativeWindow window;
 
         private Control parent;
         private Control reflectParent;
@@ -417,7 +417,7 @@ namespace System.Windows.Forms
         private string text;                   // See ControlStyles.CacheText for usage notes
         private byte layoutSuspendCount;
         private byte requiredScaling;        // bits 0-4: BoundsSpecified stored in RequiredScaling property.  Bit 5: RequiredScalingEnabled property.
-        private PropertyStore propertyStore;          // Contains all properties that are not always set.
+        private readonly PropertyStore propertyStore;          // Contains all properties that are not always set.
         private NativeMethods.TRACKMOUSEEVENT trackMouseEvent;
         private short updateCount;
         private LayoutEventArgs cachedLayoutEventArgs;
@@ -15365,7 +15365,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal sealed class ControlNativeWindow : NativeWindow, IWindowTarget
         {
-            private Control control;
+            private readonly Control control;
             private GCHandle rootRef;   // We will root the control when we do not want to be elligible for garbage collection.
             internal IWindowTarget target;
 
@@ -15529,7 +15529,7 @@ namespace System.Windows.Forms
         public class ControlCollection : ArrangedElementCollection, IList, ICloneable
         {
 
-            private Control owner;
+            private readonly Control owner;
 
             /// A caching mechanism for key accessor
             /// We use an index here rather than control so that we don't have lifetime
@@ -16068,9 +16068,9 @@ namespace System.Windows.Forms
             // special version of this.
             private class ControlCollectionEnumerator : IEnumerator
             {
-                private ControlCollection controls;
+                private readonly ControlCollection controls;
                 private int current;
-                private int originalCount;
+                private readonly int originalCount;
 
                 public ControlCollectionEnumerator(ControlCollection controls)
                 {
@@ -17115,16 +17115,16 @@ namespace System.Windows.Forms
 
 #endif
 
-            private Control control;
-            private IWindowTarget controlWindowTarget;
+            private readonly Control control;
+            private readonly IWindowTarget controlWindowTarget;
             private IntPtr clipRegion;
             private UnsafeNativeMethods.IOleClientSite clientSite;
             private UnsafeNativeMethods.IOleInPlaceUIWindow inPlaceUiWindow;
             private UnsafeNativeMethods.IOleInPlaceFrame inPlaceFrame;
-            private ArrayList adviseList;
+            private readonly ArrayList adviseList;
             private IAdviseSink viewAdviseSink;
             private BitVector32 activeXState;
-            private AmbientProperty[] ambientProperties;
+            private readonly AmbientProperty[] ambientProperties;
             private IntPtr hwndParent;
             private IntPtr accelTable;
             private short accelCount = -1;
@@ -18861,7 +18861,7 @@ namespace System.Windows.Forms
                         vtbl = base.LoadVtable<VTABLE>();
                     }
 
-                    private VTABLE vtbl;
+                    private readonly VTABLE vtbl;
 
                     [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
                     [StructLayout(LayoutKind.Sequential)]
@@ -18924,7 +18924,7 @@ namespace System.Windows.Forms
                         public IntPtr EnumConnectionsPtr;
                     }
 
-                    private VTABLE vtbl;
+                    private readonly VTABLE vtbl;
 
                     /// <summary>
                     ///     Call IConnectioinPoint.Advise using Delegate.Invoke on the v-table slot.
@@ -19861,8 +19861,8 @@ namespace System.Windows.Forms
 
         private class AxSourcingSite : ISite
         {
-            private IComponent component;
-            private UnsafeNativeMethods.IOleClientSite clientSite;
+            private readonly IComponent component;
+            private readonly UnsafeNativeMethods.IOleClientSite clientSite;
             private string name;
             private HtmlShimManager shimManager;
 
@@ -20041,7 +20041,7 @@ namespace System.Windows.Forms
         /// </summary>
         private class ActiveXVerbEnum : UnsafeNativeMethods.IEnumOLEVERB
         {
-            private NativeMethods.tagOLEVERB[] verbs;
+            private readonly NativeMethods.tagOLEVERB[] verbs;
             private int current;
 
             internal ActiveXVerbEnum(NativeMethods.tagOLEVERB[] verbs)
@@ -20172,8 +20172,8 @@ namespace System.Windows.Forms
         /// </summary>
         private class AmbientProperty
         {
-            private string name;
-            private int dispID;
+            private readonly string name;
+            private readonly int dispID;
             private object value;
             private bool empty;
 
@@ -20265,7 +20265,7 @@ namespace System.Windows.Forms
             HandleRef hBitmapDC = NativeMethods.NullHandleRef;
             HandleRef hBitmap = NativeMethods.NullHandleRef;
             HandleRef hOriginalBmp = NativeMethods.NullHandleRef;
-            HandleRef hMetafileDC = NativeMethods.NullHandleRef;
+            readonly HandleRef hMetafileDC = NativeMethods.NullHandleRef;
             NativeMethods.RECT destRect;
 
             [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
@@ -20473,7 +20473,7 @@ namespace System.Windows.Forms
             // Member variables
 
             private IntPtr handle = IntPtr.Zero; // Associated window handle (if any)
-            private Control ownerControl = null; // The associated Control for this AccessibleChild (if any)
+            private readonly Control ownerControl = null; // The associated Control for this AccessibleChild (if any)
             private int[] runtimeId = null; // Used by UIAutomation
 
             // constructors
@@ -21038,7 +21038,7 @@ namespace System.Windows.Forms
         internal sealed class FontHandleWrapper : MarshalByRefObject, IDisposable
         {
 #if DEBUG
-            private string stackOnCreate = null;
+            private readonly string stackOnCreate = null;
             private string stackOnDispose = null;
             private bool finalizing = false;
 #endif
@@ -21115,7 +21115,7 @@ namespace System.Windows.Forms
             internal bool synchronous;
             private bool isCompleted;
             private ManualResetEvent resetEvent;
-            private object invokeSyncObject = new object();
+            private readonly object invokeSyncObject = new object();
 
             // Store the execution context associated with the caller thread, and
             // information about which thread actually got the stack applied to it.
@@ -21223,7 +21223,7 @@ namespace System.Windows.Forms
             private string productName = null;
             private string productVersion = null;
             private FileVersionInfo versionInfo = null;
-            private Control owner;
+            private readonly Control owner;
 
             internal ControlVersionInfo(Control owner)
             {
@@ -21386,7 +21386,7 @@ namespace System.Windows.Forms
         {
             // Use local stack variable rather than a refcount since we're
             // guaranteed that these 'scopes' are properly nested.
-            private bool resultedInSet;
+            private readonly bool resultedInSet;
 
             internal MultithreadSafeCallScope()
             {

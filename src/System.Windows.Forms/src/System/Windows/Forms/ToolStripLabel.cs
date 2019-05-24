@@ -423,7 +423,7 @@ namespace System.Windows.Forms
         [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
         internal class ToolStripLabelAccessibleObject : ToolStripItemAccessibleObject
         {
-            private ToolStripLabel ownerItem = null;
+            private readonly ToolStripLabel ownerItem = null;
 
             public ToolStripLabelAccessibleObject(ToolStripLabel ownerItem) : base(ownerItem)
             {
@@ -495,8 +495,7 @@ namespace System.Windows.Forms
         /// </summary>
         private class ToolStripLabelLayout : ToolStripItemInternalLayout
         {
-
-            ToolStripLabel owner;
+            readonly ToolStripLabel owner;
 
             public ToolStripLabelLayout(ToolStripLabel owner) : base(owner)
             {

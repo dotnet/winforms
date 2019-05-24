@@ -4033,7 +4033,7 @@ namespace System.Windows.Forms
         private class OleCallback : UnsafeNativeMethods.IRichEditOleCallback
         {
 
-            private RichTextBox owner;
+            private readonly RichTextBox owner;
             IDataObject lastDataObject;
             DragDropEffects lastEffect;
 

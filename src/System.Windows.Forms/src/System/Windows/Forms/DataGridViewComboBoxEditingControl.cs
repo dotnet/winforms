@@ -165,7 +165,7 @@ namespace System.Windows.Forms
     /// </summary>
     internal class DataGridViewComboBoxEditingControlAccessibleObject : ComboBox.ComboBoxAccessibleObject
     {
-        private DataGridViewComboBoxEditingControl ownerControl;
+        private readonly DataGridViewComboBoxEditingControl ownerControl;
 
         /// <summary>
         /// The parent is changed when the editing control is attached to another editing cell.

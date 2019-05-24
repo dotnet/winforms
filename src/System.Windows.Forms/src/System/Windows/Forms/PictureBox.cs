@@ -70,7 +70,7 @@ namespace System.Windows.Forms
         private SendOrPostCallback loadCompletedDelegate = null;
         private SendOrPostCallback loadProgressDelegate = null;
         private bool handleValid = false;
-        private object internalSyncObject = new object();
+        private readonly object internalSyncObject = new object();
 
         // These default images will be demand loaded.
         private Image defaultInitialImage = null;

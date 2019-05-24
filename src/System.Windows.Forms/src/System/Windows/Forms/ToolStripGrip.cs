@@ -18,7 +18,7 @@ namespace System.Windows.Forms
     {
 
         private Cursor oldCursor;
-        private int gripThickness = 0;
+        private readonly int gripThickness = 0;
         Point startLocation = Point.Empty;
         private bool movingToolStrip = false;
         private Point lastEndLocation = ToolStrip.InvalidMouseEnter;
@@ -28,8 +28,8 @@ namespace System.Windows.Forms
         private static readonly int gripThicknessDefault = 3;
         private static readonly int gripThicknessVisualStylesEnabled = 5;
         private Padding scaledDefaultPadding = defaultPadding;
-        private int scaledGripThickness = gripThicknessDefault;
-        private int scaledGripThicknessVisualStylesEnabled = gripThicknessVisualStylesEnabled;
+        private readonly int scaledGripThickness = gripThicknessDefault;
+        private readonly int scaledGripThicknessVisualStylesEnabled = gripThicknessVisualStylesEnabled;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         internal ToolStripGrip()

@@ -15,8 +15,8 @@ namespace System.Windows.Forms.Design
         private bool _autoShow = false;
         private readonly ToolStripDesigner _designer;
 
-        private ChangeToolStripParentVerb _changeParentVerb = null;
-        private StandardMenuStripVerb _standardItemsVerb = null;
+        private readonly ChangeToolStripParentVerb _changeParentVerb = null;
+        private readonly StandardMenuStripVerb _standardItemsVerb = null;
 
         public ToolStripActionList(ToolStripDesigner designer) : base(designer.Component)
         {

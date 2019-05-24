@@ -21,9 +21,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     internal class Com2PropertyBuilderUITypeEditor : Com2ExtendedUITypeEditor
     {
 
-        private Com2PropertyDescriptor propDesc;
-        string guidString;
-        int bldrType;
+        private readonly Com2PropertyDescriptor propDesc;
+        readonly string guidString;
+        readonly int bldrType;
 
         public Com2PropertyBuilderUITypeEditor(Com2PropertyDescriptor pd, string guidString, int type, UITypeEditor baseEditor) : base(baseEditor)
         {

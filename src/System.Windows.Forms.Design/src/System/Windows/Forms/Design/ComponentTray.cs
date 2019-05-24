@@ -42,7 +42,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         internal OleDragDropHandler oleDragDropHandler; // handler class for ole drag drop operations.
 
-        private IDesigner mainDesigner; // the designer that is associated with this tray
+        private readonly IDesigner mainDesigner; // the designer that is associated with this tray
         private IEventHandlerService eventHandlerService = null; // Event Handler service to handle keyboard and focus.
         private bool queriedTabOrder;
         private MenuCommand tabOrderCommand;
@@ -50,7 +50,7 @@ namespace System.Windows.Forms.Design
 
         // Services that we use on a high enough frequency to merit caching.
         private IMenuCommandService menuCommandService;
-        private CommandSet privateCommandSet = null;
+        private readonly CommandSet privateCommandSet = null;
         private InheritanceUI inheritanceUI;
 
         private Point mouseDragStart = InvalidPoint; // the starting location of a drag
@@ -63,9 +63,9 @@ namespace System.Windows.Forms.Design
         private Point autoScrollPosBeforeDragging = Point.Empty;//Used to return the correct scroll pos. after a drag
 
         // Component Tray Context menu items...
-        private MenuCommand menucmdArrangeIcons = null;
-        private MenuCommand menucmdLineupIcons = null;
-        private MenuCommand menucmdLargeIcons = null;
+        private readonly MenuCommand menucmdArrangeIcons = null;
+        private readonly MenuCommand menucmdLineupIcons = null;
+        private readonly MenuCommand menucmdLargeIcons = null;
         private bool fResetAmbient = false;
         private bool fSelectionChanged = false;
         private ComponentTrayGlyphManager glyphManager;//used to manage any glyphs added to the tray

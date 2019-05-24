@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     public struct Message
     {
 #if DEBUG
-        private static TraceSwitch s_allWinMessages = new TraceSwitch("AllWinMessages", "Output every received message");
+        private static readonly TraceSwitch s_allWinMessages = new TraceSwitch("AllWinMessages", "Output every received message");
 #endif
 
         public IntPtr HWnd { get; set; }

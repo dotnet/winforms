@@ -20,7 +20,7 @@ namespace System.Windows.Forms
     {
 
         // we need to cache this away as the Parent property gets reset a lot.
-        private ToolStrip parentToolStrip;
+        private readonly ToolStrip parentToolStrip;
 
         private static bool isScalingInitialized = false;
         private const int MAX_WIDTH = 16;

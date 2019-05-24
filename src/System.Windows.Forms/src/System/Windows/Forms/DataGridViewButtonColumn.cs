@@ -15,7 +15,7 @@ namespace System.Windows.Forms
     [ToolboxBitmapAttribute(typeof(DataGridViewButtonColumn), "DataGridViewButtonColumn")]
     public class DataGridViewButtonColumn : DataGridViewColumn
     {
-        private static Type columnType = typeof(DataGridViewButtonColumn);
+        private static readonly Type columnType = typeof(DataGridViewButtonColumn);
 
         private string text;
 

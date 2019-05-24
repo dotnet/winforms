@@ -84,8 +84,8 @@ namespace System.Windows.Forms
 
         // These are constants per process and are initialized in 
         // a class cctor below.
-        private static object _syncObject;
-        private static string _remoteObjectName;
+        private static readonly object _syncObject;
+        private static readonly string _remoteObjectName;
 
         // We keep a static instance of ourself.  It will really be
         // per-domain, but we only have one domain.  The purpose
@@ -235,10 +235,10 @@ namespace System.Windows.Forms
     internal class ComponentManagerProxy : MarshalByRefObject, UnsafeNativeMethods.IMsoComponentManager, UnsafeNativeMethods.IMsoComponent
     {
 
-        private ComponentManagerBroker _broker;
+        private readonly ComponentManagerBroker _broker;
         private UnsafeNativeMethods.IMsoComponentManager _original;
         private int _refCount;
-        private int _creationThread;
+        private readonly int _creationThread;
         private IntPtr _componentId;
         private int _nextComponentId;
         private Dictionary<int, UnsafeNativeMethods.IMsoComponent> _components;

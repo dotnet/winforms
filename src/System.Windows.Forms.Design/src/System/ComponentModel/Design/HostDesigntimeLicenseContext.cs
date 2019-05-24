@@ -9,7 +9,7 @@ namespace System.ComponentModel.Design
     /// </summary>
     internal class HostDesigntimeLicenseContext : DesigntimeLicenseContext
     {
-        private IServiceProvider provider;
+        private readonly IServiceProvider provider;
 
         public HostDesigntimeLicenseContext(IServiceProvider provider)
         {

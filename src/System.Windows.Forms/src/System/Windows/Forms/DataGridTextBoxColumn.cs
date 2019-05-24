@@ -25,8 +25,8 @@ namespace System.Windows.Forms
     {
 
         // ui State
-        private int xMargin = 2;
-        private int yMargin = 1;
+        private readonly int xMargin = 2;
+        private readonly int yMargin = 1;
         // private int   fontHandle =        0;
         private string format = null;
         private TypeConverter typeConverter;
@@ -34,7 +34,7 @@ namespace System.Windows.Forms
         private System.Reflection.MethodInfo parseMethod;
 
         // hosted control
-        private DataGridTextBox edit;
+        private readonly DataGridTextBox edit;
 
         // editing state
         private string oldValue = null;

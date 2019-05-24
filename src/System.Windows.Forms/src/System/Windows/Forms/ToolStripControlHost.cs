@@ -1186,8 +1186,8 @@ namespace System.Windows.Forms
         private class StubSite : ISite, IDictionaryService
         {
             private Hashtable _dictionary = null;
-            IComponent comp = null;
-            IComponent owner = null;
+            readonly IComponent comp = null;
+            readonly IComponent owner = null;
 
             public StubSite(Component control, Component host)
             {

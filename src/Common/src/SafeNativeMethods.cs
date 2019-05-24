@@ -200,7 +200,7 @@ namespace System.Windows.Forms
         public static extern bool InitCommonControlsEx(NativeMethods.INITCOMMONCONTROLSEX icc);
 
 #if DEBUG
-        private static System.Collections.ArrayList validImageListHandles = ArrayList.Synchronized(new System.Collections.ArrayList());
+        private static readonly System.Collections.ArrayList validImageListHandles = ArrayList.Synchronized(new System.Collections.ArrayList());
 #endif
 
         // 

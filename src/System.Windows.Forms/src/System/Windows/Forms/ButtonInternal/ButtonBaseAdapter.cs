@@ -26,7 +26,7 @@ namespace System.Windows.Forms.ButtonInternal
     /// </summary>
     internal abstract class ButtonBaseAdapter
     {
-        private ButtonBase control;
+        private readonly ButtonBase control;
 
         // SystemInformation.Border3DSize + 2 pixels for focus rect
         protected static int buttonBorderSize = 4;

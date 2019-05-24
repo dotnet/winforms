@@ -39,7 +39,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         private bool forceRenderReadOnly = false;
         private string helpKeyword;
         private string toolTipText = null;
-        private bool activeXHide = false;
+        private readonly bool activeXHide = false;
         private static int scaledImageSizeX = IMAGE_SIZE;
         private static int scaledImageSizeY = IMAGE_SIZE;
         private static bool isScalingInitialized = false;
@@ -1185,7 +1185,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         protected class PropertyDescriptorGridEntryAccessibleObject : GridEntryAccessibleObject
         {
 
-            private PropertyDescriptorGridEntry _owningPropertyDescriptorGridEntry;
+            private readonly PropertyDescriptorGridEntry _owningPropertyDescriptorGridEntry;
 
             public PropertyDescriptorGridEntryAccessibleObject(PropertyDescriptorGridEntry owner) : base(owner)
             {

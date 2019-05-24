@@ -15,8 +15,8 @@ namespace System.Windows.Forms.Design
     /// </summary>
     internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
     {
-        private ToolStripItem currentItem;
-        private IServiceProvider serviceProvider;
+        private readonly ToolStripItem currentItem;
+        private readonly IServiceProvider serviceProvider;
 
         private ToolStripMenuItem imageToolStripMenuItem;
         private ToolStripMenuItem enabledToolStripMenuItem;

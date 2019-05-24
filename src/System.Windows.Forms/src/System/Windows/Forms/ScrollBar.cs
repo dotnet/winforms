@@ -27,7 +27,7 @@ namespace System.Windows.Forms
         private int _smallChange = 1;
         private int _largeChange = 10;
         private int _value = 0;
-        private ScrollOrientation _scrollOrientation;
+        private readonly ScrollOrientation _scrollOrientation;
         private int _wheelDelta = 0;
         private bool _scaleScrollBarForDpiChange = true;
 

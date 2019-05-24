@@ -20,15 +20,15 @@ namespace System.Windows.Forms
     public class ToolStripPanelRow : Component, IArrangedElement
     {
         private Rectangle bounds = Rectangle.Empty;
-        private ToolStripPanel parent = null;
+        private readonly ToolStripPanel parent = null;
         private BitVector32 state = new BitVector32();
-        private PropertyStore propertyStore = new PropertyStore();  // Contains all properties that are not always set.
+        private readonly PropertyStore propertyStore = new PropertyStore();  // Contains all properties that are not always set.
         private int suspendCount = 0;
         private ToolStripPanelRowManager rowManager = null;
 
 
         private const int MINALLOWEDWIDTH = 50;
-        private int minAllowedWidth = MINALLOWEDWIDTH;
+        private readonly int minAllowedWidth = MINALLOWEDWIDTH;
 
         private static readonly int stateVisible = BitVector32.CreateMask();
         private static readonly int stateDisposing = BitVector32.CreateMask(stateVisible);
@@ -51,7 +51,7 @@ namespace System.Windows.Forms
 
 #if DEBUG
         private static int rowCreationCount = 0;
-        private int thisRowID;
+        private readonly int thisRowID;
 #endif
 
 
@@ -854,7 +854,7 @@ namespace System.Windows.Forms
         {
             private FlowLayoutSettings flowLayoutSettings = null;
 
-            private ToolStripPanelRow owner = null;
+            private readonly ToolStripPanelRow owner = null;
 
             public ToolStripPanelRowManager(ToolStripPanelRow owner)
             {
@@ -2307,7 +2307,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal class ToolStripPanelRowControlCollection : ArrangedElementCollection, IList, IEnumerable
         {
-            private ToolStripPanelRow owner;
+            private readonly ToolStripPanelRow owner;
             private ArrangedElementCollection cellCollection;
 
             public ToolStripPanelRowControlCollection(ToolStripPanelRow owner)
@@ -2618,7 +2618,7 @@ namespace System.Windows.Forms
             /// to sort of write a wrapper class around the ArrayList enumerator.
             private class ToolStripPanelCellToControlEnumerator : IEnumerator, ICloneable
             {
-                private IEnumerator arrayListEnumerator;
+                private readonly IEnumerator arrayListEnumerator;
 
                 internal ToolStripPanelCellToControlEnumerator(ArrayList list)
                 {

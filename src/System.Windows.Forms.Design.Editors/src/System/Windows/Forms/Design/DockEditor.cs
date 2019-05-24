@@ -91,7 +91,7 @@ namespace System.Windows.Forms.Design
             // events whenever they get focus, which is bad when the user is trying
             // to tab to a specific control using the keyboard.
             private readonly ContainerPlaceholder container = new ContainerPlaceholder();
-            private DockEditor editor;
+            private readonly DockEditor editor;
             private IWindowsFormsEditorService edSvc;
             private readonly CheckBox fill = new DockEditorCheckBox();
             private readonly CheckBox left = new DockEditorCheckBox();

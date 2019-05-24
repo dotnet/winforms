@@ -20,7 +20,7 @@ namespace System.Windows.Forms
     ]
     public class TreeNodeCollection : IList
     {
-        private TreeNode owner;
+        private readonly TreeNode owner;
 
         /// A caching mechanism for key accessor
         /// We use an index here rather than control so that we don't have lifetime

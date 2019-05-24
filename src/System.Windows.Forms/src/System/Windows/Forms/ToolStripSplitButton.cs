@@ -714,7 +714,7 @@ namespace System.Windows.Forms
         private class ToolStripSplitButtonButton : ToolStripButton
         {
 
-            private ToolStripSplitButton owner = null;
+            private readonly ToolStripSplitButton owner = null;
 
             public ToolStripSplitButtonButton(ToolStripSplitButton owner)
             {
@@ -830,8 +830,7 @@ namespace System.Windows.Forms
         /// </summary>
         private class ToolStripSplitButtonButtonLayout : ToolStripItemInternalLayout
         {
-
-            ToolStripSplitButton owner;
+            readonly ToolStripSplitButton owner;
 
             public ToolStripSplitButtonButtonLayout(ToolStripSplitButton owner) : base(owner.SplitButtonButton)
             {
@@ -876,7 +875,7 @@ namespace System.Windows.Forms
         [SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]
         public class ToolStripSplitButtonAccessibleObject : ToolStripItem.ToolStripItemAccessibleObject
         {
-            private ToolStripSplitButton owner;
+            private readonly ToolStripSplitButton owner;
 
             public ToolStripSplitButtonAccessibleObject(ToolStripSplitButton item) : base(item)
             {
@@ -892,7 +891,7 @@ namespace System.Windows.Forms
         internal class ToolStripSplitButtonExAccessibleObject : ToolStripSplitButtonAccessibleObject
         {
 
-            private ToolStripSplitButton ownerItem;
+            private readonly ToolStripSplitButton ownerItem;
 
             public ToolStripSplitButtonExAccessibleObject(ToolStripSplitButton item)
                 : base(item)
@@ -988,8 +987,8 @@ namespace System.Windows.Forms
 
         internal class ToolStripSplitButtonUiaProvider : ToolStripDropDownItemAccessibleObject
         {
-            private ToolStripSplitButton _owner;
-            private ToolStripSplitButtonExAccessibleObject _accessibleObject;
+            private readonly ToolStripSplitButton _owner;
+            private readonly ToolStripSplitButtonExAccessibleObject _accessibleObject;
 
             public ToolStripSplitButtonUiaProvider(ToolStripSplitButton owner) : base(owner)
             {

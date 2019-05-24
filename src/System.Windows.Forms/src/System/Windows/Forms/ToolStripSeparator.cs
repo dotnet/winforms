@@ -526,7 +526,7 @@ namespace System.Windows.Forms
         [System.Runtime.InteropServices.ComVisible(true)]
         internal class ToolStripSeparatorAccessibleObject : ToolStripItemAccessibleObject
         {
-            private ToolStripSeparator ownerItem = null;
+            private readonly ToolStripSeparator ownerItem = null;
 
             public ToolStripSeparatorAccessibleObject(ToolStripSeparator ownerItem) : base(ownerItem)
             {

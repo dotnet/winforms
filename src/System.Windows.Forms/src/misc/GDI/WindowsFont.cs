@@ -39,8 +39,8 @@ namespace System.Experimental.Gdi
         private bool ownedByCacheManager;
         private bool everOwnedByCacheManager;
 
-        private IntNativeMethods.LOGFONT logFont;
-        private FontStyle style;
+        private readonly IntNativeMethods.LOGFONT logFont;
+        private readonly FontStyle style;
 
         // Note: These defaults are according to the ones in GDI+ but those are not necessarily the same as the system
         // default font.  The GetSystemDefaultHFont() method should be used if needed.

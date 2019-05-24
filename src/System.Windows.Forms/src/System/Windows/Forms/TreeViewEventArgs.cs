@@ -22,8 +22,8 @@ namespace System.Windows.Forms
     /// </summary>
     public class TreeViewEventArgs : EventArgs
     {
-        TreeNode node;
-        TreeViewAction action = TreeViewAction.Unknown;
+        readonly TreeNode node;
+        readonly TreeViewAction action = TreeViewAction.Unknown;
 
         public TreeViewEventArgs(TreeNode node)
         {

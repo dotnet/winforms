@@ -1090,8 +1090,8 @@ namespace System.Windows.Forms
         [ComVisible(true)]
         protected class DataGridRelationshipAccessibleObject : AccessibleObject
         {
-            DataGridRelationshipRow owner = null;
-            int relationship;
+            readonly DataGridRelationshipRow owner = null;
+            readonly int relationship;
 
             public DataGridRelationshipAccessibleObject(DataGridRelationshipRow owner, int relationship) : base()
             {

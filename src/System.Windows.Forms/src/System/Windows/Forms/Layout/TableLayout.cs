@@ -35,8 +35,8 @@ namespace System.Windows.Forms.Layout
         // Private value type used by the Sort methods.
         private struct SorterObjectArray
         {
-            private object[] keys;
-            private IComparer comparer;
+            private readonly object[] keys;
+            private readonly IComparer comparer;
 
             internal SorterObjectArray(object[] keys, IComparer comparer)
             {
@@ -174,7 +174,7 @@ namespace System.Windows.Forms.Layout
         private static readonly int _layoutInfoProperty = PropertyStore.CreateKey();
 
 
-        private static string[] _propertiesWhichInvalidateCache = new string[] {
+        private static readonly string[] _propertiesWhichInvalidateCache = new string[] {
            //suspend layout before changing one of the above property will cause the AffectedProperty of LayoutEventArgs to be set to null
            //for more information, see http://wiki/default.aspx/Microsoft.Projects.DotNetClient.LayoutEventArgs
        
@@ -1532,7 +1532,7 @@ namespace System.Windows.Forms.Layout
             private int _colPos = -1;
 
             //the element which owns this layoutInfo
-            private IArrangedElement _element;
+            private readonly IArrangedElement _element;
 
             public LayoutInfo(IArrangedElement element)
             {
@@ -1679,7 +1679,7 @@ namespace System.Windows.Forms.Layout
         /// </summary>
         internal sealed class ContainerInfo
         {
-            private static Strip[] emptyStrip = new Strip[0];
+            private static readonly Strip[] emptyStrip = new Strip[0];
 
             private static readonly int stateValid = BitVector32.CreateMask();
             private static readonly int stateChildInfoValid = BitVector32.CreateMask(stateValid);
@@ -1694,7 +1694,7 @@ namespace System.Windows.Forms.Layout
             private TableLayoutRowStyleCollection _rowStyles;
             private TableLayoutColumnStyleCollection _colStyles;
             private TableLayoutPanelGrowStyle _growStyle;
-            private IArrangedElement _container;
+            private readonly IArrangedElement _container;
             private LayoutInfo[] _childInfo;
             private int _countFixedChildren;
             private int _minRowsAndColumns; // The minimum space required to put all the controls without overlapping
@@ -2243,7 +2243,7 @@ namespace System.Windows.Forms.Layout
         private sealed class ReservationGrid
         {
             int _numColumns = 1;
-            ArrayList _rows = new ArrayList();
+            readonly ArrayList _rows = new ArrayList();
 
             public bool IsReserved(int column, int rowOffset)
             {

@@ -26,9 +26,9 @@ namespace System.Windows.Forms
     public class GridColumnStylesCollection : BaseCollection, IList
     {
         CollectionChangeEventHandler onCollectionChanged;
-        ArrayList items = new ArrayList();
-        DataGridTableStyle owner = null;
-        private bool isDefault = false;
+        readonly ArrayList items = new ArrayList();
+        readonly DataGridTableStyle owner = null;
+        private readonly bool isDefault = false;
 
         // we have to implement IList for the Collection editor to work
         //

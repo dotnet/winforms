@@ -91,8 +91,8 @@ namespace System.Windows.Forms
         private CheckedItemCollection checkedItemCollection = null;
         private CheckedIndexCollection checkedIndexCollection = null;
 
-        private static int LBC_GETCHECKSTATE;
-        private static int LBC_SETCHECKSTATE;
+        private static readonly int LBC_GETCHECKSTATE;
+        private static readonly int LBC_SETCHECKSTATE;
 
         static CheckedListBox()
         {
@@ -1127,7 +1127,7 @@ namespace System.Windows.Forms
 
         new public class ObjectCollection : ListBox.ObjectCollection
         {
-            private CheckedListBox owner;
+            private readonly CheckedListBox owner;
 
             public ObjectCollection(CheckedListBox owner)
             : base(owner)
@@ -1168,7 +1168,7 @@ namespace System.Windows.Forms
 
         public class CheckedIndexCollection : IList
         {
-            private CheckedListBox owner;
+            private readonly CheckedListBox owner;
 
             internal CheckedIndexCollection(CheckedListBox owner)
             {
@@ -1344,7 +1344,7 @@ namespace System.Windows.Forms
             internal static int IndeterminateItemMask = ItemArray.CreateMask();
             internal static int AnyMask = CheckedItemMask | IndeterminateItemMask;
 
-            private CheckedListBox owner;
+            private readonly CheckedListBox owner;
 
             internal CheckedItemCollection(CheckedListBox owner)
             {
@@ -1649,8 +1649,8 @@ namespace System.Windows.Forms
         {
 
             private string name;
-            private int index;
-            private CheckedListBoxAccessibleObject parent;
+            private readonly int index;
+            private readonly CheckedListBoxAccessibleObject parent;
 
             public CheckedListBoxItemAccessibleObject(string name, int index, CheckedListBoxAccessibleObject parent) : base()
             {

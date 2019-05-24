@@ -53,7 +53,7 @@ namespace System.Resources
         private IFormatter binaryFormatter = null;
 
         // this is going to be used to check if a ResXDataNode is of type ResXFileRef
-        private static ITypeResolutionService internalTypeResolver = new AssemblyNamesTypeResolutionService(new AssemblyName[] { new AssemblyName("System.Windows.Forms") });
+        private static readonly ITypeResolutionService internalTypeResolver = new AssemblyNamesTypeResolutionService(new AssemblyName[] { new AssemblyName("System.Windows.Forms") });
 
         // call back function to get type name for multitargeting.
         // No public property to force using constructors for the following reasons:
@@ -837,8 +837,8 @@ namespace System.Resources
     //
     internal class ResXSerializationBinder : SerializationBinder
     {
-        private ITypeResolutionService typeResolver;
-        private Func<Type, string> typeNameConverter;
+        private readonly ITypeResolutionService typeResolver;
+        private readonly Func<Type, string> typeNameConverter;
 
         internal ResXSerializationBinder(ITypeResolutionService typeResolver)
         {
@@ -937,7 +937,7 @@ namespace System.Resources
         private Hashtable cachedAssemblies;
         private Hashtable cachedTypes;
 
-        private static string NetFrameworkPath = Path.Combine(Environment.GetEnvironmentVariable("SystemRoot"), "Microsoft.Net\\Framework");
+        private static readonly string NetFrameworkPath = Path.Combine(Environment.GetEnvironmentVariable("SystemRoot"), "Microsoft.Net\\Framework");
 
         internal AssemblyNamesTypeResolutionService(AssemblyName[] names)
         {

@@ -32,9 +32,9 @@ namespace System.Windows.Forms
         private static readonly Padding rowMargin = new Padding(3, 0, 0, 0);
         private Padding scaledRowMargin = rowMargin;
         private ToolStripRendererSwitcher rendererSwitcher = null;
-        private Type currentRendererType = typeof(System.Type);
+        private readonly Type currentRendererType = typeof(System.Type);
         private BitVector32 state = new BitVector32();
-        private ToolStripContainer owner;
+        private readonly ToolStripContainer owner;
 
 
 #if DEBUG
@@ -1493,7 +1493,7 @@ namespace System.Windows.Forms
         public class ToolStripPanelRowCollection : ArrangedElementCollection, IList
         {
 
-            private ToolStripPanel owner;
+            private readonly ToolStripPanel owner;
             public ToolStripPanelRowCollection(ToolStripPanel owner)
             {
                 this.owner = owner;
@@ -1706,7 +1706,7 @@ namespace System.Windows.Forms
         internal class ToolStripPanelControlCollection : WindowsFormsUtils.TypedControlCollection
         {
 
-            private ToolStripPanel owner;
+            private readonly ToolStripPanel owner;
 
             public ToolStripPanelControlCollection(ToolStripPanel owner)
                 : base(owner, typeof(ToolStrip))

@@ -12,13 +12,13 @@ namespace System.Windows.Forms
 {
     internal class WebBrowserContainer : UnsafeNativeMethods.IOleContainer, UnsafeNativeMethods.IOleInPlaceFrame
     {
-        private WebBrowserBase parent;
+        private readonly WebBrowserBase parent;
         private IContainer assocContainer;  // associated IContainer...
                                             // the assocContainer may be null, in which case all this container does is
                                             // forward [de]activation messages to the requisite container...
         private WebBrowserBase siteUIActive;
         private WebBrowserBase siteActive;
-        private Hashtable containerCache = new Hashtable();  // name -> Control
+        private readonly Hashtable containerCache = new Hashtable();  // name -> Control
         private Hashtable components = null;  // Control -> any
         private WebBrowserBase ctlInEditMode = null;
 

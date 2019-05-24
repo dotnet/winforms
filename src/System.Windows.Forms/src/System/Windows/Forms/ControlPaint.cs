@@ -3097,11 +3097,11 @@ namespace System.Windows.Forms
             private const int RGBMax = 255;
             private const int Undefined = HLSMax * 2 / 3;
 
-            private int hue;
-            private int saturation;
-            private int luminosity;
+            private readonly int hue;
+            private readonly int saturation;
+            private readonly int luminosity;
 
-            private bool isSystemColors_Control;
+            private readonly bool isSystemColors_Control;
 
             /// <summary>
             /// </summary>

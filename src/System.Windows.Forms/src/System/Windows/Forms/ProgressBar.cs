@@ -50,7 +50,7 @@ namespace System.Windows.Forms
         //this defines marquee animation speed
         private int marqueeSpeed = 100;
 
-        private Color defaultForeColor = SystemColors.Highlight;
+        private readonly Color defaultForeColor = SystemColors.Highlight;
 
         private ProgressBarStyle style = ProgressBarStyle.Blocks;
 

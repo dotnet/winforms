@@ -14,13 +14,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 
     internal class GridToolTip : Control
     {
-
-        Control[] controls;
+        readonly Control[] controls;
         string toolTipText;
-        NativeMethods.TOOLINFO_T[] toolInfos;
+        readonly NativeMethods.TOOLINFO_T[] toolInfos;
         bool dontShow;
         Point lastMouseMove = Point.Empty;
-        private int maximumToolTipLength = 1000;
+        private readonly int maximumToolTipLength = 1000;
 
         internal GridToolTip(Control[] controls)
         {

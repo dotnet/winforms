@@ -22,7 +22,7 @@ namespace System.ComponentModel.Design.Serialization
     {
         private static readonly Attribute[] runTimeProperties = new Attribute[] { DesignOnlyAttribute.No };
         private static readonly CodeThisReferenceExpression thisRef = new CodeThisReferenceExpression();
-        private static TraceSwitch traceSerialization = new TraceSwitch("DesignerSerialization", "Trace design time serialization");
+        private static readonly TraceSwitch traceSerialization = new TraceSwitch("DesignerSerialization", "Trace design time serialization");
         private static Stack traceScope = null;
 
         /// <summary>

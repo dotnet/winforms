@@ -12,7 +12,7 @@ namespace System.Windows.Forms
     {
         private class DataGridViewToolTip
         {
-            DataGridView dataGridView = null;
+            readonly DataGridView dataGridView = null;
             ToolTip toolTip = null;
             private bool toolTipActivated = false;
 

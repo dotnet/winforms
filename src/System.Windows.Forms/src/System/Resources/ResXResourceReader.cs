@@ -28,16 +28,15 @@ namespace System.Resources
     /// </summary>
     public class ResXResourceReader : IResourceReader
     {
-        string fileName = null;
+        readonly string fileName = null;
         TextReader reader = null;
         Stream stream = null;
         string fileContents = null;
-        AssemblyName[] assemblyNames;
+        readonly AssemblyName[] assemblyNames;
         string basePath;
         bool isReaderDirty = false;
-
-        ITypeResolutionService typeResolver;
-        IAliasResolver aliasResolver = null;
+        readonly ITypeResolutionService typeResolver;
+        readonly IAliasResolver aliasResolver = null;
 
         ListDictionary resData = null;
         ListDictionary resMetadata = null;
@@ -712,7 +711,7 @@ namespace System.Resources
 
         private sealed class ReaderAliasResolver : IAliasResolver
         {
-            private Hashtable cachedAliases;
+            private readonly Hashtable cachedAliases;
 
             internal ReaderAliasResolver()
             {

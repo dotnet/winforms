@@ -30,7 +30,7 @@ namespace System.Resources
     public class ResXFileRef
     {
         private string fileName;
-        private string typeName;
+        private readonly string typeName;
         [OptionalField(VersionAdded = 2)]
         private Encoding textFileEncoding;
 

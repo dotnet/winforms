@@ -15,7 +15,7 @@ namespace System.Windows.Forms
     [ToolboxItem(false)]
     public sealed class SplitterPanel : Panel
     {
-        SplitContainer owner = null;
+        readonly SplitContainer owner = null;
         private bool collapsed = false;
 
         public SplitterPanel(SplitContainer owner)

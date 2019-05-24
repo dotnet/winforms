@@ -452,7 +452,7 @@ namespace System.Windows.Forms
         [System.Runtime.InteropServices.ComVisible(true)]
         internal class ToolStripProgressBarAccessibleObject : ToolStripItemAccessibleObject
         {
-            private ToolStripProgressBar ownerItem = null;
+            private readonly ToolStripProgressBar ownerItem = null;
 
             public ToolStripProgressBarAccessibleObject(ToolStripProgressBar ownerItem) : base(ownerItem)
             {

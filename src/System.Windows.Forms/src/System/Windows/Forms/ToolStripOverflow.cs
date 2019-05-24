@@ -20,7 +20,7 @@ namespace System.Windows.Forms
         internal static readonly TraceSwitch PopupLayoutDebug;
 #endif
 
-        private ToolStripOverflowButton ownerItem;
+        private readonly ToolStripOverflowButton ownerItem;
 
         public ToolStripOverflow(ToolStripItem parentItem) : base(parentItem)
         {

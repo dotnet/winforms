@@ -45,7 +45,7 @@ namespace System.Windows.Forms
         private class DpiAwarenessScope : IDisposable
         {
             private bool dpiAwarenessScopeIsSet = false;
-            private DpiAwarenessContext originalAwareness = DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED;
+            private readonly DpiAwarenessContext originalAwareness = DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED;
 
             /// <summary>
             /// Enters given Dpi awareness scope

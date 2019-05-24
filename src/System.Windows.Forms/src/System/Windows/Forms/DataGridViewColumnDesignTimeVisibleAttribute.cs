@@ -9,7 +9,7 @@ namespace System.Windows.Forms
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class DataGridViewColumnDesignTimeVisibleAttribute : Attribute
     {
-        private bool visible;
+        private readonly bool visible;
 
         public DataGridViewColumnDesignTimeVisibleAttribute(bool visible)
         {

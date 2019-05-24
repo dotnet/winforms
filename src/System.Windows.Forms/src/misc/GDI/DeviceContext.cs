@@ -75,7 +75,7 @@ namespace System.Experimental.Gdi
 
         [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
         IntPtr hDC;
-        DeviceContextType dcType;
+        readonly DeviceContextType dcType;
 
         public event EventHandler Disposing;
 
@@ -84,7 +84,7 @@ namespace System.Experimental.Gdi
         // We cache the hWnd when creating the dc from one, to provide support forIDeviceContext.GetHdc/ReleaseHdc.  
         // This hWnd could be null, in such case it is referring to the screen.
         [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
-        IntPtr hWnd = (IntPtr)(-1); // Unlikely to be a valid hWnd.  
+        readonly IntPtr hWnd = (IntPtr)(-1); // Unlikely to be a valid hWnd.  
 
         IntPtr hInitialPen;
         IntPtr hInitialBrush;

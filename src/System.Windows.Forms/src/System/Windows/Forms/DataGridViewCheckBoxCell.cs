@@ -43,9 +43,9 @@ namespace System.Windows.Forms
 
         private byte flags;  // see DATAGRIDVIEWCHECKBOXCELL_ consts above
         private static bool mouseInContentBounds = false;
-        private static Type defaultCheckStateType = typeof(System.Windows.Forms.CheckState);
-        private static Type defaultBooleanType = typeof(bool);
-        private static Type cellType = typeof(DataGridViewCheckBoxCell);
+        private static readonly Type defaultCheckStateType = typeof(System.Windows.Forms.CheckState);
+        private static readonly Type defaultBooleanType = typeof(bool);
+        private static readonly Type cellType = typeof(DataGridViewCheckBoxCell);
 
         public DataGridViewCheckBoxCell() : this(false /*threeState*/)
         {

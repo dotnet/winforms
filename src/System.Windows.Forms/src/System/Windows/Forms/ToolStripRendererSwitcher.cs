@@ -23,7 +23,7 @@ namespace System.Windows.Forms
         private Type currentRendererType = typeof(System.Type);
         private BitVector32 state = new BitVector32();
 
-        private ToolStripRenderMode defaultRenderMode = ToolStripRenderMode.ManagerRenderMode;
+        private readonly ToolStripRenderMode defaultRenderMode = ToolStripRenderMode.ManagerRenderMode;
 
         public ToolStripRendererSwitcher(Control owner, ToolStripRenderMode defaultRenderMode) : this(owner)
         {

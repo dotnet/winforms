@@ -10,8 +10,8 @@ namespace System.Windows.Forms
 {
     public class HtmlWindowCollection : ICollection
     {
-        private UnsafeNativeMethods.IHTMLFramesCollection2 htmlFramesCollection2;
-        private HtmlShimManager shimManager;
+        private readonly UnsafeNativeMethods.IHTMLFramesCollection2 htmlFramesCollection2;
+        private readonly HtmlShimManager shimManager;
 
         internal HtmlWindowCollection(HtmlShimManager shimManager, UnsafeNativeMethods.IHTMLFramesCollection2 collection)
         {

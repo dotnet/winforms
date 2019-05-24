@@ -15,14 +15,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
     internal class Com2IDispatchConverter : Com2ExtendedTypeConverter
     {
-        Com2PropertyDescriptor propDesc;
+        readonly Com2PropertyDescriptor propDesc;
 
         /// <summary>
         ///     What we return textually for null.
         /// </summary>
         protected static readonly string none = SR.toStringNone;
 
-        private bool allowExpand;
+        private readonly bool allowExpand;
 
 
         public Com2IDispatchConverter(Com2PropertyDescriptor propDesc, bool allowExpand, TypeConverter baseConverter) : base(baseConverter)

@@ -19,7 +19,7 @@ namespace System.Windows.Forms
         private IBindableComponent _control;
         private BindingManagerBase _bindingManagerBase;
 
-        private BindToObject _bindToObject = null;
+        private readonly BindToObject _bindToObject = null;
 
         private PropertyDescriptor _propInfo;
         private PropertyDescriptor _propIsNullInfo;

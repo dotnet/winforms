@@ -18,7 +18,7 @@ namespace System.ComponentModel.Design.Serialization
         private static CodeDomSerializer s_default;
         private static readonly Attribute[] _runTimeFilter = new Attribute[] { DesignOnlyAttribute.No };
         private static readonly Attribute[] _designTimeFilter = new Attribute[] { DesignOnlyAttribute.Yes };
-        private static CodeThisReferenceExpression _thisRef = new CodeThisReferenceExpression();
+        private static readonly CodeThisReferenceExpression _thisRef = new CodeThisReferenceExpression();
 
         internal static CodeDomSerializer Default
         {

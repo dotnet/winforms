@@ -742,7 +742,7 @@ namespace System.Windows.Forms
         [ListBindable(false)]
         public class MenuItemCollection : IList
         {
-            private Menu owner;
+            private readonly Menu owner;
 
             /// A caching mechanism for key accessor
             /// We use an index here rather than control so that we don't have lifetime

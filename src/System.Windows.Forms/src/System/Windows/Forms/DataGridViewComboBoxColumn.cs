@@ -18,7 +18,7 @@ namespace System.Windows.Forms
     ]
     public class DataGridViewComboBoxColumn : DataGridViewColumn
     {
-        private static Type columnType = typeof(DataGridViewComboBoxColumn);
+        private static readonly Type columnType = typeof(DataGridViewComboBoxColumn);
 
         public DataGridViewComboBoxColumn() : base(new DataGridViewComboBoxCell())
         {

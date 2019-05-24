@@ -41,13 +41,13 @@ namespace System.Windows.Forms
         private int focusedTextWidth;
 
         // will contain a list of relationships that this table has
-        private ArrayList relationsList = new ArrayList(2);
+        private readonly ArrayList relationsList = new ArrayList(2);
 
         // the name of the table
         private string mappingName = string.Empty;
-        private GridColumnStylesCollection gridColumns = null;
+        private readonly GridColumnStylesCollection gridColumns = null;
         private bool readOnly = false;
-        private bool isDefaultTableStyle = false;
+        private readonly bool isDefaultTableStyle = false;
 
         private static readonly object EventAllowSorting = new object();
         private static readonly object EventGridLineColor = new object();

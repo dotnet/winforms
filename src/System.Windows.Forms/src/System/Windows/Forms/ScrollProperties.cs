@@ -22,7 +22,7 @@ namespace System.Windows.Forms
         internal bool _smallChangeSetExternally;
         internal bool _largeChangeSetExternally;
 
-        private ScrollableControl _parent;
+        private readonly ScrollableControl _parent;
 
         protected ScrollableControl ParentControl => _parent;
 

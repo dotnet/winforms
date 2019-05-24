@@ -300,24 +300,24 @@ namespace System.Windows.Forms
         private DataGridViewEditMode editMode;
 
         // Note that a cell can only be in one bag but not both at the same time.
-        private DataGridViewCellLinkedList individualSelectedCells;
-        private DataGridViewCellLinkedList individualReadOnlyCells;
-        private DataGridViewIntLinkedList selectedBandIndexes;
+        private readonly DataGridViewCellLinkedList individualSelectedCells;
+        private readonly DataGridViewCellLinkedList individualReadOnlyCells;
+        private readonly DataGridViewIntLinkedList selectedBandIndexes;
         private DataGridViewIntLinkedList selectedBandSnapshotIndexes;
 
         private DataGridViewCellStyle defaultCellStyle, columnHeadersDefaultCellStyle, rowHeadersDefaultCellStyle;
         private DataGridViewCellStyle rowsDefaultCellStyle, alternatingRowsDefaultCellStyle;
         private ScrollBars scrollBars;
         private LayoutData layout;
-        private DisplayedBandsData displayedBandsInfo;
+        private readonly DisplayedBandsData displayedBandsInfo;
         private Rectangle normalClientRectangle;
-        private ArrayList lstRows;
+        private readonly ArrayList lstRows;
         private int availableWidthForFillColumns;
 
         private BorderStyle borderStyle;
-        private DataGridViewAdvancedBorderStyle advancedCellBorderStyle;
-        private DataGridViewAdvancedBorderStyle advancedRowHeadersBorderStyle;
-        private DataGridViewAdvancedBorderStyle advancedColumnHeadersBorderStyle;
+        private readonly DataGridViewAdvancedBorderStyle advancedCellBorderStyle;
+        private readonly DataGridViewAdvancedBorderStyle advancedRowHeadersBorderStyle;
+        private readonly DataGridViewAdvancedBorderStyle advancedColumnHeadersBorderStyle;
 
         private DataGridViewClipboardCopyMode clipboardCopyMode;
 
@@ -383,7 +383,7 @@ namespace System.Windows.Forms
 
         private System.Windows.Forms.Timer vertScrollTimer, horizScrollTimer;
 
-        private Hashtable converters;
+        private readonly Hashtable converters;
         private Hashtable pens;
         private Hashtable brushes;
 
@@ -393,7 +393,7 @@ namespace System.Windows.Forms
         private DataGridViewDataConnection dataConnection;
 
         // ToolTip
-        private DataGridViewToolTip toolTipControl;
+        private readonly DataGridViewToolTip toolTipControl;
         // the tool tip string we get from cells
         private string toolTipCaption = string.Empty;
 
@@ -6044,7 +6044,7 @@ namespace System.Windows.Forms
 
         internal class DataGridViewEditingPanel : Panel
         {
-            private DataGridView owningDataGridView;
+            private readonly DataGridView owningDataGridView;
 
             public DataGridViewEditingPanel(DataGridView owningDataGridView)
             {

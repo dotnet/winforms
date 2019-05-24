@@ -22,10 +22,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     internal abstract class BaseCAMarshaler
     {
 
-        private static TraceSwitch CAMarshalSwitch = new TraceSwitch("CAMarshal", "BaseCAMarshaler: Debug CA* struct marshaling");
+        private static readonly TraceSwitch CAMarshalSwitch = new TraceSwitch("CAMarshal", "BaseCAMarshaler: Debug CA* struct marshaling");
 
         private IntPtr caArrayAddress;
-        private int count;
+        private readonly int count;
         private object[] itemArray;
 
         /// <summary>

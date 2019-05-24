@@ -26,8 +26,8 @@ namespace System.Windows.Forms
     /// </summary>
     public class TreeViewCancelEventArgs : CancelEventArgs
     {
-        private TreeNode node;
-        private TreeViewAction action;
+        private readonly TreeNode node;
+        private readonly TreeViewAction action;
 
         public TreeViewCancelEventArgs(TreeNode node, bool cancel, TreeViewAction action)
         : base(cancel)

@@ -20,9 +20,9 @@ namespace System.Windows.Forms
     {
         private const byte DATAGRIDVIEWHEADERCELL_themeMargin = 100; // Used to calculate the margins required for theming rendering
 
-        private static Type defaultFormattedValueType = typeof(string);
-        private static Type defaultValueType = typeof(object);
-        private static Type cellType = typeof(DataGridViewHeaderCell);
+        private static readonly Type defaultFormattedValueType = typeof(string);
+        private static readonly Type defaultValueType = typeof(object);
+        private static readonly Type cellType = typeof(DataGridViewHeaderCell);
         private static Rectangle rectThemeMargins = new Rectangle(-1, -1, 0, 0);
         private static readonly int PropValueType = PropertyStore.CreateKey();
         private static readonly int PropButtonState = PropertyStore.CreateKey();

@@ -34,19 +34,19 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         /// Is this guy read only?
         /// </summary>
-        private bool baseReadOnly;
+        private readonly bool baseReadOnly;
         private bool readOnly;
 
         /// <summary>
         /// The resoved native type -> clr type
         /// </summary>
-        private Type propertyType;
+        private readonly Type propertyType;
 
         /// <summary>
         /// The dispid. This is also in a DispIDAttiribute, but we
         /// need it a lot.
         /// </summary>
-        private int dispid;
+        private readonly int dispid;
 
         private TypeConverter converter;
         private object editor;
@@ -60,7 +60,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// This is any extra data needed.  For IDispatch types, it's the GUID of
         /// the interface, etc.
         /// </summary>
-        private object typeData;
+        private readonly object typeData;
 
         /// <summary>
         /// Keeps track of which data members need to be refreshed.
@@ -70,7 +70,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         /// Should we bother asking if refresh is needed?
         /// </summary>
-        private bool queryRefresh = false;
+        private readonly bool queryRefresh = false;
 
         /// <summary>
         /// Our properties manager
@@ -91,12 +91,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         /// For Object and dispatch types, we hide them by default.
         /// </summary>
-        private bool typeHide;
+        private readonly bool typeHide;
 
         /// <summary>
         /// Set if the metadata causes this property to always be hidden
         /// </summary>
-        private bool canShow;
+        private readonly bool canShow;
 
         /// <summary>
         /// This property is hidden because its get didn't return S_OK
@@ -127,7 +127,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         /// Our map of native types that we can map to managed types for editors
         /// </summary>
-        private static IDictionary oleConverters;
+        private static readonly IDictionary oleConverters;
 
         static Com2PropertyDescriptor()
         {
@@ -144,7 +144,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         /// Should we convert our type?
         /// </summary>
-        private Com2DataTypeToManagedDataTypeConverter valueConverter;
+        private readonly Com2DataTypeToManagedDataTypeConverter valueConverter;
 
         /// <summary>
         /// Ctor.
@@ -1463,7 +1463,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         private class Com2PropDescMainConverter : Com2ExtendedTypeConverter
         {
-            Com2PropertyDescriptor pd;
+            readonly Com2PropertyDescriptor pd;
 
             private const int CheckSubprops = 0;
             private const int AllowSubprops = 1;
@@ -1546,7 +1546,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
     internal class GetAttributesEvent : EventArgs
     {
-        private ArrayList attrList;
+        private readonly ArrayList attrList;
 
         public GetAttributesEvent(ArrayList attrList)
         {
@@ -1626,8 +1626,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
     internal class GetRefreshStateEvent : GetBoolValueEvent
     {
-
-        Com2ShouldRefreshTypes item;
+        readonly Com2ShouldRefreshTypes item;
 
         public GetRefreshStateEvent(Com2ShouldRefreshTypes item, bool defValue) : base(defValue)
         {

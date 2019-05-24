@@ -29,7 +29,7 @@ namespace System.Windows.Forms
     public class ToolBar : Control
     {
 
-        private ToolBarButtonCollection buttonsCollection;
+        private readonly ToolBarButtonCollection buttonsCollection;
 
         /// <summary>
         ///     The size of a button in the ToolBar
@@ -1882,7 +1882,7 @@ namespace System.Windows.Forms
         public class ToolBarButtonCollection : IList
         {
 
-            private ToolBar owner;
+            private readonly ToolBar owner;
             private bool suspendUpdate;
             /// A caching mechanism for key accessor
             /// We use an index here rather than control so that we don't have lifetime

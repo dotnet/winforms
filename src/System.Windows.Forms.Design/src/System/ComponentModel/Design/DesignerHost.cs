@@ -22,7 +22,7 @@ namespace System.ComponentModel.Design
         private static readonly int s_stateUnloading = BitVector32.CreateMask(s_stateLoading); // Designer is currently unloading.
         private static readonly int s_stateIsClosingTransaction = BitVector32.CreateMask(s_stateUnloading); // A transaction is in the process of being Canceled or Commited.
 
-        private static Type[] s_defaultServices = new Type[] { typeof(IDesignerHost), typeof(IContainer), typeof(IComponentChangeService), typeof(IDesignerLoaderHost2) };
+        private static readonly Type[] s_defaultServices = new Type[] { typeof(IDesignerHost), typeof(IContainer), typeof(IComponentChangeService), typeof(IDesignerLoaderHost2) };
 
         // IDesignerHost events
         private static readonly object s_eventActivated = new object(); // Designer has been activated
@@ -1532,7 +1532,7 @@ namespace System.ComponentModel.Design
         {
             private DesignerHost _host;
 #if DEBUG
-            private string _creatorStack;
+            private readonly string _creatorStack;
 #endif
 
             public DesignerHostTransaction(DesignerHost host, string description) : base(description)

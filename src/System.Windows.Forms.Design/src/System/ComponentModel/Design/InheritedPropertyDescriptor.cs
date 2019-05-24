@@ -19,7 +19,7 @@ namespace System.ComponentModel.Design
     {
         private PropertyDescriptor propertyDescriptor;
         private object _defaultValue;
-        private static object s_noDefault = new Object();
+        private static readonly object s_noDefault = new Object();
         private bool _initShouldSerialize;
         private object _originalValue;
 

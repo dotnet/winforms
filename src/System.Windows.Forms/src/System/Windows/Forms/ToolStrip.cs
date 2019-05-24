@@ -73,7 +73,7 @@ namespace System.Windows.Forms
 
         private Orientation orientation = Orientation.Horizontal;
 
-        private ArrayList activeDropDowns = new ArrayList(1);
+        private readonly ArrayList activeDropDowns = new ArrayList(1);
         private ToolStripRenderer renderer = null;
         private Type currentRendererType = typeof(System.Type);
         private Hashtable shortcuts = null;
@@ -5318,7 +5318,7 @@ namespace System.Windows.Forms
         public class ToolStripAccessibleObject : ControlAccessibleObject
         {
 
-            private ToolStrip owner;
+            private readonly ToolStrip owner;
 
             public ToolStripAccessibleObject(ToolStrip owner) : base(owner)
             {
@@ -5691,7 +5691,7 @@ namespace System.Windows.Forms
 
         internal class RestoreFocusMessageFilter : IMessageFilter
         {
-            private ToolStrip ownerToolStrip;
+            private readonly ToolStrip ownerToolStrip;
 
             public RestoreFocusMessageFilter(ToolStrip ownerToolStrip)
             {
@@ -5927,7 +5927,7 @@ namespace System.Windows.Forms
     internal sealed class ToolStripSplitStackDragDropHandler : IDropTarget, ISupportOleDropSource
     {
 
-        private ToolStrip owner;
+        private readonly ToolStrip owner;
 
         public ToolStripSplitStackDragDropHandler(ToolStrip owner)
         {

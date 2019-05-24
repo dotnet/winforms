@@ -32,7 +32,7 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
 
         protected static readonly Point InvalidPoint = new Point(int.MinValue, int.MinValue);
-        private static BooleanSwitch PbrsAssertPropsSwitch = new BooleanSwitch("PbrsAssertProps", "PropertyBrowser : Assert on broken properties");
+        private static readonly BooleanSwitch PbrsAssertPropsSwitch = new BooleanSwitch("PbrsAssertProps", "PropertyBrowser : Assert on broken properties");
 
         internal static AttributeTypeSorter AttributeTypeSorter = new AttributeTypeSorter();
 
@@ -121,13 +121,13 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         protected PropertyGrid ownerGrid;
 
-        private static object EVENT_VALUE_CLICK = new object();
-        private static object EVENT_LABEL_CLICK = new object();
-        private static object EVENT_OUTLINE_CLICK = new object();
-        private static object EVENT_VALUE_DBLCLICK = new object();
-        private static object EVENT_LABEL_DBLCLICK = new object();
-        private static object EVENT_OUTLINE_DBLCLICK = new object();
-        private static object EVENT_RECREATE_CHILDREN = new object();
+        private static readonly object EVENT_VALUE_CLICK = new object();
+        private static readonly object EVENT_LABEL_CLICK = new object();
+        private static readonly object EVENT_OUTLINE_CLICK = new object();
+        private static readonly object EVENT_VALUE_DBLCLICK = new object();
+        private static readonly object EVENT_LABEL_DBLCLICK = new object();
+        private static readonly object EVENT_OUTLINE_DBLCLICK = new object();
+        private static readonly object EVENT_RECREATE_CHILDREN = new object();
 
         private GridEntryAccessibleObject accessibleObject = null;
 

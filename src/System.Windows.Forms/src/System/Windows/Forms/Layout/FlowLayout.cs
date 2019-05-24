@@ -355,10 +355,10 @@ namespace System.Windows.Forms.Layout
 
         private class ContainerProxy
         {
-            private IArrangedElement _container;
+            private readonly IArrangedElement _container;
             private ElementProxy _elementProxy;
             private Rectangle _displayRect;
-            private bool _isContainerRTL;
+            private readonly bool _isContainerRTL;
             public ContainerProxy(IArrangedElement container)
             {
                 _container = container;

@@ -20,7 +20,7 @@ namespace System.Windows.Forms
     {
         // siting
         //
-        private DataGrid dataGrid;
+        private readonly DataGrid dataGrid;
 
         // ui
         //
@@ -30,26 +30,26 @@ namespace System.Windows.Forms
         private SolidBrush backBrush = DataGrid.DefaultParentRowsBackBrush;
         private SolidBrush foreBrush = DataGrid.DefaultParentRowsForeBrush;
 
-        private int borderWidth = 1;
+        private readonly int borderWidth = 1;
         // private Color borderColor = SystemColors.WindowFrame;
         private Brush borderBrush = new SolidBrush(SystemColors.WindowFrame);
 
         private static Bitmap rightArrow = null;
         private static Bitmap leftArrow = null;
 
-        private ColorMap[] colorMap = new ColorMap[] { new ColorMap() };
+        private readonly ColorMap[] colorMap = new ColorMap[] { new ColorMap() };
 
         // private bool gridLineDots = false;
         // private Color gridLineColor = SystemColors.Control;
         // private Brush gridLineBrush = SystemBrushes.Control;
-        private Pen gridLinePen = SystemPens.Control;
+        private readonly Pen gridLinePen = SystemPens.Control;
 
         private int totalHeight = 0;
         private int textRegionHeight = 0;
 
 
         // now that we have left and right arrows, we also have layout
-        private Layout layout = new Layout();
+        private readonly Layout layout = new Layout();
 
         // mouse info
         //
@@ -68,9 +68,9 @@ namespace System.Windows.Forms
 
         // storage for parent row states
         //
-        private ArrayList parents = new ArrayList();
+        private readonly ArrayList parents = new ArrayList();
         private int parentsCount = 0;
-        private ArrayList rowHeights = new ArrayList();
+        private readonly ArrayList rowHeights = new ArrayList();
         AccessibleObject accessibleObject;
 
         internal DataGridParentRows(DataGrid dataGrid)
@@ -1201,7 +1201,7 @@ namespace System.Windows.Forms
         [ComVisible(true)]
         protected internal class DataGridParentRowsAccessibleObject : AccessibleObject
         {
-            DataGridParentRows owner = null;
+            readonly DataGridParentRows owner = null;
 
             public DataGridParentRowsAccessibleObject(DataGridParentRows owner) : base()
             {

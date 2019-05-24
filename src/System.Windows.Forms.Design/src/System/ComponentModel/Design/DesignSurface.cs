@@ -15,7 +15,7 @@ namespace System.ComponentModel.Design
     /// </summary>
     public class DesignSurface : IDisposable, IServiceProvider
     {
-        private IServiceProvider _parentProvider;
+        private readonly IServiceProvider _parentProvider;
         private ServiceContainer _serviceContainer;
         private DesignerHost _host;
         private ICollection _loadErrors;

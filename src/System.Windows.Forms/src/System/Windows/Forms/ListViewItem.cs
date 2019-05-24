@@ -1557,7 +1557,7 @@ namespace System.Windows.Forms
 
         public class ListViewSubItemCollection : IList
         {
-            private ListViewItem _owner;
+            private readonly ListViewItem _owner;
 
             // A caching mechanism for key accessor
             // We use an index here rather than control so that we don't have lifetime

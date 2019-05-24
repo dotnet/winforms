@@ -270,7 +270,7 @@ namespace System.Windows.Forms.PropertyGridInternal
     internal class HotCommandsAccessibleObject : Control.ControlAccessibleObject
     {
 
-        private PropertyGrid _parentPropertyGrid;
+        private readonly PropertyGrid _parentPropertyGrid;
 
         /// <summary>
         /// Initializes new instance of DocCommentAccessibleObject.

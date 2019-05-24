@@ -27,7 +27,7 @@ namespace System.Windows.Forms
     {
 
 
-        static private int[] borderStyleToOffset = {
+        private static readonly int[] borderStyleToOffset = {
             /*None = */ 0,
             /*Single = */ 1,
             /*Inset = */ 2,

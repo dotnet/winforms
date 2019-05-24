@@ -53,8 +53,8 @@ namespace System.Windows.Forms
         // SplitContainer private Cached copies of public properties...
         //
         private Orientation orientation = Orientation.Vertical;
-        private SplitterPanel panel1 = null;
-        private SplitterPanel panel2 = null;
+        private readonly SplitterPanel panel1 = null;
+        private readonly SplitterPanel panel2 = null;
         private BorderStyle borderStyle = System.Windows.Forms.BorderStyle.None;
         private FixedPanel fixedPanel = FixedPanel.None;
 
@@ -2734,7 +2734,7 @@ namespace System.Windows.Forms
 
         private class SplitContainerMessageFilter : IMessageFilter
         {
-            private SplitContainer owner = null;
+            private readonly SplitContainer owner = null;
 
             public SplitContainerMessageFilter(SplitContainer splitContainer)
             {
@@ -2769,7 +2769,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal class SplitContainerTypedControlCollection : WindowsFormsUtils.TypedControlCollection
         {
-            SplitContainer owner;
+            readonly SplitContainer owner;
 
             public SplitContainerTypedControlCollection(Control c, Type type, bool isReadOnly) : base(c, type, isReadOnly)
             {

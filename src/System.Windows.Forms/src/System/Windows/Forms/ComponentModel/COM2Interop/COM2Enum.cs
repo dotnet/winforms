@@ -48,7 +48,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         /// Should we allow values besides what's in the listbox?
         /// </summary>
-        private bool allowUnknownValues;
+        private readonly bool allowUnknownValues;
 
         /// <summary>
         /// Our one and only ctor

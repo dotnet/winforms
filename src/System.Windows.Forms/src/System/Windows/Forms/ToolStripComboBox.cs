@@ -64,7 +64,7 @@ namespace System.Windows.Forms
         [System.Runtime.InteropServices.ComVisible(true)]
         internal class ToolStripComboBoxAccessibleObject : ToolStripItemAccessibleObject
         {
-            private ToolStripComboBox ownerItem = null;
+            private readonly ToolStripComboBox ownerItem = null;
 
             /// <summary>
             /// Initializes the new instance of ToolStripComboBoxAccessibleObject.
@@ -816,7 +816,7 @@ namespace System.Windows.Forms
             internal class ToolStripComboBoxControlAccessibleObject : ComboBox.ComboBoxAccessibleObject
             {
 
-                private ComboBox.ChildAccessibleObject childAccessibleObject;
+                private readonly ComboBox.ChildAccessibleObject childAccessibleObject;
 
                 public ToolStripComboBoxControlAccessibleObject(ToolStripComboBoxControl toolStripComboBoxControl) : base(toolStripComboBoxControl)
                 {

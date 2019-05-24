@@ -12,7 +12,7 @@ namespace System.Windows.Forms
     {
         private IDataObject lastDataObject = null;
         private DragDropEffects lastEffect = DragDropEffects.None;
-        private IDropTarget owner;
+        private readonly IDropTarget owner;
 
         public DropTarget(IDropTarget owner)
         {

@@ -49,7 +49,7 @@ namespace System.Windows.Forms
             TYMED.TYMED_MFPICT,
             TYMED.TYMED_GDI};
 
-        private IDataObject innerData = null;
+        private readonly IDataObject innerData = null;
         internal bool RestrictedFormats { get; set; }
 
         // We use this to identify that a stream is actually a serialized object.  On read,
@@ -1973,7 +1973,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            private Hashtable data = new Hashtable(BackCompatibleStringComparer.Default);
+            private readonly Hashtable data = new Hashtable(BackCompatibleStringComparer.Default);
 
             public DataStore()
             {
@@ -2190,7 +2190,7 @@ namespace System.Windows.Forms
             private static readonly string s_allowedTypeName = "System.Drawing.Bitmap";
             private static readonly string s_allowedAssemblyName = "System.Drawing";
             // PublicKeyToken=b03f5f7f11d50a3a
-            private static byte[] s_allowedToken = new byte[] { 0xB0, 0x3F, 0x5F, 0x7F, 0x11, 0xD5, 0x0A, 0x3A };
+            private static readonly byte[] s_allowedToken = new byte[] { 0xB0, 0x3F, 0x5F, 0x7F, 0x11, 0xD5, 0x0A, 0x3A };
 
             /// <summary>
             ///  Only safe to deserialize types are bypassing this callback, Strings 

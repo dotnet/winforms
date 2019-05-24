@@ -41,7 +41,7 @@ namespace System.Windows.Forms
         static readonly object EventLinkClicked = new object();
         static Color iedisabledLinkColor = Color.Empty;
 
-        static LinkComparer linkComparer = new LinkComparer();
+        static readonly LinkComparer linkComparer = new LinkComparer();
 
         /// <summary>
         ///    The dialog result that will be sent to the parent dialog form when
@@ -59,8 +59,7 @@ namespace System.Windows.Forms
 
         bool textLayoutValid = false;
         bool receivedDoubleClick = false;
-
-        ArrayList links = new ArrayList(2);
+        readonly ArrayList links = new ArrayList(2);
 
         Link focusLink = null;
         LinkCollection linkCollection = null;
@@ -2202,7 +2201,7 @@ namespace System.Windows.Forms
 
         public class LinkCollection : IList
         {
-            private LinkLabel owner;
+            private readonly LinkLabel owner;
             private bool linksAdded = false;   //whether we should serialize the linkCollection
 
             /// A caching mechanism for key accessor
@@ -2871,7 +2870,7 @@ namespace System.Windows.Forms
         internal class LinkAccessibleObject : AccessibleObject
         {
 
-            private Link link;
+            private readonly Link link;
 
             public LinkAccessibleObject(Link link) : base()
             {

@@ -4298,7 +4298,7 @@ namespace System.Windows.Forms
 
             // Member variables
 
-            private ToolStripItem ownerItem = null; // The associated ToolStripItem for this AccessibleChild (if any)
+            private readonly ToolStripItem ownerItem = null; // The associated ToolStripItem for this AccessibleChild (if any)
 
             private AccessibleStates additionalState = AccessibleStates.None;  // Test hook for the designer
 
@@ -4817,7 +4817,7 @@ namespace System.Windows.Forms
     // list for indexing purposes.
     internal class ToolStripItemImageIndexer : ImageList.Indexer
     {
-        private ToolStripItem item;
+        private readonly ToolStripItem item;
 
         public ToolStripItemImageIndexer(ToolStripItem item)
         {
@@ -4850,7 +4850,7 @@ namespace System.Windows.Forms
     {
 
         private ToolStripItemLayoutOptions currentLayoutOptions;
-        private ToolStripItem ownerItem;
+        private readonly ToolStripItem ownerItem;
         private ButtonBaseAdapter.LayoutData layoutData;
         private const int BORDER_WIDTH = 2;
         private const int BORDER_HEIGHT = 3;
@@ -5083,8 +5083,8 @@ namespace System.Windows.Forms
         }
         private class ToolStripLayoutData
         {
-            private ToolStripLayoutStyle layoutStyle;
-            private bool autoSize;
+            private readonly ToolStripLayoutStyle layoutStyle;
+            private readonly bool autoSize;
             private Size size;
 
             public ToolStripLayoutData(ToolStrip toolStrip)

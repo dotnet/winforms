@@ -44,7 +44,7 @@ namespace System.Windows.Forms
         private bool sizeGrip = true;
         private string simpleText;
         private Point lastClick = new Point(0, 0);
-        private IList panels = new ArrayList();
+        private readonly IList panels = new ArrayList();
         private StatusBarPanelCollection panelsCollection;
         private ControlToolTip tooltips;
 
@@ -1288,7 +1288,7 @@ namespace System.Windows.Forms
         ]
         public class StatusBarPanelCollection : IList
         {
-            private StatusBar owner;
+            private readonly StatusBar owner;
             /// A caching mechanism for key accessor
             /// We use an index here rather than control so that we don't have lifetime
             /// issues by holding on to extra references.
@@ -1775,9 +1775,9 @@ namespace System.Windows.Forms
                 internal IntPtr id = new IntPtr(-1);
             }
 
-            private Hashtable tools = new Hashtable();
-            private ToolTipNativeWindow window = null;
-            private Control parent = null;
+            private readonly Hashtable tools = new Hashtable();
+            private readonly ToolTipNativeWindow window = null;
+            private readonly Control parent = null;
             private int nextId = 0;
 
             /// <summary>
@@ -2076,7 +2076,7 @@ namespace System.Windows.Forms
             /// </summary>
             private class ToolTipNativeWindow : NativeWindow
             {
-                ControlToolTip control;
+                readonly ControlToolTip control;
 
                 internal ToolTipNativeWindow(ControlToolTip control)
                 {

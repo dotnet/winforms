@@ -16,7 +16,7 @@ namespace System.Windows.Forms
         ]
         public class DataGridViewControlCollection : Control.ControlCollection
         {
-            DataGridView owner;
+            readonly DataGridView owner;
 
             public DataGridViewControlCollection(DataGridView owner)
                 : base(owner)

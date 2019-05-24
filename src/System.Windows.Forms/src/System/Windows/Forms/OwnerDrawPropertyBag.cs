@@ -17,7 +17,7 @@ namespace System.Windows.Forms
     public class OwnerDrawPropertyBag : MarshalByRefObject, ISerializable
     {
         private Control.FontHandleWrapper _fontWrapper = null;
-        private static object s_internalSyncObject = new object();
+        private static readonly object s_internalSyncObject = new object();
 
         protected OwnerDrawPropertyBag(SerializationInfo info, StreamingContext context)
         {

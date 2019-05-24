@@ -21,8 +21,8 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
 
 
-        private MergePropertyDescriptor mergedPd;
-        private object[] objs;
+        private readonly MergePropertyDescriptor mergedPd;
+        private readonly object[] objs;
 
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // GridEntry classes are internal so we have complete

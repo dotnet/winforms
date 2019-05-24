@@ -37,7 +37,7 @@ namespace System.Windows.Forms
         private WebBrowserHelper.AXState axState = WebBrowserHelper.AXState.Passive;
         private WebBrowserHelper.AXState axReloadingState = WebBrowserHelper.AXState.Passive;
         private WebBrowserHelper.AXEditMode axEditMode = WebBrowserHelper.AXEditMode.None;
-        private bool inRtlRecreate = false;
+        private readonly bool inRtlRecreate = false;
         private BitVector32 axHostState = new BitVector32();
         private WebBrowserHelper.SelectionStyle selectionStyle = WebBrowserHelper.SelectionStyle.NotSelected;
         private int noComponentChange = 0;
@@ -1976,7 +1976,7 @@ namespace System.Windows.Forms
         /// </summary>
         private class WebBrowserBaseNativeWindow : NativeWindow
         {
-            private WebBrowserBase WebBrowserBase;
+            private readonly WebBrowserBase WebBrowserBase;
 
             public WebBrowserBaseNativeWindow(WebBrowserBase ax)
             {

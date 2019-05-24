@@ -33,9 +33,9 @@ namespace System.Windows.Forms
         private static Rectangle rectThemeMargins = new Rectangle(-1, -1, 0, 0);
         private static bool mouseInContentBounds = false;
 
-        private static Type defaultFormattedValueType = typeof(string);
-        private static Type defaultValueType = typeof(object);
-        private static Type cellType = typeof(DataGridViewButtonCell);
+        private static readonly Type defaultFormattedValueType = typeof(string);
+        private static readonly Type defaultValueType = typeof(object);
+        private static readonly Type cellType = typeof(DataGridViewButtonCell);
 
         public DataGridViewButtonCell()
         {

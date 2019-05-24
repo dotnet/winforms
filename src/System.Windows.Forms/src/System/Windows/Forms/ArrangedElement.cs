@@ -24,8 +24,8 @@ namespace System.Windows.Forms
         private Rectangle bounds = Rectangle.Empty;
         private IArrangedElement parent = null;
         private BitVector32 state = new BitVector32();
-        private PropertyStore propertyStore = new PropertyStore();  // Contains all properties that are not always set.
-        private int suspendCount = 0;
+        private readonly PropertyStore propertyStore = new PropertyStore();  // Contains all properties that are not always set.
+        private readonly int suspendCount = 0;
 
         private static readonly int stateVisible = BitVector32.CreateMask();
         private static readonly int stateDisposing = BitVector32.CreateMask(stateVisible);
@@ -33,7 +33,7 @@ namespace System.Windows.Forms
 
 
         private static readonly int PropControlsCollection = PropertyStore.CreateKey();
-        private Control spacer = new Control();
+        private readonly Control spacer = new Control();
 
         internal ArrangedElement()
         {

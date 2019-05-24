@@ -16,7 +16,7 @@ namespace System.ComponentModel.Design.Serialization
     /// </summary>
     internal class ComponentTypeCodeDomSerializer : TypeCodeDomSerializer
     {
-        private static object _initMethodKey = new object();
+        private static readonly object _initMethodKey = new object();
         private const string _initMethodName = "InitializeComponent";
         private static ComponentTypeCodeDomSerializer s_default;
 

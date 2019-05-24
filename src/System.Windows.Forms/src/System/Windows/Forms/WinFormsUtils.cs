@@ -408,8 +408,8 @@ namespace System.Windows.Forms
 
         public class ArraySubsetEnumerator : IEnumerator
         {
-            private object[] _array;
-            private int _total;
+            private readonly object[] _array;
+            private readonly int _total;
             private int _current;
 
             public ArraySubsetEnumerator(object[] array, int count)
@@ -499,8 +499,8 @@ namespace System.Windows.Forms
         /// </summary>
         internal class TypedControlCollection : ReadOnlyControlCollection
         {
-            private Type _typeOfControl;
-            private Control _ownerControl;
+            private readonly Type _typeOfControl;
+            private readonly Control _ownerControl;
 
             public TypedControlCollection(Control owner, Type typeOfControl, bool isReadOnly) : base(owner, isReadOnly)
             {

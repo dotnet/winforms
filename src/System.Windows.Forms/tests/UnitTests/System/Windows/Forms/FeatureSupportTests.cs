@@ -188,8 +188,8 @@ namespace System.Windows.Forms.Tests
             public static object s_zeroVersionField = new object();
             public static object s_nonZeroVersionField = new object();
 
-            private object _privateField = new object();
-            private static object s_privateField = new object();
+            private readonly object _privateField = new object();
+            private static readonly object s_privateField = new object();
         }
 
         private class NonIFeatureSupportClass

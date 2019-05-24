@@ -69,38 +69,38 @@ namespace System.Windows.Forms
         private int caretTestPos;
 
         // Bit mask - Determines when the Korean IME composition string is completed so converted character can be processed.
-        private static int IME_ENDING_COMPOSITION = BitVector32.CreateMask();
+        private static readonly int IME_ENDING_COMPOSITION = BitVector32.CreateMask();
 
         // Bit mask - Determines when the Korean IME is completing a composition, used when forcing convertion.
-        private static int IME_COMPLETING = BitVector32.CreateMask(IME_ENDING_COMPOSITION);
+        private static readonly int IME_COMPLETING = BitVector32.CreateMask(IME_ENDING_COMPOSITION);
 
         // Used for handling characters that have a modifier (Ctrl-A, Shift-Del...).
-        private static int HANDLE_KEY_PRESS = BitVector32.CreateMask(IME_COMPLETING);
+        private static readonly int HANDLE_KEY_PRESS = BitVector32.CreateMask(IME_COMPLETING);
 
         // Bit mask - Used to simulate a null mask.  Needed since a MaskedTextProvider object cannot be 
         // initialized with a null mask but we need one even in this case as a backend for 
         // default properties.  This is to support creating a MaskedTextBox with the default 
         // constructor, specially at design time.
-        private static int IS_NULL_MASK = BitVector32.CreateMask(HANDLE_KEY_PRESS);
+        private static readonly int IS_NULL_MASK = BitVector32.CreateMask(HANDLE_KEY_PRESS);
 
         // Bit mask - Used in conjuction with get_Text to return the text that is actually set in the native
         // control.  This is required to be able to measure text correctly (GetPreferredSize) and
         // to compare against during set_Text (to bail if the same and not to raise TextChanged event).
-        private static int QUERY_BASE_TEXT = BitVector32.CreateMask(IS_NULL_MASK);
+        private static readonly int QUERY_BASE_TEXT = BitVector32.CreateMask(IS_NULL_MASK);
 
         // If true, the input text is rejected whenever a character does not comply with the mask; a MaskInputRejected
         // event is fired for the failing character.  
         // If false, characters in the input string are processed one by one accepting the ones that comply
         // with the mask and raising the MaskInputRejected event for the rejected ones.
-        private static int REJECT_INPUT_ON_FIRST_FAILURE = BitVector32.CreateMask(QUERY_BASE_TEXT);
+        private static readonly int REJECT_INPUT_ON_FIRST_FAILURE = BitVector32.CreateMask(QUERY_BASE_TEXT);
 
         // Bit masks for boolean properties.
-        private static int HIDE_PROMPT_ON_LEAVE = BitVector32.CreateMask(REJECT_INPUT_ON_FIRST_FAILURE);
-        private static int BEEP_ON_ERROR = BitVector32.CreateMask(HIDE_PROMPT_ON_LEAVE);
-        private static int USE_SYSTEM_PASSWORD_CHAR = BitVector32.CreateMask(BEEP_ON_ERROR);
-        private static int INSERT_TOGGLED = BitVector32.CreateMask(USE_SYSTEM_PASSWORD_CHAR);
-        private static int CUTCOPYINCLUDEPROMPT = BitVector32.CreateMask(INSERT_TOGGLED);
-        private static int CUTCOPYINCLUDELITERALS = BitVector32.CreateMask(CUTCOPYINCLUDEPROMPT);
+        private static readonly int HIDE_PROMPT_ON_LEAVE = BitVector32.CreateMask(REJECT_INPUT_ON_FIRST_FAILURE);
+        private static readonly int BEEP_ON_ERROR = BitVector32.CreateMask(HIDE_PROMPT_ON_LEAVE);
+        private static readonly int USE_SYSTEM_PASSWORD_CHAR = BitVector32.CreateMask(BEEP_ON_ERROR);
+        private static readonly int INSERT_TOGGLED = BitVector32.CreateMask(USE_SYSTEM_PASSWORD_CHAR);
+        private static readonly int CUTCOPYINCLUDEPROMPT = BitVector32.CreateMask(INSERT_TOGGLED);
+        private static readonly int CUTCOPYINCLUDELITERALS = BitVector32.CreateMask(CUTCOPYINCLUDEPROMPT);
 
         ///////// Properties backend fields. See corresponding property comments for more info.
 

@@ -9,9 +9,9 @@ namespace System.Windows.Forms
 {
     public sealed class HtmlElementCollection : ICollection
     {
-        private UnsafeNativeMethods.IHTMLElementCollection htmlElementCollection;
-        private HtmlElement[] elementsArray;
-        private HtmlShimManager shimManager;
+        private readonly UnsafeNativeMethods.IHTMLElementCollection htmlElementCollection;
+        private readonly HtmlElement[] elementsArray;
+        private readonly HtmlShimManager shimManager;
 
         internal HtmlElementCollection(HtmlShimManager shimManager)
         {

@@ -2589,7 +2589,7 @@ namespace System.Windows.Forms.Design
             /// <summary>
             /// Constructor that accepts the related ControlDesigner.
             /// </summary>
-            private ToolStripMenuItemDesigner menuItemDesigner;
+            private readonly ToolStripMenuItemDesigner menuItemDesigner;
 
             internal DropDownBehavior(ControlDesigner designer, ToolStripMenuItemDesigner menuItemDesigner) : base(designer)
             {

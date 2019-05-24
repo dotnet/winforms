@@ -42,7 +42,7 @@ namespace System.Windows.Forms
         private static readonly Point DEFAULT_PADDING = new Point(6, 3);
 
         //properties
-        private TabPageCollection tabCollection;
+        private readonly TabPageCollection tabCollection;
         private TabAlignment alignment = TabAlignment.Top;
         private TabDrawMode drawMode = TabDrawMode.Normal;
         private ImageList imageList = null;
@@ -2345,7 +2345,7 @@ namespace System.Windows.Forms
 
         public class TabPageCollection : IList
         {
-            private TabControl owner;
+            private readonly TabControl owner;
             /// A caching mechanism for key accessor
             /// We use an index here rather than control so that we don't have lifetime
             /// issues by holding on to extra references.
@@ -2822,7 +2822,7 @@ namespace System.Windows.Forms
         public new class ControlCollection : Control.ControlCollection
         {
 
-            private TabControl owner;
+            private readonly TabControl owner;
 
             /*C#r: protected*/
 

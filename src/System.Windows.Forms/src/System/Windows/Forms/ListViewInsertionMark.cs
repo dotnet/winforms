@@ -16,7 +16,7 @@ namespace System.Windows.Forms
     /// </summary>
     public sealed class ListViewInsertionMark
     {
-        private ListView listView;
+        private readonly ListView listView;
 
         private int index = 0;
         private Color color = Color.Empty;

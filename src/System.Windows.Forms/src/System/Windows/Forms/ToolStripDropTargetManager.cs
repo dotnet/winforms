@@ -19,7 +19,7 @@ namespace System.Windows.Forms
     internal class ToolStripDropTargetManager : IDropTarget
     {
         private IDropTarget lastDropTarget;
-        private ToolStrip owner;
+        private readonly ToolStrip owner;
 
 #if DEBUG
         private bool dropTargetIsEntered;

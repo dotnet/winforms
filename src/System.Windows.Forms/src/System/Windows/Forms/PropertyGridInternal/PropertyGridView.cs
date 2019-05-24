@@ -82,7 +82,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         private const int DOWNARROW_ICONWIDTH = 16;
         private const int DOWNARROW_ICONHEIGHT = 16;
 
-        private static int OFFSET_2PIXELS = 2;
+        private static readonly int OFFSET_2PIXELS = 2;
         private int offset_2Units = OFFSET_2PIXELS;
 
         protected static readonly Point InvalidPosition = new Point(int.MinValue, int.MinValue);
@@ -157,12 +157,12 @@ namespace System.Windows.Forms.PropertyGridInternal
         private IHelpService topHelpService;
         private IHelpService helpService;
 
-        private EventHandler ehValueClick;
-        private EventHandler ehLabelClick;
-        private EventHandler ehOutlineClick;
-        private EventHandler ehValueDblClick;
-        private EventHandler ehLabelDblClick;
-        private GridEntryRecreateChildrenEventHandler ehRecreateChildren;
+        private readonly EventHandler ehValueClick;
+        private readonly EventHandler ehLabelClick;
+        private readonly EventHandler ehOutlineClick;
+        private readonly EventHandler ehValueDblClick;
+        private readonly EventHandler ehLabelDblClick;
+        private readonly GridEntryRecreateChildrenEventHandler ehRecreateChildren;
 
         private int cachedRowHeight = -1;
         IntPtr baseHfont;
@@ -6376,8 +6376,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
 
             private Control currentControl = null; // the control that is hosted in the holder
-            private PropertyGridView gridView;              // the owner gridview
-            private MouseHook mouseHook;             // we use this to hook mouse downs, etc. to know when to close the dropdown.
+            private readonly PropertyGridView gridView;              // the owner gridview
+            private readonly MouseHook mouseHook;             // we use this to hook mouse downs, etc. to know when to close the dropdown.
 
             private LinkLabel createNewLink = null;
 
@@ -7121,7 +7121,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
 
             internal bool fInSetSelectedIndex = false;
-            private PropertyGridView _owningPropertyGridView;
+            private readonly PropertyGridView _owningPropertyGridView;
 
             public GridViewListBox(PropertyGridView gridView)
             {
@@ -7190,8 +7190,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         private class GridViewListBoxItemAccessibleObject : AccessibleObject
         {
 
-            private GridViewListBox _owningGridViewListBox;
-            private object _owningItem;
+            private readonly GridViewListBox _owningGridViewListBox;
+            private readonly object _owningItem;
 
             public GridViewListBoxItemAccessibleObject(GridViewListBox owningGridViewListBox, object owningItem)
             {
@@ -7424,7 +7424,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         private class GridViewListBoxItemAccessibleObjectCollection : Hashtable
         {
 
-            private GridViewListBox _owningGridViewListBox;
+            private readonly GridViewListBox _owningGridViewListBox;
 
             public GridViewListBoxItemAccessibleObjectCollection(GridViewListBox owningGridViewListBox)
             {
@@ -7458,9 +7458,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         private class GridViewListBoxAccessibleObject : ControlAccessibleObject
         {
 
-            private GridViewListBox _owningGridViewListBox;
-            private PropertyGridView _owningPropertyGridView;
-            private GridViewListBoxItemAccessibleObjectCollection _itemAccessibleObjects;
+            private readonly GridViewListBox _owningGridViewListBox;
+            private readonly PropertyGridView _owningPropertyGridView;
+            private readonly GridViewListBoxItemAccessibleObjectCollection _itemAccessibleObjects;
 
             /// <summary>
             /// Constructs the new instance of GridViewListBoxAccessibleObject.
@@ -7577,7 +7577,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             private bool dontFocusMe = false;
             private int lastMove;
 
-            private MouseHook mouseHook;
+            private readonly MouseHook mouseHook;
 
             // We do this becuase the Focus call above doesn't always stick, so
             // we make the Edit think that it doesn't have focus.  this prevents
@@ -8031,7 +8031,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             protected class GridViewEditAccessibleObject : ControlAccessibleObject
             {
 
-                private PropertyGridView propertyGridView;
+                private readonly PropertyGridView propertyGridView;
 
                 public GridViewEditAccessibleObject(GridViewEdit owner) : base(owner)
                 {
@@ -8183,9 +8183,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal class MouseHook
         {
-            private PropertyGridView gridView;
-            private Control control;
-            private IMouseHookClient client;
+            private readonly PropertyGridView gridView;
+            private readonly Control control;
+            private readonly IMouseHookClient client;
 
             internal int thisProcessID = 0;
             private GCHandle mouseHookRoot;
@@ -8205,7 +8205,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
 #if DEBUG
-            string callingStack;
+            readonly string callingStack;
             ~MouseHook()
             {
                 Debug.Assert(mouseHookHandle == IntPtr.Zero, "Finalizing an active mouse hook.  This will crash the process.  Calling stack: " + callingStack);
@@ -8456,8 +8456,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         internal class PropertyGridViewAccessibleObject : ControlAccessibleObject
         {
 
-            private PropertyGridView _owningPropertyGridView;
-            private PropertyGrid _parentPropertyGrid;
+            private readonly PropertyGridView _owningPropertyGridView;
+            private readonly PropertyGrid _parentPropertyGrid;
 
             /// <summary>
             ///     Construct a PropertyGridViewAccessibleObject
@@ -8975,11 +8975,10 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal class GridPositionData
         {
-
-            ArrayList expandedState;
-            GridEntryCollection selectedItemTree;
-            int itemRow;
-            int itemCount;
+            readonly ArrayList expandedState;
+            readonly GridEntryCollection selectedItemTree;
+            readonly int itemRow;
+            readonly int itemCount;
 
             public GridPositionData(PropertyGridView gridView)
             {

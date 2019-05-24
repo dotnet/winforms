@@ -117,7 +117,7 @@ namespace System.Windows.Forms
         private string currentText = string.Empty;
         private string lastTextChangedValue;
         private bool dropDown;
-        private AutoCompleteDropDownFinder finder = new AutoCompleteDropDownFinder();
+        private readonly AutoCompleteDropDownFinder finder = new AutoCompleteDropDownFinder();
 
         private bool selectedValueChangedFired;
 
@@ -4168,9 +4168,9 @@ namespace System.Windows.Forms
         [ComVisible(true)]
         private class ComboBoxChildNativeWindow : NativeWindow
         {
-            private ComboBox _owner;
+            private readonly ComboBox _owner;
             private InternalAccessibleObject _accessibilityObject;
-            private ChildWindowType _childWindowType;
+            private readonly ChildWindowType _childWindowType;
 
             public ComboBoxChildNativeWindow(ComboBox comboBox, ChildWindowType childWindowType)
             {
@@ -4306,7 +4306,7 @@ namespace System.Windows.Forms
 
         private sealed class ItemComparer : System.Collections.IComparer
         {
-            private ComboBox comboBox;
+            private readonly ComboBox comboBox;
 
             public ItemComparer(ComboBox comboBox)
             {
@@ -4341,7 +4341,7 @@ namespace System.Windows.Forms
         public class ObjectCollection : IList
         {
 
-            private ComboBox owner;
+            private readonly ComboBox owner;
             private ArrayList innerList;
             private IComparer comparer;
 
@@ -4767,8 +4767,7 @@ namespace System.Windows.Forms
         [ComVisible(true)]
         public class ChildAccessibleObject : AccessibleObject
         {
-
-            ComboBox owner;
+            readonly ComboBox owner;
 
             public ChildAccessibleObject(ComboBox owner, IntPtr handle)
             {
@@ -4794,8 +4793,8 @@ namespace System.Windows.Forms
         internal class ComboBoxItemAccessibleObject : AccessibleObject
         {
 
-            private ComboBox _owningComboBox;
-            private object _owningItem;
+            private readonly ComboBox _owningComboBox;
+            private readonly object _owningItem;
             private IAccessible _systemIAccessible;
 
             /// <summary>
@@ -5073,7 +5072,7 @@ namespace System.Windows.Forms
         internal class ComboBoxItemAccessibleObjectCollection : Hashtable
         {
 
-            private ComboBox _owningComboBoxBox;
+            private readonly ComboBox _owningComboBoxBox;
             private readonly ObjectIDGenerator _idGenerator = new ObjectIDGenerator();
 
             public ComboBoxItemAccessibleObjectCollection(ComboBox owningComboBoxBox)
@@ -5119,8 +5118,8 @@ namespace System.Windows.Forms
             private const int COMBOBOX_ACC_ITEM_INDEX = 1;
 
             private ComboBoxChildDropDownButtonUiaProvider _dropDownButtonUiaProvider;
-            private ComboBoxItemAccessibleObjectCollection _itemAccessibleObjects;
-            private ComboBox _owningComboBox;
+            private readonly ComboBoxItemAccessibleObjectCollection _itemAccessibleObjects;
+            private readonly ComboBox _owningComboBox;
 
             /// <summary>
             /// Initializes new instance of ComboBoxAccessibleObject.
@@ -5438,8 +5437,8 @@ namespace System.Windows.Forms
         {
             private const string COMBO_BOX_EDIT_AUTOMATION_ID = "1001";
 
-            private ComboBox _owner;
-            private IntPtr _handle;
+            private readonly ComboBox _owner;
+            private readonly IntPtr _handle;
 
             /// <summary>
             /// Initializes new instance of ComboBoxChildEditUiaProvider.
@@ -5584,8 +5583,8 @@ namespace System.Windows.Forms
         {
             private const string COMBO_BOX_LIST_AUTOMATION_ID = "1000";
 
-            private ComboBox _owningComboBox;
-            private IntPtr _childListControlhandle;
+            private readonly ComboBox _owningComboBox;
+            private readonly IntPtr _childListControlhandle;
 
             /// <summary>
             /// Initializes new instance of ComboBoxChildListUiaProvider. 
@@ -5832,7 +5831,7 @@ namespace System.Windows.Forms
 
             private const int COMBOBOX_TEXT_ACC_ITEM_INDEX = 1;
 
-            private ComboBox _owner;
+            private readonly ComboBox _owner;
 
             /// <summary>
             /// Initializes new instance of ComboBoxChildTextUiaProvider.
@@ -6007,7 +6006,7 @@ namespace System.Windows.Forms
         {
 
             private const int COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX = 2;
-            private ComboBox _owner;
+            private readonly ComboBox _owner;
 
             /// <summary>
             /// Initializes new instance of ComboBoxChildDropDownButtonUiaProvider.
@@ -6238,7 +6237,7 @@ namespace System.Windows.Forms
         {
             static internal int inWndProcCnt;
             //this hashtable can contain null for those ACWindows we find, but are sure are not ours.
-            static private Hashtable ACWindows = new Hashtable();
+            private static readonly Hashtable ACWindows = new Hashtable();
 
             [
                 SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")
@@ -6429,12 +6428,11 @@ namespace System.Windows.Forms
             internal Rectangle dropDownRect;
             Rectangle whiteFillRect;
             Rectangle clientRect;
-
-            RightToLeft origRightToLeft; // The combo box's RTL value when we were created
+            readonly RightToLeft origRightToLeft; // The combo box's RTL value when we were created
 
             private const int WhiteFillRectWidth = 5; // used for making the button look smaller than it is
 
-            private static int OFFSET_2PIXELS = 2;
+            private static readonly int OFFSET_2PIXELS = 2;
             protected static int Offset2Pixels = OFFSET_2PIXELS;
 
             public FlatComboAdapter(ComboBox comboBox, bool smallButton)

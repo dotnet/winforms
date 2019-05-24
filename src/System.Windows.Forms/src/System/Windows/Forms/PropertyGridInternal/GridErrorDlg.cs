@@ -42,9 +42,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         private TableLayoutPanel pictureLabelTableLayoutPanel;
         private TextBox details;
 
-        private Bitmap expandImage = null;
-        private Bitmap collapseImage = null;
-        private PropertyGrid ownerGrid;
+        private readonly Bitmap expandImage = null;
+        private readonly Bitmap collapseImage = null;
+        private readonly PropertyGrid ownerGrid;
 
         private bool detailsButtonExpanded = false;
 
@@ -368,7 +368,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
     internal class DetailsButton : Button
     {
-        private GridErrorDlg parent;
+        private readonly GridErrorDlg parent;
         public DetailsButton(GridErrorDlg form)
         {
             parent = form;
@@ -390,7 +390,7 @@ namespace System.Windows.Forms.PropertyGridInternal
     internal class DetailsButtonAccessibleObject : Control.ControlAccessibleObject
     {
 
-        private DetailsButton ownerItem = null;
+        private readonly DetailsButton ownerItem = null;
 
         public DetailsButtonAccessibleObject(DetailsButton owner) : base(owner)
         {

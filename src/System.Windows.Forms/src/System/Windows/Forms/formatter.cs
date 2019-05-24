@@ -10,11 +10,11 @@ namespace System.Windows.Forms
 {
     internal class Formatter
     {
-        static private Type stringType = typeof(string);
-        static private Type booleanType = typeof(bool);
-        static private Type checkStateType = typeof(CheckState);
-        static private object parseMethodNotFound = new object();
-        static private object defaultDataSourceNullValue = System.DBNull.Value;
+        private static readonly Type stringType = typeof(string);
+        private static readonly Type booleanType = typeof(bool);
+        private static readonly Type checkStateType = typeof(CheckState);
+        private static readonly object parseMethodNotFound = new object();
+        private static readonly object defaultDataSourceNullValue = System.DBNull.Value;
 
         /// <summary>
         ///

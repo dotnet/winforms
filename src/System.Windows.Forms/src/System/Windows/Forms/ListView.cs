@@ -146,7 +146,7 @@ namespace System.Windows.Forms
         // listItemsArray is null if the handle is created; otherwise, it contains all Items.
         // We do not try to sort listItemsArray as items are added, but during a handle recreate
         // we will make sure we get the items in the same order the ListView displays them.
-        private Hashtable listItemsTable = new Hashtable(); // elements are ListViewItem's
+        private readonly Hashtable listItemsTable = new Hashtable(); // elements are ListViewItem's
         private ArrayList listItemsArray = new ArrayList(); // elements are ListViewItem's
 
         private Size tileSize = Size.Empty;
@@ -161,8 +161,8 @@ namespace System.Windows.Forms
         private int updateCounter = 0; // the counter we use to track how many BeginUpdate/EndUpdate calls there have been.
 
         private ColumnHeader[] columnHeaders;
-        private ListViewItemCollection listItemCollection;
-        private ColumnHeaderCollection columnHeaderCollection;
+        private readonly ListViewItemCollection listItemCollection;
+        private readonly ColumnHeaderCollection columnHeaderCollection;
         private CheckedIndexCollection checkedIndexCollection;
         private CheckedListViewItemCollection checkedListViewItemCollection;
         private SelectedListViewItemCollection selectedListViewItemCollection;
@@ -6999,7 +6999,7 @@ namespace System.Windows.Forms
         [ListBindable(false)]
         public class CheckedIndexCollection : IList
         {
-            private ListView owner;
+            private readonly ListView owner;
 
             /* C#r: protected */
             public CheckedIndexCollection(ListView owner)
@@ -7230,7 +7230,7 @@ namespace System.Windows.Forms
         [ListBindable(false)]
         public class CheckedListViewItemCollection : IList
         {
-            private ListView owner;
+            private readonly ListView owner;
 
             /// A caching mechanism for key accessor
             /// We use an index here rather than control so that we don't have lifetime
@@ -7568,7 +7568,7 @@ namespace System.Windows.Forms
         [ListBindable(false)]
         public class SelectedIndexCollection : IList
         {
-            private ListView owner;
+            private readonly ListView owner;
 
             /* C#r: protected */
             public SelectedIndexCollection(ListView owner)
@@ -7887,7 +7887,7 @@ namespace System.Windows.Forms
         [ListBindable(false)]
         public class SelectedListViewItemCollection : IList
         {
-            private ListView owner;
+            private readonly ListView owner;
 
             /// A caching mechanism for key accessor
             /// We use an index here rather than control so that we don't have lifetime
@@ -8300,7 +8300,7 @@ namespace System.Windows.Forms
         [ListBindable(false)]
         public class ColumnHeaderCollection : IList
         {
-            private ListView owner;
+            private readonly ListView owner;
 
             public ColumnHeaderCollection(ListView owner)
             {
@@ -8933,7 +8933,7 @@ namespace System.Windows.Forms
                 void RemoveAt(int index);
             }
 
-            private IInnerList innerList;
+            private readonly IInnerList innerList;
 
             public ListViewItemCollection(ListView owner)
             {
@@ -9464,7 +9464,7 @@ namespace System.Windows.Forms
         //
         internal class ListViewNativeItemCollection : ListViewItemCollection.IInnerList
         {
-            private ListView owner;
+            private readonly ListView owner;
 
             public ListViewNativeItemCollection(ListView owner)
             {
@@ -9944,7 +9944,7 @@ namespace System.Windows.Forms
         internal class ListViewAccessibleObject : ControlAccessibleObject
         {
 
-            private ListView owner;
+            private readonly ListView owner;
 
             internal ListViewAccessibleObject(ListView owner) : base(owner)
             {

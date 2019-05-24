@@ -14,7 +14,7 @@ namespace System.ComponentModel.Design.Serialization
     /// </summary>
     public class DesignerSerializationManager : IDesignerSerializationManager
     {
-        private IServiceProvider provider;
+        private readonly IServiceProvider provider;
         private ITypeResolutionService typeResolver;
         private bool searchedTypeResolver;
         private bool recycleInstances;
@@ -921,7 +921,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         private sealed class SerializationSession : IDisposable
         {
-            private DesignerSerializationManager _serializationManager;
+            private readonly DesignerSerializationManager _serializationManager;
 
             internal SerializationSession(DesignerSerializationManager serializationManager)
             {
@@ -959,8 +959,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         private sealed class WrappedPropertyDescriptor : PropertyDescriptor
         {
-            private object target;
-            private PropertyDescriptor property;
+            private readonly object target;
+            private readonly PropertyDescriptor property;
 
             internal WrappedPropertyDescriptor(PropertyDescriptor property, object target) : base(property.Name, null)
             {

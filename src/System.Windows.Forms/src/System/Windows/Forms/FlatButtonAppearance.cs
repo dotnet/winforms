@@ -16,7 +16,7 @@ namespace System.Windows.Forms
     public class FlatButtonAppearance
     {
 
-        private ButtonBase owner;
+        private readonly ButtonBase owner;
 
         private int borderSize = 1;
         private Color borderColor = Color.Empty;

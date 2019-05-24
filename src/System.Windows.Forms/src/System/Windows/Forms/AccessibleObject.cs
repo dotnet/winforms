@@ -59,7 +59,7 @@ namespace System.Windows.Forms
         // IOleWindow interface of the 'inner' system IAccessible object that we are wrapping
         private UnsafeNativeMethods.IOleWindow systemIOleWindow = null;
 
-        private bool systemWrapper = false;     // Indicates this object is being used ONLY to wrap a system IAccessible
+        private readonly bool systemWrapper = false;     // Indicates this object is being used ONLY to wrap a system IAccessible
 
         private int accObjId = NativeMethods.OBJID_CLIENT;    // Indicates what kind of 'inner' system accessible object we are using
 
@@ -2464,7 +2464,7 @@ namespace System.Windows.Forms
         private class EnumVariantObject : UnsafeNativeMethods.IEnumVariant
         {
             private int currentChild = 0;
-            private AccessibleObject owner;
+            private readonly AccessibleObject owner;
 
             public EnumVariantObject(AccessibleObject owner)
             {
@@ -2682,30 +2682,30 @@ namespace System.Windows.Forms
     {
 
         private IAccessible publicIAccessible;                       // AccessibleObject as IAccessible
-        private UnsafeNativeMethods.IEnumVariant publicIEnumVariant; // AccessibleObject as IEnumVariant
-        private UnsafeNativeMethods.IOleWindow publicIOleWindow;     // AccessibleObject as IOleWindow
-        private IReflect publicIReflect;                             // AccessibleObject as IReflect
+        private readonly UnsafeNativeMethods.IEnumVariant publicIEnumVariant; // AccessibleObject as IEnumVariant
+        private readonly UnsafeNativeMethods.IOleWindow publicIOleWindow;     // AccessibleObject as IOleWindow
+        private readonly IReflect publicIReflect;                             // AccessibleObject as IReflect
 
-        private UnsafeNativeMethods.IServiceProvider publicIServiceProvider;             // AccessibleObject as IServiceProvider
-        private UnsafeNativeMethods.IAccessibleEx publicIAccessibleEx;                   // AccessibleObject as IAccessibleEx
+        private readonly UnsafeNativeMethods.IServiceProvider publicIServiceProvider;             // AccessibleObject as IServiceProvider
+        private readonly UnsafeNativeMethods.IAccessibleEx publicIAccessibleEx;                   // AccessibleObject as IAccessibleEx
 
         // UIAutomation
-        private UnsafeNativeMethods.IRawElementProviderSimple publicIRawElementProviderSimple;    // AccessibleObject as IRawElementProviderSimple
-        private UnsafeNativeMethods.IRawElementProviderFragment publicIRawElementProviderFragment;// AccessibleObject as IRawElementProviderFragment
-        private UnsafeNativeMethods.IRawElementProviderFragmentRoot publicIRawElementProviderFragmentRoot;// AccessibleObject as IRawElementProviderFragmentRoot
-        private UnsafeNativeMethods.IInvokeProvider publicIInvokeProvider;                        // AccessibleObject as IInvokeProvider
-        private UnsafeNativeMethods.IValueProvider publicIValueProvider;                          // AccessibleObject as IValueProvider
-        private UnsafeNativeMethods.IRangeValueProvider publicIRangeValueProvider;                // AccessibleObject as IRangeValueProvider
-        private UnsafeNativeMethods.IExpandCollapseProvider publicIExpandCollapseProvider;        // AccessibleObject as IExpandCollapseProvider
-        private UnsafeNativeMethods.IToggleProvider publicIToggleProvider;                        // AccessibleObject as IToggleProvider
-        private UnsafeNativeMethods.ITableProvider publicITableProvider;                          // AccessibleObject as ITableProvider
-        private UnsafeNativeMethods.ITableItemProvider publicITableItemProvider;                  // AccessibleObject as ITableItemProvider
-        private UnsafeNativeMethods.IGridProvider publicIGridProvider;                            // AccessibleObject as IGridProvider
-        private UnsafeNativeMethods.IGridItemProvider publicIGridItemProvider;                    // AccessibleObject as IGridItemProvider
-        private UnsafeNativeMethods.ILegacyIAccessibleProvider publicILegacyIAccessibleProvider;   // AccessibleObject as ILegayAccessibleProvider
-        private UnsafeNativeMethods.ISelectionProvider publicISelectionProvider;                  // AccessibleObject as ISelectionProvider
-        private UnsafeNativeMethods.ISelectionItemProvider publicISelectionItemProvider;          // AccessibleObject as ISelectionItemProvider
-        private UnsafeNativeMethods.IRawElementProviderHwndOverride publicIRawElementProviderHwndOverride; // AccessibleObject as IRawElementProviderHwndOverride
+        private readonly UnsafeNativeMethods.IRawElementProviderSimple publicIRawElementProviderSimple;    // AccessibleObject as IRawElementProviderSimple
+        private readonly UnsafeNativeMethods.IRawElementProviderFragment publicIRawElementProviderFragment;// AccessibleObject as IRawElementProviderFragment
+        private readonly UnsafeNativeMethods.IRawElementProviderFragmentRoot publicIRawElementProviderFragmentRoot;// AccessibleObject as IRawElementProviderFragmentRoot
+        private readonly UnsafeNativeMethods.IInvokeProvider publicIInvokeProvider;                        // AccessibleObject as IInvokeProvider
+        private readonly UnsafeNativeMethods.IValueProvider publicIValueProvider;                          // AccessibleObject as IValueProvider
+        private readonly UnsafeNativeMethods.IRangeValueProvider publicIRangeValueProvider;                // AccessibleObject as IRangeValueProvider
+        private readonly UnsafeNativeMethods.IExpandCollapseProvider publicIExpandCollapseProvider;        // AccessibleObject as IExpandCollapseProvider
+        private readonly UnsafeNativeMethods.IToggleProvider publicIToggleProvider;                        // AccessibleObject as IToggleProvider
+        private readonly UnsafeNativeMethods.ITableProvider publicITableProvider;                          // AccessibleObject as ITableProvider
+        private readonly UnsafeNativeMethods.ITableItemProvider publicITableItemProvider;                  // AccessibleObject as ITableItemProvider
+        private readonly UnsafeNativeMethods.IGridProvider publicIGridProvider;                            // AccessibleObject as IGridProvider
+        private readonly UnsafeNativeMethods.IGridItemProvider publicIGridItemProvider;                    // AccessibleObject as IGridItemProvider
+        private readonly UnsafeNativeMethods.ILegacyIAccessibleProvider publicILegacyIAccessibleProvider;   // AccessibleObject as ILegayAccessibleProvider
+        private readonly UnsafeNativeMethods.ISelectionProvider publicISelectionProvider;                  // AccessibleObject as ISelectionProvider
+        private readonly UnsafeNativeMethods.ISelectionItemProvider publicISelectionItemProvider;          // AccessibleObject as ISelectionItemProvider
+        private readonly UnsafeNativeMethods.IRawElementProviderHwndOverride publicIRawElementProviderHwndOverride; // AccessibleObject as IRawElementProviderHwndOverride
 
         /// <summary>
         /// Create a new wrapper.

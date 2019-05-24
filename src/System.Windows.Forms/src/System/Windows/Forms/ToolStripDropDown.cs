@@ -2419,7 +2419,7 @@ namespace System.Windows.Forms
         [System.Runtime.InteropServices.ComVisible(true)]
         public class ToolStripDropDownAccessibleObject : ToolStripAccessibleObject
         {
-            private ToolStripDropDown owner;
+            private readonly ToolStripDropDown owner;
 
             public ToolStripDropDownAccessibleObject(ToolStripDropDown owner) : base(owner)
             {

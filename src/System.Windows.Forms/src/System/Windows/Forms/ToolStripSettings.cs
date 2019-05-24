@@ -131,8 +131,8 @@ namespace System.Windows.Forms
     /// </summary>
     internal class ToolStripSettingsManager
     {
-        private Form form;
-        private string formKey;
+        private readonly Form form;
+        private readonly string formKey;
 
         internal ToolStripSettingsManager(Form owner, string formKey)
         {

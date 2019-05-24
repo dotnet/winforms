@@ -67,7 +67,7 @@ namespace System.Windows.Forms.Tests
 
         private class SubCollection : BaseCollection
         {
-            private ArrayList _list;
+            private readonly ArrayList _list;
 
             public SubCollection(ArrayList list) => _list = list;
 

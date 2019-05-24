@@ -10,9 +10,11 @@ namespace System.Windows.Forms
 
     public class DataGridViewSortCompareEventArgs : HandledEventArgs
     {
-        private DataGridViewColumn dataGridViewColumn;
-        private object cellValue1, cellValue2;
-        private int sortResult, rowIndex1, rowIndex2;
+        private readonly DataGridViewColumn dataGridViewColumn;
+        private readonly object cellValue1, cellValue2;
+        private int sortResult;
+        private readonly int rowIndex1;
+        private readonly int rowIndex2;
 
         public DataGridViewSortCompareEventArgs(DataGridViewColumn dataGridViewColumn,
             object cellValue1,

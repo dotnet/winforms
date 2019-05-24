@@ -52,10 +52,10 @@ namespace System.Windows.Forms
 
         internal const int DATAGRIDVIEWCOMBOBOXCELL_defaultMaxDropDownItems = 8;
 
-        private static Type defaultFormattedValueType = typeof(string);
-        private static Type defaultEditType = typeof(System.Windows.Forms.DataGridViewComboBoxEditingControl);
-        private static Type defaultValueType = typeof(object);
-        private static Type cellType = typeof(DataGridViewComboBoxCell);
+        private static readonly Type defaultFormattedValueType = typeof(string);
+        private static readonly Type defaultEditType = typeof(System.Windows.Forms.DataGridViewComboBoxEditingControl);
+        private static readonly Type defaultValueType = typeof(object);
+        private static readonly Type cellType = typeof(DataGridViewComboBoxCell);
 
         private byte flags;  // see DATAGRIDVIEWCOMBOBOXCELL_ consts above
         private static bool mouseInDropDownButtonBounds = false;
@@ -68,7 +68,7 @@ namespace System.Windows.Forms
         //private object valueUsedDuringAutoSize  = null;
 
         private static bool isScalingInitialized = false;
-        private static int OFFSET_2PIXELS = 2;
+        private static readonly int OFFSET_2PIXELS = 2;
         private static int offset2X = OFFSET_2PIXELS;
         private static int offset2Y = OFFSET_2PIXELS;
         private static byte nonXPTriangleHeight = DATAGRIDVIEWCOMBOBOXCELL_nonXPTriangleHeight;
@@ -2689,7 +2689,7 @@ namespace System.Windows.Forms
         [ListBindable(false)]
         public class ObjectCollection : IList
         {
-            private DataGridViewComboBoxCell owner;
+            private readonly DataGridViewComboBoxCell owner;
             private ArrayList items;
             private IComparer comparer;
 
@@ -3020,7 +3020,7 @@ namespace System.Windows.Forms
 
         private sealed class ItemComparer : System.Collections.IComparer
         {
-            private DataGridViewComboBoxCell dataGridViewComboBoxCell;
+            private readonly DataGridViewComboBoxCell dataGridViewComboBoxCell;
 
             public ItemComparer(DataGridViewComboBoxCell dataGridViewComboBoxCell)
             {

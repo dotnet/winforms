@@ -15,10 +15,10 @@ namespace System.Windows.Forms
     /// </summary>
     internal class HtmlToClrEventProxy : IReflect
     {
-        private EventHandler eventHandler;
-        private IReflect typeIReflectImplementation;
-        private object sender = null;
-        private string eventName;
+        private readonly EventHandler eventHandler;
+        private readonly IReflect typeIReflectImplementation;
+        private readonly object sender = null;
+        private readonly string eventName;
 
         public HtmlToClrEventProxy(object sender, string eventName, EventHandler eventHandler)
         {

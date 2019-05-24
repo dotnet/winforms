@@ -24,8 +24,8 @@ namespace System.Windows.Forms
         internal static object EventMouseUp = new object();
         internal static object EventStop = new object();
 
-        private UnsafeNativeMethods.IHTMLDocument2 htmlDocument2;
-        private HtmlShimManager shimManager;
+        private readonly UnsafeNativeMethods.IHTMLDocument2 htmlDocument2;
+        private readonly HtmlShimManager shimManager;
 
         internal HtmlDocument(HtmlShimManager shimManager, UnsafeNativeMethods.IHTMLDocument doc)
         {
@@ -651,7 +651,7 @@ namespace System.Windows.Forms
         {
             private AxHost.ConnectionPointCookie cookie;
             private HtmlDocument htmlDocument;
-            private UnsafeNativeMethods.IHTMLWindow2 associatedWindow = null;
+            private readonly UnsafeNativeMethods.IHTMLWindow2 associatedWindow = null;
 
             internal HtmlDocumentShim(HtmlDocument htmlDocument)
             {
@@ -763,7 +763,7 @@ namespace System.Windows.Forms
         private class HTMLDocumentEvents2 : StandardOleMarshalObject, /*Enforce calling back on the same thread*/
                                             UnsafeNativeMethods.DHTMLDocumentEvents2
         {
-            private HtmlDocument parent;
+            private readonly HtmlDocument parent;
 
             public HTMLDocumentEvents2(HtmlDocument htmlDocument)
             {

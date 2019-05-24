@@ -16,7 +16,7 @@ namespace System.Windows.Forms
         {
             private int[] runtimeId = null; // Used by UIAutomation
 
-            DataGridView owner;
+            readonly DataGridView owner;
             DataGridViewTopRowAccessibleObject topRowAccessibilityObject = null;
             DataGridViewSelectedCellsAccessibleObject selectedCellsAccessibilityObject = null;
 
@@ -450,8 +450,8 @@ namespace System.Windows.Forms
 
         internal class DataGridViewEditingPanelAccessibleObject : ControlAccessibleObject
         {
-            private DataGridView dataGridView;
-            private Panel panel;
+            private readonly DataGridView dataGridView;
+            private readonly Panel panel;
 
             public DataGridViewEditingPanelAccessibleObject(DataGridView dataGridView, Panel panel) : base(panel)
             {

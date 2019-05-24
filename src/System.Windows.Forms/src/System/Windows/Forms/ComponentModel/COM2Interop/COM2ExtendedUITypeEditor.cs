@@ -24,7 +24,7 @@ namespace System.Drawing.Design
     internal class Com2ExtendedUITypeEditor : UITypeEditor
     {
 
-        private UITypeEditor innerEditor;
+        private readonly UITypeEditor innerEditor;
 
         public Com2ExtendedUITypeEditor(UITypeEditor baseTypeEditor)
         {

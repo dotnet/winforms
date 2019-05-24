@@ -37,11 +37,11 @@ namespace System.Windows.Forms
 #endif
 
         private CollectionChangeEventHandler onCollectionChanged;
-        private RowArrayList items;
-        private List<DataGridViewElementStates> rowStates;
+        private readonly RowArrayList items;
+        private readonly List<DataGridViewElementStates> rowStates;
         private int rowCountsVisible, rowCountsVisibleFrozen, rowCountsVisibleSelected;
         private int rowsHeightVisible, rowsHeightVisibleFrozen;
-        private DataGridView dataGridView;
+        private readonly DataGridView dataGridView;
 
         /* IList interface implementation */
 
@@ -2581,7 +2581,7 @@ namespace System.Windows.Forms
 
         private class RowArrayList : ArrayList
         {
-            private DataGridViewRowCollection owner;
+            private readonly DataGridViewRowCollection owner;
             private RowComparer rowComparer;
 
             public RowArrayList(DataGridViewRowCollection owner)
@@ -2693,13 +2693,13 @@ namespace System.Windows.Forms
 
         private class RowComparer
         {
-            private DataGridView dataGridView;
-            private DataGridViewRowCollection dataGridViewRows;
-            private DataGridViewColumn dataGridViewSortedColumn;
-            private int sortedColumnIndex;
-            private IComparer customComparer;
-            private bool ascending;
-            private static ComparedObjectMax max = new ComparedObjectMax();
+            private readonly DataGridView dataGridView;
+            private readonly DataGridViewRowCollection dataGridViewRows;
+            private readonly DataGridViewColumn dataGridViewSortedColumn;
+            private readonly int sortedColumnIndex;
+            private readonly IComparer customComparer;
+            private readonly bool ascending;
+            private static readonly ComparedObjectMax max = new ComparedObjectMax();
 
             public RowComparer(DataGridViewRowCollection dataGridViewRows, IComparer customComparer, bool ascending)
             {
@@ -2826,7 +2826,7 @@ namespace System.Windows.Forms
 
         private class UnsharingRowEnumerator : IEnumerator
         {
-            private DataGridViewRowCollection owner;
+            private readonly DataGridViewRowCollection owner;
             private int current;
 
             /// <summary>

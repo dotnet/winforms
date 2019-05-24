@@ -42,7 +42,7 @@ namespace System.Windows.Forms
         // we will be mapping only the black color to 
         // the HeaderForeColor
         //
-        private static ColorMap[] colorMap = new ColorMap[] { new ColorMap() };
+        private static readonly ColorMap[] colorMap = new ColorMap[] { new ColorMap() };
 
         // bitmaps
         //
@@ -761,8 +761,7 @@ namespace System.Windows.Forms
         protected class DataGridRowAccessibleObject : AccessibleObject
         {
             ArrayList cells;
-
-            DataGridRow owner = null;
+            readonly DataGridRow owner = null;
 
             internal static string CellToDisplayString(DataGrid grid, int row, int column)
             {
@@ -1008,8 +1007,8 @@ namespace System.Windows.Forms
         [ComVisible(true)]
         protected class DataGridCellAccessibleObject : AccessibleObject
         {
-            DataGridRow owner = null;
-            int column;
+            readonly DataGridRow owner = null;
+            readonly int column;
 
             public DataGridCellAccessibleObject(DataGridRow owner, int column) : base()
             {

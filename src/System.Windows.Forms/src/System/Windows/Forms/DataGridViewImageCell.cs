@@ -16,12 +16,12 @@ namespace System.Windows.Forms
 
     public class DataGridViewImageCell : DataGridViewCell
     {
-        private static ColorMap[] colorMap = new ColorMap[] { new ColorMap() };
+        private static readonly ColorMap[] colorMap = new ColorMap[] { new ColorMap() };
         private static readonly int PropImageCellDescription = PropertyStore.CreateKey();
         private static readonly int PropImageCellLayout = PropertyStore.CreateKey();
-        private static Type defaultTypeImage = typeof(System.Drawing.Image);
-        private static Type defaultTypeIcon = typeof(System.Drawing.Icon);
-        private static Type cellType = typeof(DataGridViewImageCell);
+        private static readonly Type defaultTypeImage = typeof(System.Drawing.Image);
+        private static readonly Type defaultTypeIcon = typeof(System.Drawing.Icon);
+        private static readonly Type cellType = typeof(DataGridViewImageCell);
         private static Bitmap errorBmp = null;
         private static Icon errorIco = null;
 

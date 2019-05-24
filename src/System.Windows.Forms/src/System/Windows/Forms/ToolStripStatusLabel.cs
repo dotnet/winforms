@@ -268,7 +268,7 @@ namespace System.Windows.Forms
         [ComVisible(true)]
         internal class ToolStripStatusLabelAccessibleObject : ToolStripLabelAccessibleObject
         {
-            private ToolStripStatusLabel ownerItem;
+            private readonly ToolStripStatusLabel ownerItem;
 
             public ToolStripStatusLabelAccessibleObject(ToolStripStatusLabel ownerItem) : base(ownerItem)
             {
@@ -307,8 +307,7 @@ namespace System.Windows.Forms
         /// </summary>
         private class ToolStripStatusLabelLayout : ToolStripItemInternalLayout
         {
-
-            ToolStripStatusLabel owner;
+            readonly ToolStripStatusLabel owner;
 
             public ToolStripStatusLabelLayout(ToolStripStatusLabel owner) : base(owner)
             {

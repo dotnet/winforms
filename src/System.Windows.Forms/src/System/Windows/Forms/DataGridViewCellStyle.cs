@@ -34,7 +34,7 @@ namespace System.Windows.Forms
         private static readonly int PropWrapMode = PropertyStore.CreateKey();
 
         private DataGridViewCellStyleScopes scope;
-        private PropertyStore propertyStore;          // Contains all properties that are not always set.
+        private readonly PropertyStore propertyStore;          // Contains all properties that are not always set.
         private DataGridView dataGridView;
 
         /// <summary>

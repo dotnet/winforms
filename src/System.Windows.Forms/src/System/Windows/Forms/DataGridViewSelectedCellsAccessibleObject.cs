@@ -8,7 +8,7 @@ namespace System.Windows.Forms
     {
         private class DataGridViewSelectedCellsAccessibleObject : AccessibleObject
         {
-            DataGridView owner;
+            readonly DataGridView owner;
 
             public DataGridViewSelectedCellsAccessibleObject(DataGridView owner)
             {

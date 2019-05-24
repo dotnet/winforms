@@ -252,8 +252,8 @@ namespace System.Windows.Forms.PropertyGridInternal
     internal class DropDownButtonAccessibleObject : Control.ControlAccessibleObject
     {
 
-        private DropDownButton _owningDropDownButton;
-        private PropertyGridView _owningPropertyGrid;
+        private readonly DropDownButton _owningDropDownButton;
+        private readonly PropertyGridView _owningPropertyGrid;
 
         /// <summary>
         /// Constructs the new instance of DropDownButtonAccessibleObject.

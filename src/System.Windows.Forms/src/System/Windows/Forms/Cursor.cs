@@ -35,7 +35,7 @@ namespace System.Windows.Forms
     {
         private static Size cursorSize = System.Drawing.Size.Empty;
 
-        private byte[] cursorData;
+        private readonly byte[] cursorData;
         private IntPtr handle = IntPtr.Zero;       // handle to loaded image
         private bool ownHandle = true;
         private int resourceId = 0;

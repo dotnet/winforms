@@ -27,8 +27,8 @@ namespace System.Windows.Forms.Design
     [ToolboxItem(false)]
     public class ComponentEditorForm : Form
     {
-        private IComponent component;
-        private Type[] pageTypes;
+        private readonly IComponent component;
+        private readonly Type[] pageTypes;
         private ComponentEditorPageSite[] pageSites;
         private Size maxSize = System.Drawing.Size.Empty;
         private int initialActivePage;
@@ -36,7 +36,7 @@ namespace System.Windows.Forms.Design
         private bool dirty;
         private bool firstActivate;
 
-        private Panel pageHost = new Panel();
+        private readonly Panel pageHost = new Panel();
         private PageSelector selector;
         private ImageList selectorImageList;
         private Button okButton;
@@ -561,7 +561,7 @@ namespace System.Windows.Forms.Design
             internal Control parent;
             internal bool isActive;
             internal bool isDirty;
-            private ComponentEditorForm form;
+            private readonly ComponentEditorForm form;
 
             /// <summary>
             ///     Creates the page site.

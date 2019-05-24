@@ -32,7 +32,7 @@ namespace System.Windows.Forms
         //                                                 
         private const int UNKNOWN_GROUPING = 10;
 
-        private static KeywordVk[] keywords = new KeywordVk[] {
+        private static readonly KeywordVk[] keywords = new KeywordVk[] {
             new KeywordVk("ENTER",      (int)Keys.Return),
             new KeywordVk("TAB",        (int)Keys.Tab),
             new KeywordVk("ESC",        (int)Keys.Escape),
@@ -107,7 +107,7 @@ namespace System.Windows.Forms
 
         private static bool fStartNewChar;
 
-        private static SKWindow messageWindow;
+        private static readonly SKWindow messageWindow;
 
         private enum SendMethodTypes
         {

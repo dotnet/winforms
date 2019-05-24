@@ -42,13 +42,13 @@ namespace System.Windows.Forms
         private static readonly object EVENT_BALLOONTIPCLOSED = new object();
 
         private const int WM_TRAYMOUSEMESSAGE = Interop.WindowMessages.WM_USER + 1024;
-        private static int WM_TASKBARCREATED = SafeNativeMethods.RegisterWindowMessage("TaskbarCreated");
+        private static readonly int WM_TASKBARCREATED = SafeNativeMethods.RegisterWindowMessage("TaskbarCreated");
 
-        private object syncObj = new object();
+        private readonly object syncObj = new object();
 
         private Icon icon = null;
         private string text = string.Empty;
-        private int id = 0;
+        private readonly int id = 0;
         private bool added = false;
         private NotifyIconNativeWindow window = null;
         private ContextMenu contextMenu = null;

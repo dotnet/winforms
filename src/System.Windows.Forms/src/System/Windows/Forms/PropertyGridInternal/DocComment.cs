@@ -21,8 +21,8 @@ namespace System.Windows.Forms.PropertyGridInternal
     internal class DocComment : PropertyGrid.SnappableControl
     {
 
-        private Label m_labelTitle;
-        private Label m_labelDesc;
+        private readonly Label m_labelTitle;
+        private readonly Label m_labelDesc;
         private string fullDesc;
 
         protected int lineHeight;
@@ -273,7 +273,7 @@ namespace System.Windows.Forms.PropertyGridInternal
     internal class DocCommentAccessibleObject : Control.ControlAccessibleObject
     {
 
-        private PropertyGrid _parentPropertyGrid;
+        private readonly PropertyGrid _parentPropertyGrid;
 
         /// <summary>
         /// Initializes new instance of DocCommentAccessibleObject.

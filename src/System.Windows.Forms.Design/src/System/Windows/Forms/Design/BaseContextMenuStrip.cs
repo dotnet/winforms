@@ -16,8 +16,8 @@ namespace System.Windows.Forms.Design
     /// </summary>
     internal class BaseContextMenuStrip : GroupedContextMenuStrip
     {
-        private IServiceProvider serviceProvider;
-        private Component component;
+        private readonly IServiceProvider serviceProvider;
+        private readonly Component component;
         private ToolStripMenuItem selectionMenuItem;
 
         public BaseContextMenuStrip(IServiceProvider provider, Component component) : base()

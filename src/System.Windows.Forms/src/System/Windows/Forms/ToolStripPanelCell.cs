@@ -32,7 +32,7 @@ namespace System.Windows.Forms
 
         private Rectangle cachedBounds = Rectangle.Empty;
 #if DEBUG
-        private string cellID;
+        private readonly string cellID;
         [ThreadStatic]
         private static int cellCount;
 #endif

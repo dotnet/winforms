@@ -14,7 +14,7 @@ namespace System.Windows.Forms
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public sealed class RelatedImageListAttribute : Attribute
     {
-        private string relatedImageList = null;
+        private readonly string relatedImageList = null;
 
         public RelatedImageListAttribute(string relatedImageList)
         {

@@ -1397,7 +1397,7 @@ namespace System.Windows.Forms
         ///				 meaning depending on the language; for instance ImeMode.Off means 'disable' or 'alpha' to Chinese
         ///				 but to Japanese it is 'alpha' and to Korean it has no meaning.
         /// </summary>
-        private static ImeMode[] japaneseTable = {
+        private static readonly ImeMode[] japaneseTable = {
             ImeMode.Inherit,
             ImeMode.Disable,
             ImeMode.Off,
@@ -1410,7 +1410,7 @@ namespace System.Windows.Forms
             ImeMode.Alpha
         };
 
-        private static ImeMode[] koreanTable = {
+        private static readonly ImeMode[] koreanTable = {
             ImeMode.Inherit,
             ImeMode.Disable,
             ImeMode.Alpha,
@@ -1423,7 +1423,7 @@ namespace System.Windows.Forms
             ImeMode.Alpha
         };
 
-        private static ImeMode[] chineseTable = {
+        private static readonly ImeMode[] chineseTable = {
             ImeMode.Inherit,
             ImeMode.Disable,
             ImeMode.Off,
@@ -1436,7 +1436,7 @@ namespace System.Windows.Forms
             ImeMode.Off
         };
 
-        private static ImeMode[] unsupportedTable = {
+        private static readonly ImeMode[] unsupportedTable = {
         };
 
 

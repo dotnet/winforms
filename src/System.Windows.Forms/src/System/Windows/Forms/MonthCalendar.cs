@@ -134,7 +134,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///     Bitmask for the annually bolded dates.  Months start on January.
         /// </summary>
-        private int[] monthsOfYear = new int[12];
+        private readonly int[] monthsOfYear = new int[12];
         /// <summary>
         ///     Bitmask for the dates bolded monthly.
         /// </summary>
@@ -143,9 +143,9 @@ namespace System.Windows.Forms
         ///     Lists are slow, so this section can be optimized.
         ///     Implementation is such that inserts are fast, removals are slow.
         /// </summary>
-        private ArrayList arrayOfDates = new ArrayList();
-        private ArrayList annualArrayOfDates = new ArrayList(); // we have to maintain these lists too.
-        private ArrayList monthlyArrayOfDates = new ArrayList();
+        private readonly ArrayList arrayOfDates = new ArrayList();
+        private readonly ArrayList annualArrayOfDates = new ArrayList(); // we have to maintain these lists too.
+        private readonly ArrayList monthlyArrayOfDates = new ArrayList();
 
         // notifications
         private DateRangeEventHandler onDateChanged;
@@ -2686,7 +2686,7 @@ namespace System.Windows.Forms
         internal class MonthCalendarAccessibleObject : ControlAccessibleObject
         {
 
-            private MonthCalendar calendar;
+            private readonly MonthCalendar calendar;
 
             public MonthCalendarAccessibleObject(Control owner)
                 : base(owner)

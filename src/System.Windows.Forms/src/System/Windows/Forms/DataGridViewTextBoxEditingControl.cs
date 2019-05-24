@@ -304,7 +304,7 @@ namespace System.Windows.Forms
     /// </summary>
     internal class DataGridViewTextBoxEditingControlAccessibleObject : Control.ControlAccessibleObject
     {
-        private DataGridViewTextBoxEditingControl ownerControl;
+        private readonly DataGridViewTextBoxEditingControl ownerControl;
 
         /// <summary>
         /// The parent is changed when the editing control is attached to another editing cell.

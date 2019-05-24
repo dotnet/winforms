@@ -15,7 +15,7 @@ namespace System.Windows.Forms
     [ListBindable(false)]
     public class ListViewGroupCollection : IList
     {
-        private ListView _listView;
+        private readonly ListView _listView;
 
         private ArrayList _list;
 

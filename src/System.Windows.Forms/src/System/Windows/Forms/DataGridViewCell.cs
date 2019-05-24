@@ -55,11 +55,11 @@ namespace System.Windows.Forms
 
         private static Bitmap errorBmp = null;
 
-        private PropertyStore propertyStore;          // Contains all properties that are not always set.
+        private readonly PropertyStore propertyStore;          // Contains all properties that are not always set.
         private DataGridViewRow owningRow;
         private DataGridViewColumn owningColumn;
 
-        private static Type stringType = typeof(string);        // cache the string type for performance
+        private static readonly Type stringType = typeof(string);        // cache the string type for performance
 
         private byte flags;  // see DATAGRIDVIEWCELL_flag* consts above
 

@@ -23,7 +23,7 @@ namespace System.Windows.Forms.PropertyGridInternal
     internal class MergePropertyDescriptor : PropertyDescriptor
     {
 
-        private PropertyDescriptor[] descriptors;
+        private readonly PropertyDescriptor[] descriptors;
 
         private enum TriState
         {
@@ -604,7 +604,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private class MergedAttributeCollection : AttributeCollection
         {
-            private MergePropertyDescriptor owner;
+            private readonly MergePropertyDescriptor owner;
 
             private AttributeCollection[] attributeCollections = null;
             private IDictionary foundAttributes = null;

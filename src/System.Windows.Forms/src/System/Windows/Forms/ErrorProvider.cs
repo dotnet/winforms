@@ -40,8 +40,8 @@ namespace System.Windows.Forms
         // FIELDS
         //
 
-        Hashtable items = new Hashtable();
-        Hashtable windows = new Hashtable();
+        readonly Hashtable items = new Hashtable();
+        readonly Hashtable windows = new Hashtable();
         Icon icon = DefaultIcon;
         IconRegion region;
         int itemIdCounter;
@@ -62,10 +62,10 @@ namespace System.Windows.Forms
         private object dataSource = null;
         private string dataMember = null;
         private BindingManagerBase errorManager;
-        private EventHandler currentChanged;
+        private readonly EventHandler currentChanged;
 
         // listen to the OnPropertyChanged event in the ContainerControl
-        private EventHandler propChangedEvent;
+        private readonly EventHandler propChangedEvent;
 
         private EventHandler onRightToLeftChanged;
         private bool rightToLeft = false;
@@ -945,9 +945,9 @@ namespace System.Windows.Forms
             // FIELDS
             //
 
-            ArrayList items = new ArrayList();
-            Control parent;
-            ErrorProvider provider;
+            readonly ArrayList items = new ArrayList();
+            readonly Control parent;
+            readonly ErrorProvider provider;
             Rectangle windowBounds = Rectangle.Empty;
             System.Windows.Forms.Timer timer;
             NativeWindow tipWindow;
@@ -1443,11 +1443,11 @@ namespace System.Windows.Forms
             //
 
             string error;
-            Control control;
+            readonly Control control;
             ErrorWindow window;
-            ErrorProvider provider;
+            readonly ErrorProvider provider;
             int blinkPhase;
-            IntPtr id;
+            readonly IntPtr id;
             int iconPadding;
             bool toolTipShown;
             ErrorIconAlignment iconAlignment;
@@ -1809,7 +1809,7 @@ namespace System.Windows.Forms
             //
 
             Region region;
-            Icon icon;
+            readonly Icon icon;
 
             //
             // CONSTRUCTORS

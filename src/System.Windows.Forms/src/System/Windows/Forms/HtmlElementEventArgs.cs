@@ -11,7 +11,7 @@ namespace System.Windows.Forms
 
     public sealed class HtmlElementEventArgs : EventArgs
     {
-        private HtmlShimManager _shimManager;
+        private readonly HtmlShimManager _shimManager;
 
         internal HtmlElementEventArgs(HtmlShimManager shimManager, UnsafeNativeMethods.IHTMLEventObj eventObj)
         {

@@ -46,7 +46,7 @@ namespace System.Windows.Forms
 
         readonly int bitDepth;
 
-        private static object syncLock = new object();//used to lock this class before sync'ing to SystemEvents
+        private static readonly object syncLock = new object();//used to lock this class before sync'ing to SystemEvents
 
         private static int desktopChangedCount = -1;//static counter of desktop size changes
 
@@ -63,7 +63,7 @@ namespace System.Windows.Forms
         private const int MONITOR_DEFAULTTONEAREST = 0x00000002;
         private const int MONITORINFOF_PRIMARY = 0x00000001;
 
-        private static bool multiMonitorSupport = (UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CMONITORS) != 0);
+        private static readonly bool multiMonitorSupport = (UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CMONITORS) != 0);
         private static Screen[] screens;
 
         internal Screen(IntPtr monitor) : this(monitor, IntPtr.Zero)

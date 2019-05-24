@@ -208,7 +208,7 @@ namespace System.Windows.Forms
     /// </summary>
     internal class DataGridViewIntLinkedListEnumerator : IEnumerator
     {
-        private DataGridViewIntLinkedListElement headElement;
+        private readonly DataGridViewIntLinkedListElement headElement;
         private DataGridViewIntLinkedListElement current;
         private bool reset;
 

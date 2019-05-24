@@ -45,7 +45,7 @@ namespace System.Windows.Forms
         // private CurrentChangingEventHandler onCurrentChanging;
         private ItemChangedEventHandler onItemChanged;
         private ListChangedEventHandler onListChanged;
-        private ItemChangedEventArgs resetEvent = new ItemChangedEventArgs(-1);
+        private readonly ItemChangedEventArgs resetEvent = new ItemChangedEventArgs(-1);
         private EventHandler onMetaDataChangedHandler;
 
         /// <summary>

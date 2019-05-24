@@ -54,7 +54,7 @@ namespace System.Windows.Forms
         static bool comCtlSupportsVisualStylesInitialized = false;
         static bool comCtlSupportsVisualStyles = false;
         private static FormCollection s_forms = null;
-        private static object internalSyncObject = new object();
+        private static readonly object internalSyncObject = new object();
         static bool useWaitCursor = false;
 
         private static bool useEverettThreadAffinity = false;
@@ -2280,12 +2280,12 @@ namespace System.Windows.Forms
             private const int STATE_TRACKINGCOMPONENT = 0x00000020;
             private const int INVALID_ID = unchecked((int)0xFFFFFFFF);
 
-            private static Hashtable contextHash = new Hashtable();
+            private static readonly Hashtable contextHash = new Hashtable();
 
             // When this gets to zero, we'll invoke a full garbage
             // collect and check for root/window leaks.
             //
-            private static object tcInternalSyncObject = new object();
+            private static readonly object tcInternalSyncObject = new object();
 
             private static int totalMessageLoopCount;
             private static int baseLoopReason;
@@ -2300,14 +2300,14 @@ namespace System.Windows.Forms
             private ApplicationContext applicationContext;
 
             // Parking window list
-            private List<ParkingWindow> parkingWindows = new List<ParkingWindow>();
+            private readonly List<ParkingWindow> parkingWindows = new List<ParkingWindow>();
             private Control marshalingControl;
             private CultureInfo culture;
             private List<IMessageFilter> messageFilters;
             private List<IMessageFilter> messageFilterSnapshot;
             private int inProcessFilters = 0;
             private IntPtr handle;
-            private int id;
+            private readonly int id;
             private int messageLoopCount;
             private int threadState;
             private int modalCount;
@@ -4336,7 +4336,7 @@ namespace System.Windows.Forms
             private IntPtr activeHwnd;
             private IntPtr focusedHwnd;
             internal ThreadWindows previousThreadWindows;
-            private bool onlyWinForms = true;
+            private readonly bool onlyWinForms = true;
 
             internal ThreadWindows(bool onlyWinForms)
             {

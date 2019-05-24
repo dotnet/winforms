@@ -22,7 +22,7 @@ namespace System.Windows.Forms
     ]
     public class DataGridViewSelectedCellCollection : BaseCollection, IList
     {
-        ArrayList items = new ArrayList();
+        readonly ArrayList items = new ArrayList();
 
         int IList.Add(object value)
         {

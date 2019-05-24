@@ -1922,7 +1922,7 @@ namespace System.Windows.Forms
         private class WebBrowserEvent : StandardOleMarshalObject, UnsafeNativeMethods.DWebBrowserEvents2
         {
 
-            private WebBrowser parent;
+            private readonly WebBrowser parent;
             private bool allowNavigation;
             private bool haveNavigated = false;
 

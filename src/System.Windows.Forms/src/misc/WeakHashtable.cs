@@ -15,7 +15,7 @@ namespace System.ComponentModel
     /// </summary>
     internal sealed class WeakHashtable : Hashtable
     {
-        private static IEqualityComparer _comparer = new WeakKeyComparer();
+        private static readonly IEqualityComparer _comparer = new WeakKeyComparer();
 
         private long _lastGlobalMem;
         private int _lastHashCount;
@@ -170,7 +170,7 @@ namespace System.ComponentModel
         /// </summary>
         private sealed class EqualityWeakReference : WeakReference
         {
-            private int _hashCode;
+            private readonly int _hashCode;
             internal EqualityWeakReference(object o) : base(o)
             {
                 _hashCode = o.GetHashCode();

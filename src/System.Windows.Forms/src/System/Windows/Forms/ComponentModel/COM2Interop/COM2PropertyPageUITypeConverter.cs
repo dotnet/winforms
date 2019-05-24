@@ -20,7 +20,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     internal class Com2PropertyPageUITypeEditor : Com2ExtendedUITypeEditor, ICom2PropertyPageDisplayService
     {
 
-        private Com2PropertyDescriptor propDesc;
+        private readonly Com2PropertyDescriptor propDesc;
         private Guid guid;
 
         public Com2PropertyPageUITypeEditor(Com2PropertyDescriptor pd, Guid guid, UITypeEditor baseEditor) : base(baseEditor)

@@ -336,7 +336,7 @@ namespace System.Windows.Forms
         internal class WeakRefCollection : IList
         {
             private int refCheckThreshold = int.MaxValue; // this means this is disabled by default.
-            private ArrayList _innerList;
+            private readonly ArrayList _innerList;
 
             internal WeakRefCollection()
             {
@@ -541,8 +541,8 @@ namespace System.Windows.Forms
             /// </summary>
             internal class WeakRefObject
             {
-                int hash;
-                WeakReference weakHolder;
+                readonly int hash;
+                readonly WeakReference weakHolder;
 
                 internal WeakRefObject(object obj)
                 {

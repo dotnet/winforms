@@ -14,7 +14,7 @@ namespace System.Windows.Forms
     {
         private int backwardsWalkingIndex;
         private int forwardsWalkingIndex;
-        private ToolStrip toolStrip;
+        private readonly ToolStrip toolStrip;
         private int overflowSpace;
         private bool overflowRequired;
         private Point noMansLand;

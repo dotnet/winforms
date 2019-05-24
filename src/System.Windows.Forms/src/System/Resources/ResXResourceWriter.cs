@@ -43,7 +43,7 @@ namespace System.Resources
 
         private Hashtable cachedAliases;
 
-        private static TraceSwitch ResValueProviderSwitch = new TraceSwitch("ResX", "Debug the resource value provider");
+        private static readonly TraceSwitch ResValueProviderSwitch = new TraceSwitch("ResX", "Debug the resource value provider");
 
         internal static readonly string Beta2CompatSerializedObjectMimeType = "text/microsoft-urt/psuedoml-serialized/base64";
 
@@ -113,8 +113,7 @@ namespace System.Resources
         </xsd:element>
         </xsd:schema>
         ";
-
-        string fileName;
+        readonly string fileName;
         Stream stream;
         TextWriter textWriter;
         XmlTextWriter xmlTextWriter;
@@ -122,7 +121,7 @@ namespace System.Resources
         bool hasBeenSaved;
         bool initialized;
 
-        private Func<Type, string> typeNameConverter; // no public property to be consistent with ResXDataNode class.
+        private readonly Func<Type, string> typeNameConverter; // no public property to be consistent with ResXDataNode class.
 
         /// <summary>
         ///     Base Path for ResXFileRefs.

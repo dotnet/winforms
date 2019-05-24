@@ -35,9 +35,9 @@ namespace System.Experimental.Gdi
     {
         // Handle to the native Windows brush object.
         // 
-        private DeviceContext dc;
+        private readonly DeviceContext dc;
         private IntPtr nativeHandle;        // Cannot be protected because the class is internal (C# doesn't allow it).
-        private Color color = Color.White;  // GDI brushes have just one color as opposed to GDI+ that can have background color.
+        private readonly Color color = Color.White;  // GDI brushes have just one color as opposed to GDI+ that can have background color.
         // Note: We may need to implement background color too.
 
 #if WINGRAPHICS_FINALIZATION_WATCH

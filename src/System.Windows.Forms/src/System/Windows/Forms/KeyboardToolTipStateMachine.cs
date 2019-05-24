@@ -375,7 +375,7 @@ namespace System.Windows.Forms
 
         private sealed class ToolToTipDictionary
         {
-            private ConditionalWeakTable<IKeyboardToolTip, WeakReference<ToolTip>> table = new ConditionalWeakTable<IKeyboardToolTip, WeakReference<ToolTip>>();
+            private readonly ConditionalWeakTable<IKeyboardToolTip, WeakReference<ToolTip>> table = new ConditionalWeakTable<IKeyboardToolTip, WeakReference<ToolTip>>();
 
             public ToolTip this[IKeyboardToolTip tool]
             {

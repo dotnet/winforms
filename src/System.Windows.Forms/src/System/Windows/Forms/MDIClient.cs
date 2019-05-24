@@ -35,7 +35,7 @@ namespace System.Windows.Forms
         // kept in add order, not ZOrder. Need to return the correct
         // array of items...
         //
-        private ArrayList children = new ArrayList();
+        private readonly ArrayList children = new ArrayList();
 
 
         /// <summary>
@@ -427,7 +427,7 @@ namespace System.Windows.Forms
         [ComVisible(false)]
         new public class ControlCollection : Control.ControlCollection
         {
-            private MdiClient owner;
+            private readonly MdiClient owner;
 
             /*C#r: protected*/
 

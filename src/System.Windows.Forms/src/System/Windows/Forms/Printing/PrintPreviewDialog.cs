@@ -33,7 +33,7 @@ namespace System.Windows.Forms
     ]
     public class PrintPreviewDialog : Form
     {
-        PrintPreviewControl previewControl;
+        readonly PrintPreviewControl previewControl;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.NumericUpDown pageCounter;
         private System.Windows.Forms.ToolStripButton printToolStripButton;
@@ -56,7 +56,7 @@ namespace System.Windows.Forms
         private System.Windows.Forms.ToolStripSeparator separatorToolStripSeparator1;
         private System.Windows.Forms.ToolStripButton closeToolStripButton;
         private System.Windows.Forms.ToolStripLabel pageToolStripLabel;
-        ImageList imageList;
+        readonly ImageList imageList;
 
         /// <summary>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.PrintPreviewDialog'/> class.</para>

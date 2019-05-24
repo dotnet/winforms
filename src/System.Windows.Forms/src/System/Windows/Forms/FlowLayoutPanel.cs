@@ -20,7 +20,7 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionFlowLayoutPanel))]
     public class FlowLayoutPanel : Panel, IExtenderProvider
     {
-        private FlowLayoutSettings _flowLayoutSettings;
+        private readonly FlowLayoutSettings _flowLayoutSettings;
 
         public FlowLayoutPanel()
         {

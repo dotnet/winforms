@@ -24,7 +24,7 @@ namespace System.Windows.Forms
     public class WebBrowserSiteBase
         : UnsafeNativeMethods.IOleControlSite, UnsafeNativeMethods.IOleClientSite, UnsafeNativeMethods.IOleInPlaceSite, UnsafeNativeMethods.ISimpleFrameSite, UnsafeNativeMethods.IPropertyNotifySink, IDisposable
     {
-        private WebBrowserBase host;
+        private readonly WebBrowserBase host;
         private AxHost.ConnectionPointCookie connectionPoint;
 
         //

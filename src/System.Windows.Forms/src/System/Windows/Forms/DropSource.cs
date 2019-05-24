@@ -14,7 +14,7 @@ namespace System.Windows.Forms
         private const int DragDropSCancel = 0x00040101;
         private const int DragDropSUseDefaultCursors = 0x00040102;
 
-        private ISupportOleDropSource peer;
+        private readonly ISupportOleDropSource peer;
 
         public DropSource(ISupportOleDropSource peer)
         {

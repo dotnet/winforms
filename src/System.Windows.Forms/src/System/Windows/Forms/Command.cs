@@ -21,7 +21,7 @@ namespace System.Windows.Forms
 
         private static Command[] cmds;
         private static int icmdTry;
-        private static object internalSyncObject = new object();
+        private static readonly object internalSyncObject = new object();
         private const int idMin = 0x00100;
         private const int idLim = 0x10000;
 

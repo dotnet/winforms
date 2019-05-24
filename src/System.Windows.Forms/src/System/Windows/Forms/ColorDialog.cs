@@ -31,7 +31,7 @@ namespace System.Windows.Forms
     {
 
         private int options;
-        private int[] customColors;
+        private readonly int[] customColors;
 
         /// <summary>
         /// </summary>

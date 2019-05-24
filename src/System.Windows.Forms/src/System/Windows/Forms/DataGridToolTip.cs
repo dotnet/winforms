@@ -20,7 +20,7 @@ namespace System.Windows.Forms
         private NativeWindow tipWindow = null;
 
         // the dataGrid which contains this toolTip
-        private DataGrid dataGrid = null;
+        private readonly DataGrid dataGrid = null;
 
         // CONSTRUCTOR
         public DataGridToolTip(DataGrid dataGrid)

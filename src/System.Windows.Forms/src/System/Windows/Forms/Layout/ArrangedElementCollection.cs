@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Layout
 
         // We wrap an ArrayList rather than inherit from CollectionBase because we
         // do not want to break binary compatibility with ControlCollection.
-        private ArrayList _innerList;
+        private readonly ArrayList _innerList;
 
         // Internal constructor prevents externals from getting a hold of one of these.
         // We'll open this up in Orcas.

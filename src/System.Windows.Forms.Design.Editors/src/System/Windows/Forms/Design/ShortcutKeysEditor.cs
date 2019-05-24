@@ -96,7 +96,7 @@ namespace System.Windows.Forms.Design
             private CheckBox chkCtrl;
             private CheckBox chkShift;
             private ComboBox cmbKey;
-            private ShortcutKeysEditor editor;
+            private readonly ShortcutKeysEditor editor;
             private TypeConverter keysConverter;
             private Label lblKey;
             private Label lblModifiers;

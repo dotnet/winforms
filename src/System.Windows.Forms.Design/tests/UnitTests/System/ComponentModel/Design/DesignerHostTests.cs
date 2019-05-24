@@ -1139,7 +1139,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<ArgumentNullException>("service", () => host.GetService(null));
         }
 
-        private static IDesignerHost s_placeholderHost = new Mock<IDesignerHost>(MockBehavior.Strict).Object;
+        private static readonly IDesignerHost s_placeholderHost = new Mock<IDesignerHost>(MockBehavior.Strict).Object;
 
         public static IEnumerable<object[]> ChangeActiveDesigner_TestData()
         {

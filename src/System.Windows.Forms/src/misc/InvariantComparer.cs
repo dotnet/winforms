@@ -11,7 +11,7 @@ namespace System
     [Serializable]
     internal class InvariantComparer : IComparer
     {
-        private CompareInfo m_compareInfo;
+        private readonly CompareInfo m_compareInfo;
         internal static readonly InvariantComparer Default = new InvariantComparer();
 
         internal InvariantComparer()

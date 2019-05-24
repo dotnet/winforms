@@ -166,7 +166,7 @@ namespace System.Windows.Forms
         [ComVisible(true)]
         internal class DataGridStateParentRowAccessibleObject : AccessibleObject
         {
-            DataGridState owner = null;
+            readonly DataGridState owner = null;
 
             public DataGridStateParentRowAccessibleObject(DataGridState owner) : base()
             {

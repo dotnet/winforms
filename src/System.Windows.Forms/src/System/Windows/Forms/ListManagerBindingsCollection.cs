@@ -14,7 +14,7 @@ namespace System.Windows.Forms
     [DefaultEvent(nameof(CollectionChanged))]
     internal class ListManagerBindingsCollection : BindingsCollection
     {
-        private BindingManagerBase _bindingManagerBase;
+        private readonly BindingManagerBase _bindingManagerBase;
 
         /// <summary>
         /// ColumnsCollection constructor.  Used only by DataSource.

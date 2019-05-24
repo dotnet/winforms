@@ -11,7 +11,7 @@ namespace System.Windows.Forms
     public class PropertyManager : BindingManagerBase
     {
         private object _dataSource;
-        private string _propName;
+        private readonly string _propName;
         private PropertyDescriptor _propInfo;
         private bool _bound;
 

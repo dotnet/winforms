@@ -17,7 +17,7 @@ namespace System.Windows.Forms
     {
 
         CollectionChangeEventHandler onCollectionChanged;
-        private ArrayList data = new ArrayList();
+        private readonly ArrayList data = new ArrayList();
 
         public AutoCompleteStringCollection()
         {

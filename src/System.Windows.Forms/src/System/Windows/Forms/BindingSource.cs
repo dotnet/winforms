@@ -81,7 +81,7 @@ namespace System.Windows.Forms
         // Support for property change event hooking on list items
         private object _currentItemHookedForItemChange = null;
         private object _lastCurrentItem = null;
-        private EventHandler _listItemPropertyChangedHandler;
+        private readonly EventHandler _listItemPropertyChangedHandler;
 
         // State data
         private int _addNewPos = -1;

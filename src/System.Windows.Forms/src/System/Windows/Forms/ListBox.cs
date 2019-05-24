@@ -2639,7 +2639,7 @@ namespace System.Windows.Forms
 
             private static int lastMask = 1;
 
-            private ListControl listControl;
+            private readonly ListControl listControl;
             private Entry[] entries;
             private int count;
             private int version;
@@ -3041,11 +3041,11 @@ namespace System.Windows.Forms
             /// </summary>
             private class EntryEnumerator : IEnumerator
             {
-                private ItemArray items;
-                private bool anyBit;
-                private int state;
+                private readonly ItemArray items;
+                private readonly bool anyBit;
+                private readonly int state;
                 private int current;
-                private int version;
+                private readonly int version;
 
                 /// <summary>
                 ///     Creates a new enumerator that will enumerate over the given state.
@@ -3138,7 +3138,7 @@ namespace System.Windows.Forms
         public class ObjectCollection : IList
         {
 
-            private ListBox owner;
+            private readonly ListBox owner;
             private ItemArray items;
 
             public ObjectCollection(ListBox owner)
@@ -3612,7 +3612,7 @@ namespace System.Windows.Forms
         // IntegerCollection
         public class IntegerCollection : IList
         {
-            private ListBox owner;
+            private readonly ListBox owner;
             private int[] innerArray;
             private int count = 0;
 
@@ -3975,7 +3975,7 @@ namespace System.Windows.Forms
             /// </summary>
             private class CustomTabOffsetsEnumerator : IEnumerator
             {
-                private IntegerCollection items;
+                private readonly IntegerCollection items;
                 private int current;
 
                 /// <summary>
@@ -4036,7 +4036,7 @@ namespace System.Windows.Forms
         // SelectedIndices
         public class SelectedIndexCollection : IList
         {
-            private ListBox owner;
+            private readonly ListBox owner;
 
             /* C#r: protected */
             public SelectedIndexCollection(ListBox owner)
@@ -4255,7 +4255,7 @@ namespace System.Windows.Forms
             /// </summary>
             private class SelectedIndexEnumerator : IEnumerator
             {
-                private SelectedIndexCollection items;
+                private readonly SelectedIndexCollection items;
                 private int current;
 
                 /// <summary>
@@ -4318,7 +4318,7 @@ namespace System.Windows.Forms
             // This is the bitmask used within ItemArray to identify selected objects.
             internal static int SelectedObjectMask = ItemArray.CreateMask();
 
-            private ListBox owner;
+            private readonly ListBox owner;
             private bool stateDirty;
             private int lastVersion;
             private int count;

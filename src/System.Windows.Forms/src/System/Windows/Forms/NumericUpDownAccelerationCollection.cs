@@ -17,7 +17,7 @@ namespace System.Windows.Forms
     [ListBindable(false)]
     public class NumericUpDownAccelerationCollection : MarshalByRefObject, ICollection<NumericUpDownAcceleration>, IEnumerable<NumericUpDownAcceleration>
     {
-        List<NumericUpDownAcceleration> items;
+        readonly List<NumericUpDownAcceleration> items;
 
 
         /// ICollection<NumericUpDownAcceleration> implementation.

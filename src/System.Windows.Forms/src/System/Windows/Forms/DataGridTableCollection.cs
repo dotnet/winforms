@@ -21,8 +21,8 @@ namespace System.Windows.Forms
     public class GridTableStylesCollection : BaseCollection, IList
     {
         CollectionChangeEventHandler onCollectionChanged;
-        ArrayList items = new ArrayList();
-        DataGrid owner = null;
+        readonly ArrayList items = new ArrayList();
+        readonly DataGrid owner = null;
 
         int IList.Add(object value)
         {

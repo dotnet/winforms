@@ -1889,7 +1889,7 @@ namespace System.Windows.Forms
     /// </summary>
     internal class LabelImageIndexer : ImageList.Indexer
     {
-        private Label owner;
+        private readonly Label owner;
         private bool useIntegerIndex = true;
 
         public LabelImageIndexer(Label owner)

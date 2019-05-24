@@ -57,7 +57,7 @@ namespace System.Windows.Forms.Design.Behavior
         private bool _cancelDrag = false; // should we cancel the drag on the next QueryContinueDrag
 
 
-        private int _adornerWindowIndex = -1;
+        private readonly int _adornerWindowIndex = -1;
 
         //test hooks for SnapLines
         private static int WM_GETALLSNAPLINES;
@@ -605,10 +605,10 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         private class AdornerWindow : Control
         {
-            private BehaviorService _behaviorService;//ptr back to BehaviorService
+            private readonly BehaviorService _behaviorService;//ptr back to BehaviorService
             private Control _designerFrame;//the designer's frame
             private static MouseHook s_mouseHook; // shared mouse hook
-            private static List<AdornerWindow> s_adornerWindowList = new List<AdornerWindow>();
+            private static readonly List<AdornerWindow> s_adornerWindowList = new List<AdornerWindow>();
             private bool _processingDrag; // is this particular window in a drag operation
 
             /// <summary>

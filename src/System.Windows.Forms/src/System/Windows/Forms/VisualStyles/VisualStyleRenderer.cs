@@ -33,7 +33,7 @@ namespace System.Windows.Forms.VisualStyles
         private int part;
         private int state;
         private int lastHResult = 0;
-        private static int numberOfPossibleClasses = VisualStyleElement.Count; //used as size for themeHandles
+        private static readonly int numberOfPossibleClasses = VisualStyleElement.Count; //used as size for themeHandles
 
         [ThreadStatic]
         private static Hashtable themeHandles = null; //per-thread cache of ThemeHandle objects.

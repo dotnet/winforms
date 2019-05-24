@@ -130,7 +130,7 @@ namespace System.Windows.Forms
         [System.Runtime.InteropServices.ComVisible(true)]
         internal class ToolStripTextBoxAccessibleObject : ToolStripItemAccessibleObject
         {
-            private ToolStripTextBox ownerItem = null;
+            private readonly ToolStripTextBox ownerItem = null;
 
             public ToolStripTextBoxAccessibleObject(ToolStripTextBox ownerItem) : base(ownerItem)
             {

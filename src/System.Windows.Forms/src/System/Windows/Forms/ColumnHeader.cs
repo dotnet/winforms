@@ -44,7 +44,7 @@ namespace System.Windows.Forms
         private HorizontalAlignment textAlign = HorizontalAlignment.Left;
         private bool textAlignInitialized = false;
         private int displayIndexInternal = -1;
-        private ColumnHeaderImageListIndexer imageIndexer = null;
+        private readonly ColumnHeaderImageListIndexer imageIndexer = null;
 
         object userData;
 
@@ -562,7 +562,7 @@ namespace System.Windows.Forms
 
         internal class ColumnHeaderImageListIndexer : ImageList.Indexer
         {
-            private ColumnHeader owner = null;
+            private readonly ColumnHeader owner = null;
             public ColumnHeaderImageListIndexer(ColumnHeader ch)
             {
                 owner = ch;

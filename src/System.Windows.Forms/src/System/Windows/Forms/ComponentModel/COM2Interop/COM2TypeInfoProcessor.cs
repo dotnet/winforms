@@ -28,7 +28,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     internal class Com2TypeInfoProcessor
     {
 
-        private static TraceSwitch DbgTypeInfoProcessorSwitch = new TraceSwitch("DbgTypeInfoProcessor", "Com2TypeInfoProcessor: debug Com2 type info processing");
+        private static readonly TraceSwitch DbgTypeInfoProcessorSwitch = new TraceSwitch("DbgTypeInfoProcessor", "Com2TypeInfoProcessor: debug Com2 type info processing");
 
         private Com2TypeInfoProcessor()
         {
@@ -1095,11 +1095,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         internal class CachedProperties
         {
 
-            private PropertyDescriptor[] props;
+            private readonly PropertyDescriptor[] props;
 
             public readonly int MajorVersion;
             public readonly int MinorVersion;
-            private int defaultIndex;
+            private readonly int defaultIndex;
 
             internal CachedProperties(PropertyDescriptor[] props, int defIndex, int majVersion, int minVersion)
             {

@@ -20,9 +20,9 @@ namespace System.Windows.Forms
         private static readonly DataGridViewContentAlignment anyRight = DataGridViewContentAlignment.TopRight | DataGridViewContentAlignment.MiddleRight | DataGridViewContentAlignment.BottomRight;
         private static readonly DataGridViewContentAlignment anyBottom = DataGridViewContentAlignment.BottomRight | DataGridViewContentAlignment.BottomCenter | DataGridViewContentAlignment.BottomLeft;
 
-        private static Type defaultFormattedValueType = typeof(string);
-        private static Type defaultValueType = typeof(object);
-        private static Type cellType = typeof(DataGridViewLinkCell);
+        private static readonly Type defaultFormattedValueType = typeof(string);
+        private static readonly Type defaultValueType = typeof(object);
+        private static readonly Type cellType = typeof(DataGridViewLinkCell);
 
         private static readonly int PropLinkCellActiveLinkColor = PropertyStore.CreateKey();
         private static readonly int PropLinkCellLinkBehavior = PropertyStore.CreateKey();

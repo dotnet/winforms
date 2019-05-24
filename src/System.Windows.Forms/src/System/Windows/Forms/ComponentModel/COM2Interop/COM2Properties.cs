@@ -20,7 +20,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     internal class Com2Properties
     {
 
-        private static TraceSwitch DbgCom2PropertiesSwitch = new TraceSwitch("DbgCom2Properties", "Com2Properties: debug Com2 properties manager");
+        private static readonly TraceSwitch DbgCom2PropertiesSwitch = new TraceSwitch("DbgCom2Properties", "Com2Properties: debug Com2 properties manager");
 
 
 
@@ -30,7 +30,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// 
         /// 5 minutes -- ticks are 1/10,000,000th of a second
         /// </summary>
-        private static long AGE_THRESHHOLD = (long)(10000000L * 60L * 5L);
+        private static readonly long AGE_THRESHHOLD = (long)(10000000L * 60L * 5L);
 
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         /// The index of the default property
         /// </summary>
-        private int defaultIndex = -1;
+        private readonly int defaultIndex = -1;
 
 
         /// <summary>
@@ -63,8 +63,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
 
 #if DEBUG
-        private string dbgObjName;
-        private string dbgObjClass;
+        private readonly string dbgObjName;
+        private readonly string dbgObjClass;
 #endif
 
         private int alwaysValid = 0;
@@ -72,7 +72,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         /// These are the interfaces we recognize for extended browsing.
         /// </summary>
-        private static Type[] extendedInterfaces = new Type[]{
+        private static readonly Type[] extendedInterfaces = new Type[]{
                                                         typeof(NativeMethods.ICategorizeProperties),
                                                         typeof(NativeMethods.IProvidePropertyBuilder),
                                                         typeof(NativeMethods.IPerPropertyBrowsing),
@@ -83,7 +83,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// These are the classes of handlers corresponding to the extended
         /// interfaces above.
         /// </summary>
-        private static Type[] extendedInterfaceHandlerTypes = new Type[]{
+        private static readonly Type[] extendedInterfaceHandlerTypes = new Type[]{
                                                         typeof(Com2ICategorizePropertiesHandler),
                                                         typeof(Com2IProvidePropertyBuilderHandler),
                                                         typeof(Com2IPerPropertyBrowsingHandler),

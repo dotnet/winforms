@@ -25,10 +25,10 @@ namespace System.Windows.Forms
         // This is totally a UI Fudge - if we have an image or check margin with 
         // no image or checks in it use this - which is consistent with office 
         // and an image margin with a 16x16 icon in it.
-        private static int DefaultImageMarginWidth = 24; // 24+1px border - with scaling we add this 1px to new, scaled, field value
-        private static int DefaultImageAndCheckMarginWidth = 46;  // 46+1px border - with scaling we add this 1px to new, scaled, field value    
+        private static readonly int DefaultImageMarginWidth = 24; // 24+1px border - with scaling we add this 1px to new, scaled, field value
+        private static readonly int DefaultImageAndCheckMarginWidth = 46;  // 46+1px border - with scaling we add this 1px to new, scaled, field value    
 
-        private static int ArrowSize = 10;
+        private static readonly int ArrowSize = 10;
 
         private Size maxItemSize = Size.Empty;
         private Rectangle checkRectangle = Rectangle.Empty;
@@ -53,13 +53,13 @@ namespace System.Windows.Forms
         private static readonly Size DefaultImageSize = new Size(16, 16);
 
         private Size scaledDefaultImageSize = DefaultImageSize;
-        private int scaledDefaultImageMarginWidth = DefaultImageMarginWidth + 1; // 1px for border
-        private int scaledDefaultImageAndCheckMarginWidth = DefaultImageAndCheckMarginWidth + 1; // 1px for border
+        private readonly int scaledDefaultImageMarginWidth = DefaultImageMarginWidth + 1; // 1px for border
+        private readonly int scaledDefaultImageAndCheckMarginWidth = DefaultImageAndCheckMarginWidth + 1; // 1px for border
         private Padding scaledImagePadding = ImagePadding;
         private Padding scaledTextPadding = TextPadding;
         private Padding scaledCheckPadding = CheckPadding;
         private Padding scaledArrowPadding = ArrowPadding;
-        private int scaledArrowSize = ArrowSize;
+        private readonly int scaledArrowSize = ArrowSize;
 
         /// <summary>
         /// Summary of ToolStripDropDown.

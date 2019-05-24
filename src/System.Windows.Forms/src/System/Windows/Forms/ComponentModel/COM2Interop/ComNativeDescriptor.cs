@@ -24,17 +24,17 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         private static ComNativeDescriptor handler = null;
 
-        private AttributeCollection staticAttrs = new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes, DesignTimeVisibleAttribute.No });
+        private readonly AttributeCollection staticAttrs = new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes, DesignTimeVisibleAttribute.No });
 
         /// <summary>
         /// Our collection of Object managers (Com2Properties) for native properties
         /// </summary>
-        private WeakHashtable nativeProps = new WeakHashtable();
+        private readonly WeakHashtable nativeProps = new WeakHashtable();
 
         /// <summary>
         /// Our collection of browsing handlers, which are stateless and shared across objects.
         /// </summary>
-        private Hashtable extendedBrowsingHandlers = new Hashtable();
+        private readonly Hashtable extendedBrowsingHandlers = new Hashtable();
 
         /// <summary>
         /// We increment this every time we look at an Object, at specified
@@ -523,8 +523,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         private sealed class ComTypeDescriptor : ICustomTypeDescriptor
         {
-            private ComNativeDescriptor _handler;
-            private object _instance;
+            private readonly ComNativeDescriptor _handler;
+            private readonly object _instance;
 
             /// <summary>
             ///     Creates a new WalkingTypeDescriptor.

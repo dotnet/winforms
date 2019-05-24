@@ -74,14 +74,14 @@ namespace System.Windows.Forms
         // list for indexing purposes.
         internal class TreeNodeImageIndexer : ImageList.Indexer
         {
-            private TreeNode owner;
+            private readonly TreeNode owner;
 
             public enum ImageListType
             {
                 Default,
                 State
             }
-            private ImageListType imageListType;
+            private readonly ImageListType imageListType;
 
             public TreeNodeImageIndexer(TreeNode node, ImageListType imageListType)
             {

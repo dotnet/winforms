@@ -40,15 +40,15 @@ namespace System.Experimental.Gdi
         private const int endCapMask = 0x00000F00;
         private const int joinMask = 0x0000F000;
 
-        private DeviceContext dc;
+        private readonly DeviceContext dc;
 
         //
         // Fields with default values
         //
         private WindowsBrush wndBrush;
         private WindowsPenStyle style;
-        private Color color;
-        private int width;
+        private readonly Color color;
+        private readonly int width;
 
         private const int cosmeticPenWidth = 1;  // Cosmetic pen width.
 

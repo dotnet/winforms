@@ -24,8 +24,8 @@ namespace System.Windows.Forms
         internal static readonly object EventScroll = new object();
         internal static readonly object EventUnload = new object();
 
-        private HtmlShimManager shimManager;
-        private UnsafeNativeMethods.IHTMLWindow2 htmlWindow2;
+        private readonly HtmlShimManager shimManager;
+        private readonly UnsafeNativeMethods.IHTMLWindow2 htmlWindow2;
 
         internal HtmlWindow(HtmlShimManager shimManager, UnsafeNativeMethods.IHTMLWindow2 win)
         {
@@ -388,7 +388,7 @@ namespace System.Windows.Forms
         private class HTMLWindowEvents2 : StandardOleMarshalObject, /*Enforce calling back on the same thread*/
             UnsafeNativeMethods.DHTMLWindowEvents2
         {
-            private HtmlWindow parent;
+            private readonly HtmlWindow parent;
 
             public HTMLWindowEvents2(HtmlWindow htmlWindow)
             {

@@ -85,7 +85,7 @@ namespace System.Windows.Forms
         // list for indexing purposes.
         internal class ToolBarButtonImageIndexer : ImageList.Indexer
         {
-            private ToolBarButton owner;
+            private readonly ToolBarButton owner;
 
 
 

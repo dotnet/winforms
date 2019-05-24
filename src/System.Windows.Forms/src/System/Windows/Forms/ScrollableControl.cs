@@ -1657,7 +1657,7 @@ namespace System.Windows.Forms
         [TypeConverterAttribute(typeof(DockPaddingEdgesConverter))]
         public class DockPaddingEdges : ICloneable
         {
-            private ScrollableControl _owner;
+            private readonly ScrollableControl _owner;
             private int _left;
             private int _right;
             private int _top;

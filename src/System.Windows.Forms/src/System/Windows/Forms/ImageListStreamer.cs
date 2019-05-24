@@ -26,9 +26,9 @@ namespace System.Windows.Forms
         // (unicode for MSFT).
         //
         private static readonly byte[] HEADER_MAGIC = new byte[] { 0x4D, 0x53, 0x46, 0X74 };
-        private static object internalSyncObject = new object();
+        private static readonly object internalSyncObject = new object();
 
-        private ImageList imageList;
+        private readonly ImageList imageList;
         private ImageList.NativeImageList nativeImageList;
 
         internal ImageListStreamer(ImageList il)

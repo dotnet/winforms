@@ -17,7 +17,7 @@ namespace System.Windows.Forms
     {
         internal class DataGridViewDataConnection
         {
-            DataGridView owner = null;
+            readonly DataGridView owner = null;
             CurrencyManager currencyManager = null;
             object dataSource = null;
             string dataMember = string.Empty;

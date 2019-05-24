@@ -24,7 +24,7 @@ namespace System.Windows.Forms
         private static readonly VisualStyleElement HeaderElement = VisualStyleElement.Header.Item.Normal;
 
         // ColorMap used to map the black color of the resource bitmaps to the fore color in use in the row header cell
-        private static ColorMap[] colorMap = new ColorMap[] { new ColorMap() };
+        private static readonly ColorMap[] colorMap = new ColorMap[] { new ColorMap() };
 
         private static Bitmap rightArrowBmp = null;
         private static Bitmap leftArrowBmp = null;
@@ -35,7 +35,7 @@ namespace System.Windows.Forms
         private static Bitmap pencilRTLBmp = null;
         private static Bitmap starBmp = null;
 
-        private static Type cellType = typeof(DataGridViewRowHeaderCell);
+        private static readonly Type cellType = typeof(DataGridViewRowHeaderCell);
 
         private const byte DATAGRIDVIEWROWHEADERCELL_iconMarginWidth = 3;      // 3 pixels of margin on the left and right of icons
         private const byte DATAGRIDVIEWROWHEADERCELL_iconMarginHeight = 2;     // 2 pixels of margin on the top and bottom of icons

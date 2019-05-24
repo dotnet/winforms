@@ -32,7 +32,7 @@ namespace System.Windows.Forms
         private static byte sortGlyphWidth = DATAGRIDVIEWCOLUMNHEADERCELL_sortGlyphWidth;
         private static byte sortGlyphHeight = DATAGRIDVIEWCOLUMNHEADERCELL_sortGlyphHeight;
 
-        private static Type cellType = typeof(DataGridViewColumnHeaderCell);
+        private static readonly Type cellType = typeof(DataGridViewColumnHeaderCell);
 
         private SortOrder sortGlyphDirection;
 

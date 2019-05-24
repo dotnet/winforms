@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class DockingAttribute : Attribute
     {
-        private DockingBehavior dockingBehavior;
+        private readonly DockingBehavior dockingBehavior;
 
         /// <summary>
         ///    <para>

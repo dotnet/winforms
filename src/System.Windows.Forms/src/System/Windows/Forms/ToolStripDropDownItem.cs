@@ -799,7 +799,7 @@ namespace System.Windows.Forms
     [System.Runtime.InteropServices.ComVisible(true)]
     public class ToolStripDropDownItemAccessibleObject : ToolStripItem.ToolStripItemAccessibleObject
     {
-        private ToolStripDropDownItem owner;
+        private readonly ToolStripDropDownItem owner;
         public ToolStripDropDownItemAccessibleObject(ToolStripDropDownItem item) : base(item)
         {
             owner = item;

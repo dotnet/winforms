@@ -287,7 +287,7 @@ namespace System.Windows.Forms
         [System.Runtime.InteropServices.ComVisible(true)]
         internal class ToolStripButtonAccessibleObject : ToolStripItemAccessibleObject
         {
-            private ToolStripButton ownerItem = null;
+            private readonly ToolStripButton ownerItem = null;
 
             public ToolStripButtonAccessibleObject(ToolStripButton ownerItem) : base(ownerItem)
             {

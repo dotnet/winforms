@@ -8,7 +8,7 @@ namespace System.Windows.Forms
 
     public abstract class LayoutSettings
     {
-        private IArrangedElement _owner;
+        private readonly IArrangedElement _owner;
 
         protected LayoutSettings()
         {

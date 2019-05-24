@@ -23,7 +23,7 @@ namespace System.Windows.Forms.PropertyGridInternal
     internal class MultiSelectRootGridEntry : SingleSelectRootGridEntry
     {
 
-        private static PDComparer PropertyComparer = new PDComparer();
+        private static readonly PDComparer PropertyComparer = new PDComparer();
 
 
         internal MultiSelectRootGridEntry(PropertyGridView view, object obj, IServiceProvider baseProvider, IDesignerHost host, PropertyTab tab, PropertySort sortType)

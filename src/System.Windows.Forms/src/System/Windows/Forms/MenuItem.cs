@@ -44,7 +44,7 @@ namespace System.Windows.Forms
         // We need to store a table of all created menuitems, so that other objects
         // such as ContainerControl can get a reference to a particular menuitem,
         // given a unique ID.
-        private static Hashtable s_allCreatedMenuItems = new Hashtable();
+        private static readonly Hashtable s_allCreatedMenuItems = new Hashtable();
         private const uint FirstUniqueID = 0xC0000000;
         private static long s_nextUniqueID = FirstUniqueID;
         private uint _uniqueID = 0;
@@ -53,7 +53,7 @@ namespace System.Windows.Forms
 
 #if DEBUG
         private string _debugText;
-        private int _creationNumber;
+        private readonly int _creationNumber;
         private static int CreateCount;
 #endif
 
@@ -1781,7 +1781,7 @@ namespace System.Windows.Forms
 
         private class MdiListMoreWindowsData : MdiListUserData
         {
-            private MenuItem _parent;
+            private readonly MenuItem _parent;
 
             public MdiListMoreWindowsData(MenuItem parent)
             {

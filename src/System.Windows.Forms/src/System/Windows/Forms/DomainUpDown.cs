@@ -660,7 +660,7 @@ namespace System.Windows.Forms
         /// </summary>
         public class DomainUpDownItemCollection : ArrayList
         {
-            DomainUpDown owner;
+            readonly DomainUpDown owner;
 
             internal DomainUpDownItemCollection(DomainUpDown owner)
             : base()
@@ -869,7 +869,7 @@ namespace System.Windows.Forms
         internal class DomainItemListAccessibleObject : AccessibleObject
         {
 
-            private DomainUpDownAccessibleObject parent;
+            private readonly DomainUpDownAccessibleObject parent;
 
             public DomainItemListAccessibleObject(DomainUpDownAccessibleObject parent) : base()
             {
@@ -942,7 +942,7 @@ namespace System.Windows.Forms
         {
 
             private string name;
-            private DomainItemListAccessibleObject parent;
+            private readonly DomainItemListAccessibleObject parent;
 
             public DomainItemAccessibleObject(string name, AccessibleObject parent) : base()
             {

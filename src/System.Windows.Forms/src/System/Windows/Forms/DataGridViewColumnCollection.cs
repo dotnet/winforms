@@ -26,13 +26,13 @@ namespace System.Windows.Forms
     public class DataGridViewColumnCollection : BaseCollection, IList
     {
         private CollectionChangeEventHandler onCollectionChanged;
-        private ArrayList items = new ArrayList();
+        private readonly ArrayList items = new ArrayList();
         private ArrayList itemsSorted;
         private int lastAccessedSortedIndex = -1;
         private int columnCountsVisible, columnCountsVisibleSelected;
         private int columnsWidthVisible, columnsWidthVisibleFrozen;
-        private static ColumnOrderComparer columnOrderComparer = new ColumnOrderComparer();
-        private DataGridView dataGridView;
+        private static readonly ColumnOrderComparer columnOrderComparer = new ColumnOrderComparer();
+        private readonly DataGridView dataGridView;
 
         /* IList interface implementation */
 

@@ -204,7 +204,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         // this is just here so we can identify the enums that we added
         private class Com2IPerPropertyEnumConverter : Com2EnumConverter
         {
-            private Com2IPerPropertyBrowsingEnum itemsEnum;
+            private readonly Com2IPerPropertyBrowsingEnum itemsEnum;
             public Com2IPerPropertyEnumConverter(Com2IPerPropertyBrowsingEnum items) : base(items)
             {
                 itemsEnum = items;
@@ -238,9 +238,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
 
             internal Com2PropertyDescriptor target;
-            private Com2IPerPropertyBrowsingHandler handler;
-            private OleStrCAMarshaler nameMarshaller;
-            private Int32CAMarshaler valueMarshaller;
+            private readonly Com2IPerPropertyBrowsingHandler handler;
+            private readonly OleStrCAMarshaler nameMarshaller;
+            private readonly Int32CAMarshaler valueMarshaller;
             internal bool arraysFetched;
             //private bool                 standardValuesQueried;
 

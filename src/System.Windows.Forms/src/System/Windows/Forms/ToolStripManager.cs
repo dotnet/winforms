@@ -39,7 +39,7 @@ namespace System.Windows.Forms
         private const int staticEventDefaultRendererChanged = 0;
         private const int staticEventCount = 1;
 
-        private static object internalSyncObject = new object();
+        private static readonly object internalSyncObject = new object();
 
         private static void InitalizeThread()
         {
@@ -1556,7 +1556,7 @@ namespace System.Windows.Forms
                 }
 
 #if DEBUG
-                string callingStack;
+                readonly string callingStack;
                 ~HostedWindowsFormsMessageHook()
                 {
                     Debug.Assert(messageHookHandle == IntPtr.Zero, "Finalizing an active mouse hook.  This will crash the process.  Calling stack: " + callingStack);
@@ -2533,7 +2533,7 @@ namespace System.Windows.Forms
     internal class MergeHistory
     {
         private Stack<MergeHistoryItem> mergeHistoryItemsStack;
-        private ToolStrip mergedToolStrip;
+        private readonly ToolStrip mergedToolStrip;
 
         public MergeHistory(ToolStrip mergedToolStrip)
         {
@@ -2561,7 +2561,7 @@ namespace System.Windows.Forms
 
     internal class MergeHistoryItem
     {
-        private MergeAction mergeAction;
+        private readonly MergeAction mergeAction;
         private ToolStripItem targetItem;
         private int index = -1;
         private int previousIndex = -1;

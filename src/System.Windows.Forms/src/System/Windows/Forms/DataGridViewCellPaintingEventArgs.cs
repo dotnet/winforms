@@ -10,7 +10,7 @@ namespace System.Windows.Forms
 {
     public class DataGridViewCellPaintingEventArgs : HandledEventArgs
     {
-        private DataGridView _dataGridView;
+        private readonly DataGridView _dataGridView;
 
         public DataGridViewCellPaintingEventArgs(DataGridView dataGridView,
                                                  Graphics graphics,

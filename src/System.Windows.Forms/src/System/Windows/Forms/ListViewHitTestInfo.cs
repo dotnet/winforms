@@ -17,9 +17,9 @@ namespace System.Windows.Forms
     public class ListViewHitTestInfo
     {
 
-        private ListViewHitTestLocations loc;
-        private ListViewItem item;
-        private ListViewItem.ListViewSubItem subItem;
+        private readonly ListViewHitTestLocations loc;
+        private readonly ListViewItem item;
+        private readonly ListViewItem.ListViewSubItem subItem;
 
         /// <summary>
         ///     Creates a ListViewHitTestInfo instance.

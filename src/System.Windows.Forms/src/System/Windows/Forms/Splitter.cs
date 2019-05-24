@@ -1070,7 +1070,7 @@ namespace System.Windows.Forms
 
         private class SplitterMessageFilter : IMessageFilter
         {
-            private Splitter owner = null;
+            private readonly Splitter owner = null;
 
             public SplitterMessageFilter(Splitter splitter)
             {

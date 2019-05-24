@@ -21,7 +21,7 @@ namespace System.Drawing.Design
     [Serializable]
     public class ToolboxItem : ISerializable
     {
-        private static TraceSwitch s_toolboxItemPersist = new TraceSwitch("ToolboxPersisting", "ToolboxItem: write data");
+        private static readonly TraceSwitch s_toolboxItemPersist = new TraceSwitch("ToolboxPersisting", "ToolboxItem: write data");
 
         private static readonly object s_eventComponentsCreated = new object();
         private static readonly object s_eventComponentsCreating = new object();

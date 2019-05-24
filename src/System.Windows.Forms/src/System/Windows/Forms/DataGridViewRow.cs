@@ -18,7 +18,7 @@ namespace System.Windows.Forms
     [TypeConverterAttribute(typeof(DataGridViewRowConverter))]
     public class DataGridViewRow : DataGridViewBand
     {
-        private static Type s_rowType = typeof(DataGridViewRow);
+        private static readonly Type s_rowType = typeof(DataGridViewRow);
         private static readonly int s_propRowErrorText = PropertyStore.CreateKey();
         private static readonly int s_propRowAccessibilityObject = PropertyStore.CreateKey();
 
@@ -2252,7 +2252,7 @@ namespace System.Windows.Forms
 
         private class DataGridViewSelectedRowCellsAccessibleObject : AccessibleObject
         {
-            private DataGridViewRow owner;
+            private readonly DataGridViewRow owner;
 
             internal DataGridViewSelectedRowCellsAccessibleObject(DataGridViewRow owner)
             {

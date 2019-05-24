@@ -48,11 +48,11 @@ namespace System.Windows.Forms
     public abstract class AxHost : Control, ISupportInitialize, ICustomTypeDescriptor
     {
 
-        private static TraceSwitch AxHTraceSwitch = new TraceSwitch("AxHTrace", "ActiveX handle tracing");
-        private static TraceSwitch AxPropTraceSwitch = new TraceSwitch("AxPropTrace", "ActiveX property tracing");
-        private static TraceSwitch AxHostSwitch = new TraceSwitch("AxHost", "ActiveX host creation");
-        private static BooleanSwitch AxIgnoreTMSwitch = new BooleanSwitch("AxIgnoreTM", "ActiveX switch to ignore thread models");
-        private static BooleanSwitch AxAlwaysSaveSwitch = new BooleanSwitch("AxAlwaysSave", "ActiveX to save all controls regardless of their IsDirty function return value");
+        private static readonly TraceSwitch AxHTraceSwitch = new TraceSwitch("AxHTrace", "ActiveX handle tracing");
+        private static readonly TraceSwitch AxPropTraceSwitch = new TraceSwitch("AxPropTrace", "ActiveX property tracing");
+        private static readonly TraceSwitch AxHostSwitch = new TraceSwitch("AxHost", "ActiveX host creation");
+        private static readonly BooleanSwitch AxIgnoreTMSwitch = new BooleanSwitch("AxIgnoreTM", "ActiveX switch to ignore thread models");
+        private static readonly BooleanSwitch AxAlwaysSaveSwitch = new BooleanSwitch("AxAlwaysSave", "ActiveX to save all controls regardless of their IsDirty function return value");
 
         /// <summary>
         ///     Flags which may be passed to the AxHost constructor
@@ -84,10 +84,10 @@ namespace System.Windows.Forms
             internal const int IgnoreThreadModel = 0x10000000;
         }
 
-        private static COMException E_NOTIMPL = new COMException(SR.AXNotImplemented, unchecked((int)0x80000001));
-        private static COMException E_INVALIDARG = new COMException(SR.AXInvalidArgument, unchecked((int)0x80070057));
-        private static COMException E_FAIL = new COMException(SR.AXUnknownError, unchecked((int)0x80004005));
-        private static COMException E_NOINTERFACE = new COMException(SR.AxInterfaceNotSupported, unchecked((int)0x80004002));
+        private static readonly COMException E_NOTIMPL = new COMException(SR.AXNotImplemented, unchecked((int)0x80000001));
+        private static readonly COMException E_INVALIDARG = new COMException(SR.AXInvalidArgument, unchecked((int)0x80070057));
+        private static readonly COMException E_FAIL = new COMException(SR.AXUnknownError, unchecked((int)0x80004005));
+        private static readonly COMException E_NOINTERFACE = new COMException(SR.AxInterfaceNotSupported, unchecked((int)0x80004002));
 
         private const int INPROC_SERVER = 1;
         private const int OC_PASSIVE = 0;
@@ -174,7 +174,7 @@ namespace System.Windows.Forms
         private int ocState = OC_PASSIVE;
         private int miscStatusBits;
         private int freezeCount = 0;
-        private int flags = 0;
+        private readonly int flags = 0;
         private int selectionStyle = 0;
         private int editMode = EDITM_NONE;
         private int noComponentChange = 0;
@@ -217,17 +217,17 @@ namespace System.Windows.Forms
         private UnsafeNativeMethods.IPersistStorage iPersistStorage;
 
         private AboutBoxDelegate aboutBoxDelegate = null;
-        private EventHandler selectionChangeHandler;
+        private readonly EventHandler selectionChangeHandler;
 
-        private bool isMaskEdit;
+        private readonly bool isMaskEdit;
         private bool ignoreDialogKeys;
 
-        private EventHandler onContainerVisibleChanged;
+        private readonly EventHandler onContainerVisibleChanged;
 
         // These should be in the order given by the PROPCAT_X values
         // Also, note that they are not to be localized...
 
-        private static CategoryAttribute[] categoryNames = new CategoryAttribute[] {
+        private static readonly CategoryAttribute[] categoryNames = new CategoryAttribute[] {
             null,
             new WinCategoryAttribute("Default"),
             new WinCategoryAttribute("Default"),
@@ -3880,7 +3880,7 @@ namespace System.Windows.Forms
         [AttributeUsage(AttributeTargets.Class, Inherited = false)]
         public sealed class ClsidAttribute : Attribute
         {
-            private string val;
+            private readonly string val;
 
             public ClsidAttribute(string clsid)
             {
@@ -3899,7 +3899,7 @@ namespace System.Windows.Forms
         [AttributeUsage(AttributeTargets.Assembly, Inherited = false)]
         public sealed class TypeLibraryTimeStampAttribute : Attribute
         {
-            private DateTime val;
+            private readonly DateTime val;
 
             public TypeLibraryTimeStampAttribute(string timestamp)
             {
@@ -3921,7 +3921,7 @@ namespace System.Windows.Forms
             private int cookie;
             internal int threadId;
 #if DEBUG
-            private string callStack;
+            private readonly string callStack;
 #endif
             /// <summary>
             /// Creates a connection point to of the given interface type.
@@ -4098,8 +4098,8 @@ namespace System.Windows.Forms
 
         public class InvalidActiveXStateException : Exception
         {
-            private string name;
-            private ActiveXInvokeKind kind;
+            private readonly string name;
+            private readonly ActiveXInvokeKind kind;
 
             public InvalidActiveXStateException(string name, ActiveXInvokeKind kind)
             {
@@ -4136,7 +4136,7 @@ namespace System.Windows.Forms
             : UnsafeNativeMethods.IOleControlSite, UnsafeNativeMethods.IOleClientSite, UnsafeNativeMethods.IOleInPlaceSite, UnsafeNativeMethods.ISimpleFrameSite, UnsafeNativeMethods.IVBGetControl, UnsafeNativeMethods.IGetVBAObject, UnsafeNativeMethods.IPropertyNotifySink, IReflect, IDisposable
         {
 
-            private AxHost host;
+            private readonly AxHost host;
             private ConnectionPointCookie connectionPoint;
 
             internal OleInterfaces(AxHost host)
@@ -5653,9 +5653,9 @@ namespace System.Windows.Forms
         /// </summary>
         internal class EnumUnknown : UnsafeNativeMethods.IEnumUnknown
         {
-            private object[] arr;
+            private readonly object[] arr;
             private int loc;
-            private int size;
+            private readonly int size;
 
             internal EnumUnknown(object[] arr)
             {
@@ -5744,7 +5744,7 @@ namespace System.Windows.Forms
             private AxHost siteUIActive;
             private AxHost siteActive;
             private bool formAlreadyCreated = false;
-            private Hashtable containerCache = new Hashtable();  // name -> Control
+            private readonly Hashtable containerCache = new Hashtable();  // name -> Control
             private int lockCount = 0;
             private Hashtable components = null;  // Control -> any
             private Hashtable proxyCache = null;
@@ -6675,8 +6675,8 @@ namespace System.Windows.Forms
             /// </summary>
             private class ExtenderProxy : UnsafeNativeMethods.IExtender, UnsafeNativeMethods.IVBGetControl, UnsafeNativeMethods.IGetVBAObject, UnsafeNativeMethods.IGetOleObject, IReflect
             {
-                private WeakReference pRef;
-                private WeakReference pContainer;
+                private readonly WeakReference pRef;
+                private readonly WeakReference pContainer;
 
                 internal ExtenderProxy(Control principal, AxContainer container)
                 {
@@ -7205,7 +7205,7 @@ namespace System.Windows.Forms
         [SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly")]
         public class State : ISerializable
         {
-            private int VERSION = 1;
+            private readonly int VERSION = 1;
             private int length;
             private byte[] buffer;
             internal int type;
@@ -7214,7 +7214,7 @@ namespace System.Windows.Forms
             private UnsafeNativeMethods.ILockBytes iLockBytes;
             private bool manualUpdate = false;
             private string licenseKey = null;
-            private PropertyBagStream propBag;
+            private readonly PropertyBagStream propBag;
 
             // create on save from ipersist stream
             internal State(MemoryStream ms, int storageType, AxHost ctl, PropertyBagStream propBag)
@@ -7647,13 +7647,13 @@ namespace System.Windows.Forms
         /// </summary>
         internal class AxPropertyDescriptor : PropertyDescriptor
         {
-            private PropertyDescriptor baseProp;
+            private readonly PropertyDescriptor baseProp;
             internal AxHost owner;
-            private DispIdAttribute dispid;
+            private readonly DispIdAttribute dispid;
 
             private TypeConverter converter;
             private UITypeEditor editor;
-            private ArrayList updateAttrs = new ArrayList();
+            private readonly ArrayList updateAttrs = new ArrayList();
             private int flags = 0;
 
             private const int FlagUpdatedEditorAndConverter = 0x00000001;
@@ -8078,7 +8078,7 @@ namespace System.Windows.Forms
 
         private class AxPropertyTypeEditor : UITypeEditor
         {
-            private AxPropertyDescriptor propDesc;
+            private readonly AxPropertyDescriptor propDesc;
             private Guid guid;
 
             public AxPropertyTypeEditor(AxPropertyDescriptor pd, Guid guid)
@@ -8131,7 +8131,7 @@ namespace System.Windows.Forms
         /// </summary>
         private class AxEnumConverter : Com2EnumConverter
         {
-            private AxPropertyDescriptor target;
+            private readonly AxPropertyDescriptor target;
 
             public AxEnumConverter(AxPropertyDescriptor target, Com2Enum com2Enum) : base(com2Enum)
             {
@@ -8157,8 +8157,8 @@ namespace System.Windows.Forms
         // 
         private class AxPerPropertyBrowsingEnum : Com2Enum
         {
-            private AxPropertyDescriptor target;
-            private AxHost owner;
+            private readonly AxPropertyDescriptor target;
+            private readonly AxHost owner;
             private OleStrCAMarshaler nameMarshaller;
             private Int32CAMarshaler valueMarshaller;
             private bool arraysFetched;

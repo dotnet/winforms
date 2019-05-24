@@ -14,11 +14,11 @@ namespace System.Windows.Forms
 
     public class PrintControllerWithStatusDialog : PrintController
     {
-        private PrintController underlyingController;
+        private readonly PrintController underlyingController;
         private PrintDocument document;
         private BackgroundThread backgroundThread;
         private int pageNumber;
-        private string dialogTitle;
+        private readonly string dialogTitle;
 
         public PrintControllerWithStatusDialog(PrintController underlyingController)
         : this(underlyingController, string.Format(SR.PrintControllerWithStatusDialog_DialogTitlePrint))
@@ -151,9 +151,9 @@ namespace System.Windows.Forms
 
         private class BackgroundThread
         {
-            private PrintControllerWithStatusDialog parent;
+            private readonly PrintControllerWithStatusDialog parent;
             private StatusDialog dialog;
-            private Thread thread;
+            private readonly Thread thread;
             internal bool canceled = false;
             private bool alreadyStopped = false;
 
@@ -244,7 +244,7 @@ namespace System.Windows.Forms
             internal Label label1;
             private Button button1;
             private TableLayoutPanel tableLayoutPanel1;
-            private BackgroundThread backgroundThread;
+            private readonly BackgroundThread backgroundThread;
 
             internal StatusDialog(BackgroundThread backgroundThread, string dialogTitle)
             {

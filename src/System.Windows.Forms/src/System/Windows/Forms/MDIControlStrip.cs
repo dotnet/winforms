@@ -18,10 +18,10 @@ namespace System.Windows.Forms
     internal class MdiControlStrip : MenuStrip
     {
 
-        private ToolStripMenuItem system;
-        private ToolStripMenuItem close;
-        private ToolStripMenuItem minimize;
-        private ToolStripMenuItem restore;
+        private readonly ToolStripMenuItem system;
+        private readonly ToolStripMenuItem close;
+        private readonly ToolStripMenuItem minimize;
+        private readonly ToolStripMenuItem restore;
         private MenuStrip mergedMenu;
 
         private IWin32Window target;

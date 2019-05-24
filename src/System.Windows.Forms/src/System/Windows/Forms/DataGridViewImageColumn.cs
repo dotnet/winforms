@@ -16,7 +16,7 @@ namespace System.Windows.Forms
     [ToolboxBitmapAttribute(typeof(DataGridViewImageColumn), "DataGridViewImageColumn")]
     public class DataGridViewImageColumn : DataGridViewColumn
     {
-        private static Type columnType = typeof(DataGridViewImageColumn);
+        private static readonly Type columnType = typeof(DataGridViewImageColumn);
         private Image image;
         private Icon icon;
 

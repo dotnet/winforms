@@ -24,11 +24,11 @@ namespace System.Windows.Forms
     public class ToolStripContainer : ContainerControl
     {
 
-        private ToolStripPanel topPanel;
-        private ToolStripPanel bottomPanel;
-        private ToolStripPanel leftPanel;
-        private ToolStripPanel rightPanel;
-        private ToolStripContentPanel contentPanel;
+        private readonly ToolStripPanel topPanel;
+        private readonly ToolStripPanel bottomPanel;
+        private readonly ToolStripPanel leftPanel;
+        private readonly ToolStripPanel rightPanel;
+        private readonly ToolStripContentPanel contentPanel;
 
 
         public ToolStripContainer()
@@ -473,9 +473,9 @@ namespace System.Windows.Forms
 
         internal class ToolStripContainerTypedControlCollection : WindowsFormsUtils.ReadOnlyControlCollection
         {
-            ToolStripContainer owner;
-            Type contentPanelType = typeof(ToolStripContentPanel);
-            Type panelType = typeof(ToolStripPanel);
+            readonly ToolStripContainer owner;
+            readonly Type contentPanelType = typeof(ToolStripContentPanel);
+            readonly Type panelType = typeof(ToolStripPanel);
 
             public ToolStripContainerTypedControlCollection(Control c, bool isReadOnly)
                 : base(c, isReadOnly)

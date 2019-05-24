@@ -31,18 +31,18 @@ namespace System.Windows.Forms
         private const int yOffset = 1;
         private const int textPadding = 2;
         private const int buttonToText = 4;
-        private static ColorMap[] colorMap = new ColorMap[] { new ColorMap() };
+        private static readonly ColorMap[] colorMap = new ColorMap[] { new ColorMap() };
 
 
         private static readonly Point minimumBounds = new Point(50, 30);
 
-        private DataGrid dataGrid = null;
+        private readonly DataGrid dataGrid = null;
         private bool backButtonVisible = false;
         private bool downButtonVisible = false;
 
         private SolidBrush backBrush = DefaultBackBrush;
         private SolidBrush foreBrush = DefaultForeBrush;
-        private Pen textBorderPen = DefaultTextBorderPen;
+        private readonly Pen textBorderPen = DefaultTextBorderPen;
 
         private string text = string.Empty;
         private bool textBorderVisible = false;

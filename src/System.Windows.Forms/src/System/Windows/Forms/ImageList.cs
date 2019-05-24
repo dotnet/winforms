@@ -41,7 +41,7 @@ namespace System.Windows.Forms
     {
 
         // gpr: Copied from Icon
-        private static Color fakeTransparencyColor = Color.FromArgb(0x0d, 0x0b, 0x0c);
+        private static readonly Color fakeTransparencyColor = Color.FromArgb(0x0d, 0x0b, 0x0c);
         private static Size DefaultImageSize = new Size(16, 16);
 
         private const int INITIAL_CAPACITY = 4;
@@ -1033,7 +1033,7 @@ namespace System.Windows.Forms
         {
             private IntPtr himl;
 #if DEBUG
-            private string callStack;
+            private readonly string callStack;
 #endif
 
             internal NativeImageList(IntPtr himl)
@@ -1132,8 +1132,8 @@ namespace System.Windows.Forms
         ]
         public sealed class ImageCollection : IList
         {
-            private ImageList owner;
-            private ArrayList imageInfoCollection = new ArrayList();
+            private readonly ImageList owner;
+            private readonly ArrayList imageInfoCollection = new ArrayList();
 
             /// A caching mechanism for key accessor
             /// We use an index here rather than control so that we don't have lifetime

@@ -23,7 +23,7 @@ namespace System.Windows.Forms
         private HorizontalAlignment _alignment = HorizontalAlignment.Left;
         private PropertyDescriptor _propertyDescriptor = null;
         private DataGridTableStyle _dataGridTableStyle = null;
-        private Font _font = null;
+        private readonly Font _font = null;
         private string _mappingName = string.Empty;
         private string _headerName = string.Empty;
         private bool _invalid = false;

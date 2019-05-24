@@ -23,7 +23,7 @@ namespace System.Windows.Forms
         BindingManagerBase parentManager;
         string dataField;
         PropertyDescriptor fieldInfo;
-        static List<BindingManagerBase> IgnoreItemChangedTable = new List<BindingManagerBase>();
+        static readonly List<BindingManagerBase> IgnoreItemChangedTable = new List<BindingManagerBase>();
 
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set the dataSource

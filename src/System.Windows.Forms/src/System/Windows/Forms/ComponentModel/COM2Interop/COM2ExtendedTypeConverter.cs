@@ -22,7 +22,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     /// </summary>
     internal class Com2ExtendedTypeConverter : TypeConverter
     {
-        private TypeConverter innerConverter;
+        private readonly TypeConverter innerConverter;
 
         public Com2ExtendedTypeConverter(TypeConverter innerConverter)
         {

@@ -10,9 +10,9 @@ namespace System.Windows.Forms
 
     public sealed class DataGridViewAdvancedBorderStyle : ICloneable
     {
-        private DataGridView owner;
+        private readonly DataGridView owner;
         private bool all = true;
-        private DataGridViewAdvancedCellBorderStyle banned1, banned2, banned3;
+        private readonly DataGridViewAdvancedCellBorderStyle banned1, banned2, banned3;
         private DataGridViewAdvancedCellBorderStyle top = DataGridViewAdvancedCellBorderStyle.None;
         private DataGridViewAdvancedCellBorderStyle left = DataGridViewAdvancedCellBorderStyle.None;
         private DataGridViewAdvancedCellBorderStyle right = DataGridViewAdvancedCellBorderStyle.None;

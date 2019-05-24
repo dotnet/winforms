@@ -79,11 +79,11 @@ namespace System.Windows.Forms
         private const int CompareOptions = IgnoreCase | IgnoreKanaType |
             IgnoreNonSpace | IgnoreSymbols | IgnoreWidth | StringSort;
 
-        private string[] keys;
-        private object[] items;
-        private int lcid;
-        private int options;
-        private bool descending;
+        private readonly string[] keys;
+        private readonly object[] items;
+        private readonly int lcid;
+        private readonly int options;
+        private readonly bool descending;
 
         /// <summary>
         ///     Constructs a StringSorter. Instances are created by the sort() routines,

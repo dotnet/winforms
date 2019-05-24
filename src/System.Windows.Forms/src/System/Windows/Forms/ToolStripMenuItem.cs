@@ -29,7 +29,7 @@ namespace System.Windows.Forms
     public class ToolStripMenuItem : ToolStripDropDownItem
     {
 
-        private static MenuTimer menuTimer = new MenuTimer();
+        private static readonly MenuTimer menuTimer = new MenuTimer();
 
         private static readonly int PropShortcutKeys = PropertyStore.CreateKey();
         private static readonly int PropCheckState = PropertyStore.CreateKey();
@@ -41,7 +41,7 @@ namespace System.Windows.Forms
 
         // SUPPORT for mapping NATIVE menu commands to ToolStripMenuItems -----
         // corresponds to wID in MENUITEMINFO structure
-        private int nativeMenuCommandID = -1;
+        private readonly int nativeMenuCommandID = -1;
         private IntPtr targetWindowHandle = IntPtr.Zero;
         private IntPtr nativeMenuHandle = IntPtr.Zero;
 
@@ -1367,7 +1367,7 @@ namespace System.Windows.Forms
         [System.Runtime.InteropServices.ComVisible(true)]
         internal class ToolStripMenuItemAccessibleObject : ToolStripDropDownItemAccessibleObject
         {
-            private ToolStripMenuItem ownerItem = null;
+            private readonly ToolStripMenuItem ownerItem = null;
 
             public ToolStripMenuItemAccessibleObject(ToolStripMenuItem ownerItem) : base(ownerItem)
             {
@@ -1421,16 +1421,16 @@ namespace System.Windows.Forms
     internal class MenuTimer
     {
 
-        private System.Windows.Forms.Timer autoMenuExpandTimer = new System.Windows.Forms.Timer();
+        private readonly System.Windows.Forms.Timer autoMenuExpandTimer = new System.Windows.Forms.Timer();
 
         // consider - weak reference?
         private ToolStripMenuItem currentItem = null;
         private ToolStripMenuItem fromItem = null;
         private bool inTransition = false;
 
-        private int quickShow = 1;
+        private readonly int quickShow = 1;
 
-        private int slowShow;
+        private readonly int slowShow;
 
         public MenuTimer()
         {
@@ -1608,7 +1608,7 @@ namespace System.Windows.Forms
 
     internal class ToolStripMenuItemInternalLayout : ToolStripItemInternalLayout
     {
-        private ToolStripMenuItem ownerItem;
+        private readonly ToolStripMenuItem ownerItem;
 
         public ToolStripMenuItemInternalLayout(ToolStripMenuItem ownerItem) : base(ownerItem)
         {

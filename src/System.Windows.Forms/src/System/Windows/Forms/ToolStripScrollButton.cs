@@ -17,7 +17,7 @@ namespace System.Windows.Forms
     /// </summary>
     internal class ToolStripScrollButton : ToolStripControlHost
     {
-        private bool up = true;
+        private readonly bool up = true;
 
         [ThreadStatic]
         private static Bitmap upScrollImage;
@@ -189,7 +189,7 @@ namespace System.Windows.Forms
             public StickyLabel()
             {
             }
-            private bool freezeLocationChange = false;
+            private readonly bool freezeLocationChange = false;
 
             public bool FreezeLocationChange
             {

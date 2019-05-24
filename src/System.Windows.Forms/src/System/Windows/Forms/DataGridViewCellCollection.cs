@@ -23,8 +23,8 @@ namespace System.Windows.Forms
     public class DataGridViewCellCollection : BaseCollection, IList
     {
         CollectionChangeEventHandler onCollectionChanged;
-        ArrayList items = new ArrayList();
-        DataGridViewRow owner = null;
+        readonly ArrayList items = new ArrayList();
+        readonly DataGridViewRow owner = null;
 
         int IList.Add(object value)
         {

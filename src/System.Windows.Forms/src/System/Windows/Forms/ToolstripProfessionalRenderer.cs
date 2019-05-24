@@ -37,7 +37,7 @@ namespace System.Windows.Forms
 
         private const int DROP_DOWN_MENU_ITEM_PAINT_PADDING_SIZE = 1;
         private Padding scaledDropDownMenuItemPaintPadding = new Padding(DROP_DOWN_MENU_ITEM_PAINT_PADDING_SIZE + 1, 0, DROP_DOWN_MENU_ITEM_PAINT_PADDING_SIZE, 0);
-        private ProfessionalColorTable professionalColorTable;
+        private readonly ProfessionalColorTable professionalColorTable;
         private bool roundedEdges = true;
         private ToolStripRenderer toolStripHighContrastRenderer;
         private ToolStripRenderer toolStripLowResolutionRenderer;

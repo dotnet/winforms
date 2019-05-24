@@ -294,7 +294,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         internal class CategoryGridEntryAccessibleObject : GridEntryAccessibleObject
         {
 
-            private CategoryGridEntry _owningCategoryGridEntry;
+            private readonly CategoryGridEntry _owningCategoryGridEntry;
 
             /// <summary>
             /// Initializes new instance of CategoryGridEntryAccessibleObject.

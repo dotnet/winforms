@@ -30,7 +30,7 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionTableLayoutPanel))]
     public class TableLayoutPanel : Panel, IExtenderProvider
     {
-        private TableLayoutSettings _tableLayoutSettings;
+        private readonly TableLayoutSettings _tableLayoutSettings;
         private static readonly object EventCellPaint = new object();
 
         public TableLayoutPanel()

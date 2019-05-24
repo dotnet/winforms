@@ -51,9 +51,8 @@ namespace System.Windows.Forms
         private const int BOTTOM_LOCATION_INDEX = 2;
         private const int LEFT_LOCATION_INDEX = 3;
         private const int LOCATION_TOTAL = 4;
-
-        Hashtable tools = new Hashtable();
-        int[] delayTimes = new int[4];
+        readonly Hashtable tools = new Hashtable();
+        readonly int[] delayTimes = new int[4];
         bool auto = true;
         bool showAlways = false;
         ToolTipNativeWindow window = null;
@@ -68,7 +67,7 @@ namespace System.Windows.Forms
         string toolTipTitle = string.Empty;
         ToolTipIcon toolTipIcon = (ToolTipIcon)0;
         ToolTipTimer timer;
-        Hashtable owners = new Hashtable();
+        readonly Hashtable owners = new Hashtable();
         bool stripAmpersands = false;
         bool useAnimation = true;
         bool useFading = true;
@@ -84,7 +83,7 @@ namespace System.Windows.Forms
         // Adding a tool twice breaks the ToolTip, so we need to track which
         // tools are created to prevent this...
         //
-        Hashtable created = new Hashtable();
+        readonly Hashtable created = new Hashtable();
 
         private bool cancelled = false;
 
@@ -2879,7 +2878,7 @@ namespace System.Windows.Forms
         /// </summary>
         private class ToolTipNativeWindow : NativeWindow
         {
-            ToolTip control;
+            readonly ToolTip control;
 
             internal ToolTipNativeWindow(ToolTip control)
             {
@@ -2898,7 +2897,7 @@ namespace System.Windows.Forms
 
         private class ToolTipTimer : Timer
         {
-            IWin32Window host;
+            readonly IWin32Window host;
 
             public ToolTipTimer(IWin32Window owner) : base()
             {
@@ -2929,7 +2928,7 @@ namespace System.Windows.Forms
 
             public Type TipType = Type.Auto;
             private string caption;
-            private string designerText;
+            private readonly string designerText;
             public Point Position = Point.Empty;
 
             public TipInfo(string caption, Type type)

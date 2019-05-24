@@ -1293,7 +1293,7 @@ namespace System.Windows.Forms
             /////////////////////////////////////////////////////////////////////
 
             // Parent control
-            private UpDownBase parent;
+            private readonly UpDownBase parent;
             private bool doubleClickFired = false;
             /////////////////////////////////////////////////////////////////////
             // Constructors
@@ -1422,7 +1422,7 @@ namespace System.Windows.Forms
             // back to our parent.  They should track.
             internal class UpDownEditAccessibleObject : ControlAccessibleObject
             {
-                UpDownBase parent;
+                readonly UpDownBase parent;
 
                 public UpDownEditAccessibleObject(UpDownEdit owner, UpDownBase parent) : base(owner)
                 {
@@ -1471,7 +1471,7 @@ namespace System.Windows.Forms
             /////////////////////////////////////////////////////////////////////
 
             // Parent control
-            private UpDownBase parent;
+            private readonly UpDownBase parent;
 
             // Button state
             private ButtonID pushed = ButtonID.None;
@@ -2005,8 +2005,8 @@ namespace System.Windows.Forms
 
                 internal class DirectionButtonAccessibleObject : AccessibleObject
                 {
-                    private bool up;
-                    private UpDownButtonsAccessibleObject parent;
+                    private readonly bool up;
+                    private readonly UpDownButtonsAccessibleObject parent;
 
                     public DirectionButtonAccessibleObject(UpDownButtonsAccessibleObject parent, bool up)
                     {

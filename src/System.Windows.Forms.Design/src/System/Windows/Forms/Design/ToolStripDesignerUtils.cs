@@ -29,7 +29,7 @@ namespace System.Windows.Forms.Design
 
         [ThreadStatic]
         private static Dictionary<Type, Bitmap> s_cachedWinformsImages;
-        private static string s_systemWindowsFormsNamespace = typeof(ToolStripItem).Namespace;
+        private static readonly string s_systemWindowsFormsNamespace = typeof(ToolStripItem).Namespace;
 
         private ToolStripDesignerUtils()
         {

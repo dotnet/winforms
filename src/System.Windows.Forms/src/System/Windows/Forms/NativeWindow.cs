@@ -77,10 +77,10 @@ namespace System.Windows.Forms
 
         //nned to Store Table of Ids and Handles
         private static short globalID = 1;
-        private static Dictionary<short, IntPtr> hashForIdHandle;
-        private static Dictionary<IntPtr, short> hashForHandleId;
-        private static object internalSyncObject = new object();
-        private static object createWindowSyncObject = new object();
+        private static readonly Dictionary<short, IntPtr> hashForIdHandle;
+        private static readonly Dictionary<IntPtr, short> hashForHandleId;
+        private static readonly object internalSyncObject = new object();
+        private static readonly object createWindowSyncObject = new object();
 
 #if DEBUG
         AppDomain handleCreatedIn = null;
@@ -94,8 +94,8 @@ namespace System.Windows.Forms
         bool ownHandle;
         NativeWindow previousWindow; // doubly linked list of subclasses.
         NativeWindow nextWindow;
-        WeakReference weakThisPtr;
-        private DpiAwarenessContext windowDpiAwarenessContext = DpiHelper.IsScalingRequirementMet ?
+        readonly WeakReference weakThisPtr;
+        private readonly DpiAwarenessContext windowDpiAwarenessContext = DpiHelper.IsScalingRequirementMet ?
                                                                   CommonUnsafeNativeMethods.TryGetThreadDpiAwarenessContext() :
                                                                   DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED;
 
@@ -1583,7 +1583,7 @@ namespace System.Windows.Forms
             internal bool registered;
             internal NativeWindow targetWindow;
 
-            private static object wcInternalSyncObject = new object();
+            private static readonly object wcInternalSyncObject = new object();
             private static int domainQualifier = 0;
 
             internal WindowClass(string className, int classStyle)

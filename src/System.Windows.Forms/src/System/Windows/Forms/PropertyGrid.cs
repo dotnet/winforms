@@ -30,11 +30,11 @@ namespace System.Windows.Forms
     public class PropertyGrid : ContainerControl, IComPropertyBrowser, UnsafeNativeMethods.IPropertyNotifySink
     {
 
-        private DocComment doccomment;
+        private readonly DocComment doccomment;
         private int dcSizeRatio = -1;
         private int hcSizeRatio = -1;
-        private HotCommands hotcommands;
-        private ToolStrip toolStrip;
+        private readonly HotCommands hotcommands;
+        private readonly ToolStrip toolStrip;
 
         private bool helpVisible = true;
         private bool toolbarVisible = true;
@@ -64,12 +64,12 @@ namespace System.Windows.Forms
 
         // this guy's kind of an odd one...he gets special treatment
         private ToolStripButton btnViewPropertyPages;
-        private ToolStripSeparator separator1;
-        private ToolStripSeparator separator2;
+        private readonly ToolStripSeparator separator1;
+        private readonly ToolStripSeparator separator2;
         private int buttonType = NORMAL_BUTTONS;
 
         // our main baby
-        private PropertyGridView gridView;
+        private readonly PropertyGridView gridView;
 
 
         private IDesignerHost designerHost;
@@ -160,12 +160,12 @@ namespace System.Windows.Forms
         //
         private AxHost.ConnectionPointCookie[] connectionPointCookies = null;
 
-        private static object EventPropertyValueChanged = new object();
-        private static object EventComComponentNameChanged = new object();
-        private static object EventPropertyTabChanged = new object();
-        private static object EventSelectedGridItemChanged = new object();
-        private static object EventPropertySortChanged = new object();
-        private static object EventSelectedObjectsChanged = new object();
+        private static readonly object EventPropertyValueChanged = new object();
+        private static readonly object EventComComponentNameChanged = new object();
+        private static readonly object EventPropertyTabChanged = new object();
+        private static readonly object EventSelectedGridItemChanged = new object();
+        private static readonly object EventPropertySortChanged = new object();
+        private static readonly object EventSelectedObjectsChanged = new object();
 
         [
             SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // the "PropertyGridToolBar" caption is for testing.
@@ -5574,7 +5574,7 @@ namespace System.Windows.Forms
 
             internal static PropertyTabCollection Empty = new PropertyTabCollection(null);
 
-            private PropertyGrid owner;
+            private readonly PropertyGrid owner;
 
             internal PropertyTabCollection(PropertyGrid owner)
             {
@@ -5722,7 +5722,7 @@ namespace System.Windows.Forms
 
         private class PropertyGridServiceProvider : IServiceProvider
         {
-            PropertyGrid owner;
+            readonly PropertyGrid owner;
 
             public PropertyGridServiceProvider(PropertyGrid owner)
             {
@@ -5924,7 +5924,7 @@ namespace System.Windows.Forms
     internal class PropertyGridAccessibleObject : Control.ControlAccessibleObject
     {
 
-        private PropertyGrid _owningPropertyGrid;
+        private readonly PropertyGrid _owningPropertyGrid;
 
         /// <summary>
         /// Initializes new instance of PropertyGridAccessibleObject
@@ -6153,7 +6153,7 @@ namespace System.Windows.Forms
     internal class PropertyGridToolStrip : ToolStrip
     {
 
-        private PropertyGrid _parentPropertyGrid;
+        private readonly PropertyGrid _parentPropertyGrid;
 
         /// <summary>
         /// Initializes new instance of PropertyGridToolStrip control.
@@ -6187,7 +6187,7 @@ namespace System.Windows.Forms
     internal class PropertyGridToolStripAccessibleObject : ToolStrip.ToolStripAccessibleObject
     {
 
-        private PropertyGrid _parentPropertyGrid;
+        private readonly PropertyGrid _parentPropertyGrid;
 
         /// <summary>
         /// Constructs new instance of PropertyGridToolStripAccessibleObject

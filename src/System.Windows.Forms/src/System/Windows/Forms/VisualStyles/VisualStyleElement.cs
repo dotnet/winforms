@@ -32,9 +32,9 @@ namespace System.Windows.Forms.VisualStyles
     public class VisualStyleElement
     {
         internal static readonly int Count = 25; //UPDATE THIS WHEN CLASSES ARE ADDED/REMOVED!
-        private string className;
-        private int part;
-        private int state;
+        private readonly string className;
+        private readonly int part;
+        private readonly int state;
 
         private VisualStyleElement(string className, int part, int state)
         {

@@ -228,7 +228,7 @@ namespace System.Windows.Forms
         [System.Runtime.InteropServices.ComVisible(true)]
         internal class ToolStripDropDownButtonAccessibleObject : ToolStripDropDownItemAccessibleObject
         {
-            private ToolStripDropDownButton ownerItem = null;
+            private readonly ToolStripDropDownButton ownerItem = null;
 
             public ToolStripDropDownButtonAccessibleObject(ToolStripDropDownButton ownerItem)
                 : base(ownerItem)
@@ -251,7 +251,7 @@ namespace System.Windows.Forms
 
         internal class ToolStripDropDownButtonInternalLayout : ToolStripItemInternalLayout
         {
-            private ToolStripDropDownButton ownerItem;
+            private readonly ToolStripDropDownButton ownerItem;
             private static readonly Size dropDownArrowSizeUnscaled = new Size(5, 3);
             private static Size dropDownArrowSize = dropDownArrowSizeUnscaled;
             private const int DROP_DOWN_ARROW_PADDING = 2;

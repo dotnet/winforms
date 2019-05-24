@@ -71,7 +71,7 @@ namespace System.Drawing.Design
         {
             private object value;
             private IWindowsFormsEditorService edSvc;
-            private TypeConverter cursorConverter;
+            private readonly TypeConverter cursorConverter;
             private UITypeEditor editor;
 
             public CursorUI(UITypeEditor editor)

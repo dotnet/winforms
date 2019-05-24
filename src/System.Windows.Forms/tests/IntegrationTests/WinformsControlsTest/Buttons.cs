@@ -14,7 +14,7 @@ namespace WinformsControlsTest
             InitializeComponent();
         }
 
-        private FlatStyle[] styles = { FlatStyle.Flat, FlatStyle.Popup, FlatStyle.Standard, FlatStyle.System };
+        private readonly FlatStyle[] styles = { FlatStyle.Flat, FlatStyle.Popup, FlatStyle.Standard, FlatStyle.System };
         private void Test1_Load(object sender, EventArgs e)
         {
             RadioButton r;

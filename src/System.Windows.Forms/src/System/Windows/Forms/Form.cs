@@ -119,7 +119,7 @@ namespace System.Windows.Forms
 #if MAGIC_PADDING
         private static Padding FormPadding = new Padding(9);  // UI guideline
 #endif
-        private static object internalSyncObject = new object();
+        private static readonly object internalSyncObject = new object();
 
         // Property store keys for properties.  The property store allocates most efficiently
         // in groups of four, so we try to lump properties in groups of four based on how
@@ -7492,7 +7492,7 @@ namespace System.Windows.Forms
         public new class ControlCollection : Control.ControlCollection
         {
 
-            private Form owner;
+            private readonly Form owner;
 
             /*C#r:protected*/
 
