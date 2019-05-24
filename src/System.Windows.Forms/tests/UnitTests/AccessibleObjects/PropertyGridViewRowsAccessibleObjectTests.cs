@@ -10,7 +10,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 {
     public class PropertyGridViewRowsAccessibleObjectTests
     {
-        [Fact]
+        [StaFact]
         public void PropertyGridViewRowsAccessibleObject_Ctor_Default()
         {
             TestForm form = new TestForm();
@@ -78,14 +78,14 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             // 
             // propertyGrid
             // 
-            this.propertyGrid.Size = new Size(223, 244);
+            propertyGrid.Size = new Size(223, 244);
             // 
             // TestForm
             // 
-            this.ClientSize = new Size(508, 367);
-            this.Controls.Add(propertyGrid);
-            this.Controls.Add(domainUpDown);
-            this.Load += new EventHandler(this.TestForm_Load);
+            ClientSize = new Size(508, 367);
+            Controls.Add(propertyGrid);
+            Controls.Add(domainUpDown);
+            Load += TestForm_Load;
         }
 
     }

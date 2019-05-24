@@ -778,7 +778,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
             if (row < 0)
             {
-                return new Rectangle(0, 0, 0, 0);
+                return Rectangle.Empty;
             }
             Rectangle rect = GetRectangle(row, ROWVALUE | ROWLABEL);
 
@@ -793,7 +793,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
             if (pt.y > propertyGridViewBottom)
             {
-                return new Rectangle(0, 0, 0, 0);
+                return Rectangle.Empty;
             }
 
             if (pt.y + rect.Height > propertyGridViewBottom)
