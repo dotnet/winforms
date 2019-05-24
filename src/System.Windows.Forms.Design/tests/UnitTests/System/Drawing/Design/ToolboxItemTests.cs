@@ -490,7 +490,7 @@ namespace System.Drawing.Design.Tests
             };
             var mockDesigner = new Mock<IDesigner>(MockBehavior.Strict);
             mockDesigner.Setup(d => d.Dispose());
-            var mockComponentInitializer = mockDesigner.As<IComponentInitializer>();
+            Mock<IComponentInitializer> mockComponentInitializer = mockDesigner.As<IComponentInitializer>();
             mockComponentInitializer
                 .Setup(i => i.InitializeNewComponent(null));
             mockComponentInitializer
@@ -556,7 +556,7 @@ namespace System.Drawing.Design.Tests
             };
             var mockDesigner = new Mock<IDesigner>(MockBehavior.Strict);
             mockDesigner.Setup(d => d.Dispose());
-            var mockComponentInitializer = mockDesigner.As<IComponentInitializer>();
+            Mock<IComponentInitializer> mockComponentInitializer = mockDesigner.As<IComponentInitializer>();
             mockComponentInitializer
                 .Setup(i => i.InitializeNewComponent(null))
                 .Throws(new Exception());
@@ -809,7 +809,7 @@ namespace System.Drawing.Design.Tests
             };
             var mockDesigner = new Mock<IDesigner>(MockBehavior.Strict);
             mockDesigner.Setup(d => d.Dispose());
-            var mockComponentInitializer = mockDesigner.As<IComponentInitializer>();
+            Mock<IComponentInitializer> mockComponentInitializer = mockDesigner.As<IComponentInitializer>();
             mockComponentInitializer
                 .Setup(i => i.InitializeNewComponent(null));
             mockComponentInitializer
@@ -875,7 +875,7 @@ namespace System.Drawing.Design.Tests
             };
             var mockDesigner = new Mock<IDesigner>(MockBehavior.Strict);
             mockDesigner.Setup(d => d.Dispose());
-            var mockComponentInitializer = mockDesigner.As<IComponentInitializer>();
+            Mock<IComponentInitializer> mockComponentInitializer = mockDesigner.As<IComponentInitializer>();
             mockComponentInitializer
                 .Setup(i => i.InitializeNewComponent(null))
                 .Throws(new Exception());

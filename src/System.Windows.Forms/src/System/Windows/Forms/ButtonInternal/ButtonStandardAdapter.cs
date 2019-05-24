@@ -212,7 +212,7 @@ namespace System.Windows.Forms.ButtonInternal
 
             if (up & IsHighContrastHighlighted())
             {
-                var highlightTextColor = SystemColors.HighlightText;
+                Color highlightTextColor = SystemColors.HighlightText;
                 PaintField(e, layout, colors, highlightTextColor, false);
 
                 if (Control.Focused && Control.ShowFocusCues)

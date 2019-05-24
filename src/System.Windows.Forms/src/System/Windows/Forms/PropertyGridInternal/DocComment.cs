@@ -291,7 +291,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             var propertyGridAccessibleObject = _parentPropertyGrid.AccessibilityObject as PropertyGridAccessibleObject;
             if (propertyGridAccessibleObject != null)
             {
-                var navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
+                UnsafeNativeMethods.IRawElementProviderFragment navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
                 if (navigationTarget != null)
                 {
                     return navigationTarget;

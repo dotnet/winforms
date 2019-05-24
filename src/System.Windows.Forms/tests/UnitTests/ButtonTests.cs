@@ -50,7 +50,7 @@ namespace System.Windows.Forms.Tests
             var button = new Button();
 
             // act & assert
-            var ex = Assert.Throws<InvalidEnumArgumentException>(() => button.AutoSizeMode = expected);
+            InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => button.AutoSizeMode = expected);
             Assert.Equal("value", ex.ParamName);
         }
 
@@ -59,7 +59,7 @@ namespace System.Windows.Forms.Tests
         {
             var button = new Button();
 
-            var adaptor = button.CreateFlatAdapter();
+            ButtonInternal.ButtonBaseAdapter adaptor = button.CreateFlatAdapter();
 
             Assert.NotNull(adaptor);
         }
@@ -69,7 +69,7 @@ namespace System.Windows.Forms.Tests
         {
             var button = new Button();
 
-            var adaptor = button.CreatePopupAdapter();
+            ButtonInternal.ButtonBaseAdapter adaptor = button.CreatePopupAdapter();
 
             Assert.NotNull(adaptor);
         }
@@ -79,7 +79,7 @@ namespace System.Windows.Forms.Tests
         {
             var button = new Button();
 
-            var adaptor = button.CreateStandardAdapter();
+            ButtonInternal.ButtonBaseAdapter adaptor = button.CreateStandardAdapter();
 
             Assert.NotNull(adaptor);
         }
@@ -91,7 +91,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(GetPreferredSizeCoreData))]
         public void Button_GetPreferredSizeCore(Button button, Size proposed, Size expected)
         {
-            var actual = button.GetPreferredSizeCore(proposed);
+            Size actual = button.GetPreferredSizeCore(proposed);
 
             Assert.Equal(expected, actual);
         }
@@ -126,7 +126,7 @@ namespace System.Windows.Forms.Tests
             var button = new Button();
 
             // act & assert
-            var ex = Assert.Throws<InvalidEnumArgumentException>(() => button.DialogResult = expected);
+            InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => button.DialogResult = expected);
             Assert.Equal("value", ex.ParamName);
         }
 

@@ -193,7 +193,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Rows[0].Cells[0], string.Empty };
             yield return new object[] { dataGridView.Columns[0].HeaderCell, string.Empty };
 
-            var cell = dataGridView.Rows[1].Cells[0];
+            DataGridViewCell cell = dataGridView.Rows[1].Cells[0];
             cell.Value = "value";
             yield return new object[] { cell, "value" };
         }
@@ -425,7 +425,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Rows[0].Cells[0], string.Empty };
             yield return new object[] { dataGridView.Columns[0].HeaderCell, string.Empty };
 
-            var cell = dataGridView.Rows[1].Cells[0];
+            DataGridViewCell cell = dataGridView.Rows[1].Cells[0];
             cell.Value = "value";
             yield return new object[] { cell, "value" };
         }

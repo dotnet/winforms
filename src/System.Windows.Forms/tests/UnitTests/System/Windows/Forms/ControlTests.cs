@@ -279,7 +279,7 @@ namespace System.Windows.Forms.Tests
             };
             cont.Controls.AddRange(unordered);
 
-            var tabOrderedChildren = cont.GetChildControlsInTabOrder(false);
+            Control[] tabOrderedChildren = cont.GetChildControlsInTabOrder(false);
 
             Assert.Equal(ordered, tabOrderedChildren);
         }
@@ -302,7 +302,7 @@ namespace System.Windows.Forms.Tests
             };
             cont.Controls.AddRange(unordered);
 
-            var tabOrderedChildrenWithhandlesOnly = cont.GetChildControlsInTabOrder(true);
+            Control[] tabOrderedChildrenWithhandlesOnly = cont.GetChildControlsInTabOrder(true);
 
             Assert.Empty(tabOrderedChildrenWithhandlesOnly);
         }
@@ -508,7 +508,7 @@ namespace System.Windows.Forms.Tests
         {
             var cont = new Control();
 
-            var ret = cont.GetContainerControl();
+            IContainerControl ret = cont.GetContainerControl();
 
             Assert.Null(ret);
         }
@@ -616,7 +616,7 @@ namespace System.Windows.Forms.Tests
         {
             var cont = new Control();
 
-            var ex = Assert.Throws<InvalidEnumArgumentException>(() => cont.AccessibleRole = expected);
+            InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => cont.AccessibleRole = expected);
             Assert.Equal("value", ex.ParamName);
         }
 
@@ -721,7 +721,7 @@ namespace System.Windows.Forms.Tests
         {
             var cont = new Control();
 
-            var ex = Assert.Throws<InvalidEnumArgumentException>(() => cont.BackgroundImageLayout = expected);
+            InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => cont.BackgroundImageLayout = expected);
             Assert.Equal("value", ex.ParamName);
         }
 
@@ -783,7 +783,7 @@ namespace System.Windows.Forms.Tests
             var cont = new Control();
             var expectedSize = new Size(expected, expected);
 
-            var actualSize = cont.ApplySizeConstraints(expected, expected);
+            Size actualSize = cont.ApplySizeConstraints(expected, expected);
 
             Assert.Equal(expectedSize, actualSize);
         }
@@ -793,7 +793,7 @@ namespace System.Windows.Forms.Tests
         public void Control_ApplySizeConstraintsSize_Invoke_ReturnsExpected(Size expectedSize)
         {
             var control = new Control();
-            var actualSize = control.ApplySizeConstraints(expectedSize);
+            Size actualSize = control.ApplySizeConstraints(expectedSize);
             Assert.Equal(expectedSize, actualSize);
         }
 
@@ -814,7 +814,7 @@ namespace System.Windows.Forms.Tests
             var cont = new Control();
             var expectedBounds = new Rectangle(expected, expected, expected, expected);
 
-            var actualBounds = cont.ApplyBoundsConstraints(expected, expected, expected, expected);
+            Rectangle actualBounds = cont.ApplyBoundsConstraints(expected, expected, expected, expected);
 
             Assert.Equal(expectedBounds, actualBounds);
         }
@@ -1597,7 +1597,7 @@ namespace System.Windows.Forms.Tests
         {
             var cont = new Control();
 
-            var ret = cont.GetChildAtPoint(new Point(5, 5), skip);
+            Control ret = cont.GetChildAtPoint(new Point(5, 5), skip);
 
             Assert.Null(ret);
         }
@@ -1615,7 +1615,7 @@ namespace System.Windows.Forms.Tests
             var cont = new Control();
 
             // act & assert
-            var ex = Assert.Throws<InvalidEnumArgumentException>(() => cont.GetChildAtPoint(new Point(5, 5), skip));
+            InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => cont.GetChildAtPoint(new Point(5, 5), skip));
             Assert.Equal("skipValue", ex.ParamName);
         }
 
@@ -1626,7 +1626,7 @@ namespace System.Windows.Forms.Tests
         {
             var cont = new Control();
 
-            var intptr = cont.Handle;
+            IntPtr intptr = cont.Handle;
 
             Assert.NotEqual(IntPtr.Zero, intptr);
         }
@@ -1636,7 +1636,7 @@ namespace System.Windows.Forms.Tests
         {
             var cont = new Control();
 
-            var intptr = cont.HandleInternal;
+            IntPtr intptr = cont.HandleInternal;
 
             Assert.Equal(IntPtr.Zero, intptr);
             Assert.False(cont.IsHandleCreated);
@@ -1655,7 +1655,7 @@ namespace System.Windows.Forms.Tests
             var cont = new Control();
             var mock = new Mock<IDataObject>(MockBehavior.Strict);
 
-            var ret = cont.DoDragDrop(mock.Object, expected);
+            DragDropEffects ret = cont.DoDragDrop(mock.Object, expected);
 
             Assert.Equal(DragDropEffects.None, ret);
         }

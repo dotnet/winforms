@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Tests
             mockContainer.Setup(x => x.Add(It.IsAny<BindingNavigator>())).Verifiable();
 
             // act & assert
-            var ex = Assert.Throws<ArgumentNullException>(() => new BindingNavigator(nullContainer));
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(() => new BindingNavigator(nullContainer));
             Assert.Equal("container", ex.ParamName);
 
             var bn = new BindingNavigator(mockContainer.Object);
@@ -100,7 +100,7 @@ namespace System.Windows.Forms.Tests
 
             for (var i = 0; i < items.Count; i++)
             {
-                var item = items[i];
+                ToolStripItem item = items[i];
                 Assert.NotNull(item);
                 Assert.Equal(itemNames[i], item.Name.Trim());
                 Assert.Equal(itemTexts[i], item.Text.Trim());

@@ -490,7 +490,7 @@ namespace System.Windows.Forms
                 switch (direction)
                 {
                     case UnsafeNativeMethods.NavigateDirection.Parent:
-                        var currentCell = dataGridView.CurrentCell;
+                        DataGridViewCell currentCell = dataGridView.CurrentCell;
                         if (currentCell != null && dataGridView.IsCurrentCellInEditMode)
                         {
                             return currentCell.AccessibilityObject;

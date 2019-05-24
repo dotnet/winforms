@@ -640,7 +640,7 @@ namespace System.Windows.Forms.Tests
             mockIListSource
                 .Setup(s => s.GetList())
                 .Returns(list);
-            var mockIList = mockIListSource.As<IList>();
+            Mock<IList> mockIList = mockIListSource.As<IList>();
             dataSource.Property = mockIList.Object;
 
             CurrencyManager manager = Assert.IsAssignableFrom<CurrencyManager>(context[dataSource, "Property"]);
@@ -681,7 +681,7 @@ namespace System.Windows.Forms.Tests
             mockIListSource
                 .Setup(s => s.GetList())
                 .Returns((IList)null);
-            var mockIList = mockIListSource.As<IList>();
+            Mock<IList> mockIList = mockIListSource.As<IList>();
             dataSource.Property = mockIList.Object;
 
             Assert.Throws<ArgumentNullException>("dataSource", () => context[dataSource, "Property"]);

@@ -1008,7 +1008,7 @@ namespace System.Windows.Forms
 
                     if (index >= 0 && index < dropDown.Items.Count)
                     {
-                        var item = dropDown.Items[index];
+                        ToolStripItem item = dropDown.Items[index];
                         var controlHostItem = item as ToolStripControlHost;
                         if (controlHostItem != null)
                         {

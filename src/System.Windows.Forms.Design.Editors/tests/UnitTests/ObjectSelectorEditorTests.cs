@@ -13,7 +13,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ObjectSelectorEditor_Constructor()
         {
-            var underTest = GetNewObjectSelectorEditor();
+            ObjectSelectorEditor underTest = GetNewObjectSelectorEditor();
 
             Assert.NotNull(underTest);
             Assert.True(underTest.EqualsToValue(null));
@@ -26,7 +26,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ObjectSelectorEditor_CurrentValue()
         {
-            var underTest = GetNewObjectSelectorEditor();
+            ObjectSelectorEditor underTest = GetNewObjectSelectorEditor();
 
             underTest.SetValue("some Value");
             Assert.True(underTest.EqualsToValue("some Value"));
@@ -36,7 +36,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ObjectSelectorEditor_GetEditStyle()
         {
-            var underTest = GetNewObjectSelectorEditor();
+            ObjectSelectorEditor underTest = GetNewObjectSelectorEditor();
 
             Assert.Equal(UITypeEditorEditStyle.DropDown, underTest.GetEditStyle(null));
         }
@@ -44,7 +44,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ObjectSelectorEditor_Selector()
         {
-            var underTest = GetNewSelector();
+            ObjectSelectorEditor.Selector underTest = GetNewSelector();
 
             Assert.NotNull(underTest);
             underTest.AddNode("node", "value", null);

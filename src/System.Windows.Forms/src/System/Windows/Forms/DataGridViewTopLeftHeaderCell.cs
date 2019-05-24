@@ -650,7 +650,7 @@ namespace System.Windows.Forms
 
             internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
             {
-                var dataGridView = Owner.DataGridView;
+                DataGridView dataGridView = Owner.DataGridView;
 
                 switch (direction)
                 {

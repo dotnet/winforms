@@ -51,7 +51,7 @@ namespace System.Windows.Forms.Tests
         {
             var box = new CheckBox();
 
-            var ex = Assert.Throws<InvalidEnumArgumentException>(() => box.Appearance = expected);
+            InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => box.Appearance = expected);
             Assert.Equal("value", ex.ParamName);
         }
 
@@ -103,7 +103,7 @@ namespace System.Windows.Forms.Tests
         {
             var box = new CheckBox();
 
-            var ex = Assert.Throws<InvalidEnumArgumentException>(() => box.CheckAlign = expected);
+            InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => box.CheckAlign = expected);
             Assert.Equal("value", ex.ParamName);
         }
 
@@ -148,7 +148,7 @@ namespace System.Windows.Forms.Tests
         {
             var box = new CheckBox();
 
-            var ex = Assert.Throws<InvalidEnumArgumentException>(() => box.CheckState = expected);
+            InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => box.CheckState = expected);
             Assert.Equal("value", ex.ParamName);
         }
 
@@ -174,7 +174,7 @@ namespace System.Windows.Forms.Tests
         {
             var box = new CheckBox();
 
-            var buttonBaseAdptr = box.CreateFlatAdapter();
+            ButtonInternal.ButtonBaseAdapter buttonBaseAdptr = box.CreateFlatAdapter();
 
             Assert.NotNull(buttonBaseAdptr);
         }
@@ -184,7 +184,7 @@ namespace System.Windows.Forms.Tests
         {
             var box = new CheckBox();
 
-            var checkBoxPopupAdptr = box.CreatePopupAdapter();
+            ButtonInternal.ButtonBaseAdapter checkBoxPopupAdptr = box.CreatePopupAdapter();
 
             Assert.NotNull(checkBoxPopupAdptr);
         }
@@ -194,7 +194,7 @@ namespace System.Windows.Forms.Tests
         {
             var box = new CheckBox();
 
-            var checkBoxSndAdptr = box.CreateStandardAdapter();
+            ButtonInternal.ButtonBaseAdapter checkBoxSndAdptr = box.CreateStandardAdapter();
 
             Assert.NotNull(checkBoxSndAdptr);
         }

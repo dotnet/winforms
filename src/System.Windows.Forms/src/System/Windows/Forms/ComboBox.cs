@@ -2288,7 +2288,7 @@ namespace System.Windows.Forms
 
         internal int GetListNativeWindowRuntimeIdPart()
         {
-            var listNativeWindow = GetListNativeWindow();
+            NativeWindow listNativeWindow = GetListNativeWindow();
             return listNativeWindow != null ? listNativeWindow.GetHashCode() : 0;
         }
 
@@ -4780,10 +4780,10 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    var listAccessibleObject = _owningComboBox.ChildListAccessibleObject;
+                    ChildAccessibleObject listAccessibleObject = _owningComboBox.ChildListAccessibleObject;
                     int currentIndex = GetCurrentIndex();
 
-                    var parentRect = listAccessibleObject.BoundingRectangle;
+                    Rectangle parentRect = listAccessibleObject.BoundingRectangle;
                     int left = parentRect.Left;
                     int top = parentRect.Top + _owningComboBox.ItemHeight * currentIndex;
                     int width = parentRect.Width;
@@ -5450,7 +5450,7 @@ namespace System.Windows.Forms
                         comboBoxAccessibleObject = _owner.AccessibilityObject as ComboBoxAccessibleObject;
                         if (comboBoxAccessibleObject != null)
                         {
-                            var firstComboBoxChildFragment = comboBoxAccessibleObject.GetChildFragment(0);
+                            AccessibleObject firstComboBoxChildFragment = comboBoxAccessibleObject.GetChildFragment(0);
                             if (RuntimeId != firstComboBoxChildFragment.RuntimeId)
                             {
                                 return firstComboBoxChildFragment;
@@ -5874,7 +5874,7 @@ namespace System.Windows.Forms
                         comboBoxAccessibleObject = _owner.AccessibilityObject as ComboBoxAccessibleObject;
                         if (comboBoxAccessibleObject != null)
                         {
-                            var firstComboBoxChildFragment = comboBoxAccessibleObject.GetChildFragment(0);
+                            AccessibleObject firstComboBoxChildFragment = comboBoxAccessibleObject.GetChildFragment(0);
                             if (RuntimeId != firstComboBoxChildFragment.RuntimeId)
                             {
                                 return firstComboBoxChildFragment;

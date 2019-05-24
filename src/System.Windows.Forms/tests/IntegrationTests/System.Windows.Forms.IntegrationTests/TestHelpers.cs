@@ -269,7 +269,7 @@ namespace System.Windows.Forms.Func.Tests
                 throw new ArgumentException(nameof(keys) + " must not be null or empty.");
             }
 
-            var handle = process.MainWindowHandle;
+            IntPtr handle = process.MainWindowHandle;
             ExternalTestHelpers.TrySetForegroundWindow(handle);
 
             if (handle.Equals(ExternalTestHelpers.TryGetForegroundWindow()))

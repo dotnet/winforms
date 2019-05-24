@@ -1105,8 +1105,8 @@ namespace System.Windows.Forms.Tests
 
                 return row;
             }
-            var font1 = SystemFonts.DefaultFont;
-            var font2 = SystemFonts.MenuFont;
+            Font font1 = SystemFonts.DefaultFont;
+            Font font2 = SystemFonts.MenuFont;
             var provider1 = new NumberFormatInfo();
             var provider2 = new NumberFormatInfo();
 
@@ -2500,7 +2500,7 @@ namespace System.Windows.Forms.Tests
 
             var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
-            var source = dataGridView.Rows[0];
+            DataGridViewRow source = dataGridView.Rows[0];
             source.ContextMenuStrip = menu;
             source.DefaultCellStyle = style;
             source.DefaultHeaderCellType = typeof(DataGridViewRowHeaderCell);

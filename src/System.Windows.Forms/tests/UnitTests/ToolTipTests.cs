@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Tests
             mockContainer.Setup(x => x.Add(It.IsAny<ToolTip>())).Verifiable();
 
             // act & assert
-            var ex = Assert.Throws<ArgumentNullException>(() => new ToolTip(nullContainer));
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(() => new ToolTip(nullContainer));
             Assert.Equal("cont", ex.ParamName);
 
             var tt = new ToolTip(mockContainer.Object);

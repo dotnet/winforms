@@ -2192,7 +2192,7 @@ namespace System.Windows.Forms
                         throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                     }
 
-                    var dataGridView = owner.DataGridView;
+                    DataGridView dataGridView = owner.DataGridView;
 
                     switch (direction)
                     {

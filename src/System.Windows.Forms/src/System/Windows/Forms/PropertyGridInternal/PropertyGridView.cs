@@ -1698,7 +1698,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         internal GridEntry GetElementFromPoint(int x, int y)
         {
             Point point = new Point(x, y);
-            var allGridEntries = GetAllGridEntries();
+            GridEntryCollection allGridEntries = GetAllGridEntries();
             GridEntry[] targetEntries = new GridEntry[allGridEntries.Count];
             try
             {
@@ -8019,7 +8019,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         }
                         else
                         {
-                            var selectedGridEntry = propertyGridView.SelectedGridEntry;
+                            GridEntry selectedGridEntry = propertyGridView.SelectedGridEntry;
                             if (selectedGridEntry != null)
                             {
                                 return selectedGridEntry.AccessibilityObject.Name;
@@ -8378,7 +8378,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 var propertyGridAccessibleObject = _parentPropertyGrid.AccessibilityObject as PropertyGridAccessibleObject;
                 if (propertyGridAccessibleObject != null)
                 {
-                    var navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
+                    UnsafeNativeMethods.IRawElementProviderFragment navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
                     if (navigationTarget != null)
                     {
                         return navigationTarget;
@@ -8500,11 +8500,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             internal AccessibleObject GetCategory(int categoryIndex)
             {
                 GridEntry[] targetEntries = new GridEntry[1];
-                var topLevelGridEntries = _owningPropertyGridView.TopLevelGridEntries;
+                GridEntryCollection topLevelGridEntries = _owningPropertyGridView.TopLevelGridEntries;
                 var topLevelGridEntriesCount = topLevelGridEntries.Count;
                 if (topLevelGridEntriesCount > 0)
                 {
-                    var targetEntry = topLevelGridEntries[categoryIndex];
+                    GridItem targetEntry = topLevelGridEntries[categoryIndex];
                     var categoryGridEntry = targetEntry as CategoryGridEntry;
                     if (categoryGridEntry != null)
                     {
@@ -8522,7 +8522,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             internal AccessibleObject GetLastCategory()
             {
-                var topLevelGridEntries = _owningPropertyGridView.TopLevelGridEntries;
+                GridEntryCollection topLevelGridEntries = _owningPropertyGridView.TopLevelGridEntries;
                 var topLevelGridEntriesCount = topLevelGridEntries.Count;
                 return GetCategory(topLevelGridEntries.Count - 1);
             }
@@ -8560,7 +8560,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         previousGridEntry = gridEntry;
                         if (gridEntry.ChildCount > 0)
                         {
-                            var foundChild = GetPreviousGridEntry(currentGridEntry, gridEntry.Children, out currentGridEntryFound);
+                            AccessibleObject foundChild = GetPreviousGridEntry(currentGridEntry, gridEntry.Children, out currentGridEntryFound);
                             if (foundChild != null)
                             {
                                 // Return some down-level child if found.
@@ -8604,7 +8604,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                     else if (gridEntry.ChildCount > 0)
                     {
-                        var foundChild = GetNextGridEntry(currentGridEntry, gridEntry.Children, out currentGridEntryFound);
+                        AccessibleObject foundChild = GetNextGridEntry(currentGridEntry, gridEntry.Children, out currentGridEntryFound);
                         if (foundChild != null)
                         {
                             // Return some down-level child if found.

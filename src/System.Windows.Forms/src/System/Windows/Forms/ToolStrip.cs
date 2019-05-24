@@ -5427,7 +5427,7 @@ namespace System.Windows.Forms
             internal AccessibleObject GetChildFragment(int fragmentIndex, bool getOverflowItem = false)
             {
 
-                var items = getOverflowItem ? owner.OverflowItems : owner.DisplayedItems;
+                ToolStripItemCollection items = getOverflowItem ? owner.OverflowItems : owner.DisplayedItems;
                 int childFragmentCount = items.Count;
 
                 if (!getOverflowItem && owner.CanOverflow && owner.OverflowButton.Visible && fragmentIndex == childFragmentCount - 1)
@@ -5437,7 +5437,7 @@ namespace System.Windows.Forms
 
                 for (int index = 0; index < childFragmentCount; index++)
                 {
-                    var item = items[index];
+                    ToolStripItem item = items[index];
                     if (item.Available && item.Alignment == ToolStripItemAlignment.Left && fragmentIndex == index)
                     {
                         var controlHostItem = item as ToolStripControlHost;
@@ -5452,7 +5452,7 @@ namespace System.Windows.Forms
 
                 for (int index = 0; index < childFragmentCount; index++)
                 {
-                    var item = owner.Items[index];
+                    ToolStripItem item = owner.Items[index];
                     if (item.Available && item.Alignment == ToolStripItemAlignment.Right && fragmentIndex == index)
                     {
                         var controlHostItem = item as ToolStripControlHost;
@@ -5501,7 +5501,7 @@ namespace System.Windows.Forms
                 }
 
                 ToolStripItemCollection items;
-                var placement = child.Owner.Placement;
+                ToolStripItemPlacement placement = child.Owner.Placement;
 
                 if (owner is ToolStripOverflow)
                 {
@@ -5522,7 +5522,7 @@ namespace System.Windows.Forms
                 // First we walk through the head aligned items.
                 for (int index = 0; index < items.Count; index++)
                 {
-                    var item = items[index];
+                    ToolStripItem item = items[index];
                     if (item.Available && item.Alignment == ToolStripItemAlignment.Left && child.Owner == items[index])
                     {
                         return index;
@@ -5532,7 +5532,7 @@ namespace System.Windows.Forms
                 // If we didn't find it, then we walk through the tail aligned items.
                 for (int index = 0; index < items.Count; index++)
                 {
-                    var item = items[index];
+                    ToolStripItem item = items[index];
                     if (item.Available && item.Alignment == ToolStripItemAlignment.Right && child.Owner == items[index])
                     {
                         return index;

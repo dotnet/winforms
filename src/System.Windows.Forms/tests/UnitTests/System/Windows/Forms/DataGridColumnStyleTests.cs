@@ -211,7 +211,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void HeaderText_SetWithPropertyDescriptor_GetReturnsExpected(string value)
         {
-            var property = TypeDescriptor.GetProperties(typeof(DataClass))[0];
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(DataClass))[0];
             var style = new SubDataGridColumnStyle(property)
             {
                 HeaderText = value
@@ -681,7 +681,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DataGridColumnStyle_CheckValidDataSource_HasPropertyDescriptor_Nop()
         {
-            var property = TypeDescriptor.GetProperties(typeof(DataClass))[0];
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(DataClass))[0];
             var style = new SubDataGridColumnStyle(property);
             var context = new BindingContext();
             var dataSource = new List<int> { 1, 2, 3 };

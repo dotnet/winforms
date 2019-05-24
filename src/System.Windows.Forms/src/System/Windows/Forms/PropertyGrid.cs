@@ -5925,7 +5925,7 @@ namespace System.Windows.Forms
         {
             Point clientPoint = _owningPropertyGrid.PointToClient(new Point((int)x, (int)y));
 
-            var element = _owningPropertyGrid.GetElementFromPoint(clientPoint);
+            Control element = _owningPropertyGrid.GetElementFromPoint(clientPoint);
             if (element != null)
             {
                 return element.AccessibilityObject;
@@ -6110,7 +6110,7 @@ namespace System.Windows.Forms
             int childFragmentCount = GetChildFragmentCount();
             for (int i = 0; i < childFragmentCount; i++)
             {
-                var childFragment = GetChildFragment(i);
+                AccessibleObject childFragment = GetChildFragment(i);
                 if (childFragment == controlAccessibleObject)
                 {
                     return i;
@@ -6184,7 +6184,7 @@ namespace System.Windows.Forms
             var propertyGridAccessibleObject = _parentPropertyGrid.AccessibilityObject as PropertyGridAccessibleObject;
             if (propertyGridAccessibleObject != null)
             {
-                var navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
+                UnsafeNativeMethods.IRawElementProviderFragment navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
                 if (navigationTarget != null)
                 {
                     return navigationTarget;

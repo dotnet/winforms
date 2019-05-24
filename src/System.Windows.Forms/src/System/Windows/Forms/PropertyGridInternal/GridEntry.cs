@@ -3166,7 +3166,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 switch (direction)
                 {
                     case UnsafeNativeMethods.NavigateDirection.Parent:
-                        var parentGridEntry = owner.ParentGridEntry;
+                        GridEntry parentGridEntry = owner.ParentGridEntry;
                         if (parentGridEntry != null)
                         {
                             if (parentGridEntry is SingleSelectRootGridEntry)

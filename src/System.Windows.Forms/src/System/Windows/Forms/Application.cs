@@ -2560,7 +2560,7 @@ namespace System.Windows.Forms
                 // Locking 'this' here is ok since this is an internal class.
                 lock (this)
                 {
-                    var parkingWindow = GetParkingWindowForContext(context);
+                    ParkingWindow parkingWindow = GetParkingWindowForContext(context);
                     if (parkingWindow == null)
                     {
 #if DEBUG
@@ -2605,7 +2605,7 @@ namespace System.Windows.Forms
                 }
 
                 // Supported OS scenario.
-                foreach (var p in parkingWindows)
+                foreach (ParkingWindow p in parkingWindows)
                 {
                     if (CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(p.DpiAwarenessContext, context))
                     {

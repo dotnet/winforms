@@ -306,7 +306,7 @@ namespace System.ComponentModel.Design.Tests
 
             var result = new Component();
             var mockDesigner = new Mock<IDesigner>(MockBehavior.Strict);
-            var mockComponentInitializer = mockDesigner.As<IComponentInitializer>();
+            Mock<IComponentInitializer> mockComponentInitializer = mockDesigner.As<IComponentInitializer>();
             mockComponentInitializer
                 .Setup(d => d.InitializeNewComponent(null))
                 .Verifiable();

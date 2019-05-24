@@ -40,7 +40,7 @@ namespace System.Windows.Forms.Tests
         {
             var box = new CheckedListBox();
 
-            var collection = box.CheckedIndices;
+            CheckedListBox.CheckedIndexCollection collection = box.CheckedIndices;
 
             Assert.NotNull(collection);
         }
@@ -50,7 +50,7 @@ namespace System.Windows.Forms.Tests
         {
             var box = new CheckedListBox();
 
-            var collection = box.CheckedItems;
+            CheckedListBox.CheckedItemCollection collection = box.CheckedItems;
 
             Assert.NotNull(collection);
         }
@@ -77,7 +77,7 @@ namespace System.Windows.Forms.Tests
         {
             var box = new CheckedListBox();
 
-            var result = box.DrawMode;
+            DrawMode result = box.DrawMode;
 
             Assert.Equal(DrawMode.Normal, result);
         }
@@ -101,7 +101,7 @@ namespace System.Windows.Forms.Tests
         {
             var box = new CheckedListBox();
 
-            var ex = Assert.Throws<ArgumentException>(() => box.SelectionMode = expected);
+            ArgumentException ex = Assert.Throws<ArgumentException>(() => box.SelectionMode = expected);
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace System.Windows.Forms.Tests
         {
             var box = new CheckedListBox();
 
-            var ex = Assert.Throws<InvalidEnumArgumentException>(() => box.SelectionMode = expected);
+            InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => box.SelectionMode = expected);
             Assert.Equal("value", ex.ParamName);
         }
 
@@ -177,7 +177,7 @@ namespace System.Windows.Forms.Tests
         {
             var box = new CheckedListBox();
 
-            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => box.GetItemCheckState(index));
+            ArgumentOutOfRangeException ex = Assert.Throws<ArgumentOutOfRangeException>(() => box.GetItemCheckState(index));
             Assert.Equal("index", ex.ParamName);
         }
 
@@ -189,7 +189,7 @@ namespace System.Windows.Forms.Tests
         {
             var box = new CheckedListBox();
 
-            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => box.SetItemCheckState(index, CheckState.Checked));
+            ArgumentOutOfRangeException ex = Assert.Throws<ArgumentOutOfRangeException>(() => box.SetItemCheckState(index, CheckState.Checked));
             Assert.Equal("index", ex.ParamName);
         }
 
@@ -224,7 +224,7 @@ namespace System.Windows.Forms.Tests
             var box = new CheckedListBox();
             box.Items.Add(new CheckBox(), false);
 
-            var ex = Assert.Throws<InvalidEnumArgumentException>(() => box.SetItemCheckState(0, expected));
+            InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => box.SetItemCheckState(0, expected));
             Assert.Equal("value", ex.ParamName);
         }
 
