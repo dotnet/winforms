@@ -1254,8 +1254,10 @@ namespace System.ComponentModel.Design
                         _state[s_stateLoading] = true;
                         Unload();
 
-                        ArrayList errorList = new ArrayList();
-                        errorList.Add(ex);
+                        ArrayList errorList = new ArrayList
+                        {
+                            ex
+                        };
                         if (errorCollection != null)
                         {
                             errorList.AddRange(errorCollection);

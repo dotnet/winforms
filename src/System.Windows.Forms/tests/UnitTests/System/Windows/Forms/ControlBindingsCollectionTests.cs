@@ -59,9 +59,10 @@ namespace System.Windows.Forms.Tests
         public void Add_Binding_Success(Binding binding)
         {
             var control = new Control();
-            var collection = new ControlBindingsCollection(control);
-
-            collection.Add(binding);
+            var collection = new ControlBindingsCollection(control)
+            {
+                binding
+            };
             Assert.Same(binding, Assert.Single(collection));
             Assert.Same(control, binding.BindableComponent);
         }

@@ -56,8 +56,10 @@ namespace System.Windows.Forms.Tests
         public void ListViewSubItemCollection_Item_GetInvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
             var item = new ListViewItem();
-            var collection = new ListViewItem.ListViewSubItemCollection(item);
-            collection.Add(new ListViewItem.ListViewSubItem());
+            var collection = new ListViewItem.ListViewSubItemCollection(item)
+            {
+                new ListViewItem.ListViewSubItem()
+            };
             Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index]);
         }
 
@@ -65,8 +67,10 @@ namespace System.Windows.Forms.Tests
         public void ListViewSubItemCollection_Item_SetValidIndex_GetReturnsExpected()
         {
             var item = new ListViewItem();
-            var collection = new ListViewItem.ListViewSubItemCollection(item);
-            collection.Add(new ListViewItem.ListViewSubItem());
+            var collection = new ListViewItem.ListViewSubItemCollection(item)
+            {
+                new ListViewItem.ListViewSubItem()
+            };
 
             var subItem = new ListViewItem.ListViewSubItem();
             collection[0] = subItem;
@@ -79,8 +83,10 @@ namespace System.Windows.Forms.Tests
         public void ListViewSubItemCollection_Item_SetInvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
             var item = new ListViewItem();
-            var collection = new ListViewItem.ListViewSubItemCollection(item);
-            collection.Add(new ListViewItem.ListViewSubItem());
+            var collection = new ListViewItem.ListViewSubItemCollection(item)
+            {
+                new ListViewItem.ListViewSubItem()
+            };
             Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index] = new ListViewItem.ListViewSubItem());
         }
 
@@ -88,8 +94,10 @@ namespace System.Windows.Forms.Tests
         public void ListViewSubItemCollection_Item_SetNull_ThrowsArgumentNullException()
         {
             var item = new ListViewItem();
-            var collection = new ListViewItem.ListViewSubItemCollection(item);
-            collection.Add(new ListViewItem.ListViewSubItem());
+            var collection = new ListViewItem.ListViewSubItemCollection(item)
+            {
+                new ListViewItem.ListViewSubItem()
+            };
             Assert.Throws<ArgumentNullException>("value", () => collection[0] = null);
         }
 
@@ -110,8 +118,10 @@ namespace System.Windows.Forms.Tests
         public void ListViewSubItemCollection_IListItem_GetInvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
             var item = new ListViewItem();
-            IList collection = new ListViewItem.ListViewSubItemCollection(item);
-            collection.Add(new ListViewItem.ListViewSubItem());
+            IList collection = new ListViewItem.ListViewSubItemCollection(item)
+            {
+                new ListViewItem.ListViewSubItem()
+            };
             Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index]);
         }
 
@@ -119,8 +129,10 @@ namespace System.Windows.Forms.Tests
         public void ListViewSubItemCollection_IListItem_SetValidIndex_GetReturnsExpected()
         {
             var item = new ListViewItem();
-            IList collection = new ListViewItem.ListViewSubItemCollection(item);
-            collection.Add(new ListViewItem.ListViewSubItem());
+            IList collection = new ListViewItem.ListViewSubItemCollection(item)
+            {
+                new ListViewItem.ListViewSubItem()
+            };
 
             var subItem = new ListViewItem.ListViewSubItem();
             collection[0] = subItem;
@@ -133,8 +145,10 @@ namespace System.Windows.Forms.Tests
         public void ListViewSubItemCollection_IListItem_SetInvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
             var item = new ListViewItem();
-            IList collection = new ListViewItem.ListViewSubItemCollection(item);
-            collection.Add(new ListViewItem.ListViewSubItem());
+            IList collection = new ListViewItem.ListViewSubItemCollection(item)
+            {
+                new ListViewItem.ListViewSubItem()
+            };
             Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index]);
         }
 
@@ -234,8 +248,10 @@ namespace System.Windows.Forms.Tests
         public void ListViewSubItemCollection_Add_String_Success(string text, string expectedText)
         {
             var item = new ListViewItem();
-            var collection = new ListViewItem.ListViewSubItemCollection(item);
-            collection.Add(text);
+            var collection = new ListViewItem.ListViewSubItemCollection(item)
+            {
+                text
+            };
             ListViewItem.ListViewSubItem subItem = Assert.Single(collection.Cast<ListViewItem.ListViewSubItem>());
             Assert.Equal(expectedText, subItem.Text);
             Assert.Equal(item, subItem.owner);
@@ -253,8 +269,10 @@ namespace System.Windows.Forms.Tests
         public void ListViewSubItemCollection_Add_String_Color_Color_Font_Success(string text, Color foreColor, Color backColor, Font font, Color expectedForeColor, Color expectedBackColor, string expectedText)
         {
             var item = new ListViewItem();
-            var collection = new ListViewItem.ListViewSubItemCollection(item);
-            collection.Add(text, foreColor, backColor, font);
+            var collection = new ListViewItem.ListViewSubItemCollection(item)
+            {
+                { text, foreColor, backColor, font }
+            };
             ListViewItem.ListViewSubItem subItem = Assert.Single(collection.Cast<ListViewItem.ListViewSubItem>());
             Assert.Same(expectedText, subItem.Text);
             Assert.Equal(expectedForeColor, subItem.ForeColor);
@@ -632,8 +650,10 @@ namespace System.Windows.Forms.Tests
         public void ListViewSubItemCollection_Insert_NullItem_ThrowsArgumentNullException()
         {
             var item = new ListViewItem();
-            var collection = new ListViewItem.ListViewSubItemCollection(item);
-            collection.Add(new ListViewItem.ListViewSubItem());
+            var collection = new ListViewItem.ListViewSubItemCollection(item)
+            {
+                new ListViewItem.ListViewSubItem()
+            };
             Assert.Throws<ArgumentNullException>("item", () => collection.Insert(1, null));
         }
 
@@ -769,8 +789,10 @@ namespace System.Windows.Forms.Tests
         public void ListViewSubItemCollection_RemoveAt_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
             var item = new ListViewItem();
-            var collection = new ListViewItem.ListViewSubItemCollection(item);
-            collection.Add(new ListViewItem.ListViewSubItem());
+            var collection = new ListViewItem.ListViewSubItemCollection(item)
+            {
+                new ListViewItem.ListViewSubItem()
+            };
             Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.RemoveAt(index));
         }
 

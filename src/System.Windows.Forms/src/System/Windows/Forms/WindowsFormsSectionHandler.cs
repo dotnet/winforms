@@ -40,8 +40,10 @@ namespace System.Windows.Forms
             {
                 s_propJitDebugging = new ConfigurationProperty("jitDebugging", typeof(bool), JitDebuggingDefault, ConfigurationPropertyOptions.None);
 
-                ConfigurationPropertyCollection properties = new ConfigurationPropertyCollection();
-                properties.Add(s_propJitDebugging);
+                ConfigurationPropertyCollection properties = new ConfigurationPropertyCollection
+                {
+                    s_propJitDebugging
+                };
                 s_properties = properties;
             }
 

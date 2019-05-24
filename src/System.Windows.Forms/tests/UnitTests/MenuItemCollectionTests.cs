@@ -149,9 +149,11 @@ namespace System.Windows.Forms.Tests
             var menuItem1 = new MenuItem();
             var menuItem2 = new MenuItem();
             var parent = new MenuItem("text", new MenuItem[0]);
-            var collection = new Menu.MenuItemCollection(parent);
-            collection.Add(menuItem1);
-            collection.Add(menuItem2);
+            var collection = new Menu.MenuItemCollection(parent)
+            {
+                menuItem1,
+                menuItem2
+            };
 
             Assert.Equal(0, collection.Add(0, menuItem2));
             Assert.Equal(2, collection.Count);
@@ -281,8 +283,10 @@ namespace System.Windows.Forms.Tests
         {
             var menuItem = new MenuItem();
             var parent = new MenuItem("text", new MenuItem[0]);
-            var collection = new Menu.MenuItemCollection(parent);
-            collection.Add(menuItem);
+            var collection = new Menu.MenuItemCollection(parent)
+            {
+                menuItem
+            };
             Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.Add(index, menuItem));
         }
 
@@ -387,8 +391,10 @@ namespace System.Windows.Forms.Tests
         {
             var menuItem = new MenuItem();
             var menu = new SubMenu(new MenuItem[0]);
-            var collection = new Menu.MenuItemCollection(menu);
-            collection.Add(menuItem);
+            var collection = new Menu.MenuItemCollection(menu)
+            {
+                menuItem
+            };
             var array = new object[] { 1, 2, 3 };
             collection.CopyTo(array, 1);
             Assert.Equal(new object[] { 1, menuItem, 3 }, array);

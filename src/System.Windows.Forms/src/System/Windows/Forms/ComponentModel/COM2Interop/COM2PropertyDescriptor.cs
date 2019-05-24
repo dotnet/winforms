@@ -131,12 +131,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         static Com2PropertyDescriptor()
         {
-            oleConverters = new SortedList();
-            oleConverters[GUID_COLOR] = typeof(Com2ColorConverter);
-            oleConverters[typeof(SafeNativeMethods.IFontDisp).GUID] = typeof(Com2FontConverter);
-            oleConverters[typeof(UnsafeNativeMethods.IFont).GUID] = typeof(Com2FontConverter);
-            oleConverters[typeof(UnsafeNativeMethods.IPictureDisp).GUID] = typeof(Com2PictureConverter);
-            oleConverters[typeof(UnsafeNativeMethods.IPicture).GUID] = typeof(Com2PictureConverter);
+            oleConverters = new SortedList
+            {
+                [GUID_COLOR] = typeof(Com2ColorConverter),
+                [typeof(SafeNativeMethods.IFontDisp).GUID] = typeof(Com2FontConverter),
+                [typeof(UnsafeNativeMethods.IFont).GUID] = typeof(Com2FontConverter),
+                [typeof(UnsafeNativeMethods.IPictureDisp).GUID] = typeof(Com2PictureConverter),
+                [typeof(UnsafeNativeMethods.IPicture).GUID] = typeof(Com2PictureConverter)
+            };
         }
 
         /// <summary>
