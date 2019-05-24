@@ -895,10 +895,7 @@ namespace System.Windows.Forms
                 w.Update(false);
             }
 
-            if (onRightToLeftChanged != null)
-            {
-                onRightToLeftChanged(this, e);
-            }
+            onRightToLeftChanged?.Invoke(this, e);
         }
 
         /// <summary>

@@ -136,10 +136,7 @@ namespace System.Windows.Forms
 
         private void OnRendererChanged(EventArgs e)
         {
-            if (RendererChanged != null)
-            {
-                RendererChanged(this, e);
-            }
+            RendererChanged?.Invoke(this, e);
         }
         private void OnDefaultRendererChanged(object sender, EventArgs e)
         {

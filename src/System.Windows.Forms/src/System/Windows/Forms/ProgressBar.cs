@@ -802,10 +802,7 @@ namespace System.Windows.Forms
                 RecreateHandle();
             }
 
-            if (onRightToLeftLayoutChanged != null)
-            {
-                onRightToLeftLayoutChanged(this, e);
-            }
+            onRightToLeftLayoutChanged?.Invoke(this, e);
         }
 
 

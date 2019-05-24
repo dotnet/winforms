@@ -1381,10 +1381,7 @@ namespace System.Windows.Forms
         public static void RaiseIdle(EventArgs e)
         {
             ThreadContext current = ThreadContext.FromCurrent();
-            if (current.idleHandler != null)
-            {
-                current.idleHandler(Thread.CurrentThread, e);
-            }
+            current.idleHandler?.Invoke(Thread.CurrentThread, e);
         }
 
         /// <summary>
@@ -4004,10 +4001,7 @@ namespace System.Windows.Forms
             /// </summary>
             bool UnsafeNativeMethods.IMsoComponent.FDoIdle(int grfidlef)
             {
-                if (idleHandler != null)
-                {
-                    idleHandler(Thread.CurrentThread, EventArgs.Empty);
-                }
+                idleHandler?.Invoke(Thread.CurrentThread, EventArgs.Empty);
                 return false;
             }
 

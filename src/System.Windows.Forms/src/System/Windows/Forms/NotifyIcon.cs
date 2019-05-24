@@ -491,11 +491,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnBalloonTipClicked()
         {
-            EventHandler handler = (EventHandler)Events[EVENT_BALLOONTIPCLICKED];
-            if (handler != null)
-            {
-                handler(this, EventArgs.Empty);
-            }
+            ((EventHandler)Events[EVENT_BALLOONTIPCLICKED])?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -505,11 +501,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnBalloonTipClosed()
         {
-            EventHandler handler = (EventHandler)Events[EVENT_BALLOONTIPCLOSED];
-            if (handler != null)
-            {
-                handler(this, EventArgs.Empty);
-            }
+            ((EventHandler)Events[EVENT_BALLOONTIPCLOSED])?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -519,11 +511,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnBalloonTipShown()
         {
-            EventHandler handler = (EventHandler)Events[EVENT_BALLOONTIPSHOWN];
-            if (handler != null)
-            {
-                handler(this, EventArgs.Empty);
-            }
+            ((EventHandler)Events[EVENT_BALLOONTIPSHOWN])?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -537,11 +525,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnClick(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EVENT_CLICK];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_CLICK])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -550,11 +534,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnDoubleClick(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EVENT_DOUBLECLICK];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_DOUBLECLICK])?.Invoke(this, e);
         }
 
 
@@ -564,11 +544,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnMouseClick(MouseEventArgs mea)
         {
-            MouseEventHandler handler = (MouseEventHandler)Events[EVENT_MOUSECLICK];
-            if (handler != null)
-            {
-                handler(this, mea);
-            }
+            ((MouseEventHandler)Events[EVENT_MOUSECLICK])?.Invoke(this, mea);
         }
 
         /// <summary>
@@ -577,11 +553,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnMouseDoubleClick(MouseEventArgs mea)
         {
-            MouseEventHandler handler = (MouseEventHandler)Events[EVENT_MOUSEDOUBLECLICK];
-            if (handler != null)
-            {
-                handler(this, mea);
-            }
+            ((MouseEventHandler)Events[EVENT_MOUSEDOUBLECLICK])?.Invoke(this, mea);
         }
 
         /// <summary>
@@ -594,11 +566,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnMouseDown(MouseEventArgs e)
         {
-            MouseEventHandler handler = (MouseEventHandler)Events[EVENT_MOUSEDOWN];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((MouseEventHandler)Events[EVENT_MOUSEDOWN])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -610,11 +578,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnMouseMove(MouseEventArgs e)
         {
-            MouseEventHandler handler = (MouseEventHandler)Events[EVENT_MOUSEMOVE];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((MouseEventHandler)Events[EVENT_MOUSEMOVE])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -625,11 +589,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnMouseUp(MouseEventArgs e)
         {
-            MouseEventHandler handler = (MouseEventHandler)Events[EVENT_MOUSEUP];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((MouseEventHandler)Events[EVENT_MOUSEUP])?.Invoke(this, e);
         }
 
         /// <summary>

@@ -553,11 +553,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnApply(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EventApply];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventApply])?.Invoke(this, e);
         }
 
         /// <summary>

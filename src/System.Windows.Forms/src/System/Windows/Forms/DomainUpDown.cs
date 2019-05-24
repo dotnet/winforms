@@ -470,10 +470,7 @@ namespace System.Windows.Forms
         {
 
             // Call the event handler
-            if (onSelectedItemChanged != null)
-            {
-                onSelectedItemChanged(this, e);
-            }
+            onSelectedItemChanged?.Invoke(this, e);
         }
 
         /// <summary>

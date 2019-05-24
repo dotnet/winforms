@@ -1469,11 +1469,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void OnSplitterMoving(SplitterCancelEventArgs e)
         {
-            SplitterCancelEventHandler handler = (SplitterCancelEventHandler)Events[EVENT_MOVING];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((SplitterCancelEventHandler)Events[EVENT_MOVING])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1483,11 +1479,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void OnSplitterMoved(SplitterEventArgs e)
         {
-            SplitterEventHandler handler = (SplitterEventHandler)Events[EVENT_MOVED];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((SplitterEventHandler)Events[EVENT_MOVED])?.Invoke(this, e);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////

@@ -3842,10 +3842,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected void OnNavigate(NavigateEventArgs e)
         {
-            if (onNavigate != null)
-            {
-                onNavigate(this, e);
-            }
+            onNavigate?.Invoke(this, e);
         }
 
         /*
@@ -3882,11 +3879,7 @@ namespace System.Windows.Forms
             }
 
             // Raise the event for the event listeners
-            EventHandler handler = (EventHandler)Events[EVENT_NODECLICKED];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_NODECLICKED])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -3894,10 +3887,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected void OnRowHeaderClick(EventArgs e)
         {
-            if (onRowHeaderClick != null)
-            {
-                onRowHeaderClick(this, e);
-            }
+            onRowHeaderClick?.Invoke(this, e);
         }
 
         /// <summary>
@@ -3911,13 +3901,7 @@ namespace System.Windows.Forms
             if (ToolTipProvider != null)
             {
                 ResetToolTip();
-            }
-
-            EventHandler handler = (EventHandler)Events[EVENT_SCROLL];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            } ((EventHandler)Events[EVENT_SCROLL])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -4102,11 +4086,7 @@ namespace System.Windows.Forms
         {
             NavigateBack();
 
-            EventHandler handler = (EventHandler)Events[EVENT_BACKBUTTONCLICK];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_BACKBUTTONCLICK])?.Invoke(this, e);
         }
 
         protected override void OnBackColorChanged(EventArgs e)
@@ -4178,11 +4158,7 @@ namespace System.Windows.Forms
             // then fires the event.
             ParentRowsVisible = !caption.ToggleDownButtonDirection();
 
-            EventHandler handler = (EventHandler)Events[EVENT_DOWNBUTTONCLICK];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_DOWNBUTTONCLICK])?.Invoke(this, e);
         }
 
         protected override void OnForeColorChanged(EventArgs e)

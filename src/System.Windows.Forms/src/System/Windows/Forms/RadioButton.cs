@@ -462,11 +462,7 @@ namespace System.Windows.Forms
         {
             AccessibilityNotifyClients(AccessibleEvents.StateChange, -1);
             AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
-            EventHandler handler = (EventHandler)Events[EVENT_CHECKEDCHANGED];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_CHECKEDCHANGED])?.Invoke(this, e);
         }
 
         /// <summary>

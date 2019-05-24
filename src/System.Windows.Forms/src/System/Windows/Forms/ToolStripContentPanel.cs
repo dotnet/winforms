@@ -377,11 +377,7 @@ namespace System.Windows.Forms
         {
             // There is no good way to explain this event except to say
             // that it's just another name for OnControlCreated.
-            EventHandler handler = (EventHandler)Events[EventLoad];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventLoad])?.Invoke(this, e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -419,11 +415,7 @@ namespace System.Windows.Forms
 
             Invalidate();
 
-            EventHandler handler = (EventHandler)Events[EventRendererChanged];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventRendererChanged])?.Invoke(this, e);
         }
 
         private void ResetRenderMode()

@@ -392,11 +392,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnCellPaint(TableLayoutCellPaintEventArgs e)
         {
-            TableLayoutCellPaintEventHandler handler = (TableLayoutCellPaintEventHandler)Events[EventCellPaint];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((TableLayoutCellPaintEventHandler)Events[EventCellPaint])?.Invoke(this, e);
         }
 
         protected override void OnPaintBackground(PaintEventArgs e)

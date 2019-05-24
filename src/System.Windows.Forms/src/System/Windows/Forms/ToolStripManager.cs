@@ -521,12 +521,7 @@ namespace System.Windows.Forms
                     CurrentRendererType = (value == null) ? DefaultRendererType : value.GetType();
                     defaultRenderer = value;
 
-                    EventHandler handler = (EventHandler)GetEventHandler(staticEventDefaultRendererChanged);
-
-                    if (handler != null)
-                    {
-                        handler(null, EventArgs.Empty);
-                    }
+                    ((EventHandler)GetEventHandler(staticEventDefaultRendererChanged))?.Invoke(null, EventArgs.Empty);
 
                 }
             }
@@ -610,12 +605,7 @@ namespace System.Windows.Forms
 
                 if (oldVis != VisualStylesEnabled)
                 {
-                    EventHandler handler = (EventHandler)GetEventHandler(staticEventDefaultRendererChanged);
-
-                    if (handler != null)
-                    {
-                        handler(null, EventArgs.Empty);
-                    }
+                    ((EventHandler)GetEventHandler(staticEventDefaultRendererChanged))?.Invoke(null, EventArgs.Empty);
                 }
             }
         }

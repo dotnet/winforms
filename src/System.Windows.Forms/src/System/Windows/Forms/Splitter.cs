@@ -922,11 +922,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnSplitterMoving(SplitterEventArgs sevent)
         {
-            SplitterEventHandler handler = (SplitterEventHandler)Events[EVENT_MOVING];
-            if (handler != null)
-            {
-                handler(this, sevent);
-            }
+            ((SplitterEventHandler)Events[EVENT_MOVING])?.Invoke(this, sevent);
 
             if (splitTarget != null)
             {
@@ -941,11 +937,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnSplitterMoved(SplitterEventArgs sevent)
         {
-            SplitterEventHandler handler = (SplitterEventHandler)Events[EVENT_MOVED];
-            if (handler != null)
-            {
-                handler(this, sevent);
-            }
+            ((SplitterEventHandler)Events[EVENT_MOVED])?.Invoke(this, sevent);
 
             if (splitTarget != null)
             {

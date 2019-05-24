@@ -1501,10 +1501,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnDrawItem(DrawItemEventArgs e)
         {
-            if (onDrawItem != null)
-            {
-                onDrawItem(this, e);
-            }
+            onDrawItem?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1633,10 +1630,7 @@ namespace System.Windows.Forms
             cachedDisplayRect = Rectangle.Empty;
             UpdateTabSelection(tabControlState[TABCONTROLSTATE_UISelection]);
             tabControlState[TABCONTROLSTATE_UISelection] = false;
-            if (onSelectedIndexChanged != null)
-            {
-                onSelectedIndexChanged(this, e);
-            }
+            onSelectedIndexChanged?.Invoke(this, e);
         }
 
 
@@ -1647,11 +1641,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnSelecting(TabControlCancelEventArgs e)
         {
-            TabControlCancelEventHandler handler = (TabControlCancelEventHandler)Events[EVENT_SELECTING];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((TabControlCancelEventHandler)Events[EVENT_SELECTING])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1661,11 +1651,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnSelected(TabControlEventArgs e)
         {
-            TabControlEventHandler handler = (TabControlEventHandler)Events[EVENT_SELECTED];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((TabControlEventHandler)Events[EVENT_SELECTED])?.Invoke(this, e);
 
             // Raise the enter event for this tab.
             if (SelectedTab != null)
@@ -1682,11 +1668,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnDeselecting(TabControlCancelEventArgs e)
         {
-            TabControlCancelEventHandler handler = (TabControlCancelEventHandler)Events[EVENT_DESELECTING];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((TabControlCancelEventHandler)Events[EVENT_DESELECTING])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1696,11 +1678,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnDeselected(TabControlEventArgs e)
         {
-            TabControlEventHandler handler = (TabControlEventHandler)Events[EVENT_DESELECTED];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((TabControlEventHandler)Events[EVENT_DESELECTED])?.Invoke(this, e);
 
             // Raise the Leave event for this tab.
             if (SelectedTab != null)

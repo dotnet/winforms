@@ -900,18 +900,12 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnRecreateHandle(EventArgs eventargs)
         {
-            if (recreateHandler != null)
-            {
-                recreateHandler(this, eventargs);
-            }
+            recreateHandler?.Invoke(this, eventargs);
         }
 
         private void OnChangeHandle(EventArgs eventargs)
         {
-            if (changeHandler != null)
-            {
-                changeHandler(this, eventargs);
-            }
+            changeHandler?.Invoke(this, eventargs);
         }
 
 #if false

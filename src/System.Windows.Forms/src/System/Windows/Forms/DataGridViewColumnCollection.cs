@@ -998,10 +998,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnCollectionChanged(CollectionChangeEventArgs e)
         {
-            if (onCollectionChanged != null)
-            {
-                onCollectionChanged(this, e);
-            }
+            onCollectionChanged?.Invoke(this, e);
         }
 
         private void OnCollectionChanged(CollectionChangeEventArgs ccea, bool changeIsInsertion, Point newCurrentCell)

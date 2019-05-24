@@ -137,10 +137,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void ExitThreadCore()
         {
-            if (ThreadExit != null)
-            {
-                ThreadExit(this, EventArgs.Empty);
-            }
+            ThreadExit?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>

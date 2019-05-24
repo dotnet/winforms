@@ -667,11 +667,7 @@ namespace System.Windows.Forms
 
             Invalidate();
 
-            EventHandler handler = (EventHandler)Events[EventRendererChanged];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventRendererChanged])?.Invoke(this, e);
         }
 
         /// <summary>

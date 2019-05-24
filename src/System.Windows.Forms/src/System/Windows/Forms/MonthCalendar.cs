@@ -1705,10 +1705,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnDateChanged(DateRangeEventArgs drevent)
         {
-            if (onDateChanged != null)
-            {
-                onDateChanged(this, drevent);
-            }
+            onDateChanged?.Invoke(this, drevent);
         }
 
         /// <summary>
@@ -1716,10 +1713,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnDateSelected(DateRangeEventArgs drevent)
         {
-            if (onDateSelected != null)
-            {
-                onDateSelected(this, drevent);
-            }
+            onDateSelected?.Invoke(this, drevent);
         }
 
         protected override void OnFontChanged(EventArgs e)
@@ -1753,10 +1747,7 @@ namespace System.Windows.Forms
                 RecreateHandle();
             }
 
-            if (onRightToLeftLayoutChanged != null)
-            {
-                onRightToLeftLayoutChanged(this, e);
-            }
+            onRightToLeftLayoutChanged?.Invoke(this, e);
         }
 
 

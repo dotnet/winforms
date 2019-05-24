@@ -1245,11 +1245,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnLinkClicked(LinkLabelLinkClickedEventArgs e)
         {
-            LinkLabelLinkClickedEventHandler handler = (LinkLabelLinkClickedEventHandler)Events[EventLinkClicked];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((LinkLabelLinkClickedEventHandler)Events[EventLinkClicked])?.Invoke(this, e);
         }
 
         protected override void OnPaddingChanged(EventArgs e)

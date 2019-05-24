@@ -1248,10 +1248,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnCloseUp(EventArgs eventargs)
         {
-            if (onCloseUp != null)
-            {
-                onCloseUp(this, eventargs);
-            }
+            onCloseUp?.Invoke(this, eventargs);
         }
 
         /// <summary>
@@ -1259,10 +1256,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnDropDown(EventArgs eventargs)
         {
-            if (onDropDown != null)
-            {
-                onDropDown(this, eventargs);
-            }
+            onDropDown?.Invoke(this, eventargs);
         }
 
         protected virtual void OnFormatChanged(EventArgs e)
@@ -1297,10 +1291,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnValueChanged(EventArgs eventargs)
         {
-            if (onValueChanged != null)
-            {
-                onValueChanged(this, eventargs);
-            }
+            onValueChanged?.Invoke(this, eventargs);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -1316,10 +1307,7 @@ namespace System.Windows.Forms
                 RecreateHandle();
             }
 
-            if (onRightToLeftLayoutChanged != null)
-            {
-                onRightToLeftLayoutChanged(this, e);
-            }
+            onRightToLeftLayoutChanged?.Invoke(this, e);
         }
 
 

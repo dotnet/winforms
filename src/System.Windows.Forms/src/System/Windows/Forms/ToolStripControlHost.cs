@@ -755,11 +755,7 @@ namespace System.Windows.Forms
         }
         private void HandleQueryAccessibilityHelp(object sender, QueryAccessibilityHelpEventArgs e)
         {
-            QueryAccessibilityHelpEventHandler handler = (QueryAccessibilityHelpEventHandler)Events[ToolStripItem.EventQueryAccessibilityHelp];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((QueryAccessibilityHelpEventHandler)Events[ToolStripItem.EventQueryAccessibilityHelp])?.Invoke(this, e);
         }
         private void HandleQueryContinueDrag(object sender, QueryContinueDragEventArgs e)
         {

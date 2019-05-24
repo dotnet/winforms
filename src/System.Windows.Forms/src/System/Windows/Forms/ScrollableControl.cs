@@ -829,11 +829,7 @@ namespace System.Windows.Forms
             // DockPaddingEdges compat.  
             // dont call base in this instance - for App compat we should not fire Invalidate when 
             // the padding has changed.
-            EventHandler handler = (EventHandler)Events[Control.EventPaddingChanged];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[Control.EventPaddingChanged])?.Invoke(this, e);
         }
 
 
@@ -1094,11 +1090,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnScroll(ScrollEventArgs se)
         {
-            ScrollEventHandler handler = (ScrollEventHandler)Events[EVENT_SCROLL];
-            if (handler != null)
-            {
-                handler(this, se);
-            }
+            ((ScrollEventHandler)Events[EVENT_SCROLL])?.Invoke(this, se);
         }
 
         private void ResetAutoScrollMargin()

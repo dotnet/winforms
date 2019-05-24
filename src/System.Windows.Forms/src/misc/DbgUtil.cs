@@ -211,7 +211,7 @@ namespace System.Internal
         {
             int MAX_SIZE = 255;
             StringBuilder buffer = new StringBuilder(MAX_SIZE);
-            string message = string.Empty;
+            string message;
             int err = 0;
 
             try

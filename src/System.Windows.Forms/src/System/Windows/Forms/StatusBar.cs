@@ -781,11 +781,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnPanelClick(StatusBarPanelClickEventArgs e)
         {
-            StatusBarPanelClickEventHandler handler = (StatusBarPanelClickEventHandler)Events[EVENT_PANELCLICK];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((StatusBarPanelClickEventHandler)Events[EVENT_PANELCLICK])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1000,11 +996,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnDrawItem(StatusBarDrawItemEventArgs sbdievent)
         {
-            StatusBarDrawItemEventHandler handler = (StatusBarDrawItemEventHandler)Events[EVENT_SBDRAWITEM];
-            if (handler != null)
-            {
-                handler(this, sbdievent);
-            }
+            ((StatusBarDrawItemEventHandler)Events[EVENT_SBDRAWITEM])?.Invoke(this, sbdievent);
         }
 
         /// <summary>

@@ -1835,10 +1835,7 @@ namespace System.Windows.Forms
             /// </summary>
             protected virtual void OnUpDown(UpDownEventArgs upevent)
             {
-                if (upDownEventHandler != null)
-                {
-                    upDownEventHandler(this, upevent);
-                }
+                upDownEventHandler?.Invoke(this, upevent);
             }
 
             /// <summary>

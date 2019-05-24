@@ -338,10 +338,7 @@ namespace System.Experimental.Gdi
                 return;
             }
 
-            if (Disposing != null)
-            {
-                Disposing(this, EventArgs.Empty);
-            }
+            Disposing?.Invoke(this, EventArgs.Empty);
 
             disposed = true;
 

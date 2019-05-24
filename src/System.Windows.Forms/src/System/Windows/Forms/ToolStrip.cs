@@ -3617,11 +3617,7 @@ namespace System.Windows.Forms
 
             ClearAllSelections();
             UpdateToolTip(null); // supress the tooltip.
-            EventHandler handler = (EventHandler)Events[EventBeginDrag];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventBeginDrag])?.Invoke(this, e);
         }
 
         protected virtual void OnEndDrag(EventArgs e)
@@ -3631,11 +3627,7 @@ namespace System.Windows.Forms
             Debug.Assert(ParentInternal as ToolStripPanel != null, "Why is our parent not a toolstrip panel?");
             Debug.Assert(ToolStripPanelRow == null || ToolStripPanelRow.ToolStripPanel.RowsInternal.Contains(ToolStripPanelRow), "Why are we in an orphaned row?");
 
-            EventHandler handler = (EventHandler)Events[EventEndDrag];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventEndDrag])?.Invoke(this, e);
         }
 
 
@@ -3649,11 +3641,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(Renderer);
 
-            EventHandler handler = (EventHandler)Events[EventRendererChanged];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventRendererChanged])?.Invoke(this, e);
         }
         /// <summary>
         /// Summary of OnEnabledChanged.
@@ -3753,13 +3741,7 @@ namespace System.Windows.Forms
                 // it becomes visible.)   We will recalculate this in SetDisplayedItems, but for the moment
                 // if we find an item that ParticipatesInLayout, mark us as having visible items.
                 HasVisibleItems = true;
-            }
-
-            ToolStripItemEventHandler handler = (ToolStripItemEventHandler)Events[EventItemAdded];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            } ((ToolStripItemEventHandler)Events[EventItemAdded])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -3767,11 +3749,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnItemClicked(ToolStripItemClickedEventArgs e)
         {
-            ToolStripItemClickedEventHandler handler = (ToolStripItemClickedEventHandler)Events[EventItemClicked];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((ToolStripItemClickedEventHandler)Events[EventItemClicked])?.Invoke(this, e);
         }
 
         protected internal virtual void OnItemRemoved(ToolStripItemEventArgs e)
@@ -3780,11 +3758,7 @@ namespace System.Windows.Forms
             // clear cached item states.
             OnItemVisibleChanged(e, /*performlayout*/true);
 
-            ToolStripItemEventHandler handler = (ToolStripItemEventHandler)Events[EventItemRemoved];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((ToolStripItemEventHandler)Events[EventItemRemoved])?.Invoke(this, e);
         }
 
 
@@ -3839,20 +3813,12 @@ namespace System.Windows.Forms
 
         protected virtual void OnLayoutCompleted(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EventLayoutCompleted];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventLayoutCompleted])?.Invoke(this, e);
         }
 
         protected virtual void OnLayoutStyleChanged(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EventLayoutStyleChanged];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventLayoutStyleChanged])?.Invoke(this, e);
         }
 
         protected override void OnLostFocus(EventArgs e)
@@ -3875,11 +3841,7 @@ namespace System.Windows.Forms
         }
         internal virtual void OnLocationChanging(ToolStripLocationCancelEventArgs e)
         {
-            ToolStripLocationCancelEventHandler handler = (ToolStripLocationCancelEventHandler)Events[EventLocationChanging];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((ToolStripLocationCancelEventHandler)Events[EventLocationChanging])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -4297,11 +4259,7 @@ namespace System.Windows.Forms
 
             Renderer.DrawGrip(new ToolStripGripRenderEventArgs(e.Graphics, this));
 
-            PaintEventHandler handler = (PaintEventHandler)Events[EventPaintGrip];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((PaintEventHandler)Events[EventPaintGrip])?.Invoke(this, e);
         }
 
         protected override void OnScroll(ScrollEventArgs se)

@@ -4411,10 +4411,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnAfterLabelEdit(LabelEditEventArgs e)
         {
-            if (onAfterLabelEdit != null)
-            {
-                onAfterLabelEdit(this, e);
-            }
+            onAfterLabelEdit?.Invoke(this, e);
         }
 
         protected override void OnBackgroundImageChanged(EventArgs e)
@@ -4482,21 +4479,14 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnBeforeLabelEdit(LabelEditEventArgs e)
         {
-            if (onBeforeLabelEdit != null)
-            {
-                onBeforeLabelEdit(this, e);
-            }
+            onBeforeLabelEdit?.Invoke(this, e);
         }
 
         /// <summary>
         /// </summary>
         protected virtual void OnCacheVirtualItems(CacheVirtualItemsEventArgs e)
         {
-            CacheVirtualItemsEventHandler handler = (CacheVirtualItemsEventHandler)Events[EVENT_CACHEVIRTUALITEMS];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((CacheVirtualItemsEventHandler)Events[EVENT_CACHEVIRTUALITEMS])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -4504,10 +4494,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnColumnClick(ColumnClickEventArgs e)
         {
-            if (onColumnClick != null)
-            {
-                onColumnClick(this, e);
-            }
+            onColumnClick?.Invoke(this, e);
         }
 
         /// <summary>
@@ -4515,11 +4502,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnColumnReordered(ColumnReorderedEventArgs e)
         {
-            ColumnReorderedEventHandler handler = (ColumnReorderedEventHandler)Events[EVENT_COLUMNREORDERED];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((ColumnReorderedEventHandler)Events[EVENT_COLUMNREORDERED])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -4527,11 +4510,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnColumnWidthChanged(ColumnWidthChangedEventArgs e)
         {
-            ColumnWidthChangedEventHandler handler = (ColumnWidthChangedEventHandler)Events[EVENT_COLUMNWIDTHCHANGED];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((ColumnWidthChangedEventHandler)Events[EVENT_COLUMNWIDTHCHANGED])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -4539,11 +4518,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnColumnWidthChanging(ColumnWidthChangingEventArgs e)
         {
-            ColumnWidthChangingEventHandler handler = (ColumnWidthChangingEventHandler)Events[EVENT_COLUMNWIDTHCHANGING];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((ColumnWidthChangingEventHandler)Events[EVENT_COLUMNWIDTHCHANGING])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -4551,11 +4526,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnDrawColumnHeader(DrawListViewColumnHeaderEventArgs e)
         {
-            DrawListViewColumnHeaderEventHandler handler = (DrawListViewColumnHeaderEventHandler)Events[EVENT_DRAWCOLUMNHEADER];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((DrawListViewColumnHeaderEventHandler)Events[EVENT_DRAWCOLUMNHEADER])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -4563,11 +4534,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnDrawItem(DrawListViewItemEventArgs e)
         {
-            DrawListViewItemEventHandler handler = (DrawListViewItemEventHandler)Events[EVENT_DRAWITEM];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((DrawListViewItemEventHandler)Events[EVENT_DRAWITEM])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -4575,11 +4542,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnDrawSubItem(DrawListViewSubItemEventArgs e)
         {
-            DrawListViewSubItemEventHandler handler = (DrawListViewSubItemEventHandler)Events[EVENT_DRAWSUBITEM];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((DrawListViewSubItemEventHandler)Events[EVENT_DRAWSUBITEM])?.Invoke(this, e);
         }
 
         protected override void OnFontChanged(EventArgs e)
@@ -4806,10 +4769,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnItemActivate(EventArgs e)
         {
-            if (onItemActivate != null)
-            {
-                onItemActivate(this, e);
-            }
+            onItemActivate?.Invoke(this, e);
         }
 
         /// <summary>
@@ -4819,26 +4779,17 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnItemCheck(ItemCheckEventArgs ice)
         {
-            if (onItemCheck != null)
-            {
-                onItemCheck(this, ice);
-            }
+            onItemCheck?.Invoke(this, ice);
         }
 
         protected virtual void OnItemChecked(ItemCheckedEventArgs e)
         {
-            if (onItemChecked != null)
-            {
-                onItemChecked(this, e);
-            }
+            onItemChecked?.Invoke(this, e);
         }
 
         protected virtual void OnItemDrag(ItemDragEventArgs e)
         {
-            if (onItemDrag != null)
-            {
-                onItemDrag(this, e);
-            }
+            onItemDrag?.Invoke(this, e);
         }
 
         /// <summary>
@@ -4846,10 +4797,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnItemMouseHover(ListViewItemMouseHoverEventArgs e)
         {
-            if (onItemMouseHover != null)
-            {
-                onItemMouseHover(this, e);
-            }
+            onItemMouseHover?.Invoke(this, e);
         }
 
         /// <summary>
@@ -4857,11 +4805,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnItemSelectionChanged(ListViewItemSelectionChangedEventArgs e)
         {
-            ListViewItemSelectionChangedEventHandler eh = (ListViewItemSelectionChangedEventHandler)Events[EVENT_ITEMSELECTIONCHANGED];
-            if (eh != null)
-            {
-                eh(this, e);
-            }
+            ((ListViewItemSelectionChangedEventHandler)Events[EVENT_ITEMSELECTIONCHANGED])?.Invoke(this, e);
         }
 
         protected override void OnParentChanged(EventArgs e)
@@ -4893,11 +4837,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnRetrieveVirtualItem(RetrieveVirtualItemEventArgs e)
         {
-            RetrieveVirtualItemEventHandler handler = (RetrieveVirtualItemEventHandler)Events[EVENT_RETRIEVEVIRTUALITEM];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((RetrieveVirtualItemEventHandler)Events[EVENT_RETRIEVEVIRTUALITEM])?.Invoke(this, e);
         }
 
 
@@ -4926,11 +4866,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnSearchForVirtualItem(SearchForVirtualItemEventArgs e)
         {
-            SearchForVirtualItemEventHandler handler = (SearchForVirtualItemEventHandler)Events[EVENT_SEARCHFORVIRTUALITEM];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((SearchForVirtualItemEventHandler)Events[EVENT_SEARCHFORVIRTUALITEM])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -4942,11 +4878,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnSelectedIndexChanged(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EVENT_SELECTEDINDEXCHANGED];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_SELECTEDINDEXCHANGED])?.Invoke(this, e);
         }
 
         protected override void OnSystemColorsChanged(EventArgs e)
@@ -4965,11 +4897,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnVirtualItemsSelectionRangeChanged(ListViewVirtualItemsSelectionRangeChangedEventArgs e)
         {
-            ListViewVirtualItemsSelectionRangeChangedEventHandler eh = (ListViewVirtualItemsSelectionRangeChangedEventHandler)Events[EVENT_VIRTUALITEMSSELECTIONRANGECHANGED];
-            if (eh != null)
-            {
-                eh(this, e);
-            }
+            ((ListViewVirtualItemsSelectionRangeChangedEventHandler)Events[EVENT_VIRTUALITEMSSELECTIONRANGECHANGED])?.Invoke(this, e);
         }
 
         private unsafe void PositionHeader()

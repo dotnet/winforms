@@ -6523,11 +6523,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void RaiseCreateHandleEvent(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EventHandleCreated];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventHandleCreated])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -6537,11 +6533,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseKeyEvent(object key, KeyEventArgs e)
         {
-            KeyEventHandler handler = (KeyEventHandler)Events[key];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((KeyEventHandler)Events[key])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -6551,11 +6543,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseMouseEvent(object key, MouseEventArgs e)
         {
-            MouseEventHandler handler = (MouseEventHandler)Events[key];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((MouseEventHandler)Events[key])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8996,11 +8984,7 @@ namespace System.Windows.Forms
         protected virtual void OnClick(EventArgs e)
         {
             Contract.Requires(e != null);
-            EventHandler handler = (EventHandler)Events[EventClick];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventClick])?.Invoke(this, e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -9020,11 +9004,7 @@ namespace System.Windows.Forms
         protected virtual void OnControlAdded(ControlEventArgs e)
         {
             Contract.Requires(e != null);
-            ControlEventHandler handler = (ControlEventHandler)Events[EventControlAdded];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((ControlEventHandler)Events[EventControlAdded])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -9034,11 +9014,7 @@ namespace System.Windows.Forms
         protected virtual void OnControlRemoved(ControlEventArgs e)
         {
             Contract.Requires(e != null);
-            ControlEventHandler handler = (ControlEventHandler)Events[EventControlRemoved];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((ControlEventHandler)Events[EventControlRemoved])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -9139,13 +9115,7 @@ namespace System.Windows.Forms
                 {
                     ListenToUserPreferenceChanged(GetTopLevel());
                 }
-            }
-
-            EventHandler handler = (EventHandler)Events[EventHandleCreated];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            } ((EventHandler)Events[EventHandleCreated])?.Invoke(this, e);
 
             if (IsHandleCreated)
             {
@@ -9206,11 +9176,7 @@ namespace System.Windows.Forms
         protected virtual void OnHandleDestroyed(EventArgs e)
         {
             Contract.Requires(e != null);
-            EventHandler handler = (EventHandler)Events[EventHandleDestroyed];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventHandleDestroyed])?.Invoke(this, e);
 
             UpdateReflectParent(false);
 
@@ -9270,11 +9236,7 @@ namespace System.Windows.Forms
         protected virtual void OnDoubleClick(EventArgs e)
         {
             Contract.Requires(e != null);
-            EventHandler handler = (EventHandler)Events[EventDoubleClick];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventDoubleClick])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -9290,11 +9252,7 @@ namespace System.Windows.Forms
         protected virtual void OnDragEnter(DragEventArgs drgevent)
         {
             Contract.Requires(drgevent != null);
-            DragEventHandler handler = (DragEventHandler)Events[EventDragEnter];
-            if (handler != null)
-            {
-                handler(this, drgevent);
-            }
+            ((DragEventHandler)Events[EventDragEnter])?.Invoke(this, drgevent);
         }
 
         /// <summary>
@@ -9305,11 +9263,7 @@ namespace System.Windows.Forms
         protected virtual void OnDragOver(DragEventArgs drgevent)
         {
             Contract.Requires(drgevent != null);
-            DragEventHandler handler = (DragEventHandler)Events[EventDragOver];
-            if (handler != null)
-            {
-                handler(this, drgevent);
-            }
+            ((DragEventHandler)Events[EventDragOver])?.Invoke(this, drgevent);
         }
 
         /// <summary>
@@ -9320,11 +9274,7 @@ namespace System.Windows.Forms
         protected virtual void OnDragLeave(EventArgs e)
         {
             Contract.Requires(e != null);
-            EventHandler handler = (EventHandler)Events[EventDragLeave];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventDragLeave])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -9335,11 +9285,7 @@ namespace System.Windows.Forms
         protected virtual void OnDragDrop(DragEventArgs drgevent)
         {
             Contract.Requires(drgevent != null);
-            DragEventHandler handler = (DragEventHandler)Events[EventDragDrop];
-            if (handler != null)
-            {
-                handler(this, drgevent);
-            }
+            ((DragEventHandler)Events[EventDragDrop])?.Invoke(this, drgevent);
         }
 
         /// <summary>
@@ -9351,22 +9297,14 @@ namespace System.Windows.Forms
         protected virtual void OnGiveFeedback(GiveFeedbackEventArgs gfbevent)
         {
             Contract.Requires(gfbevent != null);
-            GiveFeedbackEventHandler handler = (GiveFeedbackEventHandler)Events[EventGiveFeedback];
-            if (handler != null)
-            {
-                handler(this, gfbevent);
-            }
+            ((GiveFeedbackEventHandler)Events[EventGiveFeedback])?.Invoke(this, gfbevent);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnEnter(EventArgs e)
         {
             Contract.Requires(e != null);
-            EventHandler handler = (EventHandler)Events[EventEnter];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventEnter])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -9397,13 +9335,7 @@ namespace System.Windows.Forms
             if (parent != null)
             {
                 parent.ChildGotFocus(this);
-            }
-
-            EventHandler handler = (EventHandler)Events[EventGotFocus];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            } ((EventHandler)Events[EventGotFocus])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -9456,13 +9388,7 @@ namespace System.Windows.Forms
                 {
                     controls[i].OnParentInvalidated(e);
                 }
-            }
-
-            InvalidateEventHandler handler = (InvalidateEventHandler)Events[EventInvalidated];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            } ((InvalidateEventHandler)Events[EventInvalidated])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -9472,11 +9398,7 @@ namespace System.Windows.Forms
         protected virtual void OnKeyDown(KeyEventArgs e)
         {
             Contract.Requires(e != null);
-            KeyEventHandler handler = (KeyEventHandler)Events[EventKeyDown];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((KeyEventHandler)Events[EventKeyDown])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -9486,11 +9408,7 @@ namespace System.Windows.Forms
         protected virtual void OnKeyPress(KeyPressEventArgs e)
         {
             Contract.Requires(e != null);
-            KeyPressEventHandler handler = (KeyPressEventHandler)Events[EventKeyPress];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((KeyPressEventHandler)Events[EventKeyPress])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -9500,11 +9418,7 @@ namespace System.Windows.Forms
         protected virtual void OnKeyUp(KeyEventArgs e)
         {
             Contract.Requires(e != null);
-            KeyEventHandler handler = (KeyEventHandler)Events[EventKeyUp];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((KeyEventHandler)Events[EventKeyUp])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -9522,12 +9436,7 @@ namespace System.Windows.Forms
             if (IsActiveX)
             {
                 ActiveXViewChanged();
-            }
-            LayoutEventHandler handler = (LayoutEventHandler)Events[EventLayout];
-            if (handler != null)
-            {
-                handler(this, levent);
-            }
+            } ((LayoutEventHandler)Events[EventLayout])?.Invoke(this, levent);
 
             bool parentRequiresLayout = LayoutEngine.Layout(this, levent);
 
@@ -9566,11 +9475,7 @@ namespace System.Windows.Forms
         protected virtual void OnLeave(EventArgs e)
         {
             Contract.Requires(e != null);
-            EventHandler handler = (EventHandler)Events[EventLeave];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventLeave])?.Invoke(this, e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -9593,23 +9498,13 @@ namespace System.Windows.Forms
             if (IsActiveX)
             {
                 ActiveXOnFocus(false);
-            }
-
-            EventHandler handler = (EventHandler)Events[EventLostFocus];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            } ((EventHandler)Events[EventLostFocus])?.Invoke(this, e);
         }
 
         protected virtual void OnMarginChanged(EventArgs e)
         {
             Contract.Requires(e != null);
-            EventHandler handler = (EventHandler)Events[EventMarginChanged];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventMarginChanged])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -9619,11 +9514,7 @@ namespace System.Windows.Forms
         protected virtual void OnMouseDoubleClick(MouseEventArgs e)
         {
             Contract.Requires(e != null);
-            MouseEventHandler handler = (MouseEventHandler)Events[EventMouseDoubleClick];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((MouseEventHandler)Events[EventMouseDoubleClick])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -9633,11 +9524,7 @@ namespace System.Windows.Forms
         protected virtual void OnMouseClick(MouseEventArgs e)
         {
             Contract.Requires(e != null);
-            MouseEventHandler handler = (MouseEventHandler)Events[EventMouseClick];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((MouseEventHandler)Events[EventMouseClick])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -9647,11 +9534,7 @@ namespace System.Windows.Forms
         protected virtual void OnMouseCaptureChanged(EventArgs e)
         {
             Contract.Requires(e != null);
-            EventHandler handler = (EventHandler)Events[EventMouseCaptureChanged];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventMouseCaptureChanged])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -9661,11 +9544,7 @@ namespace System.Windows.Forms
         protected virtual void OnMouseDown(MouseEventArgs e)
         {
             Contract.Requires(e != null);
-            MouseEventHandler handler = (MouseEventHandler)Events[EventMouseDown];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((MouseEventHandler)Events[EventMouseDown])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -9675,11 +9554,7 @@ namespace System.Windows.Forms
         protected virtual void OnMouseEnter(EventArgs e)
         {
             Contract.Requires(e != null);
-            EventHandler handler = (EventHandler)Events[EventMouseEnter];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventMouseEnter])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -9689,11 +9564,7 @@ namespace System.Windows.Forms
         protected virtual void OnMouseLeave(EventArgs e)
         {
             Contract.Requires(e != null);
-            EventHandler handler = (EventHandler)Events[EventMouseLeave];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventMouseLeave])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -9739,11 +9610,7 @@ namespace System.Windows.Forms
         protected virtual void OnMouseHover(EventArgs e)
         {
             Contract.Requires(e != null);
-            EventHandler handler = (EventHandler)Events[EventMouseHover];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventMouseHover])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -9753,11 +9620,7 @@ namespace System.Windows.Forms
         protected virtual void OnMouseMove(MouseEventArgs e)
         {
             Contract.Requires(e != null);
-            MouseEventHandler handler = (MouseEventHandler)Events[EventMouseMove];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((MouseEventHandler)Events[EventMouseMove])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -9767,11 +9630,7 @@ namespace System.Windows.Forms
         protected virtual void OnMouseUp(MouseEventArgs e)
         {
             Contract.Requires(e != null);
-            MouseEventHandler handler = (MouseEventHandler)Events[EventMouseUp];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((MouseEventHandler)Events[EventMouseUp])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -9781,11 +9640,7 @@ namespace System.Windows.Forms
         protected virtual void OnMouseWheel(MouseEventArgs e)
         {
             Contract.Requires(e != null);
-            MouseEventHandler handler = (MouseEventHandler)Events[EventMouseWheel];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((MouseEventHandler)Events[EventMouseWheel])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -9795,11 +9650,7 @@ namespace System.Windows.Forms
         protected virtual void OnMove(EventArgs e)
         {
             Contract.Requires(e != null);
-            EventHandler handler = (EventHandler)Events[EventMove];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventMove])?.Invoke(this, e);
 
             if (RenderTransparent)
             {
@@ -9815,11 +9666,7 @@ namespace System.Windows.Forms
         protected virtual void OnPaint(PaintEventArgs e)
         {
             Contract.Requires(e != null);
-            PaintEventHandler handler = (PaintEventHandler)Events[EventPaint];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((PaintEventHandler)Events[EventPaint])?.Invoke(this, e);
         }
 
         protected virtual void OnPaddingChanged(EventArgs e)
@@ -9828,12 +9675,7 @@ namespace System.Windows.Forms
             if (GetStyle(ControlStyles.ResizeRedraw))
             {
                 Invalidate();
-            }
-            EventHandler handler = (EventHandler)Events[EventPaddingChanged];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            } ((EventHandler)Events[EventPaddingChanged])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -9890,11 +9732,7 @@ namespace System.Windows.Forms
         protected virtual void OnQueryContinueDrag(QueryContinueDragEventArgs qcdevent)
         {
             Contract.Requires(qcdevent != null);
-            QueryContinueDragEventHandler handler = (QueryContinueDragEventHandler)Events[EventQueryContinueDrag];
-            if (handler != null)
-            {
-                handler(this, qcdevent);
-            }
+            ((QueryContinueDragEventHandler)Events[EventQueryContinueDrag])?.Invoke(this, qcdevent);
         }
 
         /// <summary>
@@ -9923,11 +9761,7 @@ namespace System.Windows.Forms
                 Invalidate();
             }
             LayoutTransaction.DoLayout(this, this, PropertyNames.Bounds);
-            EventHandler handler = (EventHandler)Events[EventResize];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventResize])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -9940,11 +9774,7 @@ namespace System.Windows.Forms
         protected virtual void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
         {
             Contract.Requires(e != null);
-            PreviewKeyDownEventHandler handler = (PreviewKeyDownEventHandler)Events[EventPreviewKeyDown];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((PreviewKeyDownEventHandler)Events[EventPreviewKeyDown])?.Invoke(this, e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -9967,11 +9797,7 @@ namespace System.Windows.Forms
         protected virtual void OnChangeUICues(UICuesEventArgs e)
         {
             Contract.Requires(e != null);
-            UICuesEventHandler handler = (UICuesEventHandler)Events[EventChangeUICues];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((UICuesEventHandler)Events[EventChangeUICues])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -9982,11 +9808,7 @@ namespace System.Windows.Forms
         protected virtual void OnStyleChanged(EventArgs e)
         {
             Contract.Requires(e != null);
-            EventHandler handler = (EventHandler)Events[EventStyleChanged];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventStyleChanged])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -10010,11 +9832,7 @@ namespace System.Windows.Forms
             }
             Invalidate();
 
-            EventHandler handler = (EventHandler)Events[EventSystemColorsChanged];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventSystemColorsChanged])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -10025,11 +9843,7 @@ namespace System.Windows.Forms
         protected virtual void OnValidating(CancelEventArgs e)
         {
             Contract.Requires(e != null);
-            CancelEventHandler handler = (CancelEventHandler)Events[EventValidating];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((CancelEventHandler)Events[EventValidating])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -10039,11 +9853,7 @@ namespace System.Windows.Forms
         protected virtual void OnValidated(EventArgs e)
         {
             Contract.Requires(e != null);
-            EventHandler handler = (EventHandler)Events[EventValidated];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventValidated])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -11280,11 +11090,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseDragEvent(object key, DragEventArgs e)
         {
-            DragEventHandler handler = (DragEventHandler)Events[key];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((DragEventHandler)Events[key])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -11294,11 +11100,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaisePaintEvent(object key, PaintEventArgs e)
         {
-            PaintEventHandler handler = (PaintEventHandler)Events[EventPaint];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((PaintEventHandler)Events[EventPaint])?.Invoke(this, e);
         }
 
         private void RemovePendingMessages(int msgMin, int msgMax)

@@ -1349,10 +1349,7 @@ namespace System.Windows.Forms
         // 
         protected virtual void OnCanGoBackChanged(EventArgs e)
         {
-            if (CanGoBackChanged != null)
-            {
-                CanGoBackChanged(this, e);
-            }
+            CanGoBackChanged?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1364,10 +1361,7 @@ namespace System.Windows.Forms
         // 
         protected virtual void OnCanGoForwardChanged(EventArgs e)
         {
-            if (CanGoForwardChanged != null)
-            {
-                CanGoForwardChanged(this, e);
-            }
+            CanGoForwardChanged?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1380,10 +1374,7 @@ namespace System.Windows.Forms
         protected virtual void OnDocumentCompleted(WebBrowserDocumentCompletedEventArgs e)
         {
             AxIWebBrowser2.RegisterAsDropTarget = AllowWebBrowserDrop;
-            if (DocumentCompleted != null)
-            {
-                DocumentCompleted(this, e);
-            }
+            DocumentCompleted?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1395,10 +1386,7 @@ namespace System.Windows.Forms
         // 
         protected virtual void OnDocumentTitleChanged(EventArgs e)
         {
-            if (DocumentTitleChanged != null)
-            {
-                DocumentTitleChanged(this, e);
-            }
+            DocumentTitleChanged?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1410,10 +1398,7 @@ namespace System.Windows.Forms
         // 
         protected virtual void OnEncryptionLevelChanged(EventArgs e)
         {
-            if (EncryptionLevelChanged != null)
-            {
-                EncryptionLevelChanged(this, e);
-            }
+            EncryptionLevelChanged?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1425,10 +1410,7 @@ namespace System.Windows.Forms
         // 
         protected virtual void OnFileDownload(EventArgs e)
         {
-            if (FileDownload != null)
-            {
-                FileDownload(this, e);
-            }
+            FileDownload?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1440,10 +1422,7 @@ namespace System.Windows.Forms
         // 
         protected virtual void OnNavigated(WebBrowserNavigatedEventArgs e)
         {
-            if (Navigated != null)
-            {
-                Navigated(this, e);
-            }
+            Navigated?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1455,10 +1434,7 @@ namespace System.Windows.Forms
         // 
         protected virtual void OnNavigating(WebBrowserNavigatingEventArgs e)
         {
-            if (Navigating != null)
-            {
-                Navigating(this, e);
-            }
+            Navigating?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1470,10 +1446,7 @@ namespace System.Windows.Forms
         // 
         protected virtual void OnNewWindow(CancelEventArgs e)
         {
-            if (NewWindow != null)
-            {
-                NewWindow(this, e);
-            }
+            NewWindow?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1485,10 +1458,7 @@ namespace System.Windows.Forms
         // 
         protected virtual void OnProgressChanged(WebBrowserProgressChangedEventArgs e)
         {
-            if (ProgressChanged != null)
-            {
-                ProgressChanged(this, e);
-            }
+            ProgressChanged?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1500,10 +1470,7 @@ namespace System.Windows.Forms
         // 
         protected virtual void OnStatusTextChanged(EventArgs e)
         {
-            if (StatusTextChanged != null)
-            {
-                StatusTextChanged(this, e);
-            }
+            StatusTextChanged?.Invoke(this, e);
         }
 
 

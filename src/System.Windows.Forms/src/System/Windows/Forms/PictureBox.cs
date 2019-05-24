@@ -1222,20 +1222,12 @@ namespace System.Windows.Forms
 
         protected virtual void OnLoadCompleted(AsyncCompletedEventArgs e)
         {
-            AsyncCompletedEventHandler handler = (AsyncCompletedEventHandler)(Events[loadCompletedKey]);
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((AsyncCompletedEventHandler)(Events[loadCompletedKey]))?.Invoke(this, e);
         }
 
         protected virtual void OnLoadProgressChanged(ProgressChangedEventArgs e)
         {
-            ProgressChangedEventHandler handler = (ProgressChangedEventHandler)(Events[loadProgressChangedKey]);
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((ProgressChangedEventHandler)(Events[loadProgressChangedKey]))?.Invoke(this, e);
         }
 
         /// <summary>

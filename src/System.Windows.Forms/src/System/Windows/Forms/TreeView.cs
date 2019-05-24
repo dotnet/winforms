@@ -2043,10 +2043,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnDrawNode(DrawTreeNodeEventArgs e)
         {
-            if (onDrawNode != null)
-            {
-                onDrawNode(this, e);
-            }
+            onDrawNode?.Invoke(this, e);
         }
 
         /// <summary>
@@ -2284,10 +2281,7 @@ namespace System.Windows.Forms
         protected virtual void OnBeforeLabelEdit(NodeLabelEditEventArgs e)
         {
             Contract.Requires(e != null);
-            if (onBeforeLabelEdit != null)
-            {
-                onBeforeLabelEdit(this, e);
-            }
+            onBeforeLabelEdit?.Invoke(this, e);
         }
 
         /// <summary>
@@ -2296,10 +2290,7 @@ namespace System.Windows.Forms
         protected virtual void OnAfterLabelEdit(NodeLabelEditEventArgs e)
         {
             Contract.Requires(e != null);
-            if (onAfterLabelEdit != null)
-            {
-                onAfterLabelEdit(this, e);
-            }
+            onAfterLabelEdit?.Invoke(this, e);
         }
 
         /// <summary>
@@ -2308,10 +2299,7 @@ namespace System.Windows.Forms
         protected virtual void OnBeforeCheck(TreeViewCancelEventArgs e)
         {
             Contract.Requires(e != null);
-            if (onBeforeCheck != null)
-            {
-                onBeforeCheck(this, e);
-            }
+            onBeforeCheck?.Invoke(this, e);
         }
 
         /// <summary>
@@ -2320,10 +2308,7 @@ namespace System.Windows.Forms
         protected virtual void OnAfterCheck(TreeViewEventArgs e)
         {
             Contract.Requires(e != null);
-            if (onAfterCheck != null)
-            {
-                onAfterCheck(this, e);
-            }
+            onAfterCheck?.Invoke(this, e);
         }
 
         /// <summary>
@@ -2332,10 +2317,7 @@ namespace System.Windows.Forms
         protected internal virtual void OnBeforeCollapse(TreeViewCancelEventArgs e)
         {
             Contract.Requires(e != null);
-            if (onBeforeCollapse != null)
-            {
-                onBeforeCollapse(this, e);
-            }
+            onBeforeCollapse?.Invoke(this, e);
         }
 
         /// <summary>
@@ -2344,10 +2326,7 @@ namespace System.Windows.Forms
         protected internal virtual void OnAfterCollapse(TreeViewEventArgs e)
         {
             Contract.Requires(e != null);
-            if (onAfterCollapse != null)
-            {
-                onAfterCollapse(this, e);
-            }
+            onAfterCollapse?.Invoke(this, e);
         }
 
         /// <summary>
@@ -2356,10 +2335,7 @@ namespace System.Windows.Forms
         protected virtual void OnBeforeExpand(TreeViewCancelEventArgs e)
         {
             Contract.Requires(e != null);
-            if (onBeforeExpand != null)
-            {
-                onBeforeExpand(this, e);
-            }
+            onBeforeExpand?.Invoke(this, e);
         }
 
         /// <summary>
@@ -2368,10 +2344,7 @@ namespace System.Windows.Forms
         protected virtual void OnAfterExpand(TreeViewEventArgs e)
         {
             Contract.Requires(e != null);
-            if (onAfterExpand != null)
-            {
-                onAfterExpand(this, e);
-            }
+            onAfterExpand?.Invoke(this, e);
         }
 
         /// <summary>
@@ -2380,10 +2353,7 @@ namespace System.Windows.Forms
         protected virtual void OnItemDrag(ItemDragEventArgs e)
         {
             Contract.Requires(e != null);
-            if (onItemDrag != null)
-            {
-                onItemDrag(this, e);
-            }
+            onItemDrag?.Invoke(this, e);
         }
 
         /// <summary>
@@ -2392,10 +2362,7 @@ namespace System.Windows.Forms
         protected virtual void OnNodeMouseHover(TreeNodeMouseHoverEventArgs e)
         {
             Contract.Requires(e != null);
-            if (onNodeMouseHover != null)
-            {
-                onNodeMouseHover(this, e);
-            }
+            onNodeMouseHover?.Invoke(this, e);
         }
 
         /// <summary>
@@ -2404,10 +2371,7 @@ namespace System.Windows.Forms
         protected virtual void OnBeforeSelect(TreeViewCancelEventArgs e)
         {
             Contract.Requires(e != null);
-            if (onBeforeSelect != null)
-            {
-                onBeforeSelect(this, e);
-            }
+            onBeforeSelect?.Invoke(this, e);
         }
 
         /// <summary>
@@ -2416,10 +2380,7 @@ namespace System.Windows.Forms
         protected virtual void OnAfterSelect(TreeViewEventArgs e)
         {
             Contract.Requires(e != null);
-            if (onAfterSelect != null)
-            {
-                onAfterSelect(this, e);
-            }
+            onAfterSelect?.Invoke(this, e);
         }
 
         /// <summary>
@@ -2428,10 +2389,7 @@ namespace System.Windows.Forms
         protected virtual void OnNodeMouseClick(TreeNodeMouseClickEventArgs e)
         {
             Contract.Requires(e != null);
-            if (onNodeMouseClick != null)
-            {
-                onNodeMouseClick(this, e);
-            }
+            onNodeMouseClick?.Invoke(this, e);
         }
 
         /// <summary>
@@ -2440,10 +2398,7 @@ namespace System.Windows.Forms
         protected virtual void OnNodeMouseDoubleClick(TreeNodeMouseClickEventArgs e)
         {
             Contract.Requires(e != null);
-            if (onNodeMouseDoubleClick != null)
-            {
-                onNodeMouseDoubleClick(this, e);
-            }
+            onNodeMouseDoubleClick?.Invoke(this, e);
         }
 
         /// <summary>
@@ -2525,10 +2480,7 @@ namespace System.Windows.Forms
                 RecreateHandle();
             }
 
-            if (onRightToLeftLayoutChanged != null)
-            {
-                onRightToLeftLayoutChanged(this, e);
-            }
+            onRightToLeftLayoutChanged?.Invoke(this, e);
         }
 
 

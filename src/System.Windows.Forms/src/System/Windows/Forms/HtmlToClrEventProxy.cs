@@ -42,10 +42,7 @@ namespace System.Windows.Forms
 
         private void InvokeClrEvent()
         {
-            if (eventHandler != null)
-            {
-                eventHandler(sender, EventArgs.Empty);
-            }
+            eventHandler?.Invoke(sender, EventArgs.Empty);
         }
 
 

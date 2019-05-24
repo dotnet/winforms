@@ -1212,9 +1212,9 @@ namespace System.Windows.Forms
             {
                 _data.baseItem.OnClick(e);
             }
-            else if (_data._onClick != null)
+            else
             {
-                _data._onClick(this, e);
+                _data._onClick?.Invoke(this, e);
             }
         }
 
@@ -1229,9 +1229,9 @@ namespace System.Windows.Forms
             {
                 _data.baseItem.OnDrawItem(e);
             }
-            else if (_data._onDrawItem != null)
+            else
             {
-                _data._onDrawItem(this, e);
+                _data._onDrawItem?.Invoke(this, e);
             }
         }
 
@@ -1246,9 +1246,9 @@ namespace System.Windows.Forms
             {
                 _data.baseItem.OnMeasureItem(e);
             }
-            else if (_data._onMeasureItem != null)
+            else
             {
-                _data._onMeasureItem(this, e);
+                _data._onMeasureItem?.Invoke(this, e);
             }
         }
 
@@ -1277,9 +1277,9 @@ namespace System.Windows.Forms
             {
                 _data.baseItem.OnPopup(e);
             }
-            else if (_data._onPopup != null)
+            else
             {
-                _data._onPopup(this, e);
+                _data._onPopup?.Invoke(this, e);
             }
 
             // Update any subitem states that got changed in the event
@@ -1309,9 +1309,9 @@ namespace System.Windows.Forms
             {
                 _data.baseItem.OnSelect(e);
             }
-            else if (_data._onSelect != null)
+            else
             {
-                _data._onSelect(this, e);
+                _data._onSelect?.Invoke(this, e);
             }
         }
 

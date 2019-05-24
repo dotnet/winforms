@@ -3297,11 +3297,7 @@ namespace System.Windows.Forms
         [SuppressMessage("Microsoft.Security", "CA2119:SealMethodsThatSatisfyPrivateInterfaces")] // PM review done
         protected virtual void OnGiveFeedback(GiveFeedbackEventArgs giveFeedbackEvent)
         {
-            GiveFeedbackEventHandler handler = (GiveFeedbackEventHandler)Events[EventGiveFeedback];
-            if (handler != null)
-            {
-                handler(this, giveFeedbackEvent);
-            }
+            ((GiveFeedbackEventHandler)Events[EventGiveFeedback])?.Invoke(this, giveFeedbackEvent);
         }
 
         internal virtual void OnImageScalingSizeChanged(EventArgs e)
@@ -3625,69 +3621,37 @@ namespace System.Windows.Forms
 
         internal void RaiseCancelEvent(object key, CancelEventArgs e)
         {
-            CancelEventHandler handler = (CancelEventHandler)Events[key];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((CancelEventHandler)Events[key])?.Invoke(this, e);
         }
 
         internal void RaiseDragEvent(object key, DragEventArgs e)
         {
-            DragEventHandler handler = (DragEventHandler)Events[key];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((DragEventHandler)Events[key])?.Invoke(this, e);
         }
         internal void RaiseEvent(object key, EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[key];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[key])?.Invoke(this, e);
         }
         internal void RaiseKeyEvent(object key, KeyEventArgs e)
         {
-            KeyEventHandler handler = (KeyEventHandler)Events[key];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((KeyEventHandler)Events[key])?.Invoke(this, e);
         }
         internal void RaiseKeyPressEvent(object key, KeyPressEventArgs e)
         {
-            KeyPressEventHandler handler = (KeyPressEventHandler)Events[key];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((KeyPressEventHandler)Events[key])?.Invoke(this, e);
         }
         internal void RaiseMouseEvent(object key, MouseEventArgs e)
         {
-            MouseEventHandler handler = (MouseEventHandler)Events[key];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((MouseEventHandler)Events[key])?.Invoke(this, e);
         }
         internal void RaisePaintEvent(object key, PaintEventArgs e)
         {
-            PaintEventHandler handler = (PaintEventHandler)Events[key];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((PaintEventHandler)Events[key])?.Invoke(this, e);
         }
 
         internal void RaiseQueryContinueDragEvent(object key, QueryContinueDragEventArgs e)
         {
-            QueryContinueDragEventHandler handler = (QueryContinueDragEventHandler)Events[key];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((QueryContinueDragEventHandler)Events[key])?.Invoke(this, e);
         }
 
         private void ResetToolTipText()

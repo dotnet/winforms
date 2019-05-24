@@ -1115,10 +1115,7 @@ namespace System.Windows.Forms
                             site.Container.Remove(this);
                         }
 
-                        if (disposed != null)
-                        {
-                            disposed(this, EventArgs.Empty);
-                        }
+                        disposed?.Invoke(this, EventArgs.Empty);
                     }
                 }
             }

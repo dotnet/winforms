@@ -2696,11 +2696,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnDrawItem(DrawItemEventArgs e)
         {
-            DrawItemEventHandler handler = (DrawItemEventHandler)Events[EVENT_DRAWITEM];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((DrawItemEventHandler)Events[EVENT_DRAWITEM])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -2710,11 +2706,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnDropDown(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EVENT_DROPDOWN];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_DROPDOWN])?.Invoke(this, e);
 
             // Notify collapsed/expanded property change.
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
@@ -2790,11 +2782,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnMeasureItem(MeasureItemEventArgs e)
         {
-            MeasureItemEventHandler handler = (MeasureItemEventHandler)Events[EVENT_MEASUREITEM];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((MeasureItemEventHandler)Events[EVENT_MEASUREITEM])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -2842,11 +2830,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnSelectionChangeCommitted(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EVENT_SELECTIONCHANGECOMMITTED];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_SELECTIONCHANGECOMMITTED])?.Invoke(this, e);
 
             // The user selects a list item or selects an item and then closes the list.
             // It indicates that the user's selection is to be processed but should not
@@ -2865,11 +2849,7 @@ namespace System.Windows.Forms
         protected override void OnSelectedIndexChanged(EventArgs e)
         {
             base.OnSelectedIndexChanged(e);
-            EventHandler handler = (EventHandler)Events[EVENT_SELECTEDINDEXCHANGED];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_SELECTEDINDEXCHANGED])?.Invoke(this, e);
 
             if (dropDownWillBeClosed)
             {
@@ -2927,11 +2907,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnSelectedItemChanged(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EVENT_SELECTEDITEMCHANGED];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_SELECTEDITEMCHANGED])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -2939,11 +2915,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnDropDownStyleChanged(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EVENT_DROPDOWNSTYLE];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_DROPDOWNSTYLE])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -3162,11 +3134,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnDropDownClosed(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EVENT_DROPDOWNCLOSED];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_DROPDOWNCLOSED])?.Invoke(this, e);
 
             // Need to announce the focus on combo-box with new selected value on drop-down close.
             // If do not do this focus in Level 3 stays on list item of unvisible list.
@@ -3193,11 +3161,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnTextUpdate(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EVENT_TEXTUPDATE];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_TEXTUPDATE])?.Invoke(this, e);
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)

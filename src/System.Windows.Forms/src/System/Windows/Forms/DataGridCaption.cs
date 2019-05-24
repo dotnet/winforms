@@ -446,32 +446,20 @@ namespace System.Windows.Forms
         {
             if (backActive)
             {
-                EventHandler handler = (EventHandler)Events[EVENT_BACKWARDCLICKED];
-                if (handler != null)
-                {
-                    handler(this, e);
-                }
+                ((EventHandler)Events[EVENT_BACKWARDCLICKED])?.Invoke(this, e);
             }
         }
 
         protected void OnCaptionClicked(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EVENT_CAPTIONCLICKED];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_CAPTIONCLICKED])?.Invoke(this, e);
         }
 
         protected void OnDownClicked(EventArgs e)
         {
             if (downActive && downButtonVisible)
             {
-                EventHandler handler = (EventHandler)Events[EVENT_DOWNCLICKED];
-                if (handler != null)
-                {
-                    handler(this, e);
-                }
+                ((EventHandler)Events[EVENT_DOWNCLICKED])?.Invoke(this, e);
             }
         }
 

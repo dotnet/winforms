@@ -195,10 +195,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected internal virtual void OnCollapse(EventArgs e)
         {
-            if (onCollapse != null)
-            {
-                onCollapse(this, e);
-            }
+            onCollapse?.Invoke(this, e);
         }
 
         /// <summary>

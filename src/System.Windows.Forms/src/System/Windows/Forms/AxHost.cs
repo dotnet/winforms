@@ -653,10 +653,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void ShowAboutBox()
         {
-            if (aboutBoxDelegate != null)
-            {
-                aboutBoxDelegate();
-            }
+            aboutBoxDelegate?.Invoke();
         }
 
         //

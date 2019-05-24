@@ -495,13 +495,7 @@ namespace System.Windows.Forms
             if (DefaultItem != null)
             {
                 DefaultItem.FireEvent(ToolStripItemEventType.Click);
-            }
-
-            EventHandler handler = (EventHandler)Events[EventButtonClick];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            } ((EventHandler)Events[EventButtonClick])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -513,13 +507,7 @@ namespace System.Windows.Forms
             if (DefaultItem != null)
             {
                 DefaultItem.FireEvent(ToolStripItemEventType.DoubleClick);
-            }
-
-            EventHandler handler = (EventHandler)Events[EventButtonDoubleClick];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            } ((EventHandler)Events[EventButtonDoubleClick])?.Invoke(this, e);
         }
 
 

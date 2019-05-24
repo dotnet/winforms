@@ -140,10 +140,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected internal virtual void OnPopup(EventArgs e)
         {
-            if (onPopup != null)
-            {
-                onPopup(this, e);
-            }
+            onPopup?.Invoke(this, e);
         }
 
         /// <summary>
@@ -151,10 +148,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected internal virtual void OnCollapse(EventArgs e)
         {
-            if (onCollapse != null)
-            {
-                onCollapse(this, e);
-            }
+            onCollapse?.Invoke(this, e);
         }
 
         /// <summary>

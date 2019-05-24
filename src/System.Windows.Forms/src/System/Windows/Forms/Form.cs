@@ -4335,11 +4335,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnActivated(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EVENT_ACTIVATED];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_ACTIVATED])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -4387,11 +4383,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnClosing(CancelEventArgs e)
         {
-            CancelEventHandler handler = (CancelEventHandler)Events[EVENT_CLOSING];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((CancelEventHandler)Events[EVENT_CLOSING])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -4400,11 +4392,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnClosed(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EVENT_CLOSED];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_CLOSED])?.Invoke(this, e);
         }
 
 
@@ -4414,11 +4402,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnFormClosing(FormClosingEventArgs e)
         {
-            FormClosingEventHandler handler = (FormClosingEventHandler)Events[EVENT_FORMCLOSING];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((FormClosingEventHandler)Events[EVENT_FORMCLOSING])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -4430,11 +4414,7 @@ namespace System.Windows.Forms
             //Remove the form from Application.OpenForms (nothing happens if isn't present)
             Application.OpenForms.Remove(this);
 
-            FormClosedEventHandler handler = (FormClosedEventHandler)Events[EVENT_FORMCLOSED];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((FormClosedEventHandler)Events[EVENT_FORMCLOSED])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -4459,11 +4439,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDeactivate(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EVENT_DEACTIVATE];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_DEACTIVATE])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -4545,11 +4521,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnHelpButtonClicked(CancelEventArgs e)
         {
-            CancelEventHandler handler = (CancelEventHandler)Events[EVENT_HELPBUTTONCLICKED];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((CancelEventHandler)Events[EVENT_HELPBUTTONCLICKED])?.Invoke(this, e);
         }
 
         protected override void OnLayout(LayoutEventArgs levent)
@@ -4704,11 +4676,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnInputLanguageChanged(InputLanguageChangedEventArgs e)
         {
-            InputLanguageChangedEventHandler handler = (InputLanguageChangedEventHandler)Events[EVENT_INPUTLANGCHANGE];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((InputLanguageChangedEventHandler)Events[EVENT_INPUTLANGCHANGE])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -4718,11 +4686,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnInputLanguageChanging(InputLanguageChangingEventArgs e)
         {
-            InputLanguageChangingEventHandler handler = (InputLanguageChangingEventHandler)Events[EVENT_INPUTLANGCHANGEREQUEST];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((InputLanguageChangingEventHandler)Events[EVENT_INPUTLANGCHANGEREQUEST])?.Invoke(this, e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -4769,11 +4733,7 @@ namespace System.Windows.Forms
         {
             UpdateMenuHandles();
             UpdateToolStrip();
-            EventHandler handler = (EventHandler)Events[EVENT_MDI_CHILD_ACTIVATE];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_MDI_CHILD_ACTIVATE])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -4792,11 +4752,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMenuComplete(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EVENT_MENUCOMPLETE];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_MENUCOMPLETE])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -4979,11 +4935,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnShown(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EVENT_SHOWN];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_SHOWN])?.Invoke(this, e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -6566,11 +6518,7 @@ namespace System.Windows.Forms
         {
             if (CanRaiseEvents)
             {
-                EventHandler handler = (EventHandler)Events[EVENT_RESIZEBEGIN];
-                if (handler != null)
-                {
-                    handler(this, e);
-                }
+                ((EventHandler)Events[EVENT_RESIZEBEGIN])?.Invoke(this, e);
             }
         }
 
@@ -6583,11 +6531,7 @@ namespace System.Windows.Forms
         {
             if (CanRaiseEvents)
             {
-                EventHandler handler = (EventHandler)Events[EVENT_RESIZEEND];
-                if (handler != null)
-                {
-                    handler(this, e);
-                }
+                ((EventHandler)Events[EVENT_RESIZEEND])?.Invoke(this, e);
             }
         }
 

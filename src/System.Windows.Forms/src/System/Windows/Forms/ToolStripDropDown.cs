@@ -1391,12 +1391,7 @@ namespace System.Windows.Forms
                 {
                     AccessibilityNotifyClients(AccessibleEvents.SystemMenuPopupEnd, -1);
                 }
-            }
-            ToolStripDropDownClosedEventHandler handler = (ToolStripDropDownClosedEventHandler)Events[EventClosed];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            } ((ToolStripDropDownClosedEventHandler)Events[EventClosed])?.Invoke(this, e);
         }
 
         // 
@@ -1404,11 +1399,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnClosing(ToolStripDropDownClosingEventArgs e)
         {
-            ToolStripDropDownClosingEventHandler handler = (ToolStripDropDownClosingEventHandler)Events[EventClosing];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((ToolStripDropDownClosingEventHandler)Events[EventClosing])?.Invoke(this, e);
         }
         /// <summary>
         /// When our handle is being created, suspend the deactivation
@@ -1456,11 +1447,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnOpening(CancelEventArgs e)
         {
-            CancelEventHandler handler = (CancelEventHandler)Events[EventOpening];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((CancelEventHandler)Events[EventOpening])?.Invoke(this, e);
         }
 
 
@@ -1476,13 +1463,7 @@ namespace System.Windows.Forms
                 {
                     AccessibilityNotifyClients(AccessibleEvents.SystemMenuPopupStart, -1);
                 }
-            }
-
-            EventHandler handler = (EventHandler)Events[EventOpened];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            } ((EventHandler)Events[EventOpened])?.Invoke(this, e);
         }
 
         protected override void OnVisibleChanged(System.EventArgs e)

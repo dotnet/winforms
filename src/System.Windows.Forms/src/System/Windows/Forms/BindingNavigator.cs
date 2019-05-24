@@ -617,10 +617,7 @@ namespace System.Windows.Forms
             RefreshItemsCore();
 
             // Raise the public event
-            if (onRefreshItems != null)
-            {
-                onRefreshItems(this, EventArgs.Empty);
-            }
+            onRefreshItems?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>

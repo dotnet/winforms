@@ -975,10 +975,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.DataView.TraceVerbose, "OnItemChanged(" + e.Index.ToString(CultureInfo.InvariantCulture) + ") " + e.ToString());
             try
             {
-                if (onItemChanged != null)
-                {
-                    onItemChanged(this, e);
-                }
+                onItemChanged?.Invoke(this, e);
             }
             catch (Exception ex)
             {
@@ -994,19 +991,13 @@ namespace System.Windows.Forms
 
         private void OnListChanged(ListChangedEventArgs e)
         {
-            if (onListChanged != null)
-            {
-                onListChanged(this, e);
-            }
+            onListChanged?.Invoke(this, e);
         }
 
         [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly")] //Exists in Everett
         internal protected void OnMetaDataChanged(EventArgs e)
         {
-            if (onMetaDataChangedHandler != null)
-            {
-                onMetaDataChangedHandler(this, e);
-            }
+            onMetaDataChangedHandler?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1017,10 +1008,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.DataView.TraceVerbose, "OnPositionChanged(" + listposition.ToString(CultureInfo.InvariantCulture) + ") " + e.ToString());
             try
             {
-                if (onPositionChangedHandler != null)
-                {
-                    onPositionChangedHandler(this, e);
-                }
+                onPositionChangedHandler?.Invoke(this, e);
             }
             catch (Exception ex)
             {

@@ -3515,11 +3515,7 @@ namespace System.Windows.Forms
         // 
         protected void OnComComponentNameChanged(ComponentRenameEventArgs e)
         {
-            ComponentRenameEventHandler handler = (ComponentRenameEventHandler)Events[EventComComponentNameChanged];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((ComponentRenameEventHandler)Events[EventComComponentNameChanged])?.Invoke(this, e);
         }
 
 
@@ -3588,33 +3584,21 @@ namespace System.Windows.Forms
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnPropertySortChanged(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EventPropertySortChanged];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventPropertySortChanged])?.Invoke(this, e);
         }
 
         // Seems safe - just fires an event
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnPropertyTabChanged(PropertyTabChangedEventArgs e)
         {
-            PropertyTabChangedEventHandler handler = (PropertyTabChangedEventHandler)Events[EventPropertyTabChanged];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((PropertyTabChangedEventHandler)Events[EventPropertyTabChanged])?.Invoke(this, e);
         }
 
         // Seems safe - just fires an event
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnPropertyValueChanged(PropertyValueChangedEventArgs e)
         {
-            PropertyValueChangedEventHandler handler = (PropertyValueChangedEventHandler)Events[EventPropertyValueChanged];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((PropertyValueChangedEventHandler)Events[EventPropertyValueChanged])?.Invoke(this, e);
         }
 
         internal void OnPropertyValueSet(GridItem changedItem, object oldValue)
@@ -3656,12 +3640,7 @@ namespace System.Windows.Forms
         // 
         protected virtual void OnSelectedGridItemChanged(SelectedGridItemChangedEventArgs e)
         {
-            SelectedGridItemChangedEventHandler handler = (SelectedGridItemChangedEventHandler)Events[EventSelectedGridItemChanged];
-
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((SelectedGridItemChangedEventHandler)Events[EventSelectedGridItemChanged])?.Invoke(this, e);
         }
 
 
@@ -3669,11 +3648,7 @@ namespace System.Windows.Forms
         // 
         protected virtual void OnSelectedObjectsChanged(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EventSelectedObjectsChanged];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventSelectedObjectsChanged])?.Invoke(this, e);
         }
 
         private void OnTransactionClosed(object sender, DesignerTransactionCloseEventArgs e)

@@ -547,13 +547,7 @@ namespace System.Windows.Forms
             if (FlatStyle == FlatStyle.System)
             {
                 AccessibilityNotifyClients(AccessibleEvents.SystemCaptureEnd, -1);
-            }
-
-            EventHandler handler = (EventHandler)Events[EVENT_CHECKEDCHANGED];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            } ((EventHandler)Events[EVENT_CHECKEDCHANGED])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -564,13 +558,7 @@ namespace System.Windows.Forms
             if (OwnerDraw)
             {
                 Refresh();
-            }
-
-            EventHandler handler = (EventHandler)Events[EVENT_CHECKSTATECHANGED];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            } ((EventHandler)Events[EVENT_CHECKSTATECHANGED])?.Invoke(this, e);
         }
 
         /// <summary>

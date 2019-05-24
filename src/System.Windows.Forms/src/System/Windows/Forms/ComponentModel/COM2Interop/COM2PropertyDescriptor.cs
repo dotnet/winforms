@@ -1090,11 +1090,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 com2props.AlwaysValid = com2props.CheckValid();
 
-                GetAttributesEventHandler handler = (GetAttributesEventHandler)Events[EventGetBaseAttributes];
-                if (handler != null)
-                {
-                    handler(this, e);
-                }
+                ((GetAttributesEventHandler)Events[EventGetBaseAttributes])?.Invoke(this, e);
             }
             finally
             {
@@ -1127,11 +1123,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             try
             {
                 com2props.AlwaysValid = com2props.CheckValid();
-                GetAttributesEventHandler handler = (GetAttributesEventHandler)Events[EventGetDynamicAttributes];
-                if (handler != null)
-                {
-                    handler(this, e);
-                }
+                ((GetAttributesEventHandler)Events[EventGetDynamicAttributes])?.Invoke(this, e);
             }
             finally
             {
@@ -1152,11 +1144,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             try
             {
                 com2props.AlwaysValid = com2props.CheckValid();
-                GetTypeConverterAndTypeEditorEventHandler handler = (GetTypeConverterAndTypeEditorEventHandler)Events[EventGetTypeConverterAndTypeEditor];
-                if (handler != null)
-                {
-                    handler(this, e);
-                }
+                ((GetTypeConverterAndTypeEditorEventHandler)Events[EventGetTypeConverterAndTypeEditor])?.Invoke(this, e);
             }
             finally
             {
@@ -1197,11 +1185,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             try
             {
                 com2props.AlwaysValid = com2props.CheckValid();
-                GetBoolValueEventHandler handler = (GetBoolValueEventHandler)Events[key];
-                if (handler != null)
-                {
-                    handler(this, e);
-                }
+                ((GetBoolValueEventHandler)Events[key])?.Invoke(this, e);
             }
             finally
             {
@@ -1217,11 +1201,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             try
             {
                 com2props.AlwaysValid = com2props.CheckValid();
-                Com2EventHandler handler = (Com2EventHandler)Events[key];
-                if (handler != null)
-                {
-                    handler(this, e);
-                }
+                ((Com2EventHandler)Events[key])?.Invoke(this, e);
             }
             finally
             {
@@ -1237,11 +1217,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             try
             {
                 com2props.AlwaysValid = com2props.CheckValid();
-                GetNameItemEventHandler handler = (GetNameItemEventHandler)Events[key];
-                if (handler != null)
-                {
-                    handler(this, e);
-                }
+                ((GetNameItemEventHandler)Events[key])?.Invoke(this, e);
             }
             finally
             {

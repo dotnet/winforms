@@ -2695,11 +2695,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnContentsResized(ContentsResizedEventArgs e)
         {
-            ContentsResizedEventHandler handler = (ContentsResizedEventHandler)Events[EVENT_REQUESTRESIZE];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((ContentsResizedEventHandler)Events[EVENT_REQUESTRESIZE])?.Invoke(this, e);
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -2822,11 +2818,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnHScroll(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EVENT_HSCROLL];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_HSCROLL])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -2835,11 +2827,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnLinkClicked(LinkClickedEventArgs e)
         {
-            LinkClickedEventHandler handler = (LinkClickedEventHandler)Events[EVENT_LINKACTIVATE];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((LinkClickedEventHandler)Events[EVENT_LINKACTIVATE])?.Invoke(this, e);
         }
 
 
@@ -2848,11 +2836,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnImeChange(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EVENT_IMECHANGE];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_IMECHANGE])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -2862,11 +2846,7 @@ namespace System.Windows.Forms
         protected virtual void OnProtected(EventArgs e)
         {
             ProtectedError = true;
-            EventHandler handler = (EventHandler)Events[EVENT_PROTECTED];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_PROTECTED])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -2875,11 +2855,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnSelectionChanged(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EVENT_SELCHANGE];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_SELCHANGE])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -2888,11 +2864,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnVScroll(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EVENT_VSCROLL];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_VSCROLL])?.Invoke(this, e);
         }
 
         /// <summary>

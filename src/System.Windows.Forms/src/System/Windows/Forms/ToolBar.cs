@@ -1322,10 +1322,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnButtonClick(ToolBarButtonClickEventArgs e)
         {
-            if (onButtonClick != null)
-            {
-                onButtonClick(this, e);
-            }
+            onButtonClick?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1334,10 +1331,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnButtonDropDown(ToolBarButtonClickEventArgs e)
         {
-            if (onButtonDropDown != null)
-            {
-                onButtonDropDown(this, e);
-            }
+            onButtonDropDown?.Invoke(this, e);
         }
 
         /// <summary>

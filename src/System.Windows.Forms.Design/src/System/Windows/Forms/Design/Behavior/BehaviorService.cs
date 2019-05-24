@@ -318,10 +318,7 @@ namespace System.Windows.Forms.Design.Behavior
 
         private void OnBeginDrag(BehaviorDragDropEventArgs e)
         {
-            if (_beginDragHandler != null)
-            {
-                _beginDragHandler(this, e);
-            }
+            _beginDragHandler?.Invoke(this, e);
         }
 
         /// <summary>
@@ -483,10 +480,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public void SyncSelection()
         {
-            if (_synchronizeEventHandler != null)
-            {
-                _synchronizeEventHandler(this, EventArgs.Empty);
-            }
+            _synchronizeEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>

@@ -318,11 +318,7 @@ namespace System.Windows.Forms
         {
             // There is no good way to explain this event except to say
             // that it's just another name for OnControlCreated.
-            EventHandler handler = (EventHandler)Events[EVENT_LOAD];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_LOAD])?.Invoke(this, e);
         }
 
         /// <summary>

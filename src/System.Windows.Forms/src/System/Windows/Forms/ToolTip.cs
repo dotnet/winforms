@@ -848,10 +848,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnDraw(DrawToolTipEventArgs e)
         {
-            if (onDraw != null)
-            {
-                onDraw(this, e);
-            }
+            onDraw?.Invoke(this, e);
         }
 
 
@@ -860,10 +857,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnPopup(PopupEventArgs e)
         {
-            if (onPopup != null)
-            {
-                onPopup(this, e);
-            }
+            onPopup?.Invoke(this, e);
         }
 
         private void TopLevelCreated(object sender, EventArgs eventargs)

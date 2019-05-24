@@ -671,11 +671,7 @@ namespace System.Windows.Forms
         {
             Debug.Assert(ImeSupported, "ImeModeChanged should not be raised on an Ime-Unaware control.");
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside OnImeModeChanged(), this = " + this);
-            EventHandler handler = (EventHandler)Events[EventImeModeChanged];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventImeModeChanged])?.Invoke(this, e);
         }
 
         /// <summary>

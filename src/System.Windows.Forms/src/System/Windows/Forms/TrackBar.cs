@@ -935,11 +935,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnScroll(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EVENT_SCROLL];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_SCROLL])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1014,11 +1010,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnValueChanged(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EVENT_VALUECHANGED];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_VALUECHANGED])?.Invoke(this, e);
         }
 
         /// <summary>

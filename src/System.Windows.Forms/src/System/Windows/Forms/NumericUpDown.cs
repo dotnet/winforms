@@ -585,10 +585,7 @@ namespace System.Windows.Forms
         {
 
             // Call the event handler
-            if (onValueChanged != null)
-            {
-                onValueChanged(this, e);
-            }
+            onValueChanged?.Invoke(this, e);
         }
 
         protected override void OnLostFocus(EventArgs e)

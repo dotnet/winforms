@@ -78,10 +78,7 @@ namespace System.Windows.Forms
 
         protected void OnCollectionChanged(CollectionChangeEventArgs e)
         {
-            if (onCollectionChanged != null)
-            {
-                onCollectionChanged(this, e);
-            }
+            onCollectionChanged?.Invoke(this, e);
         }
 
 

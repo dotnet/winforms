@@ -1802,11 +1802,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnDrawItem(DrawItemEventArgs e)
         {
-            DrawItemEventHandler handler = (DrawItemEventHandler)Events[EVENT_DRAWITEM];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((DrawItemEventHandler)Events[EVENT_DRAWITEM])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1891,11 +1887,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnMeasureItem(MeasureItemEventArgs e)
         {
-            MeasureItemEventHandler handler = (MeasureItemEventHandler)Events[EVENT_MEASUREITEM];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((MeasureItemEventHandler)Events[EVENT_MEASUREITEM])?.Invoke(this, e);
         }
 
         protected override void OnFontChanged(EventArgs e)
@@ -1969,11 +1961,7 @@ namespace System.Windows.Forms
 
             // Call the handler after updating the DataManager's position so that
             // the DataManager's selected index will be correct in an event handler.
-            EventHandler handler = (EventHandler)Events[EVENT_SELECTEDINDEXCHANGED];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EVENT_SELECTEDINDEXCHANGED])?.Invoke(this, e);
         }
 
         protected override void OnSelectedValueChanged(EventArgs e)

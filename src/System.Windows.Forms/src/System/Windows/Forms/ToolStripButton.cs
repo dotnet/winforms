@@ -224,11 +224,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnCheckedChanged(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EventCheckedChanged];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventCheckedChanged])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -237,11 +233,7 @@ namespace System.Windows.Forms
         protected virtual void OnCheckStateChanged(EventArgs e)
         {
             AccessibilityNotifyClients(AccessibleEvents.StateChange);
-            EventHandler handler = (EventHandler)Events[EventCheckStateChanged];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ((EventHandler)Events[EventCheckStateChanged])?.Invoke(this, e);
         }
 
         /// <summary>

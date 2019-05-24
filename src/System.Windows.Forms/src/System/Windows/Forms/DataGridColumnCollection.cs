@@ -526,10 +526,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected void OnCollectionChanged(CollectionChangeEventArgs e)
         {
-            if (onCollectionChanged != null)
-            {
-                onCollectionChanged(this, e);
-            }
+            onCollectionChanged?.Invoke(this, e);
 
             DataGrid grid = owner.DataGrid;
             if (grid != null)

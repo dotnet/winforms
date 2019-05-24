@@ -338,11 +338,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             if (props != null)
             {
 
-                if (Disposed != null)
-                {
 
-                    Disposed(this, EventArgs.Empty);
-                }
+                Disposed?.Invoke(this, EventArgs.Empty);
 
                 weakObjRef = null;
                 props = null;

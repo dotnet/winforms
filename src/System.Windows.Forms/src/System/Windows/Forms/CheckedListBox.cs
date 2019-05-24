@@ -926,10 +926,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnItemCheck(ItemCheckEventArgs ice)
         {
-            if (onItemCheck != null)
-            {
-                onItemCheck(this, ice);
-            }
+            onItemCheck?.Invoke(this, ice);
         }
 
         protected override void OnMeasureItem(MeasureItemEventArgs e)
